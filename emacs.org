@@ -803,25 +803,23 @@ https://github.com/syohex/emacs-zoom-window
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package winum
-    :ensure t
-    :config
-    (setq winum-keymap
-          (let ((map (make-sparse-keymap)))
-            (define-key map (kbd "C-`") 'winum-select-window-by-number)
-            (define-key map (kbd "H-0") 'winum-select-window-0-or-10)
-            (define-key map (kbd "H-1") 'winum-select-window-1)
-            (define-key map (kbd "H-2") 'winum-select-window-2)
-            (define-key map (kbd "H-3") 'winum-select-window-3)
-            (define-key map (kbd "H-4") 'winum-select-window-4)
-            (define-key map (kbd "H-5") 'winum-select-window-5)
-            (define-key map (kbd "H-6") 'winum-select-window-6)
-            (define-key map (kbd "H-7") 'winum-select-window-7)
-            (define-key map (kbd "H-8") 'winum-select-window-8)
-            map))
-    :config
-    (setq winum-auto-setup-mode-line nil))
-    (winum-mode)
+(use-package winum
+  :ensure t
+  :config
+  (setq winum-auto-assign-0-to-minibuffer nil
+        winum-auto-setup-mode-line nil
+        winum-ignored-buffers '(" *which-key*"))
+  (define-key winum-keymap (kbd "M-0") 'winum-select-window-0-or-10)
+  (define-key winum-keymap (kbd "M-1") 'winum-select-window-1)
+  (define-key winum-keymap (kbd "M-2") 'winum-select-window-2)
+  (define-key winum-keymap (kbd "M-3") 'winum-select-window-3)
+  (define-key winum-keymap (kbd "M-4") 'winum-select-window-4)
+  (define-key winum-keymap (kbd "M-5") 'winum-select-window-5)
+  (define-key winum-keymap (kbd "M-6") 'winum-select-window-6)
+  (define-key winum-keymap (kbd "M-7") 'winum-select-window-7)
+  (define-key winum-keymap (kbd "M-8") 'winum-select-window-8)
+  (define-key winum-keymap (kbd "M-9") 'winum-select-window-9)
+  (winum-mode))
 #+END_SRC
 
 ** rainbow-mode
@@ -1351,6 +1349,17 @@ Unicode is an required aesthetic
     ";"    '(evil-ex :which-key "Ex command")
     "'"    '(shell-pop :which-key "Open shell")
     "0"    '(neotree-toggle :which-key "NeoTree")
+    "`"    'winum-select-window-0-or-10
+    "²"    'winum-select-window-by-number
+    "1"    'winum-select-window-1
+    "2"    'winum-select-window-2
+    "3"    'winum-select-window-3
+    "4"    'winum-select-window-4
+    "5"    'winum-select-window-5
+    "6"    'winum-select-window-6
+    "7"    'winum-select-window-7
+    "8"    'winum-select-window-8
+    "9"    'winum-select-window-9
     "/"    '(:ignore t :which-key "search")
     "//"   '(swiper :which-key "swiper")
     "["    '(:ignore t :which-key "previous...")
@@ -1749,7 +1758,7 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
                treemacs-fringe-indicator-mode
                treemacs-git-mode)
     :bind (;; ([f8]        . treemacs)
-           ("M-9"       . treemacs-select-window)
+           ;; ("M-9"       . treemacs-select-window)
            ("C-x 1"     . treemacs-delete-other-windows)
            ("C-x t 1"   . treemacs-delete-other-windows)
            ("C-x t t"   . treemacs)
@@ -3046,7 +3055,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
           ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
            "** NEXT %? \nDEADLINE: %t")
           ("l" "Link" entry (file+headline "inbox.org" "Links")
-           "* %? %^L %^g \n%T" :prepend t)
+           "* %?%^L %^g \n%T" :prepend t)
           ("L" "A link, for reading later." entry (file+headline "inbox.org" "Reading List")
            "* %:description\n%u\n\n%c\n\n%i")
           ("n" "Note" entry (file+headline "inbox.org" "Notes")
