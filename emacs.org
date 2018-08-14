@@ -1,23 +1,32 @@
 #+OPTIONS: toc:nil
 #+TITLE: ITSYC's emacs config
 
-这个是我个人的 Emacs 配置文件，采用 Orgmode 方式管理，配置内容借鉴了：
- - [[https://github.com/sachac/.emacs.d/blob/gh-pages/Sacha.org][sachac/.emacs.d - GitHub]]
- - [[https://github.com/ivoarch/.dot-org-files/blob/master/emacs.org][ivoarch/.dot-org-files - GitHub]]
- - [[https://github.com/joedicastro/dotfiles/tree/master/emacs/.emacs.d][joedicastro/dotfiles - GitHub]] 很详细的文档说明，值得参考
- - [[https://github.com/jonnay/emagicians-starter-kit/blob/master/Emagician.org][jonnay/emagicians-starter-kit - GitHub]]
- - [[https://github.com/abo-abo/oremacs/tree/github][abo-abo/oremacs - GitHub]]
- - [[http://home.thep.lu.se/~karlf/emacs.html#sec-2][My .emacs]]
-
-优秀的配置参考：
-- [[https://github.com/sam217pa/emacs-config][sam217pa/emacs-config - GitHub]]
-- [[https://github.com/magnars/.emacs.d][magnars/.emacs.d - GitHub]]
-- [[https://github.com/kaushalmodi/.emacs.d][kaushalmodi/.emacs.d - GitHub]]
-
+这个是我个人的 Emacs 配置文件，采用 Orgmode 方式管理。
 
 整个配置采用了 Org-babel 和 use-package。
 - 关于 org-babel 的使用：[[http://orgmode.org/worg/org-contrib/babel/intro.html][Babel: Introduction]]
 - 关于 use-package 的使用：[[https://github.com/jwiegley/use-package][jwiegley/use-package - GitHub]]
+
+配置内容借鉴了优秀的配置参考：
+- [[https://github.com/joedicastro/dotfiles/tree/master/emacs/.emacs.d][joedicastro/dotfiles - GitHub]] 很详细的文档说明，值得参考
+- [[https://github.com/sachac/.emacs.d/blob/gh-pages/Sacha.org][sachac/.emacs.d - GitHub]]
+- [[https://github.com/ivoarch/.dot-org-files/blob/master/emacs.org][ivoarch/.dot-org-files - GitHub]]
+- [[https://github.com/jonnay/emagicians-starter-kit/blob/master/Emagician.org][jonnay/emagicians-starter-kit - GitHub]]
+- [[https://github.com/abo-abo/oremacs/tree/github][abo-abo/oremacs - GitHub]]
+- [[http://home.thep.lu.se/~karlf/emacs.html#sec-2][My .emacs]]
+- [[https://seancribbs.com/emacs.d.html][Sean Cribbs' Emacs 25 Configuration]]
+- [[https://github.com/sam217pa/emacs-config][sam217pa/emacs-config - GitHub]]
+- [[https://github.com/magnars/.emacs.d][magnars/.emacs.d - GitHub]]
+- [[https://github.com/kaushalmodi/.emacs.d][kaushalmodi/.emacs.d - GitHub]]
+- [[https://github.com/domtronn/emacs/blob/master/init.el#L358][domtronn/emacs - GitHub]]
+- [[https://writequit.org/org/settings.html#sec-1-3-5][Lee's Emacs settings file]]
+- http://writequit.org/org/
+- http://doc.rix.si/org/fsem.html
+- https://postmomentum.ch/steckemacs.html
+- http://pages.sachachua.com/.emacs.d/Sacha.html
+- https://github.com/larstvei/dot-emacs/blob/master/init.org
+- [[https://github.com/WolfeCub/dotfiles/blob/master/emacs/.emacs.d/README.org][WolfeCub/dotfiles - GitHub]]
+- [[https://github.com/MaxSt/dotfiles/blob/master/emacs.d/config.org][MaxSt/dotfiles - GitHub]]
 
 * Bootstrap
 ** Constants
@@ -1115,6 +1124,7 @@ Unicode is an required aesthetic
 #+END_SRC
 
 ** general
+[[https://github.com/noctuid/general.el][noctuid/general.el - GitHub]]
 参考这篇文章重新定义自己的 key bindings：[[https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/][larstvei/dot-emacs - GitHub]]
 参考在 Mac 下的一些配置：[[https://www.emacswiki.org/emacs/EmacsForMacOS][Emacs For Mac OS]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3763,6 +3773,7 @@ This is a package to perform text folding like in Vim. It has the following feat
 
 * Hydra
 参考：https://github.com/abo-abo/hydra/wiki
+- [[https://irreal.org/blog/?p=6453][Hydra Video]]
 - https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org
 - https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/
 - https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html
@@ -4088,7 +4099,6 @@ This is a package to perform text folding like in Vim. It has the following feat
     ("3" eyebrowse-switch-to-window-config-3)
     ("4" eyebrowse-switch-to-window-config-4))
 #+END_SRC
-
 * Term
 参考这篇文章配置 multi-term：[[http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/][Using GNU Emacs as a terminal emulator]]
 #+BEGIN_SRC emacs-lisp :tangle yes
