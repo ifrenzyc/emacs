@@ -1,0 +1,3 @@
+[submodule "lisp/angularjs-mode"]
+	path = lisp/angularjs-mode
+	url = git@github.com:rudolfolah/angularjs-mode.git

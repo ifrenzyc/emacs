@@ -1,0 +1,4547 @@
+#+OPTIONS: toc:nil
+#+TITLE: ITSYC's emacs config
+
+这个是我个人的 Emacs 配置文件，采用 Orgmode 方式管理，配置内容借鉴了：
+ - [[https://github.com/sachac/.emacs.d/blob/gh-pages/Sacha.org][sachac/.emacs.d - GitHub]]
+ - [[https://github.com/ivoarch/.dot-org-files/blob/master/emacs.org][ivoarch/.dot-org-files - GitHub]]
+ - [[https://github.com/joedicastro/dotfiles/tree/master/emacs/.emacs.d][joedicastro/dotfiles - GitHub]] 很详细的文档说明，值得参考
+ - [[https://github.com/jonnay/emagicians-starter-kit/blob/master/Emagician.org][jonnay/emagicians-starter-kit - GitHub]]
+ - [[https://github.com/abo-abo/oremacs/tree/github][abo-abo/oremacs - GitHub]]
+ - [[http://home.thep.lu.se/~karlf/emacs.html#sec-2][My .emacs]]
+
+优秀的配置参考：
+- [[https://github.com/sam217pa/emacs-config][sam217pa/emacs-config - GitHub]]
+- [[https://github.com/magnars/.emacs.d][magnars/.emacs.d - GitHub]]
+- [[https://github.com/kaushalmodi/.emacs.d][kaushalmodi/.emacs.d - GitHub]]
+
+
+整个配置采用了 Org-babel 和 use-package。
+- 关于 org-babel 的使用：[[http://orgmode.org/worg/org-contrib/babel/intro.html][Babel: Introduction]]
+- 关于 use-package 的使用：[[https://github.com/jwiegley/use-package][jwiegley/use-package - GitHub]]
+
+* Bootstrap
+** Constants
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defconst yc/cache-dir (expand-file-name ".cache" user-emacs-directory)
+    "Every cached or moving file should be here like with Spacemacs")
+
+  (make-directory yc/cache-dir t)
+#+END_SRC
+
+** Detect Operating System
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun is-mac-p
+      ()
+    (eq system-type 'darwin))
+
+  (defun is-linux-p
+      ()
+    (eq system-type 'gnu/linux))
+
+  (defun is-windows-p
+      ()
+    (or
+     (eq system-type 'ms-dos)
+     (eq system-type 'windows-nt)
+     (eq system-type 'cygwin)))
+
+  (defun is-bsd-p
+      ()
+    (eq system-type 'gnu/kfreebsd))
+#+END_SRC
+
+* Internal Settings
+Garbage collection
+
+A high limit for garbage colection.
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; (eval-and-compile
+  (setq gc-cons-threshold (* 100 1024 1024))
+#+END_SRC
+
+Use UTF-8 for enivorment
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; UTF-8 please
+  (setq locale-coding-system 'utf-8) ; pretty
+  (set-terminal-coding-system 'utf-8) ; pretty
+  (set-keyboard-coding-system 'utf-8) ; pretty
+  (set-selection-coding-system 'utf-8) ; please
+  (prefer-coding-system 'utf-8) ; with sugar on top
+  (set-language-environment 'utf-8)
+#+END_SRC
+
+text wrapping at 80 columns by default (only text)
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (add-hook 'text-mode-hook 'turn-on-auto-fill)
+  ;; (add-hook 'text-mode-hook
+  ;;           '(lambda() (set-fill-column 80)))
+#+END_SRC
+
+* Personal Information
+设置个人信息
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq user-full-name "Yang Chuang")
+  (setq user-mail-address "ifrenzyc@gmail.com")
+#+END_SRC
+
+* backup
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; 设定不产生备份文件
+  (setq make-backup-files nil)
+  (setq-default make-backup-files nil)  ; 不生成临时文件
+
+  ;; 取消自动保存模式
+  (setq auto-save-mode nil)
+
+  (setq backup-by-copying nil)
+
+  ;; Save a list of recent files visited. (open recent file with C-x f)
+  (recentf-mode 1)
+  (setq recentf-max-saved-items 1000) ;; just 20 is too recent
+#+END_SRC
+
+关闭 emacs 后，重新打开文件时跳转到上一次打开该文件时的位置（所在行）。
+Restore cursor to file position in previous editing session.
+参考文档：[[https://www.emacswiki.org/emacs/SavePlace#toc1][SavePlace]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (save-place-mode 1)
+#+END_SRC
+
+* Package
+use-package
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; avoid problems with files newer than their byte-compiled counterparts
+;; it's better a lower startup than load an outdated and maybe bugged package
+
+(eval-and-compile
+  (setq load-prefer-newer t
+        package-user-dir "~/.emacs.d/elpa"
+        package--init-file-ensured t
+        package-enable-at-startup nil)
+
+  (unless (file-directory-p package-user-dir)
+    (make-directory package-user-dir t)))
+
+(when (>= emacs-major-version 25)
+  (require 'package)
+  (setq package-archives '(("gnu"          . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                           ("melpa"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                           ("melpa-stable" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa-stable/")
+                           ("org"          . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
+
+  ;; (setq package-archives '(("gnu"          . "http://elpa.emacs-china.org/elpa/gnu/")
+  ;;                          ("melpa"        . "http://elpa.emacs-china.org/elpa/melpa/")
+  ;;                          ("melpa-stable" . "http://elpa.emacs-china.org/elpa/melpa-stable/")
+  ;;                          ("org"          . "http://elpa.emacs-china.org/elpa/org/")))
+
+  ;; (setq package-archives
+  ;;       '(("elpy"         . "http://jorgenschaefer.github.io/packages/")
+  ;;         ("gnu"          . "http://elpa.gnu.org/packages/")
+  ;;         ("melpa"        . "http://melpa.org/packages/")
+  ;;         ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+  ;;         ("org"          . "http://orgmode.org/elpa/")))
+  )
+
+;; initialize the packages and create the packages list if not exists
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+;; install use-package if not exists
+;; Bootstrap `use-package'
+;; 更新本地仓库里面的 package
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package)
+  (setq ;;use-package-always-defer t
+        use-package-always-ensure t
+        use-package-verbose t))
+(use-package diminish :ensure t)   ;; if you use :diminish
+(require 'bind-key)                ;; if you use any :bind variant
+#+END_SRC
+
+参考：https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package paradox
+    :ensure t
+    :config
+    (setq-default
+     paradox-column-width-package 27
+     paradox-column-width-version 13
+     paradox-execute-asynchronously t
+     paradox-github-token t
+     paradox-hide-wiki-packages t)
+    (remove-hook 'paradox--report-buffer-print 'paradox-after-execute-functions))
+#+END_SRC
+
+Hydra
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-system (:color blue)
+    "
+  ^
+  ^System^            ^Packages^          ^Processes^
+  ^──────^────────────^────────^──────────^─────────^─────────
+  _q_ quit            _p_ list            _s_ list
+  ^^                  _P_ upgrade         ^^
+  ^^                  ^^                  ^^
+  "
+    ("q" nil)
+    ("p" paradox-list-packages)
+    ("P" paradox-upgrade-packages)
+    ("s" list-processes))
+#+END_SRC
+
+* GUI & Themes & Window Management
+** gui
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; 取消工具栏
+(tool-bar-mode nil)
+
+;; 改变 Emacs 固执的要你回答 yes 的行为。按 y 或空格键表示 yes，n 表示 no。
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; show human readable file sizes in dired
+(setq dired-listing-switches "-alh")
+
+;; faster scrolling (see https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746)
+(setq auto-window-vscroll nil)
+
+;; 显示行列号
+(setq linum-mode nil
+      global-linum-mode nil)
+
+;; 打开括号匹配显示模式
+(show-paren-mode t)
+
+(when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+
+;; 在行首 C-k 时，同时删除该行
+(setq-default kill-whole-line t)
+
+;; 括号匹配时可以高亮显示另外一边的括号，但光标不会烦人的跳到另一个括号处。
+(setq show-paren-style 'parenthesis)
+
+;; 光标靠近鼠标指针时，让鼠标指针自动让开，别挡住视线。
+(setq mouse-avoidance-mode 'animate)
+
+(setq visible-bell t)
+
+;; make cursor the width of the character it is under
+;; i.e. full width of a TAB
+(setq x-stretch-cursor t)
+
+(setq ring-bell-function 'ignore)  ;; visible-bell doesn’t work well on OS X, so disable those notifications completely
+
+(global-visual-line-mode nil)
+(setq word-wrap t)
+(setq truncate-lines nil)
+(auto-fill-mode nil) ;; 不要自动将内容换行
+
+;; 取消滚动栏
+(use-package yascroll
+  :ensure t
+  :init
+  (set-scroll-bar-mode nil)
+  (global-yascroll-bar-mode 1))
+
+(use-package smooth-scrolling
+  :ensure t
+  :init
+  (smooth-scrolling-mode 1))
+
+  ;;; respect ansi colors
+(ansi-color-for-comint-mode-on)
+
+  ;;; ansi colors in compilation mode
+(ignore-errors
+  (defun yc/colorize-compilation-buffer ()
+    (when (eq major-mode 'compilation-mode)
+      (ansi-color-apply-on-region compilation-filter-start (point-max))))
+  (add-hook 'compilation-filter-hook yc/colorize-compilation-buffer))
+
+(set-frame-parameter nil 'fullscreen (if (eq system-type 'windows-nt)
+                                         'fullboth 'maximized))
+
+(use-package beacon
+  :ensure t
+  :init
+  (beacon-mode 1))
+
+(hl-line-mode t)
+;; (when window-system (global-hl-line-mode t))
+(when window-system (global-prettify-symbols-mode t))
+
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+;;(add-to-list 'default-frame-alist '(ns-appearance . dark))
+;;(add-to-list 'default-frame-alist '(ns-appearance . light))
+#+END_SRC
+
+修改 Emacs 的启动界面，展现 Dashboard，特别是 Recent files（最近打开的列表），特别适用于我这种基本采用打开最近文件的方式。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    (setq dashboard-items '((recents  . 5)
+                            (projects . 5)
+                            (bookmarks . 5))))
+#+END_SRC
+
+** whitespace
+@see - [[https://dougie.io/coding/tabs-in-emacs/][The Ultimate Guide To Using Tabs For Indentation In Emacs]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; @see http://ergoemacs.org/emacs/whitespace-mode.html
+  ;; @see http://xahlee.info/comp/unicode_arrows.html
+  ;; “·”, MIDDLE DOT, 183
+  ;; “¶”, PILCROW SIGN, 182
+  ;; “↵”, DOWNWARDS ARROW WITH CORNER LEFTWARDS, 8629
+  ;; “▷”, WHITE RIGHT POINTING TRIANGLE, 9655
+  ;; “▶”, BLACK RIGHT-POINTING TRIANGLE, 9654
+  ;; “→”, RIGHTWARDS ARROW, 8594
+  ;; “↦”, RIGHTWARDS ARROW FROM BAR, 8614
+  ;; “⇥”, RIGHTWARDS ARROW TO BAR, 8677
+
+  ;; lines lines-tail newline trailing space-before-tab space-afte-tab empty
+  ;; indentation-space indentation indentation-tab tabs spaces
+  (use-package whitespace
+    :ensure t
+    :diminish ""
+    :init
+    (setq whitespace-style '(face tabs tab-mark trailing))
+    :config
+    (setq whitespace-line-column 120)
+    (global-whitespace-mode t)
+    (if window-system (progn
+                        (set-cursor-color "Gray")
+                        ;; make it delete trailing whitespace
+                        (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+                        (add-hook 'after-init-hook
+                                  (lambda () (set-face-attribute 'whitespace-newline nil
+                                                                 :foreground "#AAA"
+                                                                 :weight 'bold)))
+                        )))
+
+  ;;; START TABS CONFIG
+  ;; Enable tabs and set prefered indentation width in spaces
+  ;; (In this case the indent size is 2-spaces wide)
+  (setq-default indent-tabs-mode nil)
+  (setq-default standard-indent 4)
+  (setq-default tab-width 4)
+
+  ;; Make the backspace properly erase the tab instead of
+  ;; removing 1 space at a time.
+  (setq backward-delete-char-untabify-method 'hungry)
+
+  ;; (OPTIONAL) Shift width for evil-mode users
+  ;; For the vim-like motions of ">>" and "<<".
+  (setq-default evil-shift-width 4)
+
+  ;; Visualize tabs as a pipe character - "|"
+  ;; This will also show trailing characters as they are useful to spot.
+  (setq whitespace-style '(face tabs tab-mark trailing))
+  (custom-set-faces
+   '(whitespace-tab ((t (:foreground "#636363")))))
+  (setq whitespace-display-mappings
+        '((tab-mark 9 [124 9] [92 9]))) ; 124 is the ascii ID for '\|'
+  (global-whitespace-mode) ; Enable whitespace mode everywhere
+
+  ;; Disable tabs and use spaces instead on Lisp and ELisp
+  ;; (defun disable-tabs () (setq indent-tabs-mode nil))
+  ;; (add-hook 'lisp-mode-hook 'disable-tabs)
+  ;; (add-hook 'emacs-lisp-mode-hook 'disable-tabs)
+  ;;; END TABS CONFIG
+#+END_SRC
+
+Visually highlight the selected buffer.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dimmer
+    :ensure t
+    :init
+    (dimmer-activate)
+    :config
+    (setq dimmer-percent 0.40))
+#+END_SRC
+
+** themes
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; @see https://github.com/gorakhargosh/emacs.d/blob/master/themes/color-theme-less.el
+  ;; (use-package hc-zenburn-theme
+  ;;   :ensure t
+  ;;   :init
+  ;;   (defvar zenburn-override-colors-alist
+  ;;     '(("zenburn-bg+05" . "#282828")
+  ;;       ("zenburn-bg+1"  . "#2F2F2F")
+  ;;       ("zenburn-bg+2"  . "#3F3F3F")
+  ;;       ("zenburn-bg+3"  . "#4F4F4F")))
+  ;;   (load-theme 'zenburn t)
+  ;;   :config
+  ;;   (set-face-attribute 'region nil :background "#666"))
+
+  (use-package gruvbox-theme
+    :ensure t
+    :config
+  ;; (load-theme  'gruvbox-dark-soft t))
+  ;; (load-theme  'gruvbox-dark-medium t))
+  ;; (load-theme  'gruvbox-dark-hard t))
+  ;; (load-theme  'gruvbox-light-medium t))
+  (load-theme  'gruvbox-light-soft t))
+  ;; (load-theme  'gruvbox-light-hard t))
+
+  ;; (use-package leuven-theme
+  ;;   :ensure t
+  ;;   :init
+  ;;   (load-theme 'leuven t)
+  ;;   :config
+  ;;   ;; Fontify the whole line for headings (with a background color).
+  ;;   (setq org-fontify-whole-heading-line t))
+
+  ;; (use-package doom-themes
+  ;;   :ensure t
+  ;;   :init
+  ;;   ;; Global settings (defaults)
+  ;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+  ;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+  ;;   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
+  ;;   ;; theme may have their own settings.
+  ;;   (load-theme 'doom-one t)
+  ;;   :config
+  ;;   ;; Enable flashing mode-line on errors
+  ;;   (doom-themes-visual-bell-config)
+
+  ;;   ;; Enable custom neotree theme
+  ;;   (doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
+
+  ;;   ;; Corrects (and improves) org-mode's native fontification.
+  ;;   (doom-themes-org-config)
+  ;; )
+
+  (use-package rainbow-delimiters
+    :ensure t
+    :config
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package mdi
+    :demand t
+    :load-path "lisp/mdi/")
+#+END_SRC
+
+** modeline
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package diminish
+  :ensure t
+  :config
+  (diminish 'visual-line-mode "↩️ "))
+
+(use-package autorevert
+  :diminish (auto-revert-mode . "🔂 "))
+
+(column-number-mode 1)
+(line-number-mode 1)
+(size-indication-mode t)
+
+(use-package powerline
+  :ensure t
+  :config (progn
+            ;; Wave seperators please
+            ;; wave
+            ;; arrow
+            ;; rounded
+            ;; zigzag
+            ;; These two lines are just examples
+            (setq powerline-arrow-shape 'zigzag)
+            ;; (setq powerline-default-separator-dir '(right . left))
+            ;; (setq powerline-default-separator 'nil)
+            (powerline-vim-theme)))
+
+(use-package powerline-evil
+  :ensure t
+  :after powerline
+  :config
+  (powerline-evil-vim-color-theme))
+
+(use-package nyan-mode
+  :ensure t
+  :after spaceline
+  :init
+  (progn
+    (nyan-mode)
+    (setq nyan-animate-nyancat t)
+    (setq nyan-wavy-trail t)
+    (setq nyan-bar-length 10))
+  :config (nyan-start-animation))
+
+;; 目前这个有 bug，会导致 emacs 卡死，但不知道具体原因
+;; Use spacemacs' mode line
+;; @see https://libraries.io/emacs/spaceline
+;; @see https://github.com/TeMPOraL/nyan-mode
+;; @see https://github.com/TheBB/spaceline
+(use-package spaceline
+  :ensure t
+  :after powerline
+  :config
+  (require 'spaceline-segments)
+  ;; (spaceline-spacemacs-theme)
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
+        spaceline-responsive nil
+        spaceline-workspace-numbers-unicode t
+        winum-auto-setup-mode-line nil)
+  (winum-mode))
+
+(use-package spaceline-config
+  :ensure spaceline
+  :config
+  (spaceline-helm-mode 1)
+  ;; (spaceline-spacemacs-theme)
+  (spaceline-emacs-theme))
+
+(use-package spaceline-all-the-icons
+  :ensure t
+  :after spaceline
+  :config
+  (setq spaceline-all-the-icons-icon-set-bookmark 'heart
+        spaceline-all-the-icons-icon-set-modified 'toggle
+        spaceline-all-the-icons-icon-set-dedicated 'pin
+        spaceline-all-the-icons-separator-type 'slant
+        spaceline-all-the-icons-icon-set-flycheck-slim 'dots
+        spaceline-all-the-icons-flycheck-alternate t
+        spaceline-all-the-icons-highlight-file-name t
+        spaceline-all-the-icons-hide-long-buffer-path t)
+  (spaceline-toggle-all-the-icons-bookmark-on)
+  (spaceline-toggle-all-the-icons-dedicated-on)
+  (spaceline-toggle-all-the-icons-fullscreen-on)
+  (spaceline-toggle-all-the-icons-buffer-position-on)
+  (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
+  (spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
+  (spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
+  (spaceline-all-the-icons--setup-paradox)         ;; Enable Paradox mode line
+  (spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
+  (spaceline-all-the-icons-theme))
+
+(use-package all-the-icons-ivy
+  :ensure t
+  :after (all-the-icons projectile ivy counsel counsel-projectile)
+  :config
+  (setq all-the-icons-ivy-file-commands
+        '(counsel-find-file
+          counsel-file-jump
+          counsel-recentf
+          counsel-projectile-find-file
+          counsel-projectile-find-dir
+          counsel-projectile))
+  (all-the-icons-ivy-setup))
+
+;; (use-package doom-modeline
+;;       :ensure t
+;;       :defer t
+;;       :hook (after-init . doom-modeline-init))
+
+;; ;; (defface my-pl-segment1-active
+;; ;;   '((t (:foreground "#000000" :background "#E1B61A")))
+;; ;;   "Powerline first segment active face.")
+;; ;; (defface my-pl-segment1-inactive
+;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
+;; ;;   "Powerline first segment inactive face.")
+;; ;; (defface my-pl-segment2-active
+;; ;;   '((t (:foreground "#F5E39F" :background "#8A7119")))
+;; ;;   "Powerline second segment active face.")
+;; ;; (defface my-pl-segment2-inactive
+;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
+;; ;;   "Powerline second segment inactive face.")
+;; ;; (defface my-pl-segment3-active
+;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
+;; ;;   "Powerline third segment active face.")
+;; ;; (defface my-pl-segment3-inactive
+;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
+;; ;;   "Powerline third segment inactive face.")
+
+;; ;; (defun air--powerline-default-theme ()
+;; ;;   "Set up my custom Powerline with Evil indicators."
+;; ;;   (interactive)
+;; ;;   (setq-default mode-line-format
+;; ;;                 '("%e"
+;; ;;                   (:eval
+;; ;;                    (let* ((active (powerline-selected-window-active))
+;; ;;                           (seg1 (if active 'my-pl-segment1-active 'my-pl-segment1-inactive))
+;; ;;                           (seg2 (if active 'my-pl-segment2-active 'my-pl-segment2-inactive))
+;; ;;                           (seg3 (if active 'my-pl-segment3-active 'my-pl-segment3-inactive))
+;; ;;                           (separator-left (intern (format "powerline-%s-%s"
+;; ;;                                                           (powerline-current-separator)
+;; ;;                                                           (car powerline-default-separator-dir))))
+;; ;;                           (separator-right (intern (format "powerline-%s-%s"
+;; ;;                                                            (powerline-current-separator)
+;; ;;                                                            (cdr powerline-default-separator-dir))))
+;; ;;                           (lhs (list (let ((evil-face (powerline-evil-face)))
+;; ;;                                        (if evil-mode
+;; ;;                                            (powerline-raw (powerline-evil-tag) evil-face)
+;; ;;                                          ))
+;; ;;                                      (if evil-mode
+;; ;;                                          (funcall separator-left (powerline-evil-face) seg1))
+;; ;;                                      ;;(when powerline-display-buffer-size
+;; ;;                                      ;;  (powerline-buffer-size nil 'l))
+;; ;;                                      ;;(when powerline-display-mule-info
+;; ;;                                      ;;  (powerline-raw mode-line-mule-info nil 'l))
+;; ;;                                      (powerline-buffer-id seg1 'l)
+;; ;;                                      (powerline-raw "[%*]" seg1 'l)
+;; ;;                                      (when (and (boundp 'which-func-mode) which-func-mode)
+;; ;;                                        (powerline-raw which-func-format seg1 'l))
+;; ;;                                      (powerline-raw " " seg1)
+;; ;;                                      (funcall separator-left seg1 seg2)
+;; ;;                                      (when (boundp 'erc-modified-channels-object)
+;; ;;                                        (powerline-raw erc-modified-channels-object seg2 'l))
+;; ;;                                      (powerline-major-mode seg2 'l)
+;; ;;                                      (powerline-process seg2)
+;; ;;                                      (powerline-minor-modes seg2 'l)
+;; ;;                                      (powerline-narrow seg2 'l)
+;; ;;                                      (powerline-raw " " seg2)
+;; ;;                                      (funcall separator-left seg2 seg3)
+;; ;;                                      (powerline-vc seg3 'r)
+;; ;;                                      (when (bound-and-true-p nyan-mode)
+;; ;;                                        (powerline-raw (list (nyan-create)) seg3 'l))))
+;; ;;                           (rhs (list (powerline-raw global-mode-string seg3 'r)
+;; ;;                                      (funcall separator-right seg3 seg2)
+;; ;;                                      (unless window-system
+;; ;;                                        (powerline-raw (char-to-string #xe0a1) seg2 'l))
+;; ;;                                      (powerline-raw "%4l" seg2 'l)
+;; ;;                                      (powerline-raw ":" seg2 'l)
+;; ;;                                      (powerline-raw "%3c" seg2 'r)
+;; ;;                                      (funcall separator-right seg2 seg1)
+;; ;;                                      (powerline-raw " " seg1)
+;; ;;                                      (powerline-raw "%6p" seg1 'r)
+;; ;;                                      (when powerline-display-hud
+;; ;;                                        (powerline-hud seg1 seg3)))))
+;; ;;                      (concat (powerline-render lhs)
+;; ;;                              (powerline-fill seg3 (powerline-width rhs))
+;; ;;                              (powerline-render rhs)))))))
+
+;; ;; (use-package powerline
+;; ;;   :ensure t
+;; ;;   :config
+;; ;;   (powerline-default-theme)
+;; ;;   (setq powerline-default-separator (if (display-graphic-p) 'slant
+;; ;;                                       nil))
+;; ;;   (air--powerline-default-theme)
+;; ;;   )
+#+END_SRC
+
+** parens
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package smartparens
+    :ensure t
+    :diminish ""
+    :init
+    (require 'smartparens-config)
+    :config (progn (smartparens-global-mode t)
+                   ;; highlights matching pairs
+                   (show-smartparens-global-mode t)
+                   ;; custom keybindings for smartparens mode
+                   (define-key smartparens-mode-map (kbd "C-<left>") 'sp-forward-barf-sexp)
+                   (define-key smartparens-mode-map (kbd "M-(") 'sp-forward-barf-sexp)
+                   (define-key smartparens-mode-map (kbd "C-<right>") 'sp-forward-slurp-sexp)
+                   (define-key smartparens-mode-map (kbd "M-)") 'sp-forward-slurp-sexp)
+
+                   (define-key smartparens-strict-mode-map (kbd "M-d") 'kill-sexp)
+                   (define-key smartparens-strict-mode-map (kbd "M-D") 'sp-kill-sexp)
+                   (define-key smartparens-mode-map (kbd "s-S") 'sp-split-sexp)
+
+
+                   (sp-with-modes '(clojure-mode cider-repl-mode)
+                     (sp-local-pair "#{" "}")
+                     (sp-local-pair "`" nil :actions nil)
+                     (sp-local-pair "@(" ")")
+                     (sp-local-pair "#(" ")"))
+
+                   (sp-local-pair 'markdown-mode "`" nil :actions nil)
+                   (sp-local-pair 'gfm-mode "`" nil :actions nil)
+
+                   (sp-local-pair 'web-mode "{" "}" :actions nil)
+                   ;; (-each sp--lisp-modes 'enable-lisp-hooks)
+                   ))
+#+END_SRC
+
+** fill-column-indicator
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package fill-column-indicator
+  ;;   :ensure t
+  ;;   :config
+  ;;   (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+  ;;   (add-hook 'org-mode-hook
+  ;;             '(lambda ()
+  ;;                (fci-mode 1)))
+  ;;   (setq fci-rule-character-color "#383838")
+  ;;   (setq-default fci-rule-column 119)
+  ;;   (global-fci-mode -1))
+#+END_SRC
+
+** indent-guide
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package highlight-indentation
+    :ensure t
+    :init
+    (highlight-indentation-mode t)
+    :config
+    (set-face-background 'highlight-indentation-face "#e3e3d3")
+    (set-face-background 'highlight-indentation-current-column-face "#c3b3b3"))
+#+END_SRC
+
+** ELScreen & window-zoom
+类似于 tmux 的最大化当前窗口功能，保持和我在 tmux 下的习惯一致。
+https://github.com/syohex/emacs-zoom-window
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package zoom-window
+    :ensure t
+    :config
+    (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
+    (setq zoom-window-mode-line-color "DarkGreen"))
+#+END_SRC
+
+** ace-window
+或许试试这个 Package： [[https://github.com/dimitri/switch-window][dimitri/switch-window - GitHub]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;;; ace-window
+  (use-package ace-window
+    :ensure t
+    :bind ("C-x o" . ace-window))
+#+END_SRC
+
+** Tiling window in Emacs
+#+BEGIN_QUOTE
+  eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工作空间。
+  目前是使用 =<f5>= 、 =<f6>= 、 =<f7>= 、 =<f8>= 进行工作空间切换。
+
+  *注意：* 这个的使用和 Winner Mode 有点冲突，通过 Winner Mode 进行恢复窗口时，会恢复到其他工作空间的窗口。
+
+  [[https://github.com/wasamasa/eyebrowse][wasamasa/eyebrowse - GitHub]]
+#+END_QUOTE
+
+- TODO: 把这个 eyebrowse 的按键配置到 Hydra 上面。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package eyebrowse
+  ;;   :ensure t
+  ;;   :defer 1
+  ;;   :bind
+  ;;   ("<f5>" . eyebrowse-switch-to-window-config-1)
+  ;;   ("<f6>" . eyebrowse-switch-to-window-config-2)
+  ;;   ("<f7>" . eyebrowse-switch-to-window-config-3)
+  ;;   ("<f8>" . eyebrowse-switch-to-window-config-4)
+  ;;   :config
+  ;;   (eyebrowse-mode 1)
+  ;;   (setq-default eyebrowse-new-workspace t))
+
+  (use-package eyebrowse
+    :ensure t
+    :defer 1
+    :config
+    (eyebrowse-mode 1)
+    (setq-default eyebrowse-new-workspace t)
+    (eyebrowse-setup-opinionated-keys)
+    :bind (("s-," . eyebrowse-prev-window-config)
+           ("s-." . eyebrowse-next-window-config)
+           ("s-0" . eyebrowse-switch-to-window-config-0)
+           ("s-1" . eyebrowse-switch-to-window-config-1)
+           ("s-2" . eyebrowse-switch-to-window-config-2)
+           ("s-3" . eyebrowse-switch-to-window-config-3)
+           ("s-4" . eyebrowse-switch-to-window-config-4)
+           ("s-5" . eyebrowse-switch-to-window-config-5)
+           ("s-6" . eyebrowse-switch-to-window-config-6)
+           ("s-7" . eyebrowse-switch-to-window-config-7)
+           ("s-8" . eyebrowse-switch-to-window-config-8)
+           ("s-9" . eyebrowse-switch-to-window-config-9)
+           ("s-/" . eyebrowse-close-window-config)
+           ("s-t" . eyebrowse-rename-window-config)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-eyebrowse (:color blue)
+    "
+  ^
+  ^Eyebrowse^         ^Do^                ^Switch^
+  ^─────────^─────────^──^────────────────^──────^────────────
+  _q_ quit            _c_ create          _<_ previous
+  ^^                  _k_ kill            _>_ next
+  ^^                  _r_ rename          _e_ last
+  ^^                  ^^                  _s_ switch
+  ^^                  ^^                  ^^
+  "
+    ("q" nil)
+    ("<" eyebrowse-prev-window-config :color red)
+    (">" eyebrowse-next-window-config :color red)
+    ("c" eyebrowse-create-window-config)
+    ("e" eyebrowse-last-window-config)
+    ("k" eyebrowse-close-window-config :color red)
+    ("r" eyebrowse-rename-window-config)
+    ("s" eyebrowse-switch-to-window-config))
+#+END_SRC
+
+** winner
+#+BEGIN_QUOTE
+  Winner Mode 是 Emacs 自带的一个 minor mode，可以用于快速恢复窗口分割状态。
+  默认使用 =C-c <left>= 组合键，就可以快速退回上一个窗口设置； =C-c <right>= 组合键，向前恢复一个窗口设置。
+
+  在 Hydra 模式下， =u= 按键快速回退上一个窗口； =r= 按键快速向前恢复一个窗口。
+
+  [[https://www.emacswiki.org/emacs/WinnerMode][EmacsWiki: Winner Mode]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (when (fboundp 'winner-mode)
+        (winner-mode 1))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package winum
+    :ensure t
+    :config
+    (setq winum-keymap
+          (let ((map (make-sparse-keymap)))
+            (define-key map (kbd "C-`") 'winum-select-window-by-number)
+            (define-key map (kbd "H-0") 'winum-select-window-0-or-10)
+            (define-key map (kbd "H-1") 'winum-select-window-1)
+            (define-key map (kbd "H-2") 'winum-select-window-2)
+            (define-key map (kbd "H-3") 'winum-select-window-3)
+            (define-key map (kbd "H-4") 'winum-select-window-4)
+            (define-key map (kbd "H-5") 'winum-select-window-5)
+            (define-key map (kbd "H-6") 'winum-select-window-6)
+            (define-key map (kbd "H-7") 'winum-select-window-7)
+            (define-key map (kbd "H-8") 'winum-select-window-8)
+            map))
+    :config
+    (setq winum-auto-setup-mode-line nil))
+    (winum-mode)
+#+END_SRC
+
+** rainbow-mode
+Colorize colors as text with their value.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rainbow-mode
+    :hook prog-mode
+    :config (setq-default rainbow-x-colors-major-mode-list '()))
+#+END_SRC
+
+* Font
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; frame font
+  ;; Setting English Font
+  ;; (if (member "Monaco" (font-family-list))
+  ;;    (set-face-attribute
+  ;;     'default nil :font "Monaco 13"))
+  (if (member "Source Code Pro" (font-family-list))
+      (set-face-attribute
+       'default nil :font "Source Code Pro 14"))
+
+  ;; set the default encoding system
+  (prefer-coding-system 'utf-8)
+  (setq default-file-name-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  ;; backwards compatibility as default-buffer-file-coding-system
+  ;; is deprecated in 23.2.
+  (if (boundp buffer-file-coding-system)
+      (setq buffer-file-coding-system 'utf-8)
+    (setq default-buffer-file-coding-system 'utf-8))
+
+  ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
+  (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
+  ;; (set-face-attribute 'mode-line nil :font "Source Code Pro 13")
+  ;; (set-face-attribute 'mode-line nil :font "DejaVu Sans Mono-12")
+#+END_SRC
+
+** unicode-fonts
+Unicode is an required aesthetic
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package pcache ;; Required by unicode-fonts
+    :ensure t
+    :init
+    ;; Mentioned here to redirect directory
+    (setq pcache-directory (expand-file-name "pcache/" yc/cache-dir)))
+
+  (use-package unicode-fonts
+    :ensure t
+    :demand t
+    :config
+    (unicode-fonts-setup))
+#+END_SRC
+
+** icons
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package all-the-icons :ensure t)
+#+END_SRC
+
+** panguspacing
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; @see http://coldnew.github.io/blog/2013/05-20_5cbb7/
+  (use-package pangu-spacing
+    :ensure t
+    :diminish ""
+    :config
+    (global-pangu-spacing-mode 1)
+    (add-hook 'org-mode-hook
+              '(lambda ()
+                 (set (make-local-variable 'pangu-spacing-real-insert-separtor) t))))
+#+END_SRC
+
+* Global key bindings
+** key binding functions
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package autothemer :ensure t)
+
+  (use-package which-key
+    :ensure t
+    :diminish which-key-mode
+    :init
+    (which-key-mode)
+    (which-key-setup-minibuffer)
+    (which-key-setup-side-window-bottom)
+    :config
+    (setq which-key-sort-order 'which-key-key-order-alpha)
+    (setq which-key-use-C-h-commands nil)
+    (setq which-key-idle-delay 0.2)
+    (add-to-list 'which-key-key-replacement-alist '("TAB" . "↹"))
+    (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))
+    (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
+    (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣")))
+#+END_SRC
+
+** evil
+- TODO 阅读：[[https://github.com/noctuid/evil-guide#terminology][noctuid/evil-guide - GitHub]]
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq evil-want-integration nil)
+
+  ;; @see http://wikemacs.org/wiki/Evil
+  (use-package evil
+    :ensure t
+    :init
+    (evil-mode 1)
+    :config
+
+    ;; @see http://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
+    ;; (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+    ;; (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+    ;; (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+    ;; (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+
+    ;; esc quits
+    ;; @see http://stackoverflow.com/questions/8483182/evil-mode-best-practice
+    (defun minibuffer-keyboard-quit ()
+      "Abort recursive edit.
+  In Delete Selection mode, if the mark is active, just deactivate it;
+  then it takes a second \\[keyboard-quit] to abort the minibuffer."
+      (interactive)
+      (if (and delete-selection-mode transient-mark-mode mark-active)
+          (setq deactivate-mark  t)
+        (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+        (abort-recursive-edit)))
+    (define-key evil-normal-state-map [escape] 'keyboard-quit)
+    (define-key evil-visual-state-map [escape] 'keyboard-quit)
+    (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+    (define-key evil-normal-state-map "\C-y" 'yank)
+    (define-key evil-insert-state-map "\C-y" 'yank)
+    (define-key evil-visual-state-map "\C-y" 'yank)
+    (define-key evil-insert-state-map "\C-e" 'end-of-line)
+
+    ;; Split and move the cursor to the new split
+    (define-key evil-normal-state-map (kbd "-")
+      (lambda ()
+        (interactive)
+        (split-window-vertically)
+        (other-window 1)))
+    (define-key evil-normal-state-map (kbd "|")
+      (lambda ()
+        (interactive)
+        (split-window-horizontally)
+        (other-window 1)))
+
+    (add-hook 'evil-after-load-hook
+              (lambda ()
+                ;; config
+                ))
+    ;; C-a for redo the last insertion
+    ;; @see http://emacs.stackexchange.com/questions/14521/insert-mode-make-c-a-insert-previously-inserted-text
+    (defun yc/evil-paste-last-insertion ()
+      (interactive)
+      (evil-paste-from-register ?.))
+
+    (eval-after-load 'evil-maps
+      '(define-key evil-insert-state-map (kbd "C-a") 'yc/evil-paste-last-insertion))
+
+    ;; @see https://github.com/rime/squirrel/wiki/vim%E7%94%A8%E6%88%B7%E4%B8%8Eemacs-evil-mode%E7%94%A8%E6%88%B7-%E8%BE%93%E5%85%A5%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E6%88%90%E8%8B%B1%E6%96%87%E7%8A%B6%E6%80%81%E7%9A%84%E5%AE%9E%E7%8E%B0
+    (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
+      "C-g back to normal state"
+      (when  (evil-insert-state-p)
+        (cond
+         ((equal (evil-initial-state major-mode) 'normal)
+          (evil-normal-state))
+         ((equal (evil-initial-state major-mode) 'insert)
+          (evil-normal-state))
+         ((equal (evil-initial-state major-mode) 'motion)
+          (evil-motion-state))
+         (t
+          (if (equal last-command 'keyboard-quit)
+              (evil-normal-state)           ;如果初始化 state 不是 normal，按两次才允许转到 normal state
+            (evil-change-to-initial-state)) ;如果初始化 state 不是 normal，按一次 转到初始状态
+          ))))
+
+    ;; C-u to scroll up or delete indent
+    ;; @see http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
+    (setq evil-want-C-u-scroll t)
+    (setq evil-want-C-i-jump t)
+    (set-cursor-color "DarkCyan")
+
+    ;; Great evil org mode keyboard shortcuts cribbed from cofi
+    (evil-define-key 'normal org-mode-map
+      (kbd "RET") 'org-open-at-point
+      "za"        'org-cycle
+      "zA"        'org-shifttab
+      "zm"        'hide-body
+      "zr"        'show-all
+      "zo"        'show-subtree
+      "zO"        'show-all
+      "zc"        'hide-subtree
+      "zC"        'hide-all
+      (kbd "M-h") 'org-metaleft
+      (kbd "M-j") 'org-shiftleft
+      (kbd "M-k") 'org-shiftright
+      (kbd "M-l") 'org-metaright
+      (kbd "M-H") 'org-metaleft
+      (kbd "M-J") 'org-metadown
+      (kbd "M-K") 'org-metaup
+      (kbd "M-L") 'org-metaright)
+
+    (evil-define-key 'normal orgstruct-mode-map
+      (kbd "RET") 'org-open-at-point
+      "za"        'org-cycle
+      "zA"        'org-shifttab
+      "zm"        'hide-body
+      "zr"        'show-all
+      "zo"        'show-subtree
+      "zO"        'show-all
+      "zc"        'hide-subtree
+      "zC"        'hide-all
+      (kbd "M-h") 'org-metaleft
+      (kbd "M-j") 'org-shiftleft
+      (kbd "M-k") 'org-shiftright
+      (kbd "M-l") 'org-metaright
+      (kbd "M-H") 'org-metaleft
+      (kbd "M-J") 'org-metadown
+      (kbd "M-K") 'org-metaup
+      (kbd "M-L") 'org-metaright)
+
+    (evil-define-key 'insert org-mode-map
+      (kbd "M-h") 'org-metaleft
+      (kbd "M-j") 'org-shiftleft
+      (kbd "M-k") 'org-shiftright
+      (kbd "M-l") 'org-metaright
+      (kbd "M-H") 'org-metaleft
+      (kbd "M-J") 'org-metadown
+      (kbd "M-K") 'org-metaup
+      (kbd "M-L") 'org-metaright)
+
+    (evil-define-key 'insert orgstruct-mode-map
+      (kbd "M-j") 'org-shiftleft
+      (kbd "M-k") 'org-shiftright
+      (kbd "M-H") 'org-metaleft
+      (kbd "M-J") 'org-metadown
+      (kbd "M-K") 'org-metaup
+      (kbd "M-L") 'org-metaright)
+    )
+
+  (use-package key-chord
+    :ensure t
+    :init
+    (key-chord-mode 1)
+    :config
+    (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
+
+  (use-package evil-nerd-commenter
+    :ensure t
+    :after evil
+    :init
+    (evilnc-default-hotkeys)
+    :config
+    ;; Emacs key bindings
+    (global-set-key (kbd "M-/") 'evilnc-comment-or-uncomment-lines)
+    (global-set-key (kbd "C-c l") 'evilnc-quick-comment-or-uncomment-to-the-line)
+    (global-set-key (kbd "C-c c") 'evilnc-copy-and-comment-lines)
+    (global-set-key (kbd "C-c p") 'evilnc-comment-or-uncomment-paragraphs)
+
+    ;; (evil-leader/set-key
+    ;;   "ci" 'evilnc-comment-or-uncomment-lines
+    ;;   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+    ;;   "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
+    ;;   "cc" 'evilnc-copy-and-comment-lines
+    ;;   "cp" 'evilnc-comment-or-uncomment-paragraphs
+    ;;   "cr" 'comment-or-uncomment-region
+    ;;   "cv" 'evilnc-toggle-invert-comment-line-by-line
+    ;;   "\\" 'evilnc-comment-operator ; if you prefer backslash key
+    ;;   )
+  )
+
+  (use-package evil-surround
+    :ensure t
+    :after org evil
+    :init
+    (global-evil-surround-mode 1))
+
+  (use-package evil-goggles
+    :ensure t
+    :diminish ""
+    :after org evil
+    :config
+    (evil-goggles-mode))
+
+  (use-package evil-search-highlight-persist
+    :ensure t
+    :after evil
+    :init
+    (global-evil-search-highlight-persist t))
+#+END_SRC
+
+*** evil-collection
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package evil-collection :ensure t :after org)
+#+END_SRC
+
+** general
+参考这篇文章重新定义自己的 key bindings：[[https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/][larstvei/dot-emacs - GitHub]]
+参考在 Mac 下的一些配置：[[https://www.emacswiki.org/emacs/EmacsForMacOS][Emacs For Mac OS]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; ;; mac switch meta key
+  ;; (defun yc/mac-switch-meta nil
+  ;;   "switch meta between Option and Command"
+  ;;   (interactive)
+  ;;   (if (eq mac-option-modifier nil)
+  ;;       (progn
+  ;;         (setq mac-option-modifier 'meta)
+  ;;         (setq mac-command-modifier 'hyper)
+  ;;         )
+  ;;     (progn
+  ;;       (setq mac-option-modifier nil)
+  ;;       (setq mac-command-modifier 'meta)
+  ;;       )
+  ;;     )
+  ;;   )
+
+  ;; ;; switch meta key
+  ;; (setq mac-option-key-is-meta nil)
+  ;; (setq mac-command-key-is-meta t)
+  ;; (setq mac-command-modifier 'meta)
+  ;; (setq mac-option-modifier nil)
+
+  (when (is-mac-p)
+    (setq mac-command-modifier 'meta
+          mac-option-modifier 'super
+          mac-control-modifier 'control
+          ns-function-modifier 'hyper))
+
+  ;; 修改后的设定 Mark 的绑定，由于经常忘了放住 Control 键，就给这个功能两个绑定了
+  (global-set-key (kbd "M-n") 'set-mark-command)
+
+  ;; use 'keyfreq-show'
+  ;; @see https://github.com/dacap/keyfreq
+  (use-package keyfreq
+    :ensure t
+    :init
+    (keyfreq-mode 1)
+    (keyfreq-autosave-mode 1))
+
+  (use-package general
+    :ensure t
+    :init
+    (general-def :states '(normal motion visual) "SPC" nil)
+    :config
+    (general-evil-setup t))
+
+  ;; (general-define-key
+  ;;      :states '(normal motion visual)
+  ;;      :prefix "SPC"
+  ;;      :global-prefix "C-SPC"
+  ;;      "<"    '(counsel-projectile-find-file :which-key "Find file in project")
+  ;;      "TAB"  'mode-line-other-buffer
+  ;;      "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
+  ;;      ":"    '(helm-M-x :which-key "M-x")
+  ;;      ";"    '(evil-ex :which-key "Ex command")
+  ;;      "'"    '(shell-pop :which-key "Open shell")
+  ;;      "0"    '(neotree-toggle :which-key "NeoTree")
+  ;;      "/"    '(:ignore t :which-key "search")
+  ;;      "//"   '(swiper :which-key "swiper")
+  ;;      "["    '(:ignore t :which-key "previous...")
+  ;;      "[["   '(text-scale-increase :which-key "text size in")
+  ;;      "]"    '(:ignore t :which-key "next...")
+  ;;      "]]"   '(text-scale-decrease :which-key "text size out")
+  ;;      "a"    '(:ignore t :which-key "applications")
+  ;;      "ai"   '(:ignore t :which-key "irc")
+  ;;      "as"   '(:ignore t :which-key "shells")
+  ;;      "asa"  'shell-pop
+  ;;      "ao"   '(:ignore t :which-key "org")
+  ;;      "aoa"  'org-agenda
+  ;;      "aoc"  'org-capture
+  ;;      "aok"  '(:ignore t :which-key "clock")
+  ;;      "aoki" 'org-clock-in
+  ;;      "aoko" 'org-clock-out
+  ;;      "aokc" 'org-clock-in-last
+  ;;      "aoke" 'org-clock-modify-effort-estimate
+  ;;      "aokq" 'org-clock-cancel
+  ;;      "aokg" 'org-clock-goto
+  ;;      "aokd" 'org-clock-display
+  ;;      "aokr" 'org-clock-report
+  ;;      "ar"   '(ranger :which-key "call ranger")
+  ;;      "b"    '(:ignore t :which-key "buffers")
+  ;;      "bb"   'helm-mini
+  ;;      "bk"   'kill-this-buffer
+  ;;      "be"   'ibuffer
+  ;;      "c"    '(:ignore t :which-key "compile/comments")
+  ;;      "C"    '(:ignore t :which-key "capture/colors")
+  ;;      "cl"   'evilnc-comment-or-uncomment-lines
+  ;;      "e"    '(:ignore t :which-key "errors")
+  ;;      "f"    '(:ignore t :which-key "files")
+  ;;      "fC"   '(:ignore t :which-key "files/convert")
+  ;;      "fe"   '(:ignore t :which-key "emacs(spacemacs)")
+  ;;      "fv"   '(:ignore t :which-key "variables")
+  ;;      "fh"   'helm-find-files
+  ;;      "fc"   'helm-recentf
+  ;;      "ff"   'ido-find-file
+  ;;      "ft"   'treemacs
+  ;;      "fs"   'save-buffer
+  ;;      "fo"   'yc/dired-open-in-finder
+  ;;      "F"    '(:ignore t :which-key "frame")
+  ;;      "Fb"   'switch-to-buffer-other-frame
+  ;;      "FD"   'delete-other-frames
+  ;;      "Fd"   'delete-frame
+  ;;      "Fn"   'make-frame
+  ;;      "g"    '(:ignore t :which-key "git/versions-control")
+  ;;      "gs"   '(magit-status :which-key "git status")
+  ;;      "gt"   '(git-timemachine-toggle :which-key "git timemachine")
+  ;;      ;; "gs"  'magit-status
+  ;;      "h"    '(:ignore t :which-key "help")
+  ;;      "hb"   'helm-descbinds
+  ;;      "hd"   '(:ignore t :which-key "help-describe")
+  ;;      "hdk"  'describe-key
+  ;;      "hdK"  'describe-keymap
+  ;;      "hdb"  'describe-bindings
+  ;;      "hdc"  'describe-char
+  ;;      "hdv"  'describe-variable
+  ;;      "hdm"  'describe-mode
+  ;;      "hdl"  'describe-last-keys
+  ;;      "hdf"  'describe-function
+  ;;      "hk"   'which-key-show-top-level
+  ;;      "i"    '(:ignore t :which-key "insertion")
+  ;;      "j"    '(:ignore t :which-key "jump/join/split")
+  ;;      "jj"   'avy-goto-word-or-subword-1
+  ;;      "jk"   'avy-goto-char
+  ;;      "jl"   'avy-goto-line
+  ;;      "uu"   'undo-tree-visualize
+  ;;      "k"    '(:ignore t :which-key "lisp")
+  ;;      "kd"   '(:ignore t :which-key "delete")
+  ;;      "kD"   '(:ignore t :which-key "delete-backward")
+  ;;      "k`"   '(:ignore t :which-key "hybrid")
+  ;;      "n"    '(:ignore t :which-key "narrow/numbers")
+  ;;      "p"    '(:ignore t :which-key "projects")
+  ;;      "p."   'hydra-projectile/body
+  ;;      "p$"   '(:ignore t :which-key "projects/shell")
+  ;;      "pf"   'projectile-find-file
+  ;;      "ps"   'helm-projectile-switch-project
+  ;;      "q"    '(:ignore t :which-key "quit")
+  ;;      "qs"   'save-buffers-kill-emacs
+  ;;      "qq"   'delete-window
+  ;;      "qR"   'restart-emacs
+  ;;      "qQ"   'kill-emacs
+  ;;      "r"    '(:ignore t :which-key "registers/rings/resume")
+  ;;      "Re"   '(:ignore t :which-key "elisp")
+  ;;      "Rp"   '(:ignore t :which-key "pcre")
+  ;;      "s"    '(:ignore t :which-key "search/symbol")
+  ;;      "sa"   '(:ignore t :which-key "ag")
+  ;;      "sg"   '(:ignore t :which-key "grep")
+  ;;      "sk"   '(:ignore t :which-key "ack")
+  ;;      "st"   '(:ignore t :which-key "pt")
+  ;;      "sw"   '(:ignore t :which-key "web")
+  ;;      "saa"  'ag
+  ;;      "sap"  'ag-project
+  ;;      "sas"  'helm-ag
+  ;;      "saf"  'helm-do-ag
+  ;;      "sap"  'helm-do-ag-project-root
+  ;;      "sc"   'evil-search-highlight-persist-remove-all
+  ;;      "ss"   'helm-swoop
+  ;;      "sS"   'helm-swoop-region-or-symbol
+  ;;      "w"    '(:ignore t :which-key "windows")
+  ;;      "wp"   '(:ignore t :which-key "popup")
+  ;;      "w."   'hydra-windows/body
+  ;;      "wh"   'windmove-left
+  ;;      "wl"   'windmove-right
+  ;;      "wk"   'windmove-up
+  ;;      "wj"   'windmove-down
+  ;;      "w/"   'split-window-right
+  ;;      "w-"   'split-window-below
+  ;;      "wc"   'delete-window
+  ;;      "wd"   'delete-frame
+  ;;      "wu"   'winner-undo
+  ;;      "wr"   'winner-redo
+  ;;      ;; "mH"   'hydra-move-splitter-left
+  ;;      ;; "mJ"   'hydra-move-splitter-down
+  ;;      ;; "mK"   'hydra-move-splitter-up
+  ;;      ;; "mL"   'hydra-move-splitter-right
+  ;;      ;; "mM"   'delete-other-windows
+  ;;      ;; "mb"   'balance-windows
+  ;;      "t"    '(:ignore t :which-key "toggles")
+  ;;      "tC"   '(:ignore t :which-key "colors")
+  ;;      "tE"   '(:ignore t :which-key "editing-styles")
+  ;;      "th"   '(:ignore t :which-key "highlight")
+  ;;      "tm"   '(:ignore t :which-key "modeline")
+  ;;      "T"    '(:ignore t :which-key "UI toggles/themes")
+  ;;      "Tf"   'toggle-frame-fullscreen
+  ;;      "Tm"   'toggle-frame-maximized
+  ;;      "x"    '(:ignore t :which-key "text")
+  ;;      "xa"   '(:ignore t :which-key "align")
+  ;;      "xd"   '(:ignore t :which-key "delete")
+  ;;      "xg"   '(:ignore t :which-key "google-translate")
+  ;;      "xl"   '(:ignore t :which-key "lines")
+  ;;      "xm"   '(:ignore t :which-key "move")
+  ;;      "xt"   '(:ignore t :which-key "transpose")
+  ;;      "xw"   '(:ignore t :which-key "words")
+  ;;      "z"    '(:ignore t :which-key "zoom")
+  ;;      "C-t"  '(:ignore t :which-key "other toggles")
+  ;;      "o"    '(:ignore t :which-key "org")
+  ;;      "o."   'hydra-org/body
+  ;;      "oa"   'org-agenda
+  ;;      "oc"   'org-capture
+  ;;      "og"   'org-clock-goto
+  ;;      "ok"   '(:ignore t :which-key "clock")
+  ;;      "oki"  'org-clock-in
+  ;;      "oko"  'org-clock-out
+  ;;      "okc"  'org-clock-in-last
+  ;;      "oke"  'org-clock-modify-effort-estimate
+  ;;      "okq"  'org-clock-cancel
+  ;;      "okd"  'org-clock-display
+  ;;      "okg"  'org-clock-goto
+  ;;      "okr"  'org-clock-report
+  ;;      "v"    'er/expand-region)
+
+  (general-create-definer my-leader-def
+    :states '(normal motion visual)
+    :prefix "SPC"
+    :global-prefix "s-SPC")
+
+  (my-leader-def
+    "TAB"  'mode-line-other-buffer
+    "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
+    "<"    '(counsel-projectile-find-file :which-key "Find file in project")
+    ":"    '(helm-M-x :which-key "M-x")
+    ";"    '(evil-ex :which-key "Ex command")
+    "'"    '(shell-pop :which-key "Open shell")
+    "0"    '(neotree-toggle :which-key "NeoTree")
+    "/"    '(:ignore t :which-key "search")
+    "//"   '(swiper :which-key "swiper")
+    "["    '(:ignore t :which-key "previous...")
+    "[["   '(text-scale-increase :which-key "text size in")
+    "]"    '(:ignore t :which-key "next...")
+    "]]"   '(text-scale-decrease :which-key "text size out")
+    "a"    '(:ignore t :which-key "applications")
+    "ai"   '(:ignore t :which-key "irc")
+    "as"   '(:ignore t :which-key "shells")
+    "asa"  'shell-pop
+    "ao"   '(:ignore t :which-key "org")
+    "aoa"  'org-agenda
+    "aoc"  'org-capture
+    "aok"  '(:ignore t :which-key "clock")
+    "aoki" 'org-clock-in
+    "aoko" 'org-clock-out
+    "aokc" 'org-clock-in-last
+    "aoke" 'org-clock-modify-effort-estimate
+    "aokq" 'org-clock-cancel
+    "aokg" 'org-clock-goto
+    "aokd" 'org-clock-display
+    "aokr" 'org-clock-report
+    "ar"   '(ranger :which-key "call ranger")
+    "b"    '(:ignore t :which-key "buffers")
+    "bb"   'helm-mini
+    "bk"   'kill-this-buffer
+    "be"   'ibuffer
+    "c"    '(:ignore t :which-key "compile/comments")
+    "C"    '(:ignore t :which-key "capture/colors")
+    "cl"   'evilnc-comment-or-uncomment-lines
+    "e"    '(:ignore t :which-key "errors")
+    "f"    '(:ignore t :which-key "files")
+    "fC"   '(:ignore t :which-key "files/convert")
+    "fe"   '(:ignore t :which-key "emacs(spacemacs)")
+    "fv"   '(:ignore t :which-key "variables")
+    "fh"   'helm-find-files
+    "fc"   'helm-recentf
+    "ff"   'ido-find-file
+    "ft"   'treemacs
+    "fs"   'save-buffer
+    "fo"   'yc/dired-open-in-finder
+    "F"    '(:ignore t :which-key "frame")
+    "Fb"   'switch-to-buffer-other-frame
+    "FD"   'delete-other-frames
+    "Fd"   'delete-frame
+    "Fn"   'make-frame
+    "g"    '(:ignore t :which-key "git/versions-control")
+    "gs"   '(magit-status :which-key "git status")
+    "gt"   '(git-timemachine-toggle :which-key "git timemachine")
+    ;; "gs"  'magit-status
+    "h"    '(:ignore t :which-key "help")
+    "hb"   'helm-descbinds
+    "hd"   '(:ignore t :which-key "help-describe")
+    "hdk"  'describe-key
+    "hdK"  'describe-keymap
+    "hdb"  'describe-bindings
+    "hdc"  'describe-char
+    "hdv"  'describe-variable
+    "hdm"  'describe-mode
+    "hdl"  'describe-last-keys
+    "hdf"  'describe-function
+    "hk"   'which-key-show-top-level
+    "i"    '(:ignore t :which-key "insertion")
+    "j"    '(:ignore t :which-key "jump/join/split")
+    "jj"   'avy-goto-word-or-subword-1
+    "jk"   'avy-goto-char
+    "jl"   'avy-goto-line
+    "uu"   'undo-tree-visualize
+    "k"    '(:ignore t :which-key "lisp")
+    "kd"   '(:ignore t :which-key "delete")
+    "kD"   '(:ignore t :which-key "delete-backward")
+    "k`"   '(:ignore t :which-key "hybrid")
+    "n"    '(:ignore t :which-key "narrow/numbers")
+    "p"    '(:ignore t :which-key "projects")
+    "p."   'hydra-projectile/body
+    "p$"   '(:ignore t :which-key "projects/shell")
+    "pf"   'projectile-find-file
+    "ps"   'helm-projectile-switch-project
+    "q"    '(:ignore t :which-key "quit")
+    "qs"   'save-buffers-kill-emacs
+    "qq"   'delete-window
+    "qR"   'restart-emacs
+    "qQ"   'kill-emacs
+    "r"    '(:ignore t :which-key "registers/rings/resume")
+    "m"    '(:ignore t :which-key "major-mode-cmd")
+    "Re"   '(:ignore t :which-key "elisp")
+    "Rp"   '(:ignore t :which-key "pcre")
+    "s"    '(:ignore t :which-key "search/symbol")
+    "sa"   '(:ignore t :which-key "ag")
+    "sg"   '(:ignore t :which-key "grep")
+    "sk"   '(:ignore t :which-key "ack")
+    "st"   '(:ignore t :which-key "pt")
+    "sw"   '(:ignore t :which-key "web")
+    "saa"  'ag
+    "sap"  'ag-project
+    "sas"  'helm-ag
+    "saf"  'helm-do-ag
+    "sap"  'helm-do-ag-project-root
+    "sc"   'evil-search-highlight-persist-remove-all
+    "ss"   'helm-swoop
+    "sS"   'helm-swoop-region-or-symbol
+    "w"    '(:ignore t :which-key "windows")
+    "wp"   '(:ignore t :which-key "popup")
+    "w."   'hydra-windows/body
+    "wh"   'windmove-left
+    "wl"   'windmove-right
+    "wk"   'windmove-up
+    "wj"   'windmove-down
+    "w/"   'split-window-right
+    "w-"   'split-window-below
+    "wc"   'delete-window
+    "wd"   'delete-frame
+    "wu"   'winner-undo
+    "wr"   'winner-redo
+    ;; "mH"   'hydra-move-splitter-left
+    ;; "mJ"   'hydra-move-splitter-down
+    ;; "mK"   'hydra-move-splitter-up
+    ;; "mL"   'hydra-move-splitter-right
+    ;; "mM"   'delete-other-windows
+    ;; "mb"   'balance-windows
+    "t"    '(:ignore t :which-key "toggles")
+    "tC"   '(:ignore t :which-key "colors")
+    "tE"   '(:ignore t :which-key "editing-styles")
+    "th"   '(:ignore t :which-key "highlight")
+    "tm"   '(:ignore t :which-key "modeline")
+    "T"    '(:ignore t :which-key "UI toggles/themes")
+    "Tf"   'toggle-frame-fullscreen
+    "Tm"   'toggle-frame-maximized
+    "x"    '(:ignore t :which-key "text")
+    "xa"   '(:ignore t :which-key "align")
+    "xd"   '(:ignore t :which-key "delete")
+    "xg"   '(:ignore t :which-key "google-translate")
+    "xl"   '(:ignore t :which-key "lines")
+    "xm"   '(:ignore t :which-key "move")
+    "xt"   '(:ignore t :which-key "transpose")
+    "xw"   '(:ignore t :which-key "words")
+    "z"    '(:ignore t :which-key "zoom")
+    "C-t"  '(:ignore t :which-key "other toggles")
+    "o"    '(:ignore t :which-key "org")
+    "o."   'hydra-org/body
+    "oa"   'org-agenda
+    "oc"   'org-capture
+    "og"   'org-clock-goto
+    "ok"   '(:ignore t :which-key "clock")
+    "oki"  'org-clock-in
+    "oko"  'org-clock-out
+    "okc"  'org-clock-in-last
+    "oke"  'org-clock-modify-effort-estimate
+    "okq"  'org-clock-cancel
+    "okd"  'org-clock-display
+    "okg"  'org-clock-goto
+    "okr"  'org-clock-report
+    "v"    'er/expand-region)
+
+  (general-create-definer my-major-mode-leader-def
+    :states '(normal motion visual)
+    :prefix "SPC m"
+    :global-prefix "s-SPC m")
+
+  (general-create-definer my-major-mode-leader-def-copy
+    :states '(normal motion visual)
+    :prefix ",")
+#+END_SRC
+
+* Buffer
+通过 =C-c n= 快速创建一个空的 Buffer。
+
+参考：
+- [[https://stackoverflow.com/questions/25791605/emacs-how-do-i-create-a-new-empty-buffer-whenever-creating-a-new-frame][Emacs: How do I create a new “empty” buffer whenever creating a new frame?]]
+- [[http://ergoemacs.org/emacs/emacs_new_empty_buffer.html][Emacs: New Empty Buffer]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun yc/new-buffer-frame ()
+    "Create a new frame with a new empty buffer."
+    (interactive)
+    (let ((buffer (generate-new-buffer "Untitled")))
+      (set-buffer-major-mode buffer)
+      (display-buffer buffer '(display-buffer-pop-up-frame . nil))))
+
+  (global-set-key (kbd "C-c n") #'yc/new-buffer-frame)
+#+END_SRC
+
+@see [[https://github.com/purcell/ibuffer-projectile][purcell/ibuffer-projectile - GitHub]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ibuffer-projectile
+    :ensure t
+    :config
+    (add-hook 'ibuffer-hook
+      (lambda ()
+        (ibuffer-projectile-set-filter-groups)
+        (unless (eq ibuffer-sorting-mode 'alphabetic)
+          (ibuffer-do-sort-by-alphabetic)))))
+#+END_SRC
+
+** Desktop
+Save and restore Emacs status, including buffers, point and window configurations.
+
+https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package desktop
+    :ensure t
+    :demand t
+    :config
+    (desktop-save-mode 1)
+    (add-to-list 'desktop-globals-to-save 'golden-ratio-adjust-factor))
+#+END_SRC
+
+* File Manager & Projects
+** dired
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package direx
+  :ensure t
+  :init
+  (global-set-key (kbd "C-x C-j") 'direx:jump-to-directory))
+
+(use-package all-the-icons-dired
+  :ensure t
+  :after (all-the-icons)
+  :init
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+#+END_SRC
+
+** projectile
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package projectile
+    :ensure t
+    :commands (projectile-project-root)
+    ;; :init (projectile-global-mode)
+    :config (progn (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
+
+                   (setq projectile-enable-caching t)
+                   (setq projectile-completion-system 'default)
+                   (setq projectile-indexing-method 'alien)
+
+                   ;; add to the globally ignored files
+                   (dolist (file-name '("*~" "*.elc"))
+                     (add-to-list 'projectile-globally-ignored-files file-name))))
+
+  (defun yc/helm-project-do-ag ()
+    "Search in current project with `ag'."
+    (interactive)
+    (let ((dir (projectile-project-root)))
+      (if dir
+          (helm-do-ag dir)
+        (message "error: Not in a project."))))
+#+END_SRC
+
+*** hydra-projectile
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-projectile-other-window (:color red)
+    "projectile-other-window"
+    ("f"  projectile-find-file-other-window        "file")
+    ("g"  projectile-find-file-dwim-other-window   "file dwim")
+    ("d"  projectile-find-dir-other-window         "dir")
+    ("b"  projectile-switch-to-buffer-other-window "buffer")
+    ("q"  nil                                      "cancel" :color blue))
+
+  (defhydra hydra-projectile (:color red
+                                     :hint nil)
+    "
+       PROJECTILE: %(projectile-project-root)
+                                                                                 ╭────────────┐
+       Find File            Search/Tags          Buffers                Cache    │ Projectile │
+    ╭────────────────────────────────────────────────────────────────────────────┴────────────╯
+    _s-f_: file              _a_: ag                _i_: Ibuffer             _c_: cache clear
+     _ff_: file dwim         _g_: update gtags      _b_: switch to buffer    _x_: remove known project
+     _fd_: file curr dir     _o_: multi-occur     _s-k_: Kill all buffers    _X_: cleanup non-existing
+      _r_: recent file                                                   ^^^^_z_: cache current
+      _d_: dir
+
+  "
+    ("a"   projectile-ag)
+    ("b"   projectile-switch-to-buffer)
+    ("c"   projectile-invalidate-cache)
+    ("d"   projectile-find-dir)
+    ("s-f" projectile-find-file)
+    ("ff"  projectile-find-file-dwim)
+    ("fd"  projectile-find-file-in-directory)
+    ("g"   ggtags-update-tags)
+    ("s-g" ggtags-update-tags)
+    ("i"   projectile-ibuffer)
+    ("K"   projectile-kill-buffers)
+    ("s-k" projectile-kill-buffers)
+    ("m"   projectile-multi-occur)
+    ("o"   projectile-multi-occur)
+    ("s-p" projectile-switch-project "switch project")
+    ("p"   projectile-switch-project)
+    ("s"   projectile-switch-project)
+    ("r"   projectile-recentf)
+    ("x"   projectile-remove-known-project)
+    ("X"   projectile-cleanup-known-projects)
+    ("z"   projectile-cache-current-file)
+    ("`"   hydra-projectile-other-window/body "other window")
+    ("q"   nil "cancel" :color blue))
+#+END_SRC
+
+** neotree
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package neotree
+    :ensure t
+    :diminish ""
+    :config
+    (setq neo-smart-open t)
+    (setq projectile-switch-project-action 'neotree-projectile-action)
+    (setq neo-window-fixed-size nil)  ; 通过设置该参数，可以手动调整 neotree 窗口大小
+    (setq-default neo-dont-be-alone t)  ; Don't allow neotree to be the only open window
+    ;; Use with evil mode
+    ;; @see https://www.emacswiki.org/emacs/NeoTree
+    (add-hook 'neotree-mode-hook
+              (lambda ()
+                (visual-line-mode -1)
+                (setq truncate-lines t)
+                (hl-line-mode 1)
+                (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+                (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
+                (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
+                (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)))
+    ;; 'classic, 'nerd, 'ascii, 'arrow
+    (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+    ;; Disable line-numbers minor mode for neotree
+    (add-hook 'neo-after-create-hook (lambda (&optional dummy) (display-line-numbers-mode -1)))
+    )
+
+  (defun neotree-copy-file ()
+    (interactive)
+    (let* ((current-path (neo-buffer--get-filename-current-line))
+           (msg (format "Copy [%s] to: "
+                        (neo-path--file-short-name current-path)))
+           (to-path (read-file-name msg (file-name-directory current-path))))
+      (dired-copy-file current-path to-path t))
+    (neo-buffer--refresh t))
+
+  (define-minor-mode neotree-evil
+    "Use NERDTree bindings on neotree."
+    :lighter " NT"
+    :keymap (progn
+              (evil-make-overriding-map neotree-mode-map 'normal t)
+              (evil-define-key 'normal neotree-mode-map
+                "C" 'neotree-change-root
+                "U" 'neotree-select-up-node
+                "r" 'neotree-refresh
+                "o" 'neotree-enter
+                (kbd "<return>") 'neotree-enter
+                "i" 'neotree-enter-horizontal-split
+                "s" 'neotree-enter-vertical-split
+                "n" 'evil-search-next
+                "N" 'evil-search-previous
+                "ma" 'neotree-create-node
+                "mc" 'neotree-copy-file
+                "md" 'neotree-delete-node
+                "mm" 'neotree-rename-node
+                "gg" 'evil-goto-first-line
+                "gi" (lambda ()
+                       (interactive)
+                       (if (string= pe/get-directory-tree-external-command
+                                    nt/gitignore-files-cmd)
+                           (progn (setq pe/get-directory-tree-external-command
+                                        nt/all-files-cmd))
+                         (progn (setq pe/get-directory-tree-external-command
+                                      nt/gitignore-files-cmd)))
+                       (nt/refresh))
+                "I" (lambda ()
+                      (interactive)
+                      (if pe/omit-enabled
+                          (progn (setq pe/directory-tree-function
+                                       'pe/get-directory-tree-async)
+                                 (pe/toggle-omit nil))
+                        (progn (setq pe/directory-tree-function
+                                     'pe/get-directory-tree-external)
+                               (pe/toggle-omit t)))))
+              neotree-mode-map))
+#+END_SRC
+
+让 Neotree 窗口，可以根据目录长度自动调节窗口大小
+#+BEGIN_SRC emacs-lisp :tangle no
+  (defun neotree-resize-window (&rest _args)
+    "Resize neotree window.
+  https://github.com/jaypei/emacs-neotree/pull/110"
+    (interactive)
+    (neo-buffer--with-resizable-window
+     (let ((fit-window-to-buffer-horizontally t))
+       (fit-window-to-buffer))))
+
+  (add-hook 'neo-change-root-hook #'neotree-resize-window)
+  (add-hook 'neo-enter-hook #'neotree-resize-window)
+#+END_SRC
+
+** treemacs
+@see https://github.com/Alexander-Miller/treemacs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; A tree layout file explorer
+  (use-package treemacs
+    :ensure t
+    :defines winum-keymap
+    :commands (treemacs-follow-mode
+               treemacs-filewatch-mode
+               treemacs-fringe-indicator-mode
+               treemacs-git-mode)
+    :bind (;; ([f8]        . treemacs)
+           ("M-9"       . treemacs-select-window)
+           ("C-x 1"     . treemacs-delete-other-windows)
+           ("C-x t 1"   . treemacs-delete-other-windows)
+           ("C-x t t"   . treemacs)
+           ("C-x t B"   . treemacs-bookmark)
+           ("C-x t C-t" . treemacs-find-file)
+           ("C-x t M-t" . treemacs-find-tag)
+           :map treemacs-mode-map
+           ([mouse-1]   . treemacs-single-click-expand-action))
+    :init
+    (with-eval-after-load 'winum
+      (bind-key (kbd "M-9") #'treemacs-select-window winum-keymap))
+    :config
+    (setq treemacs-collapse-dirs              (if (executable-find "python") 3 0)
+          treemacs-file-event-delay           5000
+          treemacs-silent-refresh             t
+          treemacs-follow-after-init          t
+          treemacs-follow-recenter-distance   0.1
+          treemacs-goto-tag-strategy          'refetch-index
+          treemacs-indentation                2
+          treemacs-indentation-string         " "
+          treemacs-is-never-other-window      nil
+          treemacs-no-png-images              nil
+          treemacs-recenter-after-file-follow nil
+          treemacs-recenter-after-tag-follow  nil
+          treemacs-show-hidden-files          t
+          treemacs-silent-filewatch           nil
+          treemacs-silent-refresh             nil
+          treemacs-sorting                    'alphabetic-desc
+          treemacs-tag-follow-cleanup         t
+          treemacs-tag-follow-delay           1.5
+          treemacs-width                      30)
+
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null (executable-find "python3"))))
+      (`(t . t)
+       (treemacs-git-mode 'extended))
+      (`(t . _)
+       (treemacs-git-mode 'simple)))
+
+    (if (fboundp 'define-fringe-bitmap)
+        (define-fringe-bitmap 'treemacs--fringe-indicator-bitmap
+          (vector #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111
+                  #b00000111111))))
+
+  ;; Projectile integration for treemacs
+  (use-package treemacs-projectile
+    :ensure t
+    :after projectile
+    :bind (([M-f8] . treemacs-projectile)
+           :map projectile-command-map
+           ("h" . treemacs-projectile)))
+#+END_SRC
+
+* Languages
+** Go
+Go 语言开发环境设置。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package go-mode
+    :ensure t
+    :mode ("\\.go" . go-mode)
+    :commands go-mode
+    :init (add-to-list 'auto-mode-alist '("\\.go$" . go-mode))
+    :config (progn (use-package company-go
+                     :ensure t
+                     :after go-mode company
+                     :commands company-go
+                     :if (executable-find "gocode")
+                     :init (add-hook 'after-init-hook
+                                     (lambda ()(add-to-list 'company-backends 'company-go))))
+                   (use-package go-direx
+                     :ensure t
+                     :after go-mode
+                     :init
+                     (define-key go-mode-map (kbd "C-c C-j") 'go-direx-pop-to-buffer))
+                   (use-package go-eldoc
+                     :ensure t
+                     :after go-mode
+                     :if (executable-find "gocode")
+                     :commands go-eldoc-setup
+                     :init (add-to-list 'go-mode-hook 'go-eldoc-setup))
+                   (bind-key "M-]" 'godef-jump go-mode-map)
+                   (bind-key "M-[" 'pop-tag-mark go-mode-map)
+                   (bind-key "C-S-F" 'gofmt go-mode-map)
+                   (bind-key "M-<return>" 'godef-describe go-mode-map)
+                   ;;                (setq go-mode-map
+                   ;; (let ((m (make-sparse-keymap)))
+                   ;;   (define-key m "}" #'go-mode-insert-and-indent)
+                   ;;   (define-key m ")" #'go-mode-insert-and-indent)
+                   ;;   (define-key m "," #'go-mode-insert-and-indent)
+                   ;;   (define-key m ":" #'go-mode-insert-and-indent)
+                   ;;   (define-key m "=" #'go-mode-insert-and-indent)
+                   ;;   (define-key m (kbd "C-c C-a") #'go-import-add)
+                   ;;   (define-key m (kbd "C-c C-j") #'godef-jump)
+                   ;;   ;; go back to point after called godef-jump.  ::super
+                   ;;   (define-key m (kbd "C-c C-b") #'pop-tag-mark)
+                   ;;   (define-key m (kbd "C-x 4 C-c C-j") #'godef-jump-other-window)
+                   ;;   (define-key m (kbd "C-c C-d") #'godef-describe)
+                   ;;   m))
+
+                   (add-hook 'go-mode-hook 'flycheck-mode)
+                   (add-hook 'go-mode-hook 'yas-minor-mode)
+                   (add-hook 'go-mode-hook 'highlight-symbol-mode)
+
+                   ;; 保存文件的时候对该源文件做一下 gofmt
+                   (add-hook 'before-save-hook 'gofmt-before-save)
+                   (add-hook 'go-mode-hook
+                             (lambda ()
+                               (setq tab-width 4)
+                               (setq indent-tabs-mode nil))))
+    )
+
+  (use-package go-complete
+    :ensure t
+    :after go-mode)
+  (use-package go-errcheck
+    :ensure t
+    :after go-mode)
+  (use-package go-gopath
+    :ensure t
+    :after go-mode)
+  (use-package go-impl :ensure t)
+  (use-package go-projectile
+    :ensure t
+    :after go-mode projectile)
+  (use-package go-snippets
+    :ensure go-snippets
+    :after go-mode company
+    :init (go-snippets-initialize))
+  (use-package go-rename
+    :ensure t
+    :after go-mode)
+
+  ;; Quick run current buffer
+  (defun yc/go ()
+    "run current buffer"
+    (interactive)
+    (compile (concat "go run " (buffer-file-name))))
+
+  ;; use goimports instead of gofmt ::super
+  (setq gofmt-command "goimports")
+
+  (defun yc/go-run-tests (args)
+    (interactive)
+    (save-selected-window
+      (async-shell-command (concat "go test " args))))
+
+  (defun yc/go-run-package-tests ()
+    (interactive)
+    (yc/go-run-tests ""))
+
+  (defun yc/go-run-package-tests-nested ()
+    (interactive)
+    (yc/go-run-tests "./..."))
+
+  (defun yc/go-run-test-current-function ()
+    (interactive)
+    (if (string-match "_test\\.go" buffer-file-name)
+        (let ((test-method (if go-use-gocheck-for-testing
+                               "-check.f"
+                             "-run")))
+          (save-excursion
+            (re-search-backward "^func[ ]+\\(([[:alnum:]]*?[ ]?[*]?[[:alnum:]]+)[ ]+\\)?\\(Test[[:alnum:]_]+\\)(.*)")
+            (yc/go-run-tests (concat test-method "='" (match-string-no-properties 2) "'"))))
+      (message "Must be in a _test.go file to run go-run-test-current-function")))
+
+  (defun yc/go-run-test-current-suite ()
+    (interactive)
+    (if (string-match "_test\.go" buffer-file-name)
+        (if go-use-gocheck-for-testing
+            (save-excursion
+              (re-search-backward "^func[ ]+\\(([[:alnum:]]*?[ ]?[*]?\\([[:alnum:]]+\\))[ ]+\\)?Test[[:alnum:]_]+(.*)")
+              (yc/go-run-tests (concat "-check.f='" (match-string-no-properties 2) "'")))
+          (message "Gocheck is needed to test the current suite"))
+      (message "Must be in a _test.go file to run go-test-current-suite")))
+
+  (defun yc/go-run-main ()
+    (interactive)
+    (shell-command
+     (format "go run %s"
+             (shell-quote-argument (buffer-file-name)))))
+
+  ;; (general-define-key
+  ;;  :keymaps 'go-mode-map
+  ;;  :states '(normal motion visual)
+  ;;  :prefix "SPC"
+  ;;  :global-prefix "C-SPC"
+  ;;  "m" '(:ignore t :which-key "major-mode-cmd")
+  ;;  "mh" '(:ignore t :which-key "help")
+  ;;  "mhh" 'godoc-at-point
+  ;;  "mi" '(:ignore t :which-key "imports")
+  ;;  "mig" 'go-goto-imports
+  ;;  "mia" 'go-import-add
+  ;;  "mir" 'go-remove-unused-imports
+  ;;  "me" '(:ignore t :which-key "playground")
+  ;;  "meb" 'go-play-buffer
+  ;;  "mer" 'go-play-region
+  ;;  "med" 'go-download-play
+  ;;  "mx" '(:ignore t :which-key "execute")
+  ;;  "mxx" 'yc/go-run-main
+  ;;  "mg" '(:ignore t :which-key "goto")
+  ;;  "mga" 'ff-find-other-file
+  ;;  "mgc" 'go-coverage
+  ;;  "mt" '(:ignore t :which-key "test")
+  ;;  "mtt" 'yc/go-run-test-current-function
+  ;;  "mts" 'yc/go-run-test-current-suite
+  ;;  "mtp" 'yc/go-run-package-tests
+  ;;  "mtP" 'yc/go-run-package-tests-nested
+  ;;  "mf" '(:ignore t :which-key "guru")
+  ;;  "mfd" 'go-guru-describe
+  ;;  "mff" 'go-guru-freevars
+  ;;  "mfi" 'go-guru-implements
+  ;;  "mfc" 'go-guru-peers
+  ;;  "mfr" 'go-guru-referrers
+  ;;  "mfj" 'go-guru-definition
+  ;;  "mfp" 'go-guru-pointsto
+  ;;  "mfs" 'go-guru-callstack
+  ;;  "mfe" 'go-guru-whicherrs
+  ;;  "mf<" 'go-guru-callers
+  ;;  "mf>" 'go-guru-callees
+  ;;  "mfo" 'go-guru-set-scope
+  ;;  "mr" '(:ignore t :which-key "rename")
+  ;;  "mrn" 'go-rename)
+
+  (my-major-mode-leader-def
+   :keymaps 'go-mode-map
+   ;; "" '(:ignore t :which-key "major-mode-cmd")
+   "h" '(:ignore t :which-key "help")
+   "hh" 'godoc-at-point
+   "i" '(:ignore t :which-key "imports")
+   "ig" 'go-goto-imports
+   "ia" 'go-import-add
+   "ir" 'go-remove-unused-imports
+   "e" '(:ignore t :which-key "playground")
+   "eb" 'go-play-buffer
+   "er" 'go-play-region
+   "ed" 'go-download-play
+   "x" '(:ignore t :which-key "execute")
+   "xx" 'yc/go-run-main
+   "g" '(:ignore t :which-key "goto")
+   "ga" 'ff-find-other-file
+   "gc" 'go-coverage
+   "t" '(:ignore t :which-key "test")
+   "tt" 'yc/go-run-test-current-function
+   "ts" 'yc/go-run-test-current-suite
+   "tp" 'yc/go-run-package-tests
+   "tP" 'yc/go-run-package-tests-nested
+   "f" '(:ignore t :which-key "guru")
+   "fd" 'go-guru-describe
+   "ff" 'go-guru-freevars
+   "fi" 'go-guru-implements
+   "fc" 'go-guru-peers
+   "fr" 'go-guru-referrers
+   "fj" 'go-guru-definition
+   "fp" 'go-guru-pointsto
+   "fs" 'go-guru-callstack
+   "fe" 'go-guru-whicherrs
+   "f<" 'go-guru-callers
+   "f>" 'go-guru-callees
+   "fo" 'go-guru-set-scope
+   "r" '(:ignore t :which-key "rename")
+   "rn" 'go-rename)
+#+END_SRC
+*问题* ：这里需要设置为 ="/usr/local/bin/go"= ，可能应为某些环境变量没有设置成功，暂时还不知道具体哪里没设置，先配置成这样。
+用上面的 =exec-path-from-shell= 包暂时解决了这个问题
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package exec-path-from-shell
+    :ensure t
+    :init
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
+#+END_SRC
+
+Run Current File
+http://ergoemacs.org/emacs/elisp_run_current_file.html
+https://github.com/grafov/go-playground
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun yc/run-current-file ()
+    "Execute the current file.
+  For example, if the current buffer is x.py, then it'll call「python x.py」in a shell. Output is printed to message buffer.
+
+  The file can be Emacs Lisp, PHP, Perl, Python, Ruby, JavaScript, TypeScript, golang, Bash, Ocaml, Visual Basic, TeX, Java, Clojure.
+  File suffix is used to determine what program to run.
+
+  If the file is modified or not saved, save it automatically before run.
+
+  URL `http://ergoemacs.org/emacs/elisp_run_current_file.html'
+  Version 2017-07-31"
+    (interactive)
+    (let (
+          ($suffix-map
+           ;; (‹extension› . ‹shell program name›)
+           `(
+             ("php" . "php")
+             ("pl" . "perl")
+             ("py" . "python")
+             ("py3" . ,(if (string-equal system-type "windows-nt") "c:/Python32/python.exe" "python3"))
+             ("rb" . "ruby")
+             ("go" . "/usr/local/bin/go run")
+             ("hs" . "runhaskell")
+             ("js" . "node") ; node.js
+             ("ts" . "tsc --alwaysStrict --lib DOM,ES2015,DOM.Iterable,ScriptHost --target ES5") ; TypeScript
+             ("sh" . "bash")
+             ("clj" . "java -cp /home/xah/apps/clojure-1.6.0/clojure-1.6.0.jar clojure.main")
+             ("rkt" . "racket")
+             ("ml" . "ocaml")
+             ("vbs" . "cscript")
+             ("tex" . "pdflatex")
+             ("latex" . "pdflatex")
+             ("java" . "javac")
+             ;; ("pov" . "/usr/local/bin/povray +R2 +A0.1 +J1.2 +Am2 +Q9 +H480 +W640")
+             ))
+          $fname
+          $fSuffix
+          $prog-name
+          $cmd-str)
+      (when (not (buffer-file-name)) (save-buffer))
+      (when (buffer-modified-p) (save-buffer))
+      (setq $fname (buffer-file-name))
+      (setq $fSuffix (file-name-extension $fname))
+      (setq $prog-name (cdr (assoc $fSuffix $suffix-map)))
+      (setq $cmd-str (concat $prog-name " \""   $fname "\""))
+      (cond
+       ((string-equal $fSuffix "el") (load $fname))
+       ((string-equal $fSuffix "go")
+        (when (fboundp 'gofmt)
+          (gofmt)
+          (shell-command $cmd-str "*xah-run-current-file output*" )))
+       ((string-equal $fSuffix "java")
+        (progn
+          (shell-command $cmd-str "*xah-run-current-file output*" )
+          (shell-command
+           (format "java %s" (file-name-sans-extension (file-name-nondirectory $fname))))))
+       (t (if $prog-name
+              (progn
+                (message "Running…")
+                (shell-command $cmd-str "*xah-run-current-file output*" ))
+            (message "No recognized program file suffix for this file."))))))
+#+END_SRC
+
+** Java
+Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
+
+** Python
+Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package python
+    :ensure t
+    :config
+
+    ;; use IPython
+    (setq-default py-shell-name "ipython")
+    (setq-default py-which-bufname "IPython")
+    ;; use the wx backend, for both mayavi and matplotlib
+    (setq py-python-command-args
+          '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
+    (setq py-force-py-shell-name-p t)
+
+    ;; switch to the interpreter after executing code
+    (setq py-shell-switch-buffers-on-execute-p t)
+    (setq py-switch-buffers-on-execute-p t)
+    ;; don't split windows
+    (setq py-split-windows-on-execute-p nil)
+    ;; try to automagically figure out indentation
+    (setq py-smart-indentation t))
+
+  (use-package elpy
+    :ensure t
+    :init
+    (elpy-enable))
+
+  (use-package anaconda-mode
+    :ensure t
+    :config
+    (add-hook 'python-mode-hook 'anaconda-mode)
+    (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+    (use-package company-anaconda
+      :ensure t
+      :config
+      (eval-after-load "company"
+        '(add-to-list 'company-backends '(company-anaconda :with company-capf)))))
+
+  ;; (general-define-key
+  ;;  :keymaps 'python-mode-map
+  ;;  :states '(normal motion visual)
+  ;;  :prefix "SPC"
+  ;;  :global-prefix "C-SPC"
+  ;;  "m"   '(:ignore t :which-key "major-mode-cmd")
+  ;;  "m'"  'python-start-or-switch-repl
+  ;;  "m="  'yapfify-buffer
+  ;;  "mc"  '(:ignore t :which-key "execute")
+  ;;  "mcc" 'python-execute-file
+  ;;  "mcC" 'python-execute-file-focus
+  ;;  "md"  '(:ignore t :which-key "debug")
+  ;;  "mdb" 'python-toggle-breakpoint  ; check in spacemacs
+  ;;  "mh"  '(:ignore t :which-key "help")
+  ;;  "mhh" 'anaconda-mode-show-doc
+  ;;  "mhd" 'helm-pydoc
+  ;;  "mg"  '(:ignore t :which-key "goto")
+  ;;  "mga" 'anaconda-mode-find-assignments
+  ;;  "mgb" 'anaconda-mode-go-back
+  ;;  "mgu" 'anaconda-mode-find-references
+  ;;  "ms"  '(:ignore t :which-key "send to REPL")
+  ;;  "msB" 'python-shell-send-buffer-switch
+  ;;  "msb" 'python-shell-send-buffer
+  ;;  "msF" 'python-shell-send-defun-switch
+  ;;  "msf" 'python-shell-send-defun
+  ;;  "msi" 'python-start-or-switch-repl
+  ;;  "msR" 'python-shell-send-region-switch
+  ;;  "msr" 'python-shell-send-region
+  ;;  "mr"  '(:ignore t :which-key "refactor")
+  ;;  "mri" 'python-remove-unused-imports  ; in spacemacs
+  ;;  "mrI" 'py-isort-buffer
+  ;;  "mv"  '(:ignore t :which-key "pyenv")
+  ;;  "mvu" 'pyenv-mode-unset
+  ;;  "mvs" 'pyenv-mode-set
+  ;;  "mV"  '(:ignore t :which-key "pyvenv")
+  ;;  "mVa" 'pyvenv-activate
+  ;;  "mVd" 'pyvenv-deactivate
+  ;;  "mVw" 'pyvenv-workon)
+
+  (use-package helm-pydoc :defer t)
+
+  (use-package pyenv-mode
+    :if (executable-find "pyenv")
+    :commands (pyenv-mode-versions))
+
+  (use-package pyvenv
+    :ensure t
+    :defer t)
+
+  (use-package py-isort
+    :ensure t
+    :defer t)
+
+  (use-package yapfify
+    :ensure t
+    :defer t)
+
+  (my-major-mode-leader-def
+   :keymaps 'python-mode-map
+   "'"  'python-start-or-switch-repl
+   "="  'yapfify-buffer
+   "c"  '(:ignore t :which-key "execute")
+   "cc" 'python-execute-file
+   "cC" 'python-execute-file-focus
+   "d"  '(:ignore t :which-key "debug")
+   "db" 'python-toggle-breakpoint  ; check in spacemacs
+   "h"  '(:ignore t :which-key "help")
+   "hh" 'anaconda-mode-show-doc
+   "hd" 'helm-pydoc
+   "g"  '(:ignore t :which-key "goto")
+   "ga" 'anaconda-mode-find-assignments
+   "gb" 'anaconda-mode-go-back
+   "gu" 'anaconda-mode-find-references
+   "s"  '(:ignore t :which-key "send to REPL")
+   "sB" 'python-shell-send-buffer-switch
+   "sb" 'python-shell-send-buffer
+   "sF" 'python-shell-send-defun-switch
+   "sf" 'python-shell-send-defun
+   "si" 'python-start-or-switch-repl
+   "sR" 'python-shell-send-region-switch
+   "sr" 'python-shell-send-region
+   "r"  '(:ignore t :which-key "refactor")
+   "ri" 'python-remove-unused-imports  ; in spacemacs
+   "rI" 'py-isort-buffer
+   "v"  '(:ignore t :which-key "pyenv")
+   "vu" 'pyenv-mode-unset
+   "vs" 'pyenv-mode-set
+   "V"  '(:ignore t :which-key "pyvenv")
+   "Va" 'pyvenv-activate
+   "Vd" 'pyvenv-deactivate
+   "Vw" 'pyvenv-workon)
+#+END_SRC
+
+** Clojure
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package clojure-mode
+    :ensure t
+    :commands clojure-mode
+    :init (add-to-list 'auto-mode-alist '("\\.\\(clj[sx]?\\|dtm\\|edn\\)\\'" . clojure-mode))
+    :config (progn (use-package cider
+                     :ensure t
+                     :init (progn (add-hook 'clojure-mode-hook 'cider-turn-on-eldoc-mode)
+                                  (add-hook 'cider-repl-mode-hook 'subword-mode))
+                     :config (progn (setq cider-annotate-completion-candidates t
+                                          cider-mode-line " cider")
+                                    (define-key cider-repl-mode-map (kbd "M-RET") 'cider-doc)
+                                    (define-key cider-mode-map (kbd "M-RET") 'cider-doc)))
+                   (use-package clj-refactor
+                     :ensure t
+                     :init (progn (add-hook 'clojure-mode-hook (lambda ()
+                                                                 (clj-refactor-mode 1)
+                                                                 (cljr-add-keybindings-with-prefix "C-c C-m")))
+                                  (define-key clojure-mode-map (kbd "C-:") 'clojure-toggle-keyword-string)
+                                  (define-key clojure-mode-map (kbd "C->") 'cljr-cycle-coll)))
+                   (add-hook 'clojure-mode-hook (lambda () (setq buffer-save-without-query t)))
+                   (add-hook 'clojure-mode-hook 'subword-mode)
+                   ;; Fancy docstrings for schema/defn when in the form:
+                   ;; (schema/defn NAME :- TYPE "DOCSTRING" ...)
+                   (put 'schema/defn 'clojure-doc-string-elt 4)))
+#+END_SRC
+
+** Javascript
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package js2-mode
+    :ensure t
+    :init (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+    :config (use-package tern
+              :commands tern-mode
+              :init (add-hook 'js2-mode-hook 'tern-mode)
+              :config (progn (use-package company-tern
+                               :ensure t
+                               :init (add-to-list 'company-backends 'company-tern))
+                             (define-key tern-mode-keymap (kbd "M-.") 'tern-find-definition)
+                             (define-key tern-mode-keymap (kbd "C-M-.") 'tern-find-definition-by-name)
+                             (define-key tern-mode-keymap (kbd "M-,") 'tern-pop-find-definition)
+                             (define-key tern-mode-keymap (kbd "C-c C-r") 'tern-rename-variable)
+                             (define-key tern-mode-keymap (kbd "C-c C-c") 'tern-get-type)
+                             (define-key tern-mode-keymap (kbd "C-c C-d") 'tern-get-docs)
+                             (define-key tern-mode-keymap (kbd "M-<return>") 'tern-get-docs))))
+
+  (setq js-indent-level 2)
+  (setq typescript-indent-level 2)
+#+END_SRC
+
+** Typesciprt & AngularJS 2/4
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package typescript :ensure t)
+
+  (use-package ng2-mode
+    :ensure t)
+
+  (use-package tide
+    :ensure t
+    :config
+    (defun setup-tide-mode ()
+      (interactive)
+      (tide-setup)
+      (flycheck-mode +1)
+      (setq flycheck-check-syntax-automatically '(save mode-enabled))
+      (eldoc-mode +1)
+      (tide-hl-identifier-mode +1)
+      ;; company is an optional dependency. You have to
+      ;; install it separately via package-install
+      ;; `M-x package-install [ret] company`
+      (company-mode +1))
+
+    ;; aligns annotation to the right hand side
+    (setq company-tooltip-align-annotations t)
+
+    ;; formats the buffer before saving
+    (add-hook 'before-save-hook 'tide-format-before-save)
+
+    (add-hook 'typescript-mode-hook #'setup-tide-mode)
+    (setq tide-format-options '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions nil)))
+#+END_SRC
+
+*** AngluarJS
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-to-list 'load-path (expand-file-name "lisp/angularjs-mode" user-emacs-directory))
+  (add-to-list 'yas-snippet-dirs (expand-file-name "lisp/angularjs-mode/snippets" user-emacs-directory))
+  ;; (add-to-list 'ac-dictionary-directories (expand-file-name "lisp/angularjs-mode/ac-dict" user-emacs-directory))
+  ;; (add-to-list 'ac-modes 'angular-mode)
+  ;; (add-to-list 'ac-modes 'angular-html-mode)
+
+  (use-package angular-snippets
+    :ensure t
+    :config
+    (eval-after-load "sgml-mode"
+      '(define-key html-mode-map (kbd "C-c C-d") 'ng-snip-show-docs-at-point)))
+#+END_SRC
+
+*** js-comint
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package js-comint
+    :ensure t
+    :config
+    (defun whitespace-clean-and-compile ()
+      (interactive)
+      (whitespace-cleanup-all)
+      (compile compile-command))
+
+    ;; Configure jshint for JS style checking.
+    ;;   - Install: $ npm install -g jshint
+    ;;   - Usage: Hit C-cC-u within any emacs buffer visiting a .js file
+    (setq jshint-cli "jshint --show-non-errors ")
+    (setq compilation-error-regexp-alist-alist
+          (cons '(jshint-cli "^\\([a-zA-Z\.0-9_/-]+\\): line \\([0-9]+\\), col \\([0-9]+\\)"
+                             1 ;; file
+                             2 ;; line
+                             3 ;; column
+                             )
+                compilation-error-regexp-alist-alist))
+    (setq compilation-error-regexp-alist
+          (cons 'jshint-cli compilation-error-regexp-alist))
+
+    (add-hook 'js-mode-hook '(lambda ()
+                               (local-set-key "\C-x\C-e" 'eval-last-sexp)
+                               (local-set-key "\C-cb" 'js-send-buffer)
+                               (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
+                               (local-set-key "\C-cl" 'js-load-file-and-go)
+                               (local-set-key "\C-c!" 'run-js)
+                               (local-set-key "\C-c\C-r" 'js-send-region)
+                               (local-set-key "\C-c\C-j" 'js-send-line)
+                               (set (make-local-variable 'compile-command)
+                                    (let ((file buffer-file-name)) (concat jshint-cli file)))
+                               (set (make-local-variable 'compilation-read-command) nil)
+                               (local-set-key "\C-c\C-u" 'whitespace-clean-and-compile)
+                               ))
+
+    (defun node-repl-comint-preoutput-filter (output)
+      "This function fixes the escape issue with node-repl in js-comint.el.
+    Heavily adapted from http://www.squidoo.com/emacs-comint (which
+    is in emacs/misc/comint_ticker)
+    Basically, by adding this preoutput filter to the
+    comint-preoutput-filter-functions list we take the output of
+    comint in a *js* buffer and do a find/replace to replace the
+    ANSI escape noise with a reasonable prompt.
+  "
+      (if (equal (buffer-name) "*js*")
+          (progn
+            ;; Uncomment these to debug the IO of the node process
+            ;; (setq js-node-output output)
+            ;; (message (concat "\n----------\n" output "\n----------\n"))
+
+            ;; Replaced ^ with \^ to indicate that doesn't have to be
+            ;; at start of line
+            (replace-regexp-in-string
+             "\\\[0K" ""
+             (replace-regexp-in-string
+              "\\\[1G" ""
+              (replace-regexp-in-string
+               "\\\[0J" ""
+               (replace-regexp-in-string
+                "\\\[3G" ""
+                (replace-regexp-in-string
+                 "\\\[0G" ""
+                 (replace-regexp-in-string
+                  "\\[2C" ""
+                  (replace-regexp-in-string
+                   "\\[0K" ""
+                   (replace-regexp-in-string
+                    "" "" output))))))))
+            )
+        output
+        )
+      )
+
+    (add-hook 'comint-preoutput-filter-functions 'node-repl-comint-preoutput-filter)
+    (add-hook 'comint-output-filter-functions 'node-repl-comint-preoutput-filter))
+#+END_SRC
+
+** web & html
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package web-mode
+    :ensure t
+    :commands web-mode
+    :init (progn (add-to-list 'auto-mode-alist '("\\.phtml$'" . web-mode))
+                 (add-to-list 'auto-mode-alist '("\\.tpl\\.php$'" . web-mode))
+                 (add-to-list 'auto-mode-alist '("\\.[gj]sp$'" . web-mode))
+                 (add-to-list 'auto-mode-alist '("\\.as[cp]x$'" . web-mode))
+                 (add-to-list 'auto-mode-alist '("\\.erb$'" . web-mode))
+                 (add-to-list 'auto-mode-alist '("\\.mustache$'" . web-mode))
+                 (add-to-list 'auto-mode-alist '("\\.djhtml$'" . web-mode))
+                 (add-to-list 'auto-mode-alist '("\\.html$'" . web-mode)))
+    :config ;; Autocomplete end tag when finished writing opening tag
+    (setq web-mode-auto-close-style 2)
+    (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+    (add-hook 'web-mode-hook
+              (lambda ()
+                (when (string-equal "jsx" (file-name-extension buffer-file-name))
+                  (setup-tide-mode))))
+    ;; configure jsx-tide checker to run after your default jsx checker
+    (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append))
+#+END_SRC
+
+GitHub: https://github.com/smihica/emmet-mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package emmet-mode
+    :ensure t
+    :config
+    (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+    (setq emmet-expand-jsx-className? t))
+#+END_SRC
+
+** JSON
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package json-mode
+    :ensure t
+    :defer t
+    :init (progn (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
+                 (add-to-list 'auto-mode-alist '("\\.jsonld$" . json-mode))
+                 (add-to-list 'auto-mode-alist '(".tern-project" . json-mode))
+                 (add-to-list 'auto-mode-alist '(".jshintrc" . json-mode)))
+    :config (progn (add-hook 'json-mode-hook 'flycheck-mode)
+                   (bind-key "C-S-f" 'json-mode-beautify json-mode-map)))
+#+END_SRC
+
+** XML
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package nxml-mode
+  ;;   :ensure t
+  ;;   :defer t
+  ;;   :init (progn (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+  ;;                (add-to-list 'auto-mode-alist '("\\.gapp$" . nxml-mode)))
+  ;;   :config (progn (bind-key "C-S-f" 'beautify-xml nxml-mode-map)))
+#+END_SRC
+
+** YAML
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package yaml-mode
+    :ensure t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+    (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode)))
+#+END_SRC
+
+** Logstash
+修改默认的缩进，原来的是 4 个空格，改成 2 个空格。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package logstash-conf
+    :ensure t
+    :config
+    (setq logstash-indent 2))
+#+END_SRC
+
+** markdown
+Config for setting markdown mode and stuff
+参考：http://aaronbedra.com/emacs.d/
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package markdown-mode
+    :ensure t
+    :commands
+    (markdown-mode gfm-mode)
+    :mode
+    (("README\\.md\\'" . gfm-mode)
+     ("\\.md\\'" . markdown-mode)
+     ("\\.markdown\\'" . markdown-mode))
+    :init
+    (setq markdown-command "/usr/local/Cellar/multimarkdown/6*/bin/multimarkdown")
+    :config
+    ;; Turn on flyspell mode when editing markdown files
+    (add-hook 'markdown-mode-hook 'flyspell-mode)
+    (add-hook 'gfm-mode-hook 'flyspell-mode)
+    :preface
+    (defun yc/markdown-set-ongoing-hydra-body ()
+      (setq yc/ongoing-hydra-body #'hydra-markdown/body))
+    :hook (markdown-mode . yc/markdown-set-ongoing-hydra-body)
+    )
+
+  (use-package markdown-toc :ensure t)
+  (use-package markdown-mode+ :ensure t)
+
+  (use-package markdownfmt
+    :ensure t
+    :config
+    ;; (add-hook 'markdown-mode-hook #'markdownfmt-enable-on-save)
+    :bind
+    (:map markdown-mode-map ("C-c C-f" . markdownfmt-format-buffer)))
+#+END_SRC
+
+*** key-bind
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (general-define-key
+  ;;    :keymaps 'markdown-mode-map
+  ;;    :states '(normal motion visual)
+  ;;    :prefix "SPC"
+  ;;    :global-prefix "C-SPC"
+  ;;    "m" '(:ignore t :which-key "major-mode-cmd")
+  ;;    "m." 'hydra-markdown/body)
+
+  (my-major-mode-leader-def
+     :keymaps 'markdown-mode-map
+     ;; "" '(:ignore t :which-key "major-mode-cmd")
+     "m." 'hydra-markdown/body)
+#+END_SRC
+
+* Auto Completion
+** smex
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package smex
+    :ensure t
+    :init
+    (smex-initialize)
+    :config
+    (global-set-key (kbd "M-x") 'smex)
+    (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+    ;; This is your old M-x.
+    (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command))
+#+END_SRC
+
+** helm
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package helm
+    :ensure t
+    :diminish ""
+    :config
+    (helm-mode 1)
+    (helm-autoresize-mode 1)
+    (setq helm-buffers-fuzzy-matching t)
+    (setq helm-autoresize-mode t)
+    (setq helm-buffer-max-length 100)
+    (set-face-attribute 'helm-selection nil :background "yellow" :foreground "black")
+    (set-face-attribute 'helm-source-header nil :height 240)
+    (define-key helm-map (kbd "C-j") 'helm-next-line)
+    (define-key helm-map (kbd "C-k") 'helm-previous-line)
+    (define-key helm-map (kbd "C-h") 'helm-next-source)
+    (define-key helm-map (kbd "C-S-h") 'describe-key)
+    (define-key helm-map (kbd "C-l") (kbd "RET"))
+    (define-key helm-map [escape] 'helm-keyboard-quit))
+#+END_SRC
+
+** company
+company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类似。
+这里需要参考[[http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text][这篇 StackExchange 文章]]，解决 company-mode 自动完成是转换为小写的问题，具体原因参考[[https://emacs-china.org/t/company/187][这里]]。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company
+    :ensure t
+    :defer t
+    :commands global-company-mode
+    :diminish ""
+    :init
+    (global-company-mode t)
+    (add-hook 'after-init-hook 'global-company-mode)
+    (setq company-show-numbers t)
+    (setq company-require-match nil)
+    (setq company-dabbrev-downcase nil) ;; make company-complete care about case
+    (setq company-dabbrev-ignore-case nil) ;; fix case-sensitive, default is keep-prefix
+    :bind (("C-." . company-complete)
+         :map company-active-map
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous)
+         ("C-d" . company-show-doc-buffer)
+         ("C-/" . helm-company)
+         ("<tab>" . company-complete))
+    :config
+    (setq company-idle-delay 0.2)
+    (setq company-tooltip-flip-when-above t)
+    (setq company-selection-wrap-around t)
+    ;; (define-key company-active-map [tab] 'company-select-next)
+    ;; (define-key company-active-map (kbd "C-n") 'company-select-next)
+    ;; (define-key company-active-map (kbd "C-p") 'company-select-previous)
+    ;; (define-key company-active-map [return] 'company-complete-selection)
+    ;; (define-key company-active-map (kbd "C-/") 'helm-company)
+
+    ;; (global-set-key (kbd "M-/") 'hippie-expand)
+    ;; (define-key evil-insert-state-map [remap evil-complete-previous] 'hippie-expand)
+    (setq hippie-expand-try-functions-list
+          '(
+            ;; Try to expand word "dynamically", searching the current buffer.
+            try-expand-dabbrev
+            ;; Try to expand word "dynamically", searching all other buffers.
+            try-expand-dabbrev-all-buffers
+            ;; Try to expand word "dynamically", searching the kill ring.
+            try-expand-dabbrev-from-kill
+            ;; Try to complete text as a file name, as many characters as unique.
+            try-complete-file-name-partially
+            ;; Try to complete text as a file name.
+            try-complete-file-name
+            ;; Try to expand word before point according to all abbrev tables.
+            try-expand-all-abbrevs
+            ;; Try to complete the current line to an entire line in the buffer.
+            try-expand-list
+            ;; Try to complete the current line to an entire line in the buffer.
+            try-expand-line
+            ;; Try to complete as an Emacs Lisp symbol, as many characters as
+            ;; unique.
+            try-complete-lisp-symbol-partially
+            ;; Try to complete word as an Emacs Lisp symbol.
+            try-complete-lisp-symbol))
+    )
+
+  (use-package fuzzy :defer t)
+
+  ;; (use-package company-box
+  ;;   :ensure t
+  ;;   :after company
+  ;;   :diminish
+  ;;   :hook (company-mode . company-box-mode))
+
+  (use-package company-quickhelp
+    :ensure t
+    :after company
+    :config
+    (company-quickhelp-mode t)
+    (setq pos-tip-background-color (face-background 'company-tooltip))
+    (setq pos-tip-foreground-color (face-foreground 'company-tooltip)))
+
+  (use-package company-statistics
+    :ensure t
+    :after company
+    :config
+    (company-statistics-mode))
+
+  ;; @see - http://oremacs.com/2017/12/27/company-numbers/
+  (let ((map company-active-map))
+    (mapc
+     (lambda (x)
+       (define-key map (format "%d" x) 'ora-company-number))
+     (number-sequence 0 9))
+    (define-key map " " (lambda ()
+                          (interactive)
+                          (company-abort)
+                          (self-insert-command 1)))
+    (define-key map (kbd "<return>") nil))
+
+  (defun ora-company-number ()
+    "Forward to `company-complete-number'.
+
+  Unless the number is potentially part of the candidate.
+  In that case, insert the number."
+    (interactive)
+    (let* ((k (this-command-keys))
+           (re (concat "^" company-prefix k)))
+      (if (cl-find-if (lambda (s) (string-match re s))
+                      company-candidates)
+          (self-insert-command 1)
+        (company-complete-number (string-to-number k)))))
+#+END_SRC
+
+** yasnippet
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package yasnippet
+    :ensure t
+    :defer 2
+    :diminish yas-minor-mode
+    :config
+    (progn
+      ;; Suppress excessive log messages
+      (setq yas-verbosity 1
+            yas-prompt-functions '(yas-ido-prompt)
+            yas-snippet-dir (expand-file-name "snippets" user-emacs-directory))
+      (yas-global-mode t)))
+#+END_SRC
+
+** spell check
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;;; spell checking
+  (use-package ispell
+    :config (setq ispell-program-name "aspell" ; use aspell instead of ispell
+                  ispell-extra-args '("--sug-mode=ultra")))
+
+  (use-package flyspell
+    :ensure t
+    :defer 2
+    :commands flyspell-mode
+    :init (add-hook 'text-mode-hook 'flyspell-mode))
+#+END_SRC
+
+** flycheck
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;;; flycheck mode
+  (use-package flycheck
+    :ensure t
+    :diminish ""
+    :commands global-flycheck-mode
+    :config (progn (use-package popup
+                     :ensure t)
+                   (use-package flycheck-pos-tip
+                     :ensure t)
+                   (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
+                   (setq flycheck-display-errors-function 'flycheck-pos-tip-error-messages)
+                   (global-flycheck-mode)))
+#+END_SRC
+
+* Org
+*orgmode 配置参考：*
+- [[https://emacs.lujianmei.com/03-editing/init-org-mode.html][Orgmode 写文档]]
+- [[https://emacs.lujianmei.com/03-editing/init-gtd-management.html][Orgmode 个人时间管理]]
+
+- 使用快捷键 =C-x r j n= 快速跳转到 Notes 的 home 页面。
+- 使用快捷键 =C-x r j g= 快速跳转到 Draft 页面。
+- 使用快捷键 =C-x r j s= 快速跳转到 =奇特的一生= 页面。
+- 使用 =C-c C-j= 是现在 orgmode 的 headline 快速跳转
+
+| Key Binding | Backend Function      | What it does                                                         |
+|-------------+-----------------------+----------------------------------------------------------------------|
+| Registers   |                       |                                                                      |
+| C-x r j     | M-x jump-to-register  | Prompts for register letter. Jumpts to point saved in that register. |
+| C-x r SPC   | M-x point-to-register | Prompts for register letter. Saves point in register.                |
+
+这里采用新版本的 orgmode，而非 Emacs 自带的，不能用 use-package。
+同时需要通过 =M-x package-list-packages= 安装新版本的 orgmode
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'org)
+  (require 'org-mouse)
+
+  (use-package org
+    :ensure nil
+    :delight org-mode "Org"
+    :preface
+    (defun yc/org-set-ongoing-hydra-body ()
+      (setq yc/ongoing-hydra-body #'hydra-org/body))
+    :hook
+    (org-mode . yc/org-set-ongoing-hydra-body)
+  )
+  (setq org-directory "/Users/yangc/Dropbox/itsycnotes")
+  (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+  (setq org-src-fontify-natively t
+        ;; org-ellipsis "⤵"
+        ;; org-ellipsis " […]"
+        org-indent-mode t
+        org-src-preserve-indentation t
+        org-enforce-todo-dependencies t
+        org-enforce-todo-checkbox-dependencies t
+        org-hide-emphasis-markers t)
+
+  (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+  (add-hook 'org-mode-hook (lambda () (setq word-wrap t)))
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  ;; @see http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-+]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "☀"))))))
+
+  (let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                               ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+                               ((x-list-fonts "Verdana")         '(:font "Verdana"))
+                               ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                               (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+         (base-font-color     (face-foreground 'default nil 'default))
+         (headline           `(:inherit default))
+         (headline-1         `(:inherit default :weight bold)))
+
+    (set-face-attribute 'default nil :font "Source Code Pro 14")
+    ;; Chinese Font
+    (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil 'font)
+                        charset (font-spec :family "Hiragino Sans GB" :size 16)))
+
+    (custom-theme-set-faces 'user
+                            `(org-level-8 ((t (,@headline ,@variable-tuple))))
+                            `(org-level-7 ((t (,@headline ,@variable-tuple))))
+                            `(org-level-6 ((t (,@headline ,@variable-tuple))))
+                            `(org-level-5 ((t (,@headline ,@variable-tuple))))
+                            `(org-level-4 ((t (,@headline ,@variable-tuple))))
+                            `(org-level-3 ((t (,@headline ,@variable-tuple))))
+                            `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.1))))
+                            `(org-level-1 ((t (,@headline-1 ,@variable-tuple :height 1.5))))
+                            `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))
+                            `(org-link ((t (:underline t))))
+                            ))
+  ;; Keep the headlines expanded in Org-Mode
+  ;; @see http://emacs.stackexchange.com/questions/9709/keep-the-headlines-expanded-in-org-mode
+  (setq org-startup-folded nil)
+  ;; Disabling underscore-to-subscript in Emacs Org-Mode export
+  ;; @see http://stackoverflow.com/questions/698562/disabling-underscore-to-subscript-in-emacs-org-mode-export/701201#701201
+  (setq org-export-with-sub-superscripts nil)
+  (defcustom org-indent-indentation-per-level 4
+    "Indentation per level in number of characters."
+    :group 'org-indent
+    :type 'integer)
+  (setq org-todo-keywords
+        (quote ((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")
+                (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "MAYBE(m)" "|" "DONE(d!/!)")
+                (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
+                (sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)"))))
+
+  (setq org-use-fast-todo-selection t)
+  (setq org-todo-state-tags-triggers
+        (quote (("CANCELLED" ("CANCELLED" . t))
+                ("WAITING" ("WAITING" . t))
+                ("MAYBE" ("WAITING" . t))
+                ("HOLD" ("WAITING") ("HOLD" . t))
+                (done ("WAITING") ("HOLD"))
+                ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+  ;; 记录时间
+  (add-hook 'org-mode-hook (lambda () (setq org-log-done 'time)))
+  ;; 记录提示信息
+  (add-hook 'org-mode-hook (lambda () (setq org-log-done 'note)))
+  ;; Separate drawers for clocking and logs
+  (setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
+  ;; Save clock data and state changes and notes in the LOGBOOK drawer
+  (setq org-clock-into-drawer t)
+  ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
+  (setq org-clock-out-remove-zero-time-clocks t)
+  ;; Clock out when moving task to a done state
+  (setq org-clock-out-when-done t)
+  (set-register ?n (cons 'file "/Users/yangc/Dropbox/itsycnotes/home.org"))
+  (set-register ?s (cons 'file "/Users/yangc/Dropbox/itsycnotes/draft.org"))
+  (set-register ?g (cons 'file "/Users/yangc/Dropbox/itsycnotes/diary.org"))
+
+  (setq org-goto-interface 'outline-path-completion org-goto-max-level 10)
+
+  (use-package org-bullets
+    :ensure t
+    :after org
+    :init
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+    ;; "◎" "○" "►" "◇" "⊛" "✪" "☯" "⊙" "✪" "➲" "●" "⬤" "⚉"  "⸖" "ͼ" "ͽ" "⚬" "◌""￮""""⚫"
+    ;; "☉" "⦾" "◦" "∙" "∘" "⚪" "◯" "⦿" "⌾" "◉"
+    ;; (setq org-bullets-bullet-list '("❂" "⊚" "❍"))
+    (setq org-bullets-bullet-list '("◉" "❂" "✸" "✿" "☼" "⚬")))
+
+  (use-package htmlize :ensure t)
+
+  (setq org-publish-project-alist
+        '(
+          ("org-blog-content" ;; 博客内容
+           ;; Path to your org files.
+           :base-directory "/Users/yangc/Dropbox/itsycnotes/"
+           :base-extension "org"
+           ;; Path to your jekyll project.
+           :publishing-directory "~/Applications/nginx/notes/"
+           :recursive t
+           :publishing-function org-html-publish-to-html
+           :headline-levels 4
+           :html-extension "html"
+           :table-of-contents t ;; 导出目录
+           :link-home "home.html"
+           :html-preamble (concat "INSERT HTML CODE HERE FOR PREAMBLE")
+           :html-postamble (concat "INSERT HTML CODE HERE FOR POSTAMBLE")
+           ;; :body-only t ;; Only export section between <body></body>
+           )
+          ("org-blog-static" ;; 静态文件
+           :base-directory "/Users/yangc/Dropbox/itsycnotes/"
+           :base-extension "css\\|ico\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|svg"
+           :publishing-directory "~/Applications/nginx/notes/"
+           :recursive t
+           :publishing-function org-publish-attachment)
+          ("blog" :components ("org-blog-content" "org-blog-static"))
+          ))
+
+  (defun org-insert-src-block (src-code-type)
+    "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
+    (interactive
+     (let ((src-code-types
+            '("emacs-lisp" "python" "C" "sh" "java" "js" "clojure" "C++" "css"
+              "calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen"
+              "octave" "oz" "plantuml" "R" "sass" "screen" "sql" "awk" "ditaa"
+              "haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby"
+              "scheme" "sqlite")))
+       (list (ido-completing-read "Source code type: " src-code-types))))
+    (progn
+      (newline-and-indent)
+      (insert (format "#+BEGIN_SRC %s\n" src-code-type))
+      (newline-and-indent)
+      (insert "#+END_SRC\n")
+      (previous-line 2)
+      (org-edit-src-code)))
+
+  (defun yc/org-toggle-link-display ()
+    "Toggle the literal or descriptive display of links."
+    (interactive)
+    (if org-descriptive-links
+        (progn (org-remove-from-invisibility-spec '(org-link))
+               (org-restart-font-lock)
+               (setq org-descriptive-links nil))
+      (progn (add-to-invisibility-spec '(org-link))
+             (org-restart-font-lock)
+             (setq org-descriptive-links t))))
+
+  ;; Paste an image on clipboard to Emacs Org mode file
+  ;; @see http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
+  (defun yc/org-screenshot ()
+    "Take a screenshot into a time stamped unique-named file in the
+      same directory as the org-buffer and insert a link to this file."
+    (interactive)
+    (org-display-inline-images)
+    (setq filename
+          (concat
+           (make-temp-name
+            (concat (file-name-nondirectory (buffer-file-name))
+                    "_imgs/"
+                    (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
+    (unless (file-exists-p (file-name-directory filename))
+      (make-directory (file-name-directory filename)))
+                                          ; take screenshot
+    (if (eq system-type 'darwin)
+        (call-process "screencapture" nil nil nil "-i" filename))
+    (if (eq system-type 'gnu/linux)
+        (call-process "import" nil nil nil filename))
+                                          ; insert into file if correctly taken
+    (if (file-exists-p filename)
+        (insert (concat "[[file:" filename "]]"))))
+
+  (setq org-image-actual-width 800)
+
+  ;; @see http://orgmode.org/worg/org-hacks.html#orgheadline126
+  (defun yc/ogrep (search &optional context)
+    "Search for word in org files.
+      Prefix argument determines number of lines."
+    (interactive "sSearch for: \nP")
+    (let ((grep-find-ignored-files '("#*" ".#*"))
+          (grep-template (concat "grep <X> -i -nH "
+                                 (when context
+                                   (concat "-C" (number-to-string context)))
+                                 " -e <R> <F>")))
+      (lgrep search "*org*" org-directory)))
+
+  (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+  (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+
+  ;; auto load markdown-mode when load org-mode
+  (eval-after-load "org"
+    '(require 'ox-md nil t))
+#+END_SRC
+
+定义一部分在 orgmode 下编写代码块的快捷模板，此快捷模板可以通过 =(<s[TAB])= 的方式快捷输入模板块，如下以此类推，输入 =(<e[TAB])= 即可输入另外的模板。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; @see 模板元素说明：https://www.cnblogs.com/holbrook/archive/2012/04/17/2454619.html
+  ;; https://www.gnu.org/software/emacs/manual/html_node/org/Template-elements.html#Template-elements
+  ;; https://www.gnu.org/software/emacs/manual/html_node/org/Template-expansion.html#Template-expansion
+  (setq org-structure-template-alist
+        '(("s" "#+BEGIN_SRC ?\n\n#+END_SRC" "<src lang=\"?\">\n\n</src>")
+          ("e" "#+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE" "<example>\n?\n</example>")
+          ("q" "#+BEGIN_QUOTE\n?\n#+END_QUOTE" "<quote>\n?\n</quote>")
+          ("v" "#+BEGIN_VERSE\n?\n#+END_VERSE" "<verse>\n?\n</verse>")
+          ("c" "#+BEGIN_COMMENT\n?\n#+END_COMMENT")
+          ("p" "#+BEGIN_PRACTICE\n?\n#+END_PRACTICE")
+          ("o" "#+BEGIN_SRC emacs-lisp :tangle yes\n?\n#+END_SRC" "<src lang=\"emacs-lisp\">\n?\n</src>")
+          ("l" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC" "<src lang=\"emacs-lisp\">\n?\n</src>")
+          ("L" "#+latex: " "<literal style=\"latex\">?</literal>")
+          ("h" "#+BEGIN_HTML\n?\n#+END_HTML" "<literal style=\"html\">\n?\n</literal>")
+          ("H" "#+html: " "<literal style=\"html\">?</literal>")
+          ("a" "#+BEGIN_ASCII\n?\n#+END_ASCII")
+          ("A" "#+ascii: ")
+          ("i" "#+index: ?" "#+index: ?")
+          ("I" "#+include %file ?" "<include file=%file markup=\"?\">")))
+#+END_SRC
+
+** TODO org-mac-link
+参考这篇内容：[[http://orgmode.org/worg/org-contrib/org-mac-link.html][org-mac-link.el – Grab links from open Mac applications]]，完成配置 org-mac-link
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package org-mac-link
+  ;;   :ensure t
+  ;;   :init
+  ;;   (add-hook 'org-mode-hook (lambda ()
+  ;;                              (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link))))
+#+END_SRC
+
+** org-capture
+使用弹出一个 frame 方式打开 org-capture。
+- %u -- 插入当前日志[2017-07-17 Mon]
+- %U -- 插入当前日志，并有具体时间[2017-07-17 Mon 16:48]
+- %T -- 时间格式不同而已<2017-07-17 Mon 16:48>
+- %a -- 插入当前所在文档的 link 地址
+
+@see - https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Set default column view headings: Task Total-Time Time-Stamp
+  (define-key global-map "\C-ca" 'org-agenda)
+  (define-key global-map "\C-cc" 'org-capture)
+  ;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol
+  ;; :empty-lines 2
+  (setq org-capture-templates
+        '(("t" "todo [inbox]" entry (file+headline "inbox.org" "Tasks")
+           "* TODO %i%?\n%U\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
+          ("T" "Tickler" entry (file+headline "gtd/tickler.org" "Tickler")
+           "* %i%? \n %U")
+          ("w" "Work TODO" entry (file+olp "inbox.org" "Work" "Tasks")
+           "* TODO %? :work:\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t)
+          ("a" "Appointment" entry (file  "inbox.org" "Appointments")
+           "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
+          ("m" "Meeting" entry (file+headline "gtd.org" "Meeting")
+           "* DONE MEETING with %? :MEETING:\n:SUBJECT:\n%U\n" :clock-in t :clock-resume t)
+          ("d" "Diary" entry (file+datetree "diary.org")
+           "* %?\n%U\n" :clock-in t :clock-resume t)
+          ("i" "Idea" entry (file+headline "Blog Topics:")
+           "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
+          ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
+           "** NEXT %? \nDEADLINE: %t")
+          ("l" "Link" entry (file+headline "inbox.org" "Links")
+           "* %? %^L %^g \n%T" :prepend t)
+          ("L" "A link, for reading later." entry (file+headline "inbox.org" "Reading List")
+           "* %:description\n%u\n\n%c\n\n%i")
+          ("n" "Note" entry (file+headline "inbox.org" "Notes")
+           "* Note %?\n%T")
+          ("b" "Blog idea" entry (file+headline "inbox.org" "Blog Topics:")
+           "* %?\n%T" :prepend t)
+          ("j" "Journal" entry (file+datetree "inbox.org")
+           "* %?\nEntered on %U\n  %i\n  %a")
+          ("s" "Screencast" entry (file "inbox.org")
+           "* %?\n%i\n")
+          ("r" "RESPONED" entry  (file (concat org-directory "/refile.org"))
+           "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+          ("n" "NOTES" entry  (file (concat org-directory "/notes.org"))
+           "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
+          ("j" "Journal" entry  (file (concat org-directory "/refile.org"))
+           "* %?\n%U\n" :clock-in t :clock-resume t)
+          ("w" "org-protocol" entry  (file (concat org-directory "/refile.org"))
+           "* TODO Review %c\n%U\n" :immediate-finish t)
+          ("p" "Phone call" entry  (file (concat org-directory "/refile.org"))
+           "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+          ("h" "Habit" entry  (file (concat org-directory "/refile.org"))
+           "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+          ))
+#+END_SRC
+
+*** TODO 还可以参考这里用于快速粘贴网页书签。
+[[https://github.com/tumashu/org-capture-pop-frame][tumashu/org-capture-pop-frame - GitHub]]
+
+** Drag and Drop
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-download)
+#+END_SRC
+
+** 重新定义不同状态的 todoList 的排版
+@see [[http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/][Emacs: Strike through headlines for DONE tasks in Org]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq org-fontify-done-headline t)
+  (custom-set-faces
+   '(org-done ((t (:foreground "PaleGreen"
+                               :weight normal
+                               :strike-through t))))
+   '(org-headline-done
+     ((((class color) (min-colors 16) (background dark))
+       (:foreground "LightSalmon" :strike-through t)))))
+
+  (defun modify-org-done-face ()
+    (setq org-fontify-done-headline t)
+    (set-face-attribute 'org-done nil :strike-through t)
+    (set-face-attribute 'org-headline-done nil :strike-through t))
+
+  (eval-after-load "org"
+  (add-hook 'org-add-hook 'modify-org-done-face))
+#+END_SRC
+
+** set org-code-block color
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (custom-set-faces
+  ;;  '(org-block-begin-line
+  ;;    ((t (:underline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
+  ;;  '(org-block-end-line
+  ;;    ((t (:overline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
+  ;;  '(org-block
+  ;;    ((t (:background "#333333"))))
+  ;;  '(org-block-background
+  ;;    ((t (:background "#333333"))))
+  ;;  )
+
+  (custom-set-faces
+   '(org-block-begin-line
+     ((t (:underline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
+   '(org-block-end-line
+     ((t (:overline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
+   '(org-block
+     ((t (:background "#F2E4BE"))))
+   '(org-block-background
+     ((t (:background "#F2E4BE"))))
+   )
+#+END_SRC
+
+** MobileOrg
+documentation: https://mobileorg.github.io/documentation/
+
+执行命令进行推送： =M-x org-mobile-push= or =C-c C-x RET p= 。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Set to the name of the file where new notes will be stored
+  (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
+  ;; Set to <your Dropbox root directory>/MobileOrg.
+  (setq org-mobile-directory "~/Dropbox/应用/MobileOrg")
+#+END_SRC
+
+** org-agenda
+参考：https://writequit.org/denver-emacs/presentations/2017-04-11-time-clocking-with-org.html
+
+Configuration
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq org-agenda-inhibit-startup nil
+        org-agenda-show-future-repeats nil
+        org-agenda-start-on-weekday nil
+        org-agenda-skip-deadline-if-done t
+        org-agenda-skip-scheduled-if-done t)
+#+END_SRC
+
+Agenda Files
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; http://cachestocaches.com/2016/9/my-workflow-org-agenda/#capture--refile
+  (setq org-directory "~/Dropbox/itsycnotes")
+  (setq org-agenda-file-gtd (expand-file-name "gtd.org" org-directory))
+  (setq org-agenda-file-inbox (expand-file-name "inbox.org" org-directory))
+  (setq org-agenda-file-done (expand-file-name "done.org_archive" org-directory))
+  (setq org-agenda-file-journal (expand-file-name "journal.org" org-directory))
+  (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
+  (setq org-default-notes-file (expand-file-name "inbox.org" org-directory))
+  ;; (setq org-default-notes-file (concat org-directory "gtd.org"))
+  (setq org-agenda-files (list org-directory))
+
+  (setq org-refile-targets '((org-agenda-file-inbox :maxlevel . 2)
+                             (org-agenda-file-gtd :maxlevel . 2)
+                             ("/Users/yangc/Dropbox/itsycnotes/someday.org" :level . 1)
+                             ("/Users/yangc/Dropbox/itsycnotes/tickler.org" :maxlevel . 2)))
+#+END_SRC
+
+使用 =C-c C-x C-c= 进入 org-columns 模式，可以看到任务总结
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Set default column view headings: Task Priority Effort Clock_Summary
+  (setq org-columns-default-format "%50ITEM(Task) %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM")
+  ;; (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
+#+END_SRC
+
+Open Org Agenda
+
+This function opens the agenda in full screen.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun yc/open-agenda ()
+    "Opens the org-agenda."
+    (interactive)
+    (let ((agenda "*Org Agenda*"))
+      (if (equal (get-buffer agenda) nil)
+          (org-agenda-list)
+        (unless (equal (buffer-name (current-buffer)) agenda)
+          (switch-to-buffer agenda))
+        (org-agenda-redo t)
+        (beginning-of-buffer))))
+#+END_SRC
+
+Agendas should be full screen!
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'org-agenda-finalize-hook (lambda () (delete-other-windows)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-super-agenda
+    :ensure t
+    :config
+    (org-super-agenda-mode)
+    (let ((org-super-agenda-groups
+           '((:auto-group t))))
+      (org-agenda-list)))
+
+  (defun yc/org-buffer-day-agenda ()
+    (interactive)
+    "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list), d (org-agenda-day-view)."
+    (progn
+      (org-agenda-set-restriction-lock 'file)
+      (org-agenda-list)
+      (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
+#+END_SRC
+
+TODO: 具体配置参考这个：
+- https://github.com/alphapapa/org-super-agenda
+- https://github.com/alphapapa/org-super-agenda/blob/master/examples.org
+
+Archive subtrees under the same hierarchy as original in the archive files
+参考：https://github.com/Fuco1/Fuco1.github.io/blob/master/posts/2017-04-20-Archive-subtrees-under-the-same-hierarchy-as-original-in-the-archive-files.org
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defadvice org-archive-subtree (around fix-hierarchy activate)
+    (let* ((fix-archive-p (and (not current-prefix-arg)
+                               (not (use-region-p))))
+           (afile (org-extract-archive-file (org-get-local-archive-location)))
+           (buffer (or (find-buffer-visiting afile) (find-file-noselect afile))))
+      ad-do-it
+      (when fix-archive-p
+        (with-current-buffer buffer
+          (goto-char (point-max))
+          (while (org-up-heading-safe))
+          (let* ((olpath (org-entry-get (point) "ARCHIVE_OLPATH"))
+                 (path (and olpath (split-string olpath "/")))
+                 (level 1)
+                 tree-text)
+            (when olpath
+              (org-mark-subtree)
+              (setq tree-text (buffer-substring (region-beginning) (region-end)))
+              (let (this-command) (org-cut-subtree))
+              (goto-char (point-min))
+              (save-restriction
+                (widen)
+                (-each path
+                  (lambda (heading)
+                    (if (re-search-forward
+                         (rx-to-string
+                          `(: bol (repeat ,level "*") (1+ " ") ,heading)) nil t)
+                        (org-narrow-to-subtree)
+                      (goto-char (point-max))
+                      (unless (looking-at "^")
+                        (insert "\n"))
+                      (insert (make-string level ?*)
+                              " "
+                              heading
+                              "\n"))
+                    (cl-incf level)))
+                (widen)
+                (org-end-of-subtree t t)
+                (org-paste-subtree level tree-text))))))))
+#+END_SRC
+
+参考这个配置自动归档：[[https://emacs.stackexchange.com/questions/19995/automatically-archive-done-entries-regardless-of-keyword][Automatically archive “DONE” entries regardless of keyword?]]
+[[https://stackoverflow.com/questions/6997387/how-to-archive-all-the-done-tasks-using-a-single-command][How to archive all the DONE tasks using a single command]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+(defun yc/org-archive-done-tasks ()
+  (interactive)
+  (org-map-entries 'org-archive-subtree "/DONE" 'file))
+#+END_SRC
+
+** outline-toc
+暂时还没在 mpla 里
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package outline-toc :ensure t)
+#+END_SRC
+
+** Babel
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ob-go :ensure t)
+#+END_SRC
+
+** org-pomodoro
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Pomodoro
+  (use-package org-pomodoro
+    :ensure t
+    :after org org-agenda
+    :bind (:map org-agenda-mode-map
+                ("P" . org-pomodoro)))
+
+  ;; Visually summarize progress
+  (use-package org-dashboard :ensure t)
+#+END_SRC
+
+** keys
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; (general-define-key
+;;  :keymaps 'org-mode-map
+;;  :states '(normal motion visual)
+;;  :prefix "SPC"
+;;  :global-prefix "C-SPC"
+;;  "m" '(:ignore t :which-key "major-mode-cmd")
+;;  ;; "ma" '(:ignore t :which-key "help")
+;;  "m." 'hydra-org/body
+;;  "ma" 'org-agenda
+;;  "mc" 'org-capture
+;;  "mb" '(:ignore t :which-key "babel")
+;;  "mC" '(:ignore t :which-key "clocks")
+;;  "ms" 'org-schedule
+;;  "md" 'org-deadline
+;;  "mCI" 'org-clock-in
+;;  "mCn" 'org-narrow-to-subtree
+;;  "mCN" 'widen
+;;  "mCO" 'org-clock-out
+;;  "mCq" 'org-clock-cancel
+;;  "mCR" 'org-refile
+;;  ;; "md" '(:ignore t :which-key "dates")
+;;  "me" '(:ignore t :which-key "export")
+;;  "mf" '(:ignore t :which-key "feeds")
+;;  "mH" 'org-shiftleft
+;;  "mJ" 'org-shiftdown
+;;  "mK" 'org-shiftup
+;;  "mL" 'org-shiftright
+;;  "mT" '(:ignore t :which-key "Toggles")
+;;  "mt" '(:ignore t :which-key "tables")
+;;  "mx" '(:ignore t :which-key "text")
+;;  ;; "C-S-l" 'org-shiftcontrolright
+;;  ;; "C-S-h" 'org-shiftcontrolleft
+;;  ;; "C-S-j" 'org-shiftcontroldown
+;;  ;; "C-S-k" 'org-shiftcontrolup
+;;  "mta" 'org-table-align
+;;  "mtb" 'org-table-blank-field
+;;  "mtc" 'org-table-convert
+;;  "mtd" '(:ignore t :which-key "delete")
+;;  "mtdc" 'org-table-delete-column
+;;  "mtdr" 'org-table-kill-row
+;;  "mte" 'org-table-eval-formula
+;;  "mtE" 'org-table-export
+;;  "mth" 'org-table-previous-field
+;;  "mtH" 'org-table-move-column-left
+;;  "mti" '(:ignore t :which-key "insert")
+;;  "mtic" 'org-table-insert-column
+;;  "mtih" 'org-table-insert-hline
+;;  "mtiH" 'org-table-hline-and-move
+;;  "mtir" 'org-table-insert-row
+;;  "mtI" 'org-table-import
+;;  "mtj" 'org-table-next-row
+;;  "mtJ" 'org-table-move-row-down
+;;  "mtK" 'org-table-move-row-up
+;;  "mtl" 'org-table-next-field
+;;  "mtL" 'org-table-move-column-right
+;;  "mtn" 'org-table-create
+;;  "mtN" 'org-table-create-with-table.el
+;;  "mtr" 'org-table-recalculate
+;;  "mts" 'org-table-sort-lines
+;;  "mtt" '(:ignore t :which-key "toggle")
+;;  "mttf" 'org-table-toggle-formula-debugger
+;;  "mtto" 'org-table-toggle-coordinate-overlays
+;;  "mtw" 'org-table-wrap-region)
+
+(my-major-mode-leader-def
+  :keymaps 'org-mode-map
+  ;; "" '(:ignore t :which-key "major-mode-cmd")
+  ;; "ma" '(:ignore t :which-key "help")
+  "." 'hydra-org/body
+  "a" 'org-agenda
+  "c" 'org-capture
+  "b" '(:ignore t :which-key "babel")
+  "C" '(:ignore t :which-key "clocks")
+  "s" 'org-schedule
+  "d" 'org-deadline
+  "CI" 'org-clock-in
+  "Cn" 'org-narrow-to-subtree
+  "CN" 'widen
+  "CO" 'org-clock-out
+  "Cq" 'org-clock-cancel
+  "CR" 'org-refile
+  ;; "md" '(:ignore t :which-key "dates")
+  "e" '(:ignore t :which-key "export")
+  "f" '(:ignore t :which-key "feeds")
+  "H" 'org-shiftleft
+  "J" 'org-shiftdown
+  "K" 'org-shiftup
+  "L" 'org-shiftright
+  "T" '(:ignore t :which-key "Toggles")
+  "t" '(:ignore t :which-key "tables")
+  "x" '(:ignore t :which-key "text")
+  ;; "C-S-l" 'org-shiftcontrolright
+  ;; "C-S-h" 'org-shiftcontrolleft
+  ;; "C-S-j" 'org-shiftcontroldown
+  ;; "C-S-k" 'org-shiftcontrolup
+  "ta" 'org-table-align
+  "tb" 'org-table-blank-field
+  "tc" 'org-table-convert
+  "td" '(:ignore t :which-key "delete")
+  "tdc" 'org-table-delete-column
+  "tdr" 'org-table-kill-row
+  "te" 'org-table-eval-formula
+  "tE" 'org-table-export
+  "th" 'org-table-previous-field
+  "tH" 'org-table-move-column-left
+  "ti" '(:ignore t :which-key "insert")
+  "tic" 'org-table-insert-column
+  "tih" 'org-table-insert-hline
+  "tiH" 'org-table-hline-and-move
+  "tir" 'org-table-insert-row
+  "tI" 'org-table-import
+  "tj" 'org-table-next-row
+  "tJ" 'org-table-move-row-down
+  "tK" 'org-table-move-row-up
+  "tl" 'org-table-next-field
+  "tL" 'org-table-move-column-right
+  "tn" 'org-table-create
+  "tN" 'org-table-create-with-table.el
+  "tr" 'org-table-recalculate
+  "ts" 'org-table-sort-lines
+  "tt" '(:ignore t :which-key "toggle")
+  "ttf" 'org-table-toggle-formula-debugger
+  "tto" 'org-table-toggle-coordinate-overlays
+  "tw" 'org-table-wrap-region)
+
+(my-major-mode-leader-def-copy
+  :keymaps 'org-mode-map
+  "" '(:ignore t :which-key "major-mode-cmd")
+  ;; "ma" '(:ignore t :which-key "help")
+  "." 'hydra-org/body
+  "a" 'org-agenda
+  "c" 'org-capture
+  "b" '(:ignore t :which-key "babel")
+  "C" '(:ignore t :which-key "clocks")
+  "s" 'org-schedule
+  "d" 'org-deadline
+  "CI" 'org-clock-in
+  "Cn" 'org-narrow-to-subtree
+  "CN" 'widen
+  "CO" 'org-clock-out
+  "Cq" 'org-clock-cancel
+  "CR" 'org-refile
+  ;; "md" '(:ignore t :which-key "dates")
+  "e" '(:ignore t :which-key "export")
+  "f" '(:ignore t :which-key "feeds")
+  "H" 'org-shiftleft
+  "J" 'org-shiftdown
+  "K" 'org-shiftup
+  "L" 'org-shiftright
+  "T" '(:ignore t :which-key "Toggles")
+  "t" '(:ignore t :which-key "tables")
+  "x" '(:ignore t :which-key "text")
+  ;; "C-S-l" 'org-shiftcontrolright
+  ;; "C-S-h" 'org-shiftcontrolleft
+  ;; "C-S-j" 'org-shiftcontroldown
+  ;; "C-S-k" 'org-shiftcontrolup
+  "ta" 'org-table-align
+  "tb" 'org-table-blank-field
+  "tc" 'org-table-convert
+  "td" '(:ignore t :which-key "delete")
+  "tdc" 'org-table-delete-column
+  "tdr" 'org-table-kill-row
+  "te" 'org-table-eval-formula
+  "tE" 'org-table-export
+  "th" 'org-table-previous-field
+  "tH" 'org-table-move-column-left
+  "ti" '(:ignore t :which-key "insert")
+  "tic" 'org-table-insert-column
+  "tih" 'org-table-insert-hline
+  "tiH" 'org-table-hline-and-move
+  "tir" 'org-table-insert-row
+  "tI" 'org-table-import
+  "tj" 'org-table-next-row
+  "tJ" 'org-table-move-row-down
+  "tK" 'org-table-move-row-up
+  "tl" 'org-table-next-field
+  "tL" 'org-table-move-column-right
+  "tn" 'org-table-create
+  "tN" 'org-table-create-with-table.el
+  "tr" 'org-table-recalculate
+  "ts" 'org-table-sort-lines
+  "tt" '(:ignore t :which-key "toggle")
+  "ttf" 'org-table-toggle-formula-debugger
+  "tto" 'org-table-toggle-coordinate-overlays
+  "tw" 'org-table-wrap-region)
+#+END_SRC
+
+* Highlight & Search and Replace
+** ido
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ido-vertical-mode
+    :ensure t)
+
+  (use-package ido
+    :ensure t
+    :init
+    (ido-mode 1)
+    (ido-vertical-mode 1)
+    (setq ido-use-faces nil)
+    (ido-everywhere 1)
+    :config
+    (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+    (global-set-key (kbd "C-x C-f") 'ido-find-file))
+
+  (use-package flx-ido
+    :ensure t
+    :config
+    (flx-ido-mode 1)
+    ;; disable ido faces to see flx highlights.
+    (setq ido-enable-flex-matching t))
+
+  (use-package ido-completing-read+
+    :ensure t
+    :config
+    (ido-ubiquitous-mode 1))
+#+END_SRC
+
+** open recently files
+Find a recent file using Ido.
+mapping key to =C-c f= .
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package recentf
+    :ensure t
+    :init
+    (recentf-mode 1)
+    (setq recentf-max-saved-items 0) ;; just 50 is too recent
+
+    ;; Save a list of recent files visited. (open recent file with C-c f)
+    :config
+    (defun ido-recentf-open ()
+      "Use `ido-completing-read' to \\[find-file] a recent file"
+      (interactive)
+      (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+          (message "Opening file...")
+        (message "Aborting")))
+
+    (global-set-key (kbd "C-c f") 'ido-recentf-open))
+#+END_SRC
+
+** helm & ivy
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package swoop
+    :ensure t)
+
+  (use-package helm-swoop
+    :ensure t
+    :config
+    (global-set-key (kbd "M-i") 'helm-swoop)
+    (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+    (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+    ;; Save buffer when helm-multi-swoop-edit complete
+    (setq helm-multi-swoop-edit-save t)
+    ;; Go to the opposite side of line from the end or beginning of line
+    (setq helm-swoop-move-to-line-cycle t)
+    ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+    (setq helm-swoop-split-direction 'split-window-vertically))
+
+  (use-package helm-projectile
+    :ensure t
+    :config
+    (helm-projectile-on)
+    (setq projectile-indexing-method 'native)
+    (setq projectile-enable-caching t)
+    )
+
+  (use-package helm-fuzzier
+    :ensure t
+    :config
+    (helm-fuzzier-mode 1)
+    (setq helm-mode-fuzzy-match t)
+    (setq helm-M-x-fuzzy-match t)
+    (setq helm-buffers-fuzzy-matching t)
+    (setq helm-recentf-fuzzy-match t))
+#+END_SRC
+
+** swiper
+关于 ivy 的使用：https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html#fnr.1
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ivy
+    :ensure t
+    :defer 0.1
+    :diminish
+    :bind (
+           ;; ("C-c C-r" . ivy-resume)
+           ("C-x b" . ivy-switch-buffer)
+           ("C-x B" . ivy-switch-buffer-other-window))
+    :custom
+    (ivy-count-format "(%d/%d) ")
+    (ivy-display-style 'fancy)
+    (ivy-use-virtual-buffers t)
+    :config (ivy-mode))
+
+  (use-package swiper
+    :ensure t
+    :after ivy
+    :config
+    (progn
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (global-set-key "\C-s" 'swiper)
+      (global-set-key (kbd "C-c u") 'swiper-all)
+      ))
+
+  (use-package counsel
+    :ensure t
+    :after ivy
+    :bind (("C-x C-f" . counsel-find-file)
+           ("M-x" . counsel-M-x)
+           ("M-y" . counsel-yank-pop)))
+
+  (use-package counsel-projectile
+    :ensure t
+    :after counsel
+    :bind ("C-x C-p" . counsel-projectile-switch-project))
+
+  (use-package counsel-osx-app
+    :after counsel
+    :bind ("s-o" . counsel-osx-app))
+
+  (use-package ag :ensure t)
+#+END_SRC
+
+** helm-ag
+#+BEGIN_SRC emacs-lisp :tangle yes
+ (use-package helm-ag
+      :ensure t
+      :defer t)
+#+END_SRC
+
+** jump
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package avy
+    :ensure t
+    :init
+    (setq avy-background t))
+#+END_SRC
+
+** highlight and search current word
+实现类似在 vs 编辑器中，按 =<F3>= 快速搜索光标当前所在的词。
+
+GitHub: https://github.com/nschum/highlight-symbol.el
+| Key    | Function                  | Desc                 |
+|--------+---------------------------+----------------------|
+| =M-<F3>= | highlight-symbol-at-point | 高亮光标当前所在的词 |
+| =<F3>=   | highlight-symbol-next     | 查找下一个匹配的词   |
+| =S-<F3>= | highlight-symbol-prev     | 查找上一个匹配的词   |
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;;; highlight-symbol
+  (use-package highlight-symbol
+    :ensure t
+    :diminish ""
+    :bind (("M-<f3>" . highlight-symbol-at-point)
+           ("<f3>" . highlight-symbol-next)
+           ("S-<f3>" . highlight-symbol-prev))
+    :config (progn (setq highlight-symbol-idle-delay 0.5)
+                   (add-hook 'prog-mode-hook 'highlight-symbol-mode)
+                   (highlight-symbol-mode)))
+#+END_SRC
+
+*** TODO 参考这个优化按键及显示方式
+https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace-related.el
+
+** expand-region
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package expand-region
+    :ensure t
+    :init
+    (pending-delete-mode t)
+    :config
+    (global-set-key (kbd "C-=") 'er/expand-region))
+
+  (use-package selected
+    :ensure t
+    :commands selected-minor-mode
+    :init
+    (setq selected-org-mode-map (make-sparse-keymap))
+    :bind (:map selected-keymap
+                ("q" . selected-off)
+                ("u" . upcase-region)
+                ("d" . downcase-region)
+                ("w" . count-words-region)
+                ("m" . apply-macro-to-region-lines)
+                :map selected-org-mode-map
+                ("t" . org-table-convert-region)))
+#+END_SRC
+
+** iedit
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package iedit :ensure t)
+#+END_SRC
+
+** folding
+#+BEGIN_QUOTE
+This is a package to perform text folding like in Vim. It has the following features:
+
+- folding of active regions;
+- good visual feedback: it’s obvious which part of text is folded;
+- persistence by default: when you close file your folds don’t disappear;
+- persistence scales well, you can work on hundreds of files with lots of folds without adverse effects;
+- it doesn’t break indentation or something;
+- folds can be toggled from folded state to unfolded and back very easily;
+- quick navigation between existing folds;
+- you can use mouse to unfold folds (good for beginners and not only for them);
+- for fans of avy package: you can use avy to fold text with minimal number of key strokes!
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package vimish-fold
+    :ensure t
+    :defer 1
+    :bind
+    (:map vimish-fold-folded-keymap ("<tab>" . vimish-fold-unfold)
+     :map vimish-fold-unfolded-keymap ("<tab>" . vimish-fold-refold))
+    :init
+    (setq-default vimish-fold-dir (expand-file-name ".vimish-fold/" user-emacs-directory))
+    (vimish-fold-global-mode)
+    :config
+    (setq-default vimish-fold-header-width 119))
+#+END_SRC
+
+** Pulse
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package pulse :ensure t)
+#+END_SRC
+
+** Replace
+文本替换，使用 =query-replace= 或者 =M-%= 命令。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package anzu
+    :ensure t
+    :defer 1
+    :bind ([remap query-replace] . anzu-query-replace-regexp)
+    :config
+    (global-anzu-mode 1)
+    (setq-default
+     anzu-cons-mode-line-p nil
+     anzu-replace-to-string-separator (mdi "arrow-right" t))
+    )
+#+END_SRC
+
+* Custom functions
+实现 move-file 函数，并映射到 =C-x C-m= 按键上
+代码来自这篇文章：[[http://zck.me/emacs-move-file][Move files in Emacs]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun yc/move-file (new-location)
+    "Write this file to NEW-LOCATION, and delete the old one."
+    (interactive (list (expand-file-name
+                        (if buffer-file-name
+                            (read-file-name "Move file to: ")
+                          (read-file-name "Move file to: "
+                                          default-directory
+                                          (expand-file-name (file-name-nondirectory (buffer-name))
+                                                            default-directory))))))
+    (when (file-exists-p new-location)
+      (delete-file new-location))
+    (let ((old-location (expand-file-name (buffer-file-name))))
+      (message "old file is %s and new file is %s"
+               old-location
+               new-location)
+      (write-file new-location t)
+      (when (and old-location
+                 (file-exists-p new-location)
+                 (not (string-equal old-location new-location)))
+        (delete-file old-location))))
+
+  (bind-key "C-x C-m" #'yc/move-file)
+
+  (defun yc/dired-open-in-finder ()
+    "Show current file in OS's file manager."
+    (interactive)
+    (let ((process-connection-type nil))
+      (start-process "" nil "open" ".")))
+#+END_SRC
+
+* Hydra
+参考：https://github.com/abo-abo/hydra/wiki
+- https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org
+- https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/
+- https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html
+- https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package hydra
+    :ensure t
+    :defer 2
+    :preface
+    (defvar-local yc/ongoing-hydra-body nil)
+    (defun yc/ongoing-hydra ()
+      (interactive)
+      (if yc/ongoing-hydra-body
+          (funcall yc/ongoing-hydra-body)
+        (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
+    :config
+    (defun hydra-move-splitter-left (arg)
+      "Move window splitter left."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'right))
+          (shrink-window-horizontally arg)
+        (enlarge-window-horizontally arg)))
+
+    (defun hydra-move-splitter-right (arg)
+      "Move window splitter right."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'right))
+          (enlarge-window-horizontally arg)
+        (shrink-window-horizontally arg)))
+
+    (defun hydra-move-splitter-up (arg)
+      "Move window splitter up."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'up))
+          (enlarge-window arg)
+        (shrink-window arg)))
+
+    (defun hydra-move-splitter-down (arg)
+      "Move window splitter down."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'up))
+          (shrink-window arg)
+        (enlarge-window arg)))
+    :bind
+    ("C-c <tab>" . hydra-fold/body)
+    ("C-c d" . hydra-dates/body)
+    ("C-c e" . hydra-eyebrowse/body)
+    ;; ("C-c f" . hydra-flycheck/body)
+    ;; ("C-c g" . hydra-magit/body)
+    ("C-c h" . hydra-helm/body)
+    ("C-c o" . yc/ongoing-hydra)
+    ;; ("C-c p" . hydra-projectile/body)
+    ("C-c p" . hydra-system/body)
+    ("C-c w" . hydra-windows/body)
+  )
+
+  (defhydra hydra-zoom (global-map "<f2>")
+    "zoom"
+    ("g" text-scale-increase "in")
+    ("l" text-scale-decrease "out")
+    ;; ("0" (text-scale-set 0) "reset" :exit t)
+    ("0" (text-scale-adjust 0) "reset")
+    ("q" nil "quit" :color blue))
+
+  (defhydra hydra-org (:color red :columns 3)
+    "Org Mode Movements"
+    ("n" outline-next-visible-heading "next heading")
+    ("p" outline-previous-visible-heading "prev heading")
+    ("N" org-forward-heading-same-level "next heading at same level")
+    ("P" org-backward-heading-same-level "prev heading at same level")
+    ("u" outline-up-heading "up heading")
+    ("g" org-goto "goto" :exit t))
+
+  (defhydra hydra-org-clock (:color blue :hint nil)
+    "
+  Clock   In/out^     ^Edit^   ^Summary     (_?_)
+  -----------------------------------------
+          _i_n         _e_dit   _g_oto entry
+          _c_ontinue   _q_uit   _d_isplay
+          _o_ut        ^ ^      _r_eport
+        "
+    ("i" org-clock-in)
+    ("o" org-clock-out)
+    ("c" org-clock-in-last)
+    ("e" org-clock-modify-effort-estimate)
+    ("q" org-clock-cancel)
+    ("g" org-clock-goto)
+    ("d" org-clock-display)
+    ("r" org-clock-report)
+    ("?" (org-info "Clocking commands")))
+
+  (defhydra hydra-org-agenda-clock (:color blue :hint nil)
+    ("i" org-agenda-clock-in)
+    ("o" org-agenda-clock-out)
+    ("q" org-agenda-clock-cancel)
+    ("g" org-agenda-clock-goto))
+
+  (bind-keys ("C-c j" . hydra-org-clock/body)
+             :map org-agenda-mode-map
+             ("C-c j" . hydra-org-agenda-clock/body))
+
+  (defhydra hydra-window ()
+    "
+      Movement^   ^Split^         ^Switch^       ^^^Resize^         ^Window Purpose^
+      ------------------------------------------------------------------------------------------------------
+      _h_ ←        _|_ vertical    ^_b_uffer       _H_  X←          choose window _P_urpose
+      _j_ ↓        _-_ horizontal  ^_f_ind files   _J_  X↓          switch to _B_uffer w/ same purpose
+      _k_ ↑        _u_ undo        ^_a_ce window   _K_  X↑          Purpose-dedication(_!_)
+      _l_ →        _r_ reset       ^_s_wap         _K_  X→          Buffer-dedication(_#_)
+      ^^^^^^^                                      _M_aximize
+      ^^^^^^^                                      _d_elete
+      _x_ M-x      _q_ quit
+      "
+    ("h" windmove-left)
+    ("j" windmove-down)
+    ("k" windmove-up)
+    ("l" windmove-right)
+    ("|" (lambda ()
+           (interactive)
+           (split-window-right)
+           (windmove-right)))
+    ("-" (lambda ()
+           (interactive)
+           (split-window-below)
+           (windmove-down)))
+    ("u" (progn
+           (winner-undo)
+           (setq this-command 'winner-undo)))
+    ("r" winner-redo)
+    ("b" ivy-purpose-switch-buffer-without-purpose)
+    ("f" counsel-find-file)
+    ("a" (lambda ()
+           (interactive)
+           (ace-window 1)
+           (add-hook 'ace-window-end-once-hook
+                     'hydra-window/body)))
+    ("s" (lambda ()
+           (interactive)
+           (ace-swap-window)
+           (add-hook 'ace-window-end-once-hook
+                     'hydra-window/body)))
+    ("H" hydra-move-splitter-left)
+    ("J" hydra-move-splitter-down)
+    ("K" hydra-move-splitter-up)
+    ("L" hydra-move-splitter-right)
+    ("M" delete-other-windows)
+    ("d" delete-window)
+
+    ("P" purpose-set-window-purpose)
+    ("B" ivy-purpose-switch-buffer-with-purpose)
+    ("!" purpose-toggle-window-purpose-dedicated)
+    ("#" purpose-toggle-window-buffer-dedicated)
+
+    ("K" ace-delete-other-windows)
+    ("S" save-buffer)
+    ("d" delete-window)
+    ("D" (lambda ()
+           (interactive)
+           (ace-delete-window)
+           (add-hook 'ace-window-end-once-hook
+                     'hydra-window/body))
+     )
+
+    ("x" counsel-M-x)
+    ("q" nil)
+    )
+  (global-set-key (kbd "<f1>") 'hydra-window/body)
+
+  (defhydra hydra-clock (:color blue)
+    "
+      ^
+      ^Clock^             ^Do^
+      ^─────^─────────────^──^─────────
+      _q_ quit            _c_ cancel
+      ^^                  _d_ display
+      ^^                  _e_ effort
+      ^^                  _i_ in
+      ^^                  _j_ jump
+      ^^                  _o_ out
+      ^^                  _r_ report
+      ^^                  ^^
+      "
+    ("q" nil)
+    ("c" org-clock-cancel :color pink)
+    ("d" org-clock-display)
+    ("e" org-clock-modify-effort-estimate)
+    ("i" org-clock-in)
+    ("j" org-clock-goto)
+    ("o" org-clock-out)
+    ("r" org-clock-report))
+
+  (defhydra hydra-helm (:hint nil :color pink)
+          "
+                                                                            ╭──────┐
+     Navigation   Other  Sources     Mark             Do             Help   │ Helm │
+    ╭───────────────────────────────────────────────────────────────────────┴──────╯
+          ^_k_^         _K_       _p_   [_m_] mark         [_v_] view         [_H_] helm help
+          ^^↑^^         ^↑^       ^↑^   [_t_] toggle all   [_d_] delete       [_s_] source help
+      _h_ ←   → _l_     _c_       ^ ^   [_u_] unmark all   [_f_] follow: %(helm-attr 'follow)
+          ^^↓^^         ^↓^       ^↓^    ^ ^               [_y_] yank selection
+          ^_j_^         _J_       _n_    ^ ^               [_w_] toggle windows
+    --------------------------------------------------------------------------------
+          "
+          ("<tab>" helm-keyboard-quit "back" :exit t)
+          ("<escape>" nil "quit")
+          ("\\" (insert "\\") "\\" :color blue)
+          ("h" helm-beginning-of-buffer)
+          ("j" helm-next-line)
+          ("k" helm-previous-line)
+          ("l" helm-end-of-buffer)
+          ("g" helm-beginning-of-buffer)
+          ("G" helm-end-of-buffer)
+          ("n" helm-next-source)
+          ("p" helm-previous-source)
+          ("K" helm-scroll-other-window-down)
+          ("J" helm-scroll-other-window)
+          ("c" helm-recenter-top-bottom-other-window)
+          ("m" helm-toggle-visible-mark)
+          ("t" helm-toggle-all-marks)
+          ("u" helm-unmark-all)
+          ("H" helm-help)
+          ("s" helm-buffer-help)
+          ("v" helm-execute-persistent-action)
+          ("d" helm-persistent-delete-marked)
+          ("y" helm-yank-selection)
+          ("w" helm-toggle-resplit-and-swap-windows)
+          ("f" helm-follow-mode))
+
+  (defhydra hydra-fold (:color pink)
+    "
+  ^
+  ^Fold^              ^Do^                ^Jump^              ^Toggle^
+  ^────^──────────────^──^────────────────^────^──────────────^──────^────────────
+  _q_ quit            _f_ fold            _<_ previous        _<tab>_ current
+  ^^                  _k_ kill            _>_ next            _S-<tab>_ all
+  ^^                  _K_ kill all        ^^                  ^^
+  ^^                  ^^                  ^^                  ^^
+  "
+    ("q" nil)
+    ("<tab>" vimish-fold-toggle)
+    ("S-<tab>" vimish-fold-toggle-all)
+    ("<" vimish-fold-previous-fold)
+    (">" vimish-fold-next-fold)
+    ("f" vimish-fold)
+    ("k" vimish-fold-delete)
+    ("K" vimish-fold-delete-all))
+
+  (defhydra hydra-dates (:color blue)
+    "
+  ^
+  ^Dates^             ^Insert^            ^Insert with Time^
+  ^─────^─────────────^──────^────────────^────────────────^──
+  _q_ quit            _d_ short           _D_ short
+  ^^                  _i_ iso             _I_ iso
+  ^^                  _l_ long            _L_ long
+  ^^                  ^^                  ^^
+  "
+    ("q" nil)
+    ("d" me/date-short)
+    ("D" me/date-short-with-time)
+    ("i" me/date-iso)
+    ("I" me/date-iso-with-time)
+    ("l" me/date-long)
+    ("L" me/date-long-with-time))
+
+  (defhydra hydra-markdown (:color pink)
+    "
+  ^
+  ^Markdown^          ^Table Columns^     ^Table Rows^
+  ^────────^──────────^─────────────^─────^──────────^────────
+  _q_ quit            _c_ insert          _r_ insert
+  ^^                  _C_ delete          _R_ delete
+  ^^                  _M-<left>_ left     _M-<down>_ down
+  ^^                  _M-<right>_ right   _M-<up>_ up
+  ^^                  ^^                  ^^
+  "
+    ("q" nil)
+    ("c" markdown-table-insert-column)
+    ("C" markdown-table-delete-column)
+    ("r" markdown-table-insert-row)
+    ("R" markdown-table-delete-row)
+    ("M-<left>" markdown-table-move-column-left)
+    ("M-<right>" markdown-table-move-column-right)
+    ("M-<down>" markdown-table-move-row-down)
+    ("M-<up>" markdown-table-move-row-up))
+
+  (defhydra hydra-windows (:color pink)
+    "
+  ^
+  ^Windows^           ^Window^            ^Zoom^              ^Eyebrowse Do^            ^Eyebrowse Switch^
+  ^───────^───────────^──────^────────────^────^──────────────^────────────^────────────^────────────────^────────────
+  _q_ quit            _b_ balance         _-_ out             _c_ create                _<_ previous
+  ^^                  _i_ heighten        _+_ in              _k_ kill                  _>_ next
+  ^^                  _j_ narrow          _=_ reset           _r_ rename                _e_ last
+  ^^                  _k_ lower           ^^                  ^^                        _s_ switch
+  ^^                  _l_ widen           ^^                  ^^                        _1_ workspace ➊
+  ^^                  ^^                  ^^                  ^^                        _2_ workspace ➋
+  ^^                  ^^                  ^^                  ^^                        _3_ workspace ➌
+  ^^                  ^^                  ^^                  ^^                        _4_ workspace ➍
+  "
+    ("q" nil)
+    ("b" balance-windows)
+    ("i" enlarge-window)
+    ("j" shrink-window-horizontally)
+    ("k" shrink-window)
+    ("l" enlarge-window-horizontally)
+    ("-" text-scale-decrease)
+    ("+" text-scale-increase)
+    ("=" (text-scale-increase 0))
+    ("<" eyebrowse-prev-window-config :color red)
+    (">" eyebrowse-next-window-config :color red)
+    ("c" eyebrowse-create-window-config)
+    ("e" eyebrowse-last-window-config)
+    ("k" eyebrowse-close-window-config :color red)
+    ("r" eyebrowse-rename-window-config)
+    ("s" eyebrowse-switch-to-window-config)
+    ("1" eyebrowse-switch-to-window-config-1)
+    ("2" eyebrowse-switch-to-window-config-2)
+    ("3" eyebrowse-switch-to-window-config-3)
+    ("4" eyebrowse-switch-to-window-config-4))
+#+END_SRC
+
+* Term
+参考这篇文章配置 multi-term：[[http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/][Using GNU Emacs as a terminal emulator]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq-default shell-file-name "/bin/bash")
+
+  (use-package multi-term
+    :ensure t
+    :defer t
+    :init
+    (setq multi-term-program-switches "--login")
+    (when (require 'multi-term nil t)
+      (global-set-key (kbd "<C-next>") 'multi-term-next)
+      (global-set-key (kbd "<C-prior>") 'multi-term-prev)
+      (setq multi-term-buffer-name "term"
+            multi-term-program "/bin/zsh"))
+    :config
+    (when (require 'term nil t) ; only if term can be loaded..
+      (setq term-bind-key-alist
+            (list (cons "C-c C-c" 'term-interrupt-subjob)
+                  (cons "C-p" 'previous-line)
+                  (cons "C-n" 'next-line)
+                  (cons "M-f" 'term-send-forward-word)
+                  (cons "M-b" 'term-send-backward-word)
+                  (cons "C-c C-j" 'term-line-mode)
+                  (cons "C-c C-k" 'term-char-mode)
+                  (cons "M-DEL" 'term-send-backward-kill-word)
+                  (cons "M-d" 'term-send-forward-kill-word)
+                  (cons "<C-left>" 'term-send-backward-word)
+                  (cons "<C-right>" 'term-send-forward-word)
+                  (cons "C-r" 'term-send-reverse-search-history)
+                  (cons "M-p" 'term-send-raw-meta)
+                  (cons "M-y" 'term-send-raw-meta)
+                  (cons "C-y" 'term-send-raw))))
+    :bind ("<f5>" . multi-term))
+
+  (use-package helm-mt
+    :ensure t
+    :defer t
+    :bind ("C-x t" . helm-mt))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company-shell
+    :ensure t
+    :after company
+    :init
+    (add-hook 'sh-mode-hook 'company-mode)
+    :config
+    (add-to-list 'company-backends 'company-shell))
+#+END_SRC
+
+** eshell
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package eshell
+    :ensure t
+    :defer t
+    :config
+    (defun yc/eshell-prompt-function ()
+      "My eshell prompt function."
+      (concat " λ "))
+
+    (setq eshell-highlight-prompt nil
+       eshell-hist-ignoredups t
+       eshell-directory-name (expand-file-name "eshell" yc/cache-dir)
+       eshell-prefer-lisp-functions t
+       eshell-prompt-function #'yc/eshell-prompt-function))
+#+END_SRC
+
+** better-shell
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package better-shell
+      :ensure t
+      :bind (("C-'" . better-shell-shell)
+             ("C-;" . better-shell-remote-open)))
+#+END_SRC
+
+** shell-pop
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package shell-pop
+    :ensure t
+    :defer t
+    ;; :bind ("C-t" . shell-pop)
+    :init
+    (progn
+      (setq shell-pop-window-position "bottom"
+            shell-pop-autocd-to-working-dir nil
+            shell-pop-window-size     30
+            shell-pop-term-shell      "/bin/zsh"
+            shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
+            ;; shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
+            shell-pop-full-span       t)
+
+      (add-hook 'term-mode-hook 'ansi-term-handle-close)
+      (add-hook 'term-mode-hook '(lambda () (yas-minor-mode -1)))
+      (add-hook 'term-mode-hook (lambda () (linum-mode -1))))
+    :config
+    ;; need to do this manually or not picked up by `shell-pop'
+    (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type))
+
+  (defun ansi-term-handle-close ()
+    "Close current term buffer when `exit' from term buffer."
+    (when (ignore-errors (get-buffer-process (current-buffer)))
+      (set-process-sentinel (get-buffer-process (current-buffer))
+                            (lambda (proc change)
+                              (when (string-match "\\(finished\\|exited\\)"
+                                                  change)
+                                (kill-buffer (process-buffer proc))
+                                (when (> (count-windows) 1)
+                                  (delete-window)))))))
+#+END_SRC
+
+* Tramp
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package tramp
+    :init
+    (setq tramp-default-method "ssh")
+    (setq password-cache-expiry nil)
+    :config
+    (setq tramp-auto-save-directory "~/.emacs.d/tramp-autosave-dir")
+    (setq tramp-backup-directory-alist `(("." . "~/.saves_tramp")))
+    ;; Make SSH work faster by reusing connections
+    (setq tramp-ssh-controlmaster-options
+          "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
+#+END_SRC
+
+counsel-tramp
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package counsel-tramp
+    :ensure t
+    :config
+    (setq tramp-default-method "ssh")
+    (define-key global-map (kbd "C-c s") 'counsel-tramp)
+    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
+#+END_SRC
+
+* Help
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package helm-descbinds
+    :ensure t
+    :bind (("C-h b" . helm-descbinds)
+           ("C-h h" . helm-descbinds)))
+#+END_SRC
+
+* Git
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; highlight git changes
+  (use-package git-gutter
+    :ensure t
+    :diminish git-gutter-mode
+    :config (global-git-gutter-mode))
+#+END_SRC
+
+** magit
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;;; magit
+  (use-package magit
+    :ensure t
+    :bind (("C-x g" . magit-status))
+    :config (progn (add-hook 'magit-log-edit-mode-hook
+                             (lambda ()
+                               (set-fill-column 72)
+                               (auto-fill-mode 1)))
+                   ;; (add-hook 'magit-mode-hook '(lambda () (auto-complete-mode 0)))
+                   (setq
+                    ;; use ido to look for branches
+                    magit-completing-read-function 'magit-ido-completing-read
+                    ;; don't put "origin-" in front of new branch names by default
+                    magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
+                    ;; highlight word/letter changes in hunk diffs
+                    magit-diff-refine-hunk t
+                    ;; don't attempt to save unsaved buffers
+                    magit-save-some-buffers nil)
+                   (diminish 'magit-auto-revert-mode "")
+                   (use-package gitconfig-mode
+                     :ensure t)
+                   (use-package gitignore-mode
+                     :ensure t)))
+
+#+END_SRC
+
+** git-timemachine
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package git-timemachine :ensure t)
+
+  (eval-after-load 'git-timemachine
+    '(progn
+       (evil-make-overriding-map git-timemachine-mode-map 'normal)
+       ;; force update evil keymaps after git-timemachine-mode loaded
+       (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
+
+  (defhydra hydra-git-timemachine ()
+    "Git timemachine"
+    ("p" git-timemachine-show-previous-revision "previous revision")
+    ("n" git-timemachine-show-next-revision "next revision")
+    ("q" nil "quit"))
+#+END_SRC
+
+* Scratch
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; scratch
+  (use-package scratch
+    :ensure t
+    :commands (scratch))
+
+  (use-package scratch-ext
+    :ensure t
+    :after scratch
+    :config
+    (setq scratch-ext-log-directory (expand-file-name ".scratch" yc/cache-dir)))
+#+END_SRC
+
+* tools
+** org-reveal
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ox-reveal
+    :ensure ox-reveal
+    :config
+    (setq org-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0")
+    (setq org-reveal-mathjax t))
+#+END_SRC
+
+** beamer
+
+** pdf 导出设置
+这里的内容是采用 Emacs+orgmode+LaTeX 导出 pdf 相关的。
+需要系统安装 xelatex 用于导出带有中文的 pdf。
+1. 需要先安装 MacTeX
+添加对 xelatex 的支持。xelatex 在刚才安装的 MacTeX 已经安装了。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/texlive/2017/bin/x86_64-darwin/"))
+  (setq exec-path (append exec-path '("/usr/local/texlive/2017/bin/x86_64-darwin/")))
+#+END_SRC
+
+配置使用 xelate 输出中文 pdf
+org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xelatex
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq org-latex-pdf-process '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+                                "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+                                "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+#+END_SRC
+
+要导出到 PDF 时也高亮, 需要在.emacs 文件中加入以下代码:
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; use minted to highlight code in latex
+  (require 'ox-latex)
+  (add-to-list 'org-latex-packages-alist '("" "minted"))
+  (setq org-latex-listings 'minted)
+#+END_SRC
+
+设置 pdf 输出样式
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq org-latex-classes
+        '(("article"
+           "
+  \\documentclass[12pt,a4paper]{article}
+  \\usepackage[margin=2cm]{geometry}
+  \\usepackage{fontspec}
+  \\setromanfont{STSong}
+  \\usepackage{etoolbox}  % Quote 部份的字型設定
+  \\newfontfamily\\quotefont{STSong}
+  \\AtBeginEnvironment{quote}{\\quotefont\\small}
+  \\setmonofont[Scale=0.9]{Courier} % 等寬字型 [FIXME] Courier 中文會爛掉！
+  \\font\\cwSong=''STSong'' at 10pt
+  %\\font\\cwHei=''STSong'' at 10p %不知為何這套字型一用就爆掉...
+  \\font\\cwYen=''STSong'' at 10pt
+  \\font\\cwKai=''STSong'' at 10pt
+  \\font\\cwMing=''STSong'' at 10pt
+  \\font\\wqyHei=''STSong'' at 10pt
+  \\font\\wqyHeiMono=''STSong'' at 10pt
+  \\font\\wqyHeiMicro=''STSong'' at 10pt
+  \\XeTeXlinebreaklocale ``zh''
+  \\XeTeXlinebreakskip = 0pt plus 1pt
+  \\linespread{1.36}
+  % [FIXME] ox-latex 的設計不良導致 hypersetup 必須在這裡插入
+  \\usepackage{hyperref}
+  \\hypersetup{
+    colorlinks=true, %把紅框框移掉改用字體顏色不同來顯示連結
+    linkcolor=[rgb]{0,0.37,0.53},
+    citecolor=[rgb]{0,0.47,0.68},
+    filecolor=[rgb]{0,0.37,0.53},
+    urlcolor=[rgb]{0,0.37,0.53},
+    pagebackref=true,
+    linktoc=all,}
+  "
+           ("\\section{%s}" . "\\section*{%s}")
+           ("\\subsection{%s}" . "\\subsection*{%s}")
+           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+          ))
+  ;; [FIXME]
+  ;; 原本是不要讓 org 插入 hypersetup（因為 org-mode 這部份設計成沒辦法自訂，或許可以去 report 一下？）
+  ;; 改成自行插入，但這樣 pdfcreator 沒辦法根據 Emacs 版本插入，pdfkeyword 也會無效...幹。
+  (setq org-latex-with-hyperref t)
+  ;; 把預設的 fontenc 拿掉
+  ;; 經過測試 XeLaTeX 輸出 PDF 時有 fontenc[T1]的話中文會無法顯示。
+  ;; hyperref 也拿掉，改從 classes 處就插入，原因見上面 org-latex-with-hyperref 的說明。
+  (setq org-latex-default-packages-alist
+        '(("" "hyperref" nil)
+          ("AUTO" "inputenc" t)
+          ("" "fixltx2e" nil)
+          ("" "graphicx" t)
+          ("" "longtable" nil)
+          ("" "float" nil)
+          ("" "wrapfig" nil)
+          ("" "rotating" nil)
+          ("normalem" "ulem" t)
+          ("" "amsmath" t)
+          ("" "textcomp" t)
+          ("" "marvosym" t)
+          ("" "wasysym" t)
+          ("" "multicol" t)  ; 這是我另外加的，因為常需要多欄位文件版面。
+          ("" "amssymb" t)
+          "\\tolerance=1000"))
+  ;; Use XeLaTeX to export PDF in Org-mode
+  (setq org-latex-pdf-process
+        '("xelatex -interaction nonstopmode -output-directory %o %f"
+          "xelatex -interaction nonstopmode -output-directory %o %f"
+          "xelatex -interaction nonstopmode -output-directory %o %f"))
+  ;; 指定你要用什麼外部 app 來開 pdf 之類的檔案。我是偷懶所以直接用 kde-open，你也可以指定其他的。
+  (setq org-file-apps '((auto-mode . emacs)
+                        ("\\.mm\\'" . default)
+                        ("\\.x?html?\\'" . "xdg-open %s")
+                        ("\\.pdf\\'" . "kde-open %s")
+                        ("\\.jpg\\'" . "kde-open %s")))
+#+END_SRC
+
+** 使用 PlantUML
+需要依赖 Java 环境及 plantuml.jar（[[http://plantuml.com/download][下载]]）。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq plantuml-java-args (expand-file-name "~/.emacs.d/bin/plantuml.jar"))
+
+  (use-package plantuml-mode
+    :ensure t
+    :config
+    ;; Enable plantuml-mode for PlantUML files
+    (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
+
+    ;; Enable plantuml-mode within an org-mode document
+    (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+
+    ;; Use fundamental mode when editing plantuml blocks with C-c '
+    (add-to-list 'org-src-lang-modes (quote ("plantuml" . fundamental)))
+
+    ;; active Org-babel languages
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '(;; other Babel languages
+       (plantuml . t)))
+    )
+#+END_SRC
+
+当执行 org code block 后，显示图片
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'org-babel-after-execute-hook 'yc/display-inline-images 'append)
+
+  (defun yc/display-inline-images ()
+    (condition-case nil
+        (org-display-inline-images)
+      (error nil)))
+#+END_SRC
+
+* blog
+** hexo 博客系统
+我的 hexo 设置
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'ox-publish)
+  (defun org-custom-link-img-follow (path)
+    (org-open-file-with-emacs
+     (format "../source/assets/%s" path)))   ;the path of the image in local dic
+
+  (defun org-custom-link-img-export (path desc format)
+    (cond
+     ((eq format 'html)
+      (format "<img src=\"/assets/%s\" alt=\"%s\"/>" path desc)))) ;the path of the image in webserver
+
+  (org-add-link-type "img" 'org-custom-link-img-follow 'org-custom-link-img-export)
+#+END_SRC
+
+** hugo
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package easy-hugo
+    :ensure t
+    :init
+    (setq easy-hugo-basedir "/Users/yangc/src/yangc/yangcblog/")
+    (setq easy-hugo-url "https://ifrenzyc.github.io")
+    (setq easy-hugo-root "/Users/yangc/src/yangc/yangcblog/")
+    (setq easy-hugo-previewtime "300")
+    :config
+    (setq easy-hugo-default-ext ".org")
+    :bind ("C-c C-e" . easy-hugo))
+#+END_SRC
+
+** dokuwiki
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dokuwiki-mode
+    :ensure t
+    :config
+    (use-package outline-magic :ensure t))
+
+  (use-package dokuwiki
+    :ensure t
+    :init
+    (use-package xml-rpc :ensure t))
+#+END_SRC
+
+* Daemon
+使用服务模式启动 Emacs，这样子在其他地方可以快速启动一个 Emacs 窗口用于类似编辑文件操作等。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package server
+    :ensure t
+    :defer 1
+    :config
+    (unless (server-running-p)
+      (server-start)))
+#+END_SRC
+
+Restart Emacs inside Emacs
+
+[[https://github.com/iqbalansari/restart-emacs][iqbalansari/restart-emacs - GitHub]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package restart-emacs
+    :ensure t
+    :defer t
+    ;; :bind ("C-c Q" . restart-emacs)
+    :config (emacs-restore-frames t))
+#+END_SRC
+
+* test
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package restclient
+    :ensure t)
+
+  (use-package ob-restclient
+    :ensure t
+    :config
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((restclient . t))))
+
+  (use-package company-restclient
+    :ensure t
+    :after company restclient-mode
+    :init
+    (add-to-list 'company-backends 'company-restclient))
+#+END_SRC
+* Document Conversions (Pandoc)
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package pandoc-mode
+    :ensure t
+    :init
+    (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+    :config
+    (when (is-mac-p)
+      (add-to-list 'exec-path "/usr/local/texlive/2017/bin/x86_64-darwin")))
+#+END_SRC
