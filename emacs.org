@@ -27,6 +27,7 @@
 - https://github.com/larstvei/dot-emacs/blob/master/init.org
 - [[https://github.com/WolfeCub/dotfiles/blob/master/emacs/.emacs.d/README.org][WolfeCub/dotfiles - GitHub]]
 - [[https://github.com/MaxSt/dotfiles/blob/master/emacs.d/config.org][MaxSt/dotfiles - GitHub]]
+  里面的 general.el 快捷键设置，适合参考。
 
 * Bootstrap
 ** Constants
@@ -114,6 +115,19 @@ Restore cursor to file position in previous editing session.
 参考文档：[[https://www.emacswiki.org/emacs/SavePlace#toc1][SavePlace]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (save-place-mode 1)
+#+END_SRC
+
+* undo-tree
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package undo-tree
+  :ensure t
+  :config
+  (progn
+    (global-undo-tree-mode)
+    (setq undo-tree-auto-save-history t
+          undo-tree-visualizer-diff t
+          undo-tree-visualizer-timestamps t
+          undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))))
 #+END_SRC
 
 * Package
@@ -431,7 +445,8 @@ Visually highlight the selected buffer.
   (use-package rainbow-delimiters
     :ensure t
     :config
-    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+    (add-hook 'cider-repl-mode #'rainbow-delimiters-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -605,9 +620,7 @@ Visually highlight the selected buffer.
 ;; ;;                                        (powerline-raw erc-modified-channels-object seg2 'l))
 ;; ;;                                      (powerline-major-mode seg2 'l)
 ;; ;;                                      (powerline-process seg2)
-;; ;;                                      (powerline-minor-modes seg2 'l)
-;; ;;                                      (powerline-narrow seg2 'l)
-;; ;;                                      (powerline-raw " " seg2)
+;; ;;         ;; ;;                                      (powerline-raw " " seg2)
 ;; ;;                                      (funcall separator-left seg2 seg3)
 ;; ;;                                      (powerline-vc seg3 'r)
 ;; ;;                                      (when (bound-and-true-p nyan-mode)
@@ -667,7 +680,6 @@ Visually highlight the selected buffer.
 
                    (sp-local-pair 'markdown-mode "`" nil :actions nil)
                    (sp-local-pair 'gfm-mode "`" nil :actions nil)
-
                    (sp-local-pair 'web-mode "{" "}" :actions nil)
                    ;; (-each sp--lisp-modes 'enable-lisp-hooks)
                    ))
@@ -675,27 +687,40 @@ Visually highlight the selected buffer.
 
 ** fill-column-indicator
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package fill-column-indicator
-  ;;   :ensure t
-  ;;   :config
-  ;;   (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
-  ;;   (add-hook 'org-mode-hook
-  ;;             '(lambda ()
-  ;;                (fci-mode 1)))
-  ;;   (setq fci-rule-character-color "#383838")
-  ;;   (setq-default fci-rule-column 119)
-  ;;   (global-fci-mode -1))
+;; (use-package fill-column-indicator
+;;   :ensure t
+;;   :config
+;;   (defun on-off-fci-before-company(command)
+;;     (when (string= "show" command)
+;;       (turn-off-fci-mode))
+;;     (when (string= "hide" command)
+;;       (turn-on-fci-mode)))
+;;   (advice-add 'company-call-frontends :before #'on-off-fci-before-company)
+;;   (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+;;   (add-hook 'prog-mode-hook #'fci-mode)
+;;   (add-hook 'text-mode-hook #'fci-mode)
+;;   (setq fci-rule-character-color "#383838")
+;;   (setq-default fci-rule-color "#906cff")
+;;   (setq-default fci-rule-column 119)
+;;   (global-fci-mode -1))
 #+END_SRC
 
 ** indent-guide
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package highlight-indentation
-    :ensure t
-    :init
-    (highlight-indentation-mode t)
-    :config
-    (set-face-background 'highlight-indentation-face "#e3e3d3")
-    (set-face-background 'highlight-indentation-current-column-face "#c3b3b3"))
+  ;; (use-package highlight-indentation
+  ;;   :ensure t
+  ;;   :init
+  ;;   (highlight-indentation-mode t)
+  ;;   :config
+  ;;   (set-face-background 'highlight-indentation-face "#e3e3d3")
+  ;;   (set-face-background 'highlight-indentation-current-column-face "#c3b3b3"))
+
+  ;; (use-package highlight-indent-guides
+  ;;   :ensure t
+  ;;   :config
+  ;;   (setq highlight-indent-guides-auto-character-face-perc 25)
+  ;;   (setq highlight-indent-guides-method 'character)
+  ;;   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 #+END_SRC
 
 ** ELScreen & window-zoom
@@ -915,205 +940,199 @@ Unicode is an required aesthetic
     (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
     (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣")))
 #+END_SRC
-
 ** evil
 - TODO 阅读：[[https://github.com/noctuid/evil-guide#terminology][noctuid/evil-guide - GitHub]]
-
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq evil-want-integration nil)
+(setq evil-want-integration nil)
 
-  ;; @see http://wikemacs.org/wiki/Evil
-  (use-package evil
-    :ensure t
-    :init
-    (evil-mode 1)
-    :config
+;; @see http://wikemacs.org/wiki/Evil
+(use-package evil
+  :ensure t
+  :demand t
+  :init
+  (evil-mode 1)
+  (setq-default evil-search-module 'evil-search
+                evil-want-Y-yank-to-eol t)
+  :config
+  ;; @see http://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
+  ;; (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+  ;; (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+  ;; (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+  ;; (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 
-    ;; @see http://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
-    ;; (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-    ;; (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-    ;; (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-    ;; (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+  ;; @see https://github.com/rime/squirrel/wiki/vim%E7%94%A8%E6%88%B7%E4%B8%8Eemacs-evil-mode%E7%94%A8%E6%88%B7-%E8%BE%93%E5%85%A5%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E6%88%90%E8%8B%B1%E6%96%87%E7%8A%B6%E6%80%81%E7%9A%84%E5%AE%9E%E7%8E%B0
+  (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
+    "C-g back to normal state"
+    (when  (evil-insert-state-p)
+      (cond
+       ((equal (evil-initial-state major-mode) 'normal)
+        (evil-normal-state))
+       ((equal (evil-initial-state major-mode) 'insert)
+        (evil-normal-state))
+       ((equal (evil-initial-state major-mode) 'motion)
+        (evil-motion-state))
+       (t
+        (if (equal last-command 'keyboard-quit)
+            (evil-normal-state)           ;如果初始化 state 不是 normal，按两次才允许转到 normal state
+          (evil-change-to-initial-state)) ;如果初始化 state 不是 normal，按一次 转到初始状态
+        ))))
 
-    ;; esc quits
-    ;; @see http://stackoverflow.com/questions/8483182/evil-mode-best-practice
-    (defun minibuffer-keyboard-quit ()
-      "Abort recursive edit.
+  ;; esc quits
+  ;; @see http://stackoverflow.com/questions/8483182/evil-mode-best-practice
+  (defun minibuffer-keyboard-quit ()
+    "Abort recursive edit.
   In Delete Selection mode, if the mark is active, just deactivate it;
   then it takes a second \\[keyboard-quit] to abort the minibuffer."
+    (interactive)
+    (if (and delete-selection-mode transient-mark-mode mark-active)
+        (setq deactivate-mark  t)
+      (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+      (abort-recursive-edit)))
+  (define-key evil-normal-state-map [escape] 'keyboard-quit)
+  (define-key evil-visual-state-map [escape] 'keyboard-quit)
+  (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+  (define-key evil-normal-state-map "\C-y" 'yank)
+  (define-key evil-insert-state-map "\C-y" 'yank)
+  (define-key evil-visual-state-map "\C-y" 'yank)
+  (define-key evil-insert-state-map "\C-e" 'end-of-line)
+
+  ;; Split and move the cursor to the new split
+  (define-key evil-normal-state-map (kbd "-")
+    (lambda ()
       (interactive)
-      (if (and delete-selection-mode transient-mark-mode mark-active)
-          (setq deactivate-mark  t)
-        (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-        (abort-recursive-edit)))
-    (define-key evil-normal-state-map [escape] 'keyboard-quit)
-    (define-key evil-visual-state-map [escape] 'keyboard-quit)
-    (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-    (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-    (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-    (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-    (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-
-    (define-key evil-normal-state-map "\C-y" 'yank)
-    (define-key evil-insert-state-map "\C-y" 'yank)
-    (define-key evil-visual-state-map "\C-y" 'yank)
-    (define-key evil-insert-state-map "\C-e" 'end-of-line)
-
-    ;; Split and move the cursor to the new split
-    (define-key evil-normal-state-map (kbd "-")
-      (lambda ()
-        (interactive)
-        (split-window-vertically)
-        (other-window 1)))
-    (define-key evil-normal-state-map (kbd "|")
-      (lambda ()
-        (interactive)
-        (split-window-horizontally)
-        (other-window 1)))
-
-    (add-hook 'evil-after-load-hook
-              (lambda ()
-                ;; config
-                ))
-    ;; C-a for redo the last insertion
-    ;; @see http://emacs.stackexchange.com/questions/14521/insert-mode-make-c-a-insert-previously-inserted-text
-    (defun yc/evil-paste-last-insertion ()
+      (split-window-vertically)
+      (other-window 1)))
+  (define-key evil-normal-state-map (kbd "|")
+    (lambda ()
       (interactive)
-      (evil-paste-from-register ?.))
+      (split-window-horizontally)
+      (other-window 1)))
 
-    (eval-after-load 'evil-maps
-      '(define-key evil-insert-state-map (kbd "C-a") 'yc/evil-paste-last-insertion))
+  (add-hook 'evil-after-load-hook
+            (lambda ()
+              ;; config
+              ))
+  ;; C-a for redo the last insertion
+  ;; @see http://emacs.stackexchange.com/questions/14521/insert-mode-make-c-a-insert-previously-inserted-text
+  (defun yc/evil-paste-last-insertion ()
+    (interactive)
+    (evil-paste-from-register ?.))
 
-    ;; @see https://github.com/rime/squirrel/wiki/vim%E7%94%A8%E6%88%B7%E4%B8%8Eemacs-evil-mode%E7%94%A8%E6%88%B7-%E8%BE%93%E5%85%A5%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E6%88%90%E8%8B%B1%E6%96%87%E7%8A%B6%E6%80%81%E7%9A%84%E5%AE%9E%E7%8E%B0
-    (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
-      "C-g back to normal state"
-      (when  (evil-insert-state-p)
-        (cond
-         ((equal (evil-initial-state major-mode) 'normal)
-          (evil-normal-state))
-         ((equal (evil-initial-state major-mode) 'insert)
-          (evil-normal-state))
-         ((equal (evil-initial-state major-mode) 'motion)
-          (evil-motion-state))
-         (t
-          (if (equal last-command 'keyboard-quit)
-              (evil-normal-state)           ;如果初始化 state 不是 normal，按两次才允许转到 normal state
-            (evil-change-to-initial-state)) ;如果初始化 state 不是 normal，按一次 转到初始状态
-          ))))
+  (eval-after-load 'evil-maps
+    '(define-key evil-insert-state-map (kbd "C-a") 'yc/evil-paste-last-insertion))
 
-    ;; C-u to scroll up or delete indent
-    ;; @see http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
-    (setq evil-want-C-u-scroll t)
-    (setq evil-want-C-i-jump t)
-    (set-cursor-color "DarkCyan")
+  ;; C-u to scroll up or delete indent
+  ;; @see http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump t)
+  (set-cursor-color "DarkCyan")
 
-    ;; Great evil org mode keyboard shortcuts cribbed from cofi
-    (evil-define-key 'normal org-mode-map
-      (kbd "RET") 'org-open-at-point
-      "za"        'org-cycle
-      "zA"        'org-shifttab
-      "zm"        'hide-body
-      "zr"        'show-all
-      "zo"        'show-subtree
-      "zO"        'show-all
-      "zc"        'hide-subtree
-      "zC"        'hide-all
-      (kbd "M-h") 'org-metaleft
-      (kbd "M-j") 'org-shiftleft
-      (kbd "M-k") 'org-shiftright
-      (kbd "M-l") 'org-metaright
-      (kbd "M-H") 'org-metaleft
-      (kbd "M-J") 'org-metadown
-      (kbd "M-K") 'org-metaup
-      (kbd "M-L") 'org-metaright)
+  ;; Great evil org mode keyboard shortcuts cribbed from cofi
+  (evil-define-key 'normal org-mode-map
+    (kbd "RET") 'org-open-at-point
+    "za"        'org-cycle
+    "zA"        'org-shifttab
+    "zm"        'hide-body
+    "zr"        'show-all
+    "zo"        'show-subtree
+    "zO"        'show-all
+    "zc"        'hide-subtree
+    "zC"        'hide-all
+    (kbd "M-h") 'org-metaleft
+    (kbd "M-j") 'org-shiftleft
+    (kbd "M-k") 'org-shiftright
+    (kbd "M-l") 'org-metaright
+    (kbd "M-H") 'org-metaleft
+    (kbd "M-J") 'org-metadown
+    (kbd "M-K") 'org-metaup
+    (kbd "M-L") 'org-metaright)
 
-    (evil-define-key 'normal orgstruct-mode-map
-      (kbd "RET") 'org-open-at-point
-      "za"        'org-cycle
-      "zA"        'org-shifttab
-      "zm"        'hide-body
-      "zr"        'show-all
-      "zo"        'show-subtree
-      "zO"        'show-all
-      "zc"        'hide-subtree
-      "zC"        'hide-all
-      (kbd "M-h") 'org-metaleft
-      (kbd "M-j") 'org-shiftleft
-      (kbd "M-k") 'org-shiftright
-      (kbd "M-l") 'org-metaright
-      (kbd "M-H") 'org-metaleft
-      (kbd "M-J") 'org-metadown
-      (kbd "M-K") 'org-metaup
-      (kbd "M-L") 'org-metaright)
+  (evil-define-key 'normal orgstruct-mode-map
+    (kbd "RET") 'org-open-at-point
+    "za"        'org-cycle
+    "zA"        'org-shifttab
+    "zm"        'hide-body
+    "zr"        'show-all
+    "zo"        'show-subtree
+    "zO"        'show-all
+    "zc"        'hide-subtree
+    "zC"        'hide-all
+    (kbd "M-h") 'org-metaleft
+    (kbd "M-j") 'org-shiftleft
+    (kbd "M-k") 'org-shiftright
+    (kbd "M-l") 'org-metaright
+    (kbd "M-H") 'org-metaleft
+    (kbd "M-J") 'org-metadown
+    (kbd "M-K") 'org-metaup
+    (kbd "M-L") 'org-metaright)
 
-    (evil-define-key 'insert org-mode-map
-      (kbd "M-h") 'org-metaleft
-      (kbd "M-j") 'org-shiftleft
-      (kbd "M-k") 'org-shiftright
-      (kbd "M-l") 'org-metaright
-      (kbd "M-H") 'org-metaleft
-      (kbd "M-J") 'org-metadown
-      (kbd "M-K") 'org-metaup
-      (kbd "M-L") 'org-metaright)
+  (evil-define-key 'insert org-mode-map
+    (kbd "M-h") 'org-metaleft
+    (kbd "M-j") 'org-shiftleft
+    (kbd "M-k") 'org-shiftright
+    (kbd "M-l") 'org-metaright
+    (kbd "M-H") 'org-metaleft
+    (kbd "M-J") 'org-metadown
+    (kbd "M-K") 'org-metaup
+    (kbd "M-L") 'org-metaright)
 
-    (evil-define-key 'insert orgstruct-mode-map
-      (kbd "M-j") 'org-shiftleft
-      (kbd "M-k") 'org-shiftright
-      (kbd "M-H") 'org-metaleft
-      (kbd "M-J") 'org-metadown
-      (kbd "M-K") 'org-metaup
-      (kbd "M-L") 'org-metaright)
-    )
-
-  (use-package key-chord
-    :ensure t
-    :init
-    (key-chord-mode 1)
-    :config
-    (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
-
-  (use-package evil-nerd-commenter
-    :ensure t
-    :after evil
-    :init
-    (evilnc-default-hotkeys)
-    :config
-    ;; Emacs key bindings
-    (global-set-key (kbd "M-/") 'evilnc-comment-or-uncomment-lines)
-    (global-set-key (kbd "C-c l") 'evilnc-quick-comment-or-uncomment-to-the-line)
-    (global-set-key (kbd "C-c c") 'evilnc-copy-and-comment-lines)
-    (global-set-key (kbd "C-c p") 'evilnc-comment-or-uncomment-paragraphs)
-
-    ;; (evil-leader/set-key
-    ;;   "ci" 'evilnc-comment-or-uncomment-lines
-    ;;   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
-    ;;   "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
-    ;;   "cc" 'evilnc-copy-and-comment-lines
-    ;;   "cp" 'evilnc-comment-or-uncomment-paragraphs
-    ;;   "cr" 'comment-or-uncomment-region
-    ;;   "cv" 'evilnc-toggle-invert-comment-line-by-line
-    ;;   "\\" 'evilnc-comment-operator ; if you prefer backslash key
-    ;;   )
+  (evil-define-key 'insert orgstruct-mode-map
+    (kbd "M-j") 'org-shiftleft
+    (kbd "M-k") 'org-shiftright
+    (kbd "M-H") 'org-metaleft
+    (kbd "M-J") 'org-metadown
+    (kbd "M-K") 'org-metaup
+    (kbd "M-L") 'org-metaright)
   )
 
-  (use-package evil-surround
-    :ensure t
-    :after org evil
-    :init
-    (global-evil-surround-mode 1))
+(use-package evil-nerd-commenter
+  :ensure t
+  :after evil
+  :init
+  (evilnc-default-hotkeys)
+  :config
+  ;; Emacs key bindings
+  (global-set-key (kbd "M-/") 'evilnc-comment-or-uncomment-lines)
+  (global-set-key (kbd "C-c l") 'evilnc-quick-comment-or-uncomment-to-the-line)
+  (global-set-key (kbd "C-c c") 'evilnc-copy-and-comment-lines)
+  (global-set-key (kbd "C-c p") 'evilnc-comment-or-uncomment-paragraphs)
 
-  (use-package evil-goggles
-    :ensure t
-    :diminish ""
-    :after org evil
-    :config
-    (evil-goggles-mode))
+  ;; (evil-leader/set-key
+  ;;   "ci" 'evilnc-comment-or-uncomment-lines
+  ;;   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+  ;;   "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
+  ;;   "cc" 'evilnc-copy-and-comment-lines
+  ;;   "cp" 'evilnc-comment-or-uncomment-paragraphs
+  ;;   "cr" 'comment-or-uncomment-region
+  ;;   "cv" 'evilnc-toggle-invert-comment-line-by-line
+  ;;   "\\" 'evilnc-comment-operator ; if you prefer backslash key
+  ;;   )
+  )
 
-  (use-package evil-search-highlight-persist
-    :ensure t
-    :after evil
-    :init
-    (global-evil-search-highlight-persist t))
+(use-package evil-surround
+  :ensure t
+  :after evil
+  :init
+  (global-evil-surround-mode 1))
+
+(use-package evil-goggles
+  :ensure t
+  :diminish ""
+  :after evil
+  :config
+  (setq evil-goggles-duration 0.150)
+  (evil-goggles-mode))
+
+;; (use-package evil-search-highlight-persist
+;;   :ensure t
+;;   :after evil
+;;   :init
+;;   (global-evil-search-highlight-persist t))
 #+END_SRC
 
 *** evil-collection
@@ -1121,6 +1140,382 @@ Unicode is an required aesthetic
   (use-package evil-collection :ensure t :after org)
 #+END_SRC
 
+*** evil-indent-plus
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-indent-plus
+  :ensure t
+  :demand t
+  :after evil
+  :config
+  ;; bind evil-indent-plus text objects
+  (evil-indent-plus-default-bindings))
+#+END_SRC
+
+*** evil-matchit
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-matchit
+  :ensure t
+  :demand t
+  :after evil
+  :config
+  (global-evil-matchit-mode 1))
+#+END_SRC
+
+*** evil-commentary
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-commentary
+  :ensure t
+  :demand t
+  :after evil
+  :config
+  (evil-commentary-mode))
+#+END_SRC
+
+*** evil-anzu
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package evil-anzu
+    :ensure t
+    :demand t
+    :after evil)
+#+END_SRC
+
+** key-chord
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package key-chord
+  :ensure t
+  :init
+  (key-chord-mode 1)
+  :config
+  (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
+#+END_SRC
+** Hydra
+参考：https://github.com/abo-abo/hydra/wiki
+- [[https://irreal.org/blog/?p=6453][Hydra Video]]
+- https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org
+- https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/
+- https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html
+- https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package hydra
+    :ensure t
+    :defer 2
+    :preface
+    (defvar-local yc/ongoing-hydra-body nil)
+    (defun yc/ongoing-hydra ()
+      (interactive)
+      (if yc/ongoing-hydra-body
+          (funcall yc/ongoing-hydra-body)
+        (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
+    :config
+    (defun hydra-move-splitter-left (arg)
+      "Move window splitter left."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'right))
+          (shrink-window-horizontally arg)
+        (enlarge-window-horizontally arg)))
+
+    (defun hydra-move-splitter-right (arg)
+      "Move window splitter right."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'right))
+          (enlarge-window-horizontally arg)
+        (shrink-window-horizontally arg)))
+
+    (defun hydra-move-splitter-up (arg)
+      "Move window splitter up."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'up))
+          (enlarge-window arg)
+        (shrink-window arg)))
+
+    (defun hydra-move-splitter-down (arg)
+      "Move window splitter down."
+      (interactive "p")
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'up))
+          (shrink-window arg)
+        (enlarge-window arg)))
+    :bind
+    ("C-c <tab>" . hydra-fold/body)
+    ("C-c d" . hydra-dates/body)
+    ("C-c e" . hydra-eyebrowse/body)
+    ;; ("C-c f" . hydra-flycheck/body)
+    ;; ("C-c g" . hydra-magit/body)
+    ("C-c h" . hydra-helm/body)
+    ("C-c o" . yc/ongoing-hydra)
+    ;; ("C-c p" . hydra-projectile/body)
+    ("C-c p" . hydra-system/body)
+    ("C-c w" . hydra-windows/body)
+  )
+
+  (defhydra hydra-zoom (global-map "<f2>")
+    "zoom"
+    ("g" text-scale-increase "in")
+    ("l" text-scale-decrease "out")
+    ;; ("0" (text-scale-set 0) "reset" :exit t)
+    ("0" (text-scale-adjust 0) "reset")
+    ("q" nil "quit" :color blue))
+
+  (defhydra hydra-org (:color red :columns 3)
+    "Org Mode Movements"
+    ("n" outline-next-visible-heading "next heading")
+    ("p" outline-previous-visible-heading "prev heading")
+    ("N" org-forward-heading-same-level "next heading at same level")
+    ("P" org-backward-heading-same-level "prev heading at same level")
+    ("u" outline-up-heading "up heading")
+    ("g" org-goto "goto" :exit t))
+
+  (defhydra hydra-org-clock (:color blue :hint nil)
+    "
+  Clock   In/out^     ^Edit^   ^Summary     (_?_)
+  -----------------------------------------
+          _i_n         _e_dit   _g_oto entry
+          _c_ontinue   _q_uit   _d_isplay
+          _o_ut        ^ ^      _r_eport
+        "
+    ("i" org-clock-in)
+    ("o" org-clock-out)
+    ("c" org-clock-in-last)
+    ("e" org-clock-modify-effort-estimate)
+    ("q" org-clock-cancel)
+    ("g" org-clock-goto)
+    ("d" org-clock-display)
+    ("r" org-clock-report)
+    ("?" (org-info "Clocking commands")))
+
+  (defhydra hydra-org-agenda-clock (:color blue :hint nil)
+    ("i" org-agenda-clock-in)
+    ("o" org-agenda-clock-out)
+    ("q" org-agenda-clock-cancel)
+    ("g" org-agenda-clock-goto))
+
+  (bind-keys ("C-c j" . hydra-org-clock/body)
+             :map org-agenda-mode-map
+             ("C-c j" . hydra-org-agenda-clock/body))
+
+  (defhydra hydra-window ()
+    "
+      Movement^   ^Split^         ^Switch^       ^^^Resize^         ^Window Purpose^
+      ------------------------------------------------------------------------------------------------------
+      _h_ ←        _|_ vertical    ^_b_uffer       _H_  X←          choose window _P_urpose
+      _j_ ↓        _-_ horizontal  ^_f_ind files   _J_  X↓          switch to _B_uffer w/ same purpose
+      _k_ ↑        _u_ undo        ^_a_ce window   _K_  X↑          Purpose-dedication(_!_)
+      _l_ →        _r_ reset       ^_s_wap         _K_  X→          Buffer-dedication(_#_)
+      ^^^^^^^                                      _M_aximize
+      ^^^^^^^                                      _d_elete
+      _x_ M-x      _q_ quit
+      "
+    ("h" windmove-left)
+    ("j" windmove-down)
+    ("k" windmove-up)
+    ("l" windmove-right)
+    ("|" (lambda ()
+           (interactive)
+           (split-window-right)
+           (windmove-right)))
+    ("-" (lambda ()
+           (interactive)
+           (split-window-below)
+           (windmove-down)))
+    ("u" (progn
+           (winner-undo)
+           (setq this-command 'winner-undo)))
+    ("r" winner-redo)
+    ("b" ivy-purpose-switch-buffer-without-purpose)
+    ("f" counsel-find-file)
+    ("a" (lambda ()
+           (interactive)
+           (ace-window 1)
+           (add-hook 'ace-window-end-once-hook
+                     'hydra-window/body)))
+    ("s" (lambda ()
+           (interactive)
+           (ace-swap-window)
+           (add-hook 'ace-window-end-once-hook
+                     'hydra-window/body)))
+    ("H" hydra-move-splitter-left)
+    ("J" hydra-move-splitter-down)
+    ("K" hydra-move-splitter-up)
+    ("L" hydra-move-splitter-right)
+    ("M" delete-other-windows)
+    ("d" delete-window)
+
+    ("P" purpose-set-window-purpose)
+    ("B" ivy-purpose-switch-buffer-with-purpose)
+    ("!" purpose-toggle-window-purpose-dedicated)
+    ("#" purpose-toggle-window-buffer-dedicated)
+
+    ("K" ace-delete-other-windows)
+    ("S" save-buffer)
+    ("d" delete-window)
+    ("D" (lambda ()
+           (interactive)
+           (ace-delete-window)
+           (add-hook 'ace-window-end-once-hook
+                     'hydra-window/body))
+     )
+
+    ("x" counsel-M-x)
+    ("q" nil)
+    )
+  (global-set-key (kbd "<f1>") 'hydra-window/body)
+
+  (defhydra hydra-clock (:color blue)
+    "
+      ^
+      ^Clock^             ^Do^
+      ^─────^─────────────^──^─────────
+      _q_ quit            _c_ cancel
+      ^^                  _d_ display
+      ^^                  _e_ effort
+      ^^                  _i_ in
+      ^^                  _j_ jump
+      ^^                  _o_ out
+      ^^                  _r_ report
+      ^^                  ^^
+      "
+    ("q" nil)
+    ("c" org-clock-cancel :color pink)
+    ("d" org-clock-display)
+    ("e" org-clock-modify-effort-estimate)
+    ("i" org-clock-in)
+    ("j" org-clock-goto)
+    ("o" org-clock-out)
+    ("r" org-clock-report))
+
+  (defhydra hydra-helm (:hint nil :color pink)
+          "
+                                                                            ╭──────┐
+     Navigation   Other  Sources     Mark             Do             Help   │ Helm │
+    ╭───────────────────────────────────────────────────────────────────────┴──────╯
+          ^_k_^         _K_       _p_   [_m_] mark         [_v_] view         [_H_] helm help
+          ^^↑^^         ^↑^       ^↑^   [_t_] toggle all   [_d_] delete       [_s_] source help
+      _h_ ←   → _l_     _c_       ^ ^   [_u_] unmark all   [_f_] follow: %(helm-attr 'follow)
+          ^^↓^^         ^↓^       ^↓^    ^ ^               [_y_] yank selection
+          ^_j_^         _J_       _n_    ^ ^               [_w_] toggle windows
+    --------------------------------------------------------------------------------
+          "
+          ("<tab>" helm-keyboard-quit "back" :exit t)
+          ("<escape>" nil "quit")
+          ("\\" (insert "\\") "\\" :color blue)
+          ("h" helm-beginning-of-buffer)
+          ("j" helm-next-line)
+          ("k" helm-previous-line)
+          ("l" helm-end-of-buffer)
+          ("g" helm-beginning-of-buffer)
+          ("G" helm-end-of-buffer)
+          ("n" helm-next-source)
+          ("p" helm-previous-source)
+          ("K" helm-scroll-other-window-down)
+          ("J" helm-scroll-other-window)
+          ("c" helm-recenter-top-bottom-other-window)
+          ("m" helm-toggle-visible-mark)
+          ("t" helm-toggle-all-marks)
+          ("u" helm-unmark-all)
+          ("H" helm-help)
+          ("s" helm-buffer-help)
+          ("v" helm-execute-persistent-action)
+          ("d" helm-persistent-delete-marked)
+          ("y" helm-yank-selection)
+          ("w" helm-toggle-resplit-and-swap-windows)
+          ("f" helm-follow-mode))
+
+  (defhydra hydra-fold (:color pink)
+    "
+  ^
+  ^Fold^              ^Do^                ^Jump^              ^Toggle^
+  ^────^──────────────^──^────────────────^────^──────────────^──────^────────────
+  _q_ quit            _f_ fold            _<_ previous        _<tab>_ current
+  ^^                  _k_ kill            _>_ next            _S-<tab>_ all
+  ^^                  _K_ kill all        ^^                  ^^
+  ^^                  ^^                  ^^                  ^^
+  "
+    ("q" nil)
+    ("<tab>" vimish-fold-toggle)
+    ("S-<tab>" vimish-fold-toggle-all)
+    ("<" vimish-fold-previous-fold)
+    (">" vimish-fold-next-fold)
+    ("f" vimish-fold)
+    ("k" vimish-fold-delete)
+    ("K" vimish-fold-delete-all))
+
+  (defhydra hydra-dates (:color blue)
+    "
+  ^
+  ^Dates^             ^Insert^            ^Insert with Time^
+  ^─────^─────────────^──────^────────────^────────────────^──
+  _q_ quit            _d_ short           _D_ short
+  ^^                  _i_ iso             _I_ iso
+  ^^                  _l_ long            _L_ long
+  ^^                  ^^                  ^^
+  "
+    ("q" nil)
+    ("d" me/date-short)
+    ("D" me/date-short-with-time)
+    ("i" me/date-iso)
+    ("I" me/date-iso-with-time)
+    ("l" me/date-long)
+    ("L" me/date-long-with-time))
+
+  (defhydra hydra-markdown (:color pink)
+    "
+  ^
+  ^Markdown^          ^Table Columns^     ^Table Rows^
+  ^────────^──────────^─────────────^─────^──────────^────────
+  _q_ quit            _c_ insert          _r_ insert
+  ^^                  _C_ delete          _R_ delete
+  ^^                  _M-<left>_ left     _M-<down>_ down
+  ^^                  _M-<right>_ right   _M-<up>_ up
+  ^^                  ^^                  ^^
+  "
+    ("q" nil)
+    ("c" markdown-table-insert-column)
+    ("C" markdown-table-delete-column)
+    ("r" markdown-table-insert-row)
+    ("R" markdown-table-delete-row)
+    ("M-<left>" markdown-table-move-column-left)
+    ("M-<right>" markdown-table-move-column-right)
+    ("M-<down>" markdown-table-move-row-down)
+    ("M-<up>" markdown-table-move-row-up))
+
+  (defhydra hydra-windows (:color pink)
+    "
+  ^
+  ^Windows^           ^Window^            ^Zoom^              ^Eyebrowse Do^            ^Eyebrowse Switch^
+  ^───────^───────────^──────^────────────^────^──────────────^────────────^────────────^────────────────^────────────
+  _q_ quit            _b_ balance         _-_ out             _c_ create                _<_ previous
+  ^^                  _i_ heighten        _+_ in              _k_ kill                  _>_ next
+  ^^                  _j_ narrow          _=_ reset           _r_ rename                _e_ last
+  ^^                  _k_ lower           ^^                  ^^                        _s_ switch
+  ^^                  _l_ widen           ^^                  ^^                        _1_ workspace ➊
+  ^^                  ^^                  ^^                  ^^                        _2_ workspace ➋
+  ^^                  ^^                  ^^                  ^^                        _3_ workspace ➌
+  ^^                  ^^                  ^^                  ^^                        _4_ workspace ➍
+  "
+    ("q" nil)
+    ("b" balance-windows)
+    ("i" enlarge-window)
+    ("j" shrink-window-horizontally)
+    ("k" shrink-window)
+    ("l" enlarge-window-horizontally)
+    ("-" text-scale-decrease)
+    ("+" text-scale-increase)
+    ("=" (text-scale-increase 0))
+    ("<" eyebrowse-prev-window-config :color red)
+    (">" eyebrowse-next-window-config :color red)
+    ("c" eyebrowse-create-window-config)
+    ("e" eyebrowse-last-window-config)
+    ("k" eyebrowse-close-window-config :color red)
+    ("r" eyebrowse-rename-window-config)
+    ("s" eyebrowse-switch-to-window-config)
+    ("1" eyebrowse-switch-to-window-config-1)
+    ("2" eyebrowse-switch-to-window-config-2)
+    ("3" eyebrowse-switch-to-window-config-3)
+    ("4" eyebrowse-switch-to-window-config-4))
+#+END_SRC
 ** general
 [[https://github.com/noctuid/general.el][noctuid/general.el - GitHub]]
 参考这篇文章重新定义自己的 key bindings：[[https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/][larstvei/dot-emacs - GitHub]]
@@ -1171,170 +1566,6 @@ Unicode is an required aesthetic
     (general-def :states '(normal motion visual) "SPC" nil)
     :config
     (general-evil-setup t))
-
-  ;; (general-define-key
-  ;;      :states '(normal motion visual)
-  ;;      :prefix "SPC"
-  ;;      :global-prefix "C-SPC"
-  ;;      "<"    '(counsel-projectile-find-file :which-key "Find file in project")
-  ;;      "TAB"  'mode-line-other-buffer
-  ;;      "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
-  ;;      ":"    '(helm-M-x :which-key "M-x")
-  ;;      ";"    '(evil-ex :which-key "Ex command")
-  ;;      "'"    '(shell-pop :which-key "Open shell")
-  ;;      "0"    '(neotree-toggle :which-key "NeoTree")
-  ;;      "/"    '(:ignore t :which-key "search")
-  ;;      "//"   '(swiper :which-key "swiper")
-  ;;      "["    '(:ignore t :which-key "previous...")
-  ;;      "[["   '(text-scale-increase :which-key "text size in")
-  ;;      "]"    '(:ignore t :which-key "next...")
-  ;;      "]]"   '(text-scale-decrease :which-key "text size out")
-  ;;      "a"    '(:ignore t :which-key "applications")
-  ;;      "ai"   '(:ignore t :which-key "irc")
-  ;;      "as"   '(:ignore t :which-key "shells")
-  ;;      "asa"  'shell-pop
-  ;;      "ao"   '(:ignore t :which-key "org")
-  ;;      "aoa"  'org-agenda
-  ;;      "aoc"  'org-capture
-  ;;      "aok"  '(:ignore t :which-key "clock")
-  ;;      "aoki" 'org-clock-in
-  ;;      "aoko" 'org-clock-out
-  ;;      "aokc" 'org-clock-in-last
-  ;;      "aoke" 'org-clock-modify-effort-estimate
-  ;;      "aokq" 'org-clock-cancel
-  ;;      "aokg" 'org-clock-goto
-  ;;      "aokd" 'org-clock-display
-  ;;      "aokr" 'org-clock-report
-  ;;      "ar"   '(ranger :which-key "call ranger")
-  ;;      "b"    '(:ignore t :which-key "buffers")
-  ;;      "bb"   'helm-mini
-  ;;      "bk"   'kill-this-buffer
-  ;;      "be"   'ibuffer
-  ;;      "c"    '(:ignore t :which-key "compile/comments")
-  ;;      "C"    '(:ignore t :which-key "capture/colors")
-  ;;      "cl"   'evilnc-comment-or-uncomment-lines
-  ;;      "e"    '(:ignore t :which-key "errors")
-  ;;      "f"    '(:ignore t :which-key "files")
-  ;;      "fC"   '(:ignore t :which-key "files/convert")
-  ;;      "fe"   '(:ignore t :which-key "emacs(spacemacs)")
-  ;;      "fv"   '(:ignore t :which-key "variables")
-  ;;      "fh"   'helm-find-files
-  ;;      "fc"   'helm-recentf
-  ;;      "ff"   'ido-find-file
-  ;;      "ft"   'treemacs
-  ;;      "fs"   'save-buffer
-  ;;      "fo"   'yc/dired-open-in-finder
-  ;;      "F"    '(:ignore t :which-key "frame")
-  ;;      "Fb"   'switch-to-buffer-other-frame
-  ;;      "FD"   'delete-other-frames
-  ;;      "Fd"   'delete-frame
-  ;;      "Fn"   'make-frame
-  ;;      "g"    '(:ignore t :which-key "git/versions-control")
-  ;;      "gs"   '(magit-status :which-key "git status")
-  ;;      "gt"   '(git-timemachine-toggle :which-key "git timemachine")
-  ;;      ;; "gs"  'magit-status
-  ;;      "h"    '(:ignore t :which-key "help")
-  ;;      "hb"   'helm-descbinds
-  ;;      "hd"   '(:ignore t :which-key "help-describe")
-  ;;      "hdk"  'describe-key
-  ;;      "hdK"  'describe-keymap
-  ;;      "hdb"  'describe-bindings
-  ;;      "hdc"  'describe-char
-  ;;      "hdv"  'describe-variable
-  ;;      "hdm"  'describe-mode
-  ;;      "hdl"  'describe-last-keys
-  ;;      "hdf"  'describe-function
-  ;;      "hk"   'which-key-show-top-level
-  ;;      "i"    '(:ignore t :which-key "insertion")
-  ;;      "j"    '(:ignore t :which-key "jump/join/split")
-  ;;      "jj"   'avy-goto-word-or-subword-1
-  ;;      "jk"   'avy-goto-char
-  ;;      "jl"   'avy-goto-line
-  ;;      "uu"   'undo-tree-visualize
-  ;;      "k"    '(:ignore t :which-key "lisp")
-  ;;      "kd"   '(:ignore t :which-key "delete")
-  ;;      "kD"   '(:ignore t :which-key "delete-backward")
-  ;;      "k`"   '(:ignore t :which-key "hybrid")
-  ;;      "n"    '(:ignore t :which-key "narrow/numbers")
-  ;;      "p"    '(:ignore t :which-key "projects")
-  ;;      "p."   'hydra-projectile/body
-  ;;      "p$"   '(:ignore t :which-key "projects/shell")
-  ;;      "pf"   'projectile-find-file
-  ;;      "ps"   'helm-projectile-switch-project
-  ;;      "q"    '(:ignore t :which-key "quit")
-  ;;      "qs"   'save-buffers-kill-emacs
-  ;;      "qq"   'delete-window
-  ;;      "qR"   'restart-emacs
-  ;;      "qQ"   'kill-emacs
-  ;;      "r"    '(:ignore t :which-key "registers/rings/resume")
-  ;;      "Re"   '(:ignore t :which-key "elisp")
-  ;;      "Rp"   '(:ignore t :which-key "pcre")
-  ;;      "s"    '(:ignore t :which-key "search/symbol")
-  ;;      "sa"   '(:ignore t :which-key "ag")
-  ;;      "sg"   '(:ignore t :which-key "grep")
-  ;;      "sk"   '(:ignore t :which-key "ack")
-  ;;      "st"   '(:ignore t :which-key "pt")
-  ;;      "sw"   '(:ignore t :which-key "web")
-  ;;      "saa"  'ag
-  ;;      "sap"  'ag-project
-  ;;      "sas"  'helm-ag
-  ;;      "saf"  'helm-do-ag
-  ;;      "sap"  'helm-do-ag-project-root
-  ;;      "sc"   'evil-search-highlight-persist-remove-all
-  ;;      "ss"   'helm-swoop
-  ;;      "sS"   'helm-swoop-region-or-symbol
-  ;;      "w"    '(:ignore t :which-key "windows")
-  ;;      "wp"   '(:ignore t :which-key "popup")
-  ;;      "w."   'hydra-windows/body
-  ;;      "wh"   'windmove-left
-  ;;      "wl"   'windmove-right
-  ;;      "wk"   'windmove-up
-  ;;      "wj"   'windmove-down
-  ;;      "w/"   'split-window-right
-  ;;      "w-"   'split-window-below
-  ;;      "wc"   'delete-window
-  ;;      "wd"   'delete-frame
-  ;;      "wu"   'winner-undo
-  ;;      "wr"   'winner-redo
-  ;;      ;; "mH"   'hydra-move-splitter-left
-  ;;      ;; "mJ"   'hydra-move-splitter-down
-  ;;      ;; "mK"   'hydra-move-splitter-up
-  ;;      ;; "mL"   'hydra-move-splitter-right
-  ;;      ;; "mM"   'delete-other-windows
-  ;;      ;; "mb"   'balance-windows
-  ;;      "t"    '(:ignore t :which-key "toggles")
-  ;;      "tC"   '(:ignore t :which-key "colors")
-  ;;      "tE"   '(:ignore t :which-key "editing-styles")
-  ;;      "th"   '(:ignore t :which-key "highlight")
-  ;;      "tm"   '(:ignore t :which-key "modeline")
-  ;;      "T"    '(:ignore t :which-key "UI toggles/themes")
-  ;;      "Tf"   'toggle-frame-fullscreen
-  ;;      "Tm"   'toggle-frame-maximized
-  ;;      "x"    '(:ignore t :which-key "text")
-  ;;      "xa"   '(:ignore t :which-key "align")
-  ;;      "xd"   '(:ignore t :which-key "delete")
-  ;;      "xg"   '(:ignore t :which-key "google-translate")
-  ;;      "xl"   '(:ignore t :which-key "lines")
-  ;;      "xm"   '(:ignore t :which-key "move")
-  ;;      "xt"   '(:ignore t :which-key "transpose")
-  ;;      "xw"   '(:ignore t :which-key "words")
-  ;;      "z"    '(:ignore t :which-key "zoom")
-  ;;      "C-t"  '(:ignore t :which-key "other toggles")
-  ;;      "o"    '(:ignore t :which-key "org")
-  ;;      "o."   'hydra-org/body
-  ;;      "oa"   'org-agenda
-  ;;      "oc"   'org-capture
-  ;;      "og"   'org-clock-goto
-  ;;      "ok"   '(:ignore t :which-key "clock")
-  ;;      "oki"  'org-clock-in
-  ;;      "oko"  'org-clock-out
-  ;;      "okc"  'org-clock-in-last
-  ;;      "oke"  'org-clock-modify-effort-estimate
-  ;;      "okq"  'org-clock-cancel
-  ;;      "okd"  'org-clock-display
-  ;;      "okg"  'org-clock-goto
-  ;;      "okr"  'org-clock-report
-  ;;      "v"    'er/expand-region)
 
   (general-create-definer my-leader-def
     :states '(normal motion visual)
@@ -1524,6 +1755,60 @@ Unicode is an required aesthetic
     :prefix ",")
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; (use-package general
+;;   :demand t
+;;   :config
+;;   ;;(general-evil-setup)
+;;   ;; bind a key globally in normal state; keymaps must be quoted
+;;   (setq general-default-keymaps 'evil-normal-state-map))
+;; ;;evil mappings
+;; (general-def 'normal
+;;   "M-l" (lambda ()
+;;           (interactive)
+;;           (evil-window-vsplit)
+;;           (evil-window-right 1))
+;;   "M-h" (lambda ()
+;;           (interactive)
+;;           (evil-window-vsplit))
+;;   "M-k" (lambda ()
+;;           (interactive)
+;;           (evil-window-split))
+;;   "M-j" (lambda ()
+;;           (interactive)
+;;           (evil-window-split)
+;;           (evil-window-down 1))
+;;   "gS" 'my-funcs/open-snippet-dir
+;;   "s" 'save-buffer
+;;   "S" 'counsel-projectile-find-file
+;;   "gs" 'magit-status
+;;   "`" 'evil-goto-mark-line
+;;   "'" 'evil-goto-mark
+;;   "C-h" 'evil-window-left
+;;   "C-l" 'evil-window-right
+;;   "C-k" 'evil-window-up
+;;   "C-j" 'evil-window-down
+;;   "g ." 'my-funcs/open-dotfile
+;;   "g h" 'org-capture
+;;   "g i" (lambda ()
+;;           (interactive)
+;;           (find-file (concat org-directory "/inbox.org")))
+;;   "g l" 'org-agenda
+;;   "g o" (lambda ()
+;;           (interactive)
+;;           (counsel-find-file org-directory))
+;;   "] SPC" (lambda ()
+;;             (interactive)
+;;             (save-excursion
+;;               (evil-open-below 1))
+;;             (evil-normal-state))
+;;   "[ SPC" (lambda ()
+;;             (interactive)
+;;             (save-excursion
+;;               (evil-open-above 1))
+;;             (evil-normal-state)))
+#+END_SRC
+
 * Buffer
 通过 =C-c n= 快速创建一个空的 Buffer。
 
@@ -1579,6 +1864,84 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
   :after (all-the-icons)
   :init
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+#+END_SRC
+*** dired-subtree
+Show subtree when pressing i
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package dired-subtree
+  :ensure t
+  :after dired
+  :config)
+#+END_SRC
+*** dired-ranger
+Multi-stage copy/pasting of files and bookmarks
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package dired-ranger
+  :ensure t
+  :after (dired)
+  :config)
+#+END_SRC
+*** key-bindings
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun my/dired-up-directory ()
+    "Take dired up one directory, but behave like dired-find-alternative-file (leave no orphan buffer)"
+    (interactive)
+    (let ((old (current-buffer)))
+      (dired-up-directory)
+      (kill-buffer old)))
+
+  (defun my/dired-create-file (file)
+    (interactive
+     (list
+      (read-file-name "Create file: " (dired-current-directory))))
+    (write-region "" nil (expand-file-name file) t)
+    (dired-add-file file)
+    (revert-buffer)
+    (dired-goto-file (expand-file-name file)))
+
+  ;; (my-major-mode-leader-def
+  ;;   :keymaps 'dired-mode-map
+  ;;   ;; "" '(:ignore t :which-key "major-mode-cmd")
+  ;;   "DEL" 'my/dired-up-directory
+  ;;   "RET" 'dired-find-alternate-file
+  ;;   "TAB" 'dired-subtree-toggle
+  ;;   "l" 'dired-find-alternate-file
+  ;;   "c" 'dired-do-rename
+  ;;   "C" 'dired-do-copy
+  ;;   "y" 'dired-ranger-copy
+  ;;   "p" 'dired-ranger-paste
+  ;;   "v" 'dired-ranger-move
+  ;;   "R" 'dired-do-redisplay
+  ;;   "r" 'wdired-change-to-wdired-mode
+  ;;   "f" 'counsel-file-jump
+  ;;   "o" 'my/dired-create-file
+  ;;   "O" 'dired-create-directory
+  ;;   "n" 'evil-ex-search-next
+  ;;   "N" 'evil-ex-search-previous
+  ;;   "q" 'kill-this-buffer
+  ;;   "!" 'dired-do-shell-command)
+
+  ;; (my-major-mode-leader-def-copy
+  ;;   :keymaps 'dired-mode-map
+  ;;   "" '(:ignore t :which-key "major-mode-cmd")
+  ;;   "DEL" 'my/dired-up-directory
+  ;;   "RET" 'dired-find-alternate-file
+  ;;   "TAB" 'dired-subtree-toggle
+  ;;   "l" 'dired-find-alternate-file
+  ;;   "c" 'dired-do-rename
+  ;;   "C" 'dired-do-copy
+  ;;   "y" 'dired-ranger-copy
+  ;;   "p" 'dired-ranger-paste
+  ;;   "v" 'dired-ranger-move
+  ;;   "R" 'dired-do-redisplay
+  ;;   "r" 'wdired-change-to-wdired-mode
+  ;;   "f" 'counsel-file-jump
+  ;;   "o" 'my/dired-create-file
+  ;;   "O" 'dired-create-directory
+  ;;   "n" 'evil-ex-search-next
+  ;;   "N" 'evil-ex-search-previous
+  ;;   "q" 'kill-this-buffer
+  ;;   "!" 'dired-do-shell-command)
 #+END_SRC
 
 ** projectile
@@ -1656,7 +2019,7 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 #+END_SRC
 
 ** neotree
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package neotree
     :ensure t
     :diminish ""
@@ -1733,7 +2096,7 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 #+END_SRC
 
 让 Neotree 窗口，可以根据目录长度自动调节窗口大小
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun neotree-resize-window (&rest _args)
     "Resize neotree window.
   https://github.com/jaypei/emacs-neotree/pull/110"
@@ -1967,48 +2330,6 @@ Go 语言开发环境设置。
      (format "go run %s"
              (shell-quote-argument (buffer-file-name)))))
 
-  ;; (general-define-key
-  ;;  :keymaps 'go-mode-map
-  ;;  :states '(normal motion visual)
-  ;;  :prefix "SPC"
-  ;;  :global-prefix "C-SPC"
-  ;;  "m" '(:ignore t :which-key "major-mode-cmd")
-  ;;  "mh" '(:ignore t :which-key "help")
-  ;;  "mhh" 'godoc-at-point
-  ;;  "mi" '(:ignore t :which-key "imports")
-  ;;  "mig" 'go-goto-imports
-  ;;  "mia" 'go-import-add
-  ;;  "mir" 'go-remove-unused-imports
-  ;;  "me" '(:ignore t :which-key "playground")
-  ;;  "meb" 'go-play-buffer
-  ;;  "mer" 'go-play-region
-  ;;  "med" 'go-download-play
-  ;;  "mx" '(:ignore t :which-key "execute")
-  ;;  "mxx" 'yc/go-run-main
-  ;;  "mg" '(:ignore t :which-key "goto")
-  ;;  "mga" 'ff-find-other-file
-  ;;  "mgc" 'go-coverage
-  ;;  "mt" '(:ignore t :which-key "test")
-  ;;  "mtt" 'yc/go-run-test-current-function
-  ;;  "mts" 'yc/go-run-test-current-suite
-  ;;  "mtp" 'yc/go-run-package-tests
-  ;;  "mtP" 'yc/go-run-package-tests-nested
-  ;;  "mf" '(:ignore t :which-key "guru")
-  ;;  "mfd" 'go-guru-describe
-  ;;  "mff" 'go-guru-freevars
-  ;;  "mfi" 'go-guru-implements
-  ;;  "mfc" 'go-guru-peers
-  ;;  "mfr" 'go-guru-referrers
-  ;;  "mfj" 'go-guru-definition
-  ;;  "mfp" 'go-guru-pointsto
-  ;;  "mfs" 'go-guru-callstack
-  ;;  "mfe" 'go-guru-whicherrs
-  ;;  "mf<" 'go-guru-callers
-  ;;  "mf>" 'go-guru-callees
-  ;;  "mfo" 'go-guru-set-scope
-  ;;  "mr" '(:ignore t :which-key "rename")
-  ;;  "mrn" 'go-rename)
-
   (my-major-mode-leader-def
    :keymaps 'go-mode-map
    ;; "" '(:ignore t :which-key "major-mode-cmd")
@@ -2167,45 +2488,6 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
       :config
       (eval-after-load "company"
         '(add-to-list 'company-backends '(company-anaconda :with company-capf)))))
-
-  ;; (general-define-key
-  ;;  :keymaps 'python-mode-map
-  ;;  :states '(normal motion visual)
-  ;;  :prefix "SPC"
-  ;;  :global-prefix "C-SPC"
-  ;;  "m"   '(:ignore t :which-key "major-mode-cmd")
-  ;;  "m'"  'python-start-or-switch-repl
-  ;;  "m="  'yapfify-buffer
-  ;;  "mc"  '(:ignore t :which-key "execute")
-  ;;  "mcc" 'python-execute-file
-  ;;  "mcC" 'python-execute-file-focus
-  ;;  "md"  '(:ignore t :which-key "debug")
-  ;;  "mdb" 'python-toggle-breakpoint  ; check in spacemacs
-  ;;  "mh"  '(:ignore t :which-key "help")
-  ;;  "mhh" 'anaconda-mode-show-doc
-  ;;  "mhd" 'helm-pydoc
-  ;;  "mg"  '(:ignore t :which-key "goto")
-  ;;  "mga" 'anaconda-mode-find-assignments
-  ;;  "mgb" 'anaconda-mode-go-back
-  ;;  "mgu" 'anaconda-mode-find-references
-  ;;  "ms"  '(:ignore t :which-key "send to REPL")
-  ;;  "msB" 'python-shell-send-buffer-switch
-  ;;  "msb" 'python-shell-send-buffer
-  ;;  "msF" 'python-shell-send-defun-switch
-  ;;  "msf" 'python-shell-send-defun
-  ;;  "msi" 'python-start-or-switch-repl
-  ;;  "msR" 'python-shell-send-region-switch
-  ;;  "msr" 'python-shell-send-region
-  ;;  "mr"  '(:ignore t :which-key "refactor")
-  ;;  "mri" 'python-remove-unused-imports  ; in spacemacs
-  ;;  "mrI" 'py-isort-buffer
-  ;;  "mv"  '(:ignore t :which-key "pyenv")
-  ;;  "mvu" 'pyenv-mode-unset
-  ;;  "mvs" 'pyenv-mode-set
-  ;;  "mV"  '(:ignore t :which-key "pyvenv")
-  ;;  "mVa" 'pyvenv-activate
-  ;;  "mVd" 'pyvenv-deactivate
-  ;;  "mVw" 'pyvenv-workon)
 
   (use-package helm-pydoc :defer t)
 
@@ -2551,17 +2833,14 @@ Config for setting markdown mode and stuff
 
 *** key-bind
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (general-define-key
-  ;;    :keymaps 'markdown-mode-map
-  ;;    :states '(normal motion visual)
-  ;;    :prefix "SPC"
-  ;;    :global-prefix "C-SPC"
-  ;;    "m" '(:ignore t :which-key "major-mode-cmd")
-  ;;    "m." 'hydra-markdown/body)
-
   (my-major-mode-leader-def
      :keymaps 'markdown-mode-map
      ;; "" '(:ignore t :which-key "major-mode-cmd")
+     "m." 'hydra-markdown/body)
+
+  (my-major-mode-leader-def-copy
+     :keymaps 'markdown-mode-map
+     "" '(:ignore t :which-key "major-mode-cmd")
      "m." 'hydra-markdown/body)
 #+END_SRC
 
@@ -2585,7 +2864,7 @@ Config for setting markdown mode and stuff
     :ensure t
     :diminish ""
     :config
-    (helm-mode 1)
+    (helm-mode nil)
     (helm-autoresize-mode 1)
     (setq helm-buffers-fuzzy-matching t)
     (setq helm-autoresize-mode t)
@@ -2790,8 +3069,10 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
   (setq org-src-fontify-natively t
         ;; org-ellipsis "⤵"
         ;; org-ellipsis " […]"
+        ;; org-ellipsis (concat " " (all-the-icons-faicon "caret-down"))
         org-indent-mode t
         org-src-preserve-indentation t
+        org-edit-src-content-indentation 2
         org-enforce-todo-dependencies t
         org-enforce-todo-checkbox-dependencies t
         org-hide-emphasis-markers t)
@@ -3011,6 +3292,14 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
           ("A" "#+ascii: ")
           ("i" "#+index: ?" "#+index: ?")
           ("I" "#+include %file ?" "<include file=%file markup=\"?\">")))
+#+END_SRC
+
+** worf
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package worf
+  :ensure t
+  :init
+  (add-hook 'org-mode-hook 'worf-mode))
 #+END_SRC
 
 ** TODO org-mac-link
@@ -3305,81 +3594,25 @@ Archive subtrees under the same hierarchy as original in the archive files
 
 ** keys
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (general-define-key
-;;  :keymaps 'org-mode-map
-;;  :states '(normal motion visual)
-;;  :prefix "SPC"
-;;  :global-prefix "C-SPC"
-;;  "m" '(:ignore t :which-key "major-mode-cmd")
-;;  ;; "ma" '(:ignore t :which-key "help")
-;;  "m." 'hydra-org/body
-;;  "ma" 'org-agenda
-;;  "mc" 'org-capture
-;;  "mb" '(:ignore t :which-key "babel")
-;;  "mC" '(:ignore t :which-key "clocks")
-;;  "ms" 'org-schedule
-;;  "md" 'org-deadline
-;;  "mCI" 'org-clock-in
-;;  "mCn" 'org-narrow-to-subtree
-;;  "mCN" 'widen
-;;  "mCO" 'org-clock-out
-;;  "mCq" 'org-clock-cancel
-;;  "mCR" 'org-refile
-;;  ;; "md" '(:ignore t :which-key "dates")
-;;  "me" '(:ignore t :which-key "export")
-;;  "mf" '(:ignore t :which-key "feeds")
-;;  "mH" 'org-shiftleft
-;;  "mJ" 'org-shiftdown
-;;  "mK" 'org-shiftup
-;;  "mL" 'org-shiftright
-;;  "mT" '(:ignore t :which-key "Toggles")
-;;  "mt" '(:ignore t :which-key "tables")
-;;  "mx" '(:ignore t :which-key "text")
-;;  ;; "C-S-l" 'org-shiftcontrolright
-;;  ;; "C-S-h" 'org-shiftcontrolleft
-;;  ;; "C-S-j" 'org-shiftcontroldown
-;;  ;; "C-S-k" 'org-shiftcontrolup
-;;  "mta" 'org-table-align
-;;  "mtb" 'org-table-blank-field
-;;  "mtc" 'org-table-convert
-;;  "mtd" '(:ignore t :which-key "delete")
-;;  "mtdc" 'org-table-delete-column
-;;  "mtdr" 'org-table-kill-row
-;;  "mte" 'org-table-eval-formula
-;;  "mtE" 'org-table-export
-;;  "mth" 'org-table-previous-field
-;;  "mtH" 'org-table-move-column-left
-;;  "mti" '(:ignore t :which-key "insert")
-;;  "mtic" 'org-table-insert-column
-;;  "mtih" 'org-table-insert-hline
-;;  "mtiH" 'org-table-hline-and-move
-;;  "mtir" 'org-table-insert-row
-;;  "mtI" 'org-table-import
-;;  "mtj" 'org-table-next-row
-;;  "mtJ" 'org-table-move-row-down
-;;  "mtK" 'org-table-move-row-up
-;;  "mtl" 'org-table-next-field
-;;  "mtL" 'org-table-move-column-right
-;;  "mtn" 'org-table-create
-;;  "mtN" 'org-table-create-with-table.el
-;;  "mtr" 'org-table-recalculate
-;;  "mts" 'org-table-sort-lines
-;;  "mtt" '(:ignore t :which-key "toggle")
-;;  "mttf" 'org-table-toggle-formula-debugger
-;;  "mtto" 'org-table-toggle-coordinate-overlays
-;;  "mtw" 'org-table-wrap-region)
-
 (my-major-mode-leader-def
   :keymaps 'org-mode-map
   ;; "" '(:ignore t :which-key "major-mode-cmd")
   ;; "ma" '(:ignore t :which-key "help")
   "." 'hydra-org/body
+  "SPC" 'worf-back-to-heading
   "a" 'org-agenda
   "c" 'org-capture
   "b" '(:ignore t :which-key "babel")
   "C" '(:ignore t :which-key "clocks")
   "s" 'org-schedule
   "d" 'org-deadline
+  "r" 'org-refile
+  "l" 'worf-right
+  "j" 'worf-down
+  "k" 'worf-up
+  "h" 'worf-left
+  "g" 'counsel-org-goto
+  "/" 'org-toggle-comment
   "CI" 'org-clock-in
   "Cn" 'org-narrow-to-subtree
   "CN" 'widen
@@ -3394,12 +3627,13 @@ Archive subtrees under the same hierarchy as original in the archive files
   "K" 'org-shiftup
   "L" 'org-shiftright
   "T" '(:ignore t :which-key "Toggles")
-  "t" '(:ignore t :which-key "tables")
-  "x" '(:ignore t :which-key "text")
+  ;; "x" '(:ignore t :which-key "text")
+  "x" 'org-archive-subtree-default-with-confirmation
   ;; "C-S-l" 'org-shiftcontrolright
   ;; "C-S-h" 'org-shiftcontrolleft
   ;; "C-S-j" 'org-shiftcontroldown
   ;; "C-S-k" 'org-shiftcontrolup
+  "t" '(:ignore t :which-key "tables")
   "ta" 'org-table-align
   "tb" 'org-table-blank-field
   "tc" 'org-table-convert
@@ -3435,12 +3669,20 @@ Archive subtrees under the same hierarchy as original in the archive files
   "" '(:ignore t :which-key "major-mode-cmd")
   ;; "ma" '(:ignore t :which-key "help")
   "." 'hydra-org/body
+  "SPC" 'worf-back-to-heading
   "a" 'org-agenda
   "c" 'org-capture
   "b" '(:ignore t :which-key "babel")
   "C" '(:ignore t :which-key "clocks")
   "s" 'org-schedule
   "d" 'org-deadline
+  "r" 'org-refile
+  "l" 'worf-right
+  "j" 'worf-down
+  "k" 'worf-up
+  "h" 'worf-left
+  "g" 'counsel-org-goto
+  "/" 'org-toggle-comment
   "CI" 'org-clock-in
   "Cn" 'org-narrow-to-subtree
   "CN" 'widen
@@ -3455,12 +3697,13 @@ Archive subtrees under the same hierarchy as original in the archive files
   "K" 'org-shiftup
   "L" 'org-shiftright
   "T" '(:ignore t :which-key "Toggles")
-  "t" '(:ignore t :which-key "tables")
-  "x" '(:ignore t :which-key "text")
+  ;; "x" '(:ignore t :which-key "text")
+  "x" 'org-archive-subtree-default-with-confirmation
   ;; "C-S-l" 'org-shiftcontrolright
   ;; "C-S-h" 'org-shiftcontrolleft
   ;; "C-S-j" 'org-shiftcontroldown
   ;; "C-S-k" 'org-shiftcontrolup
+  "t" '(:ignore t :which-key "tables")
   "ta" 'org-table-align
   "tb" 'org-table-blank-field
   "tc" 'org-table-convert
@@ -3490,6 +3733,29 @@ Archive subtrees under the same hierarchy as original in the archive files
   "ttf" 'org-table-toggle-formula-debugger
   "tto" 'org-table-toggle-coordinate-overlays
   "tw" 'org-table-wrap-region)
+
+;; key for exiting src edit mode
+(general-define-key :keymaps 'org-src-mode-map
+                    :states '(normal)
+                    "RET" 'org-edit-src-exit)
+#+END_SRC
+
+*** evil-org
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package evil-org
+  :ensure t
+  :after org
+  :init
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme '(operators textobjects table))))
+  :config
+  ;; diable o/O special handling for items
+  (setq evil-org-special-o/O nil)
+
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 #+END_SRC
 
 * Highlight & Search and Replace
@@ -3653,16 +3919,17 @@ GitHub: https://github.com/nschum/highlight-symbol.el
 | =S-<F3>= | highlight-symbol-prev     | 查找上一个匹配的词   |
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;; highlight-symbol
-  (use-package highlight-symbol
-    :ensure t
-    :diminish ""
-    :bind (("M-<f3>" . highlight-symbol-at-point)
-           ("<f3>" . highlight-symbol-next)
-           ("S-<f3>" . highlight-symbol-prev))
-    :config (progn (setq highlight-symbol-idle-delay 0.5)
-                   (add-hook 'prog-mode-hook 'highlight-symbol-mode)
-                   (highlight-symbol-mode)))
+  ;; ;; highlight-symbol
+  ;; (use-package highlight-symbol
+  ;;   :ensure t
+  ;;   :diminish ""
+  ;;   :bind (("M-<f3>" . highlight-symbol-at-point)
+  ;;          ("<f3>" . highlight-symbol-next)
+  ;;          ("S-<f3>" . highlight-symbol-prev))
+  ;;   :config (progn (setq highlight-symbol-idle-delay 0.5)
+  ;;                  (add-hook 'prog-mode-hook 'highlight-symbol-mode)
+  ;;                  ;;(highlight-symbol-mode t)
+  ;; ))
 #+END_SRC
 
 *** TODO 参考这个优化按键及显示方式
@@ -3731,6 +3998,14 @@ This is a package to perform text folding like in Vim. It has the following feat
   (use-package pulse :ensure t)
 #+END_SRC
 
+** wgrep
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package wgrep
+  :ensure t
+  :config
+  (setq wgrep-enable-key "r")
+  (setq wgrep-auto-save-buffer t))
+#+END_SRC
 ** Replace
 文本替换，使用 =query-replace= 或者 =M-%= 命令。
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3780,334 +4055,6 @@ This is a package to perform text folding like in Vim. It has the following feat
       (start-process "" nil "open" ".")))
 #+END_SRC
 
-* Hydra
-参考：https://github.com/abo-abo/hydra/wiki
-- [[https://irreal.org/blog/?p=6453][Hydra Video]]
-- https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org
-- https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/
-- https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html
-- https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package hydra
-    :ensure t
-    :defer 2
-    :preface
-    (defvar-local yc/ongoing-hydra-body nil)
-    (defun yc/ongoing-hydra ()
-      (interactive)
-      (if yc/ongoing-hydra-body
-          (funcall yc/ongoing-hydra-body)
-        (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
-    :config
-    (defun hydra-move-splitter-left (arg)
-      "Move window splitter left."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'right))
-          (shrink-window-horizontally arg)
-        (enlarge-window-horizontally arg)))
-
-    (defun hydra-move-splitter-right (arg)
-      "Move window splitter right."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'right))
-          (enlarge-window-horizontally arg)
-        (shrink-window-horizontally arg)))
-
-    (defun hydra-move-splitter-up (arg)
-      "Move window splitter up."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'up))
-          (enlarge-window arg)
-        (shrink-window arg)))
-
-    (defun hydra-move-splitter-down (arg)
-      "Move window splitter down."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'up))
-          (shrink-window arg)
-        (enlarge-window arg)))
-    :bind
-    ("C-c <tab>" . hydra-fold/body)
-    ("C-c d" . hydra-dates/body)
-    ("C-c e" . hydra-eyebrowse/body)
-    ;; ("C-c f" . hydra-flycheck/body)
-    ;; ("C-c g" . hydra-magit/body)
-    ("C-c h" . hydra-helm/body)
-    ("C-c o" . yc/ongoing-hydra)
-    ;; ("C-c p" . hydra-projectile/body)
-    ("C-c p" . hydra-system/body)
-    ("C-c w" . hydra-windows/body)
-  )
-
-  (defhydra hydra-zoom (global-map "<f2>")
-    "zoom"
-    ("g" text-scale-increase "in")
-    ("l" text-scale-decrease "out")
-    ;; ("0" (text-scale-set 0) "reset" :exit t)
-    ("0" (text-scale-adjust 0) "reset")
-    ("q" nil "quit" :color blue))
-
-  (defhydra hydra-org (:color red :columns 3)
-    "Org Mode Movements"
-    ("n" outline-next-visible-heading "next heading")
-    ("p" outline-previous-visible-heading "prev heading")
-    ("N" org-forward-heading-same-level "next heading at same level")
-    ("P" org-backward-heading-same-level "prev heading at same level")
-    ("u" outline-up-heading "up heading")
-    ("g" org-goto "goto" :exit t))
-
-  (defhydra hydra-org-clock (:color blue :hint nil)
-    "
-  Clock   In/out^     ^Edit^   ^Summary     (_?_)
-  -----------------------------------------
-          _i_n         _e_dit   _g_oto entry
-          _c_ontinue   _q_uit   _d_isplay
-          _o_ut        ^ ^      _r_eport
-        "
-    ("i" org-clock-in)
-    ("o" org-clock-out)
-    ("c" org-clock-in-last)
-    ("e" org-clock-modify-effort-estimate)
-    ("q" org-clock-cancel)
-    ("g" org-clock-goto)
-    ("d" org-clock-display)
-    ("r" org-clock-report)
-    ("?" (org-info "Clocking commands")))
-
-  (defhydra hydra-org-agenda-clock (:color blue :hint nil)
-    ("i" org-agenda-clock-in)
-    ("o" org-agenda-clock-out)
-    ("q" org-agenda-clock-cancel)
-    ("g" org-agenda-clock-goto))
-
-  (bind-keys ("C-c j" . hydra-org-clock/body)
-             :map org-agenda-mode-map
-             ("C-c j" . hydra-org-agenda-clock/body))
-
-  (defhydra hydra-window ()
-    "
-      Movement^   ^Split^         ^Switch^       ^^^Resize^         ^Window Purpose^
-      ------------------------------------------------------------------------------------------------------
-      _h_ ←        _|_ vertical    ^_b_uffer       _H_  X←          choose window _P_urpose
-      _j_ ↓        _-_ horizontal  ^_f_ind files   _J_  X↓          switch to _B_uffer w/ same purpose
-      _k_ ↑        _u_ undo        ^_a_ce window   _K_  X↑          Purpose-dedication(_!_)
-      _l_ →        _r_ reset       ^_s_wap         _K_  X→          Buffer-dedication(_#_)
-      ^^^^^^^                                      _M_aximize
-      ^^^^^^^                                      _d_elete
-      _x_ M-x      _q_ quit
-      "
-    ("h" windmove-left)
-    ("j" windmove-down)
-    ("k" windmove-up)
-    ("l" windmove-right)
-    ("|" (lambda ()
-           (interactive)
-           (split-window-right)
-           (windmove-right)))
-    ("-" (lambda ()
-           (interactive)
-           (split-window-below)
-           (windmove-down)))
-    ("u" (progn
-           (winner-undo)
-           (setq this-command 'winner-undo)))
-    ("r" winner-redo)
-    ("b" ivy-purpose-switch-buffer-without-purpose)
-    ("f" counsel-find-file)
-    ("a" (lambda ()
-           (interactive)
-           (ace-window 1)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)))
-    ("s" (lambda ()
-           (interactive)
-           (ace-swap-window)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)))
-    ("H" hydra-move-splitter-left)
-    ("J" hydra-move-splitter-down)
-    ("K" hydra-move-splitter-up)
-    ("L" hydra-move-splitter-right)
-    ("M" delete-other-windows)
-    ("d" delete-window)
-
-    ("P" purpose-set-window-purpose)
-    ("B" ivy-purpose-switch-buffer-with-purpose)
-    ("!" purpose-toggle-window-purpose-dedicated)
-    ("#" purpose-toggle-window-buffer-dedicated)
-
-    ("K" ace-delete-other-windows)
-    ("S" save-buffer)
-    ("d" delete-window)
-    ("D" (lambda ()
-           (interactive)
-           (ace-delete-window)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body))
-     )
-
-    ("x" counsel-M-x)
-    ("q" nil)
-    )
-  (global-set-key (kbd "<f1>") 'hydra-window/body)
-
-  (defhydra hydra-clock (:color blue)
-    "
-      ^
-      ^Clock^             ^Do^
-      ^─────^─────────────^──^─────────
-      _q_ quit            _c_ cancel
-      ^^                  _d_ display
-      ^^                  _e_ effort
-      ^^                  _i_ in
-      ^^                  _j_ jump
-      ^^                  _o_ out
-      ^^                  _r_ report
-      ^^                  ^^
-      "
-    ("q" nil)
-    ("c" org-clock-cancel :color pink)
-    ("d" org-clock-display)
-    ("e" org-clock-modify-effort-estimate)
-    ("i" org-clock-in)
-    ("j" org-clock-goto)
-    ("o" org-clock-out)
-    ("r" org-clock-report))
-
-  (defhydra hydra-helm (:hint nil :color pink)
-          "
-                                                                            ╭──────┐
-     Navigation   Other  Sources     Mark             Do             Help   │ Helm │
-    ╭───────────────────────────────────────────────────────────────────────┴──────╯
-          ^_k_^         _K_       _p_   [_m_] mark         [_v_] view         [_H_] helm help
-          ^^↑^^         ^↑^       ^↑^   [_t_] toggle all   [_d_] delete       [_s_] source help
-      _h_ ←   → _l_     _c_       ^ ^   [_u_] unmark all   [_f_] follow: %(helm-attr 'follow)
-          ^^↓^^         ^↓^       ^↓^    ^ ^               [_y_] yank selection
-          ^_j_^         _J_       _n_    ^ ^               [_w_] toggle windows
-    --------------------------------------------------------------------------------
-          "
-          ("<tab>" helm-keyboard-quit "back" :exit t)
-          ("<escape>" nil "quit")
-          ("\\" (insert "\\") "\\" :color blue)
-          ("h" helm-beginning-of-buffer)
-          ("j" helm-next-line)
-          ("k" helm-previous-line)
-          ("l" helm-end-of-buffer)
-          ("g" helm-beginning-of-buffer)
-          ("G" helm-end-of-buffer)
-          ("n" helm-next-source)
-          ("p" helm-previous-source)
-          ("K" helm-scroll-other-window-down)
-          ("J" helm-scroll-other-window)
-          ("c" helm-recenter-top-bottom-other-window)
-          ("m" helm-toggle-visible-mark)
-          ("t" helm-toggle-all-marks)
-          ("u" helm-unmark-all)
-          ("H" helm-help)
-          ("s" helm-buffer-help)
-          ("v" helm-execute-persistent-action)
-          ("d" helm-persistent-delete-marked)
-          ("y" helm-yank-selection)
-          ("w" helm-toggle-resplit-and-swap-windows)
-          ("f" helm-follow-mode))
-
-  (defhydra hydra-fold (:color pink)
-    "
-  ^
-  ^Fold^              ^Do^                ^Jump^              ^Toggle^
-  ^────^──────────────^──^────────────────^────^──────────────^──────^────────────
-  _q_ quit            _f_ fold            _<_ previous        _<tab>_ current
-  ^^                  _k_ kill            _>_ next            _S-<tab>_ all
-  ^^                  _K_ kill all        ^^                  ^^
-  ^^                  ^^                  ^^                  ^^
-  "
-    ("q" nil)
-    ("<tab>" vimish-fold-toggle)
-    ("S-<tab>" vimish-fold-toggle-all)
-    ("<" vimish-fold-previous-fold)
-    (">" vimish-fold-next-fold)
-    ("f" vimish-fold)
-    ("k" vimish-fold-delete)
-    ("K" vimish-fold-delete-all))
-
-  (defhydra hydra-dates (:color blue)
-    "
-  ^
-  ^Dates^             ^Insert^            ^Insert with Time^
-  ^─────^─────────────^──────^────────────^────────────────^──
-  _q_ quit            _d_ short           _D_ short
-  ^^                  _i_ iso             _I_ iso
-  ^^                  _l_ long            _L_ long
-  ^^                  ^^                  ^^
-  "
-    ("q" nil)
-    ("d" me/date-short)
-    ("D" me/date-short-with-time)
-    ("i" me/date-iso)
-    ("I" me/date-iso-with-time)
-    ("l" me/date-long)
-    ("L" me/date-long-with-time))
-
-  (defhydra hydra-markdown (:color pink)
-    "
-  ^
-  ^Markdown^          ^Table Columns^     ^Table Rows^
-  ^────────^──────────^─────────────^─────^──────────^────────
-  _q_ quit            _c_ insert          _r_ insert
-  ^^                  _C_ delete          _R_ delete
-  ^^                  _M-<left>_ left     _M-<down>_ down
-  ^^                  _M-<right>_ right   _M-<up>_ up
-  ^^                  ^^                  ^^
-  "
-    ("q" nil)
-    ("c" markdown-table-insert-column)
-    ("C" markdown-table-delete-column)
-    ("r" markdown-table-insert-row)
-    ("R" markdown-table-delete-row)
-    ("M-<left>" markdown-table-move-column-left)
-    ("M-<right>" markdown-table-move-column-right)
-    ("M-<down>" markdown-table-move-row-down)
-    ("M-<up>" markdown-table-move-row-up))
-
-  (defhydra hydra-windows (:color pink)
-    "
-  ^
-  ^Windows^           ^Window^            ^Zoom^              ^Eyebrowse Do^            ^Eyebrowse Switch^
-  ^───────^───────────^──────^────────────^────^──────────────^────────────^────────────^────────────────^────────────
-  _q_ quit            _b_ balance         _-_ out             _c_ create                _<_ previous
-  ^^                  _i_ heighten        _+_ in              _k_ kill                  _>_ next
-  ^^                  _j_ narrow          _=_ reset           _r_ rename                _e_ last
-  ^^                  _k_ lower           ^^                  ^^                        _s_ switch
-  ^^                  _l_ widen           ^^                  ^^                        _1_ workspace ➊
-  ^^                  ^^                  ^^                  ^^                        _2_ workspace ➋
-  ^^                  ^^                  ^^                  ^^                        _3_ workspace ➌
-  ^^                  ^^                  ^^                  ^^                        _4_ workspace ➍
-  "
-    ("q" nil)
-    ("b" balance-windows)
-    ("i" enlarge-window)
-    ("j" shrink-window-horizontally)
-    ("k" shrink-window)
-    ("l" enlarge-window-horizontally)
-    ("-" text-scale-decrease)
-    ("+" text-scale-increase)
-    ("=" (text-scale-increase 0))
-    ("<" eyebrowse-prev-window-config :color red)
-    (">" eyebrowse-next-window-config :color red)
-    ("c" eyebrowse-create-window-config)
-    ("e" eyebrowse-last-window-config)
-    ("k" eyebrowse-close-window-config :color red)
-    ("r" eyebrowse-rename-window-config)
-    ("s" eyebrowse-switch-to-window-config)
-    ("1" eyebrowse-switch-to-window-config-1)
-    ("2" eyebrowse-switch-to-window-config-2)
-    ("3" eyebrowse-switch-to-window-config-3)
-    ("4" eyebrowse-switch-to-window-config-4))
-#+END_SRC
 * Term
 参考这篇文章配置 multi-term：[[http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/][Using GNU Emacs as a terminal emulator]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -4563,4 +4510,15 @@ Restart Emacs inside Emacs
     :config
     (when (is-mac-p)
       (add-to-list 'exec-path "/usr/local/texlive/2017/bin/x86_64-darwin")))
+#+END_SRC
+* emojify
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package emojify
+  :demand t
+  :init
+  (add-hook 'after-init-hook #'global-emojify-mode)
+  :config
+  (when (memq window-system '(mac ns))
+    (setq emojify-display-style 'unicode)
+    (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)))
 #+END_SRC
