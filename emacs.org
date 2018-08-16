@@ -65,8 +65,8 @@ Garbage collection
 
 A high limit for garbage colection.
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (eval-and-compile
-  (setq gc-cons-threshold (* 100 1024 1024))
+  (setq gc-cons-threshold 402653184
+        gc-cons-percentage 0.6)
 #+END_SRC
 
 Use UTF-8 for enivorment
@@ -4521,4 +4521,9 @@ Restart Emacs inside Emacs
   (when (memq window-system '(mac ns))
     (setq emojify-display-style 'unicode)
     (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)))
+#+END_SRC
+* Reset GC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq gc-cons-threshold 16777216
+        gc-cons-percentage 0.1)
 #+END_SRC
