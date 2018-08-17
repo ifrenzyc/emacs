@@ -377,11 +377,10 @@ Visually highlight the selected buffer.
 
 ** scrolling
 #+BEGIN_SRC emacs-lisp :tangle yes
+(set-scroll-bar-mode nil) ;; 取消滚动栏
 ;; (use-package yascroll
 ;;   :init
-;;   (set-scroll-bar-mode nil) ;; 取消滚动栏
 ;;   (global-yascroll-bar-mode t))
-
 ;; (use-package smooth-scrolling
 ;;   :init
 ;;   (smooth-scrolling-mode t))
@@ -879,7 +878,7 @@ Unicode is an required aesthetic
 
 ** icons
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package all-the-icons)
+(use-package all-the-icons)
 #+END_SRC
 
 ** panguspacing
