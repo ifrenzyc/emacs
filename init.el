@@ -13,9 +13,10 @@
 
 ;;; Code:
 
-;; Added by package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
+;; Added by package.el. This must come before configurations of
+;; installed packages. Don't delete this line. If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
+;; uncomment this line in first time startup.
 ;; (package-initialize)
 
 (require 'org)
