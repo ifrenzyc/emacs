@@ -377,70 +377,70 @@ Visually highlight the selected buffer.
 
 ** scrolling
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package yascroll
-  :init
-  (set-scroll-bar-mode nil) ;; 取消滚动栏
-  (global-yascroll-bar-mode t))
+;; (use-package yascroll
+;;   :init
+;;   (set-scroll-bar-mode nil) ;; 取消滚动栏
+;;   (global-yascroll-bar-mode t))
 
-(use-package smooth-scrolling
-  :init
-  (smooth-scrolling-mode t))
+;; (use-package smooth-scrolling
+;;   :init
+;;   (smooth-scrolling-mode t))
 #+END_SRC
 
 ** themes
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; @see https://github.com/gorakhargosh/emacs.d/blob/master/themes/color-theme-less.el
-  ;; (use-package hc-zenburn-theme
-  ;;   :init
-  ;;   (defvar zenburn-override-colors-alist
-  ;;     '(("zenburn-bg+05" . "#282828")
-  ;;       ("zenburn-bg+1"  . "#2F2F2F")
-  ;;       ("zenburn-bg+2"  . "#3F3F3F")
-  ;;       ("zenburn-bg+3"  . "#4F4F4F")))
-  ;;   (load-theme 'zenburn t)
-  ;;   :config
-  ;;   (set-face-attribute 'region nil :background "#666"))
+;; @see https://github.com/gorakhargosh/emacs.d/blob/master/themes/color-theme-less.el
+;; (use-package hc-zenburn-theme
+;;   :init
+;;   (defvar zenburn-override-colors-alist
+;;     '(("zenburn-bg+05" . "#282828")
+;;       ("zenburn-bg+1"  . "#2F2F2F")
+;;       ("zenburn-bg+2"  . "#3F3F3F")
+;;       ("zenburn-bg+3"  . "#4F4F4F")))
+;;   (load-theme 'zenburn t)
+;;   :config
+;;   (set-face-attribute 'region nil :background "#666"))
 
-  (use-package gruvbox-theme
-    :config
-  ;; (load-theme  'gruvbox-dark-soft t))
-  ;; (load-theme  'gruvbox-dark-medium t))
-  ;; (load-theme  'gruvbox-dark-hard t))
-  ;; (load-theme  'gruvbox-light-medium t))
-  (load-theme  'gruvbox-light-soft t))
-  ;; (load-theme  'gruvbox-light-hard t))
+;; (use-package gruvbox-theme
+;;   :config
+;;   (load-theme  'gruvbox-light-soft t))
+;; (load-theme  'gruvbox-dark-soft t))
+;; (load-theme  'gruvbox-dark-medium t))
+;; (load-theme  'gruvbox-dark-hard t))
+;; (load-theme  'gruvbox-light-medium t))
+;; (load-theme  'gruvbox-light-hard t))
 
-  ;; (use-package leuven-theme
-  ;;   :init
-  ;;   (load-theme 'leuven t)
-  ;;   :config
-  ;;   ;; Fontify the whole line for headings (with a background color).
-  ;;   (setq org-fontify-whole-heading-line t))
+;; (use-package leuven-theme
+;;   :init
+;;   (load-theme 'leuven t)
+;;   :config
+;;   ;; Fontify the whole line for headings (with a background color).
+;;   (setq org-fontify-whole-heading-line t))
 
-  ;; (use-package doom-themes
-  ;;   :init
-  ;;   ;; Global settings (defaults)
-  ;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-  ;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+(use-package doom-themes
+  :init
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-  ;;   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
-  ;;   ;; theme may have their own settings.
-  ;;   (load-theme 'doom-one t)
-  ;;   :config
-  ;;   ;; Enable flashing mode-line on errors
-  ;;   (doom-themes-visual-bell-config)
+  ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
+  ;; theme may have their own settings.
+  (load-theme 'doom-one t)
+  :config
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
 
-  ;;   ;; Enable custom neotree theme
-  ;;   (doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
+  ;; Enable custom neotree theme
+  (doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
 
-  ;;   ;; Corrects (and improves) org-mode's native fontification.
-  ;;   (doom-themes-org-config)
-  ;; )
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config)
+  )
 
-  (use-package rainbow-delimiters
-    :config
-    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'cider-repl-mode #'rainbow-delimiters-mode))
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode #'rainbow-delimiters-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -458,23 +458,23 @@ Visually highlight the selected buffer.
 (line-number-mode 1)
 (size-indication-mode t)
 
-(use-package powerline
-  :config (progn
-            ;; Wave seperators please
-            ;; wave
-            ;; arrow
-            ;; rounded
-            ;; zigzag
-            ;; These two lines are just examples
-            (setq powerline-arrow-shape 'zigzag)
-            ;; (setq powerline-default-separator-dir '(right . left))
-            ;; (setq powerline-default-separator 'nil)
-            (powerline-vim-theme)))
+;; (use-package powerline
+;;   :config (progn
+;;             ;; Wave seperators please
+;;             ;; wave
+;;             ;; arrow
+;;             ;; rounded
+;;             ;; zigzag
+;;             ;; These two lines are just examples
+;;             (setq powerline-arrow-shape 'zigzag)
+;;             ;; (setq powerline-default-separator-dir '(right . left))
+;;             ;; (setq powerline-default-separator 'nil)
+;;             (powerline-vim-theme)))
 
-(use-package powerline-evil
-  :after powerline
-  :config
-  (powerline-evil-vim-color-theme))
+;; (use-package powerline-evil
+;;   :after powerline
+;;   :config
+;;   (powerline-evil-vim-color-theme))
 
 (use-package nyan-mode
   :after spaceline
@@ -491,23 +491,23 @@ Visually highlight the selected buffer.
 ;; @see https://libraries.io/emacs/spaceline
 ;; @see https://github.com/TeMPOraL/nyan-mode
 ;; @see https://github.com/TheBB/spaceline
-(use-package spaceline
-  :after powerline winum
-  :config
-  (require 'spaceline-segments)
-  ;; (spaceline-spacemacs-theme)
-  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
-        spaceline-responsive nil
-        spaceline-workspace-numbers-unicode t
-        winum-auto-setup-mode-line nil)
-  (winum-mode))
+;; (use-package spaceline
+;;   :after powerline winum
+;;   :config
+;;   (require 'spaceline-segments)
+;;   ;; (spaceline-spacemacs-theme)
+;;   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
+;;         spaceline-responsive nil
+;;         spaceline-workspace-numbers-unicode t
+;;         winum-auto-setup-mode-line nil)
+;;   (winum-mode))
 
-(use-package spaceline-config
-  :ensure spaceline
-  :config
-  (spaceline-helm-mode 1)
-  ;; (spaceline-spacemacs-theme)
-  (spaceline-emacs-theme))
+;; (use-package spaceline-config
+;;   :ensure spaceline
+;;   :config
+;;   (spaceline-helm-mode 1)
+;;   ;; (spaceline-spacemacs-theme)
+;;   (spaceline-emacs-theme))
 
 ;; (use-package spaceline-all-the-icons
 ;;   :after spaceline
@@ -543,9 +543,9 @@ Visually highlight the selected buffer.
 ;;           counsel-projectile))
 ;;   (all-the-icons-ivy-setup))
 
-;; (use-package doom-modeline
-;;       :defer t
-;;       :hook (after-init . doom-modeline-init))
+(use-package doom-modeline
+      :defer t
+      :hook (after-init . doom-modeline-init))
 
 ;; ;; (defface my-pl-segment1-active
 ;; ;;   '((t (:foreground "#000000" :background "#E1B61A")))
@@ -1545,7 +1545,7 @@ This allows me to easily start a * or # search from a visual selection.
     "TAB"  'mode-line-other-buffer
     "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
     "<"    '(counsel-projectile-find-file :which-key "Find file in project")
-    ":"    '(helm-M-x :which-key "M-x")
+    ":"    '(counsel-M-x :which-key "M-x")
     ";"    '(evil-ex :which-key "Ex command")
     "'"    '(shell-pop :which-key "Open shell")
     "0"    '(neotree-toggle :which-key "NeoTree")
@@ -3322,27 +3322,27 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 
 ** set org-code-block color
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (custom-set-faces
-  ;;  '(org-block-begin-line
-  ;;    ((t (:underline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
-  ;;  '(org-block-end-line
-  ;;    ((t (:overline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
-  ;;  '(org-block
-  ;;    ((t (:background "#333333"))))
-  ;;  '(org-block-background
-  ;;    ((t (:background "#333333"))))
-  ;;  )
+(custom-set-faces
+ '(org-block-begin-line
+   ((t (:underline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
+ '(org-block-end-line
+   ((t (:overline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
+ '(org-block
+   ((t (:background "#333333"))))
+ '(org-block-background
+   ((t (:background "#333333"))))
+ )
 
-  (custom-set-faces
-   '(org-block-begin-line
-     ((t (:underline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
-   '(org-block-end-line
-     ((t (:overline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
-   '(org-block
-     ((t (:background "#F2E4BE"))))
-   '(org-block-background
-     ((t (:background "#F2E4BE"))))
-   )
+;; (custom-set-faces
+;;  '(org-block-begin-line
+;;    ((t (:underline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block-end-line
+;;    ((t (:overline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block
+;;    ((t (:background "#F2E4BE"))))
+;;  '(org-block-background
+;;    ((t (:background "#F2E4BE"))))
+;;  )
 #+END_SRC
 
 ** MobileOrg
@@ -3789,11 +3789,11 @@ Save a list of recent files visited. (open recent file with C-c f)
       (global-set-key (kbd "C-c u") 'swiper-all)
       ))
 
-  ;; (use-package counsel
-  ;;   :after ivy
-  ;;   :bind (("C-x C-f" . counsel-find-file)
-  ;;          ("M-x" . counsel-M-x)
-  ;;          ("M-y" . counsel-yank-pop)))
+  (use-package counsel
+    :after ivy
+    :bind (("C-x C-f" . counsel-find-file)
+           ("M-x" . counsel-M-x)
+           ("M-y" . counsel-yank-pop)))
 
   ;; (use-package counsel-projectile
   ;;   :after counsel
@@ -4385,4 +4385,12 @@ Restart Emacs inside Emacs
 ;;   (when (memq window-system '(mac ns))
 ;;     (setq emojify-display-style 'unicode)
 ;;     (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)))
+#+END_SRC
+
+* Reset GC
+参考 doom-emacs 调整 GC：[[https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast][How is Doom’s startup so fast?]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; Then reset it as late as possible; these are the reasonable defaults I use.
+(add-hook 'term-mode-hook '(lambda () (setq gc-cons-threshold 16777216
+        gc-cons-percentage 0.1)))
 #+END_SRC
