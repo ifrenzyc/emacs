@@ -942,190 +942,202 @@ Restore cursor to file position in previous editing session.
 - TODO 阅读：[[https://github.com/noctuid/evil-guide#terminology][noctuid/evil-guide - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-;; @see http://wikemacs.org/wiki/Evil
-(use-package evil
-  :hook (emacs-startup . evil-mode)
-  ;; :init
-  ;; (evil-mode 1)
-  :config
-  (setq evil-want-integration nil)
-  ;; @see http://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
-  ;; (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-  ;; (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-  ;; (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-  ;; (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-  (setq-default evil-search-module 'evil-search
-                evil-want-Y-yank-to-eol t)
+  ;; @see http://wikemacs.org/wiki/Evil
+  (use-package evil
+    :hook (emacs-startup . evil-mode)
+    ;; :init
+    ;; (evil-mode 1)
+    :config
+    (setq evil-want-integration nil)
+    ;; @see http://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
+    ;; (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+    ;; (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+    ;; (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+    ;; (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+    (setq-default evil-search-module 'evil-search
+                  evil-want-Y-yank-to-eol t)
 
-  ;; @see https://github.com/rime/squirrel/wiki/vim%E7%94%A8%E6%88%B7%E4%B8%8Eemacs-evil-mode%E7%94%A8%E6%88%B7-%E8%BE%93%E5%85%A5%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E6%88%90%E8%8B%B1%E6%96%87%E7%8A%B6%E6%80%81%E7%9A%84%E5%AE%9E%E7%8E%B0
-  (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
-    "C-g back to normal state"
-    (when  (evil-insert-state-p)
-      (cond
-       ((equal (evil-initial-state major-mode) 'normal)
-        (evil-normal-state))
-       ((equal (evil-initial-state major-mode) 'insert)
-        (evil-normal-state))
-       ((equal (evil-initial-state major-mode) 'motion)
-        (evil-motion-state))
-       (t
-        (if (equal last-command 'keyboard-quit)
-            (evil-normal-state)           ;如果初始化 state 不是 normal，按两次才允许转到 normal state
-          (evil-change-to-initial-state)) ;如果初始化 state 不是 normal，按一次 转到初始状态
-        ))))
+    ;; @see https://github.com/rime/squirrel/wiki/vim%E7%94%A8%E6%88%B7%E4%B8%8Eemacs-evil-mode%E7%94%A8%E6%88%B7-%E8%BE%93%E5%85%A5%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E6%88%90%E8%8B%B1%E6%96%87%E7%8A%B6%E6%80%81%E7%9A%84%E5%AE%9E%E7%8E%B0
+    (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
+      "C-g back to normal state"
+      (when  (evil-insert-state-p)
+        (cond
+         ((equal (evil-initial-state major-mode) 'normal)
+          (evil-normal-state))
+         ((equal (evil-initial-state major-mode) 'insert)
+          (evil-normal-state))
+         ((equal (evil-initial-state major-mode) 'motion)
+          (evil-motion-state))
+         (t
+          (if (equal last-command 'keyboard-quit)
+              (evil-normal-state)           ;如果初始化 state 不是 normal，按两次才允许转到 normal state
+            (evil-change-to-initial-state)) ;如果初始化 state 不是 normal，按一次 转到初始状态
+          ))))
 
-  ;; esc quits
-  ;; @see http://stackoverflow.com/questions/8483182/evil-mode-best-practice
-  (defun minibuffer-keyboard-quit ()
-    "Abort recursive edit.
-  In Delete Selection mode, if the mark is active, just deactivate it;
-  then it takes a second \\[keyboard-quit] to abort the minibuffer."
-    (interactive)
-    (if (and delete-selection-mode transient-mark-mode mark-active)
-        (setq deactivate-mark  t)
-      (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-      (abort-recursive-edit)))
-  (define-key evil-normal-state-map [escape] 'keyboard-quit)
-  (define-key evil-visual-state-map [escape] 'keyboard-quit)
-  (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-
-  (define-key evil-normal-state-map "\C-y" 'yank)
-  (define-key evil-insert-state-map "\C-y" 'yank)
-  (define-key evil-visual-state-map "\C-y" 'yank)
-  (define-key evil-insert-state-map "\C-e" 'end-of-line)
-
-  ;; Split and move the cursor to the new split
-  (define-key evil-normal-state-map (kbd "-")
-    (lambda ()
+    ;; esc quits
+    ;; @see http://stackoverflow.com/questions/8483182/evil-mode-best-practice
+    (defun minibuffer-keyboard-quit ()
+      "Abort recursive edit.
+    In Delete Selection mode, if the mark is active, just deactivate it;
+    then it takes a second \\[keyboard-quit] to abort the minibuffer."
       (interactive)
-      (split-window-vertically)
-      (other-window 1)))
-  (define-key evil-normal-state-map (kbd "|")
-    (lambda ()
-      (interactive)
-      (split-window-horizontally)
-      (other-window 1)))
+      (if (and delete-selection-mode transient-mark-mode mark-active)
+          (setq deactivate-mark  t)
+        (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+        (abort-recursive-edit)))
+    (define-key evil-normal-state-map [escape] 'keyboard-quit)
+    (define-key evil-visual-state-map [escape] 'keyboard-quit)
+    (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+    (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
-  ;; (add-hook 'evil-after-load-hook
-  ;;           (lambda ()
-  ;;             ;; config
-  ;;             ))
-  ;; C-a for redo the last insertion
-  ;; @see http://emacs.stackexchange.com/questions/14521/insert-mode-make-c-a-insert-previously-inserted-text
-  ;; (defun yc/evil-paste-last-insertion ()
-  ;;   (interactive)
-  ;;   (evil-paste-from-register ?.))
+    (define-key evil-normal-state-map "\C-y" 'yank)
+    (define-key evil-insert-state-map "\C-y" 'yank)
+    (define-key evil-visual-state-map "\C-y" 'yank)
+    (define-key evil-insert-state-map "\C-e" 'end-of-line)
 
-  ;; (eval-after-load 'evil-maps
-  ;;   '(define-key evil-insert-state-map (kbd "C-a") 'yc/evil-paste-last-insertion))
+    ;; Split and move the cursor to the new split
+    (define-key evil-normal-state-map (kbd "-")
+      (lambda ()
+        (interactive)
+        (split-window-vertically)
+        (other-window 1)))
+    (define-key evil-normal-state-map (kbd "|")
+      (lambda ()
+        (interactive)
+        (split-window-horizontally)
+        (other-window 1)))
 
-  ;; C-u to scroll up or delete indent
-  ;; @see http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-i-jump t)
-  (set-cursor-color "DarkCyan")
+    ;; (add-hook 'evil-after-load-hook
+    ;;           (lambda ()
+    ;;             ;; config
+    ;;             ))
+    ;; C-a for redo the last insertion
+    ;; @see http://emacs.stackexchange.com/questions/14521/insert-mode-make-c-a-insert-previously-inserted-text
+    ;; (defun yc/evil-paste-last-insertion ()
+    ;;   (interactive)
+    ;;   (evil-paste-from-register ?.))
 
-  ;; ;; Great evil org mode keyboard shortcuts cribbed from cofi
-  ;; (evil-define-key 'normal org-mode-map
-  ;;   (kbd "RET") 'org-open-at-point
-  ;;   "za"        'org-cycle
-  ;;   "zA"        'org-shifttab
-  ;;   "zm"        'hide-body
-  ;;   "zr"        'show-all
-  ;;   "zo"        'show-subtree
-  ;;   "zO"        'show-all
-  ;;   "zc"        'hide-subtree
-  ;;   "zC"        'hide-all
-  ;;   (kbd "M-h") 'org-metaleft
-  ;;   (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-l") 'org-metaright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
+    ;; (eval-after-load 'evil-maps
+    ;;   '(define-key evil-insert-state-map (kbd "C-a") 'yc/evil-paste-last-insertion))
 
-  ;; (evil-define-key 'normal orgstruct-mode-map
-  ;;   (kbd "RET") 'org-open-at-point
-  ;;   "za"        'org-cycle
-  ;;   "zA"        'org-shifttab
-  ;;   "zm"        'hide-body
-  ;;   "zr"        'show-all
-  ;;   "zo"        'show-subtree
-  ;;   "zO"        'show-all
-  ;;   "zc"        'hide-subtree
-  ;;   "zC"        'hide-all
-  ;;   (kbd "M-h") 'org-metaleft
-  ;;   (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-l") 'org-metaright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
+    ;; C-u to scroll up or delete indent
+    ;; @see http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
+    (setq evil-want-C-u-scroll t)
+    (setq evil-want-C-i-jump t)
+    (set-cursor-color "DarkCyan")
 
-  ;; (evil-define-key 'insert org-mode-map
-  ;;   (kbd "M-h") 'org-metaleft
-  ;;   (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-l") 'org-metaright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
+    ;; ;; Great evil org mode keyboard shortcuts cribbed from cofi
+    ;; (evil-define-key 'normal org-mode-map
+    ;;   (kbd "RET") 'org-open-at-point
+    ;;   "za"        'org-cycle
+    ;;   "zA"        'org-shifttab
+    ;;   "zm"        'hide-body
+    ;;   "zr"        'show-all
+    ;;   "zo"        'show-subtree
+    ;;   "zO"        'show-all
+    ;;   "zc"        'hide-subtree
+    ;;   "zC"        'hide-all
+    ;;   (kbd "M-h") 'org-metaleft
+    ;;   (kbd "M-j") 'org-shiftleft
+    ;;   (kbd "M-k") 'org-shiftright
+    ;;   (kbd "M-l") 'org-metaright
+    ;;   (kbd "M-H") 'org-metaleft
+    ;;   (kbd "M-J") 'org-metadown
+    ;;   (kbd "M-K") 'org-metaup
+    ;;   (kbd "M-L") 'org-metaright)
 
-  ;; (evil-define-key 'insert orgstruct-mode-map
-  ;;   (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
-  )
+    ;; (evil-define-key 'normal orgstruct-mode-map
+    ;;   (kbd "RET") 'org-open-at-point
+    ;;   "za"        'org-cycle
+    ;;   "zA"        'org-shifttab
+    ;;   "zm"        'hide-body
+    ;;   "zr"        'show-all
+    ;;   "zo"        'show-subtree
+    ;;   "zO"        'show-all
+    ;;   "zc"        'hide-subtree
+    ;;   "zC"        'hide-all
+    ;;   (kbd "M-h") 'org-metaleft
+    ;;   (kbd "M-j") 'org-shiftleft
+    ;;   (kbd "M-k") 'org-shiftright
+    ;;   (kbd "M-l") 'org-metaright
+    ;;   (kbd "M-H") 'org-metaleft
+    ;;   (kbd "M-J") 'org-metadown
+    ;;   (kbd "M-K") 'org-metaup
+    ;;   (kbd "M-L") 'org-metaright)
 
-(use-package evil-nerd-commenter
-  :defer t
-  :after evil
-  :config
-  (evilnc-default-hotkeys)
-  ;; Emacs key bindings
-  (global-set-key (kbd "M-/") 'evilnc-comment-or-uncomment-lines)
-  (global-set-key (kbd "C-c l") 'evilnc-quick-comment-or-uncomment-to-the-line)
-  (global-set-key (kbd "C-c c") 'evilnc-copy-and-comment-lines)
-  (global-set-key (kbd "C-c p") 'evilnc-comment-or-uncomment-paragraphs)
+    ;; (evil-define-key 'insert org-mode-map
+    ;;   (kbd "M-h") 'org-metaleft
+    ;;   (kbd "M-j") 'org-shiftleft
+    ;;   (kbd "M-k") 'org-shiftright
+    ;;   (kbd "M-l") 'org-metaright
+    ;;   (kbd "M-H") 'org-metaleft
+    ;;   (kbd "M-J") 'org-metadown
+    ;;   (kbd "M-K") 'org-metaup
+    ;;   (kbd "M-L") 'org-metaright)
 
-  ;; (evil-leader/set-key
-  ;;   "ci" 'evilnc-comment-or-uncomment-lines
-  ;;   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
-  ;;   "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
-  ;;   "cc" 'evilnc-copy-and-comment-lines
-  ;;   "cp" 'evilnc-comment-or-uncomment-paragraphs
-  ;;   "cr" 'comment-or-uncomment-region
-  ;;   "cv" 'evilnc-toggle-invert-comment-line-by-line
-  ;;   "\\" 'evilnc-comment-operator ; if you prefer backslash key
-  ;;   )
-  )
+    ;; (evil-define-key 'insert orgstruct-mode-map
+    ;;   (kbd "M-j") 'org-shiftleft
+    ;;   (kbd "M-k") 'org-shiftright
+    ;;   (kbd "M-H") 'org-metaleft
+    ;;   (kbd "M-J") 'org-metadown
+    ;;   (kbd "M-K") 'org-metaup
+    ;;   (kbd "M-L") 'org-metaright)
+    )
+#+END_SRC
 
-;; (use-package evil-surround
-;;   :after evil
-;;   :init
-;;   (global-evil-surround-mode 1))
+*** evil-nerd-commenter
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package evil-nerd-commenter
+    :defer t
+    :after evil
+    :config
+    (evilnc-default-hotkeys)
+    ;; Emacs key bindings
+    (global-set-key (kbd "M-/") 'evilnc-comment-or-uncomment-lines)
+    (global-set-key (kbd "C-c l") 'evilnc-quick-comment-or-uncomment-to-the-line)
+    (global-set-key (kbd "C-c c") 'evilnc-copy-and-comment-lines)
+    (global-set-key (kbd "C-c p") 'evilnc-comment-or-uncomment-paragraphs)
 
-;; (use-package evil-goggles
-;;   :diminish ""
-;;   :after evil
-;;   :config
-;;   (setq evil-goggles-duration 0.150)
-;;   (evil-goggles-mode))
+    ;; (evil-leader/set-key
+    ;;   "ci" 'evilnc-comment-or-uncomment-lines
+    ;;   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+    ;;   "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
+    ;;   "cc" 'evilnc-copy-and-comment-lines
+    ;;   "cp" 'evilnc-comment-or-uncomment-paragraphs
+    ;;   "cr" 'comment-or-uncomment-region
+    ;;   "cv" 'evilnc-toggle-invert-comment-line-by-line
+    ;;   "\\" 'evilnc-comment-operator ; if you prefer backslash key
+    ;;   )
+    )
+#+END_SRC
 
-;; (use-package evil-search-highlight-persist
-;;   :after evil
-;;   :init
-;;   (global-evil-search-highlight-persist t))
+*** evil-surround
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package evil-surround
+  ;;   :after evil
+  ;;   :init
+  ;;   (global-evil-surround-mode 1))
+#+END_SRC
+
+*** evil-goggles
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package evil-goggles
+  ;;   :diminish ""
+  ;;   :after evil
+  ;;   :config
+  ;;   (setq evil-goggles-duration 0.150)
+  ;;   (evil-goggles-mode))
+#+END_SRC
+
+*** evil-search-highlight-persist
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package evil-search-highlight-persist
+  ;;   :after evil
+  ;;   :init
+  ;;   (global-evil-search-highlight-persist t))
 #+END_SRC
 
 *** evil-collection
