@@ -2391,150 +2391,160 @@ Archive subtrees under the same hierarchy as original in the archive files
 
 ** keys
 #+BEGIN_SRC emacs-lisp :tangle yes
-(my-major-mode-leader-def
-  :keymaps 'org-mode-map
-  ;; "" '(:ignore t :which-key "major-mode-cmd")
-  ;; "ma" '(:ignore t :which-key "help")
-  "." 'hydra-org/body
-  "SPC" 'worf-back-to-heading
-  "a" 'org-agenda
-  "c" 'org-capture
-  "b" '(:ignore t :which-key "babel")
-  "C" '(:ignore t :which-key "clocks")
-  "s" 'org-schedule
-  "d" 'org-deadline
-  "r" 'org-refile
-  "l" 'worf-right
-  "j" 'worf-down
-  "k" 'worf-up
-  "h" 'worf-left
-  "g" 'counsel-org-goto
-  "/" 'org-toggle-comment
-  "CI" 'org-clock-in
-  "Cn" 'org-narrow-to-subtree
-  "CN" 'widen
-  "CO" 'org-clock-out
-  "Cq" 'org-clock-cancel
-  "CR" 'org-refile
-  ;; "md" '(:ignore t :which-key "dates")
-  "e" '(:ignore t :which-key "export")
-  "f" '(:ignore t :which-key "feeds")
-  "H" 'org-shiftleft
-  "J" 'org-shiftdown
-  "K" 'org-shiftup
-  "L" 'org-shiftright
-  "T" '(:ignore t :which-key "Toggles")
-  ;; "x" '(:ignore t :which-key "text")
-  "x" 'org-archive-subtree-default-with-confirmation
-  ;; "C-S-l" 'org-shiftcontrolright
-  ;; "C-S-h" 'org-shiftcontrolleft
-  ;; "C-S-j" 'org-shiftcontroldown
-  ;; "C-S-k" 'org-shiftcontrolup
-  "t" '(:ignore t :which-key "tables")
-  "ta" 'org-table-align
-  "tb" 'org-table-blank-field
-  "tc" 'org-table-convert
-  "td" '(:ignore t :which-key "delete")
-  "tdc" 'org-table-delete-column
-  "tdr" 'org-table-kill-row
-  "te" 'org-table-eval-formula
-  "tE" 'org-table-export
-  "th" 'org-table-previous-field
-  "tH" 'org-table-move-column-left
-  "ti" '(:ignore t :which-key "insert")
-  "tic" 'org-table-insert-column
-  "tih" 'org-table-insert-hline
-  "tiH" 'org-table-hline-and-move
-  "tir" 'org-table-insert-row
-  "tI" 'org-table-import
-  "tj" 'org-table-next-row
-  "tJ" 'org-table-move-row-down
-  "tK" 'org-table-move-row-up
-  "tl" 'org-table-next-field
-  "tL" 'org-table-move-column-right
-  "tn" 'org-table-create
-  "tN" 'org-table-create-with-table.el
-  "tr" 'org-table-recalculate
-  "ts" 'org-table-sort-lines
-  "tt" '(:ignore t :which-key "toggle")
-  "ttf" 'org-table-toggle-formula-debugger
-  "tto" 'org-table-toggle-coordinate-overlays
-  "tw" 'org-table-wrap-region)
+  (my-major-mode-leader-def
+    :keymaps 'org-mode-map
+    ;; "" '(:ignore t :which-key "major-mode-cmd")
+    ;; "ma" '(:ignore t :which-key "help")
+    "." 'hydra-org/body
+    "'" 'org-edit-special
+    "SPC" 'worf-back-to-heading
+    "a" 'org-agenda
+    "c" 'org-capture
+    "b" '(:ignore t :which-key "babel")
+    "C" '(:ignore t :which-key "clocks")
+    "s" 'org-schedule
+    "d" 'org-deadline
+    "r" 'org-refile
+    "l" 'worf-right
+    "j" 'worf-down
+    "k" 'worf-up
+    "h" 'worf-left
+    "g" 'counsel-org-goto
+    "/" 'org-toggle-comment
+    "CI" 'org-clock-in
+    "Cn" 'org-narrow-to-subtree
+    "CN" 'widen
+    "CO" 'org-clock-out
+    "Cq" 'org-clock-cancel
+    "CR" 'org-refile
+    ;; "md" '(:ignore t :which-key "dates")
+    "e" '(:ignore t :which-key "export")
+    "f" '(:ignore t :which-key "feeds")
+    "H" 'org-shiftleft
+    "J" 'org-shiftdown
+    "K" 'org-shiftup
+    "L" 'org-shiftright
+    "T" '(:ignore t :which-key "Toggles")
+    ;; "x" '(:ignore t :which-key "text")
+    "x" 'org-archive-subtree-default-with-confirmation
+    ;; "C-S-l" 'org-shiftcontrolright
+    ;; "C-S-h" 'org-shiftcontrolleft
+    ;; "C-S-j" 'org-shiftcontroldown
+    ;; "C-S-k" 'org-shiftcontrolup
+    "t" '(:ignore t :which-key "tables")
+    "ta" 'org-table-align
+    "tb" 'org-table-blank-field
+    "tc" 'org-table-convert
+    "td" '(:ignore t :which-key "delete")
+    "tdc" 'org-table-delete-column
+    "tdr" 'org-table-kill-row
+    "te" 'org-table-eval-formula
+    "tE" 'org-table-export
+    "th" 'org-table-previous-field
+    "tH" 'org-table-move-column-left
+    "ti" '(:ignore t :which-key "insert")
+    "tic" 'org-table-insert-column
+    "tih" 'org-table-insert-hline
+    "tiH" 'org-table-hline-and-move
+    "tir" 'org-table-insert-row
+    "tI" 'org-table-import
+    "tj" 'org-table-next-row
+    "tJ" 'org-table-move-row-down
+    "tK" 'org-table-move-row-up
+    "tl" 'org-table-next-field
+    "tL" 'org-table-move-column-right
+    "tn" 'org-table-create
+    "tN" 'org-table-create-with-table.el
+    "tr" 'org-table-recalculate
+    "ts" 'org-table-sort-lines
+    "tt" '(:ignore t :which-key "toggle")
+    "ttf" 'org-table-toggle-formula-debugger
+    "tto" 'org-table-toggle-coordinate-overlays
+    "tw" 'org-table-wrap-region)
 
-(my-major-mode-leader-def-copy
-  :keymaps 'org-mode-map
-  "" '(:ignore t :which-key "major-mode-cmd")
-  ;; "ma" '(:ignore t :which-key "help")
-  "." 'hydra-org/body
-  "SPC" 'worf-back-to-heading
-  "a" 'org-agenda
-  "c" 'org-capture
-  "b" '(:ignore t :which-key "babel")
-  "C" '(:ignore t :which-key "clocks")
-  "s" 'org-schedule
-  "d" 'org-deadline
-  "r" 'org-refile
-  "l" 'worf-right
-  "j" 'worf-down
-  "k" 'worf-up
-  "h" 'worf-left
-  "g" 'counsel-org-goto
-  "/" 'org-toggle-comment
-  "CI" 'org-clock-in
-  "Cn" 'org-narrow-to-subtree
-  "CN" 'widen
-  "CO" 'org-clock-out
-  "Cq" 'org-clock-cancel
-  "CR" 'org-refile
-  ;; "md" '(:ignore t :which-key "dates")
-  "e" '(:ignore t :which-key "export")
-  "f" '(:ignore t :which-key "feeds")
-  "H" 'org-shiftleft
-  "J" 'org-shiftdown
-  "K" 'org-shiftup
-  "L" 'org-shiftright
-  "T" '(:ignore t :which-key "Toggles")
-  ;; "x" '(:ignore t :which-key "text")
-  "x" 'org-archive-subtree-default-with-confirmation
-  ;; "C-S-l" 'org-shiftcontrolright
-  ;; "C-S-h" 'org-shiftcontrolleft
-  ;; "C-S-j" 'org-shiftcontroldown
-  ;; "C-S-k" 'org-shiftcontrolup
-  "t" '(:ignore t :which-key "tables")
-  "ta" 'org-table-align
-  "tb" 'org-table-blank-field
-  "tc" 'org-table-convert
-  "td" '(:ignore t :which-key "delete")
-  "tdc" 'org-table-delete-column
-  "tdr" 'org-table-kill-row
-  "te" 'org-table-eval-formula
-  "tE" 'org-table-export
-  "th" 'org-table-previous-field
-  "tH" 'org-table-move-column-left
-  "ti" '(:ignore t :which-key "insert")
-  "tic" 'org-table-insert-column
-  "tih" 'org-table-insert-hline
-  "tiH" 'org-table-hline-and-move
-  "tir" 'org-table-insert-row
-  "tI" 'org-table-import
-  "tj" 'org-table-next-row
-  "tJ" 'org-table-move-row-down
-  "tK" 'org-table-move-row-up
-  "tl" 'org-table-next-field
-  "tL" 'org-table-move-column-right
-  "tn" 'org-table-create
-  "tN" 'org-table-create-with-table.el
-  "tr" 'org-table-recalculate
-  "ts" 'org-table-sort-lines
-  "tt" '(:ignore t :which-key "toggle")
-  "ttf" 'org-table-toggle-formula-debugger
-  "tto" 'org-table-toggle-coordinate-overlays
-  "tw" 'org-table-wrap-region)
+  (my-major-mode-leader-def-copy
+    :keymaps 'org-mode-map
+    "" '(:ignore t :which-key "major-mode-cmd")
+    ;; "ma" '(:ignore t :which-key "help")
+    "." 'hydra-org/body
+    "'" 'org-edit-special
+    "SPC" 'worf-back-to-heading
+    "a" 'org-agenda
+    "c" 'org-capture
+    "b" '(:ignore t :which-key "babel")
+    "C" '(:ignore t :which-key "clocks")
+    "s" 'org-schedule
+    "d" 'org-deadline
+    "r" 'org-refile
+    "l" 'worf-right
+    "j" 'worf-down
+    "k" 'worf-up
+    "h" 'worf-left
+    "g" 'counsel-org-goto
+    "/" 'org-toggle-comment
+    "CI" 'org-clock-in
+    "Cn" 'org-narrow-to-subtree
+    "CN" 'widen
+    "CO" 'org-clock-out
+    "Cq" 'org-clock-cancel
+    "CR" 'org-refile
+    ;; "md" '(:ignore t :which-key "dates")
+    "e" '(:ignore t :which-key "export")
+    "f" '(:ignore t :which-key "feeds")
+    "H" 'org-shiftleft
+    "J" 'org-shiftdown
+    "K" 'org-shiftup
+    "L" 'org-shiftright
+    "T" '(:ignore t :which-key "Toggles")
+    ;; "x" '(:ignore t :which-key "text")
+    "x" 'org-archive-subtree-default-with-confirmation
+    ;; "C-S-l" 'org-shiftcontrolright
+    ;; "C-S-h" 'org-shiftcontrolleft
+    ;; "C-S-j" 'org-shiftcontroldown
+    ;; "C-S-k" 'org-shiftcontrolup
+    "t" '(:ignore t :which-key "tables")
+    "ta" 'org-table-align
+    "tb" 'org-table-blank-field
+    "tc" 'org-table-convert
+    "td" '(:ignore t :which-key "delete")
+    "tdc" 'org-table-delete-column
+    "tdr" 'org-table-kill-row
+    "te" 'org-table-eval-formula
+    "tE" 'org-table-export
+    "th" 'org-table-previous-field
+    "tH" 'org-table-move-column-left
+    "ti" '(:ignore t :which-key "insert")
+    "tic" 'org-table-insert-column
+    "tih" 'org-table-insert-hline
+    "tiH" 'org-table-hline-and-move
+    "tir" 'org-table-insert-row
+    "tI" 'org-table-import
+    "tj" 'org-table-next-row
+    "tJ" 'org-table-move-row-down
+    "tK" 'org-table-move-row-up
+    "tl" 'org-table-next-field
+    "tL" 'org-table-move-column-right
+    "tn" 'org-table-create
+    "tN" 'org-table-create-with-table.el
+    "tr" 'org-table-recalculate
+    "ts" 'org-table-sort-lines
+    "tt" '(:ignore t :which-key "toggle")
+    "ttf" 'org-table-toggle-formula-debugger
+    "tto" 'org-table-toggle-coordinate-overlays
+    "tw" 'org-table-wrap-region)
 
-;; ;; key for exiting src edit mode
-;; (general-define-key :keymaps 'org-src-mode-map
-;;                     :states '(normal)
-;;                     "RET" 'org-edit-src-exit)
+  (my-major-mode-leader-def
+    :keymaps 'org-src-mode-map
+    "'" 'org-edit-src-exit)
+
+  (my-major-mode-leader-def-copy
+    :keymaps 'org-src-mode-map
+    ""  '(:ignore t :which-key "major-mode-cmd")
+    "'" 'org-edit-src-exit)
+  ;; ;; key for exiting src edit mode
+  ;; (general-define-key :keymaps 'org-src-mode-map
+  ;;                     :states '(normal)
+  ;;                     "RET" 'org-edit-src-exit)
 #+END_SRC
 
 *** evil-org
