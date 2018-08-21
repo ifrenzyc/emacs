@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 ;;; init.el --- Emacs Initialization File
 
 ;;; Commentary:
@@ -44,10 +46,11 @@
 ;; avoid problems with files newer than their byte-compiled counterparts
 ;; it's better a lower startup than load an outdated and maybe bugged package
 (eval-and-compile
-  (setq load-prefer-newer t
+  (setq package-enable-at-startup nil
+        load-prefer-newer t
         package-user-dir "~/.emacs.d/elpa"
         package--init-file-ensured t
-        package-enable-at-startup nil
+        use-package-compute-statistics t
         ))
 
 (unless (file-directory-p package-user-dir)
@@ -72,9 +75,9 @@
   (setq use-package-always-ensure t
         use-package-verbose t))
 
-(use-package bind-key)                ;; if you use any :bind variant
+(use-package bind-key :demand t)                ;; if you use any :bind variant
 (use-package diminish
-  :defer t
+  :demand t
   :config
   (diminish 'visual-line-mode "↩️ "))
 

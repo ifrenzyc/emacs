@@ -1,5 +1,3 @@
-# -*- mode: org; -*-
-
 #+TITLE: ITSYC's Literate Emacs Config
 #+Author: Yang Chuang
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
@@ -45,6 +43,8 @@
 - [[https://github.com/howardabrams/dot-files/blob/master/emacs-org.org][howardabrams/dot-files - GitHub]]
 - [[https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org][hrs/dotfiles - GitHub]]
 - [[https://github.com/daedreth/UncleDavesEmacs][daedreth/UncleDavesEmacs]]
+- https://github.com/jwiegley/dot-emacs/blob/master/init.el
+  use-package 作者 John Wiegley 的 .emacs.d
 
 * Bootstrap
 ** Constants
@@ -128,14 +128,13 @@ Unicode is an required aesthetic
   ;;   (setq pcache-directory (expand-file-name "pcache/" yc/cache-dir)))
 
   ;; (use-package unicode-fonts
-  ;;   :demand t
   ;;   :config
   ;;   (unicode-fonts-setup))
 #+END_SRC
 
 ** icons
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package all-the-icons)
+(use-package all-the-icons :defer t)
 #+END_SRC
 
 ** gui
@@ -357,7 +356,7 @@ This behaviour in general emulates the scrolloff option in vim.
 
     ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
     ;; theme may have their own settings.
-    (load-theme 'doom-one-light t)
+    (load-theme 'doom-one t)
     :config
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
@@ -366,47 +365,19 @@ This behaviour in general emulates the scrolloff option in vim.
     (doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
 
     ;; Corrects (and improves) org-mode's native fontification.
-    (doom-themes-org-config)
-    :config
-    (let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                                 ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-                                 ((x-list-fonts "Verdana")         '(:font "Verdana"))
-                                 ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-                                 (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-           (base-font-color     (face-foreground 'default nil 'default))
-           (headline           `(:inherit default))
-           (headline-1         `(:inherit default :weight bold)))
-
-      (set-face-attribute 'default nil :font "Source Code Pro 14")
-      ;; Chinese Font
-      (dolist (charset '(kana han symbol cjk-misc bopomofo))
-        (set-fontset-font (frame-parameter nil 'font)
-                          charset (font-spec :family "Hiragino Sans GB" :size 16)))
-
-      (custom-theme-set-faces 'user
-                              `(org-level-8 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-7 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-6 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-5 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-4 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-3 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.1))))
-                              `(org-level-1 ((t (,@headline-1 ,@variable-tuple :height 1.5))))
-                              `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))
-                              `(org-link ((t (:underline t))))
-                              )))
+    (doom-themes-org-config))
 
   (use-package rainbow-delimiters
-    :defer 1
-    :config
-    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'cider-repl-mode #'rainbow-delimiters-mode))
+    :defer 5
+    :hook
+    (prog-mode . rainbow-delimiters-mode)
+    (cider-repl-mode . rainbow-delimiters-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;;  (use-package mdi
 ;;    :load-path "lisp/mdi/"
-;;    :demand t)
+;;    )
 #+END_SRC
 
 ** modeline
@@ -504,7 +475,6 @@ This behaviour in general emulates the scrolloff option in vim.
 ;;   (all-the-icons-ivy-setup))
 
 (use-package doom-modeline
-      :defer t
       :hook (after-init . doom-modeline-init))
 
 ;; ;; (defface my-pl-segment1-active
@@ -596,6 +566,7 @@ This behaviour in general emulates the scrolloff option in vim.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens
     :diminish ""
+    :defer t
     :init
     (require 'smartparens-config)
     :config (progn (smartparens-global-mode t)
@@ -663,6 +634,7 @@ This behaviour in general emulates the scrolloff option in vim.
 Colorize colors as text with their value.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package rainbow-mode
+    :defer 5
     :hook prog-mode
     :config (setq-default rainbow-x-colors-major-mode-list '()))
 #+END_SRC
@@ -678,6 +650,7 @@ Colorize colors as text with their value.
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; @see http://coldnew.github.io/blog/2013/05-20_5cbb7/
   (use-package pangu-spacing
+    :defer 5
     :diminish ""
     :config
     (global-pangu-spacing-mode 1)
@@ -703,7 +676,6 @@ Colorize colors as text with their value.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package winum
-  :defer 1
   :config
   (setq winum-auto-assign-0-to-minibuffer nil
         winum-auto-setup-mode-line nil
@@ -742,7 +714,6 @@ Colorize colors as text with their value.
 - TODO: 把这个 eyebrowse 的按键配置到 Hydra 上面。
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package eyebrowse
-  ;;   :defer 1
   ;;   :bind
   ;;   ("<f5>" . eyebrowse-switch-to-window-config-1)
   ;;   ("<f6>" . eyebrowse-switch-to-window-config-2)
@@ -753,7 +724,6 @@ Colorize colors as text with their value.
   ;;   (setq-default eyebrowse-new-workspace t))
 
   ;; (use-package eyebrowse
-  ;;   :defer 1
   ;;   :config
   ;;   (eyebrowse-mode 1)
   ;;   (setq-default eyebrowse-new-workspace t)
@@ -801,6 +771,7 @@ Colorize colors as text with their value.
 https://github.com/syohex/emacs-zoom-window
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package zoom-window
+    :defer t
     :config
     (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
     (setq zoom-window-mode-line-color "DarkGreen"))
@@ -827,6 +798,7 @@ https://github.com/syohex/emacs-zoom-window
 @see [[https://github.com/purcell/ibuffer-projectile][purcell/ibuffer-projectile - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ibuffer-projectile
+    :after projectile
     :config
     (add-hook 'ibuffer-hook
       (lambda ()
@@ -907,6 +879,7 @@ Restore cursor to file position in previous editing session.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package exec-path-from-shell
   :if IS-MAC
+  :defer 5
   :config
   (setq exec-path-from-shell-variables '("PATH" "GOPATH" "GOROOT"))
   (exec-path-from-shell-initialize))
@@ -949,15 +922,14 @@ Restore cursor to file position in previous editing session.
 * Keymaps
 ** key binding functions
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package autothemer)
-
   (use-package which-key
-    :diminish which-key-mode
-    :init
+    :defer 5
+    :commands which-key-mode
+    :diminish
+    :config
     (which-key-mode)
     (which-key-setup-minibuffer)
     (which-key-setup-side-window-bottom)
-    :config
     (setq which-key-sort-order 'which-key-key-order-alpha)
     (setq which-key-use-C-h-commands nil)
     (setq which-key-idle-delay 0.2)
@@ -972,7 +944,6 @@ Restore cursor to file position in previous editing session.
 
 ;; @see http://wikemacs.org/wiki/Evil
 (use-package evil
-  :demand t
   :hook (emacs-startup . evil-mode)
   ;; :init
   ;; (evil-mode 1)
@@ -1117,10 +1088,10 @@ Restore cursor to file position in previous editing session.
   )
 
 (use-package evil-nerd-commenter
+  :defer t
   :after evil
-  :init
-  (evilnc-default-hotkeys)
   :config
+  (evilnc-default-hotkeys)
   ;; Emacs key bindings
   (global-set-key (kbd "M-/") 'evilnc-comment-or-uncomment-lines)
   (global-set-key (kbd "C-c l") 'evilnc-quick-comment-or-uncomment-to-the-line)
@@ -1165,7 +1136,6 @@ Restore cursor to file position in previous editing session.
 *** evil-indent-plus
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package evil-indent-plus
-;;   :demand t
 ;;   :after evil
 ;;   :config
 ;;   ;; bind evil-indent-plus text objects
@@ -1175,7 +1145,6 @@ Restore cursor to file position in previous editing session.
 *** evil-matchit
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package evil-matchit
-;;   :demand t
 ;;   :after evil
 ;;   :config
 ;;   (global-evil-matchit-mode 1))
@@ -1184,7 +1153,6 @@ Restore cursor to file position in previous editing session.
 *** evil-commentary
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package evil-commentary
-;;   :demand t
 ;;   :after evil
 ;;   :config
 ;;   (evil-commentary-mode))
@@ -1201,7 +1169,6 @@ This allows me to easily start a * or # search from a visual selection.
 *** evil-anzu
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package evil-anzu
-  ;;   :demand t
   ;;   :after evil)
 #+END_SRC
 
@@ -1213,6 +1180,7 @@ This allows me to easily start a * or # search from a visual selection.
 ;;   :config
 ;;   (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
 #+END_SRC
+
 ** general
 [[https://github.com/noctuid/general.el][noctuid/general.el - GitHub]]
 参考这篇文章重新定义自己的 key bindings：[[https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/][larstvei/dot-emacs - GitHub]]
@@ -1257,6 +1225,7 @@ This allows me to easily start a * or # search from a visual selection.
   ;;   (keyfreq-autosave-mode 1))
 
   (use-package general
+    :defer 5
     :init
     (general-def :states '(normal motion visual) "SPC" nil)
     :config
@@ -1452,7 +1421,6 @@ This allows me to easily start a * or # search from a visual selection.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package general
-;;   :demand t
 ;;   :config
 ;;   ;;(general-evil-setup)
 ;;   ;; bind a key globally in normal state; keymaps must be quoted
@@ -1513,7 +1481,7 @@ This allows me to easily start a * or # search from a visual selection.
 - https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hydra
-    :defer t
+    :defer 5
     :preface
     (defvar-local yc/ongoing-hydra-body nil)
     (defun yc/ongoing-hydra ()
@@ -1855,36 +1823,8 @@ This allows me to easily start a * or # search from a visual selection.
     ;; (require 'org-mouse)
 
     (use-package org
+      :defer 3
       :delight org-mode "Org"
-      :defer t
-      :init
-      (let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                                   ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-                                   ((x-list-fonts "Verdana")         '(:font "Verdana"))
-                                   ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-                                   (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-             (base-font-color     (face-foreground 'default nil 'default))
-             (headline           `(:inherit default))
-             (headline-1         `(:inherit default :weight bold)))
-
-        (set-face-attribute 'default nil :font "Source Code Pro 14")
-        ;; Chinese Font
-        (dolist (charset '(kana han symbol cjk-misc bopomofo))
-          (set-fontset-font (frame-parameter nil 'font)
-                            charset (font-spec :family "Hiragino Sans GB" :size 16)))
-
-        (custom-theme-set-faces 'user
-                                `(org-level-8 ((t (,@headline ,@variable-tuple))))
-                                `(org-level-7 ((t (,@headline ,@variable-tuple))))
-                                `(org-level-6 ((t (,@headline ,@variable-tuple))))
-                                `(org-level-5 ((t (,@headline ,@variable-tuple))))
-                                `(org-level-4 ((t (,@headline ,@variable-tuple))))
-                                `(org-level-3 ((t (,@headline ,@variable-tuple))))
-                                `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.1))))
-                                `(org-level-1 ((t (,@headline-1 ,@variable-tuple :height 1.5))))
-                                `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))
-                                `(org-link ((t (:underline t))))
-                                ))
       :config
       (setq org-directory "/Users/yangc/Dropbox/itsycnotes")
       (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -2032,9 +1972,6 @@ This allows me to easily start a * or # search from a visual selection.
     ;;   '(require 'ox-md nil t))
 #+END_SRC
 
-#+RESULTS:
-| org-bullets-mode | yc/org-set-ongoing-hydra-body | (lambda nil (setq org-log-done 'note)) | (lambda nil (setq org-log-done 'time)) | org-indent-mode | (lambda nil (setq word-wrap t)) | (lambda nil (setq truncate-lines nil)) | (lambda nil (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-block-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | org-eldoc-load |
-
 定义一部分在 orgmode 下编写代码块的快捷模板，此快捷模板可以通过 =(<s[TAB])= 的方式快捷输入模板块，如下以此类推，输入 =(<e[TAB])= 即可输入另外的模板。
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; @see 模板元素说明：https://www.cnblogs.com/holbrook/archive/2012/04/17/2454619.html
@@ -2068,17 +2005,54 @@ This allows me to easily start a * or # search from a visual selection.
   ;;     (error nil)))
 #+END_SRC
 
+** custom face
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun custom-org-faces ()
+    "Custom org face"
+    (interactive)
+    (let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                                 ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+                                 ((x-list-fonts "Verdana")         '(:font "Verdana"))
+                                 ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                                 (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+           (base-font-color     (face-foreground 'default nil 'default))
+           (headline           `(:inherit default))
+           (headline-1         `(:inherit default :weight bold)))
+
+      (set-face-attribute 'default nil :font "Source Code Pro 14")
+      ;; Chinese Font
+      (dolist (charset '(kana han symbol cjk-misc bopomofo))
+        (set-fontset-font (frame-parameter nil 'font)
+                          charset (font-spec :family "Hiragino Sans GB" :size 16)))
+
+      (custom-theme-set-faces 'user
+                              `(org-level-8 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-7 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-6 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-5 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-4 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-3 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.1))))
+                              `(org-level-1 ((t (,@headline-1 ,@variable-tuple :height 1.5))))
+                              `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))
+                              `(org-link ((t (:underline t))))))
+    )
+
+  (add-hook 'org-mode-hook #'custom-org-faces)
+#+END_SRC
+
 ** org-bullets
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-bullets
     :after org
-    ;; :hook (org-mode . org-bullets-mode)
+    :defer 5
+    :hook (org-mode . org-bullets-mode)
     :config
-    (add-hook 'org-mode-hook 'org-bullets-mode)
+    ;; (add-hook 'org-mode-hook 'org-bullets-mode)
     ;; "◎" "○" "►" "◇" "⊛" "✪" "☯" "⊙" "✪" "➲" "●" "⬤" "⚉"  "⸖" "ͼ" "ͽ" "⚬" "◌""￮""""⚫"
     ;; "☉" "⦾" "◦" "∙" "∘" "⚪" "◯" "⦿" "⌾" "◉"
     ;; (setq org-bullets-bullet-list '("❂" "⊚" "❍"))
-    (setq org-bullets-bullet-list '("◉" "❂" "✸" "✿" "☼" "⚬")))
+    (setq org-bullets-bullet-list '("❂" "✿" "✸" "◉" "☼" "⚬")))
 #+END_SRC
 
 ** worf
@@ -2165,21 +2139,21 @@ This allows me to easily start a * or # search from a visual selection.
 ** 重新定义不同状态的 todoList 的排版
 @see [[http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/][Emacs: Strike through headlines for DONE tasks in Org]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (setq org-fontify-done-headline t)
-  ;; (custom-set-faces
-  ;;  '(org-done ((t (:foreground "PaleGreen"
-  ;;                              :weight normal
-  ;;                              :strike-through t))))
-  ;;  '(org-headline-done
-  ;;    ((((class color) (min-colors 16) (background dark))
-  ;;      (:foreground "LightSalmon" :strike-through t)))))
+  (setq org-fontify-done-headline t)
+  (custom-set-faces
+   '(org-done ((t (:foreground "PaleGreen"
+                               :weight normal
+                               :strike-through t))))
+   '(org-headline-done
+     ((((class color) (min-colors 16) (background dark))
+       (:foreground "LightSalmon" :strike-through t)))))
 
-  ;; (defun modify-org-done-face ()
-  ;;   (setq org-fontify-done-headline t)
-  ;;   (set-face-attribute 'org-done nil :strike-through t)
-  ;;   (set-face-attribute 'org-headline-done nil :strike-through t))
+  (defun modify-org-done-face ()
+    (setq org-fontify-done-headline t)
+    (set-face-attribute 'org-done nil :strike-through t)
+    (set-face-attribute 'org-headline-done nil :strike-through t))
 
-  ;; (eval-after-load "org" (add-hook 'org-add-hook 'modify-org-done-face))
+  (eval-after-load "org" (add-hook 'org-add-hook 'modify-org-done-face))
 #+END_SRC
 
 ** export
@@ -2672,6 +2646,7 @@ Multi-stage copy/pasting of files and bookmarks
 ** projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
+    :defer 5
     :commands (projectile-project-root)
     ;; :init (projectile-global-mode)
     :config (progn (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
@@ -2746,6 +2721,7 @@ Multi-stage copy/pasting of files and bookmarks
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package neotree
     :diminish ""
+    :commands (neotree-toggle)
     :config
     (setq neo-smart-open t)
     (setq projectile-switch-project-action 'neotree-projectile-action)
@@ -2766,6 +2742,46 @@ Multi-stage copy/pasting of files and bookmarks
     (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
     ;; Disable line-numbers minor mode for neotree
     (add-hook 'neo-after-create-hook (lambda (&optional dummy) (display-line-numbers-mode -1)))
+
+    (define-minor-mode neotree-evil
+      "Use NERDTree bindings on neotree."
+      :lighter " NT"
+      :keymap (progn
+                ;; (evil-make-overriding-map neotree-mode-map 'normal t)
+                (evil-define-key 'normal neotree-mode-map
+                  "C" 'neotree-change-root
+                  "U" 'neotree-select-up-node
+                  "r" 'neotree-refresh
+                  "o" 'neotree-enter
+                  (kbd "<return>") 'neotree-enter
+                  "i" 'neotree-enter-horizontal-split
+                  "s" 'neotree-enter-vertical-split
+                  "n" 'evil-search-next
+                  "N" 'evil-search-previous
+                  "ma" 'neotree-create-node
+                  "mc" 'neotree-copy-file
+                  "md" 'neotree-delete-node
+                  "mm" 'neotree-rename-node
+                  "gg" 'evil-goto-first-line
+                  "gi" (lambda ()
+                         (interactive)
+                         (if (string= pe/get-directory-tree-external-command
+                                      nt/gitignore-files-cmd)
+                             (progn (setq pe/get-directory-tree-external-command
+                                          nt/all-files-cmd))
+                           (progn (setq pe/get-directory-tree-external-command
+                                        nt/gitignore-files-cmd)))
+                         (nt/refresh))
+                  "I" (lambda ()
+                        (interactive)
+                        (if pe/omit-enabled
+                            (progn (setq pe/directory-tree-function
+                                         'pe/get-directory-tree-async)
+                                   (pe/toggle-omit nil))
+                          (progn (setq pe/directory-tree-function
+                                       'pe/get-directory-tree-external)
+                                 (pe/toggle-omit t)))))
+                neotree-mode-map))
     )
 
   (defun neotree-copy-file ()
@@ -2777,45 +2793,6 @@ Multi-stage copy/pasting of files and bookmarks
       (dired-copy-file current-path to-path t))
     (neo-buffer--refresh t))
 
-  (define-minor-mode neotree-evil
-    "Use NERDTree bindings on neotree."
-    :lighter " NT"
-    :keymap (progn
-              (evil-make-overriding-map neotree-mode-map 'normal t)
-              (evil-define-key 'normal neotree-mode-map
-                "C" 'neotree-change-root
-                "U" 'neotree-select-up-node
-                "r" 'neotree-refresh
-                "o" 'neotree-enter
-                (kbd "<return>") 'neotree-enter
-                "i" 'neotree-enter-horizontal-split
-                "s" 'neotree-enter-vertical-split
-                "n" 'evil-search-next
-                "N" 'evil-search-previous
-                "ma" 'neotree-create-node
-                "mc" 'neotree-copy-file
-                "md" 'neotree-delete-node
-                "mm" 'neotree-rename-node
-                "gg" 'evil-goto-first-line
-                "gi" (lambda ()
-                       (interactive)
-                       (if (string= pe/get-directory-tree-external-command
-                                    nt/gitignore-files-cmd)
-                           (progn (setq pe/get-directory-tree-external-command
-                                        nt/all-files-cmd))
-                         (progn (setq pe/get-directory-tree-external-command
-                                      nt/gitignore-files-cmd)))
-                       (nt/refresh))
-                "I" (lambda ()
-                      (interactive)
-                      (if pe/omit-enabled
-                          (progn (setq pe/directory-tree-function
-                                       'pe/get-directory-tree-async)
-                                 (pe/toggle-omit nil))
-                        (progn (setq pe/directory-tree-function
-                                     'pe/get-directory-tree-external)
-                               (pe/toggle-omit t)))))
-              neotree-mode-map))
 #+END_SRC
 
 让 Neotree 窗口，可以根据目录长度自动调节窗口大小
@@ -2929,7 +2906,6 @@ Save and restore Emacs status, including buffers, point and window configuration
 https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package desktop
-  ;;   :demand t
   ;;   :config
   ;;   (desktop-save-mode 1)
   ;;   (add-to-list 'desktop-globals-to-save 'golden-ratio-adjust-factor))
@@ -2945,6 +2921,7 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 *** magit
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
+    :commands (magit-status)
     ;; :bind (("C-x g" . magit-status))
     :config (progn (add-hook 'magit-log-edit-mode-hook
                              (lambda ()
@@ -2985,25 +2962,27 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 * Completion
 ** ido
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package ido-vertical-mode)
+  (use-package ido-vertical-mode :after ido)
 
   (use-package ido
-    :init
-    (ido-mode 1)
+    :defer 5
+    :config
     (ido-vertical-mode 1)
     (setq ido-use-faces nil)
     (ido-everywhere 1)
-    :config
+    (ido-mode t)
     (setq ido-vertical-define-keys 'C-n-and-C-p-only)
     (global-set-key (kbd "C-x C-f") 'ido-find-file))
 
   (use-package flx-ido
+    :after ido
     :config
     (flx-ido-mode 1)
     ;; disable ido faces to see flx highlights.
     (setq ido-enable-flex-matching t))
 
   (use-package ido-completing-read+
+    :after ido
     :config
     (ido-ubiquitous-mode 1))
 #+END_SRC
@@ -3064,7 +3043,7 @@ Save a list of recent files visited. (open recent file with C-c f)
 关于 ivy 的使用：https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html#fnr.1
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy
-    :defer 1
+    :defer 5
     :diminish
     :bind (
            ;; ("C-c C-r" . ivy-resume)
@@ -3078,12 +3057,16 @@ Save a list of recent files visited. (open recent file with C-c f)
 
   (use-package swiper
     :after ivy
+    :commands (swiper swiper-all)
+    :bind 
+    ("C-s " . swiper)
+    ("C-c u" . swiper-all)
     :config
     (progn
       (ivy-mode 1)
       (setq ivy-use-virtual-buffers t)
-      (global-set-key "\C-s" 'swiper)
-      (global-set-key (kbd "C-c u") 'swiper-all)
+      ;; (global-set-key "\C-s" 'swiper)
+      ;; (global-set-key (kbd "C-c u") 'swiper-all)
       ))
 
   (use-package counsel
@@ -3226,9 +3209,10 @@ This is a package to perform text folding like in Vim. It has the following feat
 ** smex
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smex
-    :init
-    (smex-initialize)
+    :defer t
+    :commands (smex)
     :config
+    (smex-initialize)
     (global-set-key (kbd "M-x") 'smex)
     (global-set-key (kbd "M-X") 'smex-major-mode-commands)
     ;; This is your old M-x.
@@ -3260,16 +3244,8 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 这里需要参考[[http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text][这篇 StackExchange 文章]]，解决 company-mode 自动完成是转换为小写的问题，具体原因参考[[https://emacs-china.org/t/company/187][这里]]。
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company
-  :defer 1
-  :commands global-company-mode
+  :commands (company-mode company-indent-or-complete-common global-company-mode)
   :diminish ""
-  :init
-  (global-company-mode t)
-  (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-show-numbers t)
-  (setq company-require-match nil)
-  (setq company-dabbrev-downcase nil) ;; make company-complete care about case
-  (setq company-dabbrev-ignore-case nil) ;; fix case-sensitive, default is keep-prefix
   :bind (("C-." . company-complete)
          :map company-active-map
          ("C-n" . company-select-next)
@@ -3278,6 +3254,12 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
          ;; ("C-/" . helm-company)
          ("<tab>" . company-complete))
   :config
+  (global-company-mode t)
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-show-numbers t)
+  (setq company-require-match nil)
+  (setq company-dabbrev-downcase nil) ;; make company-complete care about case
+  (setq company-dabbrev-ignore-case nil) ;; fix case-sensitive, default is keep-prefix
   (setq company-idle-delay 0.2)
   (setq company-tooltip-flip-when-above t)
   (setq company-selection-wrap-around t)
@@ -3361,16 +3343,16 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 
 ** yasnippet
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package yasnippet
-  ;;   :defer 2
-  ;;   :diminish yas-minor-mode
-  ;;   :config
-  ;;   (progn
-  ;;     ;; Suppress excessive log messages
-  ;;     (setq yas-verbosity 1
-  ;;           yas-prompt-functions '(yas-ido-prompt)
-  ;;           yas-snippet-dir (expand-file-name "snippets" user-emacs-directory))
-  ;;     (yas-global-mode t)))
+  (use-package yasnippet
+    :defer 10
+    :diminish yas-minor-mode
+    :config
+    (progn
+      ;; Suppress excessive log messages
+      (setq yas-verbosity 1
+            yas-prompt-functions '(yas-ido-prompt)
+            yas-snippet-dir (expand-file-name "snippets" user-emacs-directory))
+      (yas-global-mode t)))
 #+END_SRC
 
 ** spell check
@@ -3962,46 +3944,46 @@ GitHub: https://github.com/smihica/emmet-mode
 Config for setting markdown mode and stuff
 参考：http://aaronbedra.com/emacs.d/
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package markdown-mode
-  ;;   :commands
-  ;;   (markdown-mode gfm-mode)
-  ;;   :mode
-  ;;   (("README\\.md\\'" . gfm-mode)
-  ;;    ("\\.md\\'" . markdown-mode)
-  ;;    ("\\.markdown\\'" . markdown-mode))
-  ;;   :init
-  ;;   (setq markdown-command "/usr/local/Cellar/multimarkdown/6*/bin/multimarkdown")
-  ;;   :config
-  ;;   ;; Turn on flyspell mode when editing markdown files
-  ;;   (add-hook 'markdown-mode-hook 'flyspell-mode)
-  ;;   (add-hook 'gfm-mode-hook 'flyspell-mode)
-  ;;   :preface
-  ;;   (defun yc/markdown-set-ongoing-hydra-body ()
-  ;;     (setq yc/ongoing-hydra-body #'hydra-markdown/body))
-  ;;   :hook (markdown-mode . yc/markdown-set-ongoing-hydra-body)
-  ;;   )
+  (use-package markdown-mode
+    :mode
+    (("README\\.md\\'" . gfm-mode)
+     ("\\.md\\'" . markdown-mode)
+     ("\\.markdown\\'" . markdown-mode))
+    :commands
+    (markdown-mode gfm-mode)
+    :init
+    (setq markdown-command "/usr/local/Cellar/multimarkdown/6*/bin/multimarkdown")
+    :config
+    ;; Turn on flyspell mode when editing markdown files
+    (add-hook 'markdown-mode-hook 'flyspell-mode)
+    (add-hook 'gfm-mode-hook 'flyspell-mode)
+    :preface
+    (defun yc/markdown-set-ongoing-hydra-body ()
+      (setq yc/ongoing-hydra-body #'hydra-markdown/body))
+    :hook (markdown-mode . yc/markdown-set-ongoing-hydra-body))
 
-  ;; (use-package markdown-toc)
-  ;; (use-package markdown-mode+)
+  (use-package markdown-toc :after markdown-mode)
+  (use-package markdown-mode+ :after markdown-mode)
 
-  ;; (use-package markdownfmt
-  ;;   :config
-  ;;   ;; (add-hook 'markdown-mode-hook #'markdownfmt-enable-on-save)
-  ;;   :bind
-  ;;   (:map markdown-mode-map ("C-c C-f" . markdownfmt-format-buffer)))
+  (use-package markdownfmt
+    :after markdown-mode
+    :config
+    ;; (add-hook 'markdown-mode-hook #'markdownfmt-enable-on-save)
+    :bind
+    (:map markdown-mode-map ("C-c C-f" . markdownfmt-format-buffer)))
 #+END_SRC
 
-*** key-bind
+*** key-binding
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (my-major-mode-leader-def
-  ;;    :keymaps 'markdown-mode-map
-  ;;    ;; "" '(:ignore t :which-key "major-mode-cmd")
-  ;;    "m." 'hydra-markdown/body)
+  (my-major-mode-leader-def
+     :keymaps 'markdown-mode-map
+     ;; "" '(:ignore t :which-key "major-mode-cmd")
+     "m." 'hydra-markdown/body)
 
-  ;; (my-major-mode-leader-def-copy
-  ;;    :keymaps 'markdown-mode-map
-  ;;    "" '(:ignore t :which-key "major-mode-cmd")
-  ;;    "m." 'hydra-markdown/body)
+  (my-major-mode-leader-def-copy
+     :keymaps 'markdown-mode-map
+     "" '(:ignore t :which-key "major-mode-cmd")
+     "m." 'hydra-markdown/body)
 #+END_SRC
 
 * Utility
@@ -4021,14 +4003,13 @@ Config for setting markdown mode and stuff
 参考：https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package paradox
-    :defer t
+    :defer 5
     :config
-    (setq-default
-     paradox-column-width-package 27
-     paradox-column-width-version 13
-     paradox-execute-asynchronously t
-     paradox-github-token t
-     paradox-hide-wiki-packages t)
+    (setq-default paradox-column-width-package 27
+                  paradox-column-width-version 13
+                  paradox-execute-asynchronously t
+                  paradox-github-token t
+                  paradox-hide-wiki-packages t)
     (remove-hook 'paradox--report-buffer-print 'paradox-after-execute-functions))
 #+END_SRC
 
@@ -4308,36 +4289,36 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 
 ** shell-pop
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package shell-pop
-  ;;   :defer t
-  ;;   ;; :bind ("C-t" . shell-pop)
-  ;;   :init
-  ;;   (progn
-  ;;     (setq shell-pop-window-position "bottom"
-  ;;           shell-pop-autocd-to-working-dir nil
-  ;;           shell-pop-window-size     30
-  ;;           shell-pop-term-shell      "/bin/zsh"
-  ;;           shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
-  ;;           ;; shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
-  ;;           shell-pop-full-span       t)
+  (use-package shell-pop
+    :defer t
+    ;; :bind ("C-t" . shell-pop)
+    :init
+    (progn
+      (setq shell-pop-window-position "bottom"
+            shell-pop-autocd-to-working-dir nil
+            shell-pop-window-size     30
+            shell-pop-term-shell      "/bin/bash"
+            shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/bash" "*ansi-terminal*")))
+            ;; shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
+            shell-pop-full-span       t)
 
-  ;;     (add-hook 'term-mode-hook 'ansi-term-handle-close)
-  ;;     (add-hook 'term-mode-hook '(lambda () (yas-minor-mode -1)))
-  ;;     (add-hook 'term-mode-hook (lambda () (linum-mode -1))))
-  ;;   :config
-  ;;   ;; need to do this manually or not picked up by `shell-pop'
-  ;;   (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type))
+      (add-hook 'term-mode-hook 'ansi-term-handle-close)
+      (add-hook 'term-mode-hook '(lambda () (yas-minor-mode -1)))
+      (add-hook 'term-mode-hook (lambda () (linum-mode -1))))
+    :config
+    ;; need to do this manually or not picked up by `shell-pop'
+    (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type))
 
-  ;; (defun ansi-term-handle-close ()
-  ;;   "Close current term buffer when `exit' from term buffer."
-  ;;   (when (ignore-errors (get-buffer-process (current-buffer)))
-  ;;     (set-process-sentinel (get-buffer-process (current-buffer))
-  ;;                           (lambda (proc change)
-  ;;                             (when (string-match "\\(finished\\|exited\\)"
-  ;;                                                 change)
-  ;;                               (kill-buffer (process-buffer proc))
-  ;;                               (when (> (count-windows) 1)
-  ;;                                 (delete-window)))))))
+  (defun ansi-term-handle-close ()
+    "Close current term buffer when `exit' from term buffer."
+    (when (ignore-errors (get-buffer-process (current-buffer)))
+      (set-process-sentinel (get-buffer-process (current-buffer))
+                            (lambda (proc change)
+                              (when (string-match "\\(finished\\|exited\\)"
+                                                  change)
+                                (kill-buffer (process-buffer proc))
+                                (when (> (count-windows) 1)
+                                  (delete-window)))))))
 #+END_SRC
 
 ** Tramp
@@ -4366,18 +4347,23 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 ** Daemon
 使用服务模式启动 Emacs，这样子在其他地方可以快速启动一个 Emacs 窗口用于类似编辑文件操作等。
 #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package server
+  ;;   :init 
+  ;;   (add-hook 'after-init-hook '(lambda ()(unless (server-running-p)
+                                     
+  ;;                                      (server-start)))))
+
+
   (use-package server
-    :defer 1
-    :config
-    (unless (server-running-p)
-      (server-start)))
+    :no-require
+    :hook (after-init . server-start))
 #+END_SRC
 
 Restart Emacs inside Emacs
 [[https://github.com/iqbalansari/restart-emacs][iqbalansari/restart-emacs - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package restart-emacs
-    :defer t
+    :commands (restart-emacs)
     :config (emacs-restore-frames t))
 #+END_SRC
 
@@ -4385,7 +4371,6 @@ Restart Emacs inside Emacs
 ** emojify
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package emojify
-;;   :demand t
 ;;   :init
 ;;   (add-hook 'after-init-hook #'global-emojify-mode)
 ;;   :config
