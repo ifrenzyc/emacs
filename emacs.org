@@ -941,7 +941,6 @@ Restore cursor to file position in previous editing session.
 ** Evil
 - TODO 阅读：[[https://github.com/noctuid/evil-guide#terminology][noctuid/evil-guide - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-
   ;; @see http://wikemacs.org/wiki/Evil
   (use-package evil
     :hook (emacs-startup . evil-mode)
@@ -1141,6 +1140,7 @@ Restore cursor to file position in previous editing session.
 #+END_SRC
 
 *** evil-collection
+    @see - https://github.com/emacs-evil/evil-collection
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package evil-collection :after org)
 #+END_SRC
