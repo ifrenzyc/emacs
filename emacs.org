@@ -89,6 +89,7 @@ text wrapping at 80 columns by default (only text)
 ;; (add-hook 'text-mode-hook
 ;;           '(lambda() (set-fill-column 80)))
 #+END_SRC
+
 ** Font
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; frame font
@@ -290,14 +291,11 @@ Visually highlight the selected buffer.
 #+END_SRC
 
 ** scrolling
-#+BEGIN_SRC emacs-lisp :tangle yes
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))  ;; 取消滚动栏
-#+END_SRC
-
 This makes scrolling gradual rather than by half page. I find that the half page scroll really makes me lose where I am in the file so here I make sure to scroll one line at a time. In addition I want to keep what I'm working on centered so I start scrolling when the cursor is 10 lines away from the margin.
 
 This behaviour in general emulates the scrolloff option in vim.
 #+BEGIN_SRC emacs-lisp :tangle yes
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))  ;; 取消滚动栏
 ;; (setq scroll-margin 10
 ;;       scroll-step 1
 ;;       scroll-conservatively 10000
@@ -318,7 +316,7 @@ This behaviour in general emulates the scrolloff option in vim.
 ;;   (smooth-scrolling-mode t))
 #+END_SRC
 
-** themes
+** Theme
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; @see https://github.com/gorakhargosh/emacs.d/blob/master/themes/color-theme-less.el
   ;; (use-package hc-zenburn-theme
@@ -367,11 +365,6 @@ This behaviour in general emulates the scrolloff option in vim.
     ;; Corrects (and improves) org-mode's native fontification.
     (doom-themes-org-config))
 
-  (use-package rainbow-delimiters
-    :defer 5
-    :hook
-    (prog-mode . rainbow-delimiters-mode)
-    (cider-repl-mode . rainbow-delimiters-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -382,184 +375,202 @@ This behaviour in general emulates the scrolloff option in vim.
 
 ** modeline
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package autorevert
-  :diminish (auto-revert-mode . "🔂 "))
+  (use-package autorevert
+    :diminish (auto-revert-mode . "🔂 "))
 
-(column-number-mode 1)
-(line-number-mode 1)
-(size-indication-mode t)
+  (column-number-mode 1)
+  (line-number-mode 1)
+  (size-indication-mode t)
 
-;; (use-package powerline
-;;   :config (progn
-;;             ;; Wave seperators please
-;;             ;; wave
-;;             ;; arrow
-;;             ;; rounded
-;;             ;; zigzag
-;;             ;; These two lines are just examples
-;;             (setq powerline-arrow-shape 'zigzag)
-;;             ;; (setq powerline-default-separator-dir '(right . left))
-;;             ;; (setq powerline-default-separator 'nil)
-;;             (powerline-vim-theme)))
+  ;; (use-package powerline
+  ;;   :config (progn
+  ;;             ;; Wave seperators please
+  ;;             ;; wave
+  ;;             ;; arrow
+  ;;             ;; rounded
+  ;;             ;; zigzag
+  ;;             ;; These two lines are just examples
+  ;;             (setq powerline-arrow-shape 'zigzag)
+  ;;             ;; (setq powerline-default-separator-dir '(right . left))
+  ;;             ;; (setq powerline-default-separator 'nil)
+  ;;             (powerline-vim-theme)))
 
-;; (use-package powerline-evil
-;;   :after powerline
-;;   :config
-;;   (powerline-evil-vim-color-theme))
+  ;; (use-package powerline-evil
+  ;;   :after powerline
+  ;;   :config
+  ;;   (powerline-evil-vim-color-theme))
 
-;; (use-package nyan-mode
-;;   :after spaceline
-;;   :init
-;;   (progn
-;;     (nyan-mode)
-;;     (setq nyan-animate-nyancat t)
-;;     (setq nyan-wavy-trail t)
-;;     (setq nyan-bar-length 10))
-;;   :config (nyan-start-animation))
+  ;; (use-package nyan-mode
+  ;;   :after spaceline
+  ;;   :init
+  ;;   (progn
+  ;;     (nyan-mode)
+  ;;     (setq nyan-animate-nyancat t)
+  ;;     (setq nyan-wavy-trail t)
+  ;;     (setq nyan-bar-length 10))
+  ;;   :config (nyan-start-animation))
 
-;; 目前这个有 bug，会导致 emacs 卡死，但不知道具体原因
-;; Use spacemacs' mode line
-;; @see https://libraries.io/emacs/spaceline
-;; @see https://github.com/TeMPOraL/nyan-mode
-;; @see https://github.com/TheBB/spaceline
-;; (use-package spaceline
-;;   :after powerline winum
-;;   :config
-;;   (require 'spaceline-segments)
-;;   ;; (spaceline-spacemacs-theme)
-;;   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
-;;         spaceline-responsive nil
-;;         spaceline-workspace-numbers-unicode t
-;;         winum-auto-setup-mode-line nil)
-;;   (winum-mode))
+  ;; 目前这个有 bug，会导致 emacs 卡死，但不知道具体原因
+  ;; Use spacemacs' mode line
+  ;; @see https://libraries.io/emacs/spaceline
+  ;; @see https://github.com/TeMPOraL/nyan-mode
+  ;; @see https://github.com/TheBB/spaceline
+  ;; (use-package spaceline
+  ;;   :after powerline winum
+  ;;   :config
+  ;;   (require 'spaceline-segments)
+  ;;   ;; (spaceline-spacemacs-theme)
+  ;;   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state
+  ;;         spaceline-responsive nil
+  ;;         spaceline-workspace-numbers-unicode t
+  ;;         winum-auto-setup-mode-line nil)
+  ;;   (winum-mode))
 
-;; (use-package spaceline-config
-;;   :ensure spaceline
-;;   :config
-;;   (spaceline-helm-mode 1)
-;;   ;; (spaceline-spacemacs-theme)
-;;   (spaceline-emacs-theme))
+  ;; (use-package spaceline-config
+  ;;   :ensure spaceline
+  ;;   :config
+  ;;   (spaceline-helm-mode 1)
+  ;;   ;; (spaceline-spacemacs-theme)
+  ;;   (spaceline-emacs-theme))
 
-;; (use-package spaceline-all-the-icons
-;;   :after spaceline
-;;   :config
-;;   (setq spaceline-all-the-icons-icon-set-bookmark 'heart
-;;         spaceline-all-the-icons-icon-set-modified 'toggle
-;;         spaceline-all-the-icons-icon-set-dedicated 'pin
-;;         spaceline-all-the-icons-separator-type 'slant
-;;         spaceline-all-the-icons-icon-set-flycheck-slim 'dots
-;;         spaceline-all-the-icons-flycheck-alternate t
-;;         spaceline-all-the-icons-highlight-file-name t
-;;         spaceline-all-the-icons-hide-long-buffer-path t)
-;;   (spaceline-toggle-all-the-icons-bookmark-on)
-;;   (spaceline-toggle-all-the-icons-dedicated-on)
-;;   (spaceline-toggle-all-the-icons-fullscreen-on)
-;;   (spaceline-toggle-all-the-icons-buffer-position-on)
-;;   (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
-;;   (spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
-;;   (spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
-;;   (spaceline-all-the-icons--setup-paradox)         ;; Enable Paradox mode line
-;;   (spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
-;;   (spaceline-all-the-icons-theme))
+  ;; (use-package spaceline-all-the-icons
+  ;;   :after spaceline
+  ;;   :config
+  ;;   (setq spaceline-all-the-icons-icon-set-bookmark 'heart
+  ;;         spaceline-all-the-icons-icon-set-modified 'toggle
+  ;;         spaceline-all-the-icons-icon-set-dedicated 'pin
+  ;;         spaceline-all-the-icons-separator-type 'slant
+  ;;         spaceline-all-the-icons-icon-set-flycheck-slim 'dots
+  ;;         spaceline-all-the-icons-flycheck-alternate t
+  ;;         spaceline-all-the-icons-highlight-file-name t
+  ;;         spaceline-all-the-icons-hide-long-buffer-path t)
+  ;;   (spaceline-toggle-all-the-icons-bookmark-on)
+  ;;   (spaceline-toggle-all-the-icons-dedicated-on)
+  ;;   (spaceline-toggle-all-the-icons-fullscreen-on)
+  ;;   (spaceline-toggle-all-the-icons-buffer-position-on)
+  ;;   (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
+  ;;   (spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
+  ;;   (spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
+  ;;   (spaceline-all-the-icons--setup-paradox)         ;; Enable Paradox mode line
+  ;;   (spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
+  ;;   (spaceline-all-the-icons-theme))
 
-;; (use-package all-the-icons-ivy
-;;   :after (all-the-icons projectile ivy counsel counsel-projectile)
-;;   :config
-;;   (setq all-the-icons-ivy-file-commands
-;;         '(counsel-find-file
-;;           counsel-file-jump
-;;           counsel-recentf
-;;           counsel-projectile-find-file
-;;           counsel-projectile-find-dir
-;;           counsel-projectile))
-;;   (all-the-icons-ivy-setup))
+  ;; (use-package all-the-icons-ivy
+  ;;   :after (all-the-icons projectile ivy counsel counsel-projectile)
+  ;;   :config
+  ;;   (setq all-the-icons-ivy-file-commands
+  ;;         '(counsel-find-file
+  ;;           counsel-file-jump
+  ;;           counsel-recentf
+  ;;           counsel-projectile-find-file
+  ;;           counsel-projectile-find-dir
+  ;;           counsel-projectile))
+  ;;   (all-the-icons-ivy-setup))
 
-(use-package doom-modeline
-      :hook (after-init . doom-modeline-init))
+  (use-package doom-modeline
+    :hook (after-init . doom-modeline-init))
 
-;; ;; (defface my-pl-segment1-active
-;; ;;   '((t (:foreground "#000000" :background "#E1B61A")))
-;; ;;   "Powerline first segment active face.")
-;; ;; (defface my-pl-segment1-inactive
-;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
-;; ;;   "Powerline first segment inactive face.")
-;; ;; (defface my-pl-segment2-active
-;; ;;   '((t (:foreground "#F5E39F" :background "#8A7119")))
-;; ;;   "Powerline second segment active face.")
-;; ;; (defface my-pl-segment2-inactive
-;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
-;; ;;   "Powerline second segment inactive face.")
-;; ;; (defface my-pl-segment3-active
-;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
-;; ;;   "Powerline third segment active face.")
-;; ;; (defface my-pl-segment3-inactive
-;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
-;; ;;   "Powerline third segment inactive face.")
+  ;; ;; (defface my-pl-segment1-active
+  ;; ;;   '((t (:foreground "#000000" :background "#E1B61A")))
+  ;; ;;   "Powerline first segment active face.")
+  ;; ;; (defface my-pl-segment1-inactive
+  ;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
+  ;; ;;   "Powerline first segment inactive face.")
+  ;; ;; (defface my-pl-segment2-active
+  ;; ;;   '((t (:foreground "#F5E39F" :background "#8A7119")))
+  ;; ;;   "Powerline second segment active face.")
+  ;; ;; (defface my-pl-segment2-inactive
+  ;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
+  ;; ;;   "Powerline second segment inactive face.")
+  ;; ;; (defface my-pl-segment3-active
+  ;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
+  ;; ;;   "Powerline third segment active face.")
+  ;; ;; (defface my-pl-segment3-inactive
+  ;; ;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))
+  ;; ;;   "Powerline third segment inactive face.")
 
-;; ;; (defun air--powerline-default-theme ()
-;; ;;   "Set up my custom Powerline with Evil indicators."
-;; ;;   (interactive)
-;; ;;   (setq-default mode-line-format
-;; ;;                 '("%e"
-;; ;;                   (:eval
-;; ;;                    (let* ((active (powerline-selected-window-active))
-;; ;;                           (seg1 (if active 'my-pl-segment1-active 'my-pl-segment1-inactive))
-;; ;;                           (seg2 (if active 'my-pl-segment2-active 'my-pl-segment2-inactive))
-;; ;;                           (seg3 (if active 'my-pl-segment3-active 'my-pl-segment3-inactive))
-;; ;;                           (separator-left (intern (format "powerline-%s-%s"
-;; ;;                                                           (powerline-current-separator)
-;; ;;                                                           (car powerline-default-separator-dir))))
-;; ;;                           (separator-right (intern (format "powerline-%s-%s"
-;; ;;                                                            (powerline-current-separator)
-;; ;;                                                            (cdr powerline-default-separator-dir))))
-;; ;;                           (lhs (list (let ((evil-face (powerline-evil-face)))
-;; ;;                                        (if evil-mode
-;; ;;                                            (powerline-raw (powerline-evil-tag) evil-face)
-;; ;;                                          ))
-;; ;;                                      (if evil-mode
-;; ;;                                          (funcall separator-left (powerline-evil-face) seg1))
-;; ;;                                      ;;(when powerline-display-buffer-size
-;; ;;                                      ;;  (powerline-buffer-size nil 'l))
-;; ;;                                      ;;(when powerline-display-mule-info
-;; ;;                                      ;;  (powerline-raw mode-line-mule-info nil 'l))
-;; ;;                                      (powerline-buffer-id seg1 'l)
-;; ;;                                      (powerline-raw "[%*]" seg1 'l)
-;; ;;                                      (when (and (boundp 'which-func-mode) which-func-mode)
-;; ;;                                        (powerline-raw which-func-format seg1 'l))
-;; ;;                                      (powerline-raw " " seg1)
-;; ;;                                      (funcall separator-left seg1 seg2)
-;; ;;                                      (when (boundp 'erc-modified-channels-object)
-;; ;;                                        (powerline-raw erc-modified-channels-object seg2 'l))
-;; ;;                                      (powerline-major-mode seg2 'l)
-;; ;;                                      (powerline-process seg2)
-;; ;;         ;; ;;                                      (powerline-raw " " seg2)
-;; ;;                                      (funcall separator-left seg2 seg3)
-;; ;;                                      (powerline-vc seg3 'r)
-;; ;;                                      (when (bound-and-true-p nyan-mode)
-;; ;;                                        (powerline-raw (list (nyan-create)) seg3 'l))))
-;; ;;                           (rhs (list (powerline-raw global-mode-string seg3 'r)
-;; ;;                                      (funcall separator-right seg3 seg2)
-;; ;;                                      (unless window-system
-;; ;;                                        (powerline-raw (char-to-string #xe0a1) seg2 'l))
-;; ;;                                      (powerline-raw "%4l" seg2 'l)
-;; ;;                                      (powerline-raw ":" seg2 'l)
-;; ;;                                      (powerline-raw "%3c" seg2 'r)
-;; ;;                                      (funcall separator-right seg2 seg1)
-;; ;;                                      (powerline-raw " " seg1)
-;; ;;                                      (powerline-raw "%6p" seg1 'r)
-;; ;;                                      (when powerline-display-hud
-;; ;;                                        (powerline-hud seg1 seg3)))))
-;; ;;                      (concat (powerline-render lhs)
-;; ;;                              (powerline-fill seg3 (powerline-width rhs))
-;; ;;                              (powerline-render rhs)))))))
+  ;; ;; (defun air--powerline-default-theme ()
+  ;; ;;   "Set up my custom Powerline with Evil indicators."
+  ;; ;;   (interactive)
+  ;; ;;   (setq-default mode-line-format
+  ;; ;;                 '("%e"
+  ;; ;;                   (:eval
+  ;; ;;                    (let* ((active (powerline-selected-window-active))
+  ;; ;;                           (seg1 (if active 'my-pl-segment1-active 'my-pl-segment1-inactive))
+  ;; ;;                           (seg2 (if active 'my-pl-segment2-active 'my-pl-segment2-inactive))
+  ;; ;;                           (seg3 (if active 'my-pl-segment3-active 'my-pl-segment3-inactive))
+  ;; ;;                           (separator-left (intern (format "powerline-%s-%s"
+  ;; ;;                                                           (powerline-current-separator)
+  ;; ;;                                                           (car powerline-default-separator-dir))))
+  ;; ;;                           (separator-right (intern (format "powerline-%s-%s"
+  ;; ;;                                                            (powerline-current-separator)
+  ;; ;;                                                            (cdr powerline-default-separator-dir))))
+  ;; ;;                           (lhs (list (let ((evil-face (powerline-evil-face)))
+  ;; ;;                                        (if evil-mode
+  ;; ;;                                            (powerline-raw (powerline-evil-tag) evil-face)
+  ;; ;;                                          ))
+  ;; ;;                                      (if evil-mode
+  ;; ;;                                          (funcall separator-left (powerline-evil-face) seg1))
+  ;; ;;                                      ;;(when powerline-display-buffer-size
+  ;; ;;                                      ;;  (powerline-buffer-size nil 'l))
+  ;; ;;                                      ;;(when powerline-display-mule-info
+  ;; ;;                                      ;;  (powerline-raw mode-line-mule-info nil 'l))
+  ;; ;;                                      (powerline-buffer-id seg1 'l)
+  ;; ;;                                      (powerline-raw "[%*]" seg1 'l)
+  ;; ;;                                      (when (and (boundp 'which-func-mode) which-func-mode)
+  ;; ;;                                        (powerline-raw which-func-format seg1 'l))
+  ;; ;;                                      (powerline-raw " " seg1)
+  ;; ;;                                      (funcall separator-left seg1 seg2)
+  ;; ;;                                      (when (boundp 'erc-modified-channels-object)
+  ;; ;;                                        (powerline-raw erc-modified-channels-object seg2 'l))
+  ;; ;;                                      (powerline-major-mode seg2 'l)
+  ;; ;;                                      (powerline-process seg2)
+  ;; ;;         ;; ;;                                      (powerline-raw " " seg2)
+  ;; ;;                                      (funcall separator-left seg2 seg3)
+  ;; ;;                                      (powerline-vc seg3 'r)
+  ;; ;;                                      (when (bound-and-true-p nyan-mode)
+  ;; ;;                                        (powerline-raw (list (nyan-create)) seg3 'l))))
+  ;; ;;                           (rhs (list (powerline-raw global-mode-string seg3 'r)
+  ;; ;;                                      (funcall separator-right seg3 seg2)
+  ;; ;;                                      (unless window-system
+  ;; ;;                                        (powerline-raw (char-to-string #xe0a1) seg2 'l))
+  ;; ;;                                      (powerline-raw "%4l" seg2 'l)
+  ;; ;;                                      (powerline-raw ":" seg2 'l)
+  ;; ;;                                      (powerline-raw "%3c" seg2 'r)
+  ;; ;;                                      (funcall separator-right seg2 seg1)
+  ;; ;;                                      (powerline-raw " " seg1)
+  ;; ;;                                      (powerline-raw "%6p" seg1 'r)
+  ;; ;;                                      (when powerline-display-hud
+  ;; ;;                                        (powerline-hud seg1 seg3)))))
+  ;; ;;                      (concat (powerline-render lhs)
+  ;; ;;                              (powerline-fill seg3 (powerline-width rhs))
+  ;; ;;                              (powerline-render rhs)))))))
 
-;; ;; (use-package powerline
-;; ;;   :config
-;; ;;   (powerline-default-theme)
-;; ;;   (setq powerline-default-separator (if (display-graphic-p) 'slant
-;; ;;                                       nil))
-;; ;;   (air--powerline-default-theme)
-;; ;;   )
+  ;; ;; (use-package powerline
+  ;; ;;   :config
+  ;; ;;   (powerline-default-theme)
+  ;; ;;   (setq powerline-default-separator (if (display-graphic-p) 'slant
+  ;; ;;                                       nil))
+  ;; ;;   (air--powerline-default-theme)
+  ;; ;;   )
+#+END_SRC
+
+** rainbow-delimiters
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rainbow-delimiters
+    :defer 5
+    :hook
+    (prog-mode . rainbow-delimiters-mode)
+    (cider-repl-mode . rainbow-delimiters-mode))
+#+END_SRC
+
+** rainbow-mode
+Colorize colors as text with their value.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rainbow-mode
+    :defer 5
+    :hook prog-mode
+    :config (setq-default rainbow-x-colors-major-mode-list '()))
 #+END_SRC
 
 ** parens
@@ -630,15 +641,6 @@ This behaviour in general emulates the scrolloff option in vim.
   ;;   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 #+END_SRC
 
-** rainbow-mode
-Colorize colors as text with their value.
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package rainbow-mode
-    :defer 5
-    :hook prog-mode
-    :config (setq-default rainbow-x-colors-major-mode-list '()))
-#+END_SRC
-
 ** beacon
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package beacon
@@ -646,7 +648,7 @@ Colorize colors as text with their value.
 ;;   (beacon-mode 1))
 #+END_SRC
 
-** panguspacing
+** pangu-spacing
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; @see http://coldnew.github.io/blog/2013/05-20_5cbb7/
   (use-package pangu-spacing
@@ -658,6 +660,7 @@ Colorize colors as text with their value.
               '(lambda ()
                  (set (make-local-variable 'pangu-spacing-real-insert-separtor) t))))
 #+END_SRC
+
 ** Window Management
 *** winner
 #+BEGIN_QUOTE
@@ -772,8 +775,9 @@ https://github.com/syohex/emacs-zoom-window
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package zoom-window
     :defer t
+    :commands zoom-window-zoom
+    :bind (("C-x C-z" . zoom-window-zoom))
     :config
-    (global-set-key (kbd "C-x C-z") 'zoom-window-zoom)
     (setq zoom-window-mode-line-color "DarkGreen"))
 #+END_SRC
 
@@ -841,6 +845,7 @@ Restore cursor to file position in previous editing session.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (save-place-mode 1)
 #+END_SRC
+
 ** Custom functions
 实现 move-file 函数，并映射到 =C-x C-m= 按键上
 代码来自这篇文章：[[http://zck.me/emacs-move-file][Move files in Emacs]]
@@ -920,19 +925,19 @@ Restore cursor to file position in previous editing session.
 #+END_SRC
 
 * Keymaps
-** key binding functions
+** which-key
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package which-key
     :defer 5
     :commands which-key-mode
-    :diminish
+    :diminish ""
     :config
     (which-key-mode)
     (which-key-setup-minibuffer)
     (which-key-setup-side-window-bottom)
-    (setq which-key-sort-order 'which-key-key-order-alpha)
-    (setq which-key-use-C-h-commands nil)
-    (setq which-key-idle-delay 0.2)
+    (setq which-key-sort-order 'which-key-key-order-alpha
+          which-key-use-C-h-commands nil
+          which-key-idle-delay 0.2)
     (add-to-list 'which-key-key-replacement-alist '("TAB" . "↹"))
     (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))
     (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
@@ -946,15 +951,18 @@ Restore cursor to file position in previous editing session.
     :hook (emacs-startup . evil-mode)
     ;; :init
     ;; (evil-mode 1)
+    ;; (evil-mode 1)
+    (setq evil-want-integration nil
+          evil-want-C-u-scroll t
+          evil-want-C-i-jump t)
+    (setq-default evil-search-module 'evil-search
+                  evil-want-Y-yank-to-eol t)
     :config
-    (setq evil-want-integration nil)
     ;; @see http://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     ;; (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
     ;; (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
     ;; (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
     ;; (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-    (setq-default evil-search-module 'evil-search
-                  evil-want-Y-yank-to-eol t)
 
     ;; @see https://github.com/rime/squirrel/wiki/vim%E7%94%A8%E6%88%B7%E4%B8%8Eemacs-evil-mode%E7%94%A8%E6%88%B7-%E8%BE%93%E5%85%A5%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E6%88%90%E8%8B%B1%E6%96%87%E7%8A%B6%E6%80%81%E7%9A%84%E5%AE%9E%E7%8E%B0
     (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
@@ -1024,8 +1032,6 @@ Restore cursor to file position in previous editing session.
 
     ;; C-u to scroll up or delete indent
     ;; @see http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
-    (setq evil-want-C-u-scroll t)
-    (setq evil-want-C-i-jump t)
     (set-cursor-color "DarkCyan")
 
     ;; ;; Great evil org mode keyboard shortcuts cribbed from cofi
@@ -1493,7 +1499,7 @@ This allows me to easily start a * or # search from a visual selection.
 - https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hydra
-    :defer 5
+    :defer t
     :preface
     (defvar-local yc/ongoing-hydra-body nil)
     (defun yc/ongoing-hydra ()
@@ -1831,157 +1837,159 @@ This allows me to easily start a * or # search from a visual selection.
 同时需要通过 =M-x package-list-packages= 安装新版本的 orgmode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-    ;; (require 'org)
-    ;; (require 'org-mouse)
+  ;; (require 'org)
+  ;; (require 'org-mouse)
 
-    (use-package org
-      :defer 3
-      :delight org-mode "Org"
-      :config
-      (setq org-directory "/Users/yangc/Dropbox/itsycnotes")
-      (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-      (setq org-pretty-entities t
-            org-src-fontify-natively t
-            ;; org-ellipsis "⤵"
-            ;; org-ellipsis " […]"
-            ;; org-ellipsis (concat " " (all-the-icons-faicon "caret-down"))
-            org-indent-mode t
-            ;; org-src-preserve-indentation t    ; 这个需要注释掉，会导致 org-src 里面的代码不会自动缩进两列
-            org-edit-src-content-indentation 2
-            org-enforce-todo-dependencies t
-            org-enforce-todo-checkbox-dependencies t
-            org-hide-emphasis-markers t
-            org-image-actual-width 800)
+  (use-package org
+    :defer 3
+    :delight org-mode "Org"
+    :config
+    (setq org-directory "/Users/yangc/Dropbox/itsycnotes")
+    (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+    (setq org-pretty-entities t
+          org-src-fontify-natively t
+          ;; org-ellipsis "⤵"
+          ;; org-ellipsis " […]"
+          ;; org-ellipsis (concat " " (all-the-icons-faicon "caret-down"))
+          org-indent-mode t
+          ;; org-src-preserve-indentation t    ; 这个需要注释掉，会导致 org-src 里面的代码不会自动缩进两列
+          org-edit-src-content-indentation 2
+          org-enforce-todo-dependencies t
+          org-enforce-todo-checkbox-dependencies t
+          org-hide-emphasis-markers t
+          org-image-actual-width 800)
 
-      (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
-      (add-hook 'org-mode-hook (lambda () (setq word-wrap t)))
-      (add-hook 'org-mode-hook 'org-indent-mode)
-      ;; @see http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
-      (font-lock-add-keywords 'org-mode
-                              '(("^ *\\([-+]\\) "
-                                 (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "☀"))))))
+    (setq org-export-with-sub-superscripts nil  ; 禁用 ^ 和 _ 作为上下标符号
+          org-pretty-entities-include-sub-superscripts nil)
+    (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
+    (add-hook 'org-mode-hook (lambda () (setq word-wrap t)))
+    (add-hook 'org-mode-hook 'org-indent-mode)
+    ;; @see http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
+    (font-lock-add-keywords 'org-mode
+                            '(("^ *\\([-+]\\) "
+                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "☀"))))))
 
-      ;; Keep the headlines expanded in Org-Mode
-      ;; @see http://emacs.stackexchange.com/questions/9709/keep-the-headlines-expanded-in-org-mode
-      (setq org-startup-folded nil)
-      ;; Disabling underscore-to-subscript in Emacs Org-Mode export
-      ;; @see http://stackoverflow.com/questions/698562/disabling-underscore-to-subscript-in-emacs-org-mode-export/701201#701201
-      (setq org-export-with-sub-superscripts nil)
-      (defcustom org-indent-indentation-per-level 4
-        "Indentation per level in number of characters."
-        :group 'org-indent
-        :type 'integer)
-      (setq org-todo-keywords
-            (quote ((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")
-                    (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "MAYBE(m)" "|" "DONE(d!/!)")
-                    (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
-                    (sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)"))))
+    ;; Keep the headlines expanded in Org-Mode
+    ;; @see http://emacs.stackexchange.com/questions/9709/keep-the-headlines-expanded-in-org-mode
+    (setq org-startup-folded nil)
+    ;; Disabling underscore-to-subscript in Emacs Org-Mode export
+    ;; @see http://stackoverflow.com/questions/698562/disabling-underscore-to-subscript-in-emacs-org-mode-export/701201#701201
+    (setq org-export-with-sub-superscripts nil)
+    (defcustom org-indent-indentation-per-level 4
+      "Indentation per level in number of characters."
+      :group 'org-indent
+      :type 'integer)
+    (setq org-todo-keywords
+          (quote ((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")
+                  (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "MAYBE(m)" "|" "DONE(d!/!)")
+                  (sequence "PROJECT(p)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
+                  (sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)"))))
 
-      (setq org-use-fast-todo-selection t)
-      (setq org-todo-state-tags-triggers
-            (quote (("CANCELLED" ("CANCELLED" . t))
-                    ("WAITING" ("WAITING" . t))
-                    ("MAYBE" ("WAITING" . t))
-                    ("HOLD" ("WAITING") ("HOLD" . t))
-                    (done ("WAITING") ("HOLD"))
-                    ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-                    ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-                    ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
-      ;; 记录时间
-      (add-hook 'org-mode-hook (lambda () (setq org-log-done 'time)))
-      ;; 记录提示信息
-      (add-hook 'org-mode-hook (lambda () (setq org-log-done 'note)))
-      ;; Separate drawers for clocking and logs
-      (setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
-      ;; Save clock data and state changes and notes in the LOGBOOK drawer
-      (setq org-clock-into-drawer t)
-      ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
-      (setq org-clock-out-remove-zero-time-clocks t)
-      ;; Clock out when moving task to a done state
-      (setq org-clock-out-when-done t)
-      ;; (set-register ?n (cons 'file "/Users/yangc/Dropbox/itsycnotes/home.org"))
-      ;; (set-register ?s (cons 'file "/Users/yangc/Dropbox/itsycnotes/draft.org"))
-      ;; (set-register ?g (cons 'file "/Users/yangc/Dropbox/itsycnotes/diary.org"))
+    (setq org-use-fast-todo-selection t)
+    (setq org-todo-state-tags-triggers
+          (quote (("CANCELLED" ("CANCELLED" . t))
+                  ("WAITING" ("WAITING" . t))
+                  ("MAYBE" ("WAITING" . t))
+                  ("HOLD" ("WAITING") ("HOLD" . t))
+                  (done ("WAITING") ("HOLD"))
+                  ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                  ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+                  ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+    ;; 记录时间
+    (add-hook 'org-mode-hook (lambda () (setq org-log-done 'time)))
+    ;; 记录提示信息
+    (add-hook 'org-mode-hook (lambda () (setq org-log-done 'note)))
+    ;; Separate drawers for clocking and logs
+    (setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
+    ;; Save clock data and state changes and notes in the LOGBOOK drawer
+    (setq org-clock-into-drawer t)
+    ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
+    (setq org-clock-out-remove-zero-time-clocks t)
+    ;; Clock out when moving task to a done state
+    (setq org-clock-out-when-done t)
+    ;; (set-register ?n (cons 'file "/Users/yangc/Dropbox/itsycnotes/home.org"))
+    ;; (set-register ?s (cons 'file "/Users/yangc/Dropbox/itsycnotes/draft.org"))
+    ;; (set-register ?g (cons 'file "/Users/yangc/Dropbox/itsycnotes/diary.org"))
 
-      (setq org-goto-interface 'outline-path-completion org-goto-max-level 10)
+    (setq org-goto-interface 'outline-path-completion org-goto-max-level 10)
 
-      (defun org-insert-src-block (src-code-type)
-        "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
-        (interactive
-         (let ((src-code-types
-                '("emacs-lisp" "python" "C" "sh" "java" "js" "clojure" "C++" "css"
-                  "calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen"
-                  "octave" "oz" "plantuml" "R" "sass" "screen" "sql" "awk" "ditaa"
-                  "haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby"
-                  "scheme" "sqlite")))
-           (list (ido-completing-read "Source code type: " src-code-types))))
-        (progn
-          (newline-and-indent)
-          (insert (format "#+BEGIN_SRC %s\n" src-code-type))
-          (newline-and-indent)
-          (insert "#+END_SRC\n")
-          (previous-line 2)
-          (org-edit-src-code)))
+    (defun org-insert-src-block (src-code-type)
+      "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
+      (interactive
+       (let ((src-code-types
+              '("emacs-lisp" "python" "C" "sh" "java" "js" "clojure" "C++" "css"
+                "calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen"
+                "octave" "oz" "plantuml" "R" "sass" "screen" "sql" "awk" "ditaa"
+                "haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby"
+                "scheme" "sqlite")))
+         (list (ido-completing-read "Source code type: " src-code-types))))
+      (progn
+        (newline-and-indent)
+        (insert (format "#+BEGIN_SRC %s\n" src-code-type))
+        (newline-and-indent)
+        (insert "#+END_SRC\n")
+        (previous-line 2)
+        (org-edit-src-code)))
 
-      (defun yc/org-toggle-link-display ()
-        "Toggle the literal or descriptive display of links."
-        (interactive)
-        (if org-descriptive-links
-            (progn (org-remove-from-invisibility-spec '(org-link))
-                   (org-restart-font-lock)
-                   (setq org-descriptive-links nil))
-          (progn (add-to-invisibility-spec '(org-link))
+    (defun yc/org-toggle-link-display ()
+      "Toggle the literal or descriptive display of links."
+      (interactive)
+      (if org-descriptive-links
+          (progn (org-remove-from-invisibility-spec '(org-link))
                  (org-restart-font-lock)
-                 (setq org-descriptive-links t))))
-      :preface
-      (defun yc/org-set-ongoing-hydra-body ()
-        (setq yc/ongoing-hydra-body #'hydra-org/body))
-      :hook
-      (org-mode . yc/org-set-ongoing-hydra-body))
+                 (setq org-descriptive-links nil))
+        (progn (add-to-invisibility-spec '(org-link))
+               (org-restart-font-lock)
+               (setq org-descriptive-links t))))
+    :preface
+    (defun yc/org-set-ongoing-hydra-body ()
+      (setq yc/ongoing-hydra-body #'hydra-org/body))
+    :hook
+    (org-mode . yc/org-set-ongoing-hydra-body))
 
-    ;; Paste an image on clipboard to Emacs Org mode file
-    ;; @see http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
-    ;; (defun yc/org-screenshot ()
-    ;;   "Take a screenshot into a time stamped unique-named file in the
-    ;;     same directory as the org-buffer and insert a link to this file."
-    ;;   (interactive)
-    ;;   (org-display-inline-images)
-    ;;   (setq filename
-    ;;         (concat
-    ;;          (make-temp-name
-    ;;           (concat (file-name-nondirectory (buffer-file-name))
-    ;;                   "_imgs/"
-    ;;                   (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
-    ;;   (unless (file-exists-p (file-name-directory filename))
-    ;;     (make-directory (file-name-directory filename)))
-    ;;                                         ; take screenshot
-    ;;   (if (eq system-type 'darwin)
-    ;;       (call-process "screencapture" nil nil nil "-i" filename))
-    ;;   (if (eq system-type 'gnu/linux)
-    ;;       (call-process "import" nil nil nil filename))
-    ;;                                         ; insert into file if correctly taken
-    ;;   (if (file-exists-p filename)
-    ;;       (insert (concat "[[file:" filename "]]"))))
+  ;; Paste an image on clipboard to Emacs Org mode file
+  ;; @see http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
+  ;; (defun yc/org-screenshot ()
+  ;;   "Take a screenshot into a time stamped unique-named file in the
+  ;;     same directory as the org-buffer and insert a link to this file."
+  ;;   (interactive)
+  ;;   (org-display-inline-images)
+  ;;   (setq filename
+  ;;         (concat
+  ;;          (make-temp-name
+  ;;           (concat (file-name-nondirectory (buffer-file-name))
+  ;;                   "_imgs/"
+  ;;                   (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
+  ;;   (unless (file-exists-p (file-name-directory filename))
+  ;;     (make-directory (file-name-directory filename)))
+  ;;                                         ; take screenshot
+  ;;   (if (eq system-type 'darwin)
+  ;;       (call-process "screencapture" nil nil nil "-i" filename))
+  ;;   (if (eq system-type 'gnu/linux)
+  ;;       (call-process "import" nil nil nil filename))
+  ;;                                         ; insert into file if correctly taken
+  ;;   (if (file-exists-p filename)
+  ;;       (insert (concat "[[file:" filename "]]"))))
 
 
-    ;; ;; @see http://orgmode.org/worg/org-hacks.html#orgheadline126
-    ;; (defun yc/ogrep (search &optional context)
-    ;;   "Search for word in org files.
-    ;;     Prefix argument determines number of lines."
-    ;;   (interactive "sSearch for: \nP")
-    ;;   (let ((grep-find-ignored-files '("#*" ".#*"))
-    ;;         (grep-template (concat "grep <X> -i -nH "
-    ;;                                (when context
-    ;;                                  (concat "-C" (number-to-string context)))
-    ;;                                " -e <R> <F>")))
-    ;;     (lgrep search "*org*" org-directory)))
+  ;; ;; @see http://orgmode.org/worg/org-hacks.html#orgheadline126
+  ;; (defun yc/ogrep (search &optional context)
+  ;;   "Search for word in org files.
+  ;;     Prefix argument determines number of lines."
+  ;;   (interactive "sSearch for: \nP")
+  ;;   (let ((grep-find-ignored-files '("#*" ".#*"))
+  ;;         (grep-template (concat "grep <X> -i -nH "
+  ;;                                (when context
+  ;;                                  (concat "-C" (number-to-string context)))
+  ;;                                " -e <R> <F>")))
+  ;;     (lgrep search "*org*" org-directory)))
 
-    ;; (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
-    ;; (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+  ;; (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+  ;; (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 
-    ;; ;; auto load markdown-mode when load org-mode
-    ;; (eval-after-load "org"
-    ;;   '(require 'ox-md nil t))
+  ;; ;; auto load markdown-mode when load org-mode
+  ;; (eval-after-load "org"
+  ;;   '(require 'ox-md nil t))
 #+END_SRC
 
 定义一部分在 orgmode 下编写代码块的快捷模板，此快捷模板可以通过 =(<s[TAB])= 的方式快捷输入模板块，如下以此类推，输入 =(<e[TAB])= 即可输入另外的模板。
@@ -2401,7 +2409,7 @@ Archive subtrees under the same hierarchy as original in the archive files
   ;; (use-package org-dashboard)
 #+END_SRC
 
-** keys
+** key-bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
   (my-major-mode-leader-def
     :keymaps 'org-mode-map
@@ -2560,6 +2568,7 @@ Archive subtrees under the same hierarchy as original in the archive files
 #+END_SRC
 
 *** evil-org
+@see - https://github.com/Somelauw/evil-org-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package evil-org
 ;;   :after org
@@ -2588,6 +2597,7 @@ Archive subtrees under the same hierarchy as original in the archive files
 ;;   :init
 ;;   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 #+END_SRC
+
 *** dired-subtree
 Show subtree when pressing i
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2595,6 +2605,7 @@ Show subtree when pressing i
 ;;   :after dired
 ;;   :config)
 #+END_SRC
+
 *** dired-ranger
 Multi-stage copy/pasting of files and bookmarks
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2602,6 +2613,7 @@ Multi-stage copy/pasting of files and bookmarks
 ;;   :after (dired)
 ;;   :config)
 #+END_SRC
+
 *** key-bindings
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (defun yc/dired-up-directory ()
@@ -2672,10 +2684,9 @@ Multi-stage copy/pasting of files and bookmarks
     :commands (projectile-project-root)
     ;; :init (projectile-global-mode)
     :config (progn (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
-
-                   (setq projectile-enable-caching t)
-                   (setq projectile-completion-system 'default)
-                   (setq projectile-indexing-method 'alien)
+                   (setq projectile-enable-caching t
+                         projectile-completion-system 'default
+                         projectile-indexing-method 'alien)
 
                    ;; add to the globally ignored files
                    (dolist (file-name '("*~" "*.elc"))
@@ -2932,6 +2943,7 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
   ;;   (desktop-save-mode 1)
   ;;   (add-to-list 'desktop-globals-to-save 'golden-ratio-adjust-factor))
 #+END_SRC
+
 ** Git
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; ;; highlight git changes
@@ -2950,15 +2962,11 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
                                (set-fill-column 72)
                                (auto-fill-mode 1)))
                    ;; (add-hook 'magit-mode-hook '(lambda () (auto-complete-mode 0)))
-                   (setq
-                    ;; use ido to look for branches
-                    magit-completing-read-function 'magit-ido-completing-read
-                    ;; don't put "origin-" in front of new branch names by default
-                    magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
-                    ;; highlight word/letter changes in hunk diffs
-                    magit-diff-refine-hunk t
-                    ;; don't attempt to save unsaved buffers
-                    magit-save-some-buffers nil)
+                   (setq magit-completing-read-function 'magit-ido-completing-read  ;; use ido to look for branches
+                         magit-default-tracking-name-function 'magit-default-tracking-name-branch-only ;; don't put "origin-" in front of new branch names by default
+                         magit-diff-refine-hunk t ;; highlight word/letter changes in hunk diffs
+                         ;; don't attempt to save unsaved buffers
+                         magit-save-some-buffers nil)
                    (diminish 'magit-auto-revert-mode "")
                    (use-package gitconfig-mode)
                    (use-package gitignore-mode)))
@@ -3029,7 +3037,7 @@ Save a list of recent files visited. (open recent file with C-c f)
   ;;   (global-set-key (kbd "C-c f") 'ido-recentf-open))
 #+END_SRC
 
-** helm & ivy
+** helm
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package swoop)
 
@@ -3061,7 +3069,13 @@ Save a list of recent files visited. (open recent file with C-c f)
   ;;   (setq helm-recentf-fuzzy-match t))
 #+END_SRC
 
-** swiper
+** helm-ag
+#+BEGIN_SRC emacs-lisp :tangle yes
+ ;; (use-package helm-ag
+ ;;      :defer t)
+#+END_SRC
+
+** ivy & swiper
 关于 ivy 的使用：https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html#fnr.1
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy
@@ -3106,12 +3120,6 @@ Save a list of recent files visited. (open recent file with C-c f)
   ;;   :bind ("s-o" . counsel-osx-app))
 
   (use-package ag)
-#+END_SRC
-
-** helm-ag
-#+BEGIN_SRC emacs-lisp :tangle yes
- ;; (use-package helm-ag
- ;;      :defer t)
 #+END_SRC
 
 ** jump
@@ -3265,103 +3273,124 @@ This is a package to perform text folding like in Vim. It has the following feat
 company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类似。
 这里需要参考[[http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text][这篇 StackExchange 文章]]，解决 company-mode 自动完成是转换为小写的问题，具体原因参考[[https://emacs-china.org/t/company/187][这里]]。
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package company
-  :commands (company-mode company-indent-or-complete-common global-company-mode)
-  :diminish ""
-  :bind (("C-." . company-complete)
-         :map company-active-map
-         ("C-n" . company-select-next)
-         ("C-p" . company-select-previous)
-         ("C-d" . company-show-doc-buffer)
-         ;; ("C-/" . helm-company)
-         ("<tab>" . company-complete))
-  :config
-  (global-company-mode t)
-  (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-show-numbers t)
-  (setq company-require-match nil)
-  (setq company-dabbrev-downcase nil) ;; make company-complete care about case
-  (setq company-dabbrev-ignore-case nil) ;; fix case-sensitive, default is keep-prefix
-  (setq company-idle-delay 0.2)
-  (setq company-tooltip-flip-when-above t)
-  (setq company-selection-wrap-around t)
-  ;; (define-key company-active-map [tab] 'company-select-next)
-  ;; (define-key company-active-map (kbd "C-n") 'company-select-next)
-  ;; (define-key company-active-map (kbd "C-p") 'company-select-previous)
-  ;; (define-key company-active-map [return] 'company-complete-selection)
-  ;; (define-key company-active-map (kbd "C-/") 'helm-company)
+  (use-package company
+    :commands (company-mode company-indent-or-complete-common global-company-mode)
+    :diminish ""
+    :bind (("C-." . company-complete)
+           :map company-active-map
+           ("C-n" . company-select-next)
+           ("C-p" . company-select-previous)
+           ("C-d" . company-show-doc-buffer)
+           ;; ("C-/" . helm-company)
+           ("<tab>" . company-complete))
+    :config
+    (global-company-mode t)
+    (add-hook 'after-init-hook 'global-company-mode)
+    (setq company-show-numbers t)
+    (setq company-require-match nil)
+    (setq company-dabbrev-downcase nil) ;; make company-complete care about case
+    (setq company-dabbrev-ignore-case nil) ;; fix case-sensitive, default is keep-prefix
+    (setq company-idle-delay 0.2)
+    (setq company-tooltip-flip-when-above t)
+    (setq company-selection-wrap-around t)
+    ;; (define-key company-active-map [tab] 'company-select-next)
+    ;; (define-key company-active-map (kbd "C-n") 'company-select-next)
+    ;; (define-key company-active-map (kbd "C-p") 'company-select-previous)
+    ;; (define-key company-active-map [return] 'company-complete-selection)
+    ;; (define-key company-active-map (kbd "C-/") 'helm-company)
 
-  ;; (global-set-key (kbd "M-/") 'hippie-expand)
-  ;; (define-key evil-insert-state-map [remap evil-complete-previous] 'hippie-expand)
-  (setq hippie-expand-try-functions-list
-        '(
-          ;; Try to expand word "dynamically", searching the current buffer.
-          try-expand-dabbrev
-          ;; Try to expand word "dynamically", searching all other buffers.
-          try-expand-dabbrev-all-buffers
-          ;; Try to expand word "dynamically", searching the kill ring.
-          try-expand-dabbrev-from-kill
-          ;; Try to complete text as a file name, as many characters as unique.
-          try-complete-file-name-partially
-          ;; Try to complete text as a file name.
-          try-complete-file-name
-          ;; Try to expand word before point according to all abbrev tables.
-          try-expand-all-abbrevs
-          ;; Try to complete the current line to an entire line in the buffer.
-          try-expand-list
-          ;; Try to complete the current line to an entire line in the buffer.
-          try-expand-line
-          ;; Try to complete as an Emacs Lisp symbol, as many characters as
-          ;; unique.
-          try-complete-lisp-symbol-partially
-          ;; Try to complete word as an Emacs Lisp symbol.
-          try-complete-lisp-symbol))
-  )
+    ;; (global-set-key (kbd "M-/") 'hippie-expand)
+    ;; (define-key evil-insert-state-map [remap evil-complete-previous] 'hippie-expand)
+    (setq hippie-expand-try-functions-list
+          '(
+            ;; Try to expand word "dynamically", searching the current buffer.
+            try-expand-dabbrev
+            ;; Try to expand word "dynamically", searching all other buffers.
+            try-expand-dabbrev-all-buffers
+            ;; Try to expand word "dynamically", searching the kill ring.
+            try-expand-dabbrev-from-kill
+            ;; Try to complete text as a file name, as many characters as unique.
+            try-complete-file-name-partially
+            ;; Try to complete text as a file name.
+            try-complete-file-name
+            ;; Try to expand word before point according to all abbrev tables.
+            try-expand-all-abbrevs
+            ;; Try to complete the current line to an entire line in the buffer.
+            try-expand-list
+            ;; Try to complete the current line to an entire line in the buffer.
+            try-expand-line
+            ;; Try to complete as an Emacs Lisp symbol, as many characters as
+            ;; unique.
+            try-complete-lisp-symbol-partially
+            ;; Try to complete word as an Emacs Lisp symbol.
+            try-complete-lisp-symbol))
+    )
 
-;; (use-package fuzzy :defer t)
+  ;; (use-package fuzzy :defer t)
 
-;; (use-package company-box
-;;   :after company
-;;   :diminish
-;;   :hook (company-mode . company-box-mode))
+  ;; @see - http://oremacs.com/2017/12/27/company-numbers/
+  ;; (let ((map company-active-map))
+  ;;   (mapc
+  ;;    (lambda (x)
+  ;;      (define-key map (format "%d" x) 'ora-company-number))
+  ;;    (number-sequence 0 9))
+  ;;   (define-key map " " (lambda ()
+  ;;                         (interactive)
+  ;;                         (company-abort)
+  ;;                         (self-insert-command 1)))
+  ;;   (define-key map (kbd "<return>") nil))
 
-;; (use-package company-quickhelp
-;;   :after company
-;;   :config
-;;   (company-quickhelp-mode t)
-;;   (setq pos-tip-background-color (face-background 'company-tooltip))
-;;   (setq pos-tip-foreground-color (face-foreground 'company-tooltip)))
+  ;; (defun ora-company-number ()
+  ;;   "Forward to `company-complete-number'.
 
-;; (use-package company-statistics
-;;   :after company
-;;   :config
-;;   (company-statistics-mode))
-
-;; @see - http://oremacs.com/2017/12/27/company-numbers/
-;; (let ((map company-active-map))
-;;   (mapc
-;;    (lambda (x)
-;;      (define-key map (format "%d" x) 'ora-company-number))
-;;    (number-sequence 0 9))
-;;   (define-key map " " (lambda ()
-;;                         (interactive)
-;;                         (company-abort)
-;;                         (self-insert-command 1)))
-;;   (define-key map (kbd "<return>") nil))
-
-;; (defun ora-company-number ()
-;;   "Forward to `company-complete-number'.
-
-;;   Unless the number is potentially part of the candidate.
-;;   In that case, insert the number."
-;;   (interactive)
-;;   (let* ((k (this-command-keys))
-;;          (re (concat "^" company-prefix k)))
-;;     (if (cl-find-if (lambda (s) (string-match re s))
-;;                     company-candidates)
-;;         (self-insert-command 1)
-;;       (company-complete-number (string-to-number k)))))
+  ;;   Unless the number is potentially part of the candidate.
+  ;;   In that case, insert the number."
+  ;;   (interactive)
+  ;;   (let* ((k (this-command-keys))
+  ;;          (re (concat "^" company-prefix k)))
+  ;;     (if (cl-find-if (lambda (s) (string-match re s))
+  ;;                     company-candidates)
+  ;;         (self-insert-command 1)
+  ;;       (company-complete-number (string-to-number k)))))
 #+END_SRC
+
+*** company-lsp
+@see - https://github.com/tigersoldier/company-lsp
+#+BEGIN_SRC emacs-lisp :tangle yes
+#+END_SRC
+
+*** company-box
+@see - https://github.com/sebastiencs/company-box
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package company-box
+  ;;   :after company
+  ;;   :diminish
+  ;;   :hook (company-mode . company-box-mode))
+#+END_SRC
+
+*** company-quickhelp
+@see - https://github.com/expez/company-quickhelp
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package company-quickhelp
+  ;;   :after company
+  ;;   :config
+  ;;   (company-quickhelp-mode t)
+  ;;   (setq pos-tip-background-color (face-background 'company-tooltip))
+  ;;   (setq pos-tip-foreground-color (face-foreground 'company-tooltip)))
+#+END_SRC
+
+*** company-statistics
+@see - https://github.com/company-mode/company-statistics
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package company-statistics
+  ;;   :after company
+  ;;   :hook (company-mode . company-statistics-mode)
+  ;;   :config
+  ;;   (company-statistics-mode))
+#+END_SRC
+
+** lsp-mode
+https://github.com/emacs-lsp/lsp-mode
 
 ** yasnippet
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3409,6 +3438,8 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
   ;;   :bind (("C-h b" . helm-descbinds)
   ;;          ("C-h h" . helm-descbinds)))
 #+END_SRC
+
+** eldoc
 
 * Languages
 ** Go
