@@ -607,6 +607,9 @@ Highlight matching and auto insert parenthesis.
                    ))
 #+END_SRC
 
+*** Hydra-smartparens
+https://github.com/abo-abo/hydra/wiki/Smartparens
+
 ** fill-column-indicator
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package fill-column-indicator
@@ -1836,6 +1839,10 @@ anzu 的 evil 扩展
     ("3" eyebrowse-switch-to-window-config-3)
     ("4" eyebrowse-switch-to-window-config-4))
 #+END_SRC
+
+*** major-mode-hydra
+https://github.com/jerrypnz/major-mode-hydra.el
+
 * Org Mode
 *orgmode 配置参考：*
 - [[https://emacs.lujianmei.com/03-editing/init-org-mode.html][Orgmode 写文档]]
@@ -2698,6 +2705,9 @@ Multi-stage copy/pasting of files and bookmarks
   ;;   "!" 'dired-do-shell-command)
 #+END_SRC
 
+*** hydra-dired
+https://github.com/abo-abo/hydra/wiki/Dired
+
 ** projectile
 @see - https://github.com/bbatsov/projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3172,6 +3182,9 @@ Save a list of recent files visited. (open recent file with C-c f)
 
   (use-package ag)
 #+END_SRC
+
+*** ivy-hydra
+https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 ** jump
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -4461,6 +4474,14 @@ Restart Emacs inside Emacs
 
 ** View Large Files
 @see - https://github.com/m00natic/vlfi
+
+** Debug Emacs
+@see - https://github.com/ShingoFukuyama/manage-minor-mode
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (add-to-list 'load-path (expand-file-name "lisp/manage-minor-mode" user-emacs-directory))
+  ;; (require 'manage-minor-mode)
+#+END_SRC
 
 * Misc
 ** emojify

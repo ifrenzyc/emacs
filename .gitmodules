@@ -1,3 +1,6 @@
 [submodule "lisp/angularjs-mode"]
 	path = lisp/angularjs-mode
 	url = git@github.com:rudolfolah/angularjs-mode.git
+[submodule "lisp/manage-minor-mode"]
+	path = lisp/manage-minor-mode
+	url = git@github.com:ShingoFukuyama/manage-minor-mode.git
