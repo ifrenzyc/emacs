@@ -2277,7 +2277,7 @@ Configuration
 
 Agenda Files
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (define-key global-map "\C-ca" 'org-agenda)
+  (general-define-key "C-c a" 'org-agenda)
 
   ;; http://cachestocaches.com/2016/9/my-workflow-org-agenda/#capture--refile
   (setq org-directory "~/Dropbox/itsycnotes")
