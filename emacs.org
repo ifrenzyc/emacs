@@ -797,7 +797,8 @@ https://github.com/syohex/emacs-zoom-window
       (set-buffer-major-mode buffer)
       (display-buffer buffer '(display-buffer-pop-up-frame . nil))))
 
-  (global-set-key (kbd "C-c n") #'yc/new-buffer-frame)
+  (general-define-key
+   "C-c n" 'yc/new-buffer-frame)
 #+END_SRC
 
 @see [[https://github.com/purcell/ibuffer-projectile][purcell/ibuffer-projectile - GitHub]]
@@ -925,6 +926,39 @@ Restore cursor to file position in previous editing session.
 ;;       ))
 #+END_SRC
 
+Macosx switch meta key
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (when IS-MAC
+    (setq mac-command-modifier 'meta
+          mac-option-modifier 'super
+          mac-control-modifier 'control
+          ns-function-modifier 'hyper))
+
+  ;; (defun yc/mac-switch-meta nil
+  ;;   "switch meta between Option and Command"
+  ;;   (interactive)
+  ;;   (if (eq mac-option-modifier nil)
+  ;;       (progn
+  ;;         (setq mac-option-modifier 'meta)
+  ;;         (setq mac-command-modifier 'hyper)
+  ;;         )
+  ;;     (progn
+  ;;       (setq mac-option-modifier nil)
+  ;;       (setq mac-command-modifier 'meta)
+  ;;       )
+  ;;     )
+  ;;   )
+
+  ;; ;; switch meta key
+  ;; (setq mac-option-key-is-meta nil)
+  ;; (setq mac-command-key-is-meta t)
+  ;; (setq mac-command-modifier 'meta)
+  ;; (setq mac-option-modifier nil)
+
+  ;; 修改后的设定 Mark 的绑定，由于经常忘了放住 Control 键，就给这个功能两个绑定了
+  ;; (global-set-key (kbd "M-n") 'set-mark-command)
+#+END_SRC
+
 * Keymaps
 ** which-key
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -950,15 +984,16 @@ Restore cursor to file position in previous editing session.
   ;; @see http://wikemacs.org/wiki/Evil
   (use-package evil
     :hook (emacs-startup . evil-mode)
-    ;; :init
-    ;; (evil-mode 1)
+    :init
     ;; (evil-mode 1)
     (setq evil-want-integration nil
           evil-want-C-u-scroll t
           evil-want-C-i-jump t)
-    (setq-default evil-search-module 'evil-search
-                  evil-want-Y-yank-to-eol t)
+    (setq-default evil-want-Y-yank-to-eol t)
     :config
+    ;; change evil's search module after evil has been loaded (`setq' will not work)
+    (general-setq evil-search-module 'evil-search)
+
     ;; @see http://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     ;; (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
     ;; (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
@@ -1098,14 +1133,15 @@ Restore cursor to file position in previous editing session.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package evil-nerd-commenter
     :defer t
-    :after evil
+    :after evil general
     :config
     (evilnc-default-hotkeys)
     ;; Emacs key bindings
-    (global-set-key (kbd "M-/") 'evilnc-comment-or-uncomment-lines)
-    (global-set-key (kbd "C-c l") 'evilnc-quick-comment-or-uncomment-to-the-line)
-    (global-set-key (kbd "C-c c") 'evilnc-copy-and-comment-lines)
-    (global-set-key (kbd "C-c p") 'evilnc-comment-or-uncomment-paragraphs)
+    (general-define-key
+     "M-/"   'evilnc-comment-or-uncomment-lines
+     "C-c l" 'evilnc-quick-comment-or-uncomment-to-the-line
+     "C-c c" 'evilnc-copy-and-comment-lines
+     "C-c p" 'evilnc-comment-or-uncomment-paragraphs)
 
     ;; (evil-leader/set-key
     ;;   "ci" 'evilnc-comment-or-uncomment-lines
@@ -1120,13 +1156,12 @@ Restore cursor to file position in previous editing session.
     )
 #+END_SRC
 
-*** evil-surround
-@see - https://github.com/emacs-evil/evil-surround
+*** evil-commentary
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package evil-surround
-  ;;   :after evil
-  ;;   :init
-  ;;   (global-evil-surround-mode 1))
+;; (use-package evil-commentary
+;;   :after evil
+;;   :config
+;;   (evil-commentary-mode))
 #+END_SRC
 
 *** evil-goggles
@@ -1162,6 +1197,9 @@ Restore cursor to file position in previous editing session.
 ;;   (evil-indent-plus-default-bindings))
 #+END_SRC
 
+*** evil-lion
+@see - https://github.com/edkolev/evil-lion
+
 *** evil-matchit
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package evil-matchit
@@ -1170,15 +1208,16 @@ Restore cursor to file position in previous editing session.
 ;;   (global-evil-matchit-mode 1))
 #+END_SRC
 
-*** evil-commentary
+*** evil-surround
+@see - https://github.com/emacs-evil/evil-surround
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (use-package evil-commentary
-;;   :after evil
-;;   :config
-;;   (evil-commentary-mode))
+  ;; (use-package evil-surround
+  ;;   :after evil
+  ;;   :init
+  ;;   (global-evil-surround-mode 1))
 #+END_SRC
 
-*** Evil Visual Star
+*** evil-visualstar
 This allows me to easily start a * or # search from a visual selection.
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package evil-visualstar
@@ -1195,6 +1234,8 @@ anzu 的 evil 扩展
   ;;   :after evil)
 #+END_SRC
 
+*** evil-number
+
 ** key-chord
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package key-chord
@@ -1209,36 +1250,6 @@ anzu 的 evil 扩展
 参考这篇文章重新定义自己的 key bindings：[[https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/][larstvei/dot-emacs - GitHub]]
 参考在 Mac 下的一些配置：[[https://www.emacswiki.org/emacs/EmacsForMacOS][Emacs For Mac OS]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; ;; mac switch meta key
-  ;; (defun yc/mac-switch-meta nil
-  ;;   "switch meta between Option and Command"
-  ;;   (interactive)
-  ;;   (if (eq mac-option-modifier nil)
-  ;;       (progn
-  ;;         (setq mac-option-modifier 'meta)
-  ;;         (setq mac-command-modifier 'hyper)
-  ;;         )
-  ;;     (progn
-  ;;       (setq mac-option-modifier nil)
-  ;;       (setq mac-command-modifier 'meta)
-  ;;       )
-  ;;     )
-  ;;   )
-
-  ;; ;; switch meta key
-  ;; (setq mac-option-key-is-meta nil)
-  ;; (setq mac-command-key-is-meta t)
-  ;; (setq mac-command-modifier 'meta)
-  ;; (setq mac-option-modifier nil)
-
-  (when IS-MAC
-    (setq mac-command-modifier 'meta
-          mac-option-modifier 'super
-          mac-control-modifier 'control
-          ns-function-modifier 'hyper))
-
-  ;; 修改后的设定 Mark 的绑定，由于经常忘了放住 Control 键，就给这个功能两个绑定了
-  ;; (global-set-key (kbd "M-n") 'set-mark-command)
 
   ;; use 'keyfreq-show'
   ;; @see https://github.com/dacap/keyfreq
@@ -1252,6 +1263,7 @@ anzu 的 evil 扩展
     :init
     (general-def :states '(normal motion visual) "SPC" nil)
     :config
+    ;; Vim-like definitions
     (general-evil-setup t))
 
   (general-create-definer my-leader-def
@@ -1667,7 +1679,8 @@ anzu 的 evil 扩展
     ("x" counsel-M-x)
     ("q" nil)
     )
-  (global-set-key (kbd "<f1>") 'hydra-window/body)
+  (general-define-key
+   "<f1>"  'hydra-window/body)
 
   (defhydra hydra-clock (:color blue)
     "
@@ -1822,9 +1835,6 @@ anzu 的 evil 扩展
     ("3" eyebrowse-switch-to-window-config-3)
     ("4" eyebrowse-switch-to-window-config-4))
 #+END_SRC
-*** evil-lion
-@see - https://github.com/edkolev/evil-lion
-
 * Org Mode
 *orgmode 配置参考：*
 - [[https://emacs.lujianmei.com/03-editing/init-org-mode.html][Orgmode 写文档]]
@@ -2561,6 +2571,8 @@ Archive subtrees under the same hierarchy as original in the archive files
     "tto" 'org-table-toggle-coordinate-overlays
     "tw" 'org-table-wrap-region)
 
+  @see - https://github.com/noctuid/evil-guide
+  (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
   (my-major-mode-leader-def
     :keymaps 'org-src-mode-map
     "'" 'org-edit-src-exit)
@@ -2686,11 +2698,11 @@ Multi-stage copy/pasting of files and bookmarks
 #+END_SRC
 
 ** projectile
+@see - https://github.com/bbatsov/projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
     :defer 5
     :commands (projectile-project-root)
-    ;; :init (projectile-global-mode)
     :config (progn (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
                    (setq projectile-enable-caching t
                          projectile-completion-system 'default
@@ -2698,7 +2710,8 @@ Multi-stage copy/pasting of files and bookmarks
 
                    ;; add to the globally ignored files
                    (dolist (file-name '("*~" "*.elc"))
-                     (add-to-list 'projectile-globally-ignored-files file-name))))
+                     (add-to-list 'projectile-globally-ignored-files file-name)))
+    (projectile-mode +1))
 
   (defun yc/helm-project-do-ag ()
     "Search in current project with `ag'."
@@ -3000,17 +3013,19 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 * Completion
 ** ido
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package ido-vertical-mode :after ido)
-
   (use-package ido
     :defer 5
+    :init
+    (setq ido-use-faces nil)
     :config
     (ido-vertical-mode 1)
-    (setq ido-use-faces nil)
     (ido-everywhere 1)
     (ido-mode t)
     (setq ido-vertical-define-keys 'C-n-and-C-p-only)
-    (global-set-key (kbd "C-x C-f") 'ido-find-file))
+    (general-define-key
+     "C-x C-f" 'ido-find-file))
+
+  (use-package ido-vertical-mode :after ido)
 
   (use-package flx-ido
     :after ido
@@ -3047,6 +3062,43 @@ Save a list of recent files visited. (open recent file with C-c f)
 
 ** helm
 #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package helm
+  ;;   :diminish ""
+  ;;   :config
+  ;;   (helm-mode t)
+  ;;   (helm-autoresize-mode 1)
+  ;;   (setq helm-buffers-fuzzy-matching t)
+  ;;   (setq helm-autoresize-mode t)
+  ;;   (setq helm-buffer-max-length 100)
+  ;;   (set-face-attribute 'helm-selection nil :background "yellow" :foreground "black")
+  ;;   (set-face-attribute 'helm-source-header nil :height 240)
+  ;;   (define-key helm-map (kbd "C-j") 'helm-next-line)
+  ;;   (define-key helm-map (kbd "C-k") 'helm-previous-line)
+  ;;   (define-key helm-map (kbd "C-h") 'helm-next-source)
+  ;;   (define-key helm-map (kbd "C-S-h") 'describe-key)
+  ;;   (define-key helm-map (kbd "C-l") (kbd "RET"))
+  ;;   (define-key helm-map [escape] 'helm-keyboard-quit))
+#+END_SRC
+
+*** helm-fuzzier
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package helm-fuzzier
+  ;;   :config
+  ;;   (helm-fuzzier-mode 1)
+  ;;   (setq helm-mode-fuzzy-match t)
+  ;;   (setq helm-M-x-fuzzy-match t)
+  ;;   (setq helm-buffers-fuzzy-matching t)
+  ;;   (setq helm-recentf-fuzzy-match t))
+#+END_SRC
+
+*** helm-ag
+#+BEGIN_SRC emacs-lisp :tangle yes
+ ;; (use-package helm-ag
+ ;;      :defer t)
+#+END_SRC
+
+*** helm-swoop
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package swoop)
 
   ;; (use-package helm-swoop
@@ -3060,28 +3112,18 @@ Save a list of recent files visited. (open recent file with C-c f)
   ;;   (setq helm-swoop-move-to-line-cycle t)
   ;;   ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
   ;;   (setq helm-swoop-split-direction 'split-window-vertically))
+#+END_SRC
 
+*** helm-projectile
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package helm-projectile
   ;;   :config
   ;;   (helm-projectile-on)
   ;;   (setq projectile-indexing-method 'native)
-  ;;   (setq projectile-enable-caching t)
-  ;;   )
-
-  ;; (use-package helm-fuzzier
-  ;;   :config
-  ;;   (helm-fuzzier-mode 1)
-  ;;   (setq helm-mode-fuzzy-match t)
-  ;;   (setq helm-M-x-fuzzy-match t)
-  ;;   (setq helm-buffers-fuzzy-matching t)
-  ;;   (setq helm-recentf-fuzzy-match t))
+  ;;   (setq projectile-enable-caching t))
 #+END_SRC
 
-** helm-ag
-#+BEGIN_SRC emacs-lisp :tangle yes
- ;; (use-package helm-ag
- ;;      :defer t)
-#+END_SRC
+*** helm-apropos
 
 ** ivy & swiper
 关于 ivy 的使用：https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html#fnr.1
@@ -3205,6 +3247,10 @@ This is a package to perform text folding like in Vim. It has the following feat
 - for fans of avy package: you can use avy to fold text with minimal number of key strokes!
 #+END_QUOTE
 
+- origami
+- hideshow
+- vimish-fold 
+- evil-vimish-fold
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package vimish-fold
   ;;   :defer 1
@@ -3252,33 +3298,13 @@ This is a package to perform text folding like in Vim. It has the following feat
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smex
     :defer t
-    :commands (smex)
+    :commands smex
     :config
     (smex-initialize)
-    (global-set-key (kbd "M-x") 'smex)
-    (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-    ;; This is your old M-x.
-    (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command))
-#+END_SRC
-
-** helm
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package helm
-  ;;   :diminish ""
-  ;;   :config
-  ;;   (helm-mode t)
-  ;;   (helm-autoresize-mode 1)
-  ;;   (setq helm-buffers-fuzzy-matching t)
-  ;;   (setq helm-autoresize-mode t)
-  ;;   (setq helm-buffer-max-length 100)
-  ;;   (set-face-attribute 'helm-selection nil :background "yellow" :foreground "black")
-  ;;   (set-face-attribute 'helm-source-header nil :height 240)
-  ;;   (define-key helm-map (kbd "C-j") 'helm-next-line)
-  ;;   (define-key helm-map (kbd "C-k") 'helm-previous-line)
-  ;;   (define-key helm-map (kbd "C-h") 'helm-next-source)
-  ;;   (define-key helm-map (kbd "C-S-h") 'describe-key)
-  ;;   (define-key helm-map (kbd "C-l") (kbd "RET"))
-  ;;   (define-key helm-map [escape] 'helm-keyboard-quit))
+    (general-define-key
+     "M-x" 'smex
+     "M-X" 'smex-major-mode-commands
+     "C-c C-c M-x" 'execute-extended-command))  ;; This is your old M-x.
 #+END_SRC
 
 ** company
@@ -4431,6 +4457,9 @@ Restart Emacs inside Emacs
     :commands (restart-emacs)
     :config (emacs-restore-frames t))
 #+END_SRC
+
+** View Large Files
+@see - https://github.com/m00natic/vlfi
 
 * Misc
 ** emojify
