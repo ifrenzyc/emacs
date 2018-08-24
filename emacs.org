@@ -219,8 +219,8 @@ Unicode is an required aesthetic
 ** whitespace
 @see - [[https://dougie.io/coding/tabs-in-emacs/][The Ultimate Guide To Using Tabs For Indentation In Emacs]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; @see http://ergoemacs.org/emacs/whitespace-mode.html
-  ;; @see http://xahlee.info/comp/unicode_arrows.html
+  ;; @see - http://ergoemacs.org/emacs/whitespace-mode.html
+  ;; @see - http://xahlee.info/comp/unicode_arrows.html
   ;; “·”, MIDDLE DOT, 183
   ;; “¶”, PILCROW SIGN, 182
   ;; “↵”, DOWNWARDS ARROW WITH CORNER LEFTWARDS, 8629
@@ -318,7 +318,7 @@ This behaviour in general emulates the scrolloff option in vim.
 
 ** Theme
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; @see https://github.com/gorakhargosh/emacs.d/blob/master/themes/color-theme-less.el
+  ;; @see - https://github.com/gorakhargosh/emacs.d/blob/master/themes/color-theme-less.el
   ;; (use-package hc-zenburn-theme
   ;;   :init
   ;;   (defvar zenburn-override-colors-alist
@@ -412,9 +412,9 @@ This behaviour in general emulates the scrolloff option in vim.
 
   ;; 目前这个有 bug，会导致 emacs 卡死，但不知道具体原因
   ;; Use spacemacs' mode line
-  ;; @see https://libraries.io/emacs/spaceline
-  ;; @see https://github.com/TeMPOraL/nyan-mode
-  ;; @see https://github.com/TheBB/spaceline
+  ;; @see - https://libraries.io/emacs/spaceline
+  ;; @see - https://github.com/TeMPOraL/nyan-mode
+  ;; @see - https://github.com/TheBB/spaceline
   ;; (use-package spaceline
   ;;   :after powerline winum
   ;;   :config
@@ -654,7 +654,7 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 
 ** pangu-spacing
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; @see http://coldnew.github.io/blog/2013/05-20_5cbb7/
+  ;; @see - http://coldnew.github.io/blog/2013/05-20_5cbb7/
   (use-package pangu-spacing
     :defer 5
     :diminish ""
@@ -805,7 +805,7 @@ https://github.com/syohex/emacs-zoom-window
    "C-c n" 'yc/new-buffer-frame)
 #+END_SRC
 
-@see [[https://github.com/purcell/ibuffer-projectile][purcell/ibuffer-projectile - GitHub]]
+@see - [[https://github.com/purcell/ibuffer-projectile][purcell/ibuffer-projectile - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ibuffer-projectile
     :after projectile
@@ -985,7 +985,7 @@ Macosx switch meta key
 ** Evil
 - TODO 阅读：[[https://github.com/noctuid/evil-guide#terminology][noctuid/evil-guide - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; @see http://wikemacs.org/wiki/Evil
+  ;; @see - http://wikemacs.org/wiki/Evil
   (use-package evil
     :hook (emacs-startup . evil-mode)
     :init
@@ -998,13 +998,13 @@ Macosx switch meta key
     ;; change evil's search module after evil has been loaded (`setq' will not work)
     (general-setq evil-search-module 'evil-search)
 
-    ;; @see http://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
+    ;; @see - http://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
     ;; (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
     ;; (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
     ;; (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
     ;; (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 
-    ;; @see https://github.com/rime/squirrel/wiki/vim%E7%94%A8%E6%88%B7%E4%B8%8Eemacs-evil-mode%E7%94%A8%E6%88%B7-%E8%BE%93%E5%85%A5%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E6%88%90%E8%8B%B1%E6%96%87%E7%8A%B6%E6%80%81%E7%9A%84%E5%AE%9E%E7%8E%B0
+    ;; @see - https://github.com/rime/squirrel/wiki/vim%E7%94%A8%E6%88%B7%E4%B8%8Eemacs-evil-mode%E7%94%A8%E6%88%B7-%E8%BE%93%E5%85%A5%E6%B3%95%E8%87%AA%E5%8A%A8%E5%88%87%E6%8D%A2%E6%88%90%E8%8B%B1%E6%96%87%E7%8A%B6%E6%80%81%E7%9A%84%E5%AE%9E%E7%8E%B0
     (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
       "C-g back to normal state"
       (when  (evil-insert-state-p)
@@ -1022,7 +1022,7 @@ Macosx switch meta key
           ))))
 
     ;; esc quits
-    ;; @see http://stackoverflow.com/questions/8483182/evil-mode-best-practice
+    ;; @see - http://stackoverflow.com/questions/8483182/evil-mode-best-practice
     (defun minibuffer-keyboard-quit ()
       "Abort recursive edit.
     In Delete Selection mode, if the mark is active, just deactivate it;
@@ -1062,7 +1062,7 @@ Macosx switch meta key
     ;;             ;; config
     ;;             ))
     ;; C-a for redo the last insertion
-    ;; @see http://emacs.stackexchange.com/questions/14521/insert-mode-make-c-a-insert-previously-inserted-text
+    ;; @see - http://emacs.stackexchange.com/questions/14521/insert-mode-make-c-a-insert-previously-inserted-text
     ;; (defun yc/evil-paste-last-insertion ()
     ;;   (interactive)
     ;;   (evil-paste-from-register ?.))
@@ -1071,7 +1071,7 @@ Macosx switch meta key
     ;;   '(define-key evil-insert-state-map (kbd "C-a") 'yc/evil-paste-last-insertion))
 
     ;; C-u to scroll up or delete indent
-    ;; @see http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
+    ;; @see - http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
     (set-cursor-color "DarkCyan")
 
     ;; ;; Great evil org mode keyboard shortcuts cribbed from cofi
@@ -1256,7 +1256,7 @@ anzu 的 evil 扩展
 #+BEGIN_SRC emacs-lisp :tangle yes
 
   ;; use 'keyfreq-show'
-  ;; @see https://github.com/dacap/keyfreq
+  ;; @see - https://github.com/dacap/keyfreq
   ;; (use-package keyfreq
   ;;   :init
   ;;   (keyfreq-mode 1)
@@ -1890,16 +1890,16 @@ https://github.com/jerrypnz/major-mode-hydra.el
     (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
     (add-hook 'org-mode-hook (lambda () (setq word-wrap t)))
     (add-hook 'org-mode-hook 'org-indent-mode)
-    ;; @see http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
+    ;; @see - http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
     (font-lock-add-keywords 'org-mode
                             '(("^ *\\([-+]\\) "
                                (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "☀"))))))
 
     ;; Keep the headlines expanded in Org-Mode
-    ;; @see http://emacs.stackexchange.com/questions/9709/keep-the-headlines-expanded-in-org-mode
+    ;; @see - http://emacs.stackexchange.com/questions/9709/keep-the-headlines-expanded-in-org-mode
     (setq org-startup-folded nil)
     ;; Disabling underscore-to-subscript in Emacs Org-Mode export
-    ;; @see http://stackoverflow.com/questions/698562/disabling-underscore-to-subscript-in-emacs-org-mode-export/701201#701201
+    ;; @see - http://stackoverflow.com/questions/698562/disabling-underscore-to-subscript-in-emacs-org-mode-export/701201#701201
     (setq org-export-with-sub-superscripts nil)
     (defcustom org-indent-indentation-per-level 4
       "Indentation per level in number of characters."
@@ -1974,7 +1974,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
     (org-mode . yc/org-set-ongoing-hydra-body))
 
   ;; Paste an image on clipboard to Emacs Org mode file
-  ;; @see http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
+  ;; @see - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
   ;; (defun yc/org-screenshot ()
   ;;   "Take a screenshot into a time stamped unique-named file in the
   ;;     same directory as the org-buffer and insert a link to this file."
@@ -1998,7 +1998,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
   ;;       (insert (concat "[[file:" filename "]]"))))
 
 
-  ;; ;; @see http://orgmode.org/worg/org-hacks.html#orgheadline126
+  ;; ;; @see - http://orgmode.org/worg/org-hacks.html#orgheadline126
   ;; (defun yc/ogrep (search &optional context)
   ;;   "Search for word in org files.
   ;;     Prefix argument determines number of lines."
@@ -2020,7 +2020,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
 
 定义一部分在 orgmode 下编写代码块的快捷模板，此快捷模板可以通过 =(<s[TAB])= 的方式快捷输入模板块，如下以此类推，输入 =(<e[TAB])= 即可输入另外的模板。
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; @see 模板元素说明：https://www.cnblogs.com/holbrook/archive/2012/04/17/2454619.html
+  ;; 模板元素说明： @see - https://www.cnblogs.com/holbrook/archive/2012/04/17/2454619.html
   ;; https://www.gnu.org/software/emacs/manual/html_node/org/Template-elements.html#Template-elements
   ;; https://www.gnu.org/software/emacs/manual/html_node/org/Template-expansion.html#Template-expansion
   (setq org-structure-template-alist
@@ -2183,7 +2183,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
 #+END_SRC
 
 ** 重新定义不同状态的 todoList 的排版
-@see [[http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/][Emacs: Strike through headlines for DONE tasks in Org]]
+@see - [[http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/][Emacs: Strike through headlines for DONE tasks in Org]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq org-fontify-done-headline t)
   (custom-set-faces
@@ -2793,7 +2793,7 @@ https://github.com/abo-abo/hydra/wiki/Dired
     (setq neo-window-fixed-size nil)  ; 通过设置该参数，可以手动调整 neotree 窗口大小
     (setq-default neo-dont-be-alone t)  ; Don't allow neotree to be the only open window
     ;; Use with evil mode
-    ;; @see https://www.emacswiki.org/emacs/NeoTree
+    ;; @see - https://www.emacswiki.org/emacs/NeoTree
     (add-hook 'neotree-mode-hook
               (lambda ()
                 (visual-line-mode -1)
@@ -2875,7 +2875,7 @@ https://github.com/abo-abo/hydra/wiki/Dired
 #+END_SRC
 
 ** treemacs
-@see https://github.com/Alexander-Miller/treemacs
+@see - https://github.com/Alexander-Miller/treemacs
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; ;; A tree layout file explorer
   ;; (use-package treemacs
@@ -3292,7 +3292,7 @@ This is a package to perform text folding like in Vim. It has the following feat
 #+END_SRC
 ** Replace
 文本替换，使用 =query-replace= 或者 =M-%= 命令。
-@see - @see - https://github.com/syohex/emacs-anzu
+@see - https://github.com/syohex/emacs-anzu
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package anzu
   ;;   :defer 1
@@ -3322,6 +3322,7 @@ This is a package to perform text folding like in Vim. It has the following feat
 #+END_SRC
 
 ** company
+@see - https://company-mode.github.io/
 company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类似。
 这里需要参考[[http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text][这篇 StackExchange 文章]]，解决 company-mode 自动完成是转换为小写的问题，具体原因参考[[https://emacs-china.org/t/company/187][这里]]。
 #+BEGIN_SRC emacs-lisp :tangle yes
