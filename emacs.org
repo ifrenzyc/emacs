@@ -1581,15 +1581,6 @@ anzu 的 evil 扩展
     ("0" (text-scale-adjust 0) "reset")
     ("q" nil "quit" :color blue))
 
-  (defhydra hydra-org (:color red :columns 3)
-    "Org Mode Movements"
-    ("n" outline-next-visible-heading "next heading")
-    ("p" outline-previous-visible-heading "prev heading")
-    ("N" org-forward-heading-same-level "next heading at same level")
-    ("P" org-backward-heading-same-level "prev heading at same level")
-    ("u" outline-up-heading "up heading")
-    ("g" org-goto "goto" :exit t))
-
   ;; (defhydra hydra-org-clock (:color blue :hint nil)
   ;;   "
   ;; Clock   In/out^     ^Edit^   ^Summary     (_?_)
@@ -2102,10 +2093,14 @@ https://github.com/jerrypnz/major-mode-hydra.el
 #+END_SRC
 
 ** worf
+vi-like bindings for org-mode
+@see - https://oremacs.com/worf/README.html
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (use-package worf
-;;   :init
-;;   (add-hook 'org-mode-hook 'worf-mode))
+  (use-package worf
+    :defer 5
+    :init
+    :hook
+    (org-mode . worf-mode))
 #+END_SRC
 
 ** org-mac-link
@@ -2593,6 +2588,35 @@ Archive subtrees under the same hierarchy as original in the archive files
   ;; (general-define-key :keymaps 'org-src-mode-map
   ;;                     :states '(normal)
   ;;                     "RET" 'org-edit-src-exit)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-org (:color red)
+      "
+    ^
+    ^Quit^           ^Move^                 ^Zoom^          
+    ^───────^───────────^──────^────────────^────^──────────
+    _q_ quit            _n_ Next Head        _<_ Go Back 
+    ^^                  _p_ Prev Head        _l_ →
+    ^^                  _N_ Next Same Head   _h_ ←
+    ^^                  _P_ Prev Same Head   _k_ ↑      
+    ^^                  _u_ Up               _j_ ↓
+    ^^                  _g_ Goto             ^^
+    ^^                  ^^                   ^^
+    ^^                  ^^                   ^^
+    "
+    ("n" outline-next-visible-heading "next heading")
+    ("p" outline-previous-visible-heading "prev heading")
+    ("N" org-forward-heading-same-level "next heading at same level")
+    ("P" org-backward-heading-same-level "prev heading at same level")
+    ("u" outline-up-heading "up heading")
+    ("g" org-goto "goto" :exit t)
+    ("<" worf-back-to-heading "worf-back-to-heading")
+    ("l" worf-right "worf-right")
+    ("j" worf-down "worf-down")
+    ("k" worf-up "worf-up")
+    ("h" worf-left "worf-left")
+    ("q" nil))
 #+END_SRC
 
 *** evil-org
@@ -3091,6 +3115,9 @@ Save a list of recent files visited. (open recent file with C-c f)
   ;;   (define-key helm-map [escape] 'helm-keyboard-quit))
 #+END_SRC
 
+*** swiper-helm
+@see - https://github.com/abo-abo/swiper-helm
+
 *** helm-fuzzier
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package helm-fuzzier
@@ -3187,6 +3214,7 @@ Save a list of recent files visited. (open recent file with C-c f)
 https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 ** jump
+@see - https://github.com/abo-abo/avy
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package avy
   ;;   :init
