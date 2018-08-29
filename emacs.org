@@ -45,6 +45,7 @@
 - [[https://github.com/daedreth/UncleDavesEmacs][daedreth/UncleDavesEmacs]]
 - https://github.com/jwiegley/dot-emacs/blob/master/init.el
   use-package 作者 John Wiegley 的 .emacs.d
+- [[https://github.com/jkitchin/scimax][jkitchin/scimax - GitHub]] - [[https://www.youtube.com/watch?v=fgizHHd7nOo&list=PL0sMmOaE_gs3GbuZV_sNjwMREw9rfElTV][(YouTube)]]
 
 * Bootstrap
 ** Constants
@@ -1294,8 +1295,9 @@ anzu 的 evil 扩展
     "7"    'winum-select-window-7
     "8"    'winum-select-window-8
     "9"    'winum-select-window-9
-    "/"    '(:ignore t :which-key "search")
-    "//"   '(swiper :which-key "swiper")
+    "/"     '(:ignore t :which-key "search")
+    "//"    '(swiper :which-key "swiper")
+    "/g"    'counsel-git-grep
     "["    '(:ignore t :which-key "previous...")
     "[["   '(text-scale-increase :which-key "text size in")
     "]"    '(:ignore t :which-key "next...")
@@ -2096,11 +2098,11 @@ https://github.com/jerrypnz/major-mode-hydra.el
 vi-like bindings for org-mode
 @see - https://oremacs.com/worf/README.html
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package worf
-    :defer 5
-    :init
-    :hook
-    (org-mode . worf-mode))
+  ;; (use-package worf
+  ;;   :defer 5
+  ;;   :init
+  ;;   :hook
+  ;;   (org-mode . worf-mode))
 #+END_SRC
 
 ** org-mac-link
@@ -2301,8 +2303,8 @@ Agenda Files
 使用 =C-c C-x C-c= 进入 org-columns 模式，可以看到任务总结
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Set default column view headings: Task Priority Effort Clock_Summary
-  (setq org-columns-default-format "%50ITEM(Task) %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM")
-  ;; (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
+  ;; (setq org-columns-default-format "%50ITEM(Task) %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM")
+  (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
 #+END_SRC
 
 Open Org Agenda
@@ -2327,28 +2329,28 @@ Agendas should be full screen!
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (use-package org-super-agenda
-;;   :config
-;;   (org-super-agenda-mode)
-;;   (let ((org-super-agenda-groups
-;;          '((:auto-group t))))
-;;     (org-agenda-list)))
+  ;; (use-package org-super-agenda
+  ;;   :config
+  ;;   (org-super-agenda-mode)
+  ;;   (let ((org-super-agenda-groups
+  ;;          '((:auto-group t))))
+  ;;     (org-agenda-list)))
 
-(defun yc/org-buffer-day-agenda ()
-  (interactive)
-  "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list), d (org-agenda-day-view)."
-  (progn
-    (org-agenda-set-restriction-lock 'file)
-    (org-agenda-list)
-    (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
+  (defun yc/org-buffer-day-agenda ()
+    (interactive)
+    "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list), d (org-agenda-day-view)."
+    (progn
+      (org-agenda-set-restriction-lock 'file)
+      (org-agenda-list)
+      (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
 
-;; Formats the agenda into nice columns
-(setq org-agenda-prefix-format
-      '((agenda . " %i %-12t% s %-12(car (last (org-get-outline-path)))")
-        (timeline . "  % s")
-        (todo . " %i %-12:c")
-        (tags . " %i %-12:c")
-        (search . " %i %-12:c")))
+  ;; Formats the agenda into nice columns
+  ;; (setq org-agenda-prefix-format
+  ;;       '((agenda . " %i %-12t% s %-12(car (last (org-get-outline-path)))")
+  ;;         (timeline . "  % s")
+  ;;         (todo . " %i %-12:c")
+  ;;         (tags . " %i %-12:c")
+  ;;         (search . " %i %-12:c")))
 #+END_SRC
 
 TODO: 具体配置参考这个：
@@ -2898,6 +2900,8 @@ https://github.com/abo-abo/hydra/wiki/Dired
   ;; (add-hook 'neo-enter-hook #'neotree-resize-window)
 #+END_SRC
 
+@see - https://github.com/emacs-evil/evil-collection/blob/master/evil-collection-neotree.el
+
 ** treemacs
 @see - https://github.com/Alexander-Miller/treemacs
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3027,6 +3031,9 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
                    (use-package gitconfig-mode)
                    (use-package gitignore-mode)))
 #+END_SRC
+
+**** evil-magit
+@see - https://github.com/emacs-evil/evil-magit
 
 *** git-timemachine
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3180,7 +3187,7 @@ Save a list of recent files visited. (open recent file with C-c f)
     :config (ivy-mode))
 
   (use-package swiper
-    :after ivy
+    ;; :after ivy
     :commands (swiper swiper-all)
     :bind 
     ("C-s " . swiper)
@@ -3189,8 +3196,6 @@ Save a list of recent files visited. (open recent file with C-c f)
     (progn
       (ivy-mode 1)
       (setq ivy-use-virtual-buffers t)
-      ;; (global-set-key "\C-s" 'swiper)
-      ;; (global-set-key (kbd "C-c u") 'swiper-all)
       ))
 
   (use-package counsel
@@ -4469,7 +4474,8 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
   ;;         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
 #+END_SRC
 
-** counsel-tramp
+*** counsel-tramp
+@see - https://github.com/masasam/emacs-counsel-tramp
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package counsel-tramp
   ;;   :config
@@ -4477,6 +4483,10 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
   ;;   (define-key global-map (kbd "C-c s") 'counsel-tramp)
   ;;   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
 #+END_SRC
+
+*** docker-tramp
+
+*** vagrant-tramp
 
 ** Daemon
 使用服务模式启动 Emacs，这样子在其他地方可以快速启动一个 Emacs 窗口用于类似编辑文件操作等。
