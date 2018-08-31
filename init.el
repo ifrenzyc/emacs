@@ -41,7 +41,8 @@
         '(("elpy"         . "http://jorgenschaefer.github.io/packages/")
           ("gnu"          . "http://elpa.gnu.org/packages/")
           ("melpa"        . "http://melpa.org/packages/")
-          ("org"          . "http://orgmode.org/elpa/"))))
+          ("org"          . "http://orgmode.org/elpa/")))
+  )
 
 ;; avoid problems with files newer than their byte-compiled counterparts
 ;; it's better a lower startup than load an outdated and maybe bugged package

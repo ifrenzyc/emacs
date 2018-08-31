@@ -2091,7 +2091,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
     ;; "◎" "○" "►" "◇" "⊛" "✪" "☯" "⊙" "✪" "➲" "●" "⬤" "⚉"  "⸖" "ͼ" "ͽ" "⚬" "◌""￮""""⚫"
     ;; "☉" "⦾" "◦" "∙" "∘" "⚪" "◯" "⦿" "⌾" "◉"
     ;; (setq org-bullets-bullet-list '("❂" "⊚" "❍"))
-    (setq org-bullets-bullet-list '("❂" "✿" "✸" "◉" "☼" "⚬")))
+    (setq org-bullets-bullet-list '("❂" "✿" "✪" "✸" "◉" "☼" "⚬")))
 #+END_SRC
 
 ** worf
@@ -2300,11 +2300,59 @@ Agenda Files
                              ("/Users/yangc/Dropbox/itsycnotes/tickler.org" :maxlevel . 2)))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq org-agenda-custom-commands
+        '(("u" "UDAL 安排给其他人的任务"
+           ((agenda "" ((org-agenda-ndays 14)
+                        (org-agenda-start-on-weekday nil)
+                        (org-agenda-prefix-format " %-12:c%?-12t% s")))
+            (tags-todo "刘志斌\|房燕文\|骆建斌")))
+
+          ("w" "WORK"
+           ((agenda "" ((org-agenda-ndays 14)
+                        (org-agenda-start-on-weekday nil)
+                        (org-agenda-prefix-format " %-12:c%?-12t% s")))
+           (tags-todo "@work")))
+
+          ;; ("r" "Reading"
+          ;;  ((tags-todo "CATEGORY=\"Reading\""
+          ;;              ((org-agenda-prefix-format "%:T ")))))
+          ;; ("m" "Movies"
+          ;;  ((tags-todo "CATEGORY=\"Movies\""
+          ;;              ((org-agenda-prefix-format "%:T ")))))
+          ))
+#+END_SRC
+
 使用 =C-c C-x C-c= 进入 org-columns 模式，可以看到任务总结
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Set default column view headings: Task Priority Effort Clock_Summary
   ;; (setq org-columns-default-format "%50ITEM(Task) %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM")
-  (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
+  (setq org-columns-default-format "%50ITEM(Task) %20CLOCKSUM %16TIMESTAMP_IA")
+  ;; (setq org-columns-default-format "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
+#+END_SRC
+
+Formats the agenda into nice columns
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (setq org-agenda-prefix-format
+  ;;       '((agenda . " %i %-12t% s %-12(car (last (org-get-outline-path)))")
+  ;;         (timeline . "  % s")
+  ;;         (todo . " %i %-12:c")
+  ;;         (tags . " %i %-12:c")
+  ;;         (search . " %i %-12:c")))
+
+  ;; (setq org-agenda-prefix-format
+  ;;       '((agenda  . " %i %-12:c%?-12t% s")
+  ;;         (timeline  . "  % s")
+  ;;         (todo  . " %i %-30:c")
+  ;;         (tags  . " %i %-40:c")
+  ;;         (search . " %i %-12:c")))
+
+  (setq org-agenda-prefix-format
+        '((agenda . " %i %-12:c%?-14t%s")
+          (timeline . "  % s")
+          (todo . " %i %-14:c")
+          (tags . " %i %-14:c")
+          (search . " %i %-14:c")))
 #+END_SRC
 
 Open Org Agenda
@@ -2343,14 +2391,6 @@ Agendas should be full screen!
       (org-agenda-set-restriction-lock 'file)
       (org-agenda-list)
       (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
-
-  ;; Formats the agenda into nice columns
-  ;; (setq org-agenda-prefix-format
-  ;;       '((agenda . " %i %-12t% s %-12(car (last (org-get-outline-path)))")
-  ;;         (timeline . "  % s")
-  ;;         (todo . " %i %-12:c")
-  ;;         (tags . " %i %-12:c")
-  ;;         (search . " %i %-12:c")))
 #+END_SRC
 
 TODO: 具体配置参考这个：
