@@ -486,7 +486,9 @@ This behaviour in general emulates the scrolloff option in vim.
           doom-modeline-major-mode-color-icon nil
           doom-modeline-persp-name t
           doom-modeline-lsp t)
-    :hook (after-init . doom-modeline-init))
+    :hook (after-init . doom-modeline-init)
+    :config
+    (winum-mode))
 
   ;; ;; (defface my-pl-segment1-active
   ;; ;;   '((t (:foreground "#000000" :background "#E1B61A")))
@@ -688,7 +690,7 @@ automatically add spacing around operators
 https://github.com/davidshepherd7/electric-operator
 
 ** Window Management
-*** COMMENT winner
+*** winner
 #+BEGIN_QUOTE
   Winner Mode 是 Emacs 自带的一个 minor mode，可以用于快速恢复窗口分割状态。
   默认使用 =C-c <left>= 组合键，就可以快速退回上一个窗口设置； =C-c <right>= 组合键，向前恢复一个窗口设置。
@@ -705,6 +707,9 @@ https://github.com/davidshepherd7/electric-operator
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package winum
+    :defer t
+    :init
+    (winum-mode +1)
     :config
     (setq winum-auto-assign-0-to-minibuffer nil
           winum-auto-setup-mode-line nil
@@ -720,7 +725,39 @@ https://github.com/davidshepherd7/electric-operator
       (define-key winum-keymap (kbd "M-7") 'winum-select-window-7)
       (define-key winum-keymap (kbd "M-8") 'winum-select-window-8)
       (define-key winum-keymap (kbd "M-9") 'winum-select-window-9))
-    (winum-mode))
+    ;; :bind (("M-0" . winum-select-window-0-or-10)
+    ;;        ("M-1" . winum-select-window-1)
+    ;;        ("M-2" . winum-select-window-2)
+    ;;        ("M-3" . winum-select-window-3)
+    ;;        ("M-4" . winum-select-window-4)
+    ;;        ("M-5" . winum-select-window-5)
+    ;;        ("M-6" . winum-select-window-6)
+    ;;        ("M-7" . winum-select-window-7)
+    ;;        ("M-8" . winum-select-window-8)
+    ;;        ("M-9" . winum-select-window-9))
+    )
+  ;; (with-eval-after-load 'winum
+  ;;       (define-key winum-keymap (kbd "M-0") 'winum-select-window-0-or-10)
+  ;;       (define-key winum-keymap (kbd "M-1") 'winum-select-window-1)
+  ;;       (define-key winum-keymap (kbd "M-2") 'winum-select-window-2)
+  ;;       (define-key winum-keymap (kbd "M-3") 'winum-select-window-3)
+  ;;       (define-key winum-keymap (kbd "M-4") 'winum-select-window-4)
+  ;;       (define-key winum-keymap (kbd "M-5") 'winum-select-window-5)
+  ;;       (define-key winum-keymap (kbd "M-6") 'winum-select-window-6)
+  ;;       (define-key winum-keymap (kbd "M-7") 'winum-select-window-7)
+  ;;       (define-key winum-keymap (kbd "M-8") 'winum-select-window-8)
+  ;;       (define-key winum-keymap (kbd "M-9") 'winum-select-window-9))
+
+  ;; (global-set-key (kbd "M-0") 'winum-select-window-0-or-10)
+  ;; (global-set-key (kbd "M-1") 'winum-select-window-1)
+  ;; (global-set-key (kbd "M-2") 'winum-select-window-2)
+  ;; (global-set-key (kbd "M-3") 'winum-select-window-3)
+  ;; (global-set-key (kbd "M-4") 'winum-select-window-4)
+  ;; (global-set-key (kbd "M-5") 'winum-select-window-5)
+  ;; (global-set-key (kbd "M-6") 'winum-select-window-6)
+  ;; (global-set-key (kbd "M-7") 'winum-select-window-7)
+  ;; (global-set-key (kbd "M-8") 'winum-select-window-8)
+  ;; (global-set-key (kbd "M-9") 'winum-select-window-9)
 #+END_SRC
 
 *** COMMENT ace-window
@@ -903,7 +940,7 @@ Restore cursor to file position in previous editing session.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package exec-path-from-shell
   :if IS-MAC
-  :defer 5
+  :defer 1
   :config
   (setq exec-path-from-shell-variables '("PATH" "GOPATH" "GOROOT"))
   (exec-path-from-shell-initialize))
@@ -980,7 +1017,7 @@ Macosx switch meta key
 ** which-key
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package which-key
-    :defer t
+    :defer 1
     :commands which-key-mode
     :diminish ""
     :config
@@ -995,6 +1032,7 @@ Macosx switch meta key
     (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
     (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣")))
 #+END_SRC
+
 ** Evil
 - TODO 阅读：[[https://github.com/noctuid/evil-guide#terminology][noctuid/evil-guide - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1276,7 +1314,7 @@ anzu 的 evil 扩展
   ;;   (keyfreq-autosave-mode 1))
 
   (use-package general
-    :defer 5
+    :defer t
     :init
     (general-def :states '(normal motion visual) "SPC" nil)
     :config
@@ -1873,7 +1911,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
   ;; (require 'org-mouse)
 
   (use-package org
-    :defer 3
+    :defer 1
     :mode "\\.org$"
     :delight org-mode "Org"
     :config
@@ -2106,7 +2144,7 @@ e.g. =<s=
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-bullets
     :after org
-    :defer 5
+    :defer 1
     :hook (org-mode . org-bullets-mode)
     :config
     ;; (add-hook 'org-mode-hook 'org-bullets-mode)
@@ -2364,8 +2402,152 @@ Agenda Files
                              (org-agenda-file-tickler :maxlevel . 2)))
 #+END_SRC
 
-#+RESULTS:
-: ((org-agenda-file-inbox :maxlevel . 1) (org-agenda-file-gtd :maxlevel . 2) (/Users/yangc/Dropbox/itsycnotes/someday.org :level . 1) (org-agenda-file-tickler :maxlevel . 2))
+使用 =C-c C-x C-c= 进入 org-columns 模式，可以看到任务总结
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Set default column view headings: Task Priority Effort Clock_Summary
+  ;; (setq org-columns-default-format "%50ITEM(Task) %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM")
+  (setq org-columns-default-format "%50ITEM(Task) %20CLOCKSUM %16TIMESTAMP_IA")
+  ;; (setq org-columns-default-format "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
+#+END_SRC
+
+Formats the agenda into nice columns
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (setq org-agenda-prefix-format
+  ;;       '((agenda . " %i %-12t% s %-12(car (last (org-get-outline-path)))")
+  ;;         (timeline . "  % s")
+  ;;         (todo . " %i %-12:c")
+  ;;         (tags . " %i %-12:c")
+  ;;         (search . " %i %-12:c")))
+
+  ;; (setq org-agenda-prefix-format
+  ;;       '((agenda  . " %i %-12:c%?-12t% s")
+  ;;         (timeline  . "  % s")
+  ;;         (todo  . " %i %-30:c")
+  ;;         (tags  . " %i %-40:c")
+  ;;         (search . " %i %-12:c")))
+
+  (setq org-agenda-prefix-format
+        '((agenda . " %i %-12:c%?-14t%s")
+          (timeline . "  % s")
+          (todo . " %i %-14:c")
+          (tags . " %i %-14:c")
+          (search . " %i %-14:c")))
+#+END_SRC
+
+Agendas should be full screen!
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'org-agenda-finalize-hook (lambda () (delete-other-windows)))
+#+END_SRC
+
+TODO: 具体配置参考这个：
+- https://github.com/alphapapa/org-super-agenda
+- https://github.com/alphapapa/org-super-agenda/blob/master/examples.org
+
+Archive subtrees under the same hierarchy as original in the archive files
+参考：https://github.com/Fuco1/Fuco1.github.io/blob/master/posts/2017-04-20-Archive-subtrees-under-the-same-hierarchy-as-original-in-the-archive-files.org
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defadvice org-archive-subtree (around fix-hierarchy activate)
+    (let* ((fix-archive-p (and (not current-prefix-arg)
+                               (not (use-region-p))))
+           (afile (org-extract-archive-file (org-get-local-archive-location)))
+           (buffer (or (find-buffer-visiting afile) (find-file-noselect afile))))
+      ad-do-it
+      (when fix-archive-p
+        (with-current-buffer buffer
+          (goto-char (point-max))
+          (while (org-up-heading-safe))
+          (let* ((olpath (org-entry-get (point) "ARCHIVE_OLPATH"))
+                 (path (and olpath (split-string olpath "/")))
+                 (level 1)
+                 tree-text)
+            (when olpath
+              (org-mark-subtree)
+              (setq tree-text (buffer-substring (region-beginning) (region-end)))
+              (let (this-command) (org-cut-subtree))
+              (goto-char (point-min))
+              (save-restriction
+                (widen)
+                (-each path
+                  (lambda (heading)
+                    (if (re-search-forward
+                         (rx-to-string
+                          `(: bol (repeat ,level "*") (1+ " ") ,heading)) nil t)
+                        (org-narrow-to-subtree)
+                      (goto-char (point-max))
+                      (unless (looking-at "^")
+                        (insert "\n"))
+                      (insert (make-string level ?*)
+                              " "
+                              heading
+                              "\n"))
+                    (cl-incf level)))
+                (widen)
+                (org-end-of-subtree t t)
+                (org-paste-subtree level tree-text))))))))
+#+END_SRC
+
+参考这个配置自动归档：[[https://emacs.stackexchange.com/questions/19995/automatically-archive-done-entries-regardless-of-keyword][Automatically archive “DONE” entries regardless of keyword?]]
+[[https://stackoverflow.com/questions/6997387/how-to-archive-all-the-done-tasks-using-a-single-command][How to archive all the DONE tasks using a single command]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun yc/org-archive-done-tasks ()
+    (interactive)
+    (org-map-entries 'org-archive-subtree "/DONE" 'file))
+#+END_SRC
+
+*** org-super-agenda
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-super-agenda
+    :after (org org-agenda)
+    :init (org-super-agenda-mode 1)
+    :config
+    (let ((org-super-agenda-groups
+           '((:log t)  ; Automatically named "Log"
+             (:name "Schedule"
+                    :time-grid t)
+             (:name "Today"
+                    :scheduled today)
+             (:habit t)
+             (:name "Due today"
+                    :deadline today)
+             (:name "Overdue"
+                    :deadline past)
+             (:name "Due soon"
+                    :deadline future)
+             (:name "Unimportant"
+                    :todo ("SOMEDAY" "MAYBE" "CHECK" "TO-READ" "TO-WATCH")
+                    :order 100)
+             (:name "Waiting..."
+                    :todo "WAITING"
+                    :order 98)
+             (:name "Scheduled earlier"
+                    :scheduled past))))
+      ;; 这句会在 Emacs 启动的时候，显示 agenda
+      ;; (org-agenda-list)
+      ;; (org-agenda nil "a")
+      )
+    )
+
+  ;; This function opens the agenda in full screen.
+  (defun yc/open-agenda ()
+    "Opens the org-agenda."
+    (interactive)
+    (let ((agenda "*Org Agenda*"))
+      (if (equal (get-buffer agenda) nil)
+          (org-agenda-list)
+        (unless (equal (buffer-name (current-buffer)) agenda)
+          (switch-to-buffer agenda))
+        (org-agenda-redo t)
+        (beginning-of-buffer))))
+
+  (defun yc/org-buffer-day-agenda ()
+    (interactive)
+    "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list), d (org-agenda-day-view)."
+    (progn
+      (org-agenda-set-restriction-lock 'file)
+      (org-agenda-list)
+      (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq org-agenda-custom-commands
@@ -2467,151 +2649,6 @@ Agenda Files
           ;;  ((tags-todo "CATEGORY=\"Movies\""
           ;;              ((org-agenda-prefix-format "%:T ")))))
           ))
-#+END_SRC
-
-使用 =C-c C-x C-c= 进入 org-columns 模式，可以看到任务总结
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Set default column view headings: Task Priority Effort Clock_Summary
-  ;; (setq org-columns-default-format "%50ITEM(Task) %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM")
-  (setq org-columns-default-format "%50ITEM(Task) %20CLOCKSUM %16TIMESTAMP_IA")
-  ;; (setq org-columns-default-format "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
-#+END_SRC
-
-Formats the agenda into nice columns
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (setq org-agenda-prefix-format
-  ;;       '((agenda . " %i %-12t% s %-12(car (last (org-get-outline-path)))")
-  ;;         (timeline . "  % s")
-  ;;         (todo . " %i %-12:c")
-  ;;         (tags . " %i %-12:c")
-  ;;         (search . " %i %-12:c")))
-
-  ;; (setq org-agenda-prefix-format
-  ;;       '((agenda  . " %i %-12:c%?-12t% s")
-  ;;         (timeline  . "  % s")
-  ;;         (todo  . " %i %-30:c")
-  ;;         (tags  . " %i %-40:c")
-  ;;         (search . " %i %-12:c")))
-
-  (setq org-agenda-prefix-format
-        '((agenda . " %i %-12:c%?-14t%s")
-          (timeline . "  % s")
-          (todo . " %i %-14:c")
-          (tags . " %i %-14:c")
-          (search . " %i %-14:c")))
-#+END_SRC
-
-Agendas should be full screen!
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (add-hook 'org-agenda-finalize-hook (lambda () (delete-other-windows)))
-#+END_SRC
-
-TODO: 具体配置参考这个：
-- https://github.com/alphapapa/org-super-agenda
-- https://github.com/alphapapa/org-super-agenda/blob/master/examples.org
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package org-super-agenda
-    :after (org org-agenda)
-    :init (org-super-agenda-mode 1)
-    :config
-    (let ((org-super-agenda-groups
-           '((:log t)  ; Automatically named "Log"
-             (:name "Schedule"
-                    :time-grid t)
-             (:name "Today"
-                    :scheduled today)
-             (:habit t)
-             (:name "Due today"
-                    :deadline today)
-             (:name "Overdue"
-                    :deadline past)
-             (:name "Due soon"
-                    :deadline future)
-             (:name "Unimportant"
-                    :todo ("SOMEDAY" "MAYBE" "CHECK" "TO-READ" "TO-WATCH")
-                    :order 100)
-             (:name "Waiting..."
-                    :todo "WAITING"
-                    :order 98)
-             (:name "Scheduled earlier"
-                    :scheduled past))))
-      (org-agenda-list)
-      (org-agenda nil "a")
-      )
-    )
-
-  ;; This function opens the agenda in full screen.
-  (defun yc/open-agenda ()
-    "Opens the org-agenda."
-    (interactive)
-    (let ((agenda "*Org Agenda*"))
-      (if (equal (get-buffer agenda) nil)
-          (org-agenda-list)
-        (unless (equal (buffer-name (current-buffer)) agenda)
-          (switch-to-buffer agenda))
-        (org-agenda-redo t)
-        (beginning-of-buffer))))
-
-  (defun yc/org-buffer-day-agenda ()
-    (interactive)
-    "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list), d (org-agenda-day-view)."
-    (progn
-      (org-agenda-set-restriction-lock 'file)
-      (org-agenda-list)
-      (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
-#+END_SRC
-
-Archive subtrees under the same hierarchy as original in the archive files
-参考：https://github.com/Fuco1/Fuco1.github.io/blob/master/posts/2017-04-20-Archive-subtrees-under-the-same-hierarchy-as-original-in-the-archive-files.org
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (defadvice org-archive-subtree (around fix-hierarchy activate)
-    (let* ((fix-archive-p (and (not current-prefix-arg)
-                               (not (use-region-p))))
-           (afile (org-extract-archive-file (org-get-local-archive-location)))
-           (buffer (or (find-buffer-visiting afile) (find-file-noselect afile))))
-      ad-do-it
-      (when fix-archive-p
-        (with-current-buffer buffer
-          (goto-char (point-max))
-          (while (org-up-heading-safe))
-          (let* ((olpath (org-entry-get (point) "ARCHIVE_OLPATH"))
-                 (path (and olpath (split-string olpath "/")))
-                 (level 1)
-                 tree-text)
-            (when olpath
-              (org-mark-subtree)
-              (setq tree-text (buffer-substring (region-beginning) (region-end)))
-              (let (this-command) (org-cut-subtree))
-              (goto-char (point-min))
-              (save-restriction
-                (widen)
-                (-each path
-                  (lambda (heading)
-                    (if (re-search-forward
-                         (rx-to-string
-                          `(: bol (repeat ,level "*") (1+ " ") ,heading)) nil t)
-                        (org-narrow-to-subtree)
-                      (goto-char (point-max))
-                      (unless (looking-at "^")
-                        (insert "\n"))
-                      (insert (make-string level ?*)
-                              " "
-                              heading
-                              "\n"))
-                    (cl-incf level)))
-                (widen)
-                (org-end-of-subtree t t)
-                (org-paste-subtree level tree-text))))))))
-#+END_SRC
-
-参考这个配置自动归档：[[https://emacs.stackexchange.com/questions/19995/automatically-archive-done-entries-regardless-of-keyword][Automatically archive “DONE” entries regardless of keyword?]]
-[[https://stackoverflow.com/questions/6997387/how-to-archive-all-the-done-tasks-using-a-single-command][How to archive all the DONE tasks using a single command]]
-#+BEGIN_SRC emacs-lisp :tangle yes
-(defun yc/org-archive-done-tasks ()
-  (interactive)
-  (org-map-entries 'org-archive-subtree "/DONE" 'file))
 #+END_SRC
 
 ** COMMENT outline-toc
@@ -2943,7 +2980,7 @@ https://github.com/abo-abo/hydra/wiki/Dired
 @see - https://github.com/bbatsov/projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
-    :defer 5
+    :defer 1
     :commands (projectile-project-root)
     :config (progn (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
                    (setq projectile-enable-caching t
@@ -3270,7 +3307,7 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 ** ido
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ido
-    :defer 5
+    :defer 1
     :init
     (setq ido-use-faces nil)
     :config
@@ -3388,7 +3425,7 @@ Save a list of recent files visited. (open recent file with C-c f)
 关于 ivy 的使用：https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html#fnr.1
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy
-    :defer 5
+    :defer 1
     :diminish
     :bind (
            ;; ("C-c C-r" . ivy-resume)
@@ -3614,7 +3651,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 这里需要参考[[http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text][这篇 StackExchange 文章]]，解决 company-mode 自动完成是转换为小写的问题，具体原因参考[[https://emacs-china.org/t/company/187][这里]]。
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
-    :defer 5
+    :defer 1
     ;; :commands (company-mode company-indent-or-complete-common global-company-mode)
     :diminish ""
     :bind (("C-." . company-complete)
@@ -3787,7 +3824,9 @@ https://github.com/emacs-lsp/lsp-mode
 ** yasnippet
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet
-    :defer 10
+    :hook
+    (prog-mode . yas-minor-mode)
+    (org-mode . yas-minor-mode)
     :diminish yas-minor-mode
     :config
     (progn
@@ -4525,7 +4564,7 @@ Config for setting markdown mode and stuff
 参考：https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package paradox
-    :defer 5
+    :defer 1
     :config
     (setq-default paradox-column-width-package 27
                   paradox-column-width-version 13
