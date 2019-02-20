@@ -29,6 +29,13 @@
 
 (when (>= emacs-major-version 26)
   (require 'package)
+
+  ;; (setq url-proxy-services
+  ;; 	  '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+  ;; 		("http" . "127.0.0.1:1087")
+  ;; 		("https" . "127.0.0.1:1087")))
+
+  ;; (setq url-using-proxy t)
   ;; (setq package-archives '(("gnu"          . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
   ;;                          ("melpa"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
   ;;                          ("org"          . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
