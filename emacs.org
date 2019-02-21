@@ -121,6 +121,50 @@ text wrapping at 80 columns by default (only text)
   ;; (set-face-attribute 'mode-line nil :font "DejaVu Sans Mono-12")
 #+END_SRC
 
+** Input Method
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package pyim
+    :demand t
+    :config
+    ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+    (use-package pyim-basedict
+      :config (pyim-basedict-enable))
+
+    (setq default-input-method "pyim")
+
+    ;; 使用全拼
+    (setq pyim-default-scheme 'quanpin)
+
+    ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+    ;; 我自己使用的中英文动态切换规则是：
+    ;; 1. 光标只有在注释里面时，才可以输入中文。
+    ;; 2. 光标前是汉字字符时，才能输入中文。
+    ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+    (setq-default pyim-english-input-switch-functions
+                  '(pyim-probe-dynamic-english
+                    pyim-probe-isearch-mode
+                    pyim-probe-program-mode
+                    pyim-probe-org-structure-template))
+
+    (setq-default pyim-punctuation-half-width-functions
+                  '(pyim-probe-punctuation-line-beginning
+                    pyim-probe-punctuation-after-punctuation))
+
+    ;; 开启拼音搜索功能
+    (pyim-isearch-mode 1)
+
+    ;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
+    ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+    ;; 手动安装 posframe 包。
+    (setq pyim-page-tooltip 'pupup)
+
+    ;; 选词框显示 5 个候选词
+    (setq pyim-page-length 8)
+    :bind
+    (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
+     ("C-;" . pyim-delete-word-from-personal-buffer)))
+#+END_SRC
+
 ** COMMENT unicode-fonts
 Unicode is an required aesthetic
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -627,7 +671,7 @@ Highlight matching and auto insert parenthesis.
                    ))
 #+END_SRC
 
-*** Hydra-smartparens
+*** COMMENT Hydra-smartparens
 https://github.com/abo-abo/hydra/wiki/Smartparens
 
 ** COMMENT fill-column-indicator
@@ -689,8 +733,8 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 automatically add spacing around operators
 https://github.com/davidshepherd7/electric-operator
 
-** Window Management
-*** winner
+* Window Management
+** winner
 #+BEGIN_QUOTE
   Winner Mode 是 Emacs 自带的一个 minor mode，可以用于快速恢复窗口分割状态。
   默认使用 =C-c <left>= 组合键，就可以快速退回上一个窗口设置； =C-c <right>= 组合键，向前恢复一个窗口设置。
@@ -760,7 +804,7 @@ https://github.com/davidshepherd7/electric-operator
   ;; (global-set-key (kbd "M-9") 'winum-select-window-9)
 #+END_SRC
 
-*** COMMENT ace-window
+** COMMENT ace-window
 或许试试这个 Package： [[https://github.com/dimitri/switch-window][dimitri/switch-window - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;;; ace-window
@@ -768,7 +812,7 @@ https://github.com/davidshepherd7/electric-operator
   ;;   :bind ("C-x o" . ace-window))
 #+END_SRC
 
-*** Tiling window in Emacs
+** Tiling window in Emacs
 #+BEGIN_QUOTE
   eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工作空间。
   目前是使用 =<f5>= 、 =<f6>= 、 =<f7>= 、 =<f8>= 进行工作空间切换。
@@ -824,7 +868,7 @@ https://github.com/davidshepherd7/electric-operator
   ;;   ("s" eyebrowse-switch-to-window-config))
 #+END_SRC
 
-*** ELScreen & window-zoom
+** ELScreen & window-zoom
 类似于 tmux 的最大化当前窗口功能，保持和我在 tmux 下的习惯一致。
 https://github.com/syohex/emacs-zoom-window
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1289,15 +1333,15 @@ anzu 的 evil 扩展
   ;;   :after evil)
 #+END_SRC
 
-*** evil-number
+*** COMMENT evil-number
 
 ** COMMENT key-chord
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (use-package key-chord
-;;   :init
-;;   (key-chord-mode 1)
-;;   :config
-;;   (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
+  ;; (use-package key-chord
+  ;;   :init
+  ;;   (key-chord-mode 1)
+  ;;   :config
+  ;;   (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
 #+END_SRC
 
 ** general
@@ -1884,7 +1928,7 @@ anzu 的 evil 扩展
     ("4" eyebrowse-switch-to-window-config-4))
 #+END_SRC
 
-*** major-mode-hydra
+*** COMMENT major-mode-hydra
 https://github.com/jerrypnz/major-mode-hydra.el
 
 * Org Mode
@@ -1952,7 +1996,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
     (setq org-todo-keywords
           (quote ((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")
                   (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "REPEAT(r)" "MAYBE(m)" "|" "DONE(d!/!)")
-                  (sequence "PROJ(p)" "READ(r)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
+                  (sequence "PROJ(p)" "READ(r)" "FIXME(f)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
                   (sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)"))))
 
     (setq org-use-fast-todo-selection t)
@@ -2973,7 +3017,7 @@ Multi-stage copy/pasting of files and bookmarks
   ;;   "!" 'dired-do-shell-command)
 #+END_SRC
 
-*** hydra-dired
+*** COMMENT hydra-dired
 https://github.com/abo-abo/hydra/wiki/Dired
 
 ** projectile
@@ -3283,10 +3327,10 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
                    (use-package gitignore-mode)))
 #+END_SRC
 
-**** evil-magit
+**** COMMENT evil-magit
 @see - https://github.com/emacs-evil/evil-magit
 
-*** git-timemachine
+*** COMMENT git-timemachine
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package git-timemachine)
 
@@ -3503,7 +3547,7 @@ https://github.com/casouri/ivy-filthy-rich
           ))
 #+END_SRC
 
-*** ivy-hydra
+*** COMMENT ivy-hydra
 https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 ** COMMENT jump
@@ -3612,7 +3656,7 @@ This is a package to perform text folding like in Vim. It has the following feat
 ;;   (setq wgrep-auto-save-buffer t))
 #+END_SRC
 
-** ripgrep
+** COMMENT ripgrep
 
 ** COMMENT Replace
 文本替换，使用 =query-replace= 或者 =M-%= 命令。
@@ -3640,7 +3684,7 @@ This is a package to perform text folding like in Vim. It has the following feat
     :config
     (smex-initialize)
     (general-define-key
-     "M-x" 'smex
+     ;; "M-x" 'smex
      "M-X" 'smex-major-mode-commands
      "C-c C-c M-x" 'execute-extended-command))  ;; This is your old M-x.
 #+END_SRC
@@ -3735,9 +3779,17 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 *** company-lsp
 @see - https://github.com/tigersoldier/company-lsp
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company-lsp
+    :after (lsp-mode company-mode)
+    :config
+    (add-to-list 'company-backends 'company-lsp)
+    (push 'company-lsp company-backends)
+    ;; 开启 yasnippet 支持
+    (setq company-lsp-enable-snippet t)
+    )
 #+END_SRC
 
-*** company-box
+*** COMMENT company-box
 @see - https://github.com/sebastiencs/company-box
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package company-box
@@ -3746,7 +3798,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
   ;;   :hook (company-mode . company-box-mode))
 #+END_SRC
 
-*** company-posframe
+*** COMMENT company-posframe
 在 MacOS 下使用 posframe 时，Emacs 全屏状态下的问题：https://emacs-china.org/t/topic/4662/132
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package posframe)
@@ -3810,15 +3862,6 @@ https://github.com/emacs-lsp/lsp-mode
     :config
     :hook (lsp-mode . lsp-ui-mode)
     )
-
-  (use-package company-lsp
-    :after (lsp-mode company-mode)
-    :config
-    (add-to-list 'company-backends 'company-lsp)
-    (push 'company-lsp company-backends)
-    ;; 开启 yasnippet 支持
-    (setq company-lsp-enable-snippet t)
-    )
 #+END_SRC
 
 ** yasnippet
@@ -3870,7 +3913,7 @@ https://github.com/emacs-lsp/lsp-mode
   ;;          ("C-h h" . helm-descbinds)))
 #+END_SRC
 
-** eldoc
+** COMMENT eldoc
 
 * Languages
 ** COMMENT Go
@@ -4099,7 +4142,7 @@ https://github.com/grafov/go-playground
   ;;           (message "No recognized program file suffix for this file."))))))
 #+END_SRC
 
-** Java
+** COMMENT Java
 Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
 
 ** COMMENT Python
@@ -4621,15 +4664,6 @@ macOS 系统自身的包管理系统： ~brew~
   ;;   ("s" list-processes))
 #+END_SRC
 
-** COMMENT Document Conversions (Pandoc)
-#+BEGIN_SRC emacs-lisp :tangle yes
-;; (use-package pandoc-mode
-;;   :init
-;;   (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
-;;   :config
-;;   (when IS-MAC
-;;     (add-to-list 'exec-path "/usr/local/texlive/2017/bin/x86_64-darwin")))
-#+END_SRC
 ** org-reveal
 Exports Org-mode contents to Reveal.js HTML presentation.
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -4642,9 +4676,19 @@ Exports Org-mode contents to Reveal.js HTML presentation.
     (setq org-reveal-root "https://cdn.jsdelivr.net/reveal.js/3.0.0/"))
 #+END_SRC
 
-** beamer
+** COMMENT beamer
 
-** pdf 导出设置
+** COMMENT Document Conversions (Pandoc)
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package pandoc-mode
+  ;;   :init
+  ;;   (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+  ;;   :config
+  ;;   (when IS-MAC
+  ;;     (add-to-list 'exec-path "/usr/local/texlive/2017/bin/x86_64-darwin")))
+#+END_SRC
+
+** COMMENT pdf 导出设置
 这里的内容是采用 Emacs+orgmode+LaTeX 导出 pdf 相关的。
 需要系统安装 xelatex 用于导出带有中文的 pdf。
 1. 需要先安装 MacTeX
@@ -4798,8 +4842,8 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
       :after org))
 
   (when (package-installed-p 'hydra)
-    (bind-keys :map pdf-view-mode-map
-               ("\\" . hydra-pdftools/body))
+    ;; (bind-keys :map pdf-view-mode-map
+    ;;            ("\\" . hydra-pdftools/body))
     (defhydra hydra-pdftools (:color blue :hint nil)
       "
                                                                         ╭───────────┐
@@ -4918,7 +4962,7 @@ https://ox-hugo.scripter.co/doc/custom-front-matter/
   ;;   (use-package xml-rpc))
 #+END_SRC
 
-** Term
+** COMMENT Term
 参考这篇文章配置 multi-term：[[http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/][Using GNU Emacs as a terminal emulator]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq-default shell-file-name "/bin/zsh")
@@ -5043,7 +5087,7 @@ https://ox-hugo.scripter.co/doc/custom-front-matter/
   ;;         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
 #+END_SRC
 
-*** counsel-tramp
+*** COMMENT counsel-tramp
 @see - https://github.com/masasam/emacs-counsel-tramp
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package counsel-tramp
@@ -5057,32 +5101,10 @@ https://ox-hugo.scripter.co/doc/custom-front-matter/
 
 *** vagrant-tramp
 
-** Daemon
-使用服务模式启动 Emacs，这样子在其他地方可以快速启动一个 Emacs 窗口用于类似编辑文件操作等。
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package server
-  ;;   :init 
-  ;;   (add-hook 'after-init-hook '(lambda ()(unless (server-running-p)
-
-  ;;                                      (server-start)))))
-
-  (use-package server
-    :no-require
-    :hook (after-init . server-start))
-#+END_SRC
-
-Restart Emacs inside Emacs
-[[https://github.com/iqbalansari/restart-emacs][iqbalansari/restart-emacs - GitHub]]
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package restart-emacs
-    :commands (restart-emacs)
-    :config (emacs-restore-frames t))
-#+END_SRC
-
-** View Large Files
+** COMMENT View Large Files
 @see - https://github.com/m00natic/vlfi
 
-** Debug Emacs
+** COMMENT Debug Emacs
 @see - https://github.com/ShingoFukuyama/manage-minor-mode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -5090,35 +5112,55 @@ Restart Emacs inside Emacs
   ;; (require 'manage-minor-mode)
 #+END_SRC
 
-*** bug-hunter
+*** COMMENT bug-hunter
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Hunt down errors by bisecting elisp files
   (use-package bug-hunter :defer t)
 #+END_SRC
-** Images
+
+** FIXME Images
+*TODO:* 这个感觉 image-mode 和 imagex-mode 都没加载到，导致 hydra 按键无法绑定
 相关快捷键参考官方文档：https://github.com/mhayashi1120/Emacs-imagex
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'image-mode-hook '(lambda () (require 'image+)))
   (use-package image+
-    :after 'image-mode
+    ;; :after image-mode
     ;; :init (eval-after-load 'image '(require 'image+))
-    :init (add-hook 'image-mode-hook '(lambda () (require 'image+)))
+    ;; :init 
     :config
+    (imagex-global-sticky-mode t)
+    ;; (eval-after-load 'image+ '(imagex-global-sticky-mode t))
     (bind-keys :map image-mode-map
-               ("0" . imagex-sticky-restore-original)
-               ("+" . imagex-sticky-maximize)
-               ("=" . imagex-sticky-zoom-in)
-               ("-" . imagex-sticky-zoom-out))
-    (eval-after-load 'image+
-      `(when (require 'hydra nil t)
-         (defhydra imagex-sticky-binding (global-map "C-x C-l")
-           "Manipulating Image"
-           ("+" imagex-sticky-zoom-in "zoom in")
-           ("-" imagex-sticky-zoom-out "zoom out")
-           ("M" imagex-sticky-maximize "maximize")
-           ("O" imagex-sticky-restore-original "restore original")
-           ("S" imagex-sticky-save-image "save file")
-           ("r" imagex-sticky-rotate-right "rotate right")
-           ("l" imagex-sticky-rotate-left "rotate left")))))
+               ("\\" . hydra-imagex-sticky/body)))
+               ;; ("0" . imagex-sticky-restore-original)
+               ;; ("+" . imagex-sticky-maximize)
+               ;; ("=" . imagex-sticky-zoom-in)
+               ;; ("-" . imagex-sticky-zoom-out)))
+
+  ;; (eval-after-load 'image+
+  (when (package-installed-p 'hydra)
+    ;;      (bind-keys :map image-mode-map
+    ;;                 ("\\" . hydra-image-sticky/body))
+    ;;      ))
+    (defhydra hydra-imagex-sticky (:color blue)
+      "
+          Manipulating Image
+          ^Resize^             ^Rotate^           ^Save             ^Quit
+          ^^^^^^------------------------------------------------------------
+          _=_: zoom in     _r_: rotate right         _S_: save file _q_: quit
+          _-_: zoom out    _l_: rotate left
+          _+_: maximize
+          _0_: reset
+               "
+      ("\\" hydra-master/body "back")
+      ("q" nil "quit")
+      ("=" imagex-sticky-zoom-in)
+      ("-" imagex-sticky-zoom-out)
+      ("+" imagex-sticky-maximize)
+      ("0" imagex-sticky-restore-original)
+      ("S" imagex-sticky-save-image :color red)
+      ("r" imagex-sticky-rotate-right)
+      ("l" imagex-sticky-rotate-left)))
 #+END_SRC
 
 ** COMMENT emojify
@@ -5154,7 +5196,7 @@ Emojis in Emacs! :cat:
   ;; (add-hook 'after-make-frame-functions '--set-emoji-font)
 #+END_SRC
 
-*** company-emoji
+*** COMMENT company-emoji
 - [[https://github.com/dunn/company-emoji]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package company-emoji
@@ -5178,58 +5220,26 @@ Emojis in Emacs! :cat:
   ;;   (add-to-list 'company-backends 'company-restclient))
 #+END_SRC
 
-** Display Input Method in mode-line
+** Daemon
+使用服务模式启动 Emacs，这样子在其他地方可以快速启动一个 Emacs 窗口用于类似编辑文件操作等。
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setcar (nth 1 mode-line-mule-info) t)
-  (defun yc/fix-inp (&rest r)
-      (unless current-input-method-title
-          (setq current-input-method-title " EN ")))
-  (advice-add 'toggle-input-method :after 'yc/fix-inp)
-  (advice-add 'set-input-method :after 'yc/fix-inp)
+  ;; (use-package server
+  ;;   :init 
+  ;;   (add-hook 'after-init-hook '(lambda ()(unless (server-running-p)
+
+  ;;                                      (server-start)))))
+
+  (use-package server
+    :no-require
+    :hook (after-init . server-start))
 #+END_SRC
 
+Restart Emacs inside Emacs
+[[https://github.com/iqbalansari/restart-emacs][iqbalansari/restart-emacs - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package pyim
-    :demand t
-    :config
-    ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-    (use-package pyim-basedict
-      :config (pyim-basedict-enable))
-
-    (setq default-input-method "pyim")
-
-    ;; 我使用全拼
-    (setq pyim-default-scheme 'quanpin)
-
-    ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
-    ;; 我自己使用的中英文动态切换规则是：
-    ;; 1. 光标只有在注释里面时，才可以输入中文。
-    ;; 2. 光标前是汉字字符时，才能输入中文。
-    ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
-    (setq-default pyim-english-input-switch-functions
-                  '(pyim-probe-dynamic-english
-                    pyim-probe-isearch-mode
-                    pyim-probe-program-mode
-                    pyim-probe-org-structure-template))
-
-    (setq-default pyim-punctuation-half-width-functions
-                  '(pyim-probe-punctuation-line-beginning
-                    pyim-probe-punctuation-after-punctuation))
-
-    ;; 开启拼音搜索功能
-    (pyim-isearch-mode 1)
-
-    ;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
-    ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
-    ;; 手动安装 posframe 包。
-    (setq pyim-page-tooltip 'pupup)
-
-    ;; 选词框显示 5 个候选词
-    (setq pyim-page-length 8)
-
-    :bind
-    (("M-j" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-     ("C-;" . pyim-delete-word-from-personal-buffer)))
+  (use-package restart-emacs
+    :commands (restart-emacs)
+    :config (emacs-restore-frames t))
 #+END_SRC
 
 ** Reset GC
