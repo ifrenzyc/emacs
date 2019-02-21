@@ -40,15 +40,15 @@
   ;;                          ("melpa"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
   ;;                          ("org"          . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
 
-  ;; (setq package-archives '(("gnu"          . "http://elpa.emacs-china.org/elpa/gnu/")
-  ;;                          ("melpa"        . "http://elpa.emacs-china.org/elpa/melpa/")
-  ;;                          ("org"          . "http://elpa.emacs-china.org/elpa/org/")))
+  ;; (setq package-archives '(("gnu"          . "https://elpa.emacs-china.org/elpa/gnu/")
+  ;;                          ("melpa"        . "https://elpa.emacs-china.org/elpa/melpa/")
+  ;;                          ("org"          . "https://elpa.emacs-china.org/elpa/org/")))
 
   (setq package-archives
-        '(("elpy"         . "http://jorgenschaefer.github.io/packages/")
-          ("gnu"          . "http://elpa.gnu.org/packages/")
-          ("melpa"        . "http://melpa.org/packages/")
-          ("org"          . "http://orgmode.org/elpa/")))
+        '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
+          ("gnu"          . "https://elpa.gnu.org/packages/")
+          ("melpa"        . "https://melpa.org/packages/")
+          ("org"          . "https://orgmode.org/elpa/")))
   )
 
 ;; avoid problems with files newer than their byte-compiled counterparts

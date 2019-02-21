@@ -1951,7 +1951,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
 同时需要通过 =M-x package-list-packages= 安装新版本的 orgmode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (require 'org)
+  ;; (require 'org)
   ;; (require 'org-mouse)
 
   (use-package org
@@ -2188,7 +2188,7 @@ e.g. =<s=
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-bullets
     :after org
-    :defer 1
+    ;; :defer 1
     :hook (org-mode . org-bullets-mode)
     :config
     ;; (add-hook 'org-mode-hook 'org-bullets-mode)
@@ -2196,26 +2196,6 @@ e.g. =<s=
     ;; "☉" "⦾" "◦" "∙" "∘" "⚪" "◯" "⦿" "⌾" "◉"
     ;; (setq org-bullets-bullet-list '("❂" "⊚" "❍"))
     (setq org-bullets-bullet-list '("❂" "✿" "✪" "✸" "◉" "☼" "⚬")))
-#+END_SRC
-
-** COMMENT worf
-vi-like bindings for org-mode
-@see - https://oremacs.com/worf/README.html
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package worf
-  ;;   :defer 5
-  ;;   :init
-  ;;   :hook
-  ;;   (org-mode . worf-mode))
-#+END_SRC
-
-** COMMENT org-mac-link
-参考这篇内容：[[http://orgmode.org/worg/org-contrib/org-mac-link.html][org-mac-link.el – Grab links from open Mac applications]]，完成配置 org-mac-link
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package org-mac-link
-  ;;   :init
-  ;;   (add-hook 'org-mode-hook (lambda ()
-  ;;                              (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link))))
 #+END_SRC
 
 ** org-capture
@@ -2256,7 +2236,7 @@ vi-like bindings for org-mode
            "* Note %?\n%T")
           ("b" "Blog idea" entry (file+headline org-default-notes-file "Blog Topics:")
            "* %?\n%T" :prepend t)
-          ("j" "Journal" entry (file+datetree org-default-notes-file)
+          ("j" "Journal" entry (file+datetree org-agenda-file-journal)
            "* %?\nEntered on %U\n  %i\n  %a")
           ("s" "Screencast" entry (file org-default-notes-file)
            "* %?\n%i\n")
@@ -2280,114 +2260,6 @@ vi-like bindings for org-mode
 
 *** TODO 还可以参考这里用于快速粘贴网页书签。
 [[https://github.com/tumashu/org-capture-pop-frame][tumashu/org-capture-pop-frame - GitHub]]
-
-** COMMENT Drag and Drop
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package org-download)
-#+END_SRC
-
-** 重新定义不同状态的 todoList 的排版
-@see - [[http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/][Emacs: Strike through headlines for DONE tasks in Org]]
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq org-fontify-done-headline t)
-  (custom-set-faces
-   '(org-done ((t (:foreground "PaleGreen"
-                               :weight normal
-                               :strike-through t))))
-   '(org-headline-done
-     ((((class color) (min-colors 16) (background dark))
-       (:foreground "LightSalmon" :strike-through t)))))
-
-  (defun modify-org-done-face ()
-    (setq org-fontify-done-headline t)
-    (set-face-attribute 'org-done nil :strike-through t)
-    (set-face-attribute 'org-headline-done nil :strike-through t))
-
-  (eval-after-load "org" (add-hook 'org-add-hook 'modify-org-done-face))
-#+END_SRC
-
-** export
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package htmlize)
-
-  ;; (setq org-publish-project-alist
-  ;;       '(
-  ;;         ("org-blog-content" ;; 博客内容
-  ;;          ;; Path to your org files.
-  ;;          :base-directory "/Users/yangc/Dropbox/itsycnotes/"
-  ;;          :base-extension "org"
-  ;;          ;; Path to your jekyll project.
-  ;;          :publishing-directory "~/Applications/nginx/notes/"
-  ;;          :recursive t
-  ;;          :publishing-function org-html-publish-to-html
-  ;;          :headline-levels 4
-  ;;          :html-extension "html"
-  ;;          :table-of-contents t ;; 导出目录
-  ;;          :link-home "home.html"
-  ;;          :html-preamble (concat "INSERT HTML CODE HERE FOR PREAMBLE")
-  ;;          :html-postamble (concat "INSERT HTML CODE HERE FOR POSTAMBLE")
-  ;;          ;; :body-only t ;; Only export section between <body></body>
-  ;;          )
-  ;;         ("org-blog-static" ;; 静态文件
-  ;;          :base-directory "/Users/yangc/Dropbox/itsycnotes/"
-  ;;          :base-extension "css\\|ico\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|svg"
-  ;;          :publishing-directory "~/Applications/nginx/notes/"
-  ;;          :recursive t
-  ;;          :publishing-function org-publish-attachment)
-  ;;         ("blog" :components ("org-blog-content" "org-blog-static"))
-  ;;         ))
-
-  ;; auto load markdown exporter when load org-mode
-  ;; (eval-after-load "org"
-  ;;   '(require 'ox-md nil t))
-
-  (use-package ox-gfm)
-  (eval-after-load "org"
-    '(require 'ox-gfm nil t))
-
-  ;; https://github.com/kawabata/ox-pandoc
-  (use-package ox-pandoc
-    :mode ("\\.org$" . org-mode)
-    :config
-    (with-eval-after-load 'ox
-      (require 'ox-pandoc)))
-#+END_SRC
-
-** COMMENT set org-code-block color
-#+BEGIN_SRC emacs-lisp :tangle yes
-;; (custom-set-faces
-;;  '(org-block-begin-line
-;;    ((t (:underline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
-;;  '(org-block-end-line
-;;    ((t (:overline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
-;;  '(org-block
-;;    ((t (:background "#333333"))))
-;;  '(org-block-background
-;;    ((t (:background "#333333"))))
-;;  )
-
-;; (custom-set-faces
-;;  '(org-block-begin-line
-;;    ((t (:underline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
-;;  '(org-block-end-line
-;;    ((t (:overline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
-;;  '(org-block
-;;    ((t (:background "#F2E4BE"))))
-;;  '(org-block-background
-;;    ((t (:background "#F2E4BE"))))
-;;  )
-#+END_SRC
-
-** MobileOrg
-documentation: https://mobileorg.github.io/documentation/
-
-执行命令进行推送： =M-x org-mobile-push= or =C-c C-x RET p= 。
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Set to the name of the file where new notes will be stored
-  (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
-  ;; Set to <your Dropbox root directory>/MobileOrg.
-  (setq org-mobile-directory "~/Dropbox/应用/MobileOrg")
-#+END_SRC
 
 ** org-agenda
 参考：https://writequit.org/denver-emacs/presentations/2017-04-11-time-clocking-with-org.html
@@ -2693,6 +2565,180 @@ Archive subtrees under the same hierarchy as original in the archive files
           ;;  ((tags-todo "CATEGORY=\"Movies\""
           ;;              ((org-agenda-prefix-format "%:T ")))))
           ))
+#+END_SRC
+
+** org-journal
+- [[https://github.com/bastibe/org-journal][bastibe/org-journal - GitHub]]
+
+*常用按键：*
+| 按键    | 作用                 |
+|---------+----------------------|
+| =C-c C-j= | 创建一个新的日记条目 |
+
+=M-x calendar= 打开 Emacs 的日历模式，org-journal 集成在 calendar 里面
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-journal
+    :defer 1
+    :after org
+    :init
+    (setq org-journal-dir "~/notes/07_Journal/"
+          org-journal-date-format "%A, %d %m %Y"
+          ;; org-journal-date-format "#+TITLE: Journal Entry- %e %b %Y (%A)"
+          org-journal-file-format "%Y-%m-%d.org"))
+    ;; :bind (("C-c t" . journal-file-today)
+    ;;        ("C-c y" . journal-file-yesterday)))
+    ;; :preface
+    ;; (defun get-journal-file-today ()
+    ;;   "Gets filename for today's journal entry."
+    ;;   (let ((daily-name (format-time-string "%Y%m%d")))
+    ;;     (expand-file-name (concat org-journal-dir daily-name))))
+
+    ;; (defun journal-file-today ()
+    ;;   "Creates and load a journal file based on today's date."
+    ;;   (interactive)
+    ;;   (find-file (get-journal-file-today)))
+
+    ;; (defun get-journal-file-yesterday ()
+    ;;   "Gets filename for yesterday's journal entry."
+    ;;   (let* ((yesterday (time-subtract (current-time) (days-to-time 1)))
+    ;;          (daily-name (format-time-string "%Y%m%d" yesterday)))
+    ;;     (expand-file-name (concat org-journal-dir daily-name))))
+
+    ;; (defun journal-file-yesterday ()
+    ;;   "Creates and load a file based on yesterday's date."
+    ;;   (interactive)
+    ;;   (find-file (get-journal-file-yesterday))))
+#+END_SRC
+
+#+RESULTS:
+: #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8125 data (:use-package (23662 20073 799058 0) :init (23662 20073 799043 0) :config (23662 20073 799035 0) :config-secs (0 0 3 0) :init-secs (0 0 33 0) :use-package-secs (0 0 119 0)))
+
+** COMMENT worf
+vi-like bindings for org-mode
+@see - https://oremacs.com/worf/README.html
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package worf
+  ;;   :defer 5
+  ;;   :init
+  ;;   :hook
+  ;;   (org-mode . worf-mode))
+#+END_SRC
+
+** COMMENT org-mac-link
+参考这篇内容：[[http://orgmode.org/worg/org-contrib/org-mac-link.html][org-mac-link.el – Grab links from open Mac applications]]，完成配置 org-mac-link
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package org-mac-link
+  ;;   :init
+  ;;   (add-hook 'org-mode-hook (lambda ()
+  ;;                              (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link))))
+#+END_SRC
+
+** COMMENT Drag and Drop
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package org-download)
+#+END_SRC
+
+** 重新定义不同状态的 todoList 的排版
+@see - [[http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/][Emacs: Strike through headlines for DONE tasks in Org]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq org-fontify-done-headline t)
+  (custom-set-faces
+   '(org-done ((t (:foreground "PaleGreen"
+                               :weight normal
+                               :strike-through t))))
+   '(org-headline-done
+     ((((class color) (min-colors 16) (background dark))
+       (:foreground "LightSalmon" :strike-through t)))))
+
+  (defun modify-org-done-face ()
+    (setq org-fontify-done-headline t)
+    (set-face-attribute 'org-done nil :strike-through t)
+    (set-face-attribute 'org-headline-done nil :strike-through t))
+
+  (eval-after-load "org" (add-hook 'org-add-hook 'modify-org-done-face))
+#+END_SRC
+
+** export
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package htmlize)
+
+  ;; (setq org-publish-project-alist
+  ;;       '(
+  ;;         ("org-blog-content" ;; 博客内容
+  ;;          ;; Path to your org files.
+  ;;          :base-directory "/Users/yangc/Dropbox/itsycnotes/"
+  ;;          :base-extension "org"
+  ;;          ;; Path to your jekyll project.
+  ;;          :publishing-directory "~/Applications/nginx/notes/"
+  ;;          :recursive t
+  ;;          :publishing-function org-html-publish-to-html
+  ;;          :headline-levels 4
+  ;;          :html-extension "html"
+  ;;          :table-of-contents t ;; 导出目录
+  ;;          :link-home "home.html"
+  ;;          :html-preamble (concat "INSERT HTML CODE HERE FOR PREAMBLE")
+  ;;          :html-postamble (concat "INSERT HTML CODE HERE FOR POSTAMBLE")
+  ;;          ;; :body-only t ;; Only export section between <body></body>
+  ;;          )
+  ;;         ("org-blog-static" ;; 静态文件
+  ;;          :base-directory "/Users/yangc/Dropbox/itsycnotes/"
+  ;;          :base-extension "css\\|ico\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|svg"
+  ;;          :publishing-directory "~/Applications/nginx/notes/"
+  ;;          :recursive t
+  ;;          :publishing-function org-publish-attachment)
+  ;;         ("blog" :components ("org-blog-content" "org-blog-static"))
+  ;;         ))
+
+  ;; auto load markdown exporter when load org-mode
+  ;; (eval-after-load "org"
+  ;;   '(require 'ox-md nil t))
+
+  (use-package ox-gfm)
+  (eval-after-load "org"
+    '(require 'ox-gfm nil t))
+
+  ;; https://github.com/kawabata/ox-pandoc
+  (use-package ox-pandoc
+    :mode ("\\.org$" . org-mode)
+    :config
+    (with-eval-after-load 'ox
+      (require 'ox-pandoc)))
+#+END_SRC
+
+** COMMENT set org-code-block color
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; (custom-set-faces
+;;  '(org-block-begin-line
+;;    ((t (:underline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block-end-line
+;;    ((t (:overline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block
+;;    ((t (:background "#333333"))))
+;;  '(org-block-background
+;;    ((t (:background "#333333"))))
+;;  )
+
+;; (custom-set-faces
+;;  '(org-block-begin-line
+;;    ((t (:underline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block-end-line
+;;    ((t (:overline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block
+;;    ((t (:background "#F2E4BE"))))
+;;  '(org-block-background
+;;    ((t (:background "#F2E4BE"))))
+;;  )
+#+END_SRC
+
+** MobileOrg
+documentation: https://mobileorg.github.io/documentation/
+
+执行命令进行推送： =M-x org-mobile-push= or =C-c C-x RET p= 。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Set to the name of the file where new notes will be stored
+  (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
+  ;; Set to <your Dropbox root directory>/MobileOrg.
+  (setq org-mobile-directory "~/Dropbox/应用/MobileOrg")
 #+END_SRC
 
 ** COMMENT outline-toc
