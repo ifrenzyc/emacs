@@ -25,7 +25,7 @@
 ;; installed packages. Don't delete this line. If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; uncomment this line in first time startup.
-;; (package-initialize)
+(package-initialize)
 
 (when (>= emacs-major-version 26)
   (require 'package)

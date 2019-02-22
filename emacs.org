@@ -2584,8 +2584,8 @@ Archive subtrees under the same hierarchy as original in the archive files
     (setq org-journal-dir "~/notes/07_Journal/"
           org-journal-date-format "%A, %d %m %Y"
           ;; org-journal-date-format "#+TITLE: Journal Entry- %e %b %Y (%A)"
-          org-journal-file-format "%Y-%m-%d.org"))
-    ;; :bind (("C-c t" . journal-file-today)
+          org-journal-file-format "%Y-%m-%d.org")
+    :bind ("C-c j" . org-journal-new-entry))
     ;;        ("C-c y" . journal-file-yesterday)))
     ;; :preface
     ;; (defun get-journal-file-today ()
@@ -2609,9 +2609,6 @@ Archive subtrees under the same hierarchy as original in the archive files
     ;;   (interactive)
     ;;   (find-file (get-journal-file-yesterday))))
 #+END_SRC
-
-#+RESULTS:
-: #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8125 data (:use-package (23662 20073 799058 0) :init (23662 20073 799043 0) :config (23662 20073 799035 0) :config-secs (0 0 3 0) :init-secs (0 0 33 0) :use-package-secs (0 0 119 0)))
 
 ** COMMENT worf
 vi-like bindings for org-mode
