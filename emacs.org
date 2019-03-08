@@ -1008,7 +1008,7 @@ Restore cursor to file position in previous editing session.
   :if IS-MAC
   :defer 1
   :config
-  (setq exec-path-from-shell-variables '("PATH" "GOPATH" "GOROOT"))
+  (setq exec-path-from-shell-variables '("PATH" "GOPATH" "GOROOT" "PKG_CONFIG_PATH"))
   (exec-path-from-shell-initialize))
 
 ;; (cond (IS-MAC
