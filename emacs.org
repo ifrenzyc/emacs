@@ -1968,7 +1968,7 @@ anzu 的 evil 扩展
 #+END_SRC
 
 *** COMMENT major-mode-hydra
-*About:* 
+*About:* 这个是参考了 spacemacs 针对 hydra 的扩展
 https://github.com/jerrypnz/major-mode-hydra.el
 
 * Org Mode
@@ -2356,6 +2356,7 @@ Agenda Files
 
   (setq org-refile-targets '((org-agenda-file-inbox :maxlevel . 1)
                              (org-agenda-file-gtd :maxlevel . 2)
+                             (org-agenda-file-reading :maxlevel . 2)
                              ("/Users/yangc/Dropbox/itsycnotes/someday.org" :level . 1)
                              (org-agenda-file-tickler :maxlevel . 2)))
 #+END_SRC
@@ -4837,6 +4838,9 @@ Exports Org-mode contents to Reveal.js HTML presentation.
     ;; (setq org-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0"))
     (setq org-reveal-root "https://cdn.jsdelivr.net/reveal.js/3.0.0/"))
 #+END_SRC
+
+** COMMENT diff
+https://github.com/justbur/emacs-vdiff
 
 ** COMMENT beamer
 *About:* 
