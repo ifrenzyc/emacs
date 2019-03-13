@@ -1659,13 +1659,13 @@ anzu 的 evil 扩展
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hydra
     :defer t
-    :preface
-    (defvar-local yc/ongoing-hydra-body nil)
-    (defun yc/ongoing-hydra ()
-      (interactive)
-      (if yc/ongoing-hydra-body
-          (funcall yc/ongoing-hydra-body)
-        (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
+    ;; :preface
+    ;; (defvar-local yc/ongoing-hydra-body nil)
+    ;; (defun yc/ongoing-hydra ()
+    ;;   (interactive)
+    ;;   (if yc/ongoing-hydra-body
+    ;;       (funcall yc/ongoing-hydra-body)
+    ;;     (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
     :config
     (defun hydra-move-splitter-left (arg)
       "Move window splitter left."
@@ -2084,11 +2084,12 @@ https://github.com/dustinlacewell/hera
         (progn (add-to-invisibility-spec '(org-link))
                (org-restart-font-lock)
                (setq org-descriptive-links t))))
-    :preface
-    (defun yc/org-set-ongoing-hydra-body ()
-      (setq yc/ongoing-hydra-body #'hydra-org/body))
-    :hook
-    (org-mode . yc/org-set-ongoing-hydra-body))
+    )
+    ;; :preface
+    ;; (defun yc/org-set-ongoing-hydra-body ()
+    ;;   (setq yc/ongoing-hydra-body #'hydra-org/body))
+    ;; :hook
+    ;; (org-mode . yc/org-set-ongoing-hydra-body))
 
   ;; Paste an image on clipboard to Emacs Org mode file
   ;; @see - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
