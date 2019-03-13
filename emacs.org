@@ -1513,6 +1513,7 @@ anzu 的 evil 扩展
     "qQ"   'kill-emacs
     "r"    '(:ignore t :which-key "registers/rings/resume")
     "m"    '(:ignore t :which-key "major-mode-cmd")
+    "m."   'major-mode-hydra
     "Re"   '(:ignore t :which-key "elisp")
     "Rp"   '(:ignore t :which-key "pcre")
     "s"    '(:ignore t :which-key "search/symbol")
@@ -1654,6 +1655,7 @@ anzu 的 evil 扩展
 - https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/
 - https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html
 - https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
+- https://dustinlacewell.github.io/emacs.d/#org1fab346
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hydra
     :defer t
@@ -1910,27 +1912,6 @@ anzu 的 evil 扩展
   ;;   ("l" me/date-long)
   ;;   ("L" me/date-long-with-time))
 
-  ;; (defhydra hydra-markdown (:color pink)
-  ;;   "
-  ;; ^
-  ;; ^Markdown^          ^Table Columns^     ^Table Rows^
-  ;; ^────────^──────────^─────────────^─────^──────────^────────
-  ;; _q_ quit            _c_ insert          _r_ insert
-  ;; ^^                  _C_ delete          _R_ delete
-  ;; ^^                  _M-<left>_ left     _M-<down>_ down
-  ;; ^^                  _M-<right>_ right   _M-<up>_ up
-  ;; ^^                  ^^                  ^^
-  ;; "
-  ;;   ("q" nil)
-  ;;   ("c" markdown-table-insert-column)
-  ;;   ("C" markdown-table-delete-column)
-  ;;   ("r" markdown-table-insert-row)
-  ;;   ("R" markdown-table-delete-row)
-  ;;   ("M-<left>" markdown-table-move-column-left)
-  ;;   ("M-<right>" markdown-table-move-column-right)
-  ;;   ("M-<down>" markdown-table-move-row-down)
-  ;;   ("M-<up>" markdown-table-move-row-up))
-
   (defhydra hydra-windows (:color pink)
     "
   ^
@@ -1970,6 +1951,13 @@ anzu 的 evil 扩展
 *** COMMENT major-mode-hydra
 *About:* 这个是参考了 spacemacs 针对 hydra 的扩展
 https://github.com/jerrypnz/major-mode-hydra.el
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package major-mode-hydra)
+#+END_SRC
+
+*** COMMENT hera
+*About:*
+https://github.com/dustinlacewell/hera
 
 * Org Mode
 *About:* 
@@ -2012,7 +2000,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
           org-enforce-todo-dependencies t
           org-enforce-todo-checkbox-dependencies t
           org-hide-emphasis-markers t
-          org-image-actual-width 800)
+          org-image-actual-width '(400))
 
     (setq org-export-with-sub-superscripts nil  ; 禁用 ^ 和 _ 作为上下标符号
           org-pretty-entities-include-sub-superscripts nil)
@@ -2819,7 +2807,7 @@ documentation: https://mobileorg.github.io/documentation/
     :keymaps 'org-mode-map
     ;; "" '(:ignore t :which-key "major-mode-cmd")
     ;; "ma" '(:ignore t :which-key "help")
-    "." 'hydra-org/body
+    ;; "." 'hydra-org/body
     "'" 'org-edit-special
     "SPC" 'worf-back-to-heading
     "a" 'org-agenda
@@ -2974,32 +2962,50 @@ documentation: https://mobileorg.github.io/documentation/
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defhydra hydra-org (:color red)
-      "
-    ^
-    ^Quit^           ^Move^                 ^Zoom^          
-    ^───────^───────────^──────^────────────^────^──────────
-    _q_ quit            _n_ Next Head        _<_ Go Back 
-    ^^                  _p_ Prev Head        _l_ →
-    ^^                  _N_ Next Same Head   _h_ ←
-    ^^                  _P_ Prev Same Head   _k_ ↑      
-    ^^                  _u_ Up               _j_ ↓
-    ^^                  _g_ Goto             ^^
-    ^^                  ^^                   ^^
-    ^^                  ^^                   ^^
-    "
+  ;; (defhydra hydra-org (:color red)
+  ;;   "
+  ;;   ^
+  ;;   ^Quit^           ^Move^                 ^Zoom^          
+  ;;   ^───────^───────────^──────^────────────^────^──────────
+  ;;   _q_ quit            _n_ Next Head        _<_ Go Back 
+  ;;   ^^                  _p_ Prev Head        _l_ →
+  ;;   ^^                  _N_ Next Same Head   _h_ ←
+  ;;   ^^                  _P_ Prev Same Head   _k_ ↑      
+  ;;   ^^                  _u_ Up               _j_ ↓
+  ;;   ^^                  _g_ Goto             ^^
+  ;;   ^^                  ^^                   ^^
+  ;;   ^^                  ^^                   ^^
+  ;;   "
+  ;;   ("n" outline-next-visible-heading "next heading")
+  ;;   ("p" outline-previous-visible-heading "prev heading")
+  ;;   ("N" org-forward-heading-same-level "next heading at same level")
+  ;;   ("P" org-backward-heading-same-level "prev heading at same level")
+  ;;   ("u" outline-up-heading "up heading")
+  ;;   ("g" org-goto "goto" :exit t)
+  ;;   ("<" worf-back-to-heading "worf-back-to-heading")
+  ;;   ("l" worf-right "worf-right")
+  ;;   ("j" worf-down "worf-down")
+  ;;   ("k" worf-up "worf-up")
+  ;;   ("h" worf-left "worf-left")
+  ;;   ("q" nil))
+
+  (major-mode-hydra-bind org-mode "Quit"
+    ("q" nil))
+
+  (major-mode-hydra-bind org-mode "Move"
     ("n" outline-next-visible-heading "next heading")
     ("p" outline-previous-visible-heading "prev heading")
     ("N" org-forward-heading-same-level "next heading at same level")
     ("P" org-backward-heading-same-level "prev heading at same level")
     ("u" outline-up-heading "up heading")
-    ("g" org-goto "goto" :exit t)
+    ("g" org-goto "goto" :exit t))
+
+  (major-mode-hydra-bind org-mode "Zoom"
     ("<" worf-back-to-heading "worf-back-to-heading")
     ("l" worf-right "worf-right")
     ("j" worf-down "worf-down")
     ("k" worf-up "worf-up")
-    ("h" worf-left "worf-left")
-    ("q" nil))
+    ("h" worf-left "worf-left"))
 #+END_SRC
 
 *** evil-org
@@ -4375,6 +4381,13 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
   ;;  "Va" 'pyvenv-activate
   ;;  "Vd" 'pyvenv-deactivate
   ;;  "Vw" 'pyvenv-workon)
+
+  ;; (major-mode-hydra-bind python-mode "Python"
+  ;;                        ("i" elpy-importmagic-fixup "Importmagic fixup")
+  ;;                        ("d" elpy-goto-definition   "Goto definition")
+  ;;                        ("r" elpy-multiedit-python-symbol-at-point   "Rename symbol")
+  ;;                        ("f" elpy-format-code   "Format code")
+  ;;                        )
 #+END_SRC
 
 ** COMMENT Clojure
@@ -4694,11 +4707,11 @@ Config for setting markdown mode and stuff
     :config
     ;; Turn on flyspell mode when editing markdown files
     (add-hook 'markdown-mode-hook 'flyspell-mode)
-    (add-hook 'gfm-mode-hook 'flyspell-mode)
-    :preface
-    (defun yc/markdown-set-ongoing-hydra-body ()
-      (setq yc/ongoing-hydra-body #'hydra-markdown/body))
-    :hook (markdown-mode . yc/markdown-set-ongoing-hydra-body))
+    (add-hook 'gfm-mode-hook 'flyspell-mode))
+    ;; :preface
+    ;; (defun yc/markdown-set-ongoing-hydra-body ()
+    ;;   (setq yc/ongoing-hydra-body #'hydra-markdown/body))
+    ;; :hook (markdown-mode . yc/markdown-set-ongoing-hydra-body))
 
   (use-package markdown-toc :after markdown-mode)
   (use-package markdown-mode+ :after markdown-mode)
@@ -4713,15 +4726,75 @@ Config for setting markdown mode and stuff
 
 *** key-binding
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (my-major-mode-leader-def
-     :keymaps 'markdown-mode-map
-     ;; "" '(:ignore t :which-key "major-mode-cmd")
-     "m." 'hydra-markdown/body)
+  ;; (my-major-mode-leader-def
+  ;;   :keymaps 'markdown-mode-map
+  ;;   ;; "" '(:ignore t :which-key "major-mode-cmd")
+  ;;   "m." 'hydra-markdown/body)
 
-  (my-major-mode-leader-def-copy
-     :keymaps 'markdown-mode-map
-     "" '(:ignore t :which-key "major-mode-cmd")
-     "m." 'hydra-markdown/body)
+  ;; (my-major-mode-leader-def-copy
+  ;;   :keymaps 'markdown-mode-map
+  ;;   "" '(:ignore t :which-key "major-mode-cmd")
+  ;;   "m." 'hydra-markdown/body)
+
+  ;; (defhydra hydra-markdown (:color pink)
+  ;;   "
+  ;; ^
+  ;; ^Markdown^          ^Table Columns^     ^Table Rows^
+  ;; ^────────^──────────^─────────────^─────^──────────^────────
+  ;; _q_ quit            _c_ insert          _r_ insert
+  ;; ^^                  _C_ delete          _R_ delete
+  ;; ^^                  _M-<left>_ left     _M-<down>_ down
+  ;; ^^                  _M-<right>_ right   _M-<up>_ up
+  ;; ^^                  ^^                  ^^
+  ;; "
+  ;;   ("q" nil)
+  ;;   ("c" markdown-table-insert-column)
+  ;;   ("C" markdown-table-delete-column)
+  ;;   ("r" markdown-table-insert-row)
+  ;;   ("R" markdown-table-delete-row)
+  ;;   ("M-<left>" markdown-table-move-column-left)
+  ;;   ("M-<right>" markdown-table-move-column-right)
+  ;;   ("M-<down>" markdown-table-move-row-down)
+  ;;   ("M-<up>" markdown-table-move-row-up))
+
+  (major-mode-hydra-bind markdown-mode "Format"
+      ("h" markdown-insert-header-dwim "header") 
+      ("1" markdown-insert-header-atx-1 "h1")
+      ("2" markdown-insert-header-atx-2 "h2")
+      ("3" markdown-insert-header-atx-3 "h3")
+      ("4" markdown-insert-header-atx-4 "h4")    
+      ("s" markdown-insert-bold "bold")
+      ("e" markdown-insert-italic "italic")
+      ("b" markdown-insert-blockquote "quote")
+      ("p" markdown-insert-pre "pre")
+      ("c" markdown-insert-code "code"))
+
+  (major-mode-hydra-bind markdown-mode "Other"
+      ("l" markdown-promote "promote")
+      ("r" markdown-demote "demote")
+      ("d" markdown-move-down "move down")
+      ("u" markdown-move-up "move up")  
+      ("L" markdown-insert-link "link")
+      ("U" markdown-insert-uri "url")
+      ("F" markdown-insert-footnote "footnote")
+      ("W" markdown-insert-wiki-link "wiki")
+      ("R" markdown-insert-reference-link-dwim "r-link")
+      ("n" markdown-cleanup-list-numbers "clean-lists")
+      ("C" markdown-complete-bufer "complete"))
+
+  (major-mode-hydra-bind markdown-mode "Pandoc"
+        ("A" pandoc-article "article")
+        ("B" pandoc-beamer "beamer")
+        ("S" pandoc-slides "slides")
+        ("H" pandoc-handout "handout")
+        ("O" pandoc-obuletter "obu letter")
+        ("D" pandoc-docx "docx")
+        ("H" pandoc-html "html")
+        ("P" pandoc-pdf "pdf")
+        ("t" pandoc-clean "trash non-md"))
+
+  (major-mode-hydra-bind markdown-mode "Quit"
+        ("q" nil))
 #+END_SRC
 
 * Utility
