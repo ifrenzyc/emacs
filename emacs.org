@@ -820,12 +820,12 @@ https://github.com/davidshepherd7/electric-operator
   ;; (global-set-key (kbd "M-9") 'winum-select-window-9)
 #+END_SRC
 
-** COMMENT ace-window
+** ace-window
 *About:* 
 或许试试这个 Package： [[https://github.com/dimitri/switch-window][dimitri/switch-window - GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;; ace-window
-  ;; (use-package ace-window
+  ;; ace-window
+  (use-package ace-window)
   ;;   :bind ("C-x o" . ace-window))
 #+END_SRC
 
@@ -1661,7 +1661,7 @@ anzu 的 evil 扩展
     )
 #+END_SRC
 
-*** COMMENT major-mode-hydra
+*** major-mode-hydra
 *About:* 这个是参考了 spacemacs 针对 hydra 的扩展，能够方便地绑定 major mode 的按键。
 比如，当前的 major mode 是 org-mode，则可以快速唤出相应 org-mode 自定义的 hydra 按键，统一所有 major-mode 的按键。
 https://github.com/jerrypnz/major-mode-hydra.el
