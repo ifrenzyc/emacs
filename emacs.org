@@ -681,7 +681,7 @@ Highlight matching and auto insert parenthesis.
                    ))
 #+END_SRC
 
-*** COMMENT Hydra-smartparens
+*** COMMENT hydra-smartparens
 https://github.com/abo-abo/hydra/wiki/Smartparens
 
 ** COMMENT fill-column-indicator
@@ -865,25 +865,6 @@ https://github.com/davidshepherd7/electric-operator
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (defhydra hydra-eyebrowse (:color blue)
-  ;;   "
-  ;; ^
-  ;; ^Eyebrowse^         ^Do^                ^Switch^
-  ;; ^─────────^─────────^──^────────────────^──────^────────────
-  ;; _q_ quit            _c_ create          _<_ previous
-  ;; ^^                  _k_ kill            _>_ next
-  ;; ^^                  _r_ rename          _e_ last
-  ;; ^^                  ^^                  _s_ switch
-  ;; ^^                  ^^                  ^^
-  ;; "
-  ;;   ("q" nil)
-  ;;   ("<" eyebrowse-prev-window-config :color red)
-  ;;   (">" eyebrowse-next-window-config :color red)
-  ;;   ("c" eyebrowse-create-window-config)
-  ;;   ("e" eyebrowse-last-window-config)
-  ;;   ("k" eyebrowse-close-window-config :color red)
-  ;;   ("r" eyebrowse-rename-window-config)
-  ;;   ("s" eyebrowse-switch-to-window-config))
 #+END_SRC
 
 ** ELScreen & window-zoom
@@ -1532,7 +1513,7 @@ anzu 的 evil 扩展
     "sS"   'helm-swoop-region-or-symbol
     "w"    '(:ignore t :which-key "windows")
     "wp"   '(:ignore t :which-key "popup")
-    "w."   'hydra-windows/body
+    "w."   'hydra-window/body
     "wh"   'windmove-left
     "wl"   'windmove-right
     "wk"   'windmove-up
@@ -1666,38 +1647,6 @@ anzu 的 evil 扩展
     ;;   (if yc/ongoing-hydra-body
     ;;       (funcall yc/ongoing-hydra-body)
     ;;     (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
-    :config
-    (defun hydra-move-splitter-left (arg)
-      "Move window splitter left."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'right))
-          (shrink-window-horizontally arg)
-        (enlarge-window-horizontally arg)))
-
-    (defun hydra-move-splitter-right (arg)
-      "Move window splitter right."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'right))
-          (enlarge-window-horizontally arg)
-        (shrink-window-horizontally arg)))
-
-    (defun hydra-move-splitter-up (arg)
-      "Move window splitter up."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'up))
-          (enlarge-window arg)
-        (shrink-window arg)))
-
-    (defun hydra-move-splitter-down (arg)
-      "Move window splitter down."
-      (interactive "p")
-      (if (let ((windmove-wrap-around))
-            (windmove-find-other-window 'up))
-          (shrink-window arg)
-        (enlarge-window arg)))
     ;; :bind
     ;; ("C-c <tab>" . hydra-fold/body)
     ;; ("C-c d" . hydra-dates/body)
@@ -1709,16 +1658,310 @@ anzu 的 evil 扩展
     ;; ;; ("C-c p" . hydra-projectile/body)
     ;; ("C-c p" . hydra-system/body)
     ;; ("C-c w" . hydra-windows/body)
-  )
+    )
+#+END_SRC
 
-  (defhydra hydra-zoom (global-map "<f2>")
-    "zoom"
-    ("g" text-scale-increase "in")
-    ("l" text-scale-decrease "out")
-    ;; ("0" (text-scale-set 0) "reset" :exit t)
-    ("0" (text-scale-adjust 0) "reset")
-    ("q" nil "quit" :color blue))
+*** COMMENT major-mode-hydra
+*About:* 这个是参考了 spacemacs 针对 hydra 的扩展，能够方便地绑定 major mode 的按键。
+比如，当前的 major mode 是 org-mode，则可以快速唤出相应 org-mode 自定义的 hydra 按键，统一所有 major-mode 的按键。
+https://github.com/jerrypnz/major-mode-hydra.el
 
+后面的 hydra 配置，要参考 jerrypnz 的 [[https://github.com/jerrypnz/.emacs.d][emacs dotfile]]。
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Major mode keys managed by a pretty hydra
+  (use-package major-mode-hydra
+    ;; :straight (:host github :repo "jerrypnz/major-mode-hydra.el" :branch "develop")
+    :init
+    (progn
+      (autoload 'pretty-hydra-define "pretty-hydra" nil nil 'macro)
+      (autoload 'major-mode-hydra-bind "major-mode-hydra" nil 'macro))
+    :config
+    (progn
+      ;; (setq major-mode-hydra-invisible-quit-key "q")
+      (defun jp-major-mode-hydra-title-generator (_)
+        `(with-mode-icon major-mode
+                         (propertize (s-concat (format-mode-line mode-name) " Commands")
+                                     'face '(:weight bold :height 1.1))
+                         1.1))
+
+      (setq major-mode-hydra-title-generator #'jp-major-mode-hydra-title-generator)))
+#+END_SRC
+
+*** COMMENT hera
+*About:*
+https://github.com/dustinlacewell/hera
+
+*** hydra-window
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun hydra-move-splitter-left (arg)
+    "Move window splitter left."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'right))
+        (shrink-window-horizontally arg)
+      (enlarge-window-horizontally arg)))
+
+  (defun hydra-move-splitter-right (arg)
+    "Move window splitter right."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'right))
+        (enlarge-window-horizontally arg)
+      (shrink-window-horizontally arg)))
+
+  (defun hydra-move-splitter-up (arg)
+    "Move window splitter up."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'up))
+        (enlarge-window arg)
+      (shrink-window arg)))
+
+  (defun hydra-move-splitter-down (arg)
+    "Move window splitter down."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'up))
+        (shrink-window arg)
+      (enlarge-window arg)))
+
+  ;; (defhydra hydra-zoom (global-map "<f2>")
+  ;;   "zoom"
+  ;;   ("g" text-scale-increase "in")
+  ;;   ("l" text-scale-decrease "out")
+  ;;   ;; ("0" (text-scale-set 0) "reset" :exit t)
+  ;;   ("0" (text-scale-adjust 0) "reset")
+  ;;   ("q" nil "quit" :color blue))
+
+
+  ;; (defhydra hydra-window ()
+  ;;   "
+  ;;     Movement^   ^Split^         ^Switch^       ^^^Resize^         ^Window Purpose^
+  ;;     ------------------------------------------------------------------------------------------------------
+  ;;     _h_ ←        _|_ vertical    ^_b_uffer       _H_  X←          choose window _P_urpose
+  ;;     _j_ ↓        _-_ horizontal  ^_f_ind files   _J_  X↓          switch to _B_uffer w/ same purpose
+  ;;     _k_ ↑        _u_ undo        ^_a_ce window   _K_  X↑          Purpose-dedication(_!_)
+  ;;     _l_ →        _r_ reset       ^_s_wap         _K_  X→          Buffer-dedication(_#_)
+  ;;     ^^^^^^^                                      _M_aximize
+  ;;     ^^^^^^^                                      _d_elete
+  ;;     _x_ M-x      _q_ quit
+  ;;     "
+  ;;   ("h" windmove-left)
+  ;;   ("j" windmove-down)
+  ;;   ("k" windmove-up)
+  ;;   ("l" windmove-right)
+  ;;   ("|" (lambda ()
+  ;;          (interactive)
+  ;;          (split-window-right)
+  ;;          (windmove-right)))
+  ;;   ("-" (lambda ()
+  ;;          (interactive)
+  ;;          (split-window-below)
+  ;;          (windmove-down)))
+  ;;   ("u" (progn
+  ;;          (winner-undo)
+  ;;          (setq this-command 'winner-undo)))
+  ;;   ("r" winner-redo)
+  ;;   ("b" ivy-purpose-switch-buffer-without-purpose)
+  ;;   ("f" counsel-find-file)
+  ;;   ("a" (lambda ()
+  ;;          (interactive)
+  ;;          (ace-window 1)
+  ;;          (add-hook 'ace-window-end-once-hook
+  ;;                    'hydra-window/body)))
+  ;;   ("s" (lambda ()
+  ;;          (interactive)
+  ;;          (ace-swap-window)
+  ;;          (add-hook 'ace-window-end-once-hook
+  ;;                    'hydra-window/body)))
+  ;;   ("H" hydra-move-splitter-left)
+  ;;   ("J" hydra-move-splitter-down)
+  ;;   ("K" hydra-move-splitter-up)
+  ;;   ("L" hydra-move-splitter-right)
+  ;;   ("M" delete-other-windows)
+  ;;   ("d" delete-window)
+
+  ;;   ("P" purpose-set-window-purpose)
+  ;;   ("B" ivy-purpose-switch-buffer-with-purpose)
+  ;;   ("!" purpose-toggle-window-purpose-dedicated)
+  ;;   ("#" purpose-toggle-window-buffer-dedicated)
+
+  ;;   ("K" ace-delete-other-windows)
+  ;;   ("S" save-buffer)
+  ;;   ("d" delete-window)
+  ;;   ("D" (lambda ()
+  ;;          (interactive)
+  ;;          (ace-delete-window)
+  ;;          (add-hook 'ace-window-end-once-hook
+  ;;                    'hydra-window/body))
+  ;;    )
+
+  ;;   ("x" counsel-M-x)
+  ;;   ("q" nil)
+  ;;   )
+  ;; (general-define-key
+  ;;  "<f1>"  'hydra-window/body)
+
+  (pretty-hydra-define hydra-window (:hint nil :foreign-keys warn :quit-key "q")
+    (;; general window management commands
+     "Windows" (("x" ace-delete-window "delete")
+                ("m" ace-delete-other-windows "maximize")
+                ("s" ace-swap-window "swap")
+                ("a" ace-select-window "select")
+                ("o" other-window "cycle")
+                ("d" delete-window "delete")
+                ("M" delete-other-windows "delete other windows")
+                ;;("K" ace-delete-other-windows)
+                ("S" save-buffer "Save Buffer")
+                ("D" (lambda ()
+                       (interactive)
+                       (ace-delete-window)
+                       (add-hook 'ace-window-end-once-hook
+                                 'hydra-window/body)) "delete")
+                )
+     ;; resize
+     "Resize" (("h" move-border-left "←")
+               ("j" move-border-down "↓")
+               ("k" move-border-up "↑")
+               ("l" move-border-right "→")
+               ("n" balance-windows "balance")
+               ("H" hydra-move-splitter-left "←")
+               ("J" hydra-move-splitter-down "↓")
+               ("K" hydra-move-splitter-up "↑")
+               ("L" hydra-move-splitter-right "→")
+               ("b" balance-windows "balance")
+               ("i" enlarge-window "←")
+               ("j" shrink-window-horizontally "↓")
+               ("k" shrink-window "↑")
+               ("l" enlarge-window-horizontally "→")
+               )
+     ;; split
+     "Split"  (("b" split-window-right "horizontally")
+               ("B" split-window-horizontally-instead "horizontally instead")
+               ("v" split-window-below "vertically")
+               ("V" split-window-vertically-instead "vertically instead")
+               ("|" (lambda ()
+                      (interactive)
+                      (split-window-right)
+                      (windmove-right)) "horizontally")
+               ("-" (lambda ()
+                      (interactive)
+                      (split-window-below)
+                      (windmove-down)) "vertically")
+               ("u" (progn
+                      (winner-undo)
+                      (setq this-command 'winner-undo)) "undo")
+               ("r" winner-redo "redo")
+               )
+     ;; zoom
+     "Zoom" (("+" zoom-in "in")
+             ("=" zoom-in)
+             ("-" zoom-out "out")
+             ("+" text-scale-increase "in")
+             ("-" text-scale-decrease "out")
+             ("=" (text-scale-increase 0))
+             ("0" jp-zoom-default "reset"))
+
+     "Eyebrowse" (("<" eyebrowse-prev-window-config "previous")
+                  (">" eyebrowse-next-window-config "next")
+                  ("c" eyebrowse-create-window-config "create")
+                  ("e" eyebrowse-last-window-config "last")
+                  ("k" eyebrowse-close-window-config "kill")
+                  ("r" eyebrowse-rename-window-config "rename")
+                  ("s" eyebrowse-switch-to-window-config "switch")
+                  ("1" eyebrowse-switch-to-window-config-1 "workspace ➊")
+                  ("2" eyebrowse-switch-to-window-config-2 "workspace ➋")
+                  ("3" eyebrowse-switch-to-window-config-3 "workspace ➌")
+                  ("4" eyebrowse-switch-to-window-config-4 "workspace ➍")
+                  )
+     ;; ;; Move
+     ;; "Movement" (("h" windmove-left)
+     ;;             ("j" windmove-down)
+     ;;             ("k" windmove-up)
+     ;;             ("l" windmove-right)
+     ;;             )
+
+     ;; "Window Purpose" (("P" purpose-set-window-purpose)
+     ;;                   ("B" ivy-purpose-switch-buffer-with-purpose)
+     ;;                   ("!" purpose-toggle-window-purpose-dedicated)
+     ;;                   ("#" purpose-toggle-window-buffer-dedicated))
+     ;; "Others" (
+     ;;           ("x" counsel-M-x)
+     ;;           ("q" nil))
+     "Switch" (("b" ivy-purpose-switch-buffer-without-purpose)
+               ("f" counsel-find-file "find file")
+               ("a" (lambda ()
+                      (interactive)
+                      (ace-window 1)
+                      (add-hook 'ace-window-end-once-hook
+                                'hydra-window/body)) "switch")
+               ("s" (lambda ()
+                      (interactive)
+                      (ace-swap-window)
+                      (add-hook 'ace-window-end-once-hook
+                                'hydra-window/body)) "swap")
+               )
+     )
+    )
+
+  ;; (defhydra hydra-windows (:color pink)
+  ;;   "
+  ;; ^
+  ;; ^Windows^           ^Window^            ^Zoom^              ^Eyebrowse Do^            ^Eyebrowse Switch^
+  ;; ^───────^───────────^──────^────────────^────^──────────────^────────────^────────────^────────────────^────────────
+  ;; _q_ quit            _b_ balance         _-_ out             _c_ create                _<_ previous
+  ;; ^^                  _i_ heighten        _+_ in              _k_ kill                  _>_ next
+  ;; ^^                  _j_ narrow          _=_ reset           _r_ rename                _e_ last
+  ;; ^^                  _k_ lower           ^^                  ^^                        _s_ switch
+  ;; ^^                  _l_ widen           ^^                  ^^                        _1_ workspace ➊
+  ;; ^^                  ^^                  ^^                  ^^                        _2_ workspace ➋
+  ;; ^^                  ^^                  ^^                  ^^                        _3_ workspace ➌
+  ;; ^^                  ^^                  ^^                  ^^                        _4_ workspace ➍
+  ;; "
+  ;;   ("q" nil)
+  ;;   ("b" balance-windows)
+  ;;   ("i" enlarge-window)
+  ;;   ("j" shrink-window-horizontally)
+  ;;   ("k" shrink-window)
+  ;;   ("l" enlarge-window-horizontally)
+  ;;   ("-" text-scale-decrease)
+  ;;   ("+" text-scale-increase)
+  ;;   ("=" (text-scale-increase 0))
+  ;;   ("<" eyebrowse-prev-window-config :color red)
+  ;;   (">" eyebrowse-next-window-config :color red)
+  ;;   ("c" eyebrowse-create-window-config)
+  ;;   ("e" eyebrowse-last-window-config)
+  ;;   ("k" eyebrowse-close-window-config :color red)
+  ;;   ("r" eyebrowse-rename-window-config)
+  ;;   ("s" eyebrowse-switch-to-window-config)
+  ;;   ("1" eyebrowse-switch-to-window-config-1)
+  ;;   ("2" eyebrowse-switch-to-window-config-2)
+  ;;   ("3" eyebrowse-switch-to-window-config-3)
+  ;;   ("4" eyebrowse-switch-to-window-config-4))
+
+  ;; (defhydra hydra-eyebrowse (:color blue)
+  ;;   "
+  ;; ^
+  ;; ^Eyebrowse^         ^Do^                ^Switch^
+  ;; ^─────────^─────────^──^────────────────^──────^────────────
+  ;; _q_ quit            _c_ create          _<_ previous
+  ;; ^^                  _k_ kill            _>_ next
+  ;; ^^                  _r_ rename          _e_ last
+  ;; ^^                  ^^                  _s_ switch
+  ;; ^^                  ^^                  ^^
+  ;; "
+  ;;   ("q" nil)
+  ;;   ("<" eyebrowse-prev-window-config :color red)
+  ;;   (">" eyebrowse-next-window-config :color red)
+  ;;   ("c" eyebrowse-create-window-config)
+  ;;   ("e" eyebrowse-last-window-config)
+  ;;   ("k" eyebrowse-close-window-config :color red)
+  ;;   ("r" eyebrowse-rename-window-config)
+  ;;   ("s" eyebrowse-switch-to-window-config))
+#+END_SRC
+
+*** hydra-agenda
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; (defhydra hydra-org-clock (:color blue :hint nil)
   ;;   "
   ;; Clock   In/out^     ^Edit^   ^Summary     (_?_)
@@ -1744,91 +1987,22 @@ anzu 的 evil 扩展
   ;;   ("g" org-agenda-clock-goto))
 
   ;; (bind-keys ("C-c j" . hydra-org-clock/body))
-             ;; :map org-agenda-mode-map
-             ;; ("C-c j" . hydra-org-agenda-clock/body))
-
-  (defhydra hydra-window ()
-    "
-      Movement^   ^Split^         ^Switch^       ^^^Resize^         ^Window Purpose^
-      ------------------------------------------------------------------------------------------------------
-      _h_ ←        _|_ vertical    ^_b_uffer       _H_  X←          choose window _P_urpose
-      _j_ ↓        _-_ horizontal  ^_f_ind files   _J_  X↓          switch to _B_uffer w/ same purpose
-      _k_ ↑        _u_ undo        ^_a_ce window   _K_  X↑          Purpose-dedication(_!_)
-      _l_ →        _r_ reset       ^_s_wap         _K_  X→          Buffer-dedication(_#_)
-      ^^^^^^^                                      _M_aximize
-      ^^^^^^^                                      _d_elete
-      _x_ M-x      _q_ quit
-      "
-    ("h" windmove-left)
-    ("j" windmove-down)
-    ("k" windmove-up)
-    ("l" windmove-right)
-    ("|" (lambda ()
-           (interactive)
-           (split-window-right)
-           (windmove-right)))
-    ("-" (lambda ()
-           (interactive)
-           (split-window-below)
-           (windmove-down)))
-    ("u" (progn
-           (winner-undo)
-           (setq this-command 'winner-undo)))
-    ("r" winner-redo)
-    ("b" ivy-purpose-switch-buffer-without-purpose)
-    ("f" counsel-find-file)
-    ("a" (lambda ()
-           (interactive)
-           (ace-window 1)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)))
-    ("s" (lambda ()
-           (interactive)
-           (ace-swap-window)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)))
-    ("H" hydra-move-splitter-left)
-    ("J" hydra-move-splitter-down)
-    ("K" hydra-move-splitter-up)
-    ("L" hydra-move-splitter-right)
-    ("M" delete-other-windows)
-    ("d" delete-window)
-
-    ("P" purpose-set-window-purpose)
-    ("B" ivy-purpose-switch-buffer-with-purpose)
-    ("!" purpose-toggle-window-purpose-dedicated)
-    ("#" purpose-toggle-window-buffer-dedicated)
-
-    ("K" ace-delete-other-windows)
-    ("S" save-buffer)
-    ("d" delete-window)
-    ("D" (lambda ()
-           (interactive)
-           (ace-delete-window)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body))
-     )
-
-    ("x" counsel-M-x)
-    ("q" nil)
-    )
-  (general-define-key
-   "<f1>"  'hydra-window/body)
-
+  ;; :map org-agenda-mode-map
+  ;; ("C-c j" . hydra-org-agenda-clock/body))
   (defhydra hydra-clock (:color blue)
     "
-      ^
-      ^Clock^             ^Do^
-      ^─────^─────────────^──^─────────
-      _q_ quit            _c_ cancel
-      ^^                  _d_ display
-      ^^                  _e_ effort
-      ^^                  _i_ in
-      ^^                  _j_ jump
-      ^^                  _o_ out
-      ^^                  _r_ report
-      ^^                  ^^
-      "
+        ^
+        ^Clock^             ^Do^
+        ^─────^─────────────^──^─────────
+        _q_ quit            _c_ cancel
+        ^^                  _d_ display
+        ^^                  _e_ effort
+        ^^                  _i_ in
+        ^^                  _j_ jump
+        ^^                  _o_ out
+        ^^                  _r_ report
+        ^^                  ^^
+        "
     ("q" nil)
     ("c" org-clock-cancel :color pink)
     ("d" org-clock-display)
@@ -1837,7 +2011,40 @@ anzu 的 evil 扩展
     ("j" org-clock-goto)
     ("o" org-clock-out)
     ("r" org-clock-report))
+#+END_SRC
 
+*** hydra-toggles
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'all-the-icons)
+  (defun with-faicon (icon str &optional height v-adjust)
+    (s-concat (all-the-icons-faicon icon :v-adjust (or v-adjust 0) :height (or height 1)) " " str))
+
+  (defvar jp-toggles--title)
+  (setq jp-toggles--title (with-faicon "toggle-on" "Toggles" 1 -0.05))
+
+  (pretty-hydra-define hydra-toggles
+    (:hint nil :color amaranth :quit-key "q" :title jp-toggles--title)
+    ("Basic"
+     (("n" linum-mode "line number" :toggle t)
+      ("w" whitespace-mode "whitespace" :toggle t)
+      ("W" whitespace-cleanup-mode "whitespace cleanup" :toggle t)
+      ("r" rainbow-mode "rainbow" :toggle t)
+      ("L" page-break-lines-mode "page break lines" :toggle t))
+     "Highlight"
+     (("s" symbol-overlay-mode "symbol" :toggle t)
+      ("l" hl-line-mode "line" :toggle t)
+      ("x" highlight-sexp-mode "sexp" :toggle t)
+      ("t" hl-todo-mode "todo" :toggle t))
+     ;; "UI"
+     ;; (("d" jp-themes-toggle-light-dark (pretty-hydra-toggle "dark theme" jp-current-theme-dark-p)))
+     "Coding"
+     (("p" smartparens-mode "smartparens" :toggle t)
+      ("P" smartparens-strict-mode "smartparens strict" :toggle t)
+      ("f" flycheck-mode "flycheck" :toggle t))))
+#+END_SRC
+
+*** hydra-helm
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; (defhydra hydra-helm (:hint nil :color pink)
   ;;         "
   ;;                                                                           ╭──────┐
@@ -1874,7 +2081,10 @@ anzu 的 evil 扩展
   ;;         ("y" helm-yank-selection)
   ;;         ("w" helm-toggle-resplit-and-swap-windows)
   ;;         ("f" helm-follow-mode))
+#+END_SRC
 
+*** hydra-fold
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; (defhydra hydra-fold (:color pink)
   ;;   "
   ;; ^
@@ -1893,7 +2103,10 @@ anzu 的 evil 扩展
   ;;   ("f" vimish-fold)
   ;;   ("k" vimish-fold-delete)
   ;;   ("K" vimish-fold-delete-all))
+#+END_SRC
 
+*** hydra-date
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; (defhydra hydra-dates (:color blue)
   ;;   "
   ;; ^
@@ -1911,53 +2124,7 @@ anzu 的 evil 扩展
   ;;   ("I" me/date-iso-with-time)
   ;;   ("l" me/date-long)
   ;;   ("L" me/date-long-with-time))
-
-  (defhydra hydra-windows (:color pink)
-    "
-  ^
-  ^Windows^           ^Window^            ^Zoom^              ^Eyebrowse Do^            ^Eyebrowse Switch^
-  ^───────^───────────^──────^────────────^────^──────────────^────────────^────────────^────────────────^────────────
-  _q_ quit            _b_ balance         _-_ out             _c_ create                _<_ previous
-  ^^                  _i_ heighten        _+_ in              _k_ kill                  _>_ next
-  ^^                  _j_ narrow          _=_ reset           _r_ rename                _e_ last
-  ^^                  _k_ lower           ^^                  ^^                        _s_ switch
-  ^^                  _l_ widen           ^^                  ^^                        _1_ workspace ➊
-  ^^                  ^^                  ^^                  ^^                        _2_ workspace ➋
-  ^^                  ^^                  ^^                  ^^                        _3_ workspace ➌
-  ^^                  ^^                  ^^                  ^^                        _4_ workspace ➍
-  "
-    ("q" nil)
-    ("b" balance-windows)
-    ("i" enlarge-window)
-    ("j" shrink-window-horizontally)
-    ("k" shrink-window)
-    ("l" enlarge-window-horizontally)
-    ("-" text-scale-decrease)
-    ("+" text-scale-increase)
-    ("=" (text-scale-increase 0))
-    ("<" eyebrowse-prev-window-config :color red)
-    (">" eyebrowse-next-window-config :color red)
-    ("c" eyebrowse-create-window-config)
-    ("e" eyebrowse-last-window-config)
-    ("k" eyebrowse-close-window-config :color red)
-    ("r" eyebrowse-rename-window-config)
-    ("s" eyebrowse-switch-to-window-config)
-    ("1" eyebrowse-switch-to-window-config-1)
-    ("2" eyebrowse-switch-to-window-config-2)
-    ("3" eyebrowse-switch-to-window-config-3)
-    ("4" eyebrowse-switch-to-window-config-4))
 #+END_SRC
-
-*** COMMENT major-mode-hydra
-*About:* 这个是参考了 spacemacs 针对 hydra 的扩展
-https://github.com/jerrypnz/major-mode-hydra.el
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package major-mode-hydra)
-#+END_SRC
-
-*** COMMENT hera
-*About:*
-https://github.com/dustinlacewell/hera
 
 * Org Mode
 *About:* 
@@ -4415,6 +4582,21 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
   ;;                  ;; Fancy docstrings for schema/defn when in the form:
   ;;                  ;; (schema/defn NAME :- TYPE "DOCSTRING" ...)
   ;;                  (put 'schema/defn 'clojure-doc-string-elt 4)))
+#+END_SRC
+
+*** COMMENT key-binding
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (major-mode-hydra-bind clojure-mode "Connect"
+  ;;   ("j" cider-jack-in "jack-in")
+  ;;   ("J" cider-jack-in-clojurescript "jack-in-cljs")
+  ;;   ("c" cider-connect "connect")
+  ;;   ("R" cider-restart "restart")
+  ;;   ("Q" cider-quit "quit"))
+  ;; (major-mode-hydra-bind clojure-mode "Load"
+  ;;   ("k" cider-load-buffer "buffer")
+  ;;   ("l" cider-load-file "file")
+  ;;   ("L" cider-load-all-project-ns "all-ns")
+  ;;   ("r" cider-refresh "reload"))
 #+END_SRC
 
 ** COMMENT Javascript
