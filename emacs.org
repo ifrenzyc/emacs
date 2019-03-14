@@ -402,7 +402,7 @@ This behaviour in general emulates the scrolloff option in vim.
   ;;   ;; Fontify the whole line for headings (with a background color).
   ;;   (setq org-fontify-whole-heading-line t))
 
-  ;; (use-package doom-themes
+  ;; (use-package doomG-themes
   ;;   :init
   ;;   ;; Global settings (defaults)
   ;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -5587,6 +5587,18 @@ https://ox-hugo.scripter.co/doc/custom-front-matter/
 ** COMMENT View Large Files
 *About:* 
 @see - https://github.com/m00natic/vlfi
+
+** Command Log Mode
+*About:* 列出 Emacs 触发的函数或按键历史操作列表
+@see - https://github.com/lewang/command-log-mode
+*keybindings:* 
+| keybindings | function                      |
+|-------------+-------------------------------|
+| ~C-c o~       | clm/toggle-command-log-buffer |
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package command-log-mode
+    :commands (command-log-mode))
+#+END_SRC
 
 ** COMMENT Debug Emacs
 *About:* 
