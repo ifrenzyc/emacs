@@ -315,7 +315,7 @@ Emacs-plus patch : https://github.com/d12frosted/homebrew-emacs-plus
 
   ;; (OPTIONAL) Shift width for evil-mode users
   ;; For the vim-like motions of ">>" and "<<".
-  (setq-default evil-shift-width 4)
+  ;; (setq-default evil-shift-width 4)
 
   ;; Visualize tabs as a pipe character - "|"
   ;; This will also show trailing characters as they are useful to spot.
@@ -1084,7 +1084,7 @@ Macosx switch meta key
 ** Evil
 *About:* 
 - TODO 阅读：[[https://github.com/noctuid/evil-guide#terminology][noctuid/evil-guide - GitHub]]
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; @see - http://wikemacs.org/wiki/Evil
   (use-package evil
     :hook (emacs-startup . evil-mode)
@@ -1235,7 +1235,7 @@ Macosx switch meta key
 
 *** evil-nerd-commenter
 *About:* 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package evil-nerd-commenter
     :defer t
     :after evil general
@@ -1368,7 +1368,6 @@ anzu 的 evil 扩展
 参考这篇文章重新定义自己的 key bindings：[[https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/][larstvei/dot-emacs - GitHub]]
 参考在 Mac 下的一些配置：[[https://www.emacswiki.org/emacs/EmacsForMacOS][Emacs For Mac OS]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-
   ;; use 'keyfreq-show'
   ;; @see - https://github.com/dacap/keyfreq
   ;; (use-package keyfreq
@@ -1378,15 +1377,17 @@ anzu 的 evil 扩展
 
   (use-package general
     :defer t
-    :init
-    (general-def :states '(normal motion visual) "SPC" nil)
-    :config
+    ;; :init
+    ;; (general-def :states '(normal motion visual) "SPC" nil)
+    ;; :config
     ;; Vim-like definitions
-    (general-evil-setup t))
+    ;; (general-evil-setup t)
+  )
 
   (general-create-definer my-leader-def
-    :states '(normal motion visual)
-    :prefix "SPC"
+    ;; :states '(normal motion visual)
+    ;; :prefix "SPC"
+    :prefix "s-SPC"
     :global-prefix "s-SPC")
 
   (my-leader-def
@@ -1394,7 +1395,7 @@ anzu 的 evil 扩展
     "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
     "<"    '(counsel-projectile-find-file :which-key "Find file in project")
     ":"    '(counsel-M-x :which-key "M-x")
-    ";"    '(evil-ex :which-key "Ex command")
+    ;; ";"    '(evil-ex :which-key "Ex command")
     "'"    '(shell-pop :which-key "Open shell")
     "0"    '(neotree-toggle :which-key "NeoTree")
     "`"    'winum-select-window-0-or-10
@@ -1438,7 +1439,7 @@ anzu 的 evil 扩展
     "be"   'ibuffer
     "c"    '(:ignore t :which-key "compile/comments")
     "C"    '(:ignore t :which-key "capture/colors")
-    "cl"   'evilnc-comment-or-uncomment-lines
+    ;; "cl"   'evilnc-comment-or-uncomment-lines
     "e"    '(:ignore t :which-key "errors")
     "f"    '(:ignore t :which-key "files")
     "fC"   '(:ignore t :which-key "files/convert")
@@ -1508,7 +1509,7 @@ anzu 的 evil 扩展
     "sas"  'helm-ag
     "saf"  'helm-do-ag
     "sap"  'helm-do-ag-project-root
-    "sc"   'evil-search-highlight-persist-remove-all
+    ;; "sc"   'evil-search-highlight-persist-remove-all
     "ss"   'helm-swoop
     "sS"   'helm-swoop-region-or-symbol
     "w"    '(:ignore t :which-key "windows")
@@ -3114,7 +3115,7 @@ documentation: https://mobileorg.github.io/documentation/
     "tw" 'org-table-wrap-region)
 
   ;; @see - https://github.com/noctuid/evil-guide
-  (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
+  ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
   (my-major-mode-leader-def
     :keymaps 'org-src-mode-map
     "'" 'org-edit-src-exit)
@@ -3220,7 +3221,7 @@ documentation: https://mobileorg.github.io/documentation/
 *** org-evil
 *About:* 这个和上面的 evil-org-mode 是相同功能的两个
 @see - https://github.com/GuiltyDolphin/org-evil
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package org-evil
     :config
     ;; "gh" goes up a level, and is defined by org-evil-mode.
@@ -3407,7 +3408,7 @@ https://github.com/abo-abo/hydra/wiki/Dired
 
 ** neotree
 *About:* 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package neotree
     :diminish ""
     :commands (neotree-toggle)
@@ -3423,54 +3424,55 @@ https://github.com/abo-abo/hydra/wiki/Dired
                 (visual-line-mode -1)
                 (setq truncate-lines t)
                 (hl-line-mode 1)
-                (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-                (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
-                (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
-                (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)))
+                ;; (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+                ;; (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
+                ;; (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
+                ;; (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide))
+    )
     ;; 'classic, 'nerd, 'ascii, 'arrow
     (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
     ;; Disable line-numbers minor mode for neotree
     (add-hook 'neo-after-create-hook (lambda (&optional dummy) (display-line-numbers-mode -1)))
 
-    (define-minor-mode neotree-evil
-      "Use NERDTree bindings on neotree."
-      :lighter " NT"
-      :keymap (progn
-                ;; (evil-make-overriding-map neotree-mode-map 'normal t)
-                (evil-define-key 'normal neotree-mode-map
-                  "C" 'neotree-change-root
-                  "U" 'neotree-select-up-node
-                  "r" 'neotree-refresh
-                  "o" 'neotree-enter
-                  (kbd "<return>") 'neotree-enter
-                  "i" 'neotree-enter-horizontal-split
-                  "s" 'neotree-enter-vertical-split
-                  "n" 'evil-search-next
-                  "N" 'evil-search-previous
-                  "ma" 'neotree-create-node
-                  "mc" 'neotree-copy-file
-                  "md" 'neotree-delete-node
-                  "mm" 'neotree-rename-node
-                  "gg" 'evil-goto-first-line
-                  "gi" (lambda ()
-                         (interactive)
-                         (if (string= pe/get-directory-tree-external-command
-                                      nt/gitignore-files-cmd)
-                             (progn (setq pe/get-directory-tree-external-command
-                                          nt/all-files-cmd))
-                           (progn (setq pe/get-directory-tree-external-command
-                                        nt/gitignore-files-cmd)))
-                         (nt/refresh))
-                  "I" (lambda ()
-                        (interactive)
-                        (if pe/omit-enabled
-                            (progn (setq pe/directory-tree-function
-                                         'pe/get-directory-tree-async)
-                                   (pe/toggle-omit nil))
-                          (progn (setq pe/directory-tree-function
-                                       'pe/get-directory-tree-external)
-                                 (pe/toggle-omit t)))))
-                neotree-mode-map))
+    ;; (define-minor-mode neotree-evil
+    ;;   "Use NERDTree bindings on neotree."
+    ;;   :lighter " NT"
+    ;;   :keymap (progn
+    ;;             ;; (evil-make-overriding-map neotree-mode-map 'normal t)
+    ;;             (evil-define-key 'normal neotree-mode-map
+    ;;               "C" 'neotree-change-root
+    ;;               "U" 'neotree-select-up-node
+    ;;               "r" 'neotree-refresh
+    ;;               "o" 'neotree-enter
+    ;;               (kbd "<return>") 'neotree-enter
+    ;;               "i" 'neotree-enter-horizontal-split
+    ;;               "s" 'neotree-enter-vertical-split
+    ;;               "n" 'evil-search-next
+    ;;               "N" 'evil-search-previous
+    ;;               "ma" 'neotree-create-node
+    ;;               "mc" 'neotree-copy-file
+    ;;               "md" 'neotree-delete-node
+    ;;               "mm" 'neotree-rename-node
+    ;;               "gg" 'evil-goto-first-line
+    ;;               "gi" (lambda ()
+    ;;                      (interactive)
+    ;;                      (if (string= pe/get-directory-tree-external-command
+    ;;                                   nt/gitignore-files-cmd)
+    ;;                          (progn (setq pe/get-directory-tree-external-command
+    ;;                                       nt/all-files-cmd))
+    ;;                        (progn (setq pe/get-directory-tree-external-command
+    ;;                                     nt/gitignore-files-cmd)))
+    ;;                      (nt/refresh))
+    ;;               "I" (lambda ()
+    ;;                     (interactive)
+    ;;                     (if pe/omit-enabled
+    ;;                         (progn (setq pe/directory-tree-function
+    ;;                                      'pe/get-directory-tree-async)
+    ;;                                (pe/toggle-omit nil))
+    ;;                       (progn (setq pe/directory-tree-function
+    ;;                                    'pe/get-directory-tree-external)
+    ;;                              (pe/toggle-omit t)))))
+    ;;             neotree-mode-map))
     )
 
   (defun neotree-copy-file ()
