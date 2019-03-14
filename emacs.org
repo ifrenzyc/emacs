@@ -2959,7 +2959,7 @@ documentation: https://mobileorg.github.io/documentation/
 ** org-pomodoro
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; ;; Pomodoro
+  ;; Pomodoro
   (use-package org-pomodoro
     :after org org-agenda
     :bind (:map org-agenda-mode-map
@@ -2975,7 +2975,7 @@ documentation: https://mobileorg.github.io/documentation/
     :keymaps 'org-mode-map
     ;; "" '(:ignore t :which-key "major-mode-cmd")
     ;; "ma" '(:ignore t :which-key "help")
-    ;; "." 'hydra-org/body
+    "." 'major-mode-hydra
     "'" 'org-edit-special
     "SPC" 'worf-back-to-heading
     "a" 'org-agenda
@@ -3046,7 +3046,7 @@ documentation: https://mobileorg.github.io/documentation/
     :keymaps 'org-mode-map
     "" '(:ignore t :which-key "major-mode-cmd")
     ;; "ma" '(:ignore t :which-key "help")
-    "." 'hydra-org/body
+    "." 'major-mode-hydra
     "'" 'org-edit-special
     "SPC" 'worf-back-to-heading
     "a" 'org-agenda
@@ -3174,6 +3174,28 @@ documentation: https://mobileorg.github.io/documentation/
     ("j" worf-down "worf-down")
     ("k" worf-up "worf-up")
     ("h" worf-left "worf-left"))
+
+  (major-mode-hydra-bind org-mode "Shift"
+    ("K" org-move-subtree-up "up")
+    ("J" org-move-subtree-down "down")
+    ("h" org-promote-subtree "promote")
+    ("l" org-demote-subtree "demote"))
+
+  (major-mode-hydra-bind org-mode "Travel"
+    ("p" org-backward-heading-same-level "backward")
+    ("n" org-forward-heading-same-level "forward")
+    ("j" hydra-org-child-level "to child")
+    ("k" hydra-org-parent-level "to parent")
+    ("a" hydra-org-goto-first-sibling "first sibling")
+    ("e" hydra-org-goto-last-sibling "last sibling"))
+
+  (major-mode-hydra-bind org-mode "Perform"
+    ("r" (lambda () (interactive)
+           (helm-org-rifle-current-buffer)
+           (call-interactively 'org-cycle)
+           (call-interactively 'org-cycle)) "rifle")
+    ("v" avy-org-goto-heading-timer "avy")
+    ("L" org-toggle-link-display "toggle links"))
 #+END_SRC
 
 *** evil-org
@@ -3193,6 +3215,20 @@ documentation: https://mobileorg.github.io/documentation/
 
 ;;   (require 'evil-org-agenda)
 ;;   (evil-org-agenda-set-keys))
+#+END_SRC
+
+*** org-evil
+*About:* 这个和上面的 evil-org-mode 是相同功能的两个
+@see - https://github.com/GuiltyDolphin/org-evil
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-evil
+    :config
+    ;; "gh" goes up a level, and is defined by org-evil-mode.
+    ;; "gH" goes to the top level, and is defined by org-evil-mode.
+    (evil-define-key 'normal org-mode-map (kbd "gl") 'air-org-goto-first-child)
+    (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "@" 'org-refile)
+    (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note)
+    )
 #+END_SRC
 
 * Project Management
