@@ -402,36 +402,36 @@ This behaviour in general emulates the scrolloff option in vim.
   ;;   ;; Fontify the whole line for headings (with a background color).
   ;;   (setq org-fontify-whole-heading-line t))
 
-  ;; (use-package doomG-themes
-  ;;   :init
-  ;;   ;; Global settings (defaults)
-  ;;   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-  ;;         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-  ;;   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
-  ;;   ;; theme may have their own settings.
-  ;;   (load-theme 'doom-one t)
-  ;;   ;; (load-theme 'doom-solarized-light t)
-  ;;   :config
-  ;;   ;; Enable flashing mode-line on errors
-  ;;   (doom-themes-visual-bell-config)
-
-  ;;   ;; Enable custom neotree theme
-  ;;   (doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
-
-  ;;   ;; Corrects (and improves) org-mode's native fontification.
-  ;;   (doom-themes-org-config))
-
-  ;; ;; If using OSX, the colors and fonts look a bit wonky, so let's fix that
-  ;; (setq ns-use-srgb-colorspace t)
-  ;; ;; Anti-aliasing
-  ;; (setq mac-allow-anti-aliasing t)
-
-  (use-package tao-theme
+  (use-package doom-themes
     :init
-    (load-theme 'tao-yang t)
-    ;; (load-theme 'tao-yin t)
-  )
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+    ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
+    ;; theme may have their own settings.
+    (load-theme 'doom-one t)
+    ;; (load-theme 'doom-solarized-light t)
+    :config
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+
+    ;; Enable custom neotree theme
+    (doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
+
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
+
+  ;; If using OSX, the colors and fonts look a bit wonky, so let's fix that
+  (setq ns-use-srgb-colorspace t)
+  ;; Anti-aliasing
+  (setq mac-allow-anti-aliasing t)
+
+  ;; (use-package tao-theme
+  ;;   :init
+  ;;   (load-theme 'tao-yang t)
+  ;;   ;; (load-theme 'tao-yin t)
+  ;; )
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -536,14 +536,16 @@ This behaviour in general emulates the scrolloff option in vim.
     (all-the-icons-ivy-setup))
 
   (use-package doom-modeline
-    :defer t
     :init
     (setq doom-modeline-icon t
           doom-modeline-major-mode-icon t
-          doom-modeline-major-mode-color-icon nil
+          doom-modeline-major-mode-color-icon t
+          doom-modeline-buffer-file-name-style 'truncate-upto-project
+          doom-modeline-enable-word-count t
+          doom-modeline-lsp t
           doom-modeline-persp-name t
           doom-modeline-lsp t)
-    :hook (after-init . doom-modeline-init)
+    :hook (after-init . doom-modeline-mode)
     :config
     (winum-mode))
 
