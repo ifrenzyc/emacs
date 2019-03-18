@@ -2277,7 +2277,7 @@ https://github.com/dustinlacewell/hera
     (setq filename
           (concat
            (make-temp-name
-            (concat (file-name-nondirectory (buffer-file-name))
+           (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name))
                     "_imgs/"
                     (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
     (unless (file-exists-p (file-name-directory filename))
@@ -2307,6 +2307,9 @@ https://github.com/dustinlacewell/hera
   ;; (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
   ;; (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 #+END_SRC
+
+#+RESULTS:
+: yc/org-screenshot
 
 定义一部分在 orgmode 下编写代码块的快捷模板，此快捷模板可以通过 =(<s[TAB])= 的方式快捷输入模板块，如下以此类推，输入 =(<e[TAB])= 即可输入另外的模板。
 Use org-tempo to allow inserting templates using
