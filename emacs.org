@@ -4646,6 +4646,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 #+END_SRC
 
 ** Rust
+*About:* The Rust Programming Language
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package rust-mode
     :mode ("\\.rs\\'" . rust-mode)
@@ -4662,7 +4663,10 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 
   (use-package racer                      ; Completion and navigation for Rust
     :after rust-mode
-    :init (add-hook 'rust-mode-hook #'racer-mode)
+    :hook (rust-mode . racer-mode)
+    :init
+    (setq racer-rust-src-path "~/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
+
     ;;:config
     ;; (validate-setq racer-rust-src-path (getenv "RUST_SRC_PATH"))
     :diminish (racer-mode . "ⓡ"))
@@ -4678,12 +4682,16 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
     :hook (rust-mode . cargo-minor-mode))
 
   (use-package company-racer
-     :hook (rust-mode  . racer-mode)
-     :hook (racer-mode . eldoc-mode)
-     :hook (racer-mode . company-mode)
+     :after rust-mode
+     :hook ((rust-mode  . racer-mode)
+            (racer-mode . eldoc-mode)
+            (racer-mode . company-mode))
      :init
-       (with-eval-after-load 'company
-         (add-to-list 'company-backends 'company-racer)))
+     (with-eval-after-load 'company
+       (add-to-list 'company-backends 'company-racer))
+     :config
+     ;; (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+     (setq company-tooltip-align-annotations t))
 
   ;; `lsp-mode' client using the Rust Language Server
   (use-package lsp-rust
