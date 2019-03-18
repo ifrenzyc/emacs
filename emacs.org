@@ -4645,6 +4645,54 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
   ;;   ("r" cider-refresh "reload"))
 #+END_SRC
 
+** Rust
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rust-mode
+    :mode ("\\.rs\\'" . rust-mode)
+    :commands (rust-mode)
+    :config
+    ;; install rustfmt using `cargo install rustfmt'
+    (when (executable-find "rustfmt")
+      (add-hook 'rust-mode-hook
+                (lambda ()
+                  (add-hook 'before-save-hook
+                            (lambda ()
+                              (rust-format-buffer)) nil t))))
+    (autoload 'rust-mode "rust-mode" nil t))
+
+  (use-package racer                      ; Completion and navigation for Rust
+    :after rust-mode
+    :init (add-hook 'rust-mode-hook #'racer-mode)
+    ;;:config
+    ;; (validate-setq racer-rust-src-path (getenv "RUST_SRC_PATH"))
+    :diminish (racer-mode . "ⓡ"))
+
+  (use-package cargo
+    :hook (rust-mode . racer-mode))
+
+  (use-package rust-playground
+    :commands (rust-playground))
+
+  (use-package toml-mode
+    :mode ("\\.toml\\'" . toml-mode)
+    :hook (rust-mode . cargo-minor-mode))
+
+  (use-package company-racer
+     :hook (rust-mode  . racer-mode)
+     :hook (racer-mode . eldoc-mode)
+     :hook (racer-mode . company-mode)
+     :init
+       (with-eval-after-load 'company
+         (add-to-list 'company-backends 'company-racer)))
+
+  ;; `lsp-mode' client using the Rust Language Server
+  (use-package lsp-rust
+    :disabled t
+    :after lsp-mode
+    :init
+    (add-hook 'rust-mode-hook #'lsp-rust-enable))
+#+END_SRC
+
 ** COMMENT Javascript
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
