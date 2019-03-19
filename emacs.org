@@ -157,7 +157,8 @@ text wrapping at 80 columns by default (only text)
     ;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
     ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
     ;; 手动安装 posframe 包。
-    (setq pyim-page-tooltip 'pupup)
+    ;; (setq pyim-page-tooltip 'pupup)
+    (setq pyim-page-tooltip 'posframe)
 
     ;; 选词框显示 5 个候选词
     (setq pyim-page-length 8)
@@ -542,7 +543,6 @@ This behaviour in general emulates the scrolloff option in vim.
           doom-modeline-major-mode-color-icon t
           doom-modeline-buffer-file-name-style 'truncate-upto-project
           doom-modeline-enable-word-count t
-          doom-modeline-lsp t
           doom-modeline-persp-name t
           doom-modeline-lsp t)
     :hook (after-init . doom-modeline-mode)
@@ -756,7 +756,11 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 automatically add spacing around operators
 https://github.com/davidshepherd7/electric-operator
 
-* Window Management
+* Appearance
+
+* Navigation
+
+* Windows and Frames
 ** winner
 *About:* 
 #+BEGIN_QUOTE
@@ -2155,6 +2159,7 @@ https://github.com/dustinlacewell/hera
 这里采用新版本的 orgmode，而非 Emacs 自带的，不能用 use-package。
 同时需要通过 =M-x package-list-packages= 安装新版本的 orgmode
 
+** config
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (require 'org)
   ;; (require 'org-mouse)
@@ -2267,31 +2272,6 @@ https://github.com/dustinlacewell/hera
     ;; :hook
     ;; (org-mode . yc/org-set-ongoing-hydra-body))
 
-  ;; Paste an image on clipboard to Emacs Org mode file
-  ;; @see - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
-  (defun yc/org-screenshot ()
-    "Take a screenshot into a time stamped unique-named file in the
-      same directory as the org-buffer and insert a link to this file."
-    (interactive)
-    (org-display-inline-images)
-    (setq filename
-          (concat
-           (make-temp-name
-           (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name))
-                    "_imgs/"
-                    (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
-    (unless (file-exists-p (file-name-directory filename))
-      (make-directory (file-name-directory filename)))
-                                          ; take screenshot
-    (if (eq system-type 'darwin)
-        (call-process "screencapture" nil nil nil "-i" filename))
-    (if (eq system-type 'gnu/linux)
-        (call-process "import" nil nil nil filename))
-                                          ; insert into file if correctly taken
-    (if (file-exists-p filename)
-        (insert (concat "[[file:" filename "]]"))))
-
-
   ;; ;; @see - http://orgmode.org/worg/org-hacks.html#orgheadline126
   ;; (defun yc/ogrep (search &optional context)
   ;;   "Search for word in org files.
@@ -2307,9 +2287,6 @@ https://github.com/dustinlacewell/hera
   ;; (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
   ;; (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
 #+END_SRC
-
-#+RESULTS:
-: yc/org-screenshot
 
 定义一部分在 orgmode 下编写代码块的快捷模板，此快捷模板可以通过 =(<s[TAB])= 的方式快捷输入模板块，如下以此类推，输入 =(<e[TAB])= 即可输入另外的模板。
 Use org-tempo to allow inserting templates using
@@ -2440,6 +2417,8 @@ e.g. =<s=
            "** NEXT %? \nDEADLINE: %t")
           ("l" "A link, for reading later." entry (file+headline org-agenda-file-reading "Reading List")
            "* READ %?%^L %^g \n%T" :prepend t :empty-lines 1)
+          ("K" "Cliplink capture task" entry (file+headline org-agenda-file-reading "Reading List")
+           "* TODO %(org-cliplink-capture) \n  SCHEDULED: %t\n" :prepend t :empty-lines 1)
           ("L" "Link" entry (file+headline org-agenda-file-reading "Reading List")
            "* %:description\n%u\n\n%c\n\n%i" :prepend t :empty-lines 1)
           ("n" "Note" entry (file+headline org-agenda-file-notes "Notes")
@@ -2464,9 +2443,6 @@ e.g. =<s=
            "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
           ))
 #+END_SRC
-
-#+RESULTS:
-| t | todo [inbox] | entry | (file+headline org-default-notes-file Inbox) | * TODO %i%? |
 
 *** TODO 还可以参考这里用于快速粘贴网页书签。
 [[https://github.com/tumashu/org-capture-pop-frame][tumashu/org-capture-pop-frame - GitHub]]
@@ -2845,10 +2821,83 @@ vi-like bindings for org-mode
   ;;                              (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link))))
 #+END_SRC
 
-** COMMENT Drag and Drop
-*About:* 
+** Drag and Drop
+*About:* moving images from point A to point B.
+
+参考：https://github.com/jethrokuan/.emacs.d/blob/master/config.org#org-download
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package org-download
+    :ensure t
+    :after org
+    :hook ((dired-mode . org-download-enable)
+           (org-mode . org-download-enable))
+    :config
+    (org-download-enable)
+    (if (memq window-system '(mac ns))
+        (setq org-download-screenshot-method "screencapture -i %s")
+      (setq org-download-screenshot-method "maim -s %s"))
+    (defun yc/org-download-method (link)
+      "This is a helper function for org-download.
+    It creates a folder in the root directory (~/.org/img/) named after the
+    org filename (sans extension) and puts all images from that file in there.
+    Inspired by https://github.com/daviderestivo/emacs-config/blob/6086a7013020e19c0bc532770e9533b4fc549438/init.el#L701"
+      (let ((filename
+             (file-name-nondirectory
+              (car (url-path-and-query
+                    (url-generic-parse-url link)))))
+            ;; Create folder name with current buffer name, and place in root dir
+            (dirname (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name)) "_imgs/")))
+        ;;          (dirname (concat "./images/"
+        ;;                           (replace-regexp-in-string " " "_" (downcase (file-name-base buffer-file-name))))))
+
+        ;; Add timestamp to filename
+        (setq filename-with-timestamp (format "%s%s.%s"
+                                              (file-name-sans-extension filename)
+                                              (format-time-string org-download-timestamp)
+                                              (file-name-extension filename)))
+        ;; Create folder if necessary
+        (unless (file-exists-p dirname)
+          (make-directory dirname))
+        (expand-file-name filename-with-timestamp dirname)))
+    (setq org-download-method 'yc/org-download-method))
+#+END_SRC
+
+** org-cliplink
+*About:* lets you insert a link from your clipboard with a title that is fetched from the page’s metadata by curl.
+
+[[https://github.com/rexim/org-cliplink][GitHub - rexim/org-cliplink: Insert org-mode links from clipboard]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package org-download)
+  (use-package org-cliplink
+    :commands (org-cliplink-clipboard-content)
+    ;; :bind ("C-x p i" . org-cliplink)
+    )
+#+END_SRC
+
+** org-screenshot
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Paste an image on clipboard to Emacs Org mode file
+  ;; @see - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
+  (defun yc/org-screenshot ()
+    "Take a screenshot into a time stamped unique-named file in the
+      same directory as the org-buffer and insert a link to this file."
+    (interactive)
+    (setq filename
+          (concat
+           (make-temp-name
+            (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name))
+                    "_imgs/"
+                    (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
+    (unless (file-exists-p (file-name-directory filename))
+      (make-directory (file-name-directory filename)))
+                                          ; take screenshot
+    (if (eq system-type 'darwin)
+        (call-process "screencapture" nil nil nil "-i" filename))
+    (if (eq system-type 'gnu/linux)
+        (call-process "import" nil nil nil filename))
+                                          ; insert into file if correctly taken
+    (if (file-exists-p filename)
+        (insert (concat "[[file:" filename "]]")))
+    (org-display-inline-images))
 #+END_SRC
 
 ** 重新定义不同状态的 todoList 的排版
@@ -2966,6 +3015,19 @@ documentation: https://mobileorg.github.io/documentation/
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package ob-go)
+#+END_SRC
+
+*** Async Babel
+Evaluate org-src-block asynchronously.
+https://github.com/astahlman/ob-async
+如果要加这个，是不是要在 BEGIN_SRC 上加上关键字，还是默认全部都执行，对 emacs dotfile 的加载有没有影响，这些都要验证。
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package ob-async
+    :after org
+    :commands (ob-async-org-babel-execute-src-block)
+    :init
+    (with-eval-after-load 'org
+      (add-to-list 'org-ctrl-c-ctrl-c-hook 'ob-async-org-babel-execute-src-block)))
 #+END_SRC
 
 ** org-pomodoro
@@ -4159,25 +4221,27 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 *About:* 
 在 MacOS 下使用 posframe 时，Emacs 全屏状态下的问题：https://emacs-china.org/t/topic/4662/132
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package posframe)
+  (use-package posframe)
 
-  ;; (use-package company-posframe
-  ;;   :after company
-  ;;   :config (company-posframe-mode 1)
-  ;;   (setq ns-use-native-fullscreen nil)
-  ;;   (setq ns-use-fullscreen-animation nil)
-  ;;   (run-at-time "5sec" nil
-  ;;                (lambda ()
-  ;;                  (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
-  ;;                    ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
-  ;;                    (when (memq fullscreen '(fullscreen fullboth))
-  ;;                      (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
-  ;;                    ;; Manipulating a frame without waiting for the fullscreen
-  ;;                    ;; animation to complete can cause a crash, or other unexpected
-  ;;                    ;; behavior, on macOS (bug#28496).
-  ;;                    (when (featurep 'cocoa) (sleep-for 0.5))
-  ;;                    ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
-  ;;                    (toggle-frame-fullscreen)))))
+  (use-package company-posframe
+    :after company
+    :init
+    (setq ns-use-native-fullscreen nil)
+    (setq ns-use-fullscreen-animation nil)
+    :config
+    (company-posframe-mode 1)
+    (run-at-time "5sec" nil
+                 (lambda ()
+                   (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
+                     ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
+                     (when (memq fullscreen '(fullscreen fullboth))
+                       (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
+                     ;; Manipulating a frame without waiting for the fullscreen
+                     ;; animation to complete can cause a crash, or other unexpected
+                     ;; behavior, on macOS (bug#28496).
+                     (when (featurep 'cocoa) (sleep-for 0.5))
+                     ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
+                     (toggle-frame-fullscreen)))))
 #+END_SRC
 
 *** company-quickhelp
