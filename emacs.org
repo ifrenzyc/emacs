@@ -759,6 +759,8 @@ https://github.com/davidshepherd7/electric-operator
 * Appearance
 
 * Navigation
+** multiple-cursors
+参考：[[http://www.cauchy.me/2015/08/20/emacs-multi-cursors/][My Favourite Emacs Modes - multiple-cursors · Thinking Aloud]]
 
 * Windows and Frames
 ** winner
@@ -1072,7 +1074,7 @@ Macosx switch meta key
   ;; (global-set-key (kbd "M-n") 'set-mark-command)
 #+END_SRC
 
-* Keymaps
+* Keybinding
 ** which-key
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -4136,7 +4138,6 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     (setq company-tooltip-limit 20)                      ; bigger popup window
     (setq company-echo-delay 0)                          ; remove annoying blinking
     (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
-    (company-tooltip-align-annotations 't)
 
     (setq company-tooltip-flip-when-above t)
     (setq company-selection-wrap-around t)
