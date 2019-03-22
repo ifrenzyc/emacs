@@ -1,0 +1,1887 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2019-03-22 Fri 09:09 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ITSYC's Literate Emacs Config</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Yang Chuang" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>
+<style type="text/css">
+.org-bold { /* bold */ font-weight: bold; }
+.org-bold-italic { /* bold-italic */ font-weight: bold; font-style: italic; }
+.org-buffer-menu-buffer { /* buffer-menu-buffer */ font-weight: bold; }
+.org-builtin { /* font-lock-builtin-face */ color: #7a378b; }
+.org-button { /* button */ text-decoration: underline; }
+.org-calendar-today { /* calendar-today */ text-decoration: underline; }
+.org-change-log-acknowledgement { /* change-log-acknowledgement */ color: #b22222; }
+.org-change-log-conditionals { /* change-log-conditionals */ color: #a0522d; }
+.org-change-log-date { /* change-log-date */ color: #8b2252; }
+.org-change-log-email { /* change-log-email */ color: #a0522d; }
+.org-change-log-file { /* change-log-file */ color: #0000ff; }
+.org-change-log-function { /* change-log-function */ color: #a0522d; }
+.org-change-log-list { /* change-log-list */ color: #a020f0; }
+.org-change-log-name { /* change-log-name */ color: #008b8b; }
+.org-comint-highlight-input { /* comint-highlight-input */ font-weight: bold; }
+.org-comint-highlight-prompt { /* comint-highlight-prompt */ color: #00008b; }
+.org-comment { /* font-lock-comment-face */ color: #999988; font-style: italic; }
+.org-comment-delimiter { /* font-lock-comment-delimiter-face */ color: #999988; font-style: italic; }
+.org-completions-annotations { /* completions-annotations */ font-style: italic; }
+.org-completions-common-part { /* completions-common-part */ color: #000000; background-color: #ffffff; }
+.org-completions-first-difference { /* completions-first-difference */ font-weight: bold; }
+.org-constant { /* font-lock-constant-face */ color: #008b8b; }
+.org-diary { /* diary */ color: #ff0000; }
+.org-diff-context { /* diff-context */ color: #7f7f7f; }
+.org-diff-file-header { /* diff-file-header */ background-color: #b3b3b3; font-weight: bold; }
+.org-diff-function { /* diff-function */ background-color: #cccccc; }
+.org-diff-header { /* diff-header */ background-color: #cccccc; }
+.org-diff-hunk-header { /* diff-hunk-header */ background-color: #cccccc; }
+.org-diff-index { /* diff-index */ background-color: #b3b3b3; font-weight: bold; }
+.org-diff-nonexistent { /* diff-nonexistent */ background-color: #b3b3b3; font-weight: bold; }
+.org-diff-refine-change { /* diff-refine-change */ background-color: #d9d9d9; }
+.org-dired-directory { /* dired-directory */ color: #0000ff; }
+.org-dired-flagged { /* dired-flagged */ color: #ff0000; font-weight: bold; }
+.org-dired-header { /* dired-header */ color: #228b22; }
+.org-dired-ignored { /* dired-ignored */ color: #7f7f7f; }
+.org-dired-mark { /* dired-mark */ color: #008b8b; }
+.org-dired-marked { /* dired-marked */ color: #ff0000; font-weight: bold; }
+.org-dired-perm-write { /* dired-perm-write */ color: #b22222; }
+.org-dired-symlink { /* dired-symlink */ color: #a020f0; }
+.org-dired-warning { /* dired-warning */ color: #ff0000; font-weight: bold; }
+.org-doc { /* font-lock-doc-face */ color: #8b2252; }
+.org-escape-glyph { /* escape-glyph */ color: #a52a2a; }
+.org-file-name-shadow { /* file-name-shadow */ color: #7f7f7f; }
+.org-flyspell-duplicate { /* flyspell-duplicate */ color: #cdad00; font-weight: bold; text-decoration: underline; }
+.org-flyspell-incorrect { /* flyspell-incorrect */ color: #ff4500; font-weight: bold; text-decoration: underline; }
+.org-fringe { /* fringe */ background-color: #f2f2f2; }
+.org-function-name { /* font-lock-function-name-face */ color: teal; }
+.org-header-line { /* header-line */ color: #333333; background-color: #e5e5e5; }
+.org-help-argument-name { /* help-argument-name */ font-style: italic; }
+.org-highlight { /* highlight */ background-color: #b4eeb4; }
+.org-holiday { /* holiday */ background-color: #ffc0cb; }
+.org-isearch { /* isearch */ color: #b0e2ff; background-color: #cd00cd; }
+.org-isearch-fail { /* isearch-fail */ background-color: #ffc1c1; }
+.org-italic { /* italic */ font-style: italic; }
+.org-keyword { /* font-lock-keyword-face */ color: #0086b3; }
+.org-lazy-highlight { /* lazy-highlight */ background-color: #afeeee; }
+.org-link { /* link */ color: #0000ff; text-decoration: underline; }
+.org-link-visited { /* link-visited */ color: #8b008b; text-decoration: underline; }
+.org-log-edit-header { /* log-edit-header */ color: #a020f0; }
+.org-log-edit-summary { /* log-edit-summary */ color: #0000ff; }
+.org-log-edit-unknown-header { /* log-edit-unknown-header */ color: #b22222; }
+.org-match { /* match */ background-color: #ffff00; }
+.org-next-error { /* next-error */ background-color: #eedc82; }
+.org-nobreak-space { /* nobreak-space */ color: #a52a2a; text-decoration: underline; }
+.org-org-archived { /* org-archived */ color: #7f7f7f; }
+.org-org-block { /* org-block */ color: #7f7f7f; }
+.org-org-block-begin-line { /* org-block-begin-line */ color: #b22222; }
+.org-org-block-end-line { /* org-block-end-line */ color: #b22222; }
+.org-org-checkbox { /* org-checkbox */ font-weight: bold; }
+.org-org-checkbox-statistics-done { /* org-checkbox-statistics-done */ color: #228b22; font-weight: bold; }
+.org-org-checkbox-statistics-todo { /* org-checkbox-statistics-todo */ color: #ff0000; font-weight: bold; }
+.org-org-clock-overlay { /* org-clock-overlay */ background-color: #ffff00; }
+.org-org-code { /* org-code */ color: #7f7f7f; }
+.org-org-column { /* org-column */ background-color: #e5e5e5; }
+.org-org-column-title { /* org-column-title */ background-color: #e5e5e5; font-weight: bold; text-decoration: underline; }
+.org-org-date { /* org-date */ color: #a020f0; text-decoration: underline; }
+.org-org-document-info { /* org-document-info */ color: #191970; }
+.org-org-document-info-keyword { /* org-document-info-keyword */ color: #7f7f7f; }
+.org-org-document-title { /* org-document-title */ color: #191970; font-size: 144%; font-weight: bold; }
+.org-org-done { /* org-done */ color: #228b22; font-weight: bold; }
+.org-org-drawer { /* org-drawer */ color: #0000ff; }
+.org-org-ellipsis { /* org-ellipsis */ color: #b8860b; text-decoration: underline; }
+.org-org-footnote { /* org-footnote */ color: #a020f0; text-decoration: underline; }
+.org-org-formula { /* org-formula */ color: #b22222; }
+.org-org-headline-done { /* org-headline-done */ color: #bc8f8f; }
+.org-org-hide { /* org-hide */ color: #ffffff; }
+.org-org-latex-and-export-specials { /* org-latex-and-export-specials */ color: #8b4513; }
+.org-org-level-1 { /* org-level-1 */ color: #0000ff; }
+.org-org-level-2 { /* org-level-2 */ color: #a0522d; }
+.org-org-level-3 { /* org-level-3 */ color: #a020f0; }
+.org-org-level-4 { /* org-level-4 */ color: #b22222; }
+.org-org-level-5 { /* org-level-5 */ color: #228b22; }
+.org-org-level-6 { /* org-level-6 */ color: #008b8b; }
+.org-org-level-7 { /* org-level-7 */ color: #7a378b; }
+.org-org-level-8 { /* org-level-8 */ color: #8b2252; }
+.org-org-link { /* org-link */ color: #0000ff; text-decoration: underline; }
+.org-org-meta-line { /* org-meta-line */ color: #b22222; }
+.org-org-mode-line-clock { /* org-mode-line-clock */ color: #000000; background-color: #bfbfbf; }
+.org-org-mode-line-clock-overrun { /* org-mode-line-clock-overrun */ color: #000000; background-color: #ff0000; }
+.org-org-quote { /* org-quote */ color: #7f7f7f; }
+.org-org-scheduled { /* org-scheduled */ color: #006400; }
+.org-org-scheduled-previously { /* org-scheduled-previously */ color: #b22222; }
+.org-org-scheduled-today { /* org-scheduled-today */ color: #006400; }
+.org-org-sexp-date { /* org-sexp-date */ color: #a020f0; }
+.org-org-special-keyword { /* org-special-keyword */ color: #a020f0; }
+.org-org-table { /* org-table */ color: #0000ff; }
+.org-org-tag { /* org-tag */ font-weight: bold; }
+.org-org-target { /* org-target */ text-decoration: underline; }
+.org-org-time-grid { /* org-time-grid */ color: #b8860b; }
+.org-org-todo { /* org-todo */ color: #ff0000; font-weight: bold; }
+.org-org-upcoming-deadline { /* org-upcoming-deadline */ color: #b22222; }
+.org-org-verbatim { /* org-verbatim */ color: #7f7f7f; }
+.org-org-verse { /* org-verse */ color: #7f7f7f; }
+.org-org-warning { /* org-warning */ color: #ff0000; font-weight: bold; }
+.org-outline-1 { /* outline-1 */ color: #0000ff; }
+.org-outline-2 { /* outline-2 */ color: #a0522d; }
+.org-outline-3 { /* outline-3 */ color: #a020f0; }
+.org-outline-4 { /* outline-4 */ color: #b22222; }
+.org-outline-5 { /* outline-5 */ color: #228b22; }
+.org-outline-6 { /* outline-6 */ color: #008b8b; }
+.org-outline-7 { /* outline-7 */ color: #7a378b; }
+.org-outline-8 { /* outline-8 */ color: #8b2252; }
+.org-preprocessor { /* font-lock-preprocessor-face */ color: #7a378b; }
+.org-query-replace { /* query-replace */ color: #b0e2ff; background-color: #cd00cd; }
+.org-regexp-grouping-backslash { /* font-lock-regexp-grouping-backslash */ font-weight: bold; }
+.org-regexp-grouping-construct { /* font-lock-regexp-grouping-construct */ font-weight: bold; }
+.org-region { /* region */ background-color: #eedc82; }
+.org-secondary-selection { /* secondary-selection */ background-color: #ffff00; }
+.org-shadow { /* shadow */ color: #7f7f7f; }
+.org-show-paren-match { /* show-paren-match */ background-color: #40e0d0; }
+.org-show-paren-mismatch { /* show-paren-mismatch */ color: #ffffff; background-color: #a020f0; }
+.org-string { /* font-lock-string-face */ color: #dd1144; }
+.org-tool-bar { /* tool-bar */ color: #000000; background-color: #bfbfbf; }
+.org-tooltip { /* tooltip */ color: #000000; background-color: #ffffe0; }
+.org-trailing-whitespace { /* trailing-whitespace */ background-color: #ff0000; }
+.org-type { /* font-lock-type-face */ color: #228b22; }
+.org-underline { /* underline */ text-decoration: underline; }
+.org-variable-name { /* font-lock-variable-name-face */ color: teal; }
+.org-warning { /* font-lock-warning-face */ color: #ff0000; font-weight: bold; }
+.org-widget-button { /* widget-button */ font-weight: bold; }
+.org-widget-button-pressed { /* widget-button-pressed */ color: #ff0000; }
+.org-widget-documentation { /* widget-documentation */ color: #006400; }
+.org-widget-field { /* widget-field */ background-color: #d9d9d9; }
+.org-widget-inactive { /* widget-inactive */ color: #7f7f7f; }
+.org-widget-single-line-field { /* widget-single-line-field */ background-color: #d9d9d9; }
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">ITSYC's Literate Emacs Config</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgcff3f97">1. About</a></li>
+<li><a href="#org2369975">2. Bootstrap</a>
+<ul>
+<li><a href="#orgd25cab9">2.1. Constants</a></li>
+<li><a href="#org079f910">2.2. Detect Operating System</a></li>
+<li><a href="#org74435bc">2.3. Personal Information</a></li>
+</ul>
+</li>
+<li><a href="#orgf4a5435">3. Internal Settings</a>
+<ul>
+<li><a href="#org7bc898d">3.1. Font</a></li>
+<li><a href="#org9580c20">3.2. gui</a></li>
+<li><a href="#org01f1c60">3.3. whitespace</a></li>
+<li><a href="#org14c96a4">3.4. scrolling</a></li>
+</ul>
+</li>
+<li><a href="#orgfe5520a">4. Appearance</a>
+<ul>
+<li><a href="#orgdd1d82a">4.1. Theme</a></li>
+<li><a href="#org5422ba7">4.2. modeline</a></li>
+</ul>
+</li>
+<li><a href="#org8ac0335">5. Navigation</a>
+<ul>
+<li><a href="#org386b21d">5.1. multiple-cursors</a></li>
+</ul>
+</li>
+<li><a href="#org4f9f259">6. Windows and Frames</a></li>
+<li><a href="#org6f96aca">7. Functions</a>
+<ul>
+<li><a href="#org05ab65c">7.1. backup</a></li>
+<li><a href="#orgd964a4f">7.2. System Specific</a></li>
+</ul>
+</li>
+<li><a href="#orga6a6644">8. Keybinding</a>
+<ul>
+<li><a href="#orgc7bf81d">8.1. which-key</a></li>
+<li><a href="#orge028ece">8.2. Hydra</a></li>
+</ul>
+</li>
+<li><a href="#orgc3f0fdb">9. Org Mode</a>
+<ul>
+<li><a href="#org40b9403">9.1. config</a></li>
+<li><a href="#org374d685">9.2. org-capture</a>
+<ul>
+<li><a href="#org877daa4">9.2.1. <span class="todo TODO">TODO</span> 还可以参考这里用于快速粘贴网页书签。</a></li>
+</ul>
+</li>
+<li><a href="#orgb255d3c">9.3. org-journal</a></li>
+<li><a href="#org7c0aee0">9.4. org-screenshot</a></li>
+</ul>
+</li>
+<li><a href="#org8727c32">10. Project Management</a>
+<ul>
+<li><a href="#org86265f3">10.1. Git</a></li>
+</ul>
+</li>
+<li><a href="#orgec34afe">11. Completion</a></li>
+<li><a href="#orgde19b8f">12. Languages</a></li>
+<li><a href="#org1887990">13. Utility</a>
+<ul>
+<li><a href="#org4a64e39">13.1. FIXME COMMENT Images</a></li>
+<li><a href="#orgadf8551">13.2. Reset GC</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgcff3f97" class="outline-2">
+<h2 id="orgcff3f97"><span class="section-number-2">1</span> About</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+这个是我个人的 Emacs 配置文件，采用 Orgmode 方式管理。
+</p>
+
+<p>
+整个配置采用了 Org-babel 和 use-package。
+</p>
+<ul class="org-ul">
+<li>关于 org-babel 的使用：<a href="http://orgmode.org/worg/org-contrib/babel/intro.html">Babel: Introduction</a></li>
+<li>关于 use-package 的使用：<a href="https://github.com/jwiegley/use-package">jwiegley/use-package - GitHub</a></li>
+</ul>
+
+<p>
+配置内容借鉴了优秀的配置参考：
+</p>
+<ul class="org-ul">
+<li><a href="https://github.com/caisah/emacs.dz">https://github.com/caisah/emacs.dz</a>  Awesome emacs config files</li>
+<li><a href="https://github.com/joedicastro/dotfiles/tree/master/emacs/.emacs.d">joedicastro/dotfiles - GitHub</a> 很详细的文档说明，值得参考</li>
+<li><a href="https://github.com/sachac/.emacs.d/blob/gh-pages/Sacha.org">sachac/.emacs.d - GitHub</a></li>
+<li><a href="https://github.com/ivoarch/.dot-org-files/blob/master/emacs.org">ivoarch/.dot-org-files - GitHub</a></li>
+<li><a href="https://github.com/jonnay/emagicians-starter-kit/blob/master/Emagician.org">jonnay/emagicians-starter-kit - GitHub</a></li>
+<li><a href="https://github.com/abo-abo/oremacs/tree/github">abo-abo/oremacs - GitHub</a></li>
+<li><a href="http://home.thep.lu.se/~karlf/emacs.html#sec-2">My .emacs</a></li>
+<li><a href="https://seancribbs.com/emacs.d.html">Sean Cribbs' Emacs 25 Configuration</a></li>
+<li><a href="https://github.com/sam217pa/emacs-config">sam217pa/emacs-config - GitHub</a></li>
+<li><a href="https://github.com/magnars/.emacs.d">magnars/.emacs.d - GitHub</a></li>
+<li><a href="https://github.com/kaushalmodi/.emacs.d">kaushalmodi/.emacs.d - GitHub</a></li>
+<li><a href="https://github.com/domtronn/emacs/blob/master/init.el#L358">domtronn/emacs - GitHub</a></li>
+<li><a href="https://writequit.org/org/settings.html#sec-1-3-5">Lee's Emacs settings file</a></li>
+<li><a href="http://writequit.org/org/">http://writequit.org/org/</a></li>
+<li><a href="http://doc.rix.si/org/fsem.html">http://doc.rix.si/org/fsem.html</a></li>
+<li><a href="https://postmomentum.ch/steckemacs.html">https://postmomentum.ch/steckemacs.html</a></li>
+<li><a href="http://pages.sachachua.com/.emacs.d/Sacha.html">http://pages.sachachua.com/.emacs.d/Sacha.html</a></li>
+<li><a href="https://github.com/larstvei/dot-emacs/blob/master/init.org">https://github.com/larstvei/dot-emacs/blob/master/init.org</a></li>
+<li><a href="https://github.com/WolfeCub/dotfiles/blob/master/emacs/.emacs.d/README.org">WolfeCub/dotfiles - GitHub</a>
+目录分类及生成 html 适合参考。
+里面用到的 major-mode-hydra 也适合参考。</li>
+<li><a href="https://github.com/MaxSt/dotfiles/blob/master/emacs.d/config.org">MaxSt/dotfiles - GitHub</a>
+里面的 general.el 快捷键设置，适合参考。</li>
+<li><a href="https://github.com/zamansky/using-emacs/blob/master/myinit.org">zamansky/using-emacs - GitHub</a></li>
+<li><a href="https://github.com/jamiecollinson/dotfiles/blob/master/config.org/">jamiecollinson/dotfiles - GitHub</a></li>
+<li><a href="https://github.com/howardabrams/dot-files/blob/master/emacs-org.org">howardabrams/dot-files - GitHub</a></li>
+<li><a href="https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org">hrs/dotfiles - GitHub</a></li>
+<li><a href="https://github.com/daedreth/UncleDavesEmacs">daedreth/UncleDavesEmacs</a></li>
+<li><a href="https://github.com/jwiegley/dot-emacs/blob/master/init.el">https://github.com/jwiegley/dot-emacs/blob/master/init.el</a>
+use-package 作者 John Wiegley 的 .emacs.d</li>
+<li><a href="https://github.com/jkitchin/scimax">jkitchin/scimax - GitHub</a> - <a href="https://www.youtube.com/watch?v=fgizHHd7nOo&amp;list=PL0sMmOaE_gs3GbuZV_sNjwMREw9rfElTV">(YouTube)</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2369975" class="outline-2">
+<h2 id="org2369975"><span class="section-number-2">2</span> Bootstrap</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orgd25cab9" class="outline-3">
+<h3 id="orgd25cab9"><span class="section-number-3">2.1</span> Constants</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defconst</span> <span class="org-variable-name">yc/cache-dir</span> (expand-file-name <span class="org-string">".cache"</span> user-emacs-directory)
+  <span class="org-doc">"Every cached or moving file should be here like with Spacemacs"</span>)
+(make-directory yc/cache-dir t)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org079f910" class="outline-3">
+<h3 id="org079f910"><span class="section-number-3">2.2</span> Detect Operating System</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">defconst</span> <span class="org-variable-name">IS-MAC</span>   (eq system-type 'darwin))
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">IS-LINUX</span> (eq system-type 'gnu/linux))
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">IS-BSD</span>   (eq system-type 'gnu/kfreebsd))
+(<span class="org-keyword">defconst</span> <span class="org-variable-name">IS-WINDOWS</span> (<span class="org-keyword">or</span> (eq system-type 'ms-dos)
+                         (eq system-type 'windows-nt)
+                         (eq system-type 'cygwin)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org74435bc" class="outline-3">
+<h3 id="org74435bc"><span class="section-number-3">2.3</span> Personal Information</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+设置个人信息
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">setq</span> user-full-name <span class="org-string">"Yang Chuang"</span>)
+(<span class="org-keyword">setq</span> user-mail-address <span class="org-string">"ifrenzyc@gmail.com"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf4a5435" class="outline-2">
+<h2 id="orgf4a5435"><span class="section-number-2">3</span> Internal Settings</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Use UTF-8 for enivorment
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">UTF-8 please</span>
+(<span class="org-keyword">setq</span> locale-coding-system 'utf-8) <span class="org-comment-delimiter">; </span><span class="org-comment">pretty</span>
+(set-terminal-coding-system 'utf-8) <span class="org-comment-delimiter">; </span><span class="org-comment">pretty</span>
+(set-keyboard-coding-system 'utf-8) <span class="org-comment-delimiter">; </span><span class="org-comment">pretty</span>
+(set-selection-coding-system 'utf-8) <span class="org-comment-delimiter">; </span><span class="org-comment">please</span>
+(prefer-coding-system 'utf-8) <span class="org-comment-delimiter">; </span><span class="org-comment">with sugar on top</span>
+(set-language-environment 'utf-8)
+</pre>
+</div>
+
+<p>
+text wrapping at 80 columns by default (only text)
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">(add-hook 'text-mode-hook 'turn-on-auto-fill)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(add-hook 'text-mode-hook</span>
+<span class="org-comment-delimiter">;;           </span><span class="org-comment">'(lambda() (set-fill-column 80)))</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org7bc898d" class="outline-3">
+<h3 id="org7bc898d"><span class="section-number-3">3.1</span> Font</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">frame font</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Setting English Font</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(if (member "Monaco" (font-family-list))</span>
+<span class="org-comment-delimiter">;;    </span><span class="org-comment">(set-face-attribute</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">'default nil :font "Monaco 13"))</span>
+(<span class="org-keyword">if</span> (member <span class="org-string">"Source Code Pro"</span> (font-family-list))
+    (set-face-attribute
+     'default nil <span class="org-builtin">:font</span> <span class="org-string">"Source Code Pro 14"</span>))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">set the default encoding system</span>
+(prefer-coding-system 'utf-8)
+(<span class="org-keyword">setq</span> default-file-name-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">backwards compatibility as default-buffer-file-coding-system</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">is deprecated in 23.2.</span>
+(<span class="org-keyword">if</span> (boundp buffer-file-coding-system)
+    (<span class="org-keyword">setq</span> buffer-file-coding-system 'utf-8)
+  (<span class="org-keyword">setq</span> default-buffer-file-coding-system 'utf-8))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Treat clipboard input as UTF-8 string first; compound text next, etc.</span>
+(<span class="org-keyword">setq</span> x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(set-face-attribute 'mode-line nil :font "Source Code Pro 13")</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(set-face-attribute 'mode-line nil :font "DejaVu Sans Mono-12")</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9580c20" class="outline-3">
+<h3 id="org9580c20"><span class="section-number-3">3.2</span> gui</h3>
+<div class="outline-text-3" id="text-3-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">&#25913;&#21464; Emacs &#22266;&#25191;&#30340;&#35201;&#20320;&#22238;&#31572; yes &#30340;&#34892;&#20026;&#12290;&#25353; y &#25110;&#31354;&#26684;&#38190;&#34920;&#31034; yes&#65292;n &#34920;&#31034; no&#12290;</span>
+(fset 'yes-or-no-p 'y-or-n-p)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">show human readable file sizes in dired</span>
+(<span class="org-keyword">setq</span> dired-listing-switches <span class="org-string">"-alh"</span>)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">faster scrolling (see https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746)</span>
+(<span class="org-keyword">setq</span> auto-window-vscroll nil)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#26174;&#31034;&#34892;&#21015;&#21495;</span>
+(<span class="org-keyword">setq</span> linum-mode nil
+      global-linum-mode nil)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#25171;&#24320;&#25324;&#21495;&#21305;&#37197;&#26174;&#31034;&#27169;&#24335;</span>
+(show-paren-mode t)
+
+(<span class="org-keyword">when</span> (fboundp 'menu-bar-mode) (menu-bar-mode -1))      <span class="org-comment-delimiter">; </span><span class="org-comment">&#21462;&#28040;&#33756;&#21333;&#26639;</span>
+(<span class="org-keyword">when</span> (fboundp 'tool-bar-mode) (tool-bar-mode -1))      <span class="org-comment-delimiter">; </span><span class="org-comment">&#21462;&#28040;&#24037;&#20855;&#26639;</span>
+(<span class="org-keyword">when</span> (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))  <span class="org-comment-delimiter">; </span><span class="org-comment">&#21462;&#28040;&#28378;&#21160;&#26639;</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#22312;&#34892;&#39318; C-k &#26102;&#65292;&#21516;&#26102;&#21024;&#38500;&#35813;&#34892;</span>
+(<span class="org-keyword">setq-default</span> kill-whole-line t)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#25324;&#21495;&#21305;&#37197;&#26102;&#21487;&#20197;&#39640;&#20142;&#26174;&#31034;&#21478;&#22806;&#19968;&#36793;&#30340;&#25324;&#21495;&#65292;&#20294;&#20809;&#26631;&#19981;&#20250;&#28902;&#20154;&#30340;&#36339;&#21040;&#21478;&#19968;&#20010;&#25324;&#21495;&#22788;&#12290;</span>
+(<span class="org-keyword">setq</span> show-paren-style 'parenthesis)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#20809;&#26631;&#38752;&#36817;&#40736;&#26631;&#25351;&#38024;&#26102;&#65292;&#35753;&#40736;&#26631;&#25351;&#38024;&#33258;&#21160;&#35753;&#24320;&#65292;&#21035;&#25377;&#20303;&#35270;&#32447;&#12290;</span>
+(<span class="org-keyword">setq</span> mouse-avoidance-mode 'animate)
+
+(<span class="org-keyword">setq</span> visible-bell t)
+
+(column-number-mode 1)
+(line-number-mode 1)
+(size-indication-mode t)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">make cursor the width of the character it is under</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">i.e. full width of a TAB</span>
+(<span class="org-keyword">setq</span> x-stretch-cursor t)
+
+(<span class="org-keyword">setq</span> ring-bell-function 'ignore)  <span class="org-comment-delimiter">;; </span><span class="org-comment">visible-bell doesn&#8217;t work well on OS X, so disable those notifications completely</span>
+
+(global-visual-line-mode nil)
+(<span class="org-keyword">setq</span> word-wrap t)
+(<span class="org-keyword">setq</span> truncate-lines nil)
+(auto-fill-mode nil) <span class="org-comment-delimiter">;; </span><span class="org-comment">&#19981;&#35201;&#33258;&#21160;&#23558;&#20869;&#23481;&#25442;&#34892;</span>
+
+  <span class="org-comment-delimiter">;;; </span><span class="org-comment">respect ansi colors</span>
+(ansi-color-for-comint-mode-on)
+
+  <span class="org-comment-delimiter">;;; </span><span class="org-comment">ansi colors in compilation mode</span>
+(<span class="org-keyword">ignore-errors</span>
+  (<span class="org-keyword">defun</span> <span class="org-function-name">yc/colorize-compilation-buffer</span> ()
+    (<span class="org-keyword">when</span> (eq major-mode 'compilation-mode)
+      (ansi-color-apply-on-region compilation-filter-start (point-max))))
+  (add-hook 'compilation-filter-hook yc/colorize-compilation-buffer))
+
+(set-frame-parameter nil 'fullscreen (<span class="org-keyword">if</span> (eq system-type 'windows-nt)
+                                         'fullboth 'maximized))
+
+(hl-line-mode t)
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(when window-system (global-hl-line-mode t))</span>
+(<span class="org-keyword">when</span> window-system (global-prettify-symbols-mode t))
+</pre>
+</div>
+
+<p>
+Emacs-plus patch : <a href="https://github.com/d12frosted/homebrew-emacs-plus">https://github.com/d12frosted/homebrew-emacs-plus</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist '(ns-appearance . dark)) <span class="org-comment-delimiter">;; </span><span class="org-comment">light or dark - depending on your theme</span>
+</pre>
+</div>
+
+<p>
+修改 Emacs 的启动界面，展现 Dashboard，特别是 Recent files（最近打开的列表），特别适用于我这种基本采用打开最近文件的方式。
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package dashboard</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(dashboard-setup-startup-hook)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq dashboard-items '((recents  . 5)</span>
+<span class="org-comment-delimiter">;;                           </span><span class="org-comment">(projects . 5)</span>
+<span class="org-comment-delimiter">;;                           </span><span class="org-comment">(bookmarks . 5))))</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org01f1c60" class="outline-3">
+<h3 id="org01f1c60"><span class="section-number-3">3.3</span> whitespace</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+@see - <a href="https://dougie.io/coding/tabs-in-emacs/">The Ultimate Guide To Using Tabs For Indentation In Emacs</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">@see - http://ergoemacs.org/emacs/whitespace-mode.html</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">@see - http://xahlee.info/comp/unicode_arrows.html</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#8220;&#183;&#8221;, MIDDLE DOT, 183</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#8220;&#182;&#8221;, PILCROW SIGN, 182</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#8220;&#8629;&#8221;, DOWNWARDS ARROW WITH CORNER LEFTWARDS, 8629</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#8220;&#9655;&#8221;, WHITE RIGHT POINTING TRIANGLE, 9655</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#8220;&#9654;&#8221;, BLACK RIGHT-POINTING TRIANGLE, 9654</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#8220;&#8594;&#8221;, RIGHTWARDS ARROW, 8594</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#8220;&#8614;&#8221;, RIGHTWARDS ARROW FROM BAR, 8614</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#8220;&#8677;&#8221;, RIGHTWARDS ARROW TO BAR, 8677</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">lines lines-tail newline trailing space-before-tab space-afte-tab empty</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">indentation-space indentation indentation-tab tabs spaces</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package whitespace</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:diminish ""</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:init</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq whitespace-style '(face tabs tab-mark trailing))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq whitespace-line-column 120)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(global-whitespace-mode t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(if window-system (progn</span>
+<span class="org-comment-delimiter">;;                       </span><span class="org-comment">(set-cursor-color "Gray")</span>
+<span class="org-comment-delimiter">;;                       </span><span class="org-comment">;; make it delete trailing whitespace</span>
+<span class="org-comment-delimiter">;;                       </span><span class="org-comment">(add-hook 'before-save-hook 'delete-trailing-whitespace)</span>
+
+<span class="org-comment-delimiter">;;                       </span><span class="org-comment">(add-hook 'after-init-hook</span>
+<span class="org-comment-delimiter">;;                                 </span><span class="org-comment">(lambda () (set-face-attribute 'whitespace-newline nil</span>
+<span class="org-comment-delimiter">;;                                                                </span><span class="org-comment">:foreground "#AAA"</span>
+<span class="org-comment-delimiter">;;                                                                </span><span class="org-comment">:weight 'bold)))</span>
+<span class="org-comment-delimiter">;;                       </span><span class="org-comment">)))</span>
+
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">START TABS CONFIG</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Enable tabs and set prefered indentation width in spaces</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(In this case the indent size is 2-spaces wide)</span>
+(<span class="org-keyword">setq-default</span> indent-tabs-mode nil)
+(<span class="org-keyword">setq-default</span> standard-indent 4)
+(<span class="org-keyword">setq-default</span> tab-width 4)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Make the backspace properly erase the tab instead of</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">removing 1 space at a time.</span>
+(<span class="org-keyword">setq</span> backward-delete-char-untabify-method 'hungry)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(OPTIONAL) Shift width for evil-mode users</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">For the vim-like motions of "&gt;&gt;" and "&lt;&lt;".</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq-default evil-shift-width 4)</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Visualize tabs as a pipe character - "|"</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">This will also show trailing characters as they are useful to spot.</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq whitespace-style '(face tabs tab-mark trailing))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(custom-set-faces</span>
+<span class="org-comment-delimiter">;;  </span><span class="org-comment">'(whitespace-tab ((t (:foreground "#636363")))))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq whitespace-display-mappings</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">'((tab-mark 9 [124 9] [92 9]))) ; 124 is the ascii ID for '\|'</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(global-whitespace-mode t) ; Enable whitespace mode everywhere</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Disable tabs and use spaces instead on Lisp and ELisp</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(defun disable-tabs () (setq indent-tabs-mode nil))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(add-hook 'lisp-mode-hook 'disable-tabs)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(add-hook 'emacs-lisp-mode-hook 'disable-tabs)</span>
+<span class="org-comment-delimiter">;;; </span><span class="org-comment">END TABS CONFIG</span>
+</pre>
+</div>
+
+<p>
+<b>About:</b> 
+Visually highlight the selected buffer.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package dimmer</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:init</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(dimmer-activate)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq dimmer-percent 0.40))</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org14c96a4" class="outline-3">
+<h3 id="org14c96a4"><span class="section-number-3">3.4</span> scrolling</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+<b>About:</b> 
+This makes scrolling gradual rather than by half page. I find that the half page scroll really makes me lose where I am in the file so here I make sure to scroll one line at a time. In addition I want to keep what I'm working on centered so I start scrolling when the cursor is 10 lines away from the margin.
+</p>
+
+<p>
+This behaviour in general emulates the scrolloff option in vim.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">(setq scroll-margin 10</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">scroll-step 1</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">scroll-conservatively 10000</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">scroll-preserve-screen-position 1)</span>
+(<span class="org-keyword">setq</span>  hscroll-margin 1
+       hscroll-step 1
+       scroll-conservatively 1001
+       scroll-margin 0
+       scroll-preserve-screen-position t)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package yascroll</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:init</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(global-yascroll-bar-mode t))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package smooth-scrolling</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:init</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(smooth-scrolling-mode t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq smooth-scroll-margin 5))</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfe5520a" class="outline-2">
+<h2 id="orgfe5520a"><span class="section-number-2">4</span> Appearance</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgdd1d82a" class="outline-3">
+<h3 id="orgdd1d82a"><span class="section-number-3">4.1</span> Theme</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+<b>About:</b> 
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">@see - https://github.com/gorakhargosh/emacs.d/blob/master/themes/color-theme-less.el</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package hc-zenburn-theme</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:init</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(defvar zenburn-override-colors-alist</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">'(("zenburn-bg+05" . "#282828")</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">("zenburn-bg+1"  . "#2F2F2F")</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">("zenburn-bg+2"  . "#3F3F3F")</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">("zenburn-bg+3"  . "#4F4F4F")))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(load-theme 'zenburn t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(set-face-attribute 'region nil :background "#666"))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package gruvbox-theme</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(load-theme  'gruvbox-light-soft t))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(load-theme  'gruvbox-dark-soft t))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(load-theme  'gruvbox-dark-medium t))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(load-theme  'gruvbox-dark-hard t))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(load-theme  'gruvbox-light-medium t))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(load-theme  'gruvbox-light-hard t))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package leuven-theme</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:init</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(load-theme 'leuven t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Fontify the whole line for headings (with a background color).</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-fontify-whole-heading-line t))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package doom-themes</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:init</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Global settings (defaults)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">doom-themes-enable-italic t) ; if nil, italics is universally disabled</span>
+
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; theme may have their own settings.</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(load-theme 'doom-one t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; (load-theme 'doom-solarized-light t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Enable flashing mode-line on errors</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(doom-themes-visual-bell-config)</span>
+
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Enable custom neotree theme</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(doom-themes-neotree-config)  ; all-the-icons fonts must be installed!</span>
+
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Corrects (and improves) org-mode's native fontification.</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(doom-themes-org-config))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; If using OSX, the colors and fonts look a bit wonky, so let's fix that</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq ns-use-srgb-colorspace t)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; Anti-aliasing</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq mac-allow-anti-aliasing t)</span>
+
+(<span class="org-keyword">use-package</span> <span class="org-constant">tao-theme</span>
+  <span class="org-builtin">:init</span>
+  (load-theme 'tao-yang t)
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(load-theme 'tao-yin t)</span>
+)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;;  </span><span class="org-comment">(use-package mdi</span>
+<span class="org-comment-delimiter">;;    </span><span class="org-comment">:load-path "lisp/mdi/"</span>
+<span class="org-comment-delimiter">;;    </span><span class="org-comment">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5422ba7" class="outline-3">
+<h3 id="org5422ba7"><span class="section-number-3">4.2</span> modeline</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+<b>About:</b> 
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package autorevert</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:diminish (auto-revert-mode . "&#128258; "))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package powerline</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config (progn</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">;; Wave seperators please</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">;; wave</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">;; arrow</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">;; rounded</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">;; zigzag</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">;; These two lines are just examples</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">(setq powerline-arrow-shape 'zigzag)</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">;; (setq powerline-default-separator-dir '(right . left))</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">;; (setq powerline-default-separator 'nil)</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">(powerline-vim-theme)))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package powerline-evil</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:after powerline</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(powerline-evil-vim-color-theme))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package nyan-mode</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:after spaceline</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:init</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(progn</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(nyan-mode)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(setq nyan-animate-nyancat t)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(setq nyan-wavy-trail t)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(setq nyan-bar-length 10))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config (nyan-start-animation))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#30446;&#21069;&#36825;&#20010;&#26377; bug&#65292;&#20250;&#23548;&#33268; emacs &#21345;&#27515;&#65292;&#20294;&#19981;&#30693;&#36947;&#20855;&#20307;&#21407;&#22240;</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Use spacemacs' mode line</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">@see - https://libraries.io/emacs/spaceline</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">@see - https://github.com/TeMPOraL/nyan-mode</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">@see - https://github.com/TheBB/spaceline</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package spaceline</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:after powerline winum</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(require 'spaceline-segments)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; (spaceline-spacemacs-theme)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">spaceline-responsive nil</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">spaceline-workspace-numbers-unicode t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">winum-auto-setup-mode-line nil)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(winum-mode))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package spaceline-config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:ensure spaceline</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-helm-mode 1)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; (spaceline-spacemacs-theme)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-emacs-theme))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package spaceline-all-the-icons</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:after spaceline</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq spaceline-all-the-icons-icon-set-bookmark 'heart</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">spaceline-all-the-icons-icon-set-modified 'toggle</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">spaceline-all-the-icons-icon-set-dedicated 'pin</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">spaceline-all-the-icons-separator-type 'slant</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">spaceline-all-the-icons-icon-set-flycheck-slim 'dots</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">spaceline-all-the-icons-flycheck-alternate t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">spaceline-all-the-icons-highlight-file-name t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">spaceline-all-the-icons-hide-long-buffer-path t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-toggle-all-the-icons-bookmark-on)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-toggle-all-the-icons-dedicated-on)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-toggle-all-the-icons-fullscreen-on)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-toggle-all-the-icons-buffer-position-on)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-all-the-icons--setup-paradox)         ;; Enable Paradox mode line</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(spaceline-all-the-icons-theme))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package all-the-icons-ivy</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:after (all-the-icons projectile ivy counsel counsel-projectile)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq all-the-icons-ivy-file-commands</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">'(counsel-find-file</span>
+<span class="org-comment-delimiter">;;           </span><span class="org-comment">counsel-file-jump</span>
+<span class="org-comment-delimiter">;;           </span><span class="org-comment">counsel-recentf</span>
+<span class="org-comment-delimiter">;;           </span><span class="org-comment">counsel-projectile-find-file</span>
+<span class="org-comment-delimiter">;;           </span><span class="org-comment">counsel-projectile-find-dir</span>
+<span class="org-comment-delimiter">;;           </span><span class="org-comment">counsel-projectile))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(all-the-icons-ivy-setup))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package doom-modeline</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:init</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq doom-modeline-icon t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">doom-modeline-major-mode-icon t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">doom-modeline-major-mode-color-icon t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">doom-modeline-buffer-file-name-style 'truncate-upto-project</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">doom-modeline-enable-word-count t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">doom-modeline-persp-name t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">doom-modeline-lsp t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:hook (after-init . doom-modeline-mode)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(winum-mode))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (defface my-pl-segment1-active</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   '((t (:foreground "#000000" :background "#E1B61A")))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   "Powerline first segment active face.")</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (defface my-pl-segment1-inactive</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   "Powerline first segment inactive face.")</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (defface my-pl-segment2-active</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   '((t (:foreground "#F5E39F" :background "#8A7119")))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   "Powerline second segment active face.")</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (defface my-pl-segment2-inactive</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   "Powerline second segment inactive face.")</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (defface my-pl-segment3-active</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   "Powerline third segment active face.")</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (defface my-pl-segment3-inactive</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   '((t (:foreground "#CEBFF3" :background "#3A2E58")))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   "Powerline third segment inactive face.")</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (defun air--powerline-default-theme ()</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   "Set up my custom Powerline with Evil indicators."</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   (interactive)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   (setq-default mode-line-format</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                 '("%e"</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                   (:eval</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                    (let* ((active (powerline-selected-window-active))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                           (seg1 (if active 'my-pl-segment1-active 'my-pl-segment1-inactive))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                           (seg2 (if active 'my-pl-segment2-active 'my-pl-segment2-inactive))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                           (seg3 (if active 'my-pl-segment3-active 'my-pl-segment3-inactive))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                           (separator-left (intern (format "powerline-%s-%s"</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                                           (powerline-current-separator)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                                           (car powerline-default-separator-dir))))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                           (separator-right (intern (format "powerline-%s-%s"</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                                            (powerline-current-separator)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                                            (cdr powerline-default-separator-dir))))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                           (lhs (list (let ((evil-face (powerline-evil-face)))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                        (if evil-mode</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                            (powerline-raw (powerline-evil-tag) evil-face)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                          ))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (if evil-mode</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                          (funcall separator-left (powerline-evil-face) seg1))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      ;;(when powerline-display-buffer-size</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      ;;  (powerline-buffer-size nil 'l))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      ;;(when powerline-display-mule-info</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      ;;  (powerline-raw mode-line-mule-info nil 'l))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-buffer-id seg1 'l)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-raw "[%*]" seg1 'l)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (when (and (boundp 'which-func-mode) which-func-mode)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                        (powerline-raw which-func-format seg1 'l))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-raw " " seg1)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (funcall separator-left seg1 seg2)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (when (boundp 'erc-modified-channels-object)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                        (powerline-raw erc-modified-channels-object seg2 'l))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-major-mode seg2 'l)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-process seg2)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;         ;; ;;                                      (powerline-raw " " seg2)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (funcall separator-left seg2 seg3)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-vc seg3 'r)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (when (bound-and-true-p nyan-mode)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                        (powerline-raw (list (nyan-create)) seg3 'l))))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                           (rhs (list (powerline-raw global-mode-string seg3 'r)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (funcall separator-right seg3 seg2)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (unless window-system</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                        (powerline-raw (char-to-string #xe0a1) seg2 'l))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-raw "%4l" seg2 'l)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-raw ":" seg2 'l)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-raw "%3c" seg2 'r)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (funcall separator-right seg2 seg1)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-raw " " seg1)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (powerline-raw "%6p" seg1 'r)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                      (when powerline-display-hud</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                        (powerline-hud seg1 seg3)))))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                      (concat (powerline-render lhs)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                              (powerline-fill seg3 (powerline-width rhs))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                              (powerline-render rhs)))))))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (use-package powerline</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   :config</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   (powerline-default-theme)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   (setq powerline-default-separator (if (display-graphic-p) 'slant</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                       nil))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   (air--powerline-default-theme)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   )</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8ac0335" class="outline-2">
+<h2 id="org8ac0335"><span class="section-number-2">5</span> Navigation</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org386b21d" class="outline-3">
+<h3 id="org386b21d"><span class="section-number-3">5.1</span> multiple-cursors</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+参考：<a href="http://www.cauchy.me/2015/08/20/emacs-multi-cursors/">My Favourite Emacs Modes - multiple-cursors · Thinking Aloud</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4f9f259" class="outline-2">
+<h2 id="org4f9f259"><span class="section-number-2">6</span> Windows and Frames</h2>
+</div>
+<div id="outline-container-org6f96aca" class="outline-2">
+<h2 id="org6f96aca"><span class="section-number-2">7</span> Functions</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-org05ab65c" class="outline-3">
+<h3 id="org05ab65c"><span class="section-number-3">7.1</span> backup</h3>
+<div class="outline-text-3" id="text-7-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">&#35774;&#23450;&#19981;&#20135;&#29983;&#22791;&#20221;&#25991;&#20214;</span>
+(<span class="org-keyword">setq</span> make-backup-files nil)
+(<span class="org-keyword">setq-default</span> make-backup-files nil)  <span class="org-comment-delimiter">; </span><span class="org-comment">&#19981;&#29983;&#25104;&#20020;&#26102;&#25991;&#20214;</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#21462;&#28040;&#33258;&#21160;&#20445;&#23384;&#27169;&#24335;</span>
+(<span class="org-keyword">setq</span> auto-save-mode nil)
+
+(<span class="org-keyword">setq</span> backup-by-copying nil)
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Save a list of recent files visited. (open recent file with C-x f)</span>
+(recentf-mode 1)
+(<span class="org-keyword">setq</span> recentf-max-saved-items 1000) <span class="org-comment-delimiter">;; </span><span class="org-comment">just 20 is too recent</span>
+</pre>
+</div>
+
+<p>
+关闭 emacs 后，重新打开文件时跳转到上一次打开该文件时的位置（所在行）。
+Restore cursor to file position in previous editing session.
+参考文档：<a href="https://www.emacswiki.org/emacs/SavePlace#toc1">SavePlace</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(save-place-mode 1)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd964a4f" class="outline-3">
+<h3 id="orgd964a4f"><span class="section-number-3">7.2</span> System Specific</h3>
+<div class="outline-text-3" id="text-7-2">
+<p>
+<b>About:</b> 
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package exec-path-from-shell</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:if IS-MAC</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:defer 1</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq exec-path-from-shell-variables '("PATH" "GOPATH" "GOROOT" "PKG_CONFIG_PATH"))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(exec-path-from-shell-initialize))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (cond (IS-MAC</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;        (setq mac-redisplay-dont-reset-vscroll t            ; sane trackpad/mouse scroll settings</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              mac-mouse-wheel-smooth-scroll nil</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              mouse-wheel-scroll-amount '(5 ((shift) . 2))  ; one line at a time</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              mouse-wheel-progressive-speed nil             ; don't accelerate scrolling</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              ;; Curse Lion and its sudden but inevitable fullscreen mode!</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              ;; NOTE Meaningless to railwaycat's emacs-mac build</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              ns-use-native-fullscreen nil</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              ;; Don't open files from the workspace in a new frame</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              ns-pop-up-frames nil)))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;       (cond ((display-graphic-p)</span>
+<span class="org-comment-delimiter">;;               </span><span class="org-comment">;; A known problem with GUI Emacs on MacOS: it runs in an isolated</span>
+<span class="org-comment-delimiter">;;               </span><span class="org-comment">;; environment, so envvars will be wrong. That includes the PATH</span>
+<span class="org-comment-delimiter">;;               </span><span class="org-comment">;; Emacs picks up. `</span><span class="org-comment"><span class="org-constant">exec-path-from-shell</span></span><span class="org-comment">' fixes this. This is slow</span>
+<span class="org-comment-delimiter">;;               </span><span class="org-comment">;; and benefits greatly from compilation.</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              (setq exec-path</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                    (or (eval-when-compile</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                          (when (require 'exec-path-from-shell nil t)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                            (setq exec-path-from-shell-check-startup-files nil</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                  exec-path-from-shell-arguments (delete "-i" exec-path-from-shell-arguments))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                            (nconc exec-path-from-shell-variables '("GOPATH" "GOROOT" "PYTHONPATH"))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                            (exec-path-from-shell-initialize)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                            exec-path))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                        exec-path)))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;             (t</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;              (when (require 'osx-clipboard nil t)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                (osx-clipboard-mode +1)))))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;      (IS-LINUX</span>
+<span class="org-comment-delimiter">;;        </span><span class="org-comment">;; native tooltips are ugly!</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;       (setq x-gtk-use-system-tooltips nil)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;       ))</span>
+</pre>
+</div>
+
+<p>
+Macosx switch meta key
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">when</span> IS-MAC
+  (<span class="org-keyword">setq</span> mac-command-modifier 'meta
+        mac-option-modifier 'super
+        mac-control-modifier 'control
+        ns-function-modifier 'hyper))
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(defun yc/mac-switch-meta nil</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">"switch meta between Option and Command"</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(interactive)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(if (eq mac-option-modifier nil)</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(progn</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">(setq mac-option-modifier 'meta)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">(setq mac-command-modifier 'hyper)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(progn</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(setq mac-option-modifier nil)</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(setq mac-command-modifier 'meta)</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">)</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; switch meta key</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq mac-option-key-is-meta nil)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq mac-command-key-is-meta t)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq mac-command-modifier 'meta)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq mac-option-modifier nil)</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">&#20462;&#25913;&#21518;&#30340;&#35774;&#23450; Mark &#30340;&#32465;&#23450;&#65292;&#30001;&#20110;&#32463;&#24120;&#24536;&#20102;&#25918;&#20303; Control &#38190;&#65292;&#23601;&#32473;&#36825;&#20010;&#21151;&#33021;&#20004;&#20010;&#32465;&#23450;&#20102;</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(global-set-key (kbd "M-n") 'set-mark-command)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga6a6644" class="outline-2">
+<h2 id="orga6a6644"><span class="section-number-2">8</span> Keybinding</h2>
+<div class="outline-text-2" id="text-8">
+</div>
+<div id="outline-container-orgc7bf81d" class="outline-3">
+<h3 id="orgc7bf81d"><span class="section-number-3">8.1</span> which-key</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+<b>About:</b> 
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">use-package</span> <span class="org-constant">which-key</span>
+  <span class="org-builtin">:defer</span> 1
+  <span class="org-builtin">:commands</span> which-key-mode
+  <span class="org-builtin">:diminish</span> <span class="org-string">""</span>
+  <span class="org-builtin">:config</span>
+  (which-key-mode)
+  (which-key-setup-minibuffer)
+  (which-key-setup-side-window-bottom)
+  (<span class="org-keyword">setq</span> which-key-sort-order 'which-key-key-order-alpha
+        which-key-use-C-h-commands nil
+        which-key-idle-delay 0.2)
+  (add-to-list 'which-key-key-replacement-alist '(<span class="org-string">"TAB"</span> . <span class="org-string">"&#8633;"</span>))
+  (add-to-list 'which-key-key-replacement-alist '(<span class="org-string">"RET"</span> . <span class="org-string">"&#9166;"</span>))
+  (add-to-list 'which-key-key-replacement-alist '(<span class="org-string">"DEL"</span> . <span class="org-string">"&#8676;"</span>))
+  (add-to-list 'which-key-key-replacement-alist '(<span class="org-string">"SPC"</span> . <span class="org-string">"&#9251;"</span>)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge028ece" class="outline-3">
+<h3 id="orge028ece"><span class="section-number-3">8.2</span> Hydra</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+<b>About:</b> 
+参考：<a href="https://github.com/abo-abo/hydra/wiki">https://github.com/abo-abo/hydra/wiki</a>
+</p>
+<ul class="org-ul">
+<li><a href="https://irreal.org/blog/?p=6453">Hydra Video</a></li>
+<li><a href="https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org">https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org</a></li>
+<li><a href="https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/">https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/</a></li>
+<li><a href="https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html">https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html</a></li>
+<li><a href="https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/">https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/</a></li>
+<li><a href="https://dustinlacewell.github.io/emacs.d/#org1fab346">https://dustinlacewell.github.io/emacs.d/#org1fab346</a></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">use-package</span> <span class="org-constant">hydra</span>
+  <span class="org-builtin">:defer</span> t
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">:preface</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(defvar-local yc/ongoing-hydra-body nil)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(defun yc/ongoing-hydra ()</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">(interactive)</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">(if yc/ongoing-hydra-body</span>
+  <span class="org-comment-delimiter">;;       </span><span class="org-comment">(funcall yc/ongoing-hydra-body)</span>
+  <span class="org-comment-delimiter">;;     </span><span class="org-comment">(user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">:bind</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">("C-c &lt;tab&gt;" . hydra-fold/body)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">("C-c d" . hydra-dates/body)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">("C-c e" . hydra-eyebrowse/body)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">;; ("C-c f" . hydra-flycheck/body)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">;; ("C-c g" . hydra-magit/body)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">("C-c h" . hydra-helm/body)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">("C-c o" . yc/ongoing-hydra)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">;; ("C-c p" . hydra-projectile/body)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">("C-c p" . hydra-system/body)</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">("C-c w" . hydra-windows/body)</span>
+  )
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc3f0fdb" class="outline-2">
+<h2 id="orgc3f0fdb"><span class="section-number-2">9</span> Org Mode</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+<b>About:</b> 
+<b>orgmode 配置参考：</b>
+</p>
+<ul class="org-ul">
+<li><a href="https://emacs.lujianmei.com/03-editing/init-org-mode.html">Orgmode 写文档</a></li>
+<li><a href="https://emacs.lujianmei.com/03-editing/init-gtd-management.html">Orgmode 个人时间管理</a></li>
+
+<li>使用快捷键 <code>C-x r j n</code> 快速跳转到 Notes 的 home 页面。</li>
+<li>使用快捷键 <code>C-x r j g</code> 快速跳转到 Draft 页面。</li>
+<li>使用快捷键 <code>C-x r j s</code> 快速跳转到 <code>奇特的一生</code> 页面。</li>
+<li>使用 <code>C-c C-j</code> 是现在 orgmode 的 headline 快速跳转</li>
+</ul>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Key Binding</th>
+<th scope="col" class="org-left">Backend Function</th>
+<th scope="col" class="org-left">What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Registers</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">C-x r j</td>
+<td class="org-left">M-x jump-to-register</td>
+<td class="org-left">Prompts for register letter. Jumpts to point saved in that register.</td>
+</tr>
+
+<tr>
+<td class="org-left">C-x r SPC</td>
+<td class="org-left">M-x point-to-register</td>
+<td class="org-left">Prompts for register letter. Saves point in register.</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+这里采用新版本的 orgmode，而非 Emacs 自带的，不能用 use-package。
+同时需要通过 <code>M-x package-list-packages</code> 安装新版本的 orgmode
+</p>
+</div>
+
+<div id="outline-container-org40b9403" class="outline-3">
+<h3 id="org40b9403"><span class="section-number-3">9.1</span> config</h3>
+<div class="outline-text-3" id="text-9-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">;; (require 'org)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (require 'org-mouse)</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package org</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:defer 1</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:mode "\\.org$"</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:delight org-mode "Org"</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-directory "/Users/yangc/Dropbox/itsycnotes")</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-pretty-entities t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">org-src-fontify-natively t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">;; org-ellipsis "&#10549;"</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">;; org-ellipsis " [&#8230;]"</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">;; org-ellipsis (concat " " (all-the-icons-faicon "caret-down"))</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">org-indent-mode t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">;; org-src-preserve-indentation t    ; &#36825;&#20010;&#38656;&#35201;&#27880;&#37322;&#25481;&#65292;&#20250;&#23548;&#33268; org-src &#37324;&#38754;&#30340;&#20195;&#30721;&#19981;&#20250;&#33258;&#21160;&#32553;&#36827;&#20004;&#21015;</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">org-edit-src-content-indentation 2</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">org-enforce-todo-dependencies t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">org-enforce-todo-checkbox-dependencies t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">org-hide-emphasis-markers t</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">org-image-actual-width '(400))</span>
+
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-export-with-sub-superscripts nil  ; &#31105;&#29992; ^ &#21644; _ &#20316;&#20026;&#19978;&#19979;&#26631;&#31526;&#21495;</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">org-pretty-entities-include-sub-superscripts nil)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(add-hook 'org-mode-hook (lambda () (setq word-wrap t)))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(add-hook 'org-mode-hook 'org-indent-mode)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; @see - http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(font-lock-add-keywords 'org-mode</span>
+<span class="org-comment-delimiter">;;                           </span><span class="org-comment">'(("^ *\\([-+]\\) "</span>
+<span class="org-comment-delimiter">;;                              </span><span class="org-comment">(0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "&#9728;"))))))</span>
+
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Keep the headlines expanded in Org-Mode</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; @see - http://emacs.stackexchange.com/questions/9709/keep-the-headlines-expanded-in-org-mode</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-startup-folded nil)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Disabling underscore-to-subscript in Emacs Org-Mode export</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; @see - http://stackoverflow.com/questions/698562/disabling-underscore-to-subscript-in-emacs-org-mode-export/701201#701201</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-export-with-sub-superscripts nil)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(defcustom org-indent-indentation-per-level 4</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">"Indentation per level in number of characters."</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">:group 'org-indent</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">:type 'integer)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-todo-keywords</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">(quote ((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">(sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "REPEAT(r)" "MAYBE(m)" "|" "DONE(d!/!)")</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">(sequence "PROJ(p)" "READ(r)" "FIXME(f)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">(sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)"))))</span>
+
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-use-fast-todo-selection t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-todo-state-tags-triggers</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">(quote (("CANCELLED" ("CANCELLED" . t))</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">("WAITING" ("WAITING" . t))</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">("MAYBE" ("WAITING" . t))</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">("HOLD" ("WAITING") ("HOLD" . t))</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">(done ("WAITING") ("HOLD"))</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">("TODO" ("WAITING") ("CANCELLED") ("HOLD"))</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))</span>
+<span class="org-comment-delimiter">;;                 </span><span class="org-comment">("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; &#35760;&#24405;&#26102;&#38388;</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(add-hook 'org-mode-hook (lambda () (setq org-log-done 'time)))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; &#35760;&#24405;&#25552;&#31034;&#20449;&#24687;</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(add-hook 'org-mode-hook (lambda () (setq org-log-done 'note)))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Separate drawers for clocking and logs</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Save clock data and state changes and notes in the LOGBOOK drawer</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-clock-into-drawer t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-clock-out-remove-zero-time-clocks t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; Clock out when moving task to a done state</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-clock-out-when-done t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; (set-register ?n (cons 'file "/Users/yangc/Dropbox/itsycnotes/home.org"))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; (set-register ?s (cons 'file "/Users/yangc/Dropbox/itsycnotes/draft.org"))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; (set-register ?g (cons 'file "/Users/yangc/Dropbox/itsycnotes/diary.org"))</span>
+
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(setq org-goto-interface 'outline-path-completion org-goto-max-level 10)</span>
+
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(defun org-insert-src-block (src-code-type)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">"Insert a `</span><span class="org-comment"><span class="org-constant">SRC-CODE-TYPE</span></span><span class="org-comment">' type source code block in org-mode."</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(interactive</span>
+<span class="org-comment-delimiter">;;      </span><span class="org-comment">(let ((src-code-types</span>
+<span class="org-comment-delimiter">;;             </span><span class="org-comment">'("emacs-lisp" "python" "C" "sh" "java" "js" "clojure" "C++" "css"</span>
+<span class="org-comment-delimiter">;;               </span><span class="org-comment">"calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen"</span>
+<span class="org-comment-delimiter">;;               </span><span class="org-comment">"octave" "oz" "plantuml" "R" "sass" "screen" "sql" "awk" "ditaa"</span>
+<span class="org-comment-delimiter">;;               </span><span class="org-comment">"haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby"</span>
+<span class="org-comment-delimiter">;;               </span><span class="org-comment">"scheme" "sqlite")))</span>
+<span class="org-comment-delimiter">;;        </span><span class="org-comment">(list (ido-completing-read "Source code type: " src-code-types))))</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(progn</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(newline-and-indent)</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(insert (format "#+BEGIN_SRC %s\n" src-code-type))</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(newline-and-indent)</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(insert "#+END_SRC\n")</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(previous-line 2)</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(org-edit-src-code)))</span>
+
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(defun yc/org-toggle-link-display ()</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">"Toggle the literal or descriptive display of links."</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(interactive)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(if org-descriptive-links</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">(progn (org-remove-from-invisibility-spec '(org-link))</span>
+<span class="org-comment-delimiter">;;                </span><span class="org-comment">(org-restart-font-lock)</span>
+<span class="org-comment-delimiter">;;                </span><span class="org-comment">(setq org-descriptive-links nil))</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(progn (add-to-invisibility-spec '(org-link))</span>
+<span class="org-comment-delimiter">;;              </span><span class="org-comment">(org-restart-font-lock)</span>
+<span class="org-comment-delimiter">;;              </span><span class="org-comment">(setq org-descriptive-links t))))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; :preface</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; (defun yc/org-set-ongoing-hydra-body ()</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;;   (setq yc/ongoing-hydra-body #'hydra-org/body))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; :hook</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; (org-mode . yc/org-set-ongoing-hydra-body))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; ;; @see - http://orgmode.org/worg/org-hacks.html#orgheadline126</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (defun yc/ogrep (search &amp;optional context)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   "Search for word in org files.</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;     Prefix argument determines number of lines."</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   (interactive "sSearch for: \nP")</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;   (let ((grep-find-ignored-files '("#*" ".#*"))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;         (grep-template (concat "grep &lt;X&gt; -i -nH "</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                (when context</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                  (concat "-C" (number-to-string context)))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;                                " -e &lt;R&gt; &lt;F&gt;")))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;;     (lgrep search "*org*" org-directory)))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (setq org-refile-use-outline-path t)                  ; Show full paths for refiling</span>
+</pre>
+</div>
+
+<p>
+定义一部分在 orgmode 下编写代码块的快捷模板，此快捷模板可以通过 <code>(&lt;s[TAB])</code> 的方式快捷输入模板块，如下以此类推，输入 <code>(&lt;e[TAB])</code> 即可输入另外的模板。
+Use org-tempo to allow inserting templates using
+e.g. <code>&lt;s</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">&#27169;&#26495;&#20803;&#32032;&#35828;&#26126;&#65306; @see - https://www.cnblogs.com/holbrook/archive/2012/04/17/2454619.html</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">https://www.gnu.org/software/emacs/manual/html_node/org/Template-elements.html#Template-elements</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">https://www.gnu.org/software/emacs/manual/html_node/org/Template-expansion.html#Template-expansion</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">https://www.reddit.com/r/emacs/comments/ad68zk/get_easytemplates_back_in_orgmode_92/?utm_source=dlvr.it&amp;utm_medium=twitter</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">https://gist.github.com/takaxp/4fb109c2dcc67b8d8de4914760977674</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(require 'org-tempo)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(when (version&lt; "9.2" (org-version))</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(add-to-list 'org-modules 'org-tempo))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(add-to-list 'org-structure-template-alist</span>
+<span class="org-comment-delimiter">;;                </span><span class="org-comment">(if (version&lt; "9.2" (org-version))</span>
+<span class="org-comment-delimiter">;;                    </span><span class="org-comment">'(?S . "src emacs-lisp")</span>
+<span class="org-comment-delimiter">;;                  </span><span class="org-comment">'("S" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC" "&lt;src lang=\"emacs-lisp\"&gt;\n\n&lt;/src&gt;")))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq org-structure-template-alist</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">'(("s" "#+BEGIN_SRC ?\n\n#+END_SRC" "&lt;src lang=\"?\"&gt;\n\n&lt;/src&gt;")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("e" "#+BEGIN_EXAMPLE\n?\n#+END_EXAMPLE" "&lt;example&gt;\n?\n&lt;/example&gt;")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("q" "#+BEGIN_QUOTE\n?\n#+END_QUOTE" "&lt;quote&gt;\n?\n&lt;/quote&gt;")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("v" "#+BEGIN_VERSE\n?\n#+END_VERSE" "&lt;verse&gt;\n?\n&lt;/verse&gt;")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("c" "#+BEGIN_COMMENT\n?\n#+END_COMMENT")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("p" "#+BEGIN_PRACTICE\n?\n#+END_PRACTICE")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("o" "#+BEGIN_SRC emacs-lisp :tangle yes\n?\n#+END_SRC" "&lt;src lang=\"emacs-lisp\"&gt;\n?\n&lt;/src&gt;")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("l" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC" "&lt;src lang=\"emacs-lisp\"&gt;\n?\n&lt;/src&gt;")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("L" "#+latex: " "&lt;literal style=\"latex\"&gt;?&lt;/literal&gt;")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("h" "#+BEGIN_HTML\n?\n#+END_HTML" "&lt;literal style=\"html\"&gt;\n?\n&lt;/literal&gt;")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("H" "#+html: " "&lt;literal style=\"html\"&gt;?&lt;/literal&gt;")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("a" "#+BEGIN_ASCII\n?\n#+END_ASCII")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("A" "#+ascii: ")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("i" "#+index: ?" "#+index: ?")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("I" "#+include %file ?" "&lt;include file=%file markup=\"?\"&gt;")))</span>
+</pre>
+</div>
+
+<p>
+当执行 org code block 后，显示图片
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">(add-hook 'org-babel-after-execute-hook 'yc/display-inline-images 'append)</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(defun yc/display-inline-images ()</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(condition-case nil</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">(org-display-inline-images)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">(error nil)))</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org374d685" class="outline-3">
+<h3 id="org374d685"><span class="section-number-3">9.2</span> org-capture</h3>
+<div class="outline-text-3" id="text-9-2">
+<p>
+使用弹出一个 frame 方式打开 org-capture。
+</p>
+<ul class="org-ul">
+<li>%u &#x2013; 插入当前日志<span class="timestamp-wrapper"><span class="timestamp">[2017-07-17 Mon]</span></span></li>
+<li>%U &#x2013; 插入当前日志，并有具体时间<span class="timestamp-wrapper"><span class="timestamp">[2017-07-17 Mon 16:48]</span></span></li>
+<li>%T &#x2013; 时间格式不同而已<span class="timestamp-wrapper"><span class="timestamp">&lt;2017-07-17 Mon 16:48&gt;</span></span></li>
+<li>%a &#x2013; 插入当前所在文档的 link 地址</li>
+</ul>
+
+<p>
+@see - <a href="https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/">https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">;; Set default column view headings: Task Total-Time Time-Stamp</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(define-key global-map "\C-cc" 'org-capture)</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; :empty-lines 2</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(setq org-capture-templates</span>
+<span class="org-comment-delimiter">;;       </span><span class="org-comment">'(("t" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* TODO %i%?\n%U\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("T" "Tickler" entry (file+headline org-agenda-file-tickler "Tickler")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* %i%? \n %U")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("w" "Work TODO" entry (file+olp org-default-notes-file "Work" "Tasks")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* TODO %? :work:\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("a" "Appointment" entry (file+headline org-default-notes-file "Appointments")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* DONE MEETING with %? :MEETING:\n:SUBJECT:\n%U\n" :clock-in t :clock-resume t :empty-lines 1)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("d" "Diary" entry (file+datetree "diary.org")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* %?\n%U\n" :clock-in t :clock-resume t)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("i" "Idea" entry (file+headline org-agenda-file-thoughts "Thoughts")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* %? :IDEA: \n%t" :clock-in t :clock-resume t)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"** NEXT %? \nDEADLINE: %t")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("l" "A link, for reading later." entry (file+headline org-agenda-file-reading "Reading List")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* READ %?%^L %^g \n%T" :prepend t :empty-lines 1)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("K" "Cliplink capture task" entry (file+headline org-agenda-file-reading "Reading List")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* TODO %(org-cliplink-capture) \n  SCHEDULED: %t\n" :prepend t :empty-lines 1)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("L" "Link" entry (file+headline org-agenda-file-reading "Reading List")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* %:description\n%u\n\n%c\n\n%i" :prepend t :empty-lines 1)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("n" "Note" entry (file+headline org-agenda-file-notes "Notes")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* Note %?\n%T")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("b" "Blog idea" entry (file+headline org-default-notes-file "Blog Topics:")</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* %?\n%T" :prepend t)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("j" "Journal" entry (file+datetree org-agenda-file-journal)</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* %?\nEntered on %U\n  %i\n  %a")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("s" "Screencast" entry (file org-default-notes-file)</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* %?\n%i\n")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("r" "RESPONED" entry  (file (concat org-directory "/refile.org"))</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("n" "NOTES" entry  (file (concat org-directory "/notes.org"))</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("j" "Journal" entry  (file (concat org-directory "/refile.org"))</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* %?\n%U\n" :clock-in t :clock-resume t)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("w" "org-protocol" entry  (file (concat org-directory "/refile.org"))</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* TODO Review %c\n%U\n" :immediate-finish t)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("p" "Phone call" entry  (file (concat org-directory "/refile.org"))</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">("h" "Habit" entry  (file (concat org-directory "/refile.org"))</span>
+<span class="org-comment-delimiter">;;          </span><span class="org-comment">"* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"&lt;%Y-%m-%d %a .+1d/3d&gt;\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">))</span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org877daa4" class="outline-4">
+<h4 id="org877daa4"><span class="section-number-4">9.2.1</span> <span class="todo TODO">TODO</span> 还可以参考这里用于快速粘贴网页书签。</h4>
+<div class="outline-text-4" id="text-9-2-1">
+<p>
+<a href="https://github.com/tumashu/org-capture-pop-frame">tumashu/org-capture-pop-frame - GitHub</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb255d3c" class="outline-3">
+<h3 id="orgb255d3c"><span class="section-number-3">9.3</span> org-journal</h3>
+<div class="outline-text-3" id="text-9-3">
+<p>
+<b>About:</b> 
+</p>
+<ul class="org-ul">
+<li><a href="https://github.com/bastibe/org-journal">bastibe/org-journal - GitHub</a></li>
+</ul>
+
+<p>
+<b>常用按键：</b>
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">按键</th>
+<th scope="col" class="org-left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>C-c C-j</code></td>
+<td class="org-left">创建一个新的日记条目</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+<code>M-x calendar</code> 打开 Emacs 的日历模式，org-journal 集成在 calendar 里面
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span class="org-keyword">use-package</span> <span class="org-constant">org-journal</span>
+  <span class="org-builtin">:defer</span> 1
+  <span class="org-builtin">:after</span> org
+  <span class="org-builtin">:init</span>
+  (<span class="org-keyword">setq</span> org-journal-dir <span class="org-string">"~/notes/07_Journal/"</span>
+        org-journal-date-format <span class="org-string">"%A, %d %m %Y"</span>
+        <span class="org-comment-delimiter">;; </span><span class="org-comment">org-journal-date-format "#+TITLE: Journal Entry- %e %b %Y (%A)"</span>
+        org-journal-file-format <span class="org-string">"%Y-%m-%d.org"</span>)
+  <span class="org-builtin">:bind</span> (<span class="org-string">"C-c j"</span> . org-journal-new-entry))
+  <span class="org-comment-delimiter">;;        </span><span class="org-comment">("C-c y" . journal-file-yesterday)))</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">:preface</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(defun get-journal-file-today ()</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">"Gets filename for today's journal entry."</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">(let ((daily-name (format-time-string "%Y%m%d")))</span>
+  <span class="org-comment-delimiter">;;     </span><span class="org-comment">(expand-file-name (concat org-journal-dir daily-name))))</span>
+
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(defun journal-file-today ()</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">"Creates and load a journal file based on today's date."</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">(interactive)</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">(find-file (get-journal-file-today)))</span>
+
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(defun get-journal-file-yesterday ()</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">"Gets filename for yesterday's journal entry."</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">(let* ((yesterday (time-subtract (current-time) (days-to-time 1)))</span>
+  <span class="org-comment-delimiter">;;          </span><span class="org-comment">(daily-name (format-time-string "%Y%m%d" yesterday)))</span>
+  <span class="org-comment-delimiter">;;     </span><span class="org-comment">(expand-file-name (concat org-journal-dir daily-name))))</span>
+
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">(defun journal-file-yesterday ()</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">"Creates and load a file based on yesterday's date."</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">(interactive)</span>
+  <span class="org-comment-delimiter">;;   </span><span class="org-comment">(find-file (get-journal-file-yesterday))))</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7c0aee0" class="outline-3">
+<h3 id="org7c0aee0"><span class="section-number-3">9.4</span> org-screenshot</h3>
+<div class="outline-text-3" id="text-9-4">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">Paste an image on clipboard to Emacs Org mode file</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">@see - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it</span>
+(<span class="org-keyword">defun</span> <span class="org-function-name">yc/org-screenshot</span> ()
+  <span class="org-doc">"Take a screenshot into a time stamped unique-named file in the</span>
+<span class="org-doc">    same directory as the org-buffer and insert a link to this file."</span>
+  (<span class="org-keyword">interactive</span>)
+  (<span class="org-keyword">setq</span> filename
+        (concat
+         (make-temp-name
+          (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name))
+                  <span class="org-string">"_imgs/"</span>
+                  (format-time-string <span class="org-string">"%Y%m%d_%H%M%S_"</span>))) <span class="org-string">".png"</span>))
+  (<span class="org-keyword">unless</span> (file-exists-p (file-name-directory filename))
+    (make-directory (file-name-directory filename)))
+                                        <span class="org-comment-delimiter">; </span><span class="org-comment">take screenshot</span>
+  (<span class="org-keyword">if</span> (eq system-type 'darwin)
+      (call-process <span class="org-string">"screencapture"</span> nil nil nil <span class="org-string">"-i"</span> filename))
+  (<span class="org-keyword">if</span> (eq system-type 'gnu/linux)
+      (call-process <span class="org-string">"import"</span> nil nil nil filename))
+                                        <span class="org-comment-delimiter">; </span><span class="org-comment">insert into file if correctly taken</span>
+  (<span class="org-keyword">if</span> (file-exists-p filename)
+      (insert (concat <span class="org-string">"[[file:"</span> filename <span class="org-string">"]]"</span>)))
+  (org-display-inline-images))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8727c32" class="outline-2">
+<h2 id="org8727c32"><span class="section-number-2">10</span> Project Management</h2>
+<div class="outline-text-2" id="text-10">
+</div>
+<div id="outline-container-org86265f3" class="outline-3">
+<h3 id="org86265f3"><span class="section-number-3">10.1</span> Git</h3>
+<div class="outline-text-3" id="text-10-1">
+<p>
+<b>About:</b> 
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">;; highlight git changes</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package git-gutter</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:diminish git-gutter-mode</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config (global-git-gutter-mode))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">diff-hl</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Highlight uncommitted changes using VC</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package diff-hl</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:defer nil</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config (global-diff-hl-mode t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:hook (magit-post-refresh-hook . diff-hl-magit-post-refresh))</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgec34afe" class="outline-2">
+<h2 id="orgec34afe"><span class="section-number-2">11</span> Completion</h2>
+</div>
+<div id="outline-container-orgde19b8f" class="outline-2">
+<h2 id="orgde19b8f"><span class="section-number-2">12</span> Languages</h2>
+</div>
+<div id="outline-container-org1887990" class="outline-2">
+<h2 id="org1887990"><span class="section-number-2">13</span> Utility</h2>
+<div class="outline-text-2" id="text-13">
+</div>
+<div id="outline-container-org4a64e39" class="outline-3">
+<h3 id="org4a64e39"><span class="section-number-3">13.1</span> FIXME COMMENT Images</h3>
+<div class="outline-text-3" id="text-13-1">
+<p>
+<b>About:</b> 
+<b>TODO:</b> 这个感觉 image-mode 和 imagex-mode 都没加载到，导致 hydra 按键无法绑定
+相关快捷键参考官方文档：<a href="https://github.com/mhayashi1120/Emacs-imagex">https://github.com/mhayashi1120/Emacs-imagex</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">(add-hook 'image-mode-hook '(lambda () (require 'image+)))</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(use-package image+</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; :after image-mode</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; :init (eval-after-load 'image '(require 'image+))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; :init </span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">:config</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(imagex-global-sticky-mode t)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;; (eval-after-load 'image+ '(imagex-global-sticky-mode t))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(bind-keys :map image-mode-map</span>
+<span class="org-comment-delimiter">;;              </span><span class="org-comment">("\\" . hydra-imagex-sticky/body)))</span>
+<span class="org-comment-delimiter">;;              </span><span class="org-comment">;; ("0" . imagex-sticky-restore-original)</span>
+<span class="org-comment-delimiter">;;              </span><span class="org-comment">;; ("+" . imagex-sticky-maximize)</span>
+<span class="org-comment-delimiter">;;              </span><span class="org-comment">;; ("=" . imagex-sticky-zoom-in)</span>
+<span class="org-comment-delimiter">;;              </span><span class="org-comment">;; ("-" . imagex-sticky-zoom-out)))</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">;; (eval-after-load 'image+</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">(when (package-installed-p 'hydra)</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;;      (bind-keys :map image-mode-map</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;;                 ("\\" . hydra-image-sticky/body))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">;;      ))</span>
+<span class="org-comment-delimiter">;;   </span><span class="org-comment">(defhydra hydra-imagex-sticky (:color blue)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">"</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">Manipulating Image</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">^Resize^             ^Rotate^           ^Save             ^Quit</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">^^^^^^------------------------------------------------------------</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">_=_: zoom in     _r_: rotate right         _S_: save file _q_: quit</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">_-_: zoom out    _l_: rotate left</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">_+_: maximize</span>
+<span class="org-comment-delimiter">;;         </span><span class="org-comment">_0_: reset</span>
+<span class="org-comment-delimiter">;;              </span><span class="org-comment">"</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">("\\" hydra-master/body "back")</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">("q" nil "quit")</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">("=" imagex-sticky-zoom-in)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">("-" imagex-sticky-zoom-out)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">("+" imagex-sticky-maximize)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">("0" imagex-sticky-restore-original)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">("S" imagex-sticky-save-image :color red)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">("r" imagex-sticky-rotate-right)</span>
+<span class="org-comment-delimiter">;;     </span><span class="org-comment">("l" imagex-sticky-rotate-left)))</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgadf8551" class="outline-3">
+<h3 id="orgadf8551"><span class="section-number-3">13.2</span> Reset GC</h3>
+<div class="outline-text-3" id="text-13-2">
+<p>
+<b>About:</b> 
+参考 doom-emacs 调整 GC：<a href="https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast">How is Doom’s startup so fast?</a>
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span class="org-comment-delimiter">;; </span><span class="org-comment">Then reset it as late as possible; these are the reasonable defaults I use.</span>
+(add-hook 'term-mode-hook '(lambda () (<span class="org-keyword">setq</span> gc-cons-threshold 16777216
+        gc-cons-percentage 0.1)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
