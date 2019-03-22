@@ -71,6 +71,7 @@
 ;; install use-package if not exists
 ;; Bootstrap `use-package'
 ;; 更新本地仓库里面的 package
+;; 参考使用 https://github.com/raxod502/straight.el 扩展 use-package
 (setq package-pinned-packages '((use-package . "melpa")))
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)

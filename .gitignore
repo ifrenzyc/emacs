@@ -19,3 +19,7 @@ smex-items
 tramp
 transient/
 tutorial/
+url/
+.lsp-session-v1
+history
+network-security.data
