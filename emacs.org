@@ -71,6 +71,17 @@ macOS switch meta key.
           ns-function-modifier 'hyper))
 #+END_SRC
 
+** System PATH
+*About:* 加载系统的环境变量
+- [[https://github.com/purcell/exec-path-from-shell][GitHub - purcell/exec-path-from-shell]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package exec-path-from-shell
+    :if IS-MAC
+    :config
+    (setq exec-path-from-shell-variables '("PATH" "GOPATH" "GOROOT" "PKG_CONFIG_PATH"))
+    (exec-path-from-shell-initialize))
+#+END_SRC
+
 * Appearance
 ** GUI
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -178,16 +189,28 @@ Unicode is an required aesthetic
 ** whitespace
 @see - [[https://dougie.io/coding/tabs-in-emacs/][The Ultimate Guide To Using Tabs For Indentation In Emacs]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;; START TABS CONFIG
-  ;; Enable tabs and set prefered indentation width in spaces
+  ;; Emacs uses double-spaces by default. Use single spaces instead:
+  (setq sentence-end-double-space nil)
+
+  ;; Disable tabs and set prefered indentation width in spaces
   ;; (In this case the indent size is 2-spaces wide)
   (setq-default indent-tabs-mode nil)
   (setq-default standard-indent 4)
   (setq-default tab-width 4)
+  (setq-default js-indent-width 4)
 
   ;; Make the backspace properly erase the tab instead of
   ;; removing 1 space at a time.
   (setq backward-delete-char-untabify-method 'hungry)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package whitespace
+    :diminish whitespace-mode
+    :hook (prog-mode . whitespace-mode)
+    :custom
+    (whitespace-line-column 119)
+    (whitespace-style '(face lines-tail)))
 #+END_SRC
 
 ** scrolling
@@ -319,7 +342,10 @@ This behaviour in general emulates the scrolloff option in vim.
 *About:* 当文件内容有修改时，可以通过 autorevert 重新加载这个文件
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package autorevert
-    :diminish (auto-revert-mode . "🔂 "))
+    :diminish t
+    :hook (dired-mode . auto-revert-mode)
+    :config
+    (global-auto-revert-mode +1))
 #+END_SRC
 
 ** COMMENT emojify
@@ -396,7 +422,9 @@ Visually highlight the selected buffer.
     :defer t
     :hook
     (prog-mode . rainbow-delimiters-mode)
-    (cider-repl-mode . rainbow-delimiters-mode))
+    (cider-repl-mode . rainbow-delimiters-mode)
+    :config
+    (rainbow-delimiters-mode +1))
 #+END_SRC
 
 ** rainbow-mode
@@ -548,11 +576,13 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 
 ** beacon
 *About:* 当切换到不同的 buffer 时，会高亮当前光标所在的行
+makes sure you don’t lose track of your cursor when jumping around a buffer.
 - [[https://github.com/Malabarba/beacon][GitHub - Malabarba/beacon]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package beacon
+    :diminish beacon-mode
     :init
-    (beacon-mode 1))
+    (beacon-mode +1))
 #+END_SRC
 
 ** pangu-spacing
@@ -1638,6 +1668,7 @@ https://github.com/dustinlacewell/hera
      ("C-x B" . ivy-switch-buffer-other-window))
     :custom
     (ivy-count-format "(%d/%d) ")
+    (ivy-use-selectable-prompt t)
     (ivy-display-style 'fancy)
     (ivy-use-virtual-buffers t)
     :config
@@ -1682,6 +1713,14 @@ https://github.com/casouri/ivy-filthy-rich
           ))
 #+END_SRC
 
+*** ivy-prescient
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ivy-prescient
+    :after ivy
+    :config
+    (ivy-prescient-mode +1))
+#+END_SRC
+
 *** COMMENT ivy-hydra
 *About:* 
 https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
@@ -1695,8 +1734,14 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
     :defer t     
     :commands (swiper swiper-all)
     :bind 
-    ("C-s " . swiper)
-    ("C-c u" . swiper-all))
+    (("C-s" . swiper)
+    ("C-r" . swiper)
+    ("C-c u" . swiper-all)
+    :map swiper-map
+    ("M-q" . swiper-query-replace)
+    ("C-l". swiper-recenter-top-bottom)
+    ("C-." . swiper-mc)
+    ("C-'" . swiper-avy)))
 #+END_SRC
 
 ** counsel
@@ -1705,9 +1750,20 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package counsel
     :defer t
+    :after (ivy)
     :bind (("C-x C-f" . counsel-find-file)
            ("M-x" . counsel-M-x)
-           ("M-y" . counsel-yank-pop)))
+           ("M-y" . counsel-yank-pop)
+           ("C-c C-r" . ivy-resume)
+           ("C-c i" . counsel-imenu)
+           ("C-x k" . kill-buffer)
+           ("C-x l" . counsel-locate)
+           ("C-c j" . counsel-git)
+           ("C-c f" . counsel-recentf)
+           :map help-map
+           ("f" . counsel-describe-function)
+           ("v" . counsel-describe-variable)
+           ("l" . counsel-info-lookup-symbol)))
 #+END_SRC
 
 *** counsel-projectile
@@ -1876,13 +1932,17 @@ Emacs extension to increase selected region by semantic units.
 ** COMMENT multiple-cursors
 参考：[[http://www.cauchy.me/2015/08/20/emacs-multi-cursors/][My Favourite Emacs Modes - multiple-cursors · Thinking Aloud]]
 
-** jump
+** avy
 *About:* 快速在当前 buffer 中跳转光标
 @see - https://github.com/abo-abo/avy
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package avy
     :init
-    (setq avy-background t))
+    (setq avy-background t)
+    :bind
+    (("C-'" . avy-goto-char-timer))
+    :custom
+    (avy-keys '(?h ?t ?n ?s ?m ?w ?v ?z)))
 #+END_SRC
 
 ** highlight and search current word
@@ -1917,6 +1977,35 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
 *About:* 快速编辑选中的区域
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit)
+#+END_SRC
+
+** Hippie Expand
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-set-key (kbd "M-/") 'hippie-expand)
+  ;; (define-key evil-insert-state-map [remap evil-complete-previous] 'hippie-expand)
+  (setq hippie-expand-try-functions-list
+        '(
+          ;; Try to expand word "dynamically", searching the current buffer.
+          try-expand-dabbrev
+          ;; Try to expand word "dynamically", searching all other buffers.
+          try-expand-dabbrev-all-buffers
+          ;; Try to expand word "dynamically", searching the kill ring.
+          try-expand-dabbrev-from-kill
+          ;; Try to complete text as a file name, as many characters as unique.
+          try-complete-file-name-partially
+          ;; Try to complete text as a file name.
+          try-complete-file-name
+          ;; Try to expand word before point according to all abbrev tables.
+          try-expand-all-abbrevs
+          ;; Try to complete the current line to an entire line in the buffer.
+          try-expand-list
+          ;; Try to complete the current line to an entire line in the buffer.
+          try-expand-line
+          ;; Try to complete as an Emacs Lisp symbol, as many characters as
+          ;; unique.
+          try-complete-lisp-symbol-partially
+          ;; Try to complete word as an Emacs Lisp symbol.
+          try-complete-lisp-symbol))
 #+END_SRC
 
 ** folding
@@ -1967,14 +2056,20 @@ This is a package to perform text folding like in Vim. It has the following feat
   (use-package ag)
 #+END_SRC
 
+** rg
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rg)
+#+END_SRC
+
 ** wgrep
 *About:* 多文件查找替换
 - [[https://github.com/mhayashi1120/Emacs-wgrep][GitHub - mhayashi1120/Emacs-wgrep]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package wgrep
+    :commands (wgrep-change-to-wgrep-mode ivy-wgrep-change-to-wgrep-mode)
     :config
-    (setq wgrep-enable-key "r")
-    (setq wgrep-auto-save-buffer t))
+    (setq wgrep-enable-key "r"
+          wgrep-auto-save-buffer t))
 #+END_SRC
 
 ** COMMENT ripgrep
@@ -2002,10 +2097,17 @@ This is a package to perform text folding like in Vim. It has the following feat
     )
 #+END_SRC
 
-#+RESULTS:
-: #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8125 data (:use-package (23703 16024 61715 0) :init (23703 16024 61710 0) :config (23703 16024 61362 0) :config-secs (0 0 3 0) :init-secs (0 0 7044 0) :use-package-secs (0 0 7070 0)))
-
 ** dired
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
+  (setq dired-dwim-target t)
+
+  ;; Recursive Copying and Deleting
+  (setq dired-recursive-copies (quote always))
+  (setq dired-recursive-deletes (quote top))
+#+END_SRC
+
+*** diredx
 *About:* dired 模式扩展
 - [[https://github.com/Fuco1/dired-hacks][GitHub - Fuco1/dired-hacks]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2014,7 +2116,7 @@ This is a package to perform text folding like in Vim. It has the following feat
     (global-set-key (kbd "C-x C-j") 'direx:jump-to-directory))
 
   ;; show human readable file sizes in dired
-  (setq dired-listing-switches "-alh")
+  (setq dired-listing-switches "-aBhl")
 #+END_SRC
 
 *** all-the-icons-dired
@@ -2386,32 +2488,6 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     ;; (define-key company-active-map (kbd "C-p") 'company-select-previous)
     ;; (define-key company-active-map [return] 'company-complete-selection)
     ;; (define-key company-active-map (kbd "C-/") 'helm-company)
-
-    ;; (global-set-key (kbd "M-/") 'hippie-expand)
-    ;; (define-key evil-insert-state-map [remap evil-complete-previous] 'hippie-expand)
-    (setq hippie-expand-try-functions-list
-          '(
-            ;; Try to expand word "dynamically", searching the current buffer.
-            try-expand-dabbrev
-            ;; Try to expand word "dynamically", searching all other buffers.
-            try-expand-dabbrev-all-buffers
-            ;; Try to expand word "dynamically", searching the kill ring.
-            try-expand-dabbrev-from-kill
-            ;; Try to complete text as a file name, as many characters as unique.
-            try-complete-file-name-partially
-            ;; Try to complete text as a file name.
-            try-complete-file-name
-            ;; Try to expand word before point according to all abbrev tables.
-            try-expand-all-abbrevs
-            ;; Try to complete the current line to an entire line in the buffer.
-            try-expand-list
-            ;; Try to complete the current line to an entire line in the buffer.
-            try-expand-line
-            ;; Try to complete as an Emacs Lisp symbol, as many characters as
-            ;; unique.
-            try-complete-lisp-symbol-partially
-            ;; Try to complete word as an Emacs Lisp symbol.
-            try-complete-lisp-symbol))
     :custom
     (custom-set-faces
      '(company-preview
@@ -2553,10 +2629,14 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company-quickhelp
     :after company
+    :hook
+    (company-mode . company-quickhelp-mode)
     :config
     (company-quickhelp-mode t)
     (setq pos-tip-background-color (face-background 'company-tooltip))
-    (setq pos-tip-foreground-color (face-foreground 'company-tooltip)))
+    (setq pos-tip-foreground-color (face-foreground 'company-tooltip))
+    :bind (:map company-active-map
+                ("M-h" . company-quickhelp-manual-begin)))
 #+END_SRC
 
 *** company-statistics
@@ -2577,7 +2657,9 @@ https://github.com/emacs-lsp/lsp-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-mode
     :demand t
-    :commands (lsp-mode)
+    :commands (lsp)
+    :hook
+    (lsp-after-open-hook . lsp-enable-imenu)
     :init 
     (require 'lsp)
     (require 'lsp-clients)
@@ -2589,6 +2671,8 @@ https://github.com/emacs-lsp/lsp-mode
     :demand t
     :after lsp-mode
     :config
+    (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+    (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
     :hook (lsp-mode . lsp-ui-mode)
     )
 #+END_SRC
@@ -2633,11 +2717,26 @@ https://github.com/emacs-lsp/lsp-mode
   (use-package flycheck
     :diminish ""
     :commands global-flycheck-mode
+    :init
+    (setenv "DICTIONARY" "en_US")
+    :hook
+    (text-mode . flyspell-mode)
+    :custom
+    (flyspell-abbrev-p t)
     :config (progn (use-package popup)
                    (use-package flycheck-pos-tip)
                    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
                    (setq flycheck-display-errors-function 'flycheck-pos-tip-error-messages)
-                   (global-flycheck-mode)))
+                   (global-flycheck-mode +1)))
+
+  (use-package flyspell-correct
+    :after flycheck
+    :bind
+    (:map flyspell-mode-map
+          (("C-;" . flyspell-correct-wrapper))))
+
+  (use-package flyspell-correct-ivy
+    :after flyspell-correct)
 #+END_SRC
 
 ** Help
@@ -2838,6 +2937,14 @@ https://github.com/syohex/emacs-zoom-window
    "C-c n" 'yc/new-buffer-frame)
 #+END_SRC
 
+*** ibuffer
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ibuffer
+    :bind (([remap list-buffers] . ibuffer))
+    :custom
+    (ibuffer-expert t))
+#+END_SRC
+
 *** ibuffer-projectile
 *About:* 
 @see - [[https://github.com/purcell/ibuffer-projectile][purcell/ibuffer-projectile - GitHub]]
@@ -2866,50 +2973,18 @@ https://github.com/syohex/emacs-zoom-window
             undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))))
 #+END_SRC
 
-** System PATH
-*About:* 加载系统的环境变量
-- [[https://github.com/purcell/exec-path-from-shell][GitHub - purcell/exec-path-from-shell]]
+** Crux
+*About:* A Collection of Ridiculously Useful eXtensions for Emacs. 
+[[https://github.com/bbatsov/crux][GitHub - bbatsov/crux]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package exec-path-from-shell
-    :if IS-MAC
-    :defer 1
-    :config
-    (setq exec-path-from-shell-variables '("PATH" "GOPATH" "GOROOT" "PKG_CONFIG_PATH"))
-    (exec-path-from-shell-initialize))
-
-  ;; (cond (IS-MAC
-  ;;        (setq mac-redisplay-dont-reset-vscroll t            ; sane trackpad/mouse scroll settings
-  ;;              mac-mouse-wheel-smooth-scroll nil
-  ;;              mouse-wheel-scroll-amount '(5 ((shift) . 2))  ; one line at a time
-  ;;              mouse-wheel-progressive-speed nil             ; don't accelerate scrolling
-  ;;              ;; Curse Lion and its sudden but inevitable fullscreen mode!
-  ;;              ;; NOTE Meaningless to railwaycat's emacs-mac build
-  ;;              ns-use-native-fullscreen nil
-  ;;              ;; Don't open files from the workspace in a new frame
-  ;;              ns-pop-up-frames nil)))
-
-  ;;       (cond ((display-graphic-p)
-                ;; A known problem with GUI Emacs on MacOS: it runs in an isolated
-                ;; environment, so envvars will be wrong. That includes the PATH
-                ;; Emacs picks up. `exec-path-from-shell' fixes this. This is slow
-                ;; and benefits greatly from compilation.
-  ;;              (setq exec-path
-  ;;                    (or (eval-when-compile
-  ;;                          (when (require 'exec-path-from-shell nil t)
-  ;;                            (setq exec-path-from-shell-check-startup-files nil
-  ;;                                  exec-path-from-shell-arguments (delete "-i" exec-path-from-shell-arguments))
-  ;;                            (nconc exec-path-from-shell-variables '("GOPATH" "GOROOT" "PYTHONPATH"))
-  ;;                            (exec-path-from-shell-initialize)
-  ;;                            exec-path))
-  ;;                        exec-path)))
-  ;;             (t
-  ;;              (when (require 'osx-clipboard nil t)
-  ;;                (osx-clipboard-mode +1)))))
-
-  ;;      (IS-LINUX
-         ;; native tooltips are ugly!
-  ;;       (setq x-gtk-use-system-tooltips nil)
-  ;;       ))
+  (use-package crux
+    :bind (("C-c o" . crux-open-with)
+           ("C-c D" . crux-delete-file-and-buffer)
+           ("C-a" . crux-move-beginning-of-line)
+           ("M-o" . crux-smart-open-line)
+           ("C-c r" . crux-rename-file-and-buffer)
+           ("M-D" . crux-duplicate-and-comment-current-line-or-region)
+           ("s-o" . crux-smart-open-line-above)))
 #+END_SRC
 
 ** Custom functions
@@ -2962,7 +3037,7 @@ https://github.com/syohex/emacs-zoom-window
 | C-x r j     | M-x jump-to-register  | Prompts for register letter. Jumpts to point saved in that register. |
 | C-x r SPC   | M-x point-to-register | Prompts for register letter. Saves point in register.                |
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package org
+(use-package org
     :ensure org-plus-contrib
     :mode ("\\.org$" . org-mode)
     :delight org-mode "Org"
@@ -4170,7 +4245,8 @@ Visually summarize progress
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package diff-hl
     :config (global-diff-hl-mode t)
-    :hook (magit-post-refresh-hook . diff-hl-magit-post-refresh))
+    :hook ((magit-post-refresh-hook . diff-hl-magit-post-refresh)
+           (dired-mode . diff-hl-dired-mode)))
 #+END_SRC
 
 *** magit
@@ -4590,6 +4666,14 @@ https://github.com/grafov/go-playground
 *About:* 
 Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
 
+*** Java LSP
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package lsp-java
+    :after lsp-mode
+    :hook
+    (java-mode . lsp-java-enable))
+#+END_SRC
+
 *** Gradle
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package gradle-mode
@@ -4836,6 +4920,22 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 #+BEGIN_SRC emacs-lisp :tangle yes
 #+END_SRC
 
+** shell
+Automatic chmod +x
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+#+END_SRC
+
+*** Fish
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package fish-mode
+    :mode ("\\.fish\\'" . fish-mode))
+#+END_SRC
+
+** Common Lisp
+
+** Emacs Lisp
+
 ** Javascript
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -5044,8 +5144,6 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
   (use-package vue-html-mode)
 #+END_SRC
 
-
-
 ** web & html
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -5084,9 +5182,12 @@ GitHub: https://github.com/smihica/emmet-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emmet-mode
     :defer t
+    :hook
+    ((web-mode . emmet-mode)
+    (vue-mode . emmet-mode)
+    (sgml-mode . emmet-mode)    ; Auto-start on any markup modes
+    (css-mode . emmet-mode))    ; enable Emmet's css abbreviation.
     :config
-    (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
     (setq emmet-expand-jsx-className? t))
 #+END_SRC
 
