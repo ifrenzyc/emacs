@@ -1506,28 +1506,19 @@ https://github.com/dustinlacewell/hera
   ;; (bind-keys ("C-c j" . hydra-org-clock/body))
   ;; :map org-agenda-mode-map
   ;; ("C-c j" . hydra-org-agenda-clock/body))
-  (defhydra hydra-clock (:color blue)
-    "
-        ^
-        ^Clock^             ^Do^
-        ^─────^─────────────^──^─────────
-        _q_ quit            _c_ cancel
-        ^^                  _d_ display
-        ^^                  _e_ effort
-        ^^                  _i_ in
-        ^^                  _j_ jump
-        ^^                  _o_ out
-        ^^                  _r_ report
-        ^^                  ^^
-        "
-    ("q" nil)
-    ("c" org-clock-cancel :color pink)
-    ("d" org-clock-display)
-    ("e" org-clock-modify-effort-estimate)
-    ("i" org-clock-in)
-    ("j" org-clock-goto)
-    ("o" org-clock-out)
-    ("r" org-clock-report))
+  (pretty-hydra-define hydra-clock 
+    (:hint nil :foreign-keys warn :quit-key "q")
+    ("Clock"
+     (("q" nil "quit"))
+     "Do"
+     (("c" org-clock-cancel "cancel")
+      ("d" org-clock-display "display")
+      ("e" org-clock-modify-effort-estimate "effort")
+      ("i" org-clock-in "in")
+      ("j" org-clock-goto "jump")
+      ("o" org-clock-out "out")
+      ("r" org-clock-report "report")))
+    )
 #+END_SRC
 
 *** hydra-toggles
@@ -1602,24 +1593,21 @@ https://github.com/dustinlacewell/hera
 
 *** hydra-fold
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defhydra hydra-fold (:color pink)
-    "
-  ^
-  ^Fold^              ^Do^                ^Jump^              ^Toggle^
-  ^────^──────────────^──^────────────────^────^──────────────^──────^────────────
-  _q_ quit            _f_ fold            _<_ previous        _<tab>_ current
-  ^^                  _k_ kill            _>_ next            _S-<tab>_ all
-  ^^                  _K_ kill all        ^^                  ^^
-  ^^                  ^^                  ^^                  ^^
-  "
-    ("q" nil)
-    ("<tab>" vimish-fold-toggle)
-    ("S-<tab>" vimish-fold-toggle-all)
-    ("<" vimish-fold-previous-fold)
-    (">" vimish-fold-next-fold)
-    ("f" vimish-fold)
-    ("k" vimish-fold-delete)
-    ("K" vimish-fold-delete-all))
+  (pretty-hydra-define hydra-fold 
+    (:hint nil :foreign-keys warn :quit-key "q")
+    ("Fold"
+     (("q" nil "Quit"))
+     "Do" (("f" vimish-fold)
+           ("k" vimish-fold-delete)
+           ("K" vimish-fold-delete-all))
+     "Jump"
+     (("<tab>" vimish-fold-toggle)
+      ("S-<tab>" vimish-fold-toggle-all))
+     "Toggle"
+     (("<" vimish-fold-previous-fold)
+      (">" vimish-fold-next-fold))
+     )
+    )
 #+END_SRC
 
 *** hydra-date
@@ -2327,20 +2315,6 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
   ;;                                    'pe/get-directory-tree-external)
   ;;                              (pe/toggle-omit t)))))
   ;;             neotree-mode-map))
-#+END_SRC
-
-让 Neotree 窗口，可以根据目录长度自动调节窗口大小
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (defun neotree-resize-window (&rest _args)
-    "Resize neotree window.
-  https://github.com/jaypei/emacs-neotree/pull/110"
-    (interactive)
-    (neo-buffer--with-resizable-window
-     (let ((fit-window-to-buffer-horizontally t))
-       (fit-window-to-buffer))))
-
-  (add-hook 'neo-change-root-hook #'neotree-resize-window)
-  (add-hook 'neo-enter-hook #'neotree-resize-window)
 #+END_SRC
 
 @see - https://github.com/emacs-evil/evil-collection/blob/master/evil-collection-neotree.el
@@ -3646,7 +3620,11 @@ Archive subtrees under the same hierarchy as original in the archive files
   (use-package org-journal
     :defer t
     :bind ("C-c j" . org-journal-new-entry)
-    :custom
+    :init
+    (setq org-journal-dir "~/notes/07_Journal/"
+          org-journal-date-format "%A, %d-%m-%Y"
+          org-journal-file-format "%Y-%m-%d.org")
+    :config
     (setq org-journal-dir "~/notes/07_Journal/"
           org-journal-date-format "%A, %d-%m-%Y"
           org-journal-file-format "%Y-%m-%d.org"))
@@ -5119,7 +5097,7 @@ Automatic chmod +x
   (use-package vue-mode
     :demand t
     :after lsp-mode
-    :mode "\\.vue\\'"
+    :mode ("\\.vue\\'" . vue-mode)
     :config
     ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
     (setq mmm-submode-decoration-level 0)
