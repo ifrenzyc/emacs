@@ -647,7 +647,8 @@ use 'keyfreq-show'
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package evil-collection
     :init
-    (setq evil-want-keybinding nil))
+    (setq evil-want-keybinding nil
+          evil-want-integration nil))
 #+END_SRC
 
 *** config
@@ -662,6 +663,7 @@ use 'keyfreq-show'
           evil-want-integration nil
           evil-want-C-u-scroll t
           evil-want-C-i-jump t)
+            (set-cursor-color "DarkCyan")
     (setq-default evil-want-Y-yank-to-eol t)
     (evil-mode)
     :config
@@ -728,7 +730,6 @@ use 'keyfreq-show'
 
     ;; C-u to scroll up or delete indent
     ;; @see - http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
-    (set-cursor-color "DarkCyan")
     )
 #+END_SRC
 
@@ -757,7 +758,7 @@ use 'keyfreq-show'
      "cp" 'evilnc-comment-or-uncomment-paragraphs
      "cr" 'comment-or-uncomment-region
      "cv" 'evilnc-toggle-invert-comment-line-by-line
-     "\\" 'evilnc-comment-operator ; if you prefer backslash key
+     "\\" 'evilnc-comment-operator    ; if you prefer backslash key
      )
     )
 #+END_SRC
@@ -823,16 +824,6 @@ use 'keyfreq-show'
     (global-evil-matchit-mode 1))
 #+END_SRC
 
-*** evil-surround
-*About:* 快速给选中的代码块加上引号或者括号，这个与 smartparens 有一些重复。
-@see - https://github.com/emacs-evil/evil-surround
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package evil-surround
-    :after evil
-    :init
-    (global-evil-surround-mode 1))
-#+END_SRC
-
 *** evil-visualstar
 *About:* 通过 =*= ， =#= 快速查找选中的代码
 This allows me to easily start a * or # search from a visual selection.
@@ -841,6 +832,16 @@ This allows me to easily start a * or # search from a visual selection.
     :after evil
     :config
     (global-evil-visualstar-mode t))
+#+END_SRC
+
+*** evil-surround
+*About:* 快速给选中的代码块加上引号或者括号，这个与 smartparens 有一些重复。
+@see - https://github.com/emacs-evil/evil-surround
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package evil-surround
+    :after evil
+    :init
+    (global-evil-surround-mode 1))
 #+END_SRC
 
 *** evil-anzu
@@ -934,7 +935,7 @@ This allows me to easily start a * or # search from a visual selection.
     "fv"   '(:ignore t :which-key "variables")
     "fh"   'helm-find-files
     "fc"   'helm-recentf
-    "ff"   'ido-find-file
+    "ff"   'counsel-find-file
     "ft"   'treemacs
     "fs"   'save-buffer
     "fo"   'yc/dired-open-in-finder
@@ -4220,6 +4221,7 @@ Visually summarize progress
 
 *** diff-hl
 *About:* Highlight uncommitted changes using VC
+高亮显示未提交的代码块
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package diff-hl
     :config (global-diff-hl-mode t)
