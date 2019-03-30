@@ -453,6 +453,10 @@ Highlight matching and auto insert parenthesis.
     :config (progn (smartparens-global-mode t)
                    ;; highlights matching pairs
                    (show-smartparens-global-mode t)
+                   (smartparens-strict-mode t)
+                   (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+                   (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
+                   (setq sp-show-pair-from-inside t)
                    ;; custom keybindings for smartparens mode
                    ;; (define-key smartparens-mode-map (kbd "C-<left>") 'sp-forward-barf-sexp)
                    ;; (define-key smartparens-mode-map (kbd "M-(") 'sp-forward-barf-sexp)
@@ -474,6 +478,16 @@ Highlight matching and auto insert parenthesis.
                    (sp-local-pair 'web-mode "{" "}" :actions nil)
                    ;; (-each sp--lisp-modes 'enable-lisp-hooks)
                    ))
+#+END_SRC
+
+*** evil-smartparens
+- [[https://github.com/expez/evil-smartparens][GitHub - expez/evil-smartparens]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package evil-smartparens
+    :defer t
+    :after (evil smartparens)
+    :config
+    (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
 #+END_SRC
 
 *** hydra-smartparens
@@ -648,7 +662,8 @@ use 'keyfreq-show'
   (use-package evil-collection
     :init
     (setq evil-want-keybinding nil
-          evil-want-integration nil))
+          evil-want-integration nil)
+    )
 #+END_SRC
 
 *** config
@@ -665,8 +680,10 @@ use 'keyfreq-show'
           evil-want-C-i-jump t)
             (set-cursor-color "DarkCyan")
     (setq-default evil-want-Y-yank-to-eol t)
+    (global-evil-leader-mode +1)
     (evil-mode)
     :config
+    (evil-leader/set-leader "\\")
     ;; (OPTIONAL) Shift width for evil-mode users
     ;; For the vim-like motions of ">>" and "<<".
     (setq-default evil-shift-width 4)
@@ -731,6 +748,22 @@ use 'keyfreq-show'
     ;; C-u to scroll up or delete indent
     ;; @see - http://stackoverflow.com/questions/14302171/ctrl-u-in-emacs-when-using-evil-key-bindings
     )
+#+END_SRC
+
+*** evil-leader
+let there be a <leader>
+[[https://github.com/cofi/evil-leader][GitHub - cofi/evil-leader: <leader> key for evil]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package evil-leader
+    :init
+    (global-evil-leader-mode +1)
+    (evil-leader/set-leader "\\")
+    :config
+    (evil-leader/set-key
+     "1" 'delete-other-windows
+     "0" 'delete-window 
+     "f" 'find-file
+     "b" 'switch-to-buffer))
 #+END_SRC
 
 *** evil-nerd-commenter
@@ -3001,6 +3034,11 @@ https://github.com/syohex/emacs-zoom-window
 这里采用新版本的 orgmode，而非 Emacs 自带的，不能用 use-package。
 同时需要通过 =M-x package-list-packages= 安装新版本的 org-mode。
 
+| key sequence | function                  | 作用说明                                       |
+|--------------+---------------------------+------------------------------------------------|
+| =C-x n s=    | ~(org-narrow-to-subtree)~ | 只显示当前光标所在的这一个标题上，其他全部隐藏 |
+| =C-x n w=    | ~(winden)~                | 显示其他被应用的内容，与 =C-x n s= 正好相反    |
+
 *orgmode 配置参考：*
 - [[https://emacs.lujianmei.com/03-editing/init-org-mode.html][Orgmode 写文档]]
 - [[https://emacs.lujianmei.com/03-editing/init-gtd-management.html][Orgmode 个人时间管理]]
@@ -3621,10 +3659,6 @@ Archive subtrees under the same hierarchy as original in the archive files
   (use-package org-journal
     :defer t
     :bind ("C-c j" . org-journal-new-entry)
-    :init
-    (setq org-journal-dir "~/notes/07_Journal/"
-          org-journal-date-format "%A, %d-%m-%Y"
-          org-journal-file-format "%Y-%m-%d.org")
     :config
     (setq org-journal-dir "~/notes/07_Journal/"
           org-journal-date-format "%A, %d-%m-%Y"
