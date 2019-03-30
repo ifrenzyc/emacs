@@ -276,6 +276,37 @@ This behaviour in general emulates the scrolloff option in vim.
   ;;   (all-the-icons-ivy-setup))
 #+END_SRC
 
+** Dashboard
+修改 Emacs 的启动界面，展现 Dashboard，特别是 Recent files（最近打开的列表），特别适用于我这种基本采用打开最近文件的方式。
+Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载不了。
+- [[https://github.com/emacs-dashboard/emacs-dashboard][GitHub - emacs-dashboard/emacs-dashboard]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dashboard
+    :config
+    ;; Set the banner
+    (setq dashboard-startup-banner 2)
+    ;; Value can be
+    ;; 'official which displays the official emacs logo
+    ;; 'logo which displays an alternative emacs logo
+    ;; 1, 2 or 3 which displays one of the text banners
+    ;; "path/to/your/image.png" which displays whatever image you would prefer
+
+    (setq dashboard-items '((recents  . 5)
+                            (projects . 5)
+                            (bookmarks . 5)))
+    ;; Set the title
+    (setq dashboard-banner-logo-title "[ E M A C S ]")
+    ;; (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
+    ;; Content is not centered by default. To center, set
+    (setq dashboard-center-content t)
+
+    ;; To disable shortcut "jump" indicators for each section, set
+    (setq dashboard-show-shortcuts nil)
+    (dashboard-setup-startup-hook)
+    (add-to-list 'dashboard-items '(agenda) t)
+    (setq show-week-agenda-p t))
+#+END_SRC
+
 ** themes
 *** doom-theme
 *About:* Pack of themes extracted from [[https://github.com/hlissner/doom-emacs][doom-emacs]].
@@ -683,7 +714,6 @@ use 'keyfreq-show'
     (global-evil-leader-mode +1)
     (evil-mode)
     :config
-    (evil-leader/set-leader "\\")
     ;; (OPTIONAL) Shift width for evil-mode users
     ;; For the vim-like motions of ">>" and "<<".
     (setq-default evil-shift-width 4)
@@ -757,7 +787,7 @@ let there be a <leader>
   (use-package evil-leader
     :init
     (global-evil-leader-mode +1)
-    (evil-leader/set-leader "\\")
+    (evil-leader/set-leader ",")
     :config
     (evil-leader/set-key
      "1" 'delete-other-windows
@@ -1092,10 +1122,9 @@ This allows me to easily start a * or # search from a visual selection.
     :prefix "SPC m"
     :global-prefix "s-SPC m")
 
-  (general-create-definer my-major-mode-leader-def-copy
+  (general-create-definer my-major-mode-leader-def
     :states '(normal motion visual)
-    :prefix ",")
-
+    :prefix "\\")
 
   ;; Split and move the cursor to the new split
   (defun yc/split-window-vertically ()
@@ -2204,27 +2233,27 @@ Show subtree when pressing i
     "q" 'kill-this-buffer
     "!" 'dired-do-shell-command)
 
-  (my-major-mode-leader-def-copy
-    :keymaps 'dired-mode-map
-    "" '(:ignore t :which-key "major-mode-cmd")
-    "DEL" 'my/dired-up-directory
-    "RET" 'dired-find-alternate-file
-    "TAB" 'dired-subtree-toggle
-    "l" 'dired-find-alternate-file
-    "c" 'dired-do-rename
-    "C" 'dired-do-copy
-    "y" 'dired-ranger-copy
-    "p" 'dired-ranger-paste
-    "v" 'dired-ranger-move
-    "R" 'dired-do-redisplay
-    "r" 'wdired-change-to-wdired-mode
-    "f" 'counsel-file-jump
-    "o" 'my/dired-create-file
-    "O" 'dired-create-directory
-    "n" 'evil-ex-search-next
-    "N" 'evil-ex-search-previous
-    "q" 'kill-this-buffer
-    "!" 'dired-do-shell-command)
+  ;; (my-major-mode-leader-def-copy
+  ;;   :keymaps 'dired-mode-map
+  ;;   "" '(:ignore t :which-key "major-mode-cmd")
+  ;;   "DEL" 'my/dired-up-directory
+  ;;   "RET" 'dired-find-alternate-file
+  ;;   "TAB" 'dired-subtree-toggle
+  ;;   "l" 'dired-find-alternate-file
+  ;;   "c" 'dired-do-rename
+  ;;   "C" 'dired-do-copy
+  ;;   "y" 'dired-ranger-copy
+  ;;   "p" 'dired-ranger-paste
+  ;;   "v" 'dired-ranger-move
+  ;;   "R" 'dired-do-redisplay
+  ;;   "r" 'wdired-change-to-wdired-mode
+  ;;   "f" 'counsel-file-jump
+  ;;   "o" 'my/dired-create-file
+  ;;   "O" 'dired-create-directory
+  ;;   "n" 'evil-ex-search-next
+  ;;   "N" 'evil-ex-search-previous
+  ;;   "q" 'kill-this-buffer
+  ;;   "!" 'dired-do-shell-command)
 #+END_SRC
 
 *** COMMENT hydra-dired
@@ -4033,91 +4062,91 @@ Visually summarize progress
     "tto" 'org-table-toggle-coordinate-overlays
     "tw" 'org-table-wrap-region)
 
-  (my-major-mode-leader-def-copy
-    :keymaps 'org-mode-map
-    "" '(:ignore t :which-key "major-mode-cmd")
-    ;; "ma" '(:ignore t :which-key "help")
-    "." 'major-mode-hydra
-    "'" 'org-edit-special
-    "SPC" 'worf-back-to-heading
-    "a" 'org-agenda
-    "c" 'org-capture
-    "b" '(:ignore t :which-key "babel")
-    "C" '(:ignore t :which-key "clocks")
-    "s" 'org-schedule
-    "d" 'org-deadline
-    "r" 'org-refile
-    "l" 'worf-right
-    "j" 'worf-down
-    "k" 'worf-up
-    "h" 'worf-left
-    "g" 'counsel-org-goto
-    "/" 'org-toggle-comment
-    "CI" 'org-clock-in
-    "Cn" 'org-narrow-to-subtree
-    "CN" 'widen
-    "CO" 'org-clock-out
-    "Cq" 'org-clock-cancel
-    "CR" 'org-refile
-    ;; "md" '(:ignore t :which-key "dates")
-    "e" '(:ignore t :which-key "export")
-    "f" '(:ignore t :which-key "feeds")
-    "H" 'org-shiftleft
-    "J" 'org-shiftdown
-    "K" 'org-shiftup
-    "L" 'org-shiftright
-    "T" '(:ignore t :which-key "Toggles")
-    ;; "x" '(:ignore t :which-key "text")
-    "x" 'org-archive-subtree-default-with-confirmation
-    ;; "C-S-l" 'org-shiftcontrolright
-    ;; "C-S-h" 'org-shiftcontrolleft
-    ;; "C-S-j" 'org-shiftcontroldown
-    ;; "C-S-k" 'org-shiftcontrolup
-    "t" '(:ignore t :which-key "tables")
-    "ta" 'org-table-align
-    "tb" 'org-table-blank-field
-    "tc" 'org-table-convert
-    "td" '(:ignore t :which-key "delete")
-    "tdc" 'org-table-delete-column
-    "tdr" 'org-table-kill-row
-    "te" 'org-table-eval-formula
-    "tE" 'org-table-export
-    "th" 'org-table-previous-field
-    "tH" 'org-table-move-column-left
-    "ti" '(:ignore t :which-key "insert")
-    "tic" 'org-table-insert-column
-    "tih" 'org-table-insert-hline
-    "tiH" 'org-table-hline-and-move
-    "tir" 'org-table-insert-row
-    "tI" 'org-table-import
-    "tj" 'org-table-next-row
-    "tJ" 'org-table-move-row-down
-    "tK" 'org-table-move-row-up
-    "tl" 'org-table-next-field
-    "tL" 'org-table-move-column-right
-    "tn" 'org-table-create
-    "tN" 'org-table-create-with-table.el
-    "tr" 'org-table-recalculate
-    "ts" 'org-table-sort-lines
-    "tt" '(:ignore t :which-key "toggle")
-    "ttf" 'org-table-toggle-formula-debugger
-    "tto" 'org-table-toggle-coordinate-overlays
-    "tw" 'org-table-wrap-region)
+  ;; (my-major-mode-leader-def-copy
+  ;;   :keymaps 'org-mode-map
+  ;;   "" '(:ignore t :which-key "major-mode-cmd")
+  ;;   ;; "ma" '(:ignore t :which-key "help")
+  ;;   "." 'major-mode-hydra
+  ;;   "'" 'org-edit-special
+  ;;   "SPC" 'worf-back-to-heading
+  ;;   "a" 'org-agenda
+  ;;   "c" 'org-capture
+  ;;   "b" '(:ignore t :which-key "babel")
+  ;;   "C" '(:ignore t :which-key "clocks")
+  ;;   "s" 'org-schedule
+  ;;   "d" 'org-deadline
+  ;;   "r" 'org-refile
+  ;;   "l" 'worf-right
+  ;;   "j" 'worf-down
+  ;;   "k" 'worf-up
+  ;;   "h" 'worf-left
+  ;;   "g" 'counsel-org-goto
+  ;;   "/" 'org-toggle-comment
+  ;;   "CI" 'org-clock-in
+  ;;   "Cn" 'org-narrow-to-subtree
+  ;;   "CN" 'widen
+  ;;   "CO" 'org-clock-out
+  ;;   "Cq" 'org-clock-cancel
+  ;;   "CR" 'org-refile
+  ;;   ;; "md" '(:ignore t :which-key "dates")
+  ;;   "e" '(:ignore t :which-key "export")
+  ;;   "f" '(:ignore t :which-key "feeds")
+  ;;   "H" 'org-shiftleft
+  ;;   "J" 'org-shiftdown
+  ;;   "K" 'org-shiftup
+  ;;   "L" 'org-shiftright
+  ;;   "T" '(:ignore t :which-key "Toggles")
+  ;;   ;; "x" '(:ignore t :which-key "text")
+  ;;   "x" 'org-archive-subtree-default-with-confirmation
+  ;;   ;; "C-S-l" 'org-shiftcontrolright
+  ;;   ;; "C-S-h" 'org-shiftcontrolleft
+  ;;   ;; "C-S-j" 'org-shiftcontroldown
+  ;;   ;; "C-S-k" 'org-shiftcontrolup
+  ;;   "t" '(:ignore t :which-key "tables")
+  ;;   "ta" 'org-table-align
+  ;;   "tb" 'org-table-blank-field
+  ;;   "tc" 'org-table-convert
+  ;;   "td" '(:ignore t :which-key "delete")
+  ;;   "tdc" 'org-table-delete-column
+  ;;   "tdr" 'org-table-kill-row
+  ;;   "te" 'org-table-eval-formula
+  ;;   "tE" 'org-table-export
+  ;;   "th" 'org-table-previous-field
+  ;;   "tH" 'org-table-move-column-left
+  ;;   "ti" '(:ignore t :which-key "insert")
+  ;;   "tic" 'org-table-insert-column
+  ;;   "tih" 'org-table-insert-hline
+  ;;   "tiH" 'org-table-hline-and-move
+  ;;   "tir" 'org-table-insert-row
+  ;;   "tI" 'org-table-import
+  ;;   "tj" 'org-table-next-row
+  ;;   "tJ" 'org-table-move-row-down
+  ;;   "tK" 'org-table-move-row-up
+  ;;   "tl" 'org-table-next-field
+  ;;   "tL" 'org-table-move-column-right
+  ;;   "tn" 'org-table-create
+  ;;   "tN" 'org-table-create-with-table.el
+  ;;   "tr" 'org-table-recalculate
+  ;;   "ts" 'org-table-sort-lines
+  ;;   "tt" '(:ignore t :which-key "toggle")
+  ;;   "ttf" 'org-table-toggle-formula-debugger
+  ;;   "tto" 'org-table-toggle-coordinate-overlays
+  ;;   "tw" 'org-table-wrap-region)
 
   ;; @see - https://github.com/noctuid/evil-guide
   ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
   (my-major-mode-leader-def
-    :keymaps 'org-src-mode-map
-    "'" 'org-edit-src-exit)
+     :keymaps 'org-src-mode-map
+     "'" 'org-edit-src-exit)
 
-  (my-major-mode-leader-def-copy
-    :keymaps 'org-src-mode-map
-    ""  '(:ignore t :which-key "major-mode-cmd")
-    "'" 'org-edit-src-exit)
-  ;; ;; key for exiting src edit mode
-  ;; (general-define-key :keymaps 'org-src-mode-map
-  ;;                     :states '(normal)
-  ;;                     "RET" 'org-edit-src-exit)
+  ;; (my-major-mode-leader-def-copy
+  ;;   :keymaps 'org-src-mode-map
+  ;;   ""  '(:ignore t :which-key "major-mode-cmd")
+  ;;   "'" 'org-edit-src-exit)
+  ;; key for exiting src edit mode
+  (general-define-key :keymaps 'org-src-mode-map
+                      :states '(normal)
+                      "RET" 'org-edit-src-exit)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -5481,36 +5510,6 @@ Config for setting markdown mode and stuff
 ** aweshell
 
 * Utility
-** Dashboard
-修改 Emacs 的启动界面，展现 Dashboard，特别是 Recent files（最近打开的列表），特别适用于我这种基本采用打开最近文件的方式。
-- [[https://github.com/emacs-dashboard/emacs-dashboard][GitHub - emacs-dashboard/emacs-dashboard]]
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package dashboard
-    :init
-    ;; Set the title
-    (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
-    ;; Set the banner
-    (setq dashboard-startup-banner 2)
-    ;; Value can be
-    ;; 'official which displays the official emacs logo
-    ;; 'logo which displays an alternative emacs logo
-    ;; 1, 2 or 3 which displays one of the text banners
-    ;; "path/to/your/image.png" which displays whatever image you would prefer
-
-    ;; Content is not centered by default. To center, set
-    (setq dashboard-center-content t)
-
-    ;; To disable shortcut "jump" indicators for each section, set
-    (setq dashboard-show-shortcuts nil)
-    :config
-    (dashboard-setup-startup-hook)
-    (setq dashboard-items '((recents  . 5)
-                            (projects . 5)
-                            (bookmarks . 5)))
-    (add-to-list 'dashboard-items '(agenda) t)
-    (setq show-week-agenda-p t))
-#+END_SRC
-
 ** Scratch
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
