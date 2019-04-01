@@ -780,20 +780,20 @@ use 'keyfreq-show'
     )
 #+END_SRC
 
-*** evil-leader
+*** COMMENT evil-leader
 let there be a <leader>
 [[https://github.com/cofi/evil-leader][GitHub - cofi/evil-leader: <leader> key for evil]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package evil-leader
-    :init
-    (global-evil-leader-mode +1)
-    (evil-leader/set-leader ",")
-    :config
-    (evil-leader/set-key
-     "1" 'delete-other-windows
-     "0" 'delete-window 
-     "f" 'find-file
-     "b" 'switch-to-buffer))
+  ;; (use-package evil-leader
+  ;;   :init
+  ;;   (global-evil-leader-mode +1)
+  ;;   (evil-leader/set-leader ",")
+  ;;   :config
+  ;;   (evil-leader/set-key
+  ;;    "1" 'delete-other-windows
+  ;;    "0" 'delete-window 
+  ;;    "f" 'find-file
+  ;;    "b" 'switch-to-buffer))
 #+END_SRC
 
 *** evil-nerd-commenter
@@ -812,17 +812,6 @@ let there be a <leader>
      "C-c l" 'evilnc-quick-comment-or-uncomment-to-the-line
      "C-c c" 'evilnc-copy-and-comment-lines
      "C-c p" 'evilnc-comment-or-uncomment-paragraphs)
-
-    (evil-leader/set-key
-     "ci" 'evilnc-comment-or-uncomment-lines
-     "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
-     "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
-     "cc" 'evilnc-copy-and-comment-lines
-     "cp" 'evilnc-comment-or-uncomment-paragraphs
-     "cr" 'comment-or-uncomment-region
-     "cv" 'evilnc-toggle-invert-comment-line-by-line
-     "\\" 'evilnc-comment-operator    ; if you prefer backslash key
-     )
     )
 #+END_SRC
 
@@ -1070,8 +1059,8 @@ This allows me to easily start a * or # search from a visual selection.
     "wl"   'windmove-right
     "wk"   'windmove-up
     "wj"   'windmove-down
-    "w|"   'yc/split-window-vertically
-    "w-"   'yc/split-window-horizontally
+    "w-"   'yc/split-window-vertically
+    "w|"   'yc/split-window-horizontally
     "wc"   'delete-window
     "wd"   'delete-frame
     "wu"   'winner-undo
@@ -1121,6 +1110,36 @@ This allows me to easily start a * or # search from a visual selection.
     :states '(normal motion visual)
     :prefix "SPC m"
     :global-prefix "s-SPC m")
+
+  ;; (general-create-definer my-leader-def-2
+  ;;   :states '(normal motion visual)
+  ;;   :global-prefix ",")
+
+  ;; for frequently used prefix keys, the user can create a custom definer with a
+  ;; default :prefix
+  ;; using a variable is not necessary, but it may be useful if you want to
+  ;; experiment with different prefix keys and aren't using `general-create-definer'
+  (defconst my-leader ",")
+
+  (general-nmap
+    :prefix my-leader 
+    "1"  'delete-other-windows
+    "0"  'delete-window 
+    "f"  'find-file
+    "b"  'switch-to-buffer)
+
+  (general-nmap
+    :prefix my-leader 
+    "c"  '(:ignore t :which-key "comment or uncomment")
+    "ci" 'evilnc-comment-or-uncomment-lines
+    "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+    "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
+    "cc" 'evilnc-copy-and-comment-lines
+    "cp" 'evilnc-comment-or-uncomment-paragraphs
+    "cr" 'comment-or-uncomment-region
+    "cv" 'evilnc-toggle-invert-comment-line-by-line
+    "\\" 'evilnc-comment-operator    ; if you prefer backslash key
+    )
 
   ;; (general-create-definer my-major-mode-leader-def
   ;;   :states '(normal motion visual)
@@ -1809,7 +1828,7 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
            ("C-c i" . counsel-imenu)
            ("C-x k" . kill-buffer)
            ("C-x l" . counsel-locate)
-           ("C-c j" . counsel-git)
+           ;; ("C-c j" . counsel-git)    ; 与 org-journal 冲突
            ("C-c f" . counsel-recentf)
            :map help-map
            ("f" . counsel-describe-function)
@@ -3684,14 +3703,17 @@ Archive subtrees under the same hierarchy as original in the archive files
 |---------+----------------------|
 | =C-c j= | 创建一个新的日记条目 |
 
+关于为什么使用 =:custom= ，参考 [[https://github.com/bastibe/org-journal/issues/126][Search not working · Issue #126]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-journal
     :defer t
     :bind ("C-c j" . org-journal-new-entry)
-    :config
-    (setq org-journal-dir "~/notes/07_Journal/"
-          org-journal-date-format "%A, %d-%m-%Y"
-          org-journal-file-format "%Y-%m-%d.org"))
+    :custom
+    (org-journal-dir "~/notes/07_Journal/")
+    (org-journal-date-format "%A, %d-%m-%Y")
+    (org-journal-file-format "%Y-%m-%d.org"))
+
+  (my-leader-def "jo"  'org-journal-new-entry)
 #+END_SRC
 
 ** COMMENT worf
@@ -3915,7 +3937,7 @@ https://github.com/astahlman/ob-async
       (add-to-list 'org-ctrl-c-ctrl-c-hook 'ob-async-org-babel-execute-src-block)))
 #+END_SRC
 
-** org-pomodoro
+** COMMENT org-pomodoro
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Pomodoro
@@ -3925,7 +3947,7 @@ https://github.com/astahlman/ob-async
                 ("P" . org-pomodoro)))
 #+END_SRC
 
-** org-dashboard
+** COMMENT org-dashboard
 *About:* 
 Visually summarize progress
 #+BEGIN_SRC emacs-lisp :tangle yes
