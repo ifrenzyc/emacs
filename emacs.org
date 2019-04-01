@@ -1122,9 +1122,9 @@ This allows me to easily start a * or # search from a visual selection.
     :prefix "SPC m"
     :global-prefix "s-SPC m")
 
-  (general-create-definer my-major-mode-leader-def
-    :states '(normal motion visual)
-    :prefix "\\")
+  ;; (general-create-definer my-major-mode-leader-def
+  ;;   :states '(normal motion visual)
+  ;;   :prefix "\\")
 
   ;; Split and move the cursor to the new split
   (defun yc/split-window-vertically ()
