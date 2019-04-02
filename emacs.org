@@ -673,18 +673,6 @@ https://github.com/davidshepherd7/electric-operator
           which-key-idle-delay 0.2))
 #+END_SRC
 
-** keyfreq
-*About:* 统计各个命令的使用次数
-use 'keyfreq-show'
-@see - https://github.com/dacap/keyfreq
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package keyfreq
-    :commands (keyfreq-show)
-    :init
-    (keyfreq-mode 1)
-    (keyfreq-autosave-mode 1))
-#+END_SRC
-
 ** Evil
 *** evil-collection
 *About:* evil 按键扩展集合
@@ -693,8 +681,7 @@ use 'keyfreq-show'
   (use-package evil-collection
     :init
     (setq evil-want-keybinding nil
-          evil-want-integration nil)
-    )
+          evil-want-integration nil))
 #+END_SRC
 
 *** config
@@ -780,6 +767,81 @@ use 'keyfreq-show'
     )
 #+END_SRC
 
+** general
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package general
+    :defer t
+    :init
+    (general-def :states '(normal motion visual) "SPC" nil)
+    :config
+    ;; Vim-like definitions
+    (general-evil-setup t))
+
+  (general-create-definer my-leader-def
+    :states '(normal motion visual)
+    :prefix "SPC"
+    :global-prefix "s-SPC")
+
+  (general-create-definer my-major-mode-leader-def
+    :states '(normal motion visual)
+    :prefix "SPC m"
+    :global-prefix "s-SPC m")
+
+  ;; (general-create-definer my-leader-def-2
+  ;;   :states '(normal motion visual)
+  ;;   :global-prefix ",")
+
+  ;; for frequently used prefix keys, the user can create a custom definer with a
+  ;; default :prefix
+  ;; using a variable is not necessary, but it may be useful if you want to
+  ;; experiment with different prefix keys and aren't using `general-create-definer'
+  (defconst my-leader ",")
+#+END_SRC
+
+** Hydra
+*About:* make Emacs bindings that stick around.
+参考：https://github.com/abo-abo/hydra/wiki
+- [[https://irreal.org/blog/?p=6453][Hydra Video]]
+- https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org
+- https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/
+- https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html
+- https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
+- https://dustinlacewell.github.io/emacs.d/#org1fab346
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package hydra
+    :defer t
+    ;; :preface
+    ;; (defvar-local yc/ongoing-hydra-body nil)
+    ;; (defun yc/ongoing-hydra ()
+    ;;   (interactive)
+    ;;   (if yc/ongoing-hydra-body
+    ;;       (funcall yc/ongoing-hydra-body)
+    ;;     (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
+    :bind
+    ("C-c <tab>" . hydra-fold/body)
+    ("C-c d" . hydra-dates/body)
+    ("C-c f" . hydra-flycheck/body)
+    ("C-c g" . hydra-magit/body)
+    ("C-c h" . hydra-helm/body)
+    ;; ("C-c o" . yc/ongoing-hydra)
+    ("C-c p" . hydra-projectile/body)
+    ("C-c p" . hydra-system/body)
+    ("C-c w" . hydra-window/body))
+#+END_SRC
+
+** COMMENT keyfreq
+*About:* 统计各个命令的使用次数
+use 'keyfreq-show'
+@see - https://github.com/dacap/keyfreq
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package keyfreq
+  ;;   :commands (keyfreq-show)
+  ;;   :init
+  ;;   (keyfreq-mode 1)
+  ;;   (keyfreq-autosave-mode 1))
+#+END_SRC
+
+** evil-extends
 *** COMMENT evil-leader
 let there be a <leader>
 [[https://github.com/cofi/evil-leader][GitHub - cofi/evil-leader: <leader> key for evil]]
@@ -908,26 +970,12 @@ This allows me to easily start a * or # search from a visual selection.
 *** COMMENT evil-number
 *About:* 
 
-** general
+** general-extends
 *About:* 
 @see - [[https://github.com/noctuid/general.el][noctuid/general.el - GitHub]]
 参考这篇文章重新定义自己的 key bindings：[[https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/][larstvei/dot-emacs - GitHub]]
 参考在 Mac 下的一些配置：[[https://www.emacswiki.org/emacs/EmacsForMacOS][Emacs For Mac OS]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package general
-    :defer t
-    :init
-    (general-def :states '(normal motion visual) "SPC" nil)
-    :config
-    ;; Vim-like definitions
-    (general-evil-setup t)
-  )
-
-  (general-create-definer my-leader-def
-    :states '(normal motion visual)
-    :prefix "SPC"
-    :global-prefix "s-SPC")
-
   (my-leader-def
     "TAB"  'mode-line-other-buffer
     "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
@@ -1106,21 +1154,6 @@ This allows me to easily start a * or # search from a visual selection.
     "okr"  'org-clock-report
     "v"    'er/expand-region)
 
-  (general-create-definer my-major-mode-leader-def
-    :states '(normal motion visual)
-    :prefix "SPC m"
-    :global-prefix "s-SPC m")
-
-  ;; (general-create-definer my-leader-def-2
-  ;;   :states '(normal motion visual)
-  ;;   :global-prefix ",")
-
-  ;; for frequently used prefix keys, the user can create a custom definer with a
-  ;; default :prefix
-  ;; using a variable is not necessary, but it may be useful if you want to
-  ;; experiment with different prefix keys and aren't using `general-create-definer'
-  (defconst my-leader ",")
-
   (general-nmap
     :prefix my-leader 
     "1"  'delete-other-windows
@@ -1157,91 +1190,7 @@ This allows me to easily start a * or # search from a visual selection.
       (other-window 1))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle yes
-;; (use-package general
-;;   :config
-;;   ;;(general-evil-setup)
-;;   ;; bind a key globally in normal state; keymaps must be quoted
-;;   (setq general-default-keymaps 'evil-normal-state-map))
-;; ;;evil mappings
-;; (general-def 'normal
-;;   "M-l" (lambda ()
-;;           (interactive)
-;;           (evil-window-vsplit)
-;;           (evil-window-right 1))
-;;   "M-h" (lambda ()
-;;           (interactive)
-;;           (evil-window-vsplit))
-;;   "M-k" (lambda ()
-;;           (interactive)
-;;           (evil-window-split))
-;;   "M-j" (lambda ()
-;;           (interactive)
-;;           (evil-window-split)
-;;           (evil-window-down 1))
-;;   "gS" 'my-funcs/open-snippet-dir
-;;   "s" 'save-buffer
-;;   "S" 'counsel-projectile-find-file
-;;   "gs" 'magit-status
-;;   "`" 'evil-goto-mark-line
-;;   "'" 'evil-goto-mark
-;;   "C-h" 'evil-window-left
-;;   "C-l" 'evil-window-right
-;;   "C-k" 'evil-window-up
-;;   "C-j" 'evil-window-down
-;;   "g ." 'my-funcs/open-dotfile
-;;   "g h" 'org-capture
-;;   "g i" (lambda ()
-;;           (interactive)
-;;           (find-file (concat org-directory "/inbox.org")))
-;;   "g l" 'org-agenda
-;;   "g o" (lambda ()
-;;           (interactive)
-;;           (counsel-find-file org-directory))
-;;   "] SPC" (lambda ()
-;;             (interactive)
-;;             (save-excursion
-;;               (evil-open-below 1))
-;;             (evil-normal-state))
-;;   "[ SPC" (lambda ()
-;;             (interactive)
-;;             (save-excursion
-;;               (evil-open-above 1))
-;;             (evil-normal-state)))
-#+END_SRC
-
-** Hydra
-*About:* make Emacs bindings that stick around.
-参考：https://github.com/abo-abo/hydra/wiki
-- [[https://irreal.org/blog/?p=6453][Hydra Video]]
-- https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org
-- https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/
-- https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html
-- https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
-- https://dustinlacewell.github.io/emacs.d/#org1fab346
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package hydra
-    :defer t
-    ;; :preface
-    ;; (defvar-local yc/ongoing-hydra-body nil)
-    ;; (defun yc/ongoing-hydra ()
-    ;;   (interactive)
-    ;;   (if yc/ongoing-hydra-body
-    ;;       (funcall yc/ongoing-hydra-body)
-    ;;     (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
-    :bind
-    ("C-c <tab>" . hydra-fold/body)
-    ("C-c d" . hydra-dates/body)
-    ("C-c f" . hydra-flycheck/body)
-    ("C-c g" . hydra-magit/body)
-    ("C-c h" . hydra-helm/body)
-    ;; ("C-c o" . yc/ongoing-hydra)
-    ("C-c p" . hydra-projectile/body)
-    ("C-c p" . hydra-system/body)
-    ("C-c w" . hydra-window/body)
-    )
-#+END_SRC
-
+** hydra-extends
 *** major-mode-hydra
 *About:* 这个是参考了 spacemacs 针对 hydra 的扩展，能够方便地绑定 major mode 的按键。
 比如，当前的 major mode 是 org-mode，则可以快速唤出相应 org-mode 自定义的 hydra 按键，统一所有 major-mode 的按键。
@@ -3353,7 +3302,7 @@ e.g. =<s=
           ("l" "A link, for reading later." entry (file+headline org-agenda-file-reading "Reading List")
            "* READ %?%^L %^g \n%T" :prepend t :empty-lines 1)
           ("K" "Cliplink capture task" entry (file+headline org-agenda-file-reading "Reading List")
-           "* TODO %(org-cliplink-capture) \n  SCHEDULED: %t\n" :prepend t :empty-lines 1)
+           "* READ %(org-cliplink-capture) \nSCHEDULED: %t\n" :prepend t :empty-lines 1)
           ("L" "Link" entry (file+headline org-agenda-file-reading "Reading List")
            "* %:description\n%u\n\n%c\n\n%i" :prepend t :empty-lines 1)
           ("n" "Note" entry (file+headline org-agenda-file-notes "Notes")
@@ -3924,17 +3873,17 @@ documentation: https://mobileorg.github.io/documentation/
   (use-package ob-go)
 #+END_SRC
 
-*** Async Babel
+*** COMMENT Async Babel
 Evaluate org-src-block asynchronously.
 https://github.com/astahlman/ob-async
 如果要加这个，是不是要在 BEGIN_SRC 上加上关键字，还是默认全部都执行，对 emacs dotfile 的加载有没有影响，这些都要验证。
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package ob-async
-    :after org
-    :commands (ob-async-org-babel-execute-src-block)
-    :init
-    (with-eval-after-load 'org
-      (add-to-list 'org-ctrl-c-ctrl-c-hook 'ob-async-org-babel-execute-src-block)))
+  ;; (use-package ob-async
+  ;;   :after org
+  ;;   :commands (ob-async-org-babel-execute-src-block)
+  ;;   :init
+  ;;   (with-eval-after-load 'org
+  ;;     (add-to-list 'org-ctrl-c-ctrl-c-hook 'ob-async-org-babel-execute-src-block)))
 #+END_SRC
 
 ** COMMENT org-pomodoro
