@@ -510,9 +510,9 @@ Highlight matching and auto insert parenthesis.
     :config (progn (smartparens-global-mode t)
                    ;; highlights matching pairs
                    (show-smartparens-global-mode t)
-                   ;; (smartparens-strict-mode t)
-                   ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-                   ;; (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
+                   (smartparens-strict-mode t)
+                   (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+                   (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
                    (setq sp-show-pair-from-inside t)
                    ;; custom keybindings for smartparens mode
                    ;; (define-key smartparens-mode-map (kbd "C-<left>") 'sp-forward-barf-sexp)
@@ -2330,6 +2330,7 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 - [[https://github.com/jaypei/emacs-neotree][GitHub - jaypei/emacs-neotree]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package neotree
+    :defer t
     :diminish ""
     :commands (neotree-toggle)
     :hook
@@ -2340,10 +2341,102 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
                       (setq truncate-lines t)
                       (hl-line-mode 1)
                       (display-line-numbers-mode -1)    ; disable line-numbers minor mode for neotree
-                      (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-                      (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
-                      (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
-                      (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+                      (define-minor-mode neotree-evil
+                        "Use NERDTree bindings on neotree."
+                        :lighter " NT"
+                        :keymap (progn
+                                  (evil-make-overriding-map neotree-mode-map 'normal t)
+                                  (evil-define-key 'normal neotree-mode-map
+                                    "q" 'neotree-hide
+                                    "?" 'hydra-neotree/body
+                                    "C" 'neotree-change-root
+                                    "U" 'neotree-select-up-node
+                                    "r" 'neotree-refresh
+                                    "o" 'neotree-enter
+                                    (kbd "RET") 'neotree-enter
+                                    (kbd "TAB") 'neotree-enter
+                                    (kbd "SPC") 'neotree-quick-look
+                                    ;; "|" 'neotree-enter-horizontal-split
+                                    ;; "-" 'neotree-enter-vertical-split
+                                    "n" 'evil-search-next
+                                    "N" 'evil-search-previous
+                                    "ma" 'neotree-create-node
+                                    "mc" 'neotree-copy-file
+                                    "md" 'neotree-delete-node
+                                    "mm" 'neotree-rename-node
+                                    "gg" 'evil-goto-first-line
+                                    ;; (kbd "<return>") (neotree-make-executor
+                                    ;;                   :file-fn 'neo-open-file
+                                    ;;                   :dir-fn 'neo-open-dir)
+                                    ;; (kbd "<tab>") (neotree-make-executor
+                                    ;;                :dir-fn 'neo-open-dir)
+                                    "z" (neotree-make-executor
+                                         :dir-fn 'neo-open-dir)
+                                    "ZZ" 'quit-window
+                                    "gd" (neotree-make-executor
+                                          :dir-fn 'neo-open-dired)
+                                    "gD" (neotree-make-executor
+                                          :dir-fn 'neo-open-dired)
+                                    "go" (neotree-make-executor
+                                          :file-fn 'neo-open-file
+                                          :dir-fn 'neo-open-dir)
+                                    "gO" 'neotree-quick-look
+                                    "gr" 'neotree-refresh
+                                    "H" 'neotree-hidden-file-toggle
+                                    "gh" 'neotree-hidden-file-toggle
+                                    (kbd "C-k") 'neotree-select-up-node
+                                    "gk" 'neotree-select-up-node
+                                    "[[" 'neotree-select-up-node
+                                    (kbd "C-j") 'neotree-select-down-node
+                                    "gj" 'neotree-select-down-node
+                                    "]]" 'neotree-select-down-node
+                                    "gv" 'neotree-open-file-in-system-application
+                                    "c" 'neotree-create-node
+                                    "y" 'neotree-copy-node
+                                    ;; "r" 'neotree-rename-node
+                                    "R" 'neotree-change-root
+                                    "d" 'neotree-delete-node
+                                    "J" 'neotree-dir
+                                    "+" 'neotree-stretch-toggle
+                                    "=" 'neotree-stretch-toggle
+                                    "ge" 'neotree-enter
+                                    "j" 'neotree-next-line
+                                    "k" 'neotree-previous-line
+
+                                    ;; Unchanged keybings.
+                                    "a" (neotree-make-executor
+                                         :file-fn 'neo-open-file-ace-window)
+                                    "|" (neotree-make-executor
+                                         :file-fn 'neo-open-file-vertical-split)
+                                    "-" (neotree-make-executor
+                                         :file-fn 'neo-open-file-horizontal-split)
+                                    "S" 'neotree-select-previous-sibling-node
+                                    "s" 'neotree-select-next-sibling-node
+                                    (kbd "C-c C-c") 'neotree-change-root
+                                    (kbd "C-x 1") 'neotree-empty-fn
+                                    (kbd "C-x 2") 'neotree-empty-fn
+                                    (kbd "C-x 3") 'neotree-empty-fn
+                                    (kbd "C-x C-f") 'find-file-other-window
+                                    (kbd "C-c C-f") 'find-file-other-window
+                                    "gi" (lambda ()
+                                           (interactive)
+                                           (if (string= pe/get-directory-tree-external-command
+                                                        nt/gitignore-files-cmd)
+                                               (progn (setq pe/get-directory-tree-external-command
+                                                            nt/all-files-cmd))
+                                             (progn (setq pe/get-directory-tree-external-command
+                                                          nt/gitignore-files-cmd)))
+                                           (nt/refresh))
+                                    "I" (lambda ()
+                                          (interactive)
+                                          (if pe/omit-enabled
+                                              (progn (setq pe/directory-tree-function
+                                                           'pe/get-directory-tree-async)
+                                                     (pe/toggle-omit nil))
+                                            (progn (setq pe/directory-tree-function
+                                                         'pe/get-directory-tree-external)
+                                                   (pe/toggle-omit t)))))
+                                  neotree-mode-map))
                       ))
     :config
     ;; 'classic, 'nerd, 'ascii, 'arrow
@@ -2362,102 +2455,71 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
            (to-path (read-file-name msg (file-name-directory current-path))))
       (dired-copy-file current-path to-path t))
     (neo-buffer--refresh t))
-
-  ;; (define-minor-mode neotree-evil
-  ;;   "Use NERDTree bindings on neotree."
-  ;;   :lighter " NT"
-  ;;   :keymap (progn
-  ;;             ;; (evil-make-overriding-map neotree-mode-map 'normal t)
-  ;;             (evil-define-key 'normal neotree-mode-map
-  ;;               "C" 'neotree-change-root
-  ;;               "U" 'neotree-select-up-node
-  ;;               "r" 'neotree-refresh
-  ;;               "o" 'neotree-enter
-  ;;               (kbd "<return>") 'neotree-enter
-  ;;               "i" 'neotree-enter-horizontal-split
-  ;;               "s" 'neotree-enter-vertical-split
-  ;;               "n" 'evil-search-next
-  ;;               "N" 'evil-search-previous
-  ;;               "ma" 'neotree-create-node
-  ;;               "mc" 'neotree-copy-file
-  ;;               "md" 'neotree-delete-node
-  ;;               "mm" 'neotree-rename-node
-  ;;               "gg" 'evil-goto-first-line
-  ;;               "gi" (lambda ()
-  ;;                      (interactive)
-  ;;                      (if (string= pe/get-directory-tree-external-command
-  ;;                                   nt/gitignore-files-cmd)
-  ;;                          (progn (setq pe/get-directory-tree-external-command
-  ;;                                       nt/all-files-cmd))
-  ;;                        (progn (setq pe/get-directory-tree-external-command
-  ;;                                     nt/gitignore-files-cmd)))
-  ;;                      (nt/refresh))
-  ;;               "I" (lambda ()
-  ;;                     (interactive)
-  ;;                     (if pe/omit-enabled
-  ;;                         (progn (setq pe/directory-tree-function
-  ;;                                      'pe/get-directory-tree-async)
-  ;;                                (pe/toggle-omit nil))
-  ;;                       (progn (setq pe/directory-tree-function
-  ;;                                    'pe/get-directory-tree-external)
-  ;;                              (pe/toggle-omit t)))))
-  ;;             neotree-mode-map))
 #+END_SRC
 
 @see - https://github.com/emacs-evil/evil-collection/blob/master/evil-collection-neotree.el
 
 *** keybindings
-*** hydra-neotree
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defhydra hydra-neotree-new (:color blue)
-"
-Navigation^^^^             Actions^^         Visual actions/config^^^
-───────^^^^─────────────── ───────^^──────── ───────^^^────────────────
-[_L_]   next sibling^^     [_c_] create      [_TAB_] shrink/enlarge
-[_H_]   previous sibling^^ [_C_] copy        [_|_]   vertical split
-[_J_]   goto child^^       [_d_] delete      [_-_]   horizonatal split
-[_K_]   goto parent^^      [_r_] rename      [_gr_]  refresh^
-[_l_]   open/expand^^      [_R_] change root [_s_]   hidden:^^^ %s(if neo-buffer--show-hidden-file-p \"on\" \"off\")
-[_h_]   up/collapse^^      ^^                ^^^
-[_j_]   line down^^        ^^                ^^^
-[_k_]   line up^^          ^^                ^^
-[_'_]   quick look         ^^                ^^
-[_RET_] open               ^^^^              [_?_]   close hints
-"
-        ("RET" neotree-enter)
-        ("TAB" neotree-stretch-toggle)
-        ("|" neotree-enter-vertical-split)
-        ("-" neotree-enter-horizontal-split)
-        ("?" nil :exit t)
-        ("'" neotree-quick-look)
-        ("c" neotree-create-node)
-        ("C" neotree-copy-node)
-        ("d" neotree-delete-node)
-        ("gr" neotree-refresh)
-        ("h" spacemacs/neotree-collapse-or-up)
-        ("H" neotree-select-previous-sibling-node)
-        ("j" neotree-next-line)
-        ("J" neotree-select-down-node)
-        ("k" neotree-previous-line)
-        ("K" neotree-select-up-node)
-        ("l" spacemacs/neotree-expand-or-open)
-        ("L" neotree-select-next-sibling-node)
-        ("r" neotree-rename-node)
-        ("R" neotree-change-root)
-        ("s" neotree-hidden-file-toggle))
+  (defhydra hydra-neotree (:color pink :hint nil)
+           "
+                                                                                 ╭─────────┐
+      Navigation   Resize     Enter                   Action              Help   │ NeoTree │
+     ╭───────────────────────────────────────────────────────────────────────────┴─────────╯
+           ^_k_^         ^ ^        [_RET_] open              [_gr_] refresh        [_s_]   hidden:^^^ %s(if neo-buffer--show-hidden-file-p \"on\" \"off\")
+           ^^↑^^         ^ ^        [_o_] open                [_C_] create          [_?_]   close hints
+           ^ ^      _H_ ←   → _L_   [_'_] quick look          [_c_] copy
+           ^^↓^^         ^ ^        [_-_] horizonatal split   [_d_] delete           
+           ^_j_^         ^ ^        [_|_] vertical split      [_r_] rename     
+            ^ ^          ^ ^        ^ ^                     [_R_] change root
+     --------------------------------------------------------------------------------
+           "
+    ("j" evil-next-line)
+    ("k" evil-previous-line)
+    ("H" hydra-move-splitter-left)
+    ("L" hydra-move-splitter-right)
+    ;; ("L" neotree-select-next-sibling-node)
+    ;; ("H" neotree-select-previous-sibling-node)
+    ;; ("j" neotree-next-line)
+    ;; ("k" neotree-previous-line)
+    ;; ("K" neotree-select-up-node)
+    ;; ("J" neotree-select-down-node)
+
+    ("RET" neotree-enter)
+    ("o" neotree-enter)
+    ("'" neotree-quick-look)
+    ("-" neotree-enter-horizontal-split)
+    ("|" neotree-enter-vertical-split)
+
+    ("gr" neotree-refresh)
+    ("C" neotree-create-node)
+    ("c" neotree-copy-node)
+    ("d" neotree-delete-node)
+    ("r" neotree-rename-node)
+    ("R" neotree-change-root)
+    ;; ("h" spacemacs/neotree-collapse-or-up)
+    ;; ("l" spacemacs/neotree-expand-or-open)
+    ("?" nil :exit t)
+    ("q" nil :exit t)
+    ("s" neotree-hidden-file-toggle))
+
+    ;; ("TAB" neotree-stretch-toggle)
+  ;;   "
+  ;; Navigation^^^^             Actions^^         Visual actions/config^^^
+  ;; ───────^^^^─────────────── ───────^^──────── ───────^^^────────────────
+  ;; [_L_]   next sibling^^     [_c_] create      [_TAB_] shrink/enlarge
+  ;; [_H_]   previous sibling^^ [_C_] copy        [_|_]   vertical split
+  ;; [_J_]   goto child^^       [_d_] delete      [_-_]   horizonatal split
+  ;; [_K_]   goto parent^^      [_r_] rename      [_gr_]  refresh^
+  ;; [_l_]   open/expand^^      [_R_] change root [_s_]   hidden:^^^ %s(if neo-buffer--show-hidden-file-p \"on\" \"off\")
+  ;; [_h_]   up/collapse^^      ^^                ^^^
+  ;; [_j_]   line down^^        ^^                ^^^
+  ;; [_k_]   line up^^          ^^                ^^
+  ;; [_'_]   quick look         ^^                ^^
+  ;; [_RET_] open               ^^^^              [_?_]   close hints
+  ;; "
 
   ;; (defhydra hydra-helm (:hint nil :color pink)
-  ;;         "
-  ;;                                                                           ╭──────┐
-  ;;    Navigation   Other  Sources     Mark             Do             Help   │ Helm │
-  ;;   ╭───────────────────────────────────────────────────────────────────────┴──────╯
-  ;;         ^_k_^         _K_       _p_   [_m_] mark         [_v_] view         [_H_] helm help
-  ;;         ^^↑^^         ^↑^       ^↑^   [_t_] toggle all   [_d_] delete       [_s_] source help
-  ;;     _h_ ←   → _l_     _c_       ^ ^   [_u_] unmark all   [_f_] follow: %(helm-attr 'follow)
-  ;;         ^^↓^^         ^↓^       ^↓^    ^ ^               [_y_] yank selection
-  ;;         ^_j_^         _J_       _n_    ^ ^               [_w_] toggle windows
-  ;;   --------------------------------------------------------------------------------
-  ;;         "
   ;;         ("<tab>" helm-keyboard-quit "back" :exit t)
   ;;         ("<escape>" nil "quit")
   ;;         ("\\" (insert "\\") "\\" :color blue)
