@@ -71,6 +71,12 @@ macOS switch meta key.
           ns-function-modifier 'hyper))
 #+END_SRC
 
+** COMMENT Implement use-package
+- [[https://github.com/raxod502/straight.el][GitHub - raxod502/straight.el]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package straight)
+#+END_SRC
+
 ** System PATH
 *About:* 加载系统的环境变量
 - [[https://github.com/purcell/exec-path-from-shell][GitHub - purcell/exec-path-from-shell]]
@@ -142,7 +148,7 @@ macOS switch meta key.
 Emacs-plus patch : https://github.com/d12frosted/homebrew-emacs-plus
 #+BEGIN_SRC emacs-lisp :tangle yes
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark))    ; light or dark - depending on your theme
+  (add-to-list 'default-frame-alist '(ns-appearance . light))    ; light or dark - depending on your theme
 #+END_SRC
 
 If using OSX, the colors and fonts look a bit wonky, so let's fix that
@@ -172,18 +178,18 @@ Maximized Window when startup
                       charset (font-spec :family "Hiragino Sans GB" :size 16)))
 #+END_SRC
 
-*** unicode-fonts
+*** COMMENT unicode-fonts
 *About:* 
 Unicode is an required aesthetic
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package pcache ;; Required by unicode-fonts
-    :init
-    ;; Mentioned here to redirect directory
-    (setq pcache-directory (expand-file-name "pcache/" yc/cache-dir)))
+  ;; (use-package pcache ;; Required by unicode-fonts
+  ;;   :init
+  ;;   ;; Mentioned here to redirect directory
+  ;;   (setq pcache-directory (expand-file-name "pcache/" yc/cache-dir)))
 
-  (use-package unicode-fonts
-    :config
-    (unicode-fonts-setup))
+  ;; (use-package unicode-fonts
+  ;;   :config
+  ;;   (unicode-fonts-setup))
 #+END_SRC
 
 ** whitespace
@@ -350,33 +356,54 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 #+END_SRC
 
 ** modeline
+*** COMMENT doom-modeline
 *About:* 
 - [[https://github.com/seagle0128/doom-modeline][GitHub - seagle0128/doom-modeline]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package doom-modeline
-    :hook
-    (after-init . doom-modeline-mode)
-    :init
-    (setq doom-modeline-icon t
-          doom-modeline-major-mode-icon t
-          doom-modeline-major-mode-color-icon nil
-          doom-modeline-buffer-file-name-style 'truncate-upto-project
-          doom-modeline-enable-word-count t
-          doom-modeline-persp-name t
-          doom-modeline-lsp t)
-    :config
-    (require 'winum)
-    (winum-mode))
+  ;; (use-package doom-modeline
+  ;;   :hook
+  ;;   (after-init . doom-modeline-mode)
+  ;;   :init
+  ;;   (setq doom-modeline-icon t
+  ;;         doom-modeline-major-mode-icon t
+  ;;         doom-modeline-major-mode-color-icon nil
+  ;;         doom-modeline-buffer-file-name-style 'truncate-upto-project
+  ;;         doom-modeline-enable-word-count t
+  ;;         doom-modeline-persp-name t
+  ;;         doom-modeline-lsp t)
+  ;;   :config
+  ;;   (require 'winum)
+  ;;   (winum-mode))
 #+END_SRC
 
-** autorevert
-*About:* 当文件内容有修改时，可以通过 autorevert 重新加载这个文件
+*** feebleline
+*About:* 隐藏 modeline
+- [[https://github.com/tautologyclub/feebleline][GitHub - tautologyclub/feebleline]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package autorevert
-    :diminish t
-    :hook (dired-mode . auto-revert-mode)
-    :config
-    (global-auto-revert-mode +1))
+  (use-package feebleline
+    :hook
+    (after-init . feebleline-mode)
+    :config 
+    (setq feebleline-msg-functions
+          '((feebleline-line-number         :post "" :fmt "%5s")
+            (feebleline-column-number       :pre ":" :fmt "%-2s")
+            (feebleline-file-directory      :face feebleline-dir-face :post "")
+            (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
+            (feebleline-file-modified-star  :face font-lock-warning-face :post "")
+            (feebleline-git-branch          :face feebleline-git-face :pre " : ")
+            (feebleline-project-name        :align right)))
+            (window-divider-mode t)
+    (feebleline-mode 1))
+#+END_SRC
+
+*** hide-mode-line
+*About:* 隐藏 modeline
+- [[https://github.com/hlissner/emacs-hide-mode-line][GitHub - hlissner/emacs-hide-mode-line]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package hide-mode-line
+    :hook
+    ((completion-list-mode . hide-mode-line-mode)
+     (neotree-mode . hide-mode-line-mode)))
 #+END_SRC
 
 ** COMMENT emojify
@@ -395,7 +422,6 @@ Emojis in Emacs! :cat:
   ;;     (setq emojify-display-style 'unicode))
   ;;   (setq emojify-emoji-set "emojione-v2.2.6")
   ;;   (when (memq window-system '(mac ns))
-  ;;     ;; (setq emojify-display-style 'unicode)
   ;;     (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)))
 
   ;; (defun --set-emoji-font (frame)
@@ -422,15 +448,15 @@ Emojis in Emacs! :cat:
   ;;  (add-to-list 'company-backends 'company-emoji))
 #+END_SRC
 
-** dimmer
+** COMMENT dimmer
 *About:* 高亮光标所在的 window
 Visually highlight the selected buffer.
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package dimmer
-    :init
-    (dimmer-activate)
-    :config
-    (setq dimmer-percent 0.40))
+  ;; (use-package dimmer
+  ;;   :init
+  ;;   (dimmer-activate)
+  ;;   :config
+  ;;   (setq dimmer-percent 0.40))
 #+END_SRC
 
 ** COMMENT nyan-mode
@@ -484,9 +510,9 @@ Highlight matching and auto insert parenthesis.
     :config (progn (smartparens-global-mode t)
                    ;; highlights matching pairs
                    (show-smartparens-global-mode t)
-                   (smartparens-strict-mode t)
-                   (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-                   (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
+                   ;; (smartparens-strict-mode t)
+                   ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+                   ;; (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
                    (setq sp-show-pair-from-inside t)
                    ;; custom keybindings for smartparens mode
                    ;; (define-key smartparens-mode-map (kbd "C-<left>") 'sp-forward-barf-sexp)
@@ -674,14 +700,14 @@ https://github.com/davidshepherd7/electric-operator
 #+END_SRC
 
 ** Evil
-*** evil-collection
+*** COMMENT evil-collection
 *About:* evil 按键扩展集合
 @see - https://github.com/emacs-evil/evil-collection
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package evil-collection
-    :init
-    (setq evil-want-keybinding nil
-          evil-want-integration nil))
+  ;; (use-package evil-collection
+  ;;   :init
+  ;;   (setq evil-want-keybinding nil
+  ;;         evil-want-integration nil))
 #+END_SRC
 
 *** config
@@ -873,8 +899,7 @@ let there be a <leader>
      "M-/"   'evilnc-comment-or-uncomment-lines
      "C-c l" 'evilnc-quick-comment-or-uncomment-to-the-line
      "C-c c" 'evilnc-copy-and-comment-lines
-     "C-c p" 'evilnc-comment-or-uncomment-paragraphs)
-    )
+     "C-c p" 'evilnc-comment-or-uncomment-paragraphs))
 #+END_SRC
 
 *** evil-commentary
@@ -976,11 +1001,11 @@ This allows me to easily start a * or # search from a visual selection.
 参考这篇文章重新定义自己的 key bindings：[[https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/][larstvei/dot-emacs - GitHub]]
 参考在 Mac 下的一些配置：[[https://www.emacswiki.org/emacs/EmacsForMacOS][Emacs For Mac OS]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (my-leader-def
+(my-leader-def
     "TAB"  'mode-line-other-buffer
     "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
     "<"    '(counsel-projectile-find-file :which-key "Find file in project")
-    ":"    '(counsel-M-x :which-key "M-x")
+    ;; ":"    '(counsel-M-x :which-key "M-x")
     ;; ";"    '(evil-ex :which-key "Ex command")
     "'"    '(shell-pop :which-key "Open shell")
     "0"    '(neotree-toggle :which-key "NeoTree")
@@ -1191,6 +1216,7 @@ This allows me to easily start a * or # search from a visual selection.
 #+END_SRC
 
 ** hydra-extends
+关于 Hydra 高效的按键绑定，参考：[[https://github.com/troyp/spacemacs-private/tree/master/docs/hydra-wiki][spacemacs-private/docs/hydra-wiki at master · troyp/spacemacs-private · GitHub]]
 *** major-mode-hydra
 *About:* 这个是参考了 spacemacs 针对 hydra 的扩展，能够方便地绑定 major mode 的按键。
 比如，当前的 major mode 是 org-mode，则可以快速唤出相应 org-mode 自定义的 hydra 按键，统一所有 major-mode 的按键。
@@ -1381,8 +1407,7 @@ https://github.com/dustinlacewell/hera
                       (add-hook 'ace-window-end-once-hook
                                 'hydra-window/body)) "swap")
                )
-     )
-    )
+     ))
     
   ;; (defhydra hydra-window ()
   ;;   "
@@ -1660,6 +1685,38 @@ https://github.com/dustinlacewell/hera
     ("I" me/date-iso-with-time)
     ("l" me/date-long)
     ("L" me/date-long-with-time))
+#+END_SRC
+
+*** hydra-rectangle
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
+                                       :color pink
+                                       :hint nil
+                                       :post (deactivate-mark))
+    "
+    ^_k_^       _w_ copy      _o_pen       _N_umber-lines            |\\     -,,,--,,_
+  _h_   _l_     _y_ank        _t_ype       _e_xchange-point          /,`.-'`'   ..  \-;;,_
+    ^_j_^       _d_ kill      _c_lear      _r_eset-region-mark      |,4-  ) )_   .;.(  `'-'
+  ^^^^          _u_ndo        _g_ quit     ^ ^                     '---''(./..)-'(_\_)
+  "
+    ("k" rectangle-previous-line)
+    ("j" rectangle-next-line)
+    ("h" rectangle-backward-char)
+    ("l" rectangle-forward-char)
+    ("d" kill-rectangle)                    ;; C-x r k
+    ("y" yank-rectangle)                    ;; C-x r y
+    ("w" copy-rectangle-as-kill)            ;; C-x r M-w
+    ("o" open-rectangle)                    ;; C-x r o
+    ("t" string-rectangle)                  ;; C-x r t
+    ("c" clear-rectangle)                   ;; C-x r c
+    ("e" rectangle-exchange-point-and-mark) ;; C-x C-x
+    ("N" rectangle-number-lines)            ;; C-x r N
+    ("r" (if (region-active-p)
+             (deactivate-mark)
+           (rectangle-mark-mode 1)))
+    ("u" undo nil)
+    ("g" nil))      ;; ok
+  ;; (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
 #+END_SRC
 
 ** key-chord
@@ -2275,28 +2332,27 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
   (use-package neotree
     :diminish ""
     :commands (neotree-toggle)
-    :config
-    (setq neo-smart-open t)
-    (setq projectile-switch-project-action 'neotree-projectile-action)
-    (setq neo-window-fixed-size nil)  ; 通过设置该参数，可以手动调整 neotree 窗口大小
-    (setq-default neo-dont-be-alone t)  ; Don't allow neotree to be the only open window
+    :hook
     ;; Use with evil mode
     ;; @see - https://www.emacswiki.org/emacs/NeoTree
-    (add-hook 'neotree-mode-hook
-              (lambda ()
-                (visual-line-mode -1)
-                (setq truncate-lines t)
-                (hl-line-mode 1)
-                ;; (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-                ;; (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
-                ;; (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
-                ;; (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide))
-                )
-              ;; 'classic, 'nerd, 'ascii, 'arrow
-              (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-              ;; Disable line-numbers minor mode for neotree
-              (add-hook 'neo-after-create-hook (lambda (&optional dummy) (display-line-numbers-mode -1)))
-              ))
+    (neotree-mode . (lambda ()
+                      (visual-line-mode -1)
+                      (setq truncate-lines t)
+                      (hl-line-mode 1)
+                      (display-line-numbers-mode -1)    ; disable line-numbers minor mode for neotree
+                      (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+                      (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
+                      (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)
+                      (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+                      ))
+    :config
+    ;; 'classic, 'nerd, 'ascii, 'arrow
+    (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+    (setq neo-smart-open t)
+    (setq projectile-switch-project-action 'neotree-projectile-action)
+    (setq neo-window-fixed-size nil)      ; 通过设置该参数，可以手动调整 neotree 窗口大小
+    (setq-default neo-dont-be-alone t)    ; Don't allow neotree to be the only open window
+    )
 
   (defun neotree-copy-file ()
     (interactive)
@@ -2349,6 +2405,84 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 #+END_SRC
 
 @see - https://github.com/emacs-evil/evil-collection/blob/master/evil-collection-neotree.el
+
+*** keybindings
+*** hydra-neotree
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-neotree-new (:color blue)
+"
+Navigation^^^^             Actions^^         Visual actions/config^^^
+───────^^^^─────────────── ───────^^──────── ───────^^^────────────────
+[_L_]   next sibling^^     [_c_] create      [_TAB_] shrink/enlarge
+[_H_]   previous sibling^^ [_C_] copy        [_|_]   vertical split
+[_J_]   goto child^^       [_d_] delete      [_-_]   horizonatal split
+[_K_]   goto parent^^      [_r_] rename      [_gr_]  refresh^
+[_l_]   open/expand^^      [_R_] change root [_s_]   hidden:^^^ %s(if neo-buffer--show-hidden-file-p \"on\" \"off\")
+[_h_]   up/collapse^^      ^^                ^^^
+[_j_]   line down^^        ^^                ^^^
+[_k_]   line up^^          ^^                ^^
+[_'_]   quick look         ^^                ^^
+[_RET_] open               ^^^^              [_?_]   close hints
+"
+        ("RET" neotree-enter)
+        ("TAB" neotree-stretch-toggle)
+        ("|" neotree-enter-vertical-split)
+        ("-" neotree-enter-horizontal-split)
+        ("?" nil :exit t)
+        ("'" neotree-quick-look)
+        ("c" neotree-create-node)
+        ("C" neotree-copy-node)
+        ("d" neotree-delete-node)
+        ("gr" neotree-refresh)
+        ("h" spacemacs/neotree-collapse-or-up)
+        ("H" neotree-select-previous-sibling-node)
+        ("j" neotree-next-line)
+        ("J" neotree-select-down-node)
+        ("k" neotree-previous-line)
+        ("K" neotree-select-up-node)
+        ("l" spacemacs/neotree-expand-or-open)
+        ("L" neotree-select-next-sibling-node)
+        ("r" neotree-rename-node)
+        ("R" neotree-change-root)
+        ("s" neotree-hidden-file-toggle))
+
+  ;; (defhydra hydra-helm (:hint nil :color pink)
+  ;;         "
+  ;;                                                                           ╭──────┐
+  ;;    Navigation   Other  Sources     Mark             Do             Help   │ Helm │
+  ;;   ╭───────────────────────────────────────────────────────────────────────┴──────╯
+  ;;         ^_k_^         _K_       _p_   [_m_] mark         [_v_] view         [_H_] helm help
+  ;;         ^^↑^^         ^↑^       ^↑^   [_t_] toggle all   [_d_] delete       [_s_] source help
+  ;;     _h_ ←   → _l_     _c_       ^ ^   [_u_] unmark all   [_f_] follow: %(helm-attr 'follow)
+  ;;         ^^↓^^         ^↓^       ^↓^    ^ ^               [_y_] yank selection
+  ;;         ^_j_^         _J_       _n_    ^ ^               [_w_] toggle windows
+  ;;   --------------------------------------------------------------------------------
+  ;;         "
+  ;;         ("<tab>" helm-keyboard-quit "back" :exit t)
+  ;;         ("<escape>" nil "quit")
+  ;;         ("\\" (insert "\\") "\\" :color blue)
+  ;;         ("h" helm-beginning-of-buffer)
+  ;;         ("j" helm-next-line)
+  ;;         ("k" helm-previous-line)
+  ;;         ("l" helm-end-of-buffer)
+  ;;         ("g" helm-beginning-of-buffer)
+  ;;         ("G" helm-end-of-buffer)
+  ;;         ("n" helm-next-source)
+  ;;         ("p" helm-previous-source)
+  ;;         ("K" helm-scroll-other-window-down)
+  ;;         ("J" helm-scroll-other-window)
+  ;;         ("c" helm-recenter-top-bottom-other-window)
+  ;;         ("m" helm-toggle-visible-mark)
+  ;;         ("t" helm-toggle-all-marks)
+  ;;         ("u" helm-unmark-all)
+  ;;         ("H" helm-help)
+  ;;         ("s" helm-buffer-help)
+  ;;         ("v" helm-execute-persistent-action)
+  ;;         ("d" helm-persistent-delete-marked)
+  ;;         ("y" helm-yank-selection)
+  ;;         ("w" helm-toggle-resplit-and-swap-windows)
+  ;;         ("f" helm-follow-mode))
+#+END_SRC
 
 ** COMMENT treemacs
 *About:* 
@@ -2467,27 +2601,27 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
            )
     :config
     (global-company-mode t)
-    (setq company-minimum-prefix-length 3)
-    (setq company-show-numbers t)
-    (setq company-require-match nil)
-    (setq company-dabbrev-time-limit 0.3)
-    (setq company-dabbrev-downcase nil) ;; make company-complete care about case
-    (setq company-dabbrev-ignore-case nil) ;; fix case-sensitive, default is keep-prefix
-    (setq company-dabbrev-other-buffers t)
-    (setq company-echo-delay 0)                          ; remove annoying blinking
-    (setq company-idle-delay 0.2)                        ; decrease delay before autocompletion popup shows
-    (setq company-tooltip-limit 20)                      ; bigger popup window
-    (setq company-auto-complete-chars nil)
-    (setq company-transformers '(company-sort-by-occurrence))
+    (setq company-minimum-prefix-length 3
+          company-show-numbers t
+          company-require-match nil
+          company-dabbrev-time-limit 0.3
+          company-dabbrev-downcase nil                  ; make company-complete care about case
+          company-dabbrev-ignore-case nil               ; fix case-sensitive, default is keep-prefix
+          company-dabbrev-other-buffers t
+          company-echo-delay 0                          ; remove annoying blinking
+          company-idle-delay 0.2                        ; decrease delay before autocompletion popup shows
+          company-tooltip-limit 20                      ; bigger popup window
+          company-tooltip-flip-when-above t
+          company-auto-complete-chars nil
+          company-auto-complete t
+          company-selection-wrap-around t
+          company-transformers '(company-sort-by-occurrence))
     
     (add-to-list 'company-backends '(company-capf company-dabbrev))
     (setq company-backends '(company-dabbrev (company-keywords company-dabbrev-code) company-files))
     (setq company-begin-commands '(self-insert-command org-self-insert-command c-electric-lt-gt c-electric-colon)) ; start autocompletion only after typing
     ;; (setq company-begin-commands '(self-insert-command)) 
     
-    (setq company-auto-complete t)
-    (setq company-tooltip-flip-when-above t)
-    (setq company-selection-wrap-around t)
     ;; (define-key company-active-map [tab] 'company-select-next)
     ;; (define-key company-active-map (kbd "C-n") 'company-select-next)
     ;; (define-key company-active-map (kbd "C-p") 'company-select-previous)
@@ -2873,6 +3007,24 @@ https://github.com/syohex/emacs-zoom-window
     (setq zoom-window-mode-line-color "DarkGreen"))
 #+END_SRC
 
+** writeroom-mode
+- Darkroom vs Olivetti vs Writeroom-mode
+- [[https://github.com/joostkremers/writeroom-mode][GitHub - joostkremers/writeroom-mode]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package writeroom-mode
+    :defer t
+    :commands (writeroom-mode)
+    :general
+    (writeroom-mode-map
+        "C-M-<" 'writeroom-decrease-width
+        "C-M->" 'writeroom-increase-width
+        "C-M-=" 'writeroom-adjust-width)
+    :config
+    (add-to-list 'writeroom-global-effects 'visual-line-mode)
+    (setq writeroom-restore-window-config t
+          writeroom-width 119))
+#+END_SRC
+
 * Functions
 ** Input Method
 *About:* Emacs 下的中文输入法，支持全拼，双拼，五笔和仓颉，在线文档：http://tumashu.github.io/pyim
@@ -2964,6 +3116,16 @@ https://github.com/syohex/emacs-zoom-window
           (ibuffer-do-sort-by-alphabetic)))))
 #+END_SRC
 
+** autorevert
+*About:* 当文件内容有修改时，可以通过 autorevert 重新加载这个文件
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package autorevert
+    :diminish t
+    :hook (dired-mode . auto-revert-mode)
+    :config
+    (global-auto-revert-mode +1))
+#+END_SRC
+
 ** undo-tree
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3049,7 +3211,7 @@ https://github.com/syohex/emacs-zoom-window
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package org
     :ensure org-plus-contrib
-    :mode ("\\.org$" . org-mode)
+    :mode ("\\.org\\'" . org-mode)
     :delight org-mode "Org"
     :hook
     (org-mode . (lambda ()
@@ -3843,7 +4005,6 @@ Paste an image on clipboard to Emacs Org mode file.
 
   ;; https://github.com/kawabata/ox-pandoc
   (use-package ox-pandoc
-    :mode ("\\.org$" . org-mode)
     :config
     (with-eval-after-load 'ox
       (require 'ox-pandoc)))
@@ -4388,7 +4549,8 @@ Go 语言开发环境设置。
 参考：[[https://arenzana.org/2019/01/emacs-go-mode/][Emacs Go Mode – arenzana.org]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package go-mode
-    :mode ("\\.go" . go-mode)
+    :defer t
+    :mode ("\\.go\\'" . go-mode)
     :commands (go-mode)
     :init 
     (add-to-list 'auto-mode-alist '("\\.go$" . go-mode))
@@ -4692,7 +4854,7 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package gradle-mode
     :defer t
-    :mode ("\\.gradle$". gradle-mode))
+    :mode ("\\.gradle\\'". gradle-mode))
 #+END_SRC
 
 ** Python
@@ -4700,6 +4862,7 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
 Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package python
+    :defer t
     :config
     ;; use IPython
     (setq-default py-shell-name "ipython")
@@ -4721,6 +4884,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 *** anaconda-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package anaconda-mode
+    :defer t
     :config
     (add-hook 'python-mode-hook 'anaconda-mode)
     (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
@@ -4745,6 +4909,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 *** pyenv-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package pyenv-mode
+    :defer t
     :if (executable-find "pyenv")
     :commands (pyenv-mode-versions))
 #+END_SRC
@@ -4816,6 +4981,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package clojure-mode
+    :defer t
     :commands clojure-mode
     :init (add-to-list 'auto-mode-alist '("\\.\\(clj[sx]?\\|dtm\\|edn\\)\\'" . clojure-mode))
     :config (progn (use-package cider
@@ -4981,7 +5147,7 @@ Automatic chmod +x
 ** Typesciprt & AngularJS 2/4 & Vue.js
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package ng2-mode)
+  (use-package ng2-mode :defer t)
 
   (use-package tide
     :defer t
@@ -5011,22 +5177,24 @@ Automatic chmod +x
 *** AngluarJS
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (add-to-list 'load-path (expand-file-name "lisp/angularjs-mode" user-emacs-directory))
-  (add-to-list 'yas-snippet-dirs (expand-file-name "lisp/angularjs-mode/snippets" user-emacs-directory))
-  ;; (add-to-list 'ac-dictionary-directories (expand-file-name "lisp/angularjs-mode/ac-dict" user-emacs-directory))
-  ;; (add-to-list 'ac-modes 'angular-mode)
-  ;; (add-to-list 'ac-modes 'angular-html-mode)
-
   (use-package angular-snippets
+    :defer t
     :config
     (eval-after-load "sgml-mode"
-      '(define-key html-mode-map (kbd "C-c C-d") 'ng-snip-show-docs-at-point)))
+      '(define-key html-mode-map (kbd "C-c C-d") 'ng-snip-show-docs-at-point))
+    (add-to-list 'load-path (expand-file-name "lisp/angularjs-mode" user-emacs-directory))
+    (add-to-list 'yas-snippet-dirs (expand-file-name "lisp/angularjs-mode/snippets" user-emacs-directory))
+    ;; (add-to-list 'ac-dictionary-directories (expand-file-name "lisp/angularjs-mode/ac-dict" user-emacs-directory))
+    ;; (add-to-list 'ac-modes 'angular-mode)
+    ;; (add-to-list 'ac-modes 'angular-html-mode)
+    )
 #+END_SRC
 
 *** js-comint
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package js-comint
+    :defer t
     :config
     (defun whitespace-clean-and-compile ()
       (interactive)
@@ -5108,6 +5276,7 @@ Automatic chmod +x
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package web-mode
     :demand t
+    :defer t
     :init
     (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
     (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
@@ -5148,6 +5317,7 @@ Automatic chmod +x
   (use-package lsp-vue 
     :after (vue-mode lsp-mode)
     :hook ((vue-mode . lsp-vue-enable))
+    :defer t
     :config
     (setq vetur.validation.template t)
     (add-hook 'vue-mode-hook #'lsp-vue-mmm-enable))
