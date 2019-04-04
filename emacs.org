@@ -240,7 +240,7 @@ This behaviour in general emulates the scrolloff option in vim.
 #+END_SRC
 
 *** COMMENT yascroll
-*About:*
+*About:* is Yet Another Scroll Bar Mode for GNU Emacs.
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package yascroll
   ;;   :init
@@ -507,34 +507,36 @@ Highlight matching and auto insert parenthesis.
     :defer t
     :init
     (require 'smartparens-config)
-    :config (progn (smartparens-global-mode t)
-                   ;; highlights matching pairs
-                   (show-smartparens-global-mode t)
-                   (smartparens-strict-mode t)
-                   (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-                   (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
-                   (setq sp-show-pair-from-inside t)
-                   ;; custom keybindings for smartparens mode
-                   ;; (define-key smartparens-mode-map (kbd "C-<left>") 'sp-forward-barf-sexp)
-                   ;; (define-key smartparens-mode-map (kbd "M-(") 'sp-forward-barf-sexp)
-                   ;; (define-key smartparens-mode-map (kbd "C-<right>") 'sp-forward-slurp-sexp)
-                   ;; (define-key smartparens-mode-map (kbd "M-)") 'sp-forward-slurp-sexp)
+    :config 
+    (smartparens-global-mode t)
+    ;; highlights matching pairs
+    (show-smartparens-global-mode t)
+    ;; (smartparens-strict-mode t)
+    ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+    ;; (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
+    (setq sp-show-pair-from-inside t)
 
-                   ;; (define-key smartparens-strict-mode-map (kbd "M-d") 'kill-sexp)
-                   ;; (define-key smartparens-strict-mode-map (kbd "M-D") 'sp-kill-sexp)
-                   ;; (define-key smartparens-mode-map (kbd "s-S") 'sp-split-sexp)
+    (sp-with-modes '(clojure-mode cider-repl-mode)
+      (sp-local-pair "#{" "}")
+      (sp-local-pair "`" nil :actions nil)
+      (sp-local-pair "@(" ")")
+      (sp-local-pair "#(" ")"))
 
-                   (sp-with-modes '(clojure-mode cider-repl-mode)
-                     (sp-local-pair "#{" "}")
-                     (sp-local-pair "`" nil :actions nil)
-                     (sp-local-pair "@(" ")")
-                     (sp-local-pair "#(" ")"))
-
-                   (sp-local-pair 'markdown-mode "`" nil :actions nil)
-                   (sp-local-pair 'gfm-mode "`" nil :actions nil)
-                   (sp-local-pair 'web-mode "{" "}" :actions nil)
-                   ;; (-each sp--lisp-modes 'enable-lisp-hooks)
-                   ))
+    (sp-local-pair 'markdown-mode "`" nil :actions nil)
+    (sp-local-pair 'gfm-mode "`" nil :actions nil)
+    (sp-local-pair 'web-mode "{" "}" :actions nil)
+    ;; (-each sp--lisp-modes 'enable-lisp-hooks)
+    :general
+    (smartparens-mode-map
+     ;; custom keybindings for smartparens mode
+     "C-<left>" 'sp-forward-barf-sexp
+     "M-(" 'sp-forward-barf-sexp
+     "C-<right>" 'sp-forward-slurp-sexp
+     "M-)" 'sp-forward-slurp-sexp
+     "s-S" 'sp-split-sexp)
+    (smartparens-strict-mode-map
+     "M-d" 'kill-sexp
+     "M-D" 'sp-kill-sexp))
 #+END_SRC
 
 *** evil-smartparens
@@ -2824,7 +2826,13 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     )
 #+END_SRC
 
-*** company-quickhelp
+**** hydra-posframe
+- [[https://github.com/Ladicle/hydra-posframe][GitHub - Ladicle/hydra-posframe]] 
+#+BEGIN_SRC emacs-lisp :tangle yes
+
+#+END_SRC
+
+** company-quickhelp
 *About:* 
 @see - https://github.com/expez/company-quickhelp
 #+BEGIN_SRC emacs-lisp :tangle yes
