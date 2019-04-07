@@ -358,44 +358,44 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 #+END_SRC
 
 ** modeline
-*** doom-modeline
+*** COMMENT doom-modeline
 *About:* 
 - [[https://github.com/seagle0128/doom-modeline][GitHub - seagle0128/doom-modeline]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package doom-modeline
-    :hook
-    (after-init . doom-modeline-mode)
-    :init
-    (setq doom-modeline-icon t
-          doom-modeline-major-mode-icon t
-          doom-modeline-major-mode-color-icon nil
-          doom-modeline-buffer-file-name-style 'truncate-upto-project
-          doom-modeline-enable-word-count t
-          doom-modeline-persp-name t
-          doom-modeline-lsp t)
-    :config
-    (require 'winum)
-    (winum-mode))
+  ;; (use-package doom-modeline
+  ;;   :hook
+  ;;   (after-init . doom-modeline-mode)
+  ;;   :init
+  ;;   (setq doom-modeline-icon t
+  ;;         doom-modeline-major-mode-icon t
+  ;;         doom-modeline-major-mode-color-icon nil
+  ;;         doom-modeline-buffer-file-name-style 'truncate-upto-project
+  ;;         doom-modeline-enable-word-count t
+  ;;         doom-modeline-persp-name t
+  ;;         doom-modeline-lsp t)
+  ;;   :config
+  ;;   (require 'winum)
+  ;;   (winum-mode))
 #+END_SRC
 
-*** COMMENT feebleline
+*** feebleline
 *About:* 隐藏 modeline
 - [[https://github.com/tautologyclub/feebleline][GitHub - tautologyclub/feebleline]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package feebleline
-  ;;   :hook
-  ;;   (after-init . feebleline-mode)
-  ;;   :config 
-  ;;   (setq feebleline-msg-functions
-  ;;         '((feebleline-line-number         :post "" :fmt "%5s")
-  ;;           (feebleline-column-number       :pre ":" :fmt "%-2s")
-  ;;           (feebleline-file-directory      :face feebleline-dir-face :post "")
-  ;;           (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
-  ;;           (feebleline-file-modified-star  :face font-lock-warning-face :post "")
-  ;;           (feebleline-git-branch          :face feebleline-git-face :pre " : ")
-  ;;           (feebleline-project-name        :align right)))
-  ;;           (window-divider-mode t)
-  ;;   (feebleline-mode 1))
+  (use-package feebleline
+    :hook
+    (after-init . feebleline-mode)
+    :config 
+    (setq feebleline-msg-functions
+          '((feebleline-line-number         :post "" :fmt "%5s")
+            (feebleline-column-number       :pre ":" :fmt "%-2s")
+            (feebleline-file-directory      :face feebleline-dir-face :post "")
+            (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
+            (feebleline-file-modified-star  :face font-lock-warning-face :post "")
+            (feebleline-git-branch          :face feebleline-git-face :pre " : ")
+            (feebleline-project-name        :align right)))
+            (window-divider-mode t)
+    (feebleline-mode 1))
 #+END_SRC
 
 *** hide-mode-line
@@ -403,9 +403,14 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 - [[https://github.com/hlissner/emacs-hide-mode-line][GitHub - hlissner/emacs-hide-mode-line]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hide-mode-line
+    :commands hide-mode-line-mode
     :hook
-    ((completion-list-mode . hide-mode-line-mode)
-     (neotree-mode . hide-mode-line-mode)))
+    ((completion-list-mode
+      magit-status-mode
+      neotree-mode) . hide-mode-line-mode)
+    :config
+    (with-current-buffer "*command-log*"
+      (hide-mode-line-mode)))
 #+END_SRC
 
 ** COMMENT emojify
@@ -648,6 +653,7 @@ https://github.com/davidshepherd7/electric-operator
     (setq evil-want-keybinding nil
           evil-want-integration nil
           evil-want-C-u-scroll t
+          evil-visual-state-cursor 'hollow
           evil-want-C-i-jump t)
             (set-cursor-color "DarkCyan")
     (setq-default evil-want-Y-yank-to-eol t)
@@ -711,6 +717,7 @@ https://github.com/davidshepherd7/electric-operator
 - https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html
 - https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
 - https://dustinlacewell.github.io/emacs.d/#org1fab346
+- [[https://github.com/ejmr/DotEmacs/blob/master/init.el][DotEmacs/init.el at master · ejmr/DotEmacs · GitHub]] 这里面有很多 Hydra 配置可以参考
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hydra
     :defer t
@@ -1094,6 +1101,7 @@ This allows me to easily start a * or # search from a visual selection.
 
 ** hydra-extends
 关于 Hydra 高效的按键绑定，参考：[[https://github.com/troyp/spacemacs-private/tree/master/docs/hydra-wiki][spacemacs-private/docs/hydra-wiki at master · troyp/spacemacs-private · GitHub]]
+
 *** major-mode-hydra
 *About:* 这个是参考了 spacemacs 针对 hydra 的扩展，能够方便地绑定 major mode 的按键。
 比如，当前的 major mode 是 org-mode，则可以快速唤出相应 org-mode 自定义的 hydra 按键，统一所有 major-mode 的按键。
@@ -1764,6 +1772,28 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
   ;;         helm-buffer-max-length 100)
   ;;   (set-face-attribute 'helm-selection nil :background "yellow" :foreground "black")
   ;;   (set-face-attribute 'helm-source-header nil :height 240)
+  ;;   ;; Hydra for in Helm
+  ;;   (defhydra helm-like-unite ()
+  ;;     "vim movement"
+  ;;     ("?" helm-help "help")
+  ;;     ("q" nil "exit")
+  ;;     ("<SPC>" helm-toggle-visible-mark "mark")
+  ;;     ("d" helm-buffer-run-kill-persistent "Delete selection")
+  ;;     ("a" helm-toggle-all-marks "(un)mark all")
+  ;;     ;; not sure if there's a better way to this
+  ;;     ("/" (lambda ()
+  ;;            (interactive)
+  ;;            (execute-kbd-macro [?\C-s]))
+  ;;      "search")
+  ;;     ("v" helm-execute-persistent-action)
+  ;;     ("g" helm-beginning-of-buffer "top")
+  ;;     ("h" helm-previous-source)
+  ;;     ("l" helm-next-source)
+  ;;     ("G" helm-end-of-buffer "bottom")
+  ;;     ("j" helm-next-line "down")
+  ;;     ("k" helm-previous-line "up")
+  ;;     ("i" nil "cancel"))
+  ;;   (key-chord-define helm-map "jk" 'helm-like-unite/body)  
   ;;   :general
   ;;   (helm-map
   ;;    "C-j"   'helm-next-line
@@ -1895,6 +1925,32 @@ Emacs extension to increase selected region by semantic units.
 
 ** COMMENT multiple-cursors
 参考：[[http://www.cauchy.me/2015/08/20/emacs-multi-cursors/][My Favourite Emacs Modes - multiple-cursors · Thinking Aloud]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-multiple-cursors (:hint nil)
+    "
+   Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")
+  ------------------------------------------------------------------
+   [_p_]   Next     [_n_]   Next     [_l_] Edit lines  [_0_] Insert numbers
+   [_P_]   Skip     [_N_]   Skip     [_a_] Mark all    [_A_] Insert letters
+   [_M-p_] Unmark   [_M-n_] Unmark   [_s_] Search
+   [Click] Cursor at point       [_q_] Quit"
+    ("l" mc/edit-lines :exit t)
+    ("a" mc/mark-all-like-this :exit t)
+    ("n" mc/mark-next-like-this)
+    ("N" mc/skip-to-next-like-this)
+    ("M-n" mc/unmark-next-like-this)
+    ("p" mc/mark-previous-like-this)
+    ("P" mc/skip-to-previous-like-this)
+    ("M-p" mc/unmark-previous-like-this)
+    ("s" mc/mark-all-in-region-regexp :exit t)
+    ("0" mc/insert-numbers :exit t)
+    ("A" mc/insert-letters :exit t)
+    ("<mouse-1>" mc/add-cursor-on-click)
+    ;; Help with click recognition in this hydra
+    ("<down-mouse-1>" ignore)
+    ("<drag-mouse-1>" ignore)
+    ("q" nil))
+#+END_SRC
 
 ** avy
 *About:* 快速在当前 buffer 中跳转光标
@@ -1904,7 +1960,18 @@ Emacs extension to increase selected region by semantic units.
     :init
     (setq avy-background t)
     :general
-    ("C-'" 'avy-goto-char-timer)
+    ("C-'"   'avy-goto-char-timer
+     "M-g g" 'avy-goto-line)
+    :config
+    (use-package link-hint)
+    (defhydra hydra-avy (:color blue)
+      "avy-goto"
+      ("c" avy-goto-char "char")
+      ("C" avy-goto-char-2 "char-2")
+      ("w" avy-goto-word-1 "word")
+      ("s" avy-goto-subword-1 "subword")
+      ("u" link-hint-open-link "open-URI")
+      ("U" link-hint-copy-link "copy-URI"))
     :custom
     (avy-keys '(?h ?t ?n ?s ?m ?w ?v ?z)))
 #+END_SRC
@@ -2066,6 +2133,61 @@ This is a package to perform text folding like in Vim. It has the following feat
   ;; Recursive Copying and Deleting
   (setq dired-recursive-copies (quote always))
   (setq dired-recursive-deletes (quote top))
+
+  (defhydra hydra-dired (:hint nil :color pink)
+    "
+  _+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    wdired
+  _C_opy             _O_ view other   _U_nmark all       _)_ omit-mode      _$_ hide-subdir    C-x C-q : edit
+  _D_elete           _o_pen other     _u_nmark           _l_ redisplay      _w_ kill-subdir    C-c C-c : commit
+  _R_ename           _M_ chmod        _t_oggle           _g_ revert buf     _e_ ediff          C-c ESC : abort
+  _Y_ rel symlink    _G_ chgrp        _E_xtension mark   _s_ort             _=_ pdiff
+  _S_ymlink          ^ ^              _F_ind marked      _._ toggle hydra   \\ flyspell
+  _r_sync            ^ ^              ^ ^                ^ ^                _?_ summary
+  _z_ compress-file  _A_ find regexp
+  _Z_ compress       _Q_ repl regexp
+
+  T - tag prefix
+  "
+    ("\\" dired-do-ispell)
+    ("(" dired-hide-details-mode)
+    (")" dired-omit-mode)
+    ("+" dired-create-directory)
+    ("=" diredp-ediff)         ;; smart diff
+    ("?" dired-summary)
+    ("$" diredp-hide-subdir-nomove)
+    ("A" dired-do-find-regexp)
+    ("C" dired-do-copy)        ;; Copy all marked files
+    ("D" dired-do-delete)
+    ("E" dired-mark-extension)
+    ("e" dired-ediff-files)
+    ("F" dired-do-find-marked-files)
+    ("G" dired-do-chgrp)
+    ("g" revert-buffer)        ;; read all directories again (refresh)
+    ("i" dired-maybe-insert-subdir)
+    ("l" dired-do-redisplay)   ;; relist the marked or singel directory
+    ("M" dired-do-chmod)
+    ("m" dired-mark)
+    ("O" dired-display-file)
+    ("o" dired-find-file-other-window)
+    ("Q" dired-do-find-regexp-and-replace)
+    ("R" dired-do-rename)
+    ("r" dired-do-rsynch)
+    ("S" dired-do-symlink)
+    ("s" dired-sort-toggle-or-edit)
+    ("t" dired-toggle-marks)
+    ("U" dired-unmark-all-marks)
+    ("u" dired-unmark)
+    ("v" dired-view-file)      ;; q to exit, s to search, = gets line #
+    ("w" dired-kill-subdir)
+    ("Y" dired-do-relsymlink)
+    ("z" diredp-compress-this-file)
+    ("Z" dired-do-compress)
+    ("q" nil)
+    ("." nil :color blue))
+
+  (general-define-key :keymaps 'dired-mode-map
+                      :states '(normal)
+                      "?" 'hydra-dired/body)
 #+END_SRC
 
 *** diredx
@@ -2207,7 +2329,13 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
   ;;   (desktop-save-mode 1)
   ;;   (add-to-list 'desktop-globals-to-save 'golden-ratio-adjust-factor)
   ;;   (push '(company-posframe-mode . nil)
-  ;;         desktop-minor-mode-table))
+  ;;         desktop-minor-mode-table)
+  ;;   (defhydra hydra-desktop (:color blue)
+  ;;     "Desktop"
+  ;;     ("c" desktop-clear "clear")
+  ;;     ("s" desktop-save "save")
+  ;;     ("r" desktop-revert "revert")
+  ;;     ("d" desktop-change-dir "dir")))
 #+END_SRC
 
 ** smartparens
@@ -2318,6 +2446,22 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 
     ("q" nil)
     ("g" nil))
+#+END_SRC
+
+** Corral
+- [[https://github.com/nivekuil/corral][GitHub - nivekuil/corral]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package corral
+  :config
+  (defhydra hydra-corral (:columns 4)
+    "Corral"
+    ("(" corral-parentheses-backward "Back")
+    (")" corral-parentheses-forward "Forward")
+    ("[" corral-brackets-backward "Back")
+    ("]" corral-brackets-forward "Forward")
+    ("{" corral-braces-backward "Back")
+    ("}" corral-braces-forward "Forward")
+    ("." hydra-repeat "Repeat")))
 #+END_SRC
 
 ** neotree
@@ -2869,11 +3013,19 @@ https://github.com/emacs-lsp/lsp-mode
     (text-mode . flyspell-mode)
     :custom
     (flyspell-abbrev-p t)
-    :config (progn (use-package popup)
-                   (use-package flycheck-pos-tip)
-                   (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
-                   (setq flycheck-display-errors-function 'flycheck-pos-tip-error-messages)
-                   (global-flycheck-mode +1)))
+    :config
+    (progn (use-package popup)
+           (use-package flycheck-pos-tip)
+           (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
+           (setq flycheck-display-errors-function 'flycheck-pos-tip-error-messages)
+           (global-flycheck-mode +1))
+    (key-chord-define-global "QF"
+                             (defhydra flycheck-hydra ()
+                               "errors"
+                               ("n" flycheck-next-error "next")
+                               ("p" flycheck-previous-error "previous")
+                               ("h" helm-flycheck "helm" :color blue)
+                               ("q" nil "quit"))))
 
   (use-package flyspell-correct
     :after flycheck
@@ -2884,13 +3036,59 @@ https://github.com/emacs-lsp/lsp-mode
     :after flyspell-correct)
 #+END_SRC
 
-** Help
+** COMMENT Help
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package helm-descbinds
-    :general 
-    ("C-h b" 'helm-descbinds
-     "C-h h" 'helm-descbinds))
+  ;; (use-package helm-descbinds
+  ;;   :general 
+  ;;   ("C-h b" 'helm-descbinds
+  ;;    "C-h h" 'helm-descbinds)
+  ;;   :config
+  ;;   (defhydra hydra-help (:exit t)
+  ;;     ;; Better to exit after any command because otherwise helm gets in a
+  ;;     ;; mess, set hint to nil: written out manually.
+
+  ;;     "
+  ;; Describe        ^^Keys                    ^^Search                    ^^Documentation
+  ;; ---------------------------------------------------------------------------------------
+  ;; _f_unction        _k_eybinding              _a_propros                  _i_nfo
+  ;; _p_ackage         _w_here-is                _d_oc strings               _n_: man
+  ;; _m_ode            _b_: show all bindings    _s_: info by symbol         _h_elm-dash
+  ;; _v_ariable
+
+  ;; "
+  ;;     ;; Boring help commands...
+  ;;     ("e" view-echo-area-messages "messages")
+  ;;     ("l" view-lossage "lossage")
+  ;;     ("C" describe-coding-system "coding-system")
+  ;;     ("I" describe-input-method "input-method")
+
+
+  ;;     ;; Documentation
+  ;;     ("i" info nil)
+  ;;     ("n" helm-man-woman nil)
+  ;;     ("h" helm-dash)
+
+  ;;     ;; Keybinds
+  ;;     ("b" describe-bindings nil)
+  ;;     ("c" describe-key-briefly nil)
+  ;;     ("k" describe-key nil)
+  ;;     ("w" where-is nil)
+
+  ;;     ;; Search
+  ;;     ("a" apropos-command nil)
+  ;;     ("d" apropos-documentation nil)
+  ;;     ("s" info-lookup-symbol nil)
+
+  ;;     ;; Describe
+  ;;     ("f" describe-function nil)
+  ;;     ("p" describe-package nil)
+  ;;     ("m" describe-mode nil)
+  ;;     ("v" describe-variable nil)
+  ;;     ("y" describe-syntax nil)
+
+  ;;     ;; quit
+  ;;     ("q" help-quit "quit")))
 #+END_SRC
 
 ** COMMENT eldoc
@@ -4027,13 +4225,6 @@ https://github.com/astahlman/ob-async
   ;;               ("P" . org-pomodoro)))
 #+END_SRC
 
-** COMMENT org-dashboard
-*About:* 
-Visually summarize progress
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package org-dashboard)
-#+END_SRC
-
 ** keybindings
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Great evil org mode keyboard shortcuts cribbed from cofi
@@ -4318,6 +4509,15 @@ Visually summarize progress
            (call-interactively 'org-cycle)) "rifle")
     ("v" avy-org-goto-heading-timer "avy")
     ("L" org-toggle-link-display "toggle links"))
+
+  (defhydra hydra-org (:color red :columns 3)
+    "Org Mode Movements"
+    ("n" outline-next-visible-heading "next heading")
+    ("p" outline-previous-visible-heading "prev heading")
+    ("N" org-forward-heading-same-level "next heading at same level")
+    ("P" org-backward-heading-same-level "prev heading at same level")
+    ("u" outline-up-heading "up heading")
+    ("g" org-goto "goto" :exit t))
 #+END_SRC
 
 *** evil-org
@@ -4354,8 +4554,15 @@ Visually summarize progress
     (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
 #+END_SRC
 
-* BACKUP & Version Control
-** BACKUP
+** COMMENT org-dashboard
+*About:* 
+Visually summarize progress
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package org-dashboard)
+#+END_SRC
+
+* BACKUP & Version 
+** Control BACKUP
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; 设定不产生备份文件
   (setq make-backup-files nil)
@@ -4891,7 +5098,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 
 *** COMMENT helm-pydoc
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package helm-pydoc :defer t)
+  ;; (use-package helm-pydoc :defer t)
 #+END_SRC
 
 *** pyenv-mode
@@ -4933,7 +5140,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
    "db" 'python-toggle-breakpoint  ; check in spacemacs
    "h"  '(:ignore t :which-key "help")
    "hh" 'anaconda-mode-show-doc
-   "hd" 'helm-pydoc
+   ;; "hd" 'helm-pydoc
    "g"  '(:ignore t :which-key "goto")
    "ga" 'anaconda-mode-find-assignments
    "gb" 'anaconda-mode-go-back
@@ -4972,12 +5179,13 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
     :defer t
     :commands clojure-mode
     :init (add-to-list 'auto-mode-alist '("\\.\\(clj[sx]?\\|dtm\\|edn\\)\\'" . clojure-mode))
-    :config (progn 
-                   (add-hook 'clojure-mode-hook (lambda () (setq buffer-save-without-query t)))
-                   (add-hook 'clojure-mode-hook 'subword-mode)
-                   ;; Fancy docstrings for schema/defn when in the form:
-                   ;; (schema/defn NAME :- TYPE "DOCSTRING" ...)
-                   (put 'schema/defn 'clojure-doc-string-elt 4)))
+    :hook
+    (clojure-mode . (lambda () (setq buffer-save-without-query t)))
+    (clojure-mode . 'subword-mode)
+    :config 
+    ;; Fancy docstrings for schema/defn when in the form:
+    ;; (schema/defn NAME :- TYPE "DOCSTRING" ...)
+    (put 'schema/defn 'clojure-doc-string-elt 4))
 #+END_SRC
 
 *** cider
