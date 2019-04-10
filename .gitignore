@@ -20,6 +20,7 @@ tramp
 transient/
 tutorial/
 url/
+var/
 .lsp-session-v1
 history
 network-security.data
