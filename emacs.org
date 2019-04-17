@@ -328,6 +328,8 @@ Maximized Window when startup
 #+END_EXAMPLE
 
 - [[https://github.com/shimmy1996/.emacs.d#fontset-with-cjk-and-unicode-fallback][GitHub - shimmy1996/.emacs.d: My emacs configuration, done in a literate prog...]]
+- [[http://ergoemacs.org/emacs/emacs_list_and_set_font.html][Emacs: Font Setup]]
+- [[https://archive.casouri.co.uk/note/2019/emacs-%E5%AD%97%E4%BD%93%E4%B8%8E%E5%AD%97%E4%BD%93%E9%9B%86/index.html][Emacs，字体与字符集]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (defvar user/cjk-font "Noto Sans CJK SC"
   ;;   "Default font for CJK characters.")
@@ -434,36 +436,6 @@ Maximized Window when startup
   (add-to-list 'default-frame-alist (cons 'font user/standard-fontset))
   (add-to-list 'initial-frame-alist (cons 'font user/standard-fontset))
 
-  ;; (defvar user/cjk-font-scale
-  ;;   '((9  . 1.15)
-  ;;     (10 . 1.0)
-  ;;     (11 . 1.1)
-  ;;     (12 . 1.0)
-  ;;     (13 . 1.1)
-  ;;     (14 . 1.0)
-  ;;     (15 . 1.08)
-  ;;     (16 . 1.0)
-  ;;     (17 . 1.08)
-  ;;     (18 . 1.0)
-  ;;     (19 . 1.06)
-  ;;     (20 . 1.0)
-  ;;     (21 . 1.06)
-  ;;     (22 . 1.0)
-  ;;     (23 . 1.05)
-  ;;     (24 . 1.0)
-  ;;     (25 . 1.05)
-  ;;     (26 . 1.0)
-  ;;     (27 . 1.05)
-  ;;     (28 . 1.0)
-  ;;     (29 . 1.04)
-  ;;     (30 . 1.0))
-  ;;   "Scaling factor to use for cjk font of given size.")
-
-  ;; ;; Specify scaling factor for CJK font.
-  ;; (setq face-font-rescale-alist
-  ;;       (list (cons user/cjk-font
-  ;;                   (cdr (assoc user/font-size user/cjk-font-scale)))))
-
   ;; Enable font customization for charset 'symbols, which contains puncuation
   ;; marks, emoji, etc.
   (setq use-default-font-for-symbols nil)
@@ -503,7 +475,6 @@ Maximized Window when startup
   ;; (set-fontset-font "fontset-default" 'unicode'("Sarasa Mono SC"))
   ;; (dolist (param '(
   ;;                  (font . "Sarasa Mono SC")
-  
   ;;                  ))
   ;;   (add-to-list 'default-frame-alist param)
   ;;   (add-to-list 'initial-frame-alist param))
@@ -586,7 +557,9 @@ Unicode is an required aesthetic
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package whitespace
     :diminish whitespace-mode
-    :hook (prog-mode . whitespace-mode)
+    :hook 
+    (prog-mode . whitespace-mode)
+    (org-mode . whitespace-mode)
     :custom
     (whitespace-line-column 119)
     (whitespace-style '(face lines-tail)))
@@ -938,14 +911,14 @@ makes sure you don’t lose track of your cursor when jumping around a buffer.
     :diminish ""
     :config
     (global-pangu-spacing-mode 1)
-    :hook
-    ;; 针对 org-mode 和 markdown-mode，插入真正的空格字符
-    (org-mode . (lambda ()
-                  (pangu-spacing-mode 1)
-                  (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
-    (markdown-mode . (lambda ()
-                       (pangu-spacing-mode 1)
-                       (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+    ;; :hook
+    ;; ;; 针对 org-mode 和 markdown-mode，插入真正的空格字符
+    ;; (org-mode . (lambda ()
+    ;;               (pangu-spacing-mode 1)
+    ;;               (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+    ;; (markdown-mode . (lambda ()
+    ;;                    (pangu-spacing-mode 1)
+    ;;                    (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
     )
 #+END_SRC
 
@@ -1028,7 +1001,7 @@ https://github.com/davidshepherd7/electric-operator
           evil-want-C-i-jump t)
             (set-cursor-color "DarkCyan")
     (setq-default evil-want-Y-yank-to-eol t)
-    (global-evil-leader-mode +1)
+    ;; (global-evil-leader-mode +1)
     (evil-mode)
     :general
     (evil-normal-state-map [escape] 'keyboard-quit)
@@ -1104,7 +1077,7 @@ https://github.com/davidshepherd7/electric-operator
     ("C-c d" . hydra-dates/body)
     ("C-c f" . hydra-flycheck/body)
     ("C-c g" . hydra-magit/body)
-    ("C-c h" . hydra-helm/body)
+    ;; ("C-c h" . hydra-helm/body)
     ;; ("C-c o" . yc/ongoing-hydra)
     ("C-c p" . hydra-projectile/body)
     ("C-c p" . hydra-system/body)
@@ -1153,7 +1126,7 @@ let there be a <leader>
     ;; Emacs key bindings
     ("M-/"   'evilnc-comment-or-uncomment-lines
      "C-c l" 'evilnc-quick-comment-or-uncomment-to-the-line
-     "C-c c" 'evilnc-copy-and-comment-lines
+     ;; "C-c c" 'evilnc-copy-and-comment-lines   ; 这个与 org-capture 按键冲突
      "C-c p" 'evilnc-comment-or-uncomment-paragraphs))
 #+END_SRC
 
@@ -1256,7 +1229,7 @@ This allows me to easily start a * or # search from a visual selection.
 参考这篇文章重新定义自己的 key bindings：[[https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/][larstvei/dot-emacs - GitHub]]
 参考在 Mac 下的一些配置：[[https://www.emacswiki.org/emacs/EmacsForMacOS][Emacs For Mac OS]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-(my-leader-def
+  (my-leader-def
     "TAB"  'mode-line-other-buffer
     "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
     "<"    '(counsel-projectile-find-file :which-key "Find file in project")
@@ -1302,7 +1275,7 @@ This allows me to easily start a * or # search from a visual selection.
     "aokr" 'org-clock-report
     "ar"   '(ranger :which-key "call ranger")
     "b"    '(:ignore t :which-key "buffers")
-    "bb"   'helm-mini
+    ;; "bb"   'helm-mini
     "bk"   'kill-this-buffer
     "be"   'ibuffer
     "c"    '(:ignore t :which-key "compile/comments")
@@ -1313,8 +1286,8 @@ This allows me to easily start a * or # search from a visual selection.
     "fC"   '(:ignore t :which-key "files/convert")
     "fe"   '(:ignore t :which-key "emacs(spacemacs)")
     "fv"   '(:ignore t :which-key "variables")
-    "fh"   'helm-find-files
-    "fc"   'helm-recentf
+    ;; "fh"   'helm-find-files
+    ;; "fc"   'helm-recentf
     "ff"   'counsel-find-file
     "ft"   'treemacs
     "fs"   'save-buffer
@@ -1329,7 +1302,7 @@ This allows me to easily start a * or # search from a visual selection.
     "gt"   '(git-timemachine-toggle :which-key "git timemachine")
     ;; "gs"  'magit-status
     "h"    '(:ignore t :which-key "help")
-    "hb"   'helm-descbinds
+    ;; "hb"   'helm-descbinds
     "hd"   '(:ignore t :which-key "help-describe")
     "hdk"  'describe-key
     "hdK"  'describe-keymap
@@ -1355,7 +1328,7 @@ This allows me to easily start a * or # search from a visual selection.
     "p."   'hydra-projectile/body
     "p$"   '(:ignore t :which-key "projects/shell")
     "pf"   'projectile-find-file
-    "ps"   'helm-projectile-switch-project
+    ;; "ps"   'helm-projectile-switch-project
     "q"    '(:ignore t :which-key "quit")
     "qs"   'save-buffers-kill-emacs
     "qq"   'delete-window
@@ -1374,12 +1347,12 @@ This allows me to easily start a * or # search from a visual selection.
     "sw"   '(:ignore t :which-key "web")
     "saa"  'ag
     "sap"  'ag-project
-    "sas"  'helm-ag
-    "saf"  'helm-do-ag
-    "sap"  'helm-do-ag-project-root
+    ;; "sas"  'helm-ag
+    ;; "saf"  'helm-do-ag
+    ;; "sap"  'helm-do-ag-project-root
     ;; "sc"   'evil-search-highlight-persist-remove-all
-    "ss"   'helm-swoop
-    "sS"   'helm-swoop-region-or-symbol
+    ;; "ss"   'helm-swoop
+    ;; "sS"   'helm-swoop-region-or-symbol
     "w"    '(:ignore t :which-key "windows")
     "wp"   '(:ignore t :which-key "popup")
     "w."   'hydra-window/body
@@ -1465,9 +1438,9 @@ This allows me to easily start a * or # search from a visual selection.
     (other-window 1))
 
   (defun yc/split-window-horizontally ()
-      (interactive)
-      (split-window-horizontally)
-      (other-window 1))
+    (interactive)
+    (split-window-horizontally)
+    (other-window 1))
 #+END_SRC
 
 ** hydra-extends
@@ -2269,7 +2242,7 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 ** expand-region
 *About:* 快速选中文本块
 Emacs extension to increase selected region by semantic units.
- - [[https://github.com/magnars/expand-region.el][GitHub - magnars/expand-region.el]]
+- [[https://github.com/magnars/expand-region.el][GitHub - magnars/expand-region.el]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package expand-region
     :defer 1
@@ -2354,8 +2327,8 @@ Emacs extension to increase selected region by semantic units.
 *About:* 实现类似在 vs 编辑器中，按 =<F3>= 快速搜索光标当前所在的词。
 
 GitHub: https://github.com/nschum/highlight-symbol.el
-| Key    | Function                  | Desc                 |
-|--------+---------------------------+----------------------|
+| Key      | Function                  | Desc                 |
+|----------+---------------------------+----------------------|
 | =M-<F3>= | highlight-symbol-at-point | 高亮光标当前所在的词 |
 | =<F3>=   | highlight-symbol-next     | 查找下一个匹配的词   |
 | =S-<F3>= | highlight-symbol-prev     | 查找上一个匹配的词   |
@@ -3426,7 +3399,7 @@ https://github.com/emacs-lsp/lsp-mode
                                "errors"
                                ("n" flycheck-next-error "next")
                                ("p" flycheck-previous-error "previous")
-                               ("h" helm-flycheck "helm" :color blue)
+                               ;; ("h" helm-flycheck "helm" :color blue)
                                ("q" nil "quit"))))
 
   (use-package flyspell-correct
@@ -3684,56 +3657,56 @@ https://github.com/syohex/emacs-zoom-window
 #+END_SRC
 
 * Functions
-** Input Method
+** COMMENT Input Method
 *About:* Emacs 下的中文输入法，支持全拼，双拼，五笔和仓颉，在线文档：http://tumashu.github.io/pyim
 - [[https://github.com/tumashu/pyim][GitHub - tumashu/pyim]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package pyim
-    :demand t
-    :defer t
-    :config
-    (setq default-input-method "pyim")
-    ;; 使用全拼
-    (setq pyim-default-scheme 'quanpin)
+  ;; (use-package pyim
+  ;;   :demand t
+  ;;   :defer t
+  ;;   :config
+  ;;   (setq default-input-method "pyim")
+  ;;   ;; 使用全拼
+  ;;   (setq pyim-default-scheme 'quanpin)
 
-    ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
-    ;; 我自己使用的中英文动态切换规则是：
-    ;; 1. 光标只有在注释里面时，才可以输入中文。
-    ;; 2. 光标前是汉字字符时，才能输入中文。
-    ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
-    (setq-default pyim-english-input-switch-functions
-                  '(pyim-probe-dynamic-english
-                    pyim-probe-isearch-mode
-                    pyim-probe-program-mode
-                    pyim-probe-org-structure-template))
+  ;;   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+  ;;   ;; 我自己使用的中英文动态切换规则是：
+  ;;   ;; 1. 光标只有在注释里面时，才可以输入中文。
+  ;;   ;; 2. 光标前是汉字字符时，才能输入中文。
+  ;;   ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+  ;;   (setq-default pyim-english-input-switch-functions
+  ;;                 '(pyim-probe-dynamic-english
+  ;;                   pyim-probe-isearch-mode
+  ;;                   pyim-probe-program-mode
+  ;;                   pyim-probe-org-structure-template))
 
-    (setq-default pyim-punctuation-half-width-functions
-                  '(pyim-probe-punctuation-line-beginning
-                    pyim-probe-punctuation-after-punctuation))
+  ;;   (setq-default pyim-punctuation-half-width-functions
+  ;;                 '(pyim-probe-punctuation-line-beginning
+  ;;                   pyim-probe-punctuation-after-punctuation))
 
-    ;; 开启拼音搜索功能
-    (pyim-isearch-mode 1)
+  ;;   ;; 开启拼音搜索功能
+  ;;   (pyim-isearch-mode 1)
 
-    ;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
-    ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
-    ;; 手动安装 posframe 包。
-    ;; (setq pyim-page-tooltip 'pupup)
-    (setq pyim-page-tooltip 'posframe)
+  ;;   ;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
+  ;;   ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+  ;;   ;; 手动安装 posframe 包。
+  ;;   ;; (setq pyim-page-tooltip 'pupup)
+  ;;   (setq pyim-page-tooltip 'posframe)
 
-    ;; 选词框显示 5 个候选词
-    (setq pyim-page-length 8)
-    :bind
-    (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
-     ("C-;" . pyim-delete-word-from-personal-buffer)))
+  ;;   ;; 选词框显示 5 个候选词
+  ;;   (setq pyim-page-length 8)
+  ;;   :bind
+  ;;   (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
+  ;;    ("C-;" . pyim-delete-word-from-personal-buffer)))
 #+END_SRC
 
-*** pyim-basedict
+*** COMMENT pyim-basedict
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-  (use-package pyim-basedict
-    :defer t
-    :after pyim
-    :config (pyim-basedict-enable))
+  ;; ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+  ;; (use-package pyim-basedict
+  ;;   :defer t
+  ;;   :after pyim
+  ;;   :config (pyim-basedict-enable))
 #+END_SRC
 
 ** Buffer
@@ -3884,7 +3857,8 @@ https://github.com/syohex/emacs-zoom-window
             org-enforce-todo-dependencies t
             org-enforce-todo-checkbox-dependencies t
             ;; org-hide-emphasis-markers t    ; 隐藏 org-mode 语法中的标记字符
-            org-image-actual-width '(400))
+            org-image-actual-width (/ (display-pixel-width) 3))
+            ;; org-image-actual-width '(400))
 
       (setq org-log-done 'time       ; 记录时间
             ;; org-log-done 'note    ; 记录提示信息
@@ -3973,6 +3947,10 @@ https://github.com/syohex/emacs-zoom-window
   ;; 将列标记符号替换成 ► ◇ 表示 
   ;; @see - http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
   (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-+]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "►"))))))
+                             
+  (font-lock-add-keywords 'org-journal-mode
                           '(("^ *\\([-+]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "►"))))))
 #+END_SRC
@@ -4509,9 +4487,10 @@ Archive subtrees under the same hierarchy as original in the archive files
     :defer t
     :bind ("C-c j" . org-journal-new-entry)
     :custom
+    (org-journal-file-type "monthly")
     (org-journal-dir "~/notes/07_Journal/")
-    (org-journal-date-format "%A, %d-%m-%Y")
-    (org-journal-file-format "%Y-%m-%d.org"))
+    (org-journal-date-format "%A, %d/%m/%Y")
+    (org-journal-file-format "%Y-%m.org"))
 
   (my-leader-def "jo"  'org-journal-new-entry)
 #+END_SRC
@@ -5025,7 +5004,7 @@ https://github.com/astahlman/ob-async
 
   (major-mode-hydra-bind org-mode "Perform"
     ("r" (lambda () (interactive)
-           (helm-org-rifle-current-buffer)
+           ;; (helm-org-rifle-current-buffer)
            (call-interactively 'org-cycle)
            (call-interactively 'org-cycle)) "rifle")
     ("v" avy-org-goto-heading-timer "avy"))
@@ -6565,7 +6544,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 #+END_SRC
 
 *About:* 
-要导出到 PDF 时也高亮, 需要在.emacs 文件中加入以下代码:
+要导出到 PDF 时也高亮, 需要在 .emacs 文件中加入以下代码:
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; use minted to highlight code in latex
   (require 'ox-latex)

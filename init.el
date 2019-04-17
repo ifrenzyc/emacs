@@ -25,24 +25,10 @@
 ;; installed packages. Don't delete this line. If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; uncomment this line in first time startup.
-(package-initialize)
+(unless package--initialized (package-initialize))
 
 (when (>= emacs-major-version 26)
   (require 'package)
-
-  ;; (setq url-proxy-services
-  ;; 	  '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-  ;; 		("http" . "127.0.0.1:1087")
-  ;; 		("https" . "127.0.0.1:1087")))
-
-  ;; (setq url-using-proxy t)
-  ;; (setq package-archives '(("gnu"          . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-  ;;                          ("melpa"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-  ;;                          ("org"          . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")))
-
-  ;; (setq package-archives '(("gnu"          . "https://elpa.emacs-china.org/elpa/gnu/")
-  ;;                          ("melpa"        . "https://elpa.emacs-china.org/elpa/melpa/")
-  ;;                          ("org"          . "https://elpa.emacs-china.org/elpa/org/")))
 
   (setq package-archives
         '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
@@ -104,7 +90,11 @@
 (org-babel-load-file (expand-file-name "~/.emacs.d/emacs.org"))
 
 ;; Keep emacs Custom-settings in separate file
+;; This keeps your init.el neater and you have the option
+;; to gitignore your custom.el if you see fit.
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
 (load custom-file)
 
 ;;; init.el ends here
