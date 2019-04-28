@@ -2483,61 +2483,6 @@ This is a package to perform text folding like in Vim. It has the following feat
   ;; Recursive Copying and Deleting
   (setq dired-recursive-copies (quote always))
   (setq dired-recursive-deletes (quote top))
-
-  (defhydra hydra-dired (:hint nil :color pink)
-    "
-  _+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    wdired
-  _C_opy             _O_ view other   _U_nmark all       _)_ omit-mode      _$_ hide-subdir    C-x C-q : edit
-  _D_elete           _o_pen other     _u_nmark           _l_ redisplay      _w_ kill-subdir    C-c C-c : commit
-  _R_ename           _M_ chmod        _t_oggle           _g_ revert buf     _e_ ediff          C-c ESC : abort
-  _Y_ rel symlink    _G_ chgrp        _E_xtension mark   _s_ort             _=_ pdiff
-  _S_ymlink          ^ ^              _F_ind marked      _._ toggle hydra   \\ flyspell
-  _r_sync            ^ ^              ^ ^                ^ ^                _?_ summary
-  _z_ compress-file  _A_ find regexp
-  _Z_ compress       _Q_ repl regexp
-
-  T - tag prefix
-  "
-    ("\\" dired-do-ispell)
-    ("(" dired-hide-details-mode)
-    (")" dired-omit-mode)
-    ("+" dired-create-directory)
-    ("=" diredp-ediff)         ;; smart diff
-    ("?" dired-summary)
-    ("$" diredp-hide-subdir-nomove)
-    ("A" dired-do-find-regexp)
-    ("C" dired-do-copy)        ;; Copy all marked files
-    ("D" dired-do-delete)
-    ("E" dired-mark-extension)
-    ("e" dired-ediff-files)
-    ("F" dired-do-find-marked-files)
-    ("G" dired-do-chgrp)
-    ("g" revert-buffer)        ;; read all directories again (refresh)
-    ("i" dired-maybe-insert-subdir)
-    ("l" dired-do-redisplay)   ;; relist the marked or singel directory
-    ("M" dired-do-chmod)
-    ("m" dired-mark)
-    ("O" dired-display-file)
-    ("o" dired-find-file-other-window)
-    ("Q" dired-do-find-regexp-and-replace)
-    ("R" dired-do-rename)
-    ("r" dired-do-rsynch)
-    ("S" dired-do-symlink)
-    ("s" dired-sort-toggle-or-edit)
-    ("t" dired-toggle-marks)
-    ("U" dired-unmark-all-marks)
-    ("u" dired-unmark)
-    ("v" dired-view-file)      ;; q to exit, s to search, = gets line #
-    ("w" dired-kill-subdir)
-    ("Y" dired-do-relsymlink)
-    ("z" diredp-compress-this-file)
-    ("Z" dired-do-compress)
-    ("q" nil)
-    ("." nil :color blue))
-
-  (general-define-key :keymaps 'dired-mode-map
-                      :states '(normal)
-                      "?" 'hydra-dired/body)
 #+END_SRC
 
 *** diredx
@@ -2545,9 +2490,9 @@ This is a package to perform text folding like in Vim. It has the following feat
 - [[https://github.com/Fuco1/dired-hacks][GitHub - Fuco1/dired-hacks]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package direx
-    :init
+    ;; :init
     ;; show human readable file sizes in dired
-    (setq dired-listing-switches "-aBhl")
+    ;; (setq dired-listing-switches "-aBhl")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
     :general
     ("C-x C-j" 'direx:jump-to-directory))
 #+END_SRC
@@ -2573,6 +2518,7 @@ Show subtree when pressing i
 #+END_SRC
 
 *** dired-narrow
+*About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired-narrow
     :after (dired)
@@ -2653,9 +2599,63 @@ Show subtree when pressing i
   ;;   "!" 'dired-do-shell-command)
 #+END_SRC
 
-*** COMMENT hydra-dired
-*About:* 
 https://github.com/abo-abo/hydra/wiki/Dired
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defhydra hydra-dired (:hint nil :color pink)
+    "
+    _+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    wdired
+    _C_opy             _O_ view other   _U_nmark all       _)_ omit-mode      _$_ hide-subdir    C-x C-q : edit
+    _D_elete           _o_pen other     _u_nmark           _l_ redisplay      _w_ kill-subdir    C-c C-c : commit
+    _R_ename           _M_ chmod        _t_oggle           _g_ revert buf     _e_ ediff          C-c ESC : abort
+    _Y_ rel symlink    _G_ chgrp        _E_xtension mark   _s_ort             _=_ pdiff
+    _S_ymlink          ^ ^              _F_ind marked      _._ toggle hydra   \\ flyspell
+    _r_sync            ^ ^              ^ ^                ^ ^                _?_ summary
+    _z_ compress-file  _A_ find regexp
+    _Z_ compress       _Q_ repl regexp
+
+    T - tag prefix
+    "
+    ("\\" dired-do-ispell)
+    ("(" dired-hide-details-mode)
+    (")" dired-omit-mode)
+    ("+" dired-create-directory)
+    ("=" diredp-ediff)         ;; smart diff
+    ("?" dired-summary)
+    ("$" diredp-hide-subdir-nomove)
+    ("A" dired-do-find-regexp)
+    ("C" dired-do-copy)        ;; Copy all marked files
+    ("D" dired-do-delete)
+    ("E" dired-mark-extension)
+    ("e" dired-ediff-files)
+    ("F" dired-do-find-marked-files)
+    ("G" dired-do-chgrp)
+    ("g" revert-buffer)        ;; read all directories again (refresh)
+    ("i" dired-maybe-insert-subdir)
+    ("l" dired-do-redisplay)   ;; relist the marked or singel directory
+    ("M" dired-do-chmod)
+    ("m" dired-mark)
+    ("O" dired-display-file)
+    ("o" dired-find-file-other-window)
+    ("Q" dired-do-find-regexp-and-replace)
+    ("R" dired-do-rename)
+    ("r" dired-do-rsynch)
+    ("S" dired-do-symlink)
+    ("s" dired-sort-toggle-or-edit)
+    ("t" dired-toggle-marks)
+    ("U" dired-unmark-all-marks)
+    ("u" dired-unmark)
+    ("v" dired-view-file)      ;; q to exit, s to search, = gets line #
+    ("w" dired-kill-subdir)
+    ("Y" dired-do-relsymlink)
+    ("z" diredp-compress-this-file)
+    ("Z" dired-do-compress)
+    ("q" nil)
+    ("." nil :color blue))
+
+  (general-define-key :keymaps 'dired-mode-map
+                      :states '(emacs)
+                      "\\" 'hydra-dired/body)
+#+END_SRC
 
 ** open recently files
 *About:* Find a recent file using Ido.
