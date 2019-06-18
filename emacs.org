@@ -2505,6 +2505,7 @@ This is a package to perform text folding like in Vim. It has the following feat
 #+END_SRC
 
 ** dired
+@see - [[https://jonathanabennett.github.io/blog/2019/06/05/file-management-in-emacs-with-dired-mode/][File Management in Emacs with dired-mode - Jonathan Bennett's Blog]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
   (setq dired-dwim-target t)
@@ -5099,6 +5100,29 @@ Visually summarize progress
   ;; (use-package org-dashboard)
 #+END_SRC
 
+* Deft
+- [[https://jblevins.org/projects/deft/][Deft for Emacs]]
+- [[https://www.reddit.com/r/emacs/comments/agw3o5/3500_note_files_40_mb_of_plain_text_100s_of_tags/][3,500 note files, 40 MB of plain text, 100s of tags. Will Org mode work for m...]]
+- [[https://github.com/EFLS/zetteldeft][GitHub - EFLS/zetteldeft: A Zettelkasten system! Or rather, some functions on...]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package deft
+    :bind (("<f8>" . deft))
+    :commands (deft deft-open-file deft-new-file-named)
+    :config
+    (setq deft-directory "~/notes/"
+          deft-recursive t
+          deft-default-extension "org"
+          deft-extensions '("md" "txt" "org" "tex")
+          deft-use-filter-string-for-filename nil
+          deft-use-filename-as-title nil
+          deft-org-mode-title-prefix t
+          deft-markdown-mode-title-level 1
+          deft-file-naming-rules '((noslash . "-")
+                                   (nospace . "-")
+                                   (case-fn . downcase)))
+   )
+#+END_SRC
+
 * BACKUP & Version 
 ** Control BACKUP
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -6191,6 +6215,7 @@ GitHub: https://github.com/smihica/emmet-mode
 *About:* 
 Config for setting markdown mode and stuff
 参考：http://aaronbedra.com/emacs.d/
+- [[https://leanpub.com/markdown-mode/read#leanpub-auto-quick-reference][Read Guide to Markdown Mode for Emacs | Leanpub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package markdown-mode
     :defer t
@@ -6360,6 +6385,7 @@ Config for setting markdown mode and stuff
 
 ** eshell
 *About:* 
+- [[http://www.howardism.org/Technical/Emacs/eshell-present.html][Presenting the Eshell]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package eshell
     :defer t
@@ -6402,7 +6428,8 @@ Config for setting markdown mode and stuff
           ;; shell-pop-term-shell      "/bin/zsh"
           ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (multi-term-program)))
           ;; shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
-          shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/fish" "*ansi-terminal*")))
+          ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/fish" "*ansi-terminal*")))
+          shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
           ;; shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
           shell-pop-full-span       t)
     :config
