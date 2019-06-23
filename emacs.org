@@ -2521,13 +2521,17 @@ This is a package to perform text folding like in Vim. It has the following feat
 *** diredx
 *About:* dired 模式扩展
 - [[https://github.com/Fuco1/dired-hacks][GitHub - Fuco1/dired-hacks]]
+- [[https://jblevins.org/log/dired-open][Integrating OS X and Emacs Dired]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package direx
     ;; :init
     ;; show human readable file sizes in dired
     ;; (setq dired-listing-switches "-aBhl")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
     :general
-    ("C-x C-j" 'direx:jump-to-directory))
+    ("C-x C-j" 'direx:jump-to-directory
+     "z"       '(lambda () (interactive)
+                  (let ((fn (dired-get-file-for-visit)))
+                    (start-process "default-app" nil "open" fn)))))
 #+END_SRC
 
 *** all-the-icons-dired
@@ -3368,12 +3372,47 @@ https://github.com/emacs-lsp/lsp-mode
     (require 'lsp-clients))
 
   (use-package lsp-ui
+    ;;  :quelpa (lsp-ui :fetcher github :repo "Jimx-/lsp-ui")
     :demand t
     :after lsp-mode
-    :config
-    (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-    (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+    :commands lsp-ui-mode
+    :bind (:map lsp-ui-mode-map
+                ([remap xref-find-definitions] . lsp-ui-peek-find-definitions) ; [M-.]
+                ([remap xref-find-references] . lsp-ui-peek-find-references)   ; [M-?]
+                )
     :hook (lsp-mode . lsp-ui-mode)
+    :init
+    (setq lsp-ui-doc-enable nil
+          lsp-ui-doc-header nil
+          lsp-ui-doc-include-signature t
+          lsp-ui-doc-position 'at-point)
+    (setq-default lsp-ui-doc-frame-parameters
+                  '((left . -1)
+                    (top . -1)
+                    (no-accept-focus . t)
+                    (min-width . 0)
+                    (width . 0)
+                    (min-height . 0)
+                    (height . 0)
+                    (internal-border-width . 0)
+                    (vertical-scroll-bars)
+                    (horizontal-scroll-bars)
+                    (left-fringe . 0)
+                    (right-fringe . 0)
+                    (menu-bar-lines . 0)
+                    (tool-bar-lines . 0)
+                    (line-spacing . 0.1)
+                    (unsplittable . t)
+                    (undecorated . t)
+                    (minibuffer . nil)
+                    (visibility . nil)
+                    (mouse-wheel-frame . nil)
+                    (no-other-frame . t)
+                    (cursor-type)
+                    (no-special-glyphs . t)))
+    ;; for "Jimx-/lsp-ui" fork has xwebkit support.
+    (if (featurep 'xwidget)
+        (setq lsp-ui-doc-use-webkit t))
     )
 #+END_SRC
 
@@ -4620,8 +4659,8 @@ https://github.com/abo-abo/org-download
 
 ** org-screenshot
 Paste an image on clipboard to Emacs Org mode file.
+@see - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; @see - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
   (defun yc/org-screenshot ()
     "Take a screenshot into a time stamped unique-named file in the
       same directory as the org-buffer and insert a link to this file."
@@ -4634,15 +4673,42 @@ Paste an image on clipboard to Emacs Org mode file.
                     (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
     (unless (file-exists-p (file-name-directory filename))
       (make-directory (file-name-directory filename)))
-                                          ; take screenshot
+    ;; take screenshot
     (if IS-MAC 
         (call-process "screencapture" nil nil nil "-i" filename))
     (if IS-LINUX
         (call-process "import" nil nil nil filename))
-                                          ; insert into file if correctly taken
+    ;; insert into file if correctly taken
     (if (file-exists-p filename)
         (insert (concat "[[file:" filename "]]")))
     (org-display-inline-images))
+#+END_SRC
+
+#+BEGIN_SRC sh
+  brew install pngpaste
+#+END_SRC
+
+- [[http://bianle.blog/2016/10/26/emacs-paste-image-from-clipboard/][emacs从剪贴板粘贴图片 | Bianle's Blog]]
+- [[https://emacs-china.org/t/topic/6601/4][一个在 org-mode 中粘贴图片的函数（macOS，AppleScript） - Org-mode - Emacs China]]
+- [[https://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it][screenshot - Paste an image on clipboard to Emacs Org mode file without savin...]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun yc/org-insert-clipboard-image ()
+    "paste image from clipboard"
+    (interactive)
+    (setq filename
+          (concat
+           (make-temp-name
+            (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name))
+                    "_imgs/"
+                    (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
+    (unless (file-exists-p (file-name-directory filename))
+      (make-directory (file-name-directory filename)))
+
+    (message (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
+    (call-process-shell-command (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
+
+    (insert (concat "[[file:" filename "]]"))
+    )
 #+END_SRC
 
 ** 重新定义不同状态的 todoList 的排版
