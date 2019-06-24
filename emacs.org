@@ -573,41 +573,16 @@ Unicode is an required aesthetic
     :delight (vi-tilde-fringe-mode))
 #+END_SRC
 
-** scrolling
-*About:* 
-This makes scrolling gradual rather than by half page. I find that the half page scroll really makes me lose where I am in the file so here I make sure to scroll one line at a time. In addition I want to keep what I'm working on centered so I start scrolling when the cursor is 10 lines away from the margin.
-
-This behaviour in general emulates the scrolloff option in vim.
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; faster scrolling (see https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746)
-  (setq auto-window-vscroll nil)
-
-  ;; (setq scroll-margin 10
-  ;;       scroll-step 1
-  ;;       scroll-conservatively 10000
-  ;;       scroll-preserve-screen-position 1)
-  (setq  hscroll-margin 1
-         hscroll-step 1
-         scroll-conservatively 1001
-         scroll-margin 0
-         scroll-preserve-screen-position t)
-#+END_SRC
-
-*** COMMENT yascroll
-*About:* is Yet Another Scroll Bar Mode for GNU Emacs.
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package yascroll
-  ;;   :init
-  ;;   (global-yascroll-bar-mode t))
-#+END_SRC
-
-*** smooth-scrolling
-*About:*
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package smooth-scrolling
-    :init
-    (smooth-scrolling-mode t)
-    (setq smooth-scroll-margin 5))
+#+BEGIN_SRC emacs-lisp :tangle no
+;;  (use-package linum-relative
+    ;; :init
+    ;; https://github.com/coldnew/linum-relative/issues/7
+    ;; (setq linum-relative-format "%3s ")
+    ;; display current line instead of 0
+    ;; (setq linum-relative-current-symbol "")
+;;    :config
+    ;; (setq linum-relative-current-symbol ">>")
+;;    (linum-relative-global-mode 1))
 #+END_SRC
 
 ** icons
@@ -956,24 +931,22 @@ https://github.com/davidshepherd7/electric-operator
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package general
     :defer t
-    ;;;;evil :init
-    ;;;;evil (general-def :states '(normal motion visual) "SPC" nil)
-    ;;;;evil :config
+    :init
+    (general-def :states '(normal motion visual) "SPC" nil)
+    :config
     ;; Vim-like definitions
-    ;;;;evil (general-evil-setup t)
-  )
+    (general-evil-setup t)
+    )
 
   (general-create-definer my-leader-def
-   ;;;;evil :states '(normal motion visual)
-   ;;;;evil :prefix "SPC"
-   ;;;;evil :global-prefix "s-SPC")
-    :prefix "s-SPC")
+    :states '(normal motion visual)
+    :prefix "SPC"
+    :global-prefix "s-SPC")
 
   (general-create-definer my-major-mode-leader-def
-    ;;;;evil :states '(normal motion visual)
-    ;;;;evil :prefix "SPC m"
-    ;;;;evil :global-prefix "s-SPC m")
-    :prefix "s-SPC m")
+    :states '(normal motion visual)
+    :prefix "SPC m"
+    :global-prefix "s-SPC m")
 
   ;; (general-create-definer my-leader-def-2
   ;;   :states '(normal motion visual)
@@ -1014,7 +987,7 @@ https://github.com/davidshepherd7/electric-operator
     )
 #+END_SRC
 
-** COMMENT Evil
+** Evil
 *** COMMENT evil-collection
 *About:* evil 按键扩展集合
 @see - https://github.com/emacs-evil/evil-collection
@@ -1025,70 +998,70 @@ https://github.com/davidshepherd7/electric-operator
   ;;         evil-want-integration nil))
 #+END_SRC
 
-*** COMMENT config
+*** config
 *About:* vi layer for Emacs.
 - [[https://github.com/emacs-evil/evil][GitHub - emacs-evil/evil]]
 - http://wikemacs.org/wiki/Evil
 - [[https://github.com/noctuid/evil-guide#terminology][GitHub - noctuid/evil-guide]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil
-  ;;;;evil   :init
-  ;;;;evil   (setq evil-want-keybinding nil
-  ;;;;evil         evil-want-integration nil
-  ;;;;evil         evil-want-C-u-scroll t
-  ;;;;evil         evil-visual-state-cursor 'hollow
-  ;;;;evil         evil-want-C-i-jump t)
-  ;;;;evil           (set-cursor-color "DarkCyan")
-  ;;;;evil   (setq-default evil-want-Y-yank-to-eol t)
-  ;;;;evil   ;; (global-evil-leader-mode +1)
-  ;;;;evil   (evil-mode)
-  ;;;;evil   :general
-  ;;;;evil   (evil-normal-state-map [escape] 'keyboard-quit)
-  ;;;;evil   (evil-visual-state-map [escape] 'keyboard-quit)
-  ;;;;evil   (minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-  ;;;;evil   (minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-  ;;;;evil   (minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-  ;;;;evil   (minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-  ;;;;evil   (minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-  ;;;;evil 
-  ;;;;evil   (evil-normal-state-map "\C-y" 'yank)
-  ;;;;evil   (evil-insert-state-map "\C-y" 'yank)
-  ;;;;evil   (evil-visual-state-map "\C-y" 'yank)
-  ;;;;evil   (evil-insert-state-map "\C-e" 'end-of-line)
-  ;;;;evil   :config
-  ;;;;evil   ;; (OPTIONAL) Shift width for evil-mode users
-  ;;;;evil   ;; For the vim-like motions of ">>" and "<<".
-  ;;;;evil   (setq-default evil-shift-width 4)
-  ;;;;evil 
-  ;;;;evil   ;; @see - https://github.com/rime/squirrel/wiki/vim 用户与 emacs-evil-mode 用户-输入法自动切换成英文状态的实现
-  ;;;;evil   (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
-  ;;;;evil     "C-g back to normal state"
-  ;;;;evil     (when  (evil-insert-state-p)
-  ;;;;evil       (cond
-  ;;;;evil        ((equal (evil-initial-state major-mode) 'normal)
-  ;;;;evil         (evil-normal-state))
-  ;;;;evil        ((equal (evil-initial-state major-mode) 'insert)
-  ;;;;evil         (evil-normal-state))
-  ;;;;evil        ((equal (evil-initial-state major-mode) 'motion)
-  ;;;;evil         (evil-motion-state))
-  ;;;;evil        (t
-  ;;;;evil         (if (equal last-command 'keyboard-quit)
-  ;;;;evil             (evil-normal-state)           ; 如果初始化 state 不是 normal，按两次才允许转到 normal state
-  ;;;;evil           (evil-change-to-initial-state)) ; 如果初始化 state 不是 normal，按一次转到初始状态
-  ;;;;evil         ))))
-  ;;;;evil 
-  ;;;;evil   ;; esc quits
-  ;;;;evil   ;; @see - http://stackoverflow.com/questions/8483182/evil-mode-best-practice
-  ;;;;evil   (defun minibuffer-keyboard-quit ()
-  ;;;;evil     "Abort recursive edit.
-  ;;;;evil   In Delete Selection mode, if the mark is active, just deactivate it;
-  ;;;;evil   then it takes a second \\[keyboard-quit] to abort the minibuffer."
-  ;;;;evil     (interactive)
-  ;;;;evil     (if (and delete-selection-mode transient-mark-mode mark-active)
-  ;;;;evil         (setq deactivate-mark  t)
-  ;;;;evil       (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-  ;;;;evil       (abort-recursive-edit)))
-  ;;;;evil )
+  (use-package evil
+    :init
+    (setq evil-want-keybinding nil
+          evil-want-integration nil
+          evil-want-C-u-scroll t
+          evil-visual-state-cursor 'hollow
+          evil-want-C-i-jump t)
+            (set-cursor-color "DarkCyan")
+    (setq-default evil-want-Y-yank-to-eol t)
+    ;; (global-evil-leader-mode +1)
+    (evil-mode)
+    :general
+    (evil-normal-state-map [escape] 'keyboard-quit)
+    (evil-visual-state-map [escape] 'keyboard-quit)
+    (minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+    (minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+    (minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+    (minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+    (minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+  
+    (evil-normal-state-map "\C-y" 'yank)
+    (evil-insert-state-map "\C-y" 'yank)
+    (evil-visual-state-map "\C-y" 'yank)
+    (evil-insert-state-map "\C-e" 'end-of-line)
+    :config
+    ;; (OPTIONAL) Shift width for evil-mode users
+    ;; For the vim-like motions of ">>" and "<<".
+    (setq-default evil-shift-width 4)
+  
+    ;; @see - https://github.com/rime/squirrel/wiki/vim 用户与 emacs-evil-mode 用户-输入法自动切换成英文状态的实现
+    (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
+      "C-g back to normal state"
+      (when  (evil-insert-state-p)
+        (cond
+         ((equal (evil-initial-state major-mode) 'normal)
+          (evil-normal-state))
+         ((equal (evil-initial-state major-mode) 'insert)
+          (evil-normal-state))
+         ((equal (evil-initial-state major-mode) 'motion)
+          (evil-motion-state))
+         (t
+          (if (equal last-command 'keyboard-quit)
+              (evil-normal-state)           ; 如果初始化 state 不是 normal，按两次才允许转到 normal state
+            (evil-change-to-initial-state)) ; 如果初始化 state 不是 normal，按一次转到初始状态
+          ))))
+  
+    ;; esc quits
+    ;; @see - http://stackoverflow.com/questions/8483182/evil-mode-best-practice
+    (defun minibuffer-keyboard-quit ()
+      "Abort recursive edit.
+    In Delete Selection mode, if the mark is active, just deactivate it;
+    then it takes a second \\[keyboard-quit] to abort the minibuffer."
+      (interactive)
+      (if (and delete-selection-mode transient-mark-mode mark-active)
+          (setq deactivate-mark  t)
+        (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+        (abort-recursive-edit)))
+  )
 #+END_SRC
 
 ** Hydra
@@ -1152,111 +1125,112 @@ let there be a <leader>
   ;;    "b" 'switch-to-buffer))
 #+END_SRC
 
-*** COMMENT evil-nerd-commenter
+*** evil-nerd-commenter
 *About:* Comment/uncomment lines efficiently.
 - [[https://github.com/redguardtoo/evil-nerd-commenter][GitHub - redguardtoo/evil-nerd-commenter]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-nerd-commenter
-  ;;;;evil   :defer t
-  ;;;;evil   :after evil general
-  ;;;;evil   :config
-  ;;;;evil   (evilnc-default-hotkeys)
-  ;;;;evil   :general
-  ;;;;evil   ;; Emacs key bindings
-  ;;;;evil   ("M-/"   'evilnc-comment-or-uncomment-lines
-  ;;;;evil    "C-c l" 'evilnc-quick-comment-or-uncomment-to-the-line
-  ;;;;evil    ;; "C-c c" 'evilnc-copy-and-comment-lines   ; 这个与 org-capture 按键冲突
-  ;;;;evil    "C-c p" 'evilnc-comment-or-uncomment-paragraphs))
+  (use-package evil-nerd-commenter
+    :defer t
+    :after evil general
+    :config
+    (evilnc-default-hotkeys)
+    :general
+    ;; Emacs key bindings
+    ("M-/"   'evilnc-comment-or-uncomment-lines
+     "C-c l" 'evilnc-quick-comment-or-uncomment-to-the-line
+     ;; "C-c c" 'evilnc-copy-and-comment-lines   ; 这个与 org-capture 按键冲突
+     ;; "C-c p" 'evilnc-comment-or-uncomment-paragraphs
+  ))
 #+END_SRC
 
-*** COMMENT evil-commentary
+*** evil-commentary
 *About:* Comment/uncomment
 - [[https://github.com/linktohack/evil-commentary][GitHub - linktohack/evil-commentary]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-commentary
-  ;;;;evil   :after evil
-  ;;;;evil   :config
-  ;;;;evil   (evil-commentary-mode))
+  (use-package evil-commentary
+    :after evil
+    :config
+    (evil-commentary-mode))
 #+END_SRC
 
-*** COMMENT evil-goggles
+*** evil-goggles
 *About:* 高亮 evil 要编辑选中的块
 - [[https://github.com/edkolev/evil-goggles][GitHub - edkolev/evil-goggles]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-goggles
-  ;;;;evil   :diminish ""
-  ;;;;evil   :after evil
-  ;;;;evil   :config
-  ;;;;evil   (setq evil-goggles-duration 0.150)
-  ;;;;evil   (evil-goggles-mode))
+  (use-package evil-goggles
+    :diminish ""
+    :after evil
+    :config
+    (setq evil-goggles-duration 0.150)
+    (evil-goggles-mode))
 #+END_SRC
 
-*** COMMENT evil-search-highlight-persist
+*** evil-search-highlight-persist
 *About:* 显示 evil search 匹配的词，当光标处在某个词上面时，高亮其他相同的词
 - [[https://github.com/juanjux/evil-search-highlight-persist][GitHub - juanjux/evil-search-highlight-persist]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-search-highlight-persist
-  ;;;;evil   :after evil
-  ;;;;evil   :init
-  ;;;;evil   (global-evil-search-highlight-persist t)
-  ;;;;evil   :config
-  ;;;;evil   ;; To only display string whose length is greater than or equal to 3
-  ;;;;evil   (setq evil-search-highlight-string-min-len 3)
-  ;;;;evil   )
+  (use-package evil-search-highlight-persist
+    :after evil
+    :init
+    (global-evil-search-highlight-persist t)
+    :config
+    ;; To only display string whose length is greater than or equal to 3
+    (setq evil-search-highlight-string-min-len 3)
+    )
 #+END_SRC
 
-*** COMMENT evil-indent-plus
+*** evil-indent-plus
 *About:* 代码缩进按键绑定
 - [[https://github.com/TheBB/evil-indent-plus][GitHub - TheBB/evil-indent-plus]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-indent-plus
-  ;;;;evil   :after evil
-  ;;;;evil   :config
-  ;;;;evil   ;; bind evil-indent-plus text objects
-  ;;;;evil   (evil-indent-plus-default-bindings))
+  (use-package evil-indent-plus
+    :after evil
+    :config
+    ;; bind evil-indent-plus text objects
+    (evil-indent-plus-default-bindings))
 #+END_SRC
 
 *** COMMENT evil-lion
 *About:* 
 @see - https://github.com/edkolev/evil-lion
 
-*** COMMENT evil-matchit
+*** evil-matchit
 *About:* 快速在匹配的代码块分隔符跳转，按键 =%= ，比如 html 里面同级的 ~<div>~ ~</div>~ 。
 - [[https://github.com/redguardtoo/evil-matchit][GitHub - redguardtoo/evil-matchit]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-matchit
-  ;;;;evil   :after evil
-  ;;;;evil   :config
-  ;;;;evil   (global-evil-matchit-mode 1))
+  (use-package evil-matchit
+    :after evil
+    :config
+    (global-evil-matchit-mode 1))
 #+END_SRC
 
-*** COMMENT evil-visualstar
+*** evil-visualstar
 *About:* 通过 =*= ， =#= 快速查找选中的代码
 This allows me to easily start a * or # search from a visual selection.
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-visualstar
-  ;;;;evil   :after evil
-  ;;;;evil   :config
-  ;;;;evil   (global-evil-visualstar-mode t))
+  (use-package evil-visualstar
+    :after evil
+    :config
+    (global-evil-visualstar-mode t))
 #+END_SRC
 
-*** COMMENT evil-surround
+*** evil-surround
 *About:* 快速给选中的代码块加上引号或者括号，这个与 smartparens 有一些重复。
 @see - https://github.com/emacs-evil/evil-surround
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-surround
-  ;;;;evil   :after evil
-  ;;;;evil   :init
-  ;;;;evil   (global-evil-surround-mode 1))
+  (use-package evil-surround
+    :after evil
+    :init
+    (global-evil-surround-mode 1))
 #+END_SRC
 
-*** COMMENT evil-anzu
+*** evil-anzu
 *About:* anzu 的 evil 扩展，用于快速替换文本
 @see - https://github.com/syohex/emacs-anzu
 @see - https://github.com/syohex/emacs-evil-anzu
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-anzu
-  ;;;;evil   :after (evil anzu))
+  (use-package evil-anzu
+    :after (evil anzu))
 #+END_SRC
 
 *** COMMENT evil-number
@@ -1446,25 +1420,25 @@ This allows me to easily start a * or # search from a visual selection.
     "okr"  'org-clock-report
     "v"    'er/expand-region)
 
-  ;;;;evil (general-nmap
-  ;;;;evil  :prefix my-leader 
-  ;;;;evil  "1"  'delete-other-windows
-  ;;;;evil  "0"  'delete-window 
-  ;;;;evil  "f"  'find-file
-  ;;;;evil  "b"  'switch-to-buffer)
+  (general-nmap
+   :prefix my-leader 
+   "1"  'delete-other-windows
+   "0"  'delete-window 
+   "f"  'find-file
+   "b"  'switch-to-buffer)
 
-  ;;;;evil (general-nmap
-  ;;;;evil   :prefix my-leader 
-  ;;;;evil   "c"  '(:ignore t :which-key "comment or uncomment")
-  ;;;;evil   "ci" 'evilnc-comment-or-uncomment-lines
-  ;;;;evil   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
-  ;;;;evil   "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
-  ;;;;evil   "cc" 'evilnc-copy-and-comment-lines
-  ;;;;evil   "cp" 'evilnc-comment-or-uncomment-paragraphs
-  ;;;;evil   "cr" 'comment-or-uncomment-region
-  ;;;;evil   "cv" 'evilnc-toggle-invert-comment-line-by-line
-  ;;;;evil   "\\" 'evilnc-comment-operator    ; if you prefer backslash key
-  ;;;;evil   )
+  (general-nmap
+    :prefix my-leader 
+    "c"  '(:ignore t :which-key "comment or uncomment")
+    "ci" 'evilnc-comment-or-uncomment-lines
+    "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+    "ll" 'evilnc-quick-comment-or-uncomment-to-the-line
+    "cc" 'evilnc-copy-and-comment-lines
+    "cp" 'evilnc-comment-or-uncomment-paragraphs
+    "cr" 'comment-or-uncomment-region
+    "cv" 'evilnc-toggle-invert-comment-line-by-line
+    "\\" 'evilnc-comment-operator    ; if you prefer backslash key
+    )
 
   ;; (general-create-definer my-major-mode-leader-def
   ;;   :states '(normal motion visual)
@@ -1997,9 +1971,9 @@ https://github.com/dustinlacewell/hera
   (use-package key-chord
     :init
     (key-chord-mode 1)
-  ;;;;evil  :config
-  ;;;;evil  (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-  )
+    :config
+    (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+    )
 #+END_SRC
 
 * Navigation
@@ -2518,8 +2492,8 @@ This is a package to perform text folding like in Vim. It has the following feat
   ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
   (setq dired-dwim-target t)
 
-  ;;;;evil(when (featurep 'evil)
-  ;;;;evil  (setq evil-emacs-state-modes (delq 'dired-mode evil-emacs-state-modes)))
+  (when (featurep 'evil)
+    (setq evil-emacs-state-modes (delq 'dired-mode evil-emacs-state-modes)))
     
   ;; Recursive Copying and Deleting
   (setq dired-recursive-copies (quote always))
@@ -2616,8 +2590,8 @@ Show subtree when pressing i
     "f" 'counsel-file-jump
     "o" 'my/dired-create-file
     "O" 'dired-create-directory
-  ;;;;evil  "n" 'evil-ex-search-next
-  ;;;;evil  "N" 'evil-ex-search-previous
+    "n" 'evil-ex-search-next
+    "N" 'evil-ex-search-previous
     "q" 'kill-this-buffer
     "!" 'dired-do-shell-command)
 
@@ -2793,14 +2767,14 @@ Highlight matching and auto insert parenthesis.
      "M-D" 'sp-kill-sexp))
 #+END_SRC
 
-*** COMMENT evil-smartparens
+*** evil-smartparens
 - [[https://github.com/expez/evil-smartparens][GitHub - expez/evil-smartparens]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-smartparens
-  ;;;;evil   :defer t
-  ;;;;evil   :after (evil smartparens)
-  ;;;;evil   :hook
-  ;;;;evil   (smartparens-enabled . evil-smartparens-mode))
+  (use-package evil-smartparens
+    :defer t
+    :after (evil smartparens)
+    :hook
+    (smartparens-enabled . evil-smartparens-mode))
 #+END_SRC
 
 *** hydra-smartparens
@@ -2891,102 +2865,102 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
                       (setq truncate-lines t)
                       (hl-line-mode 1)
                       (display-line-numbers-mode -1)    ; disable line-numbers minor mode for neotree
-  ;;;;evil                    (define-minor-mode neotree-evil
-  ;;;;evil                      "Use NERDTree bindings on neotree."
-  ;;;;evil                      :lighter " NT"
-  ;;;;evil                      :keymap (progn
-  ;;;;evil                                (evil-make-overriding-map neotree-mode-map 'normal t)
-  ;;;;evil                                (evil-define-key 'normal neotree-mode-map
-  ;;;;evil                                  "q" 'neotree-hide
-  ;;;;evil                                  "?" 'hydra-neotree/body
-  ;;;;evil                                  "C" 'neotree-change-root
-  ;;;;evil                                  "U" 'neotree-select-up-node
-  ;;;;evil                                  "r" 'neotree-refresh
-  ;;;;evil                                  "o" 'neotree-enter
-  ;;;;evil                                  (kbd "RET") 'neotree-enter
-  ;;;;evil                                  (kbd "TAB") 'neotree-enter
-  ;;;;evil                                  (kbd "SPC") 'neotree-quick-look
-  ;;;;evil                                  ;; "|" 'neotree-enter-horizontal-split
-  ;;;;evil                                  ;; "-" 'neotree-enter-vertical-split
-  ;;;;evil                                  "n" 'evil-search-next
-  ;;;;evil                                  "N" 'evil-search-previous
-  ;;;;evil                                  "ma" 'neotree-create-node
-  ;;;;evil                                  "mc" 'neotree-copy-file
-  ;;;;evil                                  "md" 'neotree-delete-node
-  ;;;;evil                                  "mm" 'neotree-rename-node
-  ;;;;evil                                  "gg" 'evil-goto-first-line
-  ;;;;evil                                  ;; (kbd "<return>") (neotree-make-executor
-  ;;;;evil                                  ;;                   :file-fn 'neo-open-file
-  ;;;;evil                                  ;;                   :dir-fn 'neo-open-dir)
-  ;;;;evil                                  ;; (kbd "<tab>") (neotree-make-executor
-  ;;;;evil                                  ;;                :dir-fn 'neo-open-dir)
-  ;;;;evil                                  "z" (neotree-make-executor
-  ;;;;evil                                       :dir-fn 'neo-open-dir)
-  ;;;;evil                                  "ZZ" 'quit-window
-  ;;;;evil                                  "gd" (neotree-make-executor
-  ;;;;evil                                        :dir-fn 'neo-open-dired)
-  ;;;;evil                                  "gD" (neotree-make-executor
-  ;;;;evil                                        :dir-fn 'neo-open-dired)
-  ;;;;evil                                  "go" (neotree-make-executor
-  ;;;;evil                                        :file-fn 'neo-open-file
-  ;;;;evil                                        :dir-fn 'neo-open-dir)
-  ;;;;evil                                  "gO" 'neotree-quick-look
-  ;;;;evil                                  "gr" 'neotree-refresh
-  ;;;;evil                                  "H" 'neotree-hidden-file-toggle
-  ;;;;evil                                  "gh" 'neotree-hidden-file-toggle
-  ;;;;evil                                  (kbd "C-k") 'neotree-select-up-node
-  ;;;;evil                                  "gk" 'neotree-select-up-node
-  ;;;;evil                                  "[[" 'neotree-select-up-node
-  ;;;;evil                                  (kbd "C-j") 'neotree-select-down-node
-  ;;;;evil                                  "gj" 'neotree-select-down-node
-  ;;;;evil                                  "]]" 'neotree-select-down-node
-  ;;;;evil                                  "gv" 'neotree-open-file-in-system-application
-  ;;;;evil                                  "c" 'neotree-create-node
-  ;;;;evil                                  "y" 'neotree-copy-node
-  ;;;;evil                                  ;; "r" 'neotree-rename-node
-  ;;;;evil                                  "R" 'neotree-change-root
-  ;;;;evil                                  "d" 'neotree-delete-node
-  ;;;;evil                                  "J" 'neotree-dir
-  ;;;;evil                                  "+" 'neotree-stretch-toggle
-  ;;;;evil                                  "=" 'neotree-stretch-toggle
-  ;;;;evil                                  "ge" 'neotree-enter
-  ;;;;evil                                  "j" 'neotree-next-line
-  ;;;;evil                                  "k" 'neotree-previous-line
+                      (define-minor-mode neotree-evil
+                        "Use NERDTree bindings on neotree."
+                        :lighter " NT"
+                        :keymap (progn
+                                  (evil-make-overriding-map neotree-mode-map 'normal t)
+                                  (evil-define-key 'normal neotree-mode-map
+                                    "q" 'neotree-hide
+                                    "?" 'hydra-neotree/body
+                                    "C" 'neotree-change-root
+                                    "U" 'neotree-select-up-node
+                                    "r" 'neotree-refresh
+                                    "o" 'neotree-enter
+                                    (kbd "RET") 'neotree-enter
+                                    (kbd "TAB") 'neotree-enter
+                                    (kbd "SPC") 'neotree-quick-look
+                                    ;; "|" 'neotree-enter-horizontal-split
+                                    ;; "-" 'neotree-enter-vertical-split
+                                    "n" 'evil-search-next
+                                    "N" 'evil-search-previous
+                                    "ma" 'neotree-create-node
+                                    "mc" 'neotree-copy-file
+                                    "md" 'neotree-delete-node
+                                    "mm" 'neotree-rename-node
+                                    "gg" 'evil-goto-first-line
+                                    ;; (kbd "<return>") (neotree-make-executor
+                                    ;;                   :file-fn 'neo-open-file
+                                    ;;                   :dir-fn 'neo-open-dir)
+                                    ;; (kbd "<tab>") (neotree-make-executor
+                                    ;;                :dir-fn 'neo-open-dir)
+                                    "z" (neotree-make-executor
+                                         :dir-fn 'neo-open-dir)
+                                    "ZZ" 'quit-window
+                                    "gd" (neotree-make-executor
+                                          :dir-fn 'neo-open-dired)
+                                    "gD" (neotree-make-executor
+                                          :dir-fn 'neo-open-dired)
+                                    "go" (neotree-make-executor
+                                          :file-fn 'neo-open-file
+                                          :dir-fn 'neo-open-dir)
+                                    "gO" 'neotree-quick-look
+                                    "gr" 'neotree-refresh
+                                    "H" 'neotree-hidden-file-toggle
+                                    "gh" 'neotree-hidden-file-toggle
+                                    (kbd "C-k") 'neotree-select-up-node
+                                    "gk" 'neotree-select-up-node
+                                    "[[" 'neotree-select-up-node
+                                    (kbd "C-j") 'neotree-select-down-node
+                                    "gj" 'neotree-select-down-node
+                                    "]]" 'neotree-select-down-node
+                                    "gv" 'neotree-open-file-in-system-application
+                                    "c" 'neotree-create-node
+                                    "y" 'neotree-copy-node
+                                    ;; "r" 'neotree-rename-node
+                                    "R" 'neotree-change-root
+                                    "d" 'neotree-delete-node
+                                    "J" 'neotree-dir
+                                    "+" 'neotree-stretch-toggle
+                                    "=" 'neotree-stretch-toggle
+                                    "ge" 'neotree-enter
+                                    "j" 'neotree-next-line
+                                    "k" 'neotree-previous-line
 
-  ;;;;evil                                  ;; Unchanged keybings.
-  ;;;;evil                                  "a" (neotree-make-executor
-  ;;;;evil                                       :file-fn 'neo-open-file-ace-window)
-  ;;;;evil                                  "|" (neotree-make-executor
-  ;;;;evil                                       :file-fn 'neo-open-file-vertical-split)
-  ;;;;evil                                  "-" (neotree-make-executor
-  ;;;;evil                                       :file-fn 'neo-open-file-horizontal-split)
-  ;;;;evil                                  "S" 'neotree-select-previous-sibling-node
-  ;;;;evil                                  "s" 'neotree-select-next-sibling-node
-  ;;;;evil                                  (kbd "C-c C-c") 'neotree-change-root
-  ;;;;evil                                  (kbd "C-x 1") 'neotree-empty-fn
-  ;;;;evil                                  (kbd "C-x 2") 'neotree-empty-fn
-  ;;;;evil                                  (kbd "C-x 3") 'neotree-empty-fn
-  ;;;;evil                                  (kbd "C-x C-f") 'find-file-other-window
-  ;;;;evil                                  (kbd "C-c C-f") 'find-file-other-window
-  ;;;;evil                                  "gi" (lambda ()
-  ;;;;evil                                         (interactive)
-  ;;;;evil                                         (if (string= pe/get-directory-tree-external-command
-  ;;;;evil                                                      nt/gitignore-files-cmd)
-  ;;;;evil                                             (progn (setq pe/get-directory-tree-external-command
-  ;;;;evil                                                          nt/all-files-cmd))
-  ;;;;evil                                           (progn (setq pe/get-directory-tree-external-command
-  ;;;;evil                                                        nt/gitignore-files-cmd)))
-  ;;;;evil                                         (nt/refresh))
-  ;;;;evil                                  "I" (lambda ()
-  ;;;;evil                                        (interactive)
-  ;;;;evil                                        (if pe/omit-enabled
-  ;;;;evil                                            (progn (setq pe/directory-tree-function
-  ;;;;evil                                                         'pe/get-directory-tree-async)
-  ;;;;evil                                                   (pe/toggle-omit nil))
-  ;;;;evil                                          (progn (setq pe/directory-tree-function
-  ;;;;evil                                                       'pe/get-directory-tree-external)
-  ;;;;evil                                                 (pe/toggle-omit t)))))
-  ;;;;evil                                neotree-mode-map))
+                                    ;; Unchanged keybings.
+                                    "a" (neotree-make-executor
+                                         :file-fn 'neo-open-file-ace-window)
+                                    "|" (neotree-make-executor
+                                         :file-fn 'neo-open-file-vertical-split)
+                                    "-" (neotree-make-executor
+                                         :file-fn 'neo-open-file-horizontal-split)
+                                    "S" 'neotree-select-previous-sibling-node
+                                    "s" 'neotree-select-next-sibling-node
+                                    (kbd "C-c C-c") 'neotree-change-root
+                                    (kbd "C-x 1") 'neotree-empty-fn
+                                    (kbd "C-x 2") 'neotree-empty-fn
+                                    (kbd "C-x 3") 'neotree-empty-fn
+                                    (kbd "C-x C-f") 'find-file-other-window
+                                    (kbd "C-c C-f") 'find-file-other-window
+                                    "gi" (lambda ()
+                                           (interactive)
+                                           (if (string= pe/get-directory-tree-external-command
+                                                        nt/gitignore-files-cmd)
+                                               (progn (setq pe/get-directory-tree-external-command
+                                                            nt/all-files-cmd))
+                                             (progn (setq pe/get-directory-tree-external-command
+                                                          nt/gitignore-files-cmd)))
+                                           (nt/refresh))
+                                    "I" (lambda ()
+                                          (interactive)
+                                          (if pe/omit-enabled
+                                              (progn (setq pe/directory-tree-function
+                                                           'pe/get-directory-tree-async)
+                                                     (pe/toggle-omit nil))
+                                            (progn (setq pe/directory-tree-function
+                                                         'pe/get-directory-tree-external)
+                                                   (pe/toggle-omit t)))))
+                                  neotree-mode-map))
                       ))
     :config
     ;; 'classic, 'nerd, 'ascii, 'arrow
@@ -3013,7 +2987,7 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
   ;;  '(neo-dir-link-face ((t (:foreground "deep sky blue" :slant normal :weight bold :height 120 :family "Fantasque Sans Mono"))))
   ;;  '(neo-file-link-face ((t (:foreground "White" :weight normal :height 120 :family "Fantasque Sans Mono")))))
 
-   (defun text-scale-twice ()(interactive)(progn(text-scale-adjust 0)(text-scale-decrease 2)))
+  (defun text-scale-twice ()(interactive)(progn(text-scale-adjust 0)(text-scale-decrease 2)))
   ;; (add-hook 'neo-after-create-hook (lambda (_)(call-interactively 'text-scale-twice)))
 #+END_SRC
 
@@ -4835,62 +4809,62 @@ https://github.com/astahlman/ob-async
 
 ** keybindings
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil;; Great evil org mode keyboard shortcuts cribbed from cofi
-  ;;;;evil(evil-define-key 'normal org-mode-map
-  ;;;;evil  (kbd "RET") 'org-open-at-point
-  ;;;;evil  "za"        'org-cycle
-  ;;;;evil  "zA"        'org-shifttab
-  ;;;;evil  "zm"        'hide-body
-  ;;;;evil  "zr"        'show-all
-  ;;;;evil  "zo"        'show-subtree
-  ;;;;evil  "zO"        'show-all
-  ;;;;evil  "zc"        'hide-subtree
-  ;;;;evil  "zC"        'hide-all
-  ;;;;evil  (kbd "M-h") 'org-metaleft
-  ;;;;evil  (kbd "M-j") 'org-shiftleft
-  ;;;;evil  (kbd "M-k") 'org-shiftright
-  ;;;;evil  (kbd "M-l") 'org-metaright
-  ;;;;evil  (kbd "M-H") 'org-metaleft
-  ;;;;evil  (kbd "M-J") 'org-metadown
-  ;;;;evil  (kbd "M-K") 'org-metaup
-  ;;;;evil  (kbd "M-L") 'org-metaright)
+  ;; Great evil org mode keyboard shortcuts cribbed from cofi
+  (evil-define-key 'normal org-mode-map
+    (kbd "RET") 'org-open-at-point
+    "za"        'org-cycle
+    "zA"        'org-shifttab
+    "zm"        'hide-body
+    "zr"        'show-all
+    "zo"        'show-subtree
+    "zO"        'show-all
+    "zc"        'hide-subtree
+    "zC"        'hide-all
+    (kbd "M-h") 'org-metaleft
+    (kbd "M-j") 'org-shiftleft
+    (kbd "M-k") 'org-shiftright
+    (kbd "M-l") 'org-metaright
+    (kbd "M-H") 'org-metaleft
+    (kbd "M-J") 'org-metadown
+    (kbd "M-K") 'org-metaup
+    (kbd "M-L") 'org-metaright)
 
-  ;;;;evil(evil-define-key 'normal orgstruct-mode-map
-  ;;;;evil  (kbd "RET") 'org-open-at-point
-  ;;;;evil  "za"        'org-cycle
-  ;;;;evil  "zA"        'org-shifttab
-  ;;;;evil  "zm"        'hide-body
-  ;;;;evil  "zr"        'show-all
-  ;;;;evil  "zo"        'show-subtree
-  ;;;;evil  "zO"        'show-all
-  ;;;;evil  "zc"        'hide-subtree
-  ;;;;evil  "zC"        'hide-all
-  ;;;;evil  (kbd "M-h") 'org-metaleft
-  ;;;;evil  (kbd "M-j") 'org-shiftleft
-  ;;;;evil  (kbd "M-k") 'org-shiftright
-  ;;;;evil  (kbd "M-l") 'org-metaright
-  ;;;;evil  (kbd "M-H") 'org-metaleft
-  ;;;;evil  (kbd "M-J") 'org-metadown
-  ;;;;evil  (kbd "M-K") 'org-metaup
-  ;;;;evil  (kbd "M-L") 'org-metaright)
+  (evil-define-key 'normal orgstruct-mode-map
+    (kbd "RET") 'org-open-at-point
+    "za"        'org-cycle
+    "zA"        'org-shifttab
+    "zm"        'hide-body
+    "zr"        'show-all
+    "zo"        'show-subtree
+    "zO"        'show-all
+    "zc"        'hide-subtree
+    "zC"        'hide-all
+    (kbd "M-h") 'org-metaleft
+    (kbd "M-j") 'org-shiftleft
+    (kbd "M-k") 'org-shiftright
+    (kbd "M-l") 'org-metaright
+    (kbd "M-H") 'org-metaleft
+    (kbd "M-J") 'org-metadown
+    (kbd "M-K") 'org-metaup
+    (kbd "M-L") 'org-metaright)
 
-  ;;;;evil(evil-define-key 'insert org-mode-map
-  ;;;;evil  (kbd "M-h") 'org-metaleft
-  ;;;;evil  (kbd "M-j") 'org-shiftleft
-  ;;;;evil  (kbd "M-k") 'org-shiftright
-  ;;;;evil  (kbd "M-l") 'org-metaright
-  ;;;;evil  (kbd "M-H") 'org-metaleft
-  ;;;;evil  (kbd "M-J") 'org-metadown
-  ;;;;evil  (kbd "M-K") 'org-metaup
-  ;;;;evil  (kbd "M-L") 'org-metaright)
+  (evil-define-key 'insert org-mode-map
+    (kbd "M-h") 'org-metaleft
+    (kbd "M-j") 'org-shiftleft
+    (kbd "M-k") 'org-shiftright
+    (kbd "M-l") 'org-metaright
+    (kbd "M-H") 'org-metaleft
+    (kbd "M-J") 'org-metadown
+    (kbd "M-K") 'org-metaup
+    (kbd "M-L") 'org-metaright)
 
-  ;;;;evil(evil-define-key 'insert orgstruct-mode-map
-  ;;;;evil  (kbd "M-j") 'org-shiftleft
-  ;;;;evil  (kbd "M-k") 'org-shiftright
-  ;;;;evil  (kbd "M-H") 'org-metaleft
-  ;;;;evil  (kbd "M-J") 'org-metadown
-  ;;;;evil  (kbd "M-K") 'org-metaup
-  ;;;;evil  (kbd "M-L") 'org-metaright)
+  (evil-define-key 'insert orgstruct-mode-map
+    (kbd "M-j") 'org-shiftleft
+    (kbd "M-k") 'org-shiftright
+    (kbd "M-H") 'org-metaleft
+    (kbd "M-J") 'org-metadown
+    (kbd "M-K") 'org-metaup
+    (kbd "M-L") 'org-metaright)
 
   (my-major-mode-leader-def
     :keymaps 'org-mode-map
@@ -5133,38 +5107,38 @@ https://github.com/astahlman/ob-async
     ("g" org-goto "goto" :exit t))
 #+END_SRC
 
-*** COMMENT evil-org
+*** evil-org
 *About:* org-mode 的 evil 按键扩展
 @see - https://github.com/Somelauw/evil-org-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package evil-org
-  ;;;;evil   :defer t
-  ;;;;evil   :after (org evil)
-  ;;;;evil   :hook
-  ;;;;evil   (org-mode . evil-org-mode)
-  ;;;;evil   (evil-org-mode . (lambda ()
-  ;;;;evil                      (evil-org-set-key-theme '(operators textobjects table))))
-  ;;;;evil   :config
-  ;;;;evil   ;; diable o/O special handling for items
-  ;;;;evil   (setq evil-org-special-o/O nil)
-  ;;;;evil 
-  ;;;;evil   (require 'evil-org-agenda)
-  ;;;;evil   (evil-org-agenda-set-keys))
+  (use-package evil-org
+    :defer t
+    :after (org evil)
+    :hook
+    (org-mode . evil-org-mode)
+    (evil-org-mode . (lambda ()
+                       (evil-org-set-key-theme '(operators textobjects table))))
+    :config
+    ;; diable o/O special handling for items
+    (setq evil-org-special-o/O nil)
+  
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
 #+END_SRC
 
-*** COMMENT org-evil
+*** org-evil
 *About:* 这个和上面的 evil-org-mode 是相同功能的两个
 @see - https://github.com/GuiltyDolphin/org-evil
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;;;;evil (use-package org-evil
-  ;;;;evil   :defer t
-  ;;;;evil   :after (org evil)
-  ;;;;evil   :config
-  ;;;;evil   ;; "gh" goes up a level, and is defined by org-evil-mode.
-  ;;;;evil   ;; "gH" goes to the top level, and is defined by org-evil-mode.
-  ;;;;evil   (evil-define-key 'normal org-mode-map (kbd "gl") 'air-org-goto-first-child)
-  ;;;;evil   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "@" 'org-refile)
-  ;;;;evil   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
+  (use-package org-evil
+    :defer t
+    :after (org evil)
+    :config
+    ;; "gh" goes up a level, and is defined by org-evil-mode.
+    ;; "gH" goes to the top level, and is defined by org-evil-mode.
+    (evil-define-key 'normal org-mode-map (kbd "gl") 'air-org-goto-first-child)
+    (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "@" 'org-refile)
+    (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
 #+END_SRC
 
 ** COMMENT org-dashboard
@@ -5258,8 +5232,8 @@ Visually summarize progress
           magit-diff-refine-hunk t        ; highlight word/letter changes in hunk diffs
           magit-save-some-buffers nil)    ; don't attempt to save unsaved buffers
     (diminish 'magit-auto-revert-mode "")
-  ;;;;evil  (when (featurep 'evil)
-  ;;;;evil    (setq evil-emacs-state-modes (delq 'magit-status-mode evil-emacs-state-modes)))
+   (when (featurep 'evil)
+     (setq evil-emacs-state-modes (delq 'magit-status-mode evil-emacs-state-modes)))
     )
 #+END_SRC
 
@@ -5272,11 +5246,11 @@ Visually summarize progress
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package git-timemachine)
 
-  ;;;;evil(eval-after-load 'git-timemachine
-  ;;;;evil  '(progn
-  ;;;;evil     (evil-make-overriding-map git-timemachine-mode-map 'normal)
-  ;;;;evil     ;; force update evil keymaps after git-timemachine-mode loaded
-  ;;;;evil     (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
+  (eval-after-load 'git-timemachine
+    '(progn
+       (evil-make-overriding-map git-timemachine-mode-map 'normal)
+       ;; force update evil keymaps after git-timemachine-mode loaded
+       (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
 
   (defhydra hydra-git-timemachine ()
     "Git timemachine"
