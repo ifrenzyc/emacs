@@ -96,7 +96,7 @@ macOS switch meta key.
 
   ;; 不显示行号
   (setq linum-mode nil
-        global-linum-mode nil)
+       global-linum-mode nil)
 
   (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))        ; 取消菜单栏
   (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))        ; 取消工具栏
@@ -573,16 +573,26 @@ Unicode is an required aesthetic
     :delight (vi-tilde-fringe-mode))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle no
-;;  (use-package linum-relative
+** COMMENT linum
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package hlinum
+    :config
+    (hlinum-activate))
+
+  (use-package linum
+    :config
+    (setq linum-format " %3d ")
+    (global-linum-mode nil))
+
+  (use-package linum-relative
     ;; :init
     ;; https://github.com/coldnew/linum-relative/issues/7
     ;; (setq linum-relative-format "%3s ")
     ;; display current line instead of 0
     ;; (setq linum-relative-current-symbol "")
-;;    :config
-    ;; (setq linum-relative-current-symbol ">>")
-;;    (linum-relative-global-mode 1))
+    :config
+    (setq linum-relative-current-symbol ">>")
+    (linum-relative-global-mode))
 #+END_SRC
 
 ** icons
@@ -1074,6 +1084,7 @@ https://github.com/davidshepherd7/electric-operator
 - https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
 - https://dustinlacewell.github.io/emacs.d/#org1fab346
 - [[https://github.com/ejmr/DotEmacs/blob/master/init.el][DotEmacs/init.el at master · ejmr/DotEmacs · GitHub]] 这里面有很多 Hydra 配置可以参考
+- [[https://github.com/mrbig033/emacs/blob/master/modules/packages/misc/hydra/hydras.org][emacs/hydras.org at master · mrbig033/emacs · GitHub]] - [[https://www.reddit.com/r/emacs/comments/c29edh/does_anybody_have_any_more_real_cool_hydras_to][Does anybody have any (more) real cool Hydras to share?]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hydra
     :defer t
@@ -1232,6 +1243,8 @@ This allows me to easily start a * or # search from a visual selection.
   (use-package evil-anzu
     :after (evil anzu))
 #+END_SRC
+
+*** evil-multiedit
 
 *** COMMENT evil-number
 *About:* 
@@ -2464,6 +2477,12 @@ This is a package to perform text folding like in Vim. It has the following feat
 
 ** COMMENT ripgrep
 *About:* 
+
+** deadgrep
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package deadgrep
+    :bind (("C-c h" . deadgrep)))
+#+END_SRC
 
 ** anzu
 *About:* 文本替换，使用 =query-replace= 或者 =M-%= 命令。
