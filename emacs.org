@@ -735,19 +735,19 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
   ;;   (feebleline-mode 1))
 #+END_SRC
 
-*** hide-mode-line
+*** COMMENT hide-mode-line
 *About:* 隐藏 modeline
 - [[https://github.com/hlissner/emacs-hide-mode-line][GitHub - hlissner/emacs-hide-mode-line]]
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package hide-mode-line
-    :commands hide-mode-line-mode
-    :hook
-    ((completion-list-mode
-      magit-status-mode
-      neotree-mode) . hide-mode-line-mode)
-    :config
-    (with-current-buffer "*command-log*"
-      (hide-mode-line-mode)))
+#+BEGIN_SRC emacs-lisp :tangle no
+  ;; (use-package hide-mode-line
+  ;;   :commands hide-mode-line-mode
+  ;;   :hook
+  ;;   ((completion-list-mode
+  ;;     magit-status-mode
+  ;;     neotree-mode) . hide-mode-line-mode)
+  ;;   :config
+  ;;   (with-current-buffer "*command-log*"
+  ;;     (hide-mode-line-mode)))
 #+END_SRC
 
 ** COMMENT emojify
@@ -2088,6 +2088,9 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
   (use-package counsel
     :defer t
     :after (ivy)
+    :ensure-system-package
+    ((ag . the_silver_searcher)
+     (rg . ripgrep))
     :general
     ("C-x C-f" 'counsel-find-file
      "M-x"     'counsel-M-x
@@ -2475,8 +2478,11 @@ This is a package to perform text folding like in Vim. It has the following feat
           wgrep-auto-save-buffer t))
 #+END_SRC
 
-** COMMENT ripgrep
+** ripgrep
 *About:* 
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ripgrep :commands ripgrep-regexp)
+#+END_SRC
 
 ** deadgrep
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -4148,7 +4154,7 @@ e.g. =<s=
     :after org
     :hook (org-mode . org-bullets-mode)
     :config
-    ;; ◎ ⊛ ✪ ☯ ⊙ ➲ ● 🌑 ⬤ ⚉ ⸖ ͼ ͽ ○ ￮ ⚬ ⦾ ◦ ∙ ∘ ⚪ ◯ ⌾ ⎉ ⎊ ☉ ✿ ⚆ ⚇ ⚈ ⚝ ☼ ⚭ ⛒  ⛮ ⚫ ⌀  ⍟ ⎔
+    ;; ◎ ⊛ ✪ ☯ ⊙ ➲ ● 🌑 ⬤ ⚉ ⸖ ͼ ͽ ○ ￮ ⚬ ⦾ ◦ ∙ ∘ ⚪ ◯ ⌾ ⎉ ⎊ ☉ ✿ ☀ ⚆ ⚇ ⚈ ⚝ ☼ ⚭ ⛒  ⛮ ⚫ ⌀  ⍟ ⎔
     (setq org-bullets-bullet-list '("☀" "✪" "❂" "✸" "☼" "☉" "⊛" "◉" "◌")))
 #+END_SRC
 
@@ -6396,6 +6402,13 @@ Config for setting markdown mode and stuff
 
   (major-mode-hydra-bind markdown-mode "Quit"
         ("q" nil))
+#+END_SRC
+
+** dockerfile
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dockerfile-mode
+    :defer t
+    :mode ("Dockerfile\\'" . dockerfile-mode))
 #+END_SRC
 
 * Shell
