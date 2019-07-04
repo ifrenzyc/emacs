@@ -715,6 +715,14 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
     (winum-mode))
 #+END_SRC
 
+*** battery
+- [[https://github.com/lunaryorn/fancy-battery.el][GitHub - lunaryorn/fancy-battery.el: UNMAINTAINED! Display battery in Emacs M...]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package fancy-battery
+    :ensure t
+    :config (add-hook 'after-init-hook #'fancy-battery-mode))
+#+END_SRC
+
 *** COMMENT feebleline
 *About:* 隐藏 modeline
 - [[https://github.com/tautologyclub/feebleline][GitHub - tautologyclub/feebleline]]
