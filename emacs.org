@@ -2543,10 +2543,10 @@ This is a package to perform text folding like in Vim. It has the following feat
     ;; show human readable file sizes in dired
     ;; (setq dired-listing-switches "-aBhl")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
     :general
-    ("C-x C-j" 'direx:jump-to-directory
-     "z"       '(lambda () (interactive)
-                  (let ((fn (dired-get-file-for-visit)))
-                    (start-process "default-app" nil "open" fn)))))
+    ("C-x C-j" 'direx:jump-to-directory))
+     ;; "z"       '(lambda () (interactive)
+     ;;              (let ((fn (dired-get-file-for-visit)))
+     ;;                (start-process "default-app" nil "open" fn)))))
 #+END_SRC
 
 *** all-the-icons-dired
@@ -3462,6 +3462,15 @@ https://github.com/emacs-lsp/lsp-mode
     :defer 2
     :commands flyspell-mode
     :hook (text-mode . flyspell-mode))
+
+  (use-package flyspell-correct
+    :after flycheck
+    ;; :general
+    ;; (flyspell-mode-map "C-;" 'flyspell-correct-wrapper))
+    )
+
+  (use-package flyspell-correct-ivy
+    :after flyspell-correct)
 #+END_SRC
 
 ** flycheck
@@ -3489,14 +3498,6 @@ https://github.com/emacs-lsp/lsp-mode
                                ("p" flycheck-previous-error "previous")
                                ;; ("h" helm-flycheck "helm" :color blue)
                                ("q" nil "quit"))))
-
-  (use-package flyspell-correct
-    :after flycheck
-    :general
-    (flyspell-mode-map "C-;" 'flyspell-correct-wrapper))
-
-  (use-package flyspell-correct-ivy
-    :after flyspell-correct)
 #+END_SRC
 
 ** Info
@@ -3745,56 +3746,61 @@ https://github.com/syohex/emacs-zoom-window
 #+END_SRC
 
 * Functions
-** COMMENT Input Method
+** Input Method
 *About:* Emacs 下的中文输入法，支持全拼，双拼，五笔和仓颉，在线文档：http://tumashu.github.io/pyim
 - [[https://github.com/tumashu/pyim][GitHub - tumashu/pyim]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package pyim
-  ;;   :demand t
-  ;;   :defer t
-  ;;   :config
-  ;;   (setq default-input-method "pyim")
-  ;;   ;; 使用全拼
-  ;;   (setq pyim-default-scheme 'quanpin)
+  (use-package pyim
+    :demand t
+    :defer t
+    :config
+    ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+    (use-package pyim-basedict
+      :ensure nil
+      :config (pyim-basedict-enable))
+    (setq default-input-method "pyim")
+    ;; 使用全拼
+    (setq pyim-default-scheme 'quanpin)
 
-  ;;   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
-  ;;   ;; 我自己使用的中英文动态切换规则是：
-  ;;   ;; 1. 光标只有在注释里面时，才可以输入中文。
-  ;;   ;; 2. 光标前是汉字字符时，才能输入中文。
-  ;;   ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
-  ;;   (setq-default pyim-english-input-switch-functions
-  ;;                 '(pyim-probe-dynamic-english
-  ;;                   pyim-probe-isearch-mode
-  ;;                   pyim-probe-program-mode
-  ;;                   pyim-probe-org-structure-template))
+    ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+    ;; 我自己使用的中英文动态切换规则是：
+    ;; 1. 光标只有在注释里面时，才可以输入中文。
+    ;; 2. 光标前是汉字字符时，才能输入中文。
+    ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+    (setq-default pyim-english-input-switch-functions
+                  '(pyim-probe-dynamic-english
+                    pyim-probe-isearch-mode
+                    pyim-probe-program-mode
+                    pyim-probe-org-structure-template))
 
-  ;;   (setq-default pyim-punctuation-half-width-functions
-  ;;                 '(pyim-probe-punctuation-line-beginning
-  ;;                   pyim-probe-punctuation-after-punctuation))
+    (setq-default pyim-punctuation-half-width-functions
+                  '(pyim-probe-punctuation-line-beginning
+                    pyim-probe-punctuation-after-punctuation))
 
-  ;;   ;; 开启拼音搜索功能
-  ;;   (pyim-isearch-mode 1)
+    ;; 开启拼音搜索功能
+    (pyim-isearch-mode 1)
 
-  ;;   ;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
-  ;;   ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
-  ;;   ;; 手动安装 posframe 包。
-  ;;   ;; (setq pyim-page-tooltip 'pupup)
-  ;;   (setq pyim-page-tooltip 'posframe)
+    ;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
+    ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+    ;; 手动安装 posframe 包。
+    ;; (setq pyim-page-tooltip 'pupup)
+    (setq pyim-page-tooltip 'posframe)
 
-  ;;   ;; 选词框显示 5 个候选词
-  ;;   (setq pyim-page-length 8)
-  ;;   :bind
-  ;;   (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
-  ;;    ("C-;" . pyim-delete-word-from-personal-buffer)))
+    ;; 选词框显示 5 个候选词
+    (setq pyim-page-length 8)
+    :bind
+    (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
+     ;; ("C-;" . pyim-delete-word-from-personal-buffer)
+  ))
 #+END_SRC
 
 *** COMMENT pyim-basedict
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-  ;; (use-package pyim-basedict
-  ;;   :defer t
-  ;;   :after pyim
-  ;;   :config (pyim-basedict-enable))
+  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+  (use-package pyim-basedict
+    :defer t
+    :after pyim
+    :config (pyim-basedict-enable))
 #+END_SRC
 
 ** Buffer
@@ -4854,7 +4860,7 @@ https://github.com/astahlman/ob-async
     "zc"        'hide-subtree
     "zC"        'hide-all
     (kbd "M-h") 'org-metaleft
-    (kbd "M-j") 'org-shiftleft
+    ;; (kbd "M-j") 'org-shiftleft
     (kbd "M-k") 'org-shiftright
     (kbd "M-l") 'org-metaright
     (kbd "M-H") 'org-metaleft
@@ -4873,7 +4879,7 @@ https://github.com/astahlman/ob-async
     "zc"        'hide-subtree
     "zC"        'hide-all
     (kbd "M-h") 'org-metaleft
-    (kbd "M-j") 'org-shiftleft
+    ;; (kbd "M-j") 'org-shiftleft
     (kbd "M-k") 'org-shiftright
     (kbd "M-l") 'org-metaright
     (kbd "M-H") 'org-metaleft
@@ -4883,7 +4889,7 @@ https://github.com/astahlman/ob-async
 
   (evil-define-key 'insert org-mode-map
     (kbd "M-h") 'org-metaleft
-    (kbd "M-j") 'org-shiftleft
+    ;; (kbd "M-j") 'org-shiftleft
     (kbd "M-k") 'org-shiftright
     (kbd "M-l") 'org-metaright
     (kbd "M-H") 'org-metaleft
@@ -4892,7 +4898,7 @@ https://github.com/astahlman/ob-async
     (kbd "M-L") 'org-metaright)
 
   (evil-define-key 'insert orgstruct-mode-map
-    (kbd "M-j") 'org-shiftleft
+    ;; (kbd "M-j") 'org-shiftleft
     (kbd "M-k") 'org-shiftright
     (kbd "M-H") 'org-metaleft
     (kbd "M-J") 'org-metadown
