@@ -1,6 +1,6 @@
-;; -*- lexical-binding: t -*-
+;;;; init.el ---- -*- lexical-binding: t -*-
 
-;;; init.el --- Emacs Initialization File
+;; Emacs Initialization File
 
 ;;; Commentary:
 
@@ -40,8 +40,7 @@
 ;; avoid problems with files newer than their byte-compiled counterparts
 ;; it's better a lower startup than load an outdated and maybe bugged package
 (eval-and-compile
-  (setq package-enable-at-startup nil
-        load-prefer-newer t
+  (setq load-prefer-newer t
         package-user-dir "~/.emacs.d/elpa"
         package--init-file-ensured t
         use-package-compute-statistics t

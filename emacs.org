@@ -98,9 +98,9 @@ macOS switch meta key.
   (setq linum-mode nil
        global-linum-mode nil)
 
-  (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))        ; 取消菜单栏
-  (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))        ; 取消工具栏
-  (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))    ; 取消滚动栏
+  ;; (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))        ; 取消菜单栏
+  ;; (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))        ; 取消工具栏
+  ;; (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))    ; 取消滚动栏
 
   ;; 打开括号匹配显示模式
   (show-paren-mode t)
