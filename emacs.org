@@ -665,14 +665,15 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 
     ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
     ;; theme may have their own settings.
-    ;; (load-theme 'doom-one t)
-    (load-theme 'doom-solarized-light t)
+    (load-theme 'doom-one t)
+    ;; (load-theme 'doom-solarized-light t)
     :config
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
 
     ;; Enable custom neotree theme
     (doom-themes-neotree-config)    ; all-the-icons fonts must be installed!
+    (doom-themes-treemacs-config)    ; all-the-icons fonts must be installed!
 
     ;; Corrects (and improves) org-mode's native fontification.
     (doom-themes-org-config))
@@ -3087,9 +3088,10 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
   ;; "
 #+END_SRC
 
-** COMMENT treemacs
+** treemacs
 *About:* 
 @see - https://github.com/Alexander-Miller/treemacs
+- [[https://blog.jft.rocks/emacs/treemacs-icons.html][Using all-the-icons for Treemacs]] 
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; ;; A tree layout file explorer
   ;; (use-package treemacs
@@ -3177,6 +3179,128 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
   ;;   :bind (([M-f8] . treemacs-projectile)
   ;;          :map projectile-command-map
   ;;          ("h" . treemacs-projectile)))
+
+  (use-package treemacs
+    :ensure t
+    :defer t
+    :init
+    (with-eval-after-load 'winum
+      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    :config
+      (setq treemacs-collapse-dirs                 (if (treemacs--find-python3) 3 0)
+            treemacs-deferred-git-apply-delay      0.5
+            treemacs-display-in-side-window        t
+            treemacs-eldoc-display                 t
+            treemacs-file-event-delay              5000
+            treemacs-file-follow-delay             0.2
+            treemacs-follow-after-init             t
+            treemacs-git-command-pipe              ""
+            treemacs-goto-tag-strategy             'refetch-index
+            treemacs-indentation                   2
+            treemacs-indentation-string            " "
+            treemacs-is-never-other-window         nil
+            treemacs-max-git-entries               5000
+            treemacs-missing-project-action        'ask
+            treemacs-no-png-images                 nil
+            treemacs-no-delete-other-windows       t
+            treemacs-project-follow-cleanup        nil
+            treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+            treemacs-recenter-distance             0.1
+            treemacs-recenter-after-file-follow    nil
+            treemacs-recenter-after-tag-follow     nil
+            treemacs-recenter-after-project-jump   'always
+            treemacs-recenter-after-project-expand 'on-distance
+            treemacs-show-cursor                   nil
+            treemacs-show-hidden-files             t
+            treemacs-silent-filewatch              nil
+            treemacs-silent-refresh                nil
+            treemacs-sorting                       'alphabetic-desc
+            treemacs-space-between-root-nodes      t
+            treemacs-tag-follow-cleanup            t
+            treemacs-tag-follow-delay              1.5
+            treemacs-width                         35)
+
+      ;; The default width and height of the icons is 22 pixels. If you are
+      ;; using a Hi-DPI display, uncomment this to double the icon size.
+      ;;(treemacs-resize-icons 44)
+
+      (treemacs-follow-mode t)
+      (treemacs-filewatch-mode t)
+      (treemacs-fringe-indicator-mode t)
+      (pcase (cons (not (null (executable-find "git")))
+                   (not (null (treemacs--find-python3))))
+        (`(t . t)
+         (treemacs-git-mode 'deferred))
+        (`(t . _)
+         (treemacs-git-mode 'simple)))
+
+      ;; ;; Improve treemacs icons
+      ;; (with-eval-after-load 'treemacs
+      ;;   (with-eval-after-load 'all-the-icons
+      ;;     (let ((all-the-icons-default-adjust 0)
+      ;;           (tab-width 1))
+      ;;       ;; Root icon
+      ;;       (setq treemacs-icon-root-png
+      ;;             (concat (all-the-icons-octicon "repo" :height 0.8 :v-adjust -0.2)  " "))
+      ;;       ;; File icons
+      ;;       (setq treemacs-icon-open-png
+      ;;             (concat
+      ;;              (all-the-icons-octicon "chevron-down" :height 0.8 :v-adjust 0.1)
+      ;;              "\t"
+      ;;              (all-the-icons-octicon "file-directory" :v-adjust 0)
+      ;;              "\t")
+      ;;             treemacs-icon-closed-png
+      ;;             (concat
+      ;;              (all-the-icons-octicon "chevron-right" :height 0.8
+      ;;                                     :v-adjust 0.1 :face 'font-lock-doc-face)
+      ;;              "\t"
+      ;;              (all-the-icons-octicon "file-directory" :v-adjust 0 :face 'font-lock-doc-face)
+      ;;              "\t"))
+      ;;       ;; File type icons
+      ;;       (setq treemacs-icons-hash (make-hash-table :size 200 :test #'equal)
+      ;;             treemacs-icon-fallback (concat
+      ;;                                     "\t\t"
+      ;;                                     (all-the-icons-faicon "file-o" :face 'all-the-icons-dsilver
+      ;;                                                           :height 0.8 :v-adjust 0.0)
+      ;;                                     "\t")
+      ;;             treemacs-icon-text treemacs-icon-fallback)
+
+      ;;       (dolist (item all-the-icons-icon-alist)
+      ;;         (let* ((extension (car item))
+      ;;                (func (cadr item))
+      ;;                (args (append (list (caddr item)) '(:v-adjust -0.05) (cdddr item)))
+      ;;                (icon (apply func args))
+      ;;                (key (s-replace-all '(("^" . "") ("\\" . "") ("$" . "") ("." . "")) extension))
+      ;;                (value (concat "\t\t" icon "\t")))
+      ;;           (unless (ht-get treemacs-icons-hash (s-replace-regexp "\\?" "" key))
+      ;;             (ht-set! treemacs-icons-hash (s-replace-regexp "\\?" "" key) value))
+      ;;           (unless (ht-get treemacs-icons-hash (s-replace-regexp ".\\?" "" key))
+      ;;             (ht-set! treemacs-icons-hash (s-replace-regexp ".\\?" "" key) value)))))))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+  (use-package treemacs-evil
+    :after treemacs evil
+    :ensure t)
+
+  (use-package treemacs-projectile
+    :after treemacs projectile
+    :ensure t)
+
+  ;; (use-package treemacs-icons-dired
+  ;;   :after treemacs dired
+  ;;   :ensure t
+  ;;   :config (treemacs-icons-dired-mode))
+
+  (use-package treemacs-magit
+    :after treemacs magit
+    :ensure t)
 #+END_SRC
 
 * Completion
@@ -3397,10 +3521,15 @@ https://github.com/emacs-lsp/lsp-mode
                 )
     :hook (lsp-mode . lsp-ui-mode)
     :init
-    (setq lsp-ui-doc-enable nil
-          lsp-ui-doc-header nil
+    (setq lsp-ui-doc-enable t
+          lsp-ui-doc-header t
           lsp-ui-doc-include-signature t
-          lsp-ui-doc-position 'at-point)
+          lsp-ui-doc-border (face-foreground 'default)
+          ;; lsp-ui-doc-position 'top
+          lsp-ui-doc-position 'at-point
+          lsp-ui-sideline-enable nil
+          lsp-ui-sideline-ignore-duplicate t
+          lsp-ui-sideline-show-code-actions nil)
     (setq-default lsp-ui-doc-frame-parameters
                   '((left . -1)
                     (top . -1)
@@ -3674,7 +3803,7 @@ https://github.com/emacs-lsp/lsp-mode
           winum-ignored-buffers '(" *which-key*"))
     :general
     (winum-keymap
-      "M-0" 'winum-select-window-0-or-10
+      ;; "M-0" 'winum-select-window-0-or-10
       "M-1" 'winum-select-window-1
       "M-2" 'winum-select-window-2
       "M-3" 'winum-select-window-3
@@ -4481,6 +4610,14 @@ Archive subtrees under the same hierarchy as original in the archive files
            ((agenda)
             (tags-todo "personal")))
 
+            ;; - [[https://emacs.stackexchange.com/questions/16551/how-do-i-view-all-org-mode-todos-that-are-not-recurring-or-not-scheduled][org agenda - How do I view all org-mode TODOs that are not recurring, or not ...]]
+          ("cu" "Unscheduled TODO"
+           ((todo ""
+           ((org-agenda-overriding-header "\nUnscheduled TODO")
+                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled)))))
+           nil
+           nil)
+           
           ("u" "UDAL 安排给其他人的任务"
            ((agenda "" ((org-agenda-ndays 14)
                         (org-agenda-start-on-weekday nil)
@@ -4494,68 +4631,68 @@ Archive subtrees under the same hierarchy as original in the archive files
             (tags-todo "@work")))
 
           ("z" "Super view" (
-                                  (agenda "" ((org-agenda-span 'day)
-                                              (org-super-agenda-groups
-                                               '((:name "Today"
-                                                        :time-grid t
-                                                        :date today
-                                                        :todo "TODAY"
-                                                        :scheduled today
-                                                        :order 1
-                                                        )))))
-                                  (alltodo "" ((org-agenda-overriding-header "")
-                                               (org-super-agenda-groups
-                                                '((:name "Next to do"
-                                                         :todo "NEXT"
-                                                         :order 1)
-                                                  (:name "Important"
-                                                         :tag "Important"
-                                                         :priority "A"
-                                                         :order 6)
-                                                  (:name "Due Today"
-                                                         :deadline today
-                                                         :order 2)
-                                                  (:name "Due Soon"
-                                                         :deadline future
-                                                         :order 8)
-                                                  (:name "Overdue"
-                                                         :deadline past
-                                                         :order 7)
-                                                  (:name "Assignments"
-                                                         :tag "Assignment"
-                                                         :order 10)
-                                                  (:name "Issues"
-                                                         :tag "Issue"
-                                                         :order 12)
-                                                  (:name "Projects"
-                                                         :tag "Project"
-                                                         :order 14)
-                                                  (:name "Work"
-                                                         :tag "@work"
-                                                         :order 3)
-                                                  (:name "Emacs"
-                                                         :tag "EMACS"
-                                                         :order 13)
-                                                  (:name "macOS"
-                                                         :tag "macOS"
-                                                         :order 14)
-                                                  (:name "Research"
-                                                         :tag "Research"
-                                                         :order 15)
-                                                  (:name "To read"
-                                                         :tag "Read"
-                                                         :order 30)
-                                                  (:name "Waiting"
-                                                         :todo "WAITING"
-                                                         :order 20)
-                                                  (:name "trivial"
-                                                         :priority<= "C"
-                                                         :tag ("Trivial" "Unimportant")
-                                                         :todo ("SOMEDAY" )
-                                                         :order 90)
-                                                  (:discard (:tag ("Chore" "Routine" "Daily")))
-                                                  ))
-                                               )))
+                             (agenda "" ((org-agenda-span 'day)
+                                         (org-super-agenda-groups
+                                          '((:name "Today"
+                                                   :time-grid t
+                                                   :date today
+                                                   :todo "TODAY"
+                                                   :scheduled today
+                                                   :order 1
+                                                   )))))
+                             (alltodo "" ((org-agenda-overriding-header "")
+                                          (org-super-agenda-groups
+                                           '((:name "Next to do"
+                                                    :todo "NEXT"
+                                                    :order 1)
+                                             (:name "Important"
+                                                    :tag "Important"
+                                                    :priority "A"
+                                                    :order 6)
+                                             (:name "Due Today"
+                                                    :deadline today
+                                                    :order 2)
+                                             (:name "Due Soon"
+                                                    :deadline future
+                                                    :order 8)
+                                             (:name "Overdue"
+                                                    :deadline past
+                                                    :order 7)
+                                             (:name "Assignments"
+                                                    :tag "Assignment"
+                                                    :order 10)
+                                             (:name "Issues"
+                                                    :tag "Issue"
+                                                    :order 12)
+                                             (:name "Projects"
+                                                    :tag "Project"
+                                                    :order 14)
+                                             (:name "Work"
+                                                    :tag "@work"
+                                                    :order 3)
+                                             (:name "Emacs"
+                                                    :tag "EMACS"
+                                                    :order 13)
+                                             (:name "macOS"
+                                                    :tag "macOS"
+                                                    :order 14)
+                                             (:name "Research"
+                                                    :tag "Research"
+                                                    :order 15)
+                                             (:name "To read"
+                                                    :tag "Read"
+                                                    :order 30)
+                                             (:name "Waiting"
+                                                    :todo "WAITING"
+                                                    :order 20)
+                                             (:name "trivial"
+                                                    :priority<= "C"
+                                                    :tag ("Trivial" "Unimportant")
+                                                    :todo ("SOMEDAY" )
+                                                    :order 90)
+                                             (:discard (:tag ("Chore" "Routine" "Daily")))
+                                             ))
+                                          )))
            )
           ;; ("r" "Reading"
           ;;  ((tags-todo "CATEGORY=\"Reading\""
@@ -5631,8 +5768,7 @@ https://github.com/grafov/go-playground
 #+BEGIN_SRC emacs-lisp :tangle 
   (use-package lsp-go
     :defer t
-    :commands (lsp-go-enable)
-    :hook (go-mode . lsp-go-enable))
+    :hook (go-mode . lsp))
 #+END_SRC
 
 *** keybindings
@@ -5684,10 +5820,35 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
 *** Java LSP
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-java
-    :defer t
     :after lsp-mode
+    :init
+    (use-package request :defer t)
     :hook
-    (java-mode . lsp-java-enable))
+    (java-mode . lsp)
+    :config
+    (setq
+     lsp-java-server-install-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/server/")
+     lsp-java-workspace-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/workspace/")))
+#+END_SRC
+
+*** debug
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Debug
+  (use-package dap-mode
+    :diminish
+    ;; :bind (:map lsp-mode-map
+    ;;             ("<f6>" . dap-hydra))
+    :hook ((after-init . dap-mode)
+           (dap-mode . dap-ui-mode)
+
+           (python-mode . (lambda () (require 'dap-python)))
+           (ruby-mode . (lambda () (require 'dap-ruby)))
+           (go-mode . (lambda () (require 'dap-go)))
+           (java-mode . (lambda () (require 'dap-java)))
+           ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
+           (php-mode . (lambda () (require 'dap-php)))
+           (elixir-mode . (lambda () (require 'dap-elixir)))
+           ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
 #+END_SRC
 
 *** Gradle
@@ -5971,7 +6132,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
     :disabled t
     :after (lsp-mode rust-mode)
     :hook
-    (rust-mode . lsp-rust-enable))
+    (rust-mode . lsp))
 #+END_SRC
 
 *** COMMENT keybindings
@@ -6163,8 +6324,8 @@ Automatic chmod +x
     ("\\.vue\\'" . web-mode)
     :hook
     (js2-mode . lsp)
-    (web-mode . company-mode)
-    (web-mode . lsp-vue-enable))
+    (web-mode . lsp)
+    (web-mode . company-mode))
 
   ;; (use-package lsp-javascript-typescript
   ;;   :init
@@ -6199,7 +6360,7 @@ Automatic chmod +x
     :defer t
     :after (vue-mode lsp-mode)
     :hook
-    ((vue-mode . lsp-vue-enable)
+    ((vue-mode . lsp)
      (vue-mode . lsp-vue-mmm-enable))
     :config
     (setq vetur.validation.template t))
@@ -6599,6 +6760,17 @@ Config for setting markdown mode and stuff
     (remove-hook 'paradox--report-buffer-print 'paradox-after-execute-functions))
 
   (use-package use-package-ensure-system-package)
+#+END_SRC
+
+*** auto-package-update
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package auto-package-update
+    :config
+    (setq auto-package-update-interval 1) ;; in days
+    (setq auto-package-update-prompt-before-update t)
+    (setq auto-package-update-delete-old-versions t)
+    (setq auto-package-update-hide-results t)
+    (auto-package-update-maybe))
 #+END_SRC
 
 *** system-packages
@@ -7164,6 +7336,8 @@ https://ox-hugo.scripter.co/doc/custom-front-matter/
 
 ** Tramp
 *About:* 
+- [[http://www.kohn.com.cn/wordpress/?p=257][Emacs通过ssh远程编辑文件时指定端口号 | 藏经阁]]
+- [[https://emacs-china.org/t/emacs-terminal/3140/14][Emacs terminal 远程编辑文件方案 - Emacs-general - Emacs China]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package tramp
     :init

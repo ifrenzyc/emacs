@@ -24,3 +24,6 @@ var/
 .lsp-session-v1
 history
 network-security.data
+.dap-breakpoints
+.last-package-update-day
+eclipse.jdt.ls/
