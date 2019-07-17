@@ -2479,6 +2479,7 @@ This is a package to perform text folding like in Vim. It has the following feat
 ** wgrep
 *About:* 多文件查找替换
 - [[https://github.com/mhayashi1120/Emacs-wgrep][GitHub - mhayashi1120/Emacs-wgrep]]
+- [[https://www.reddit.com/r/emacs/comments/ce0557/emacs_editing_multiple_files_with_grep_wgrep/][Emacs! Editing Multiple Files with grep + wgrep]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package wgrep
     :commands (wgrep-change-to-wgrep-mode ivy-wgrep-change-to-wgrep-mode)
@@ -4304,7 +4305,7 @@ e.g. =<s=
 ** todo-keyword
 #+BEGIN_SRC emacs-lisp :tangle yes
     (setq org-todo-keywords
-          (quote ((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")
+          (quote ((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "DELEGATED(l)" "|" "DONE(d)" "DEFERRED(f)" "CANCELLED(c)")
                   (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "REPEAT(r)" "MAYBE(m)" "|" "DONE(d!/!)")
                   (sequence "PROJ(p)" "READ(r)" "FIXME(f)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
                   (sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)"))))
