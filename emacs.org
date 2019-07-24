@@ -77,6 +77,16 @@ macOS switch meta key.
   ;; (use-package straight)
 #+END_SRC
 
+** quelpa-use-package
+- [[https://github.com/quelpa/quelpa-use-package][GitHub - quelpa/quelpa-use-package: repo moved to framagit.org, please report...]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package quelpa :ensure t)
+  (use-package quelpa-use-package :ensure t)
+
+  ;; Handle the `use-package-always-ensure` setting
+  (quelpa-use-package-activate-advice)
+#+END_SRC
+
 ** System PATH
 *About:* 加载系统的环境变量
 - [[https://github.com/purcell/exec-path-from-shell][GitHub - purcell/exec-path-from-shell]]
@@ -665,8 +675,8 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 
     ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
     ;; theme may have their own settings.
-    (load-theme 'doom-one t)
-    ;; (load-theme 'doom-solarized-light t)
+    ;; (load-theme 'doom-one t)
+    (load-theme 'doom-solarized-light t)
     :config
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
@@ -2080,9 +2090,9 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
     :defer t     
     :commands (swiper swiper-all)
     :general
-    ("C-s" 'swiper-isearch
-    "C-r" 'swiper
-    "C-c u" 'swiper-all)
+    ("C-s" 'swiper
+     "C-r" 'swiper
+     "C-c u" 'swiper-all)
     (swiper-map
     "M-q" 'swiper-query-replace
     "C-l" 'swiper-recenter-top-bottom
@@ -3318,7 +3328,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     :hook 
     ((after-init . global-company-mode)
     (prog-mode . company-mode)
-	 (org-mode . company-mode))
+     (org-mode . company-mode))
     :bind (("C-." . company-complete)
            :map company-active-map
            ("<tab>" . company-complete)
@@ -3329,6 +3339,13 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
            )
     :config
     (global-company-mode t)
+    ;; Use the tab-and-go frontend.
+    ;; Allows TAB to select and complete at the same time.
+    ;; (company-tng-configure-default)
+    ;; (setq company-frontends
+    ;;       '(company-tng-frontend
+    ;;         company-pseudo-tooltip-frontend
+    ;;         company-echo-metadata-frontend))
     (setq company-minimum-prefix-length 3
           company-show-numbers t
           company-require-match nil
@@ -3344,12 +3361,12 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
           company-auto-complete t
           company-selection-wrap-around t
           company-transformers '(company-sort-by-occurrence))
-    
+
     (add-to-list 'company-backends '(company-capf company-dabbrev))
     (setq company-backends '(company-dabbrev (company-keywords company-dabbrev-code) company-files))
     (setq company-begin-commands '(self-insert-command org-self-insert-command c-electric-lt-gt c-electric-colon)) ; start autocompletion only after typing
     ;; (setq company-begin-commands '(self-insert-command)) 
-    
+
     ;; (define-key company-active-map [tab] 'company-select-next)
     ;; (define-key company-active-map (kbd "C-n") 'company-select-next)
     ;; (define-key company-active-map (kbd "C-p") 'company-select-previous)
@@ -3468,6 +3485,57 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 
 **** hydra-posframe
 - [[https://github.com/Ladicle/hydra-posframe][GitHub - Ladicle/hydra-posframe]] 
+** tabnine
+- [[https://github.com/TommyX12/company-tabnine][GitHub - TommyX12/company-tabnine: A company-mode backend for TabNine, the al...]]
+- [[https://tabnine.com/][TabNine]]
+- [[https://emacs-china.org/t/tabnine/9988/50][推荐入坑TabNine - Emacs-general - Emacs China]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company-tabnine
+    :config
+    (add-to-list 'company-backends #'company-tabnine)
+
+    ;; ;; 可以通过 company-transformers 实现 TabNine 和 lsp 同时用
+    ;; (defun company//sort-by-tabnine (candidates)
+    ;;   (if (or (functionp company-backend)
+    ;;           (not (and (listp company-backend) (memq 'company-tabnine company-backend))))
+    ;;       candidates
+    ;;     (let ((candidates-table (make-hash-table :test #'equal))
+    ;;           candidates-1
+    ;;           candidates-2)
+    ;;       (dolist (candidate candidates)
+    ;;         (if (eq (get-text-property 0 'company-backend candidate)
+    ;;                 'company-tabnine)
+    ;;             (unless (gethash candidate candidates-table)
+    ;;               (push candidate candidates-2))
+    ;;           (push candidate candidates-1)
+    ;;           (puthash candidate t candidates-table)))
+    ;;       (setq candidates-1 (nreverse candidates-1))
+    ;;       (setq candidates-2 (nreverse candidates-2))
+    ;;       (nconc (seq-take candidates-1 2)
+    ;;              (seq-take candidates-2 2)
+    ;;              (seq-drop candidates-1 2)
+    ;;              (seq-drop candidates-2 2)))))
+
+    ;; (add-to-list 'company-transformers 'company//sort-by-tabnine t)
+    ;; ;; `:separate`  使得不同 backend 分开排序
+    ;; (add-to-list 'company-backends '(company-lsp :with company-tabnine :separate))
+
+
+    ;; The free version of TabNine is good enough,
+    ;; and below code is recommended that TabNine not always
+    ;; prompt me to purchase a paid version in a large project.
+    (defadvice company-echo-show (around disable-tabnine-upgrade-message activate)
+      (let ((company-message-func (ad-get-arg 0)))
+        (when (and company-message-func
+                   (stringp (funcall company-message-func)))
+          (unless (string-match "The free version of TabNine only indexes up to" (funcall company-message-func))
+            ad-do-it))))
+    )
+#+END_SRC
+
+#+BEGIN_QUOTE
+  M-x company-tabnine-install-binary
+#+END_QUOTE
 
 ** company-quickhelp
 *About:* 
@@ -4085,7 +4153,7 @@ https://github.com/syohex/emacs-zoom-window
             ;; org-image-actual-width '(400))
 
       (setq org-log-done 'time       ; 记录时间
-            ;; org-log-done 'note    ; 记录提示信息
+            org-log-done 'note    ; 记录提示信息
             org-drawers (quote ("PROPERTIES" "LOGBOOK"))    ; separate drawers for clocking and logs
             org-clock-into-drawer t                         ; save clock data and state changes and notes in the LOGBOOK drawer
             org-clock-out-remove-zero-time-clocks t         ; removes clocked tasks with 0:00 duration
@@ -4395,6 +4463,9 @@ Configuration
   (setq ;; org-agenda-inhibit-startup t ;; faster with no hidden headings (agenda performance)
         org-agenda-show-future-repeats nil
         org-agenda-start-on-weekday nil
+        org-reverse-note-order t
+        org-log-note-state 'note
+        org-todo-log-states 'note
         org-agenda-skip-deadline-if-done t
         org-agenda-skip-scheduled-if-done t)
 
@@ -4413,6 +4484,20 @@ Configuration
   ;; don't give awarning colour to tasks with impending deadlines
   ;; if they are scheduled to be done
   (setq org-agenda-skip-deadline-prewarning-if-scheduled '(pre-scheduled))
+#+END_SRC
+
+- [[https://ivanmalison.github.io/dotfiles/][‎GitHub - IvanMalison/dotfiles: Configuration files for XMonad, Emacs, NixOS, Taffybar and more.]]
+- [[https://emacs.stackexchange.com/questions/90/how-to-sometimes-but-not-always-add-a-note-to-an-org-todo-state-change][org mode - How to sometimes but not always add a note to an Org TODO state ch...]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+(defun org-todo-force-notes ()
+  (interactive)
+  (let ((org-todo-log-states
+         (mapcar (lambda (state)
+                   (list state 'note 'time))
+                 (apply 'append org-todo-sets))))
+    (call-interactively 'org-todo)))
+
+(define-key org-mode-map (kbd "C-c C-t") 'org-todo-force-notes)
 #+END_SRC
 
 Agenda Files
@@ -4961,17 +5046,18 @@ documentation: https://mobileorg.github.io/documentation/
   (use-package ob-go)
 #+END_SRC
 
-*** COMMENT Async Babel
+*** Async Babel
 Evaluate org-src-block asynchronously.
 https://github.com/astahlman/ob-async
 如果要加这个，是不是要在 BEGIN_SRC 上加上关键字，还是默认全部都执行，对 emacs dotfile 的加载有没有影响，这些都要验证。
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package ob-async
-  ;;   :after org
-  ;;   :commands (ob-async-org-babel-execute-src-block)
-  ;;   :init
-  ;;   (with-eval-after-load 'org
-  ;;     (add-to-list 'org-ctrl-c-ctrl-c-hook 'ob-async-org-babel-execute-src-block)))
+  (use-package ob-async
+    :after org
+    :commands (ob-async-org-babel-execute-src-block)
+    ;; :init
+    ;; (with-eval-after-load 'org
+    ;;   (add-to-list 'org-ctrl-c-ctrl-c-hook 'ob-async-org-babel-execute-src-block))
+    )
 #+END_SRC
 
 ** COMMENT org-pomodoro
@@ -5883,6 +5969,16 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
     (setq py-smart-indentation t))
 #+END_SRC
 
+*** lsp-python-ms
+- [[https://vxlabs.com/2018/11/19/configuring-emacs-lsp-mode-and-microsofts-visual-studio-code-python-language-server/][Configuring Emacs, lsp-mode and Microsoft's Visual Studio Code Python languag...]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package lsp-python-ms
+    :ensure t
+    :hook (python-mode . (lambda ()
+                            (require 'lsp-python-ms)
+                            (lsp))))  ; or lsp-deferred
+#+END_SRC
+
 *** anaconda-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package anaconda-mode
@@ -6588,16 +6684,23 @@ Config for setting markdown mode and stuff
 #+END_SRC
 
 * Shell
-** Term
+- [[http://ergoemacs.org/emacs/emacs_shell_vs_term_vs_ansi-term_vs_eshell.html][Emacs: Difference between shell, term, eshell]]
+- [[https://www.masteringemacs.org/article/running-shells-in-emacs-overview][Running Shells in Emacs: An Overview]]
+- [[http://songkun.me/2018/12/10/2018-12-10-emacs-run-shell/][emacs | 在 emacs 中运行 shell | 随便写写]]
+** multi-term
 *About:* 
 参考这篇文章配置 multi-term：[[http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/][Using GNU Emacs as a terminal emulator]]
+- multi-term 下面几个烦人问题：[[https://blog.csdn.net/loveaborn/article/details/46854179][emacs使用multi-term作为terminal - 蒋国宝的IT技术博客 - CSDN博客]]
+- [[https://github.com/aborn/multi-term-plus][GitHub - aborn/multi-term-plus: Aha, some multi-term's extensions, and config...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq-default shell-file-name "/bin/zsh")
 
   (use-package multi-term
     :defer t
     :init
-    (setq multi-term-program-switches "--login")
+    (setq multi-term-program-switches "--login"
+          system-uses-terminfo nil     ; Use Emacs terminfo, not system terminfo, mac系统出现了4m
+          term-buffer-maximum-size 0)  ; 设置multi-term buffer的长度无限
     (when (require 'multi-term nil t)
       (global-set-key (kbd "<C-next>") 'multi-term-next)
       (global-set-key (kbd "<C-prior>") 'multi-term-prev)
@@ -6657,6 +6760,17 @@ Config for setting markdown mode and stuff
           eshell-prompt-function #'yc/eshell-prompt-function))
 #+END_SRC
 
+*** aweshell
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package aweshell
+    :after eshell
+    :quelpa (aweshell :fetcher github :repo "manateelazycat/aweshell")
+    :commands (aweshell-new aweshell-next aweshell-prev aweshell-toggle)
+    :config
+    (setq eshell-highlight-prompt nil
+          eshell-prompt-function 'epe-theme-dakrone))
+#+END_SRC
+
 ** better-shell
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -6680,12 +6794,13 @@ Config for setting markdown mode and stuff
     (setq shell-pop-window-position "bottom"
           shell-pop-autocd-to-working-dir nil
           shell-pop-window-size     30
-          shell-pop-term-shell      "eshell"
-          ;; shell-pop-term-shell      "/bin/zsh"
-          ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (multi-term-program)))
+          ;; shell-pop-term-shell      "eshell"
+          shell-pop-term-shell      "/bin/zsh"
+          multi-term-program        "/bin/zsh"
+          shell-pop-shell-type '("term" "*terminal*" (lambda () (multi-term-program)))
           ;; shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
           ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/fish" "*ansi-terminal*")))
-          shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
+          ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
           ;; shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
           shell-pop-full-span       t)
     :config
@@ -6704,7 +6819,91 @@ Config for setting markdown mode and stuff
                                   (delete-window)))))))
 #+END_SRC
 
-** COMMENT aweshell
+** vterm
+You need to have =libvterm= installed in your system.
+
+On macOS:
+#+BEGIN_SRC sh
+  brew install libvterm
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (add-to-list 'load-path (expand-file-name "lisp/emacs-libvterm" user-emacs-directory))
+  ;; (require 'vterm)
+
+  (use-package vterm
+    :load-path "lisp/emacs-libvterm"
+    :config
+    (when (featurep 'evil)
+      (add-hook 'vterm-mode-hook
+                (lambda ()
+                  ;; (setq-local evil-insert-state-cursor 'box)
+                  ;; (evil-insert-state)
+                  (evil-set-initial-state 'vterm-mode 'insert)
+                  ))
+      (define-key vterm-mode-map [return]                      #'vterm-send-return)
+
+      (setq vterm-keymap-exceptions nil)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-e")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-f")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-a")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-v")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-b")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-w")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-u")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-n")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-m")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-p")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-j")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-k")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-r")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-t")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-g")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-c")      #'vterm--self-insert)
+      (evil-define-key 'insert vterm-mode-map (kbd "C-SPC")    #'vterm--self-insert)
+      (evil-define-key 'normal vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+      (evil-define-key 'normal vterm-mode-map (kbd ",c")       #'multi-libvterm)
+      (evil-define-key 'normal vterm-mode-map (kbd ",n")       #'multi-libvterm-next)
+      (evil-define-key 'normal vterm-mode-map (kbd ",p")       #'multi-libvterm-prev)
+      (evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
+      (evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
+      (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package vterm-toggle
+    :after vterm
+    :quelpa (vterm-toggle :fetcher github :repo "jixiuf/vterm-toggle")
+    :commands (vterm-toggle vterm-toggle-cd vterm)
+    :config
+    ;; show vterm buffer in bottom side
+    (setq vterm-toggle-fullscreen-p nil)
+    (add-to-list 'display-buffer-alist
+                 '("^v?term.*"
+                   (display-buffer-reuse-window display-buffer-at-bottom)
+                   ;;(display-buffer-reuse-window display-buffer-in-direction)
+                   ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                   ;;(direction . bottom)
+                   ;;(dedicated . t) ;dedicated is supported in emacs27
+                   (reusable-frames . visible)
+                   (window-height . 0.3)))
+                   
+    ;; Switch to next vterm buffer
+    (define-key vterm-mode-map (kbd "s-n")   'vterm-toggle-forward)
+    ;; Switch to previous vterm buffer
+    (define-key vterm-mode-map (kbd "s-p")   'vterm-toggle-backward)
+    )
+#+END_SRC
+
+- [[https://github.com/suonlight/multi-libvterm][GitHub - suonlight/multi-libvterm: Similiar to multi-term but for emacs-libvterm]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package multi-libvterm
+    :after vterm
+    :load-path "lisp/multi-libvterm"
+    ;; :quelpa (multi-libvterm :fetcher github :repo "suonlight/multi-libvterm")
+    :commands (vterm-toggle vterm-toggle-cd vterm multi-libvterm multi-libvterm-projectile))
+#+END_SRC
 
 * Utility
 ** Scratch
@@ -6767,7 +6966,7 @@ Config for setting markdown mode and stuff
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package auto-package-update
     :config
-    (setq auto-package-update-interval 1) ;; in days
+    (setq auto-package-update-interval 7) ;; in days
     (setq auto-package-update-prompt-before-update t)
     (setq auto-package-update-delete-old-versions t)
     (setq auto-package-update-hide-results t)
@@ -7120,12 +7319,15 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
           easy-hugo-previewtime "300")
     :config
     (setq easy-hugo-default-ext ".org")
+    (when (featurep 'evil)
+       (setq evil-emacs-state-modes (delq 'easy-hugo-mode evil-emacs-state-modes)))
     :general ("C-c C-e" 'easy-hugo))
 #+END_SRC
 
 *** COMMENT ox-hugo
 *About:* 
 https://github.com/kaushalmodi/ox-hugo
+
 https://ox-hugo.scripter.co/doc/custom-front-matter/
 
 *** dokuwiki

@@ -4,3 +4,9 @@
 [submodule "lisp/manage-minor-mode"]
 	path = lisp/manage-minor-mode
 	url = git@github.com:ShingoFukuyama/manage-minor-mode.git
+[submodule "lisp/emacs-libvterm"]
+	path = lisp/emacs-libvterm
+	url = git@github.com:akermu/emacs-libvterm.git
+[submodule "lisp/multi-libvterm"]
+	path = lisp/multi-libvterm
+	url = git@github.com:suonlight/multi-libvterm.git

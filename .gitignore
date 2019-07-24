@@ -21,6 +21,7 @@ transient/
 tutorial/
 url/
 var/
+quelpa/
 .lsp-session-v1
 history
 network-security.data
