@@ -1882,7 +1882,12 @@ https://github.com/dustinlacewell/hera
       ("f" flycheck-mode "flycheck" :toggle t))
      "Org Mode"
      (("C-l" yc/org-toggle-link-display "link" :toggle t)
-      ("C-i" org-toggle-inline-images "image" :toggle t))))
+      ("C-i" org-toggle-inline-images "image" :toggle t))
+     "Dict"
+     (("yy" youdao-dictionary-search-at-point+)
+      ("yi" youdao-dictionary-search-at-point)
+      ("Y"  my-youdao-search-at-point))
+    ))
 #+END_SRC
 
 *** COMMENT hydra-helm
@@ -3948,10 +3953,24 @@ https://github.com/syohex/emacs-zoom-window
 *About:* Emacs 下的中文输入法，支持全拼，双拼，五笔和仓颉，在线文档：http://tumashu.github.io/pyim
 - [[https://github.com/tumashu/pyim][GitHub - tumashu/pyim]]
 - [[https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html][在Mac版的Emacs中使用RIME输入法]] - ([[https://emacs-china.org/t/mac-emacs-rime/10063/11][Emacs China]])
+- [[https://gitlab.com/liberime/liberime][liberime / liberime · GitLab]]  
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package liberime-config
+  ;;   :quelpa (liberime-config
+  ;;            :fetcher git
+  ;;            :url "https://gitlab.com/liberime/liberime"
+  ;;            :files ("CMakeLists.txt" "Makefile" "src" "liberime-config.el"))
+  ;;   :init
+  ;;   (add-hook 'after-liberime-load-hook
+  ;;             (lambda ()
+  ;;               (liberime-select-schema "luna_pinyin_simp"))))
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq load-path (cons (file-truename "~/.emacs.d/") load-path))
   (use-package pyim
     :demand t
+    ;; :after liberime-config
     :defer t
     :config
     (require 'liberime)  ; use RIME
@@ -7270,6 +7289,49 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
       ("N" pdf-history-forward :color red)
       ("l" image-forward-hscroll :color red)
       ("h" image-backward-hscroll :color red)))
+#+END_SRC
+
+** youdao-dictionary
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package youdao-dictionary
+    :functions (posframe-show posframe-hide)
+    :preface
+    (with-eval-after-load 'posframe
+      (defun youdao-dictionary-search-at-point-posframe ()
+        "Search word at point and display result with `posframe'."
+        (interactive)
+        (let ((word (youdao-dictionary--region-or-word)))
+          (if word
+              (progn
+                (with-current-buffer (get-buffer-create youdao-dictionary-buffer-name)
+                  (let ((inhibit-read-only t))
+                    (erase-buffer)
+                    (youdao-dictionary-mode)
+                    (insert (youdao-dictionary--format-result word))
+                    (goto-char (point-min))
+                    (set (make-local-variable 'youdao-dictionary-current-buffer-word) word)))
+                (posframe-show youdao-dictionary-buffer-name
+                               :position (point))
+                (unwind-protect
+                    (push (read-event) unread-command-events)
+                  (posframe-hide youdao-dictionary-buffer-name)))
+            (message "Nothing to look up")))))
+
+    (defun my-youdao-search-at-point ()
+      (interactive)
+      (if (display-graphic-p)
+          (if (fboundp 'youdao-dictionary-search-at-point-posframe)
+              (youdao-dictionary-search-at-point-posframe)
+            (youdao-dictionary-search-at-point-tooltip))))
+    :bind (("C-c y y" . youdao-dictionary-search-at-point+)
+           ("C-c y i" . youdao-dictionary-search-at-point)
+           ("C-c Y" . my-youdao-search-at-point))
+    :config
+    ;; Cache documents
+    (setq url-automatic-caching t)
+
+    ;; Enable Chinese word segmentation support (支持中文分词)
+    (setq youdao-dictionary-use-chinese-word-segmentation t))
 #+END_SRC
 
 ** 使用 PlantUML
