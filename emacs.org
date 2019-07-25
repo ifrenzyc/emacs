@@ -3947,18 +3947,26 @@ https://github.com/syohex/emacs-zoom-window
 ** Input Method
 *About:* Emacs 下的中文输入法，支持全拼，双拼，五笔和仓颉，在线文档：http://tumashu.github.io/pyim
 - [[https://github.com/tumashu/pyim][GitHub - tumashu/pyim]]
+- [[https://manateelazycat.github.io/emacs/2019/07/24/use-rime-in-emacs.html][在Mac版的Emacs中使用RIME输入法]] - ([[https://emacs-china.org/t/mac-emacs-rime/10063/11][Emacs China]])
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (setq load-path (cons (file-truename "~/.emacs.d/") load-path))
   (use-package pyim
     :demand t
     :defer t
     :config
+    (require 'liberime)  ; use RIME
+
     ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
     (use-package pyim-basedict
       :ensure nil
       :config (pyim-basedict-enable))
     (setq default-input-method "pyim")
     ;; 使用全拼
-    (setq pyim-default-scheme 'quanpin)
+    ;; (setq pyim-default-scheme 'quanpin)
+
+    (liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport" (file-truename "~/.emacs.d/pyim/rime/"))
+    (liberime-select-schema "luna_pinyin_simp")
+    (setq pyim-default-scheme 'rime-quanpin)
 
     ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
     ;; 我自己使用的中英文动态切换规则是：
@@ -3989,7 +3997,7 @@ https://github.com/syohex/emacs-zoom-window
     :bind
     (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
      ;; ("C-;" . pyim-delete-word-from-personal-buffer)
-  ))
+     ))
 #+END_SRC
 
 *** COMMENT pyim-basedict
