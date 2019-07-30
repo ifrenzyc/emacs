@@ -3054,7 +3054,7 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
            ^^↑^^         ^ ^        [_o_] open                [_C_] create          [_?_]   close hints
            ^ ^      _H_ ←   → _L_   [_'_] quick look          [_c_] copy
            ^^↓^^         ^ ^        [_-_] horizonatal split   [_d_] delete           
-           ^_j_^         ^ ^        [_|_] vertical split      [_r_] rename     
+           ^_j_^         ^ ^        [_|_] vertical split      [_r_] rename or move    
             ^ ^          ^ ^        ^ ^                     [_R_] change root
      --------------------------------------------------------------------------------
            "
@@ -3346,11 +3346,11 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     (global-company-mode t)
     ;; Use the tab-and-go frontend.
     ;; Allows TAB to select and complete at the same time.
-    ;; (company-tng-configure-default)
-    ;; (setq company-frontends
-    ;;       '(company-tng-frontend
-    ;;         company-pseudo-tooltip-frontend
-    ;;         company-echo-metadata-frontend))
+    (company-tng-configure-default)
+    (setq company-frontends
+          '(company-tng-frontend
+            company-pseudo-tooltip-frontend
+            company-echo-metadata-frontend))
     (setq company-minimum-prefix-length 3
           company-show-numbers t
           company-require-match nil
@@ -3499,42 +3499,41 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     :config
     (add-to-list 'company-backends #'company-tabnine)
 
-    ;; ;; 可以通过 company-transformers 实现 TabNine 和 lsp 同时用
-    ;; (defun company//sort-by-tabnine (candidates)
-    ;;   (if (or (functionp company-backend)
-    ;;           (not (and (listp company-backend) (memq 'company-tabnine company-backend))))
-    ;;       candidates
-    ;;     (let ((candidates-table (make-hash-table :test #'equal))
-    ;;           candidates-1
-    ;;           candidates-2)
-    ;;       (dolist (candidate candidates)
-    ;;         (if (eq (get-text-property 0 'company-backend candidate)
-    ;;                 'company-tabnine)
-    ;;             (unless (gethash candidate candidates-table)
-    ;;               (push candidate candidates-2))
-    ;;           (push candidate candidates-1)
-    ;;           (puthash candidate t candidates-table)))
-    ;;       (setq candidates-1 (nreverse candidates-1))
-    ;;       (setq candidates-2 (nreverse candidates-2))
-    ;;       (nconc (seq-take candidates-1 2)
-    ;;              (seq-take candidates-2 2)
-    ;;              (seq-drop candidates-1 2)
-    ;;              (seq-drop candidates-2 2)))))
+    ;; 可以通过 company-transformers 实现 TabNine 和 lsp 同时用
+    (defun company//sort-by-tabnine (candidates)
+      (if (or (functionp company-backend)
+              (not (and (listp company-backend) (memq 'company-tabnine company-backend))))
+          candidates
+        (let ((candidates-table (make-hash-table :test #'equal))
+              candidates-1
+              candidates-2)
+          (dolist (candidate candidates)
+            (if (eq (get-text-property 0 'company-backend candidate)
+                    'company-tabnine)
+                (unless (gethash candidate candidates-table)
+                  (push candidate candidates-2))
+              (push candidate candidates-1)
+              (puthash candidate t candidates-table)))
+          (setq candidates-1 (nreverse candidates-1))
+          (setq candidates-2 (nreverse candidates-2))
+          (nconc (seq-take candidates-1 2)
+                 (seq-take candidates-2 2)
+                 (seq-drop candidates-1 2)
+                 (seq-drop candidates-2 2)))))
 
-    ;; (add-to-list 'company-transformers 'company//sort-by-tabnine t)
-    ;; ;; `:separate`  使得不同 backend 分开排序
-    ;; (add-to-list 'company-backends '(company-lsp :with company-tabnine :separate))
-
+    (add-to-list 'company-transformers 'company//sort-by-tabnine t)
+    ;; `:separate`  使得不同 backend 分开排序
+    (add-to-list 'company-backends '(company-lsp :with company-tabnine :separate))
 
     ;; The free version of TabNine is good enough,
     ;; and below code is recommended that TabNine not always
     ;; prompt me to purchase a paid version in a large project.
-    (defadvice company-echo-show (around disable-tabnine-upgrade-message activate)
-      (let ((company-message-func (ad-get-arg 0)))
-        (when (and company-message-func
-                   (stringp (funcall company-message-func)))
-          (unless (string-match "The free version of TabNine only indexes up to" (funcall company-message-func))
-            ad-do-it))))
+    ;; (defadvice company-echo-show (around disable-tabnine-upgrade-message activate)
+    ;;   (let ((company-message-func (ad-get-arg 0)))
+    ;;     (when (and company-message-func
+    ;;                (stringp (funcall company-message-func)))
+    ;;       (unless (string-match "The free version of TabNine only indexes up to" (funcall company-message-func))
+    ;;         ad-do-it))))
     )
 #+END_SRC
 
@@ -3598,7 +3597,8 @@ https://github.com/emacs-lsp/lsp-mode
     (setq lsp-ui-doc-enable t
           lsp-ui-doc-header t
           lsp-ui-doc-include-signature t
-          lsp-ui-doc-border (face-foreground 'default)
+          ;; lsp-ui-doc-border (face-foreground 'default)
+          lsp-ui-doc-border "orange"
           ;; lsp-ui-doc-position 'top
           lsp-ui-doc-position 'at-point
           lsp-ui-sideline-enable nil
@@ -4394,7 +4394,8 @@ e.g. =<s=
     :hook (org-mode . org-bullets-mode)
     :config
     ;; ◎ ⊛ ✪ ☯ ⊙ ➲ ● 🌑 ⬤ ⚉ ⸖ ͼ ͽ ○ ￮ ⚬ ⦾ ◦ ∙ ∘ ⚪ ◯ ⌾ ⎉ ⎊ ☉ ✿ ☀ ⚆ ⚇ ⚈ ⚝ ☼ ⚭ ⛒  ⛮ ⚫ ⌀  ⍟ ⎔
-    (setq org-bullets-bullet-list '("☀" "✪" "❂" "✸" "☼" "☉" "⊛" "◉" "◌")))
+    (setq org-bullets-bullet-list '("☀" "✪" "❂" "✸" "☼" "☉" "⊛" "◉" "◌"))
+  )
 #+END_SRC
 
 ** todo-keyword
@@ -4533,19 +4534,19 @@ Agenda Files
 
   ;; http://cachestocaches.com/2016/9/my-workflow-org-agenda/#capture--refile
   (setq org-directory "~/Dropbox/itsycnotes")
-  (setq org-agenda-file-inbox (expand-file-name "inbox.org" org-directory))
-  (setq org-agenda-file-gtd (expand-file-name "gtd.org" org-directory))
-  (setq org-agenda-file-someday (expand-file-name "someday.org" org-directory))
-  (setq org-agenda-file-agenda (expand-file-name "agenda.org" org-directory))
+  (setq org-agenda-file-inbox (expand-file-name "0x00_GTD/00_inbox.org" org-directory))
+  (setq org-agenda-file-gtd (expand-file-name "0x00_GTD/01_gtd.org" org-directory))
+  (setq org-agenda-file-tickler (expand-file-name "0x00_GTD/02_tickler.org" org-directory))
+  (setq org-agenda-file-someday (expand-file-name "0x00_GTD/03_someday.org" org-directory))
+  (setq org-agenda-file-beorg (expand-file-name "0x00_GTD/04_beorg-refile.org" org-directory))
+  (setq org-agenda-file-agenda (expand-file-name "0x00_GTD/99_agenda.org" org-directory))
   (setq org-agenda-file-done (expand-file-name "done.org_archive" org-directory))
-  (setq org-agenda-file-beorg (expand-file-name "beorg-refile.org" org-directory))
-  (setq org-agenda-file-tickler (expand-file-name "tickler.org" org-directory))
   (setq org-agenda-file-journal (expand-file-name "journal.org" org-directory))
   (setq org-agenda-file-thoughts (expand-file-name "thoughts.org" org-directory))
   (setq org-agenda-file-reading (expand-file-name "reading.org" org-directory))
   (setq org-agenda-file-notes (expand-file-name "notes.org" org-directory))
   (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
-  (setq org-default-notes-file (expand-file-name "inbox.org" org-directory))
+  (setq org-default-notes-file (expand-file-name "0x00_GTD/00_inbox.org" org-directory))
   (setq org-agenda-files (list org-directory))
 
   (setq org-refile-targets '((org-agenda-file-inbox   :maxlevel . 1)
@@ -6710,6 +6711,28 @@ Config for setting markdown mode and stuff
     :mode ("Dockerfile\\'" . dockerfile-mode))
 #+END_SRC
 
+** k8s
+kubernetes
+- [[https://www.reddit.com/r/emacs/comments/ci7s53/conquering_kubernetes_with_emacs/][Conquering Kubernetes with Emacs]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package k8s-mode
+   :ensure t
+   :config
+   (setq k8s-search-documentation-browser-function 'browse-url-chrome)
+   :hook (k8s-mode . yas-minor-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package kubernetes
+    :ensure t
+    :commands (kubernetes-overview))
+
+  ;; If you want to pull in the Evil compatibility package.
+  (use-package kubernetes-evil
+    :ensure t
+    :after kubernetes)
+#+END_SRC
+
 * Shell
 - [[http://ergoemacs.org/emacs/emacs_shell_vs_term_vs_ansi-term_vs_eshell.html][Emacs: Difference between shell, term, eshell]]
 - [[https://www.masteringemacs.org/article/running-shells-in-emacs-overview][Running Shells in Emacs: An Overview]]
@@ -6728,11 +6751,11 @@ Config for setting markdown mode and stuff
     (setq multi-term-program-switches "--login"
           system-uses-terminfo nil     ; Use Emacs terminfo, not system terminfo, mac系统出现了4m
           term-buffer-maximum-size 0)  ; 设置multi-term buffer的长度无限
+    (setq multi-term-program "/bin/zsh")
     (when (require 'multi-term nil t)
       (global-set-key (kbd "<C-next>") 'multi-term-next)
       (global-set-key (kbd "<C-prior>") 'multi-term-prev)
-      (setq multi-term-buffer-name "term"
-            multi-term-program "/bin/zsh"))
+      (setq multi-term-buffer-name "term"))
     :config
     (when (require 'term nil t) ; only if term can be loaded..
       (setq term-bind-key-alist
@@ -6824,7 +6847,7 @@ Config for setting markdown mode and stuff
           ;; shell-pop-term-shell      "eshell"
           shell-pop-term-shell      "/bin/zsh"
           multi-term-program        "/bin/zsh"
-          shell-pop-shell-type '("term" "*terminal*" (lambda () (multi-term-program)))
+          shell-pop-shell-type '("term" "*terminal*" (lambda () (vterm)))
           ;; shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
           ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/fish" "*ansi-terminal*")))
           ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
@@ -7383,9 +7406,9 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
   (use-package easy-hugo
     :defer t
     :init
-    (setq easy-hugo-basedir "/Users/yangc/src/yangc/yangcblog/"
-          easy-hugo-url "https://ifrenzyc.github.io"
-          easy-hugo-root "/Users/yangc/src/yangc/yangcblog/"
+    (setq easy-hugo-basedir "/Users/yangc/src/yangc/itsyc.xyz/"
+          easy-hugo-url "http://itsyc.xyz"
+          easy-hugo-root "/Users/yangc/src/yangc/itsyc.xyz/"
           easy-hugo-previewtime "300")
     :config
     (setq easy-hugo-default-ext ".org")
@@ -7394,11 +7417,15 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     :general ("C-c C-e" 'easy-hugo))
 #+END_SRC
 
-*** COMMENT ox-hugo
+*** ox-hugo
 *About:* 
-https://github.com/kaushalmodi/ox-hugo
+- https://github.com/kaushalmodi/ox-hugo
+- https://ox-hugo.scripter.co/doc/custom-front-matter/
 
-https://ox-hugo.scripter.co/doc/custom-front-matter/
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ox-hugo
+    :after ox)
+#+END_SRC
 
 *** dokuwiki
 *About:* 
@@ -7639,11 +7666,27 @@ https://ox-hugo.scripter.co/doc/custom-front-matter/
     (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
 #+END_SRC
 
-*** COMMENT docker-tramp
+*** docker-tramp
 *About:* 
+#+BEGIN_SRC emacs-lisp :tangle yes :async
+  (use-package docker-tramp
+    :after tramp
+    :custom (docker-tramp-use-names t))
+#+END_SRC
 
 *** COMMENT vagrant-tramp
 *About:* 
+
+** Encrypt
+#+BEGIN_SRC sh
+  brew install gnupg
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'epa-file)
+  (custom-set-variables '(epg-gpg-program  "/usr/local/bin/gpg"))
+  (epa-file-enable)
+#+END_SRC
 
 ** COMMENT View Large Files
 *About:* 
