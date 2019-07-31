@@ -14,8 +14,6 @@
 - 关于 org-babel 的使用：[[http://orgmode.org/worg/org-contrib/babel/intro.html][Babel: Introduction]]
 - 关于 use-package 的使用：[[https://github.com/jwiegley/use-package][jwiegley/use-package - GitHub]]
 
-配置内容借鉴了优秀的配置参考：
-
 * Bootstrap
 ** Constants
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2019,6 +2017,11 @@ https://github.com/dustinlacewell/hera
 *About:* ivy 是一个 Emacs 的补全框架，类似的有 ido 和 helm。
 - [[https://github.com/abo-abo/swiper][GitHub - abo-abo/swiper]]
 关于 ivy 的使用：https://writequit.org/denver-emacs/presentations/2017-04-11-ivy.html#fnr.1
+- ido
+- everything
+- helm
+- ivy
+- snail
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy
     :defer t
@@ -3325,6 +3328,8 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 @see - https://company-mode.github.io/
 company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类似。
 这里需要参考[[http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text][这篇 StackExchange 文章]]，解决 company-mode 自动完成是转换为小写的问题，具体原因参考[[https://emacs-china.org/t/company/187][这里]]。
+- company
+- autocomplete
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
     :defer 1
@@ -3368,7 +3373,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
           company-transformers '(company-sort-by-occurrence))
 
     (add-to-list 'company-backends '(company-capf company-dabbrev))
-    (setq company-backends '(company-dabbrev (company-keywords company-dabbrev-code) company-files))
+    ;; (setq company-backends '(company-dabbrev (company-keywords company-dabbrev-code) company-files))
     (setq company-begin-commands '(self-insert-command org-self-insert-command c-electric-lt-gt c-electric-colon)) ; start autocompletion only after typing
     ;; (setq company-begin-commands '(self-insert-command)) 
 
@@ -3468,7 +3473,10 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 
   (use-package company-posframe
     :after (company posframe)
-    ;; :init
+    :init
+    (when IS-MAC
+      ;; don't use the native fullscreen crap
+      (setq-default ns-use-native-fullscreen nil))
     ;; (setq ns-use-native-fullscreen nil)
     ;; (setq ns-use-fullscreen-animation nil)
     :config
@@ -4547,7 +4555,7 @@ Agenda Files
   (setq org-agenda-file-notes (expand-file-name "notes.org" org-directory))
   (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
   (setq org-default-notes-file (expand-file-name "0x00_GTD/00_inbox.org" org-directory))
-  (setq org-agenda-files (list org-directory))
+  (setq org-agenda-files (list (concat org-directory "/0x00_GTD")))
 
   (setq org-refile-targets '((org-agenda-file-inbox   :maxlevel . 1)
                              (org-agenda-file-gtd     :maxlevel . 2)
