@@ -547,7 +547,7 @@ Unicode is an required aesthetic
 ** whitespace
 @see - [[https://dougie.io/coding/tabs-in-emacs/][The Ultimate Guide To Using Tabs For Indentation In Emacs]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Emacs uses double-spaces by default. Use single spaces instead:
+  ;; In Emac, sentences uses double-spaces by default. Use single spaces instead:
   (setq sentence-end-double-space nil)
 
   ;; Disable tabs and set prefered indentation width in spaces
@@ -2266,7 +2266,7 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 *** COMMENT helm-apropos
 
-** ido
+** COMMENT ido
 *About:* emacs 下的补全框架
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ido
@@ -2414,10 +2414,10 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
 
 ** Hippie Expand
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (global-set-key (kbd "M-/") 'hippie-expand)
+  (bind-key "M-/" 'hippie-expand)
   ;; (define-key evil-insert-state-map [remap evil-complete-previous] 'hippie-expand)
   (setq hippie-expand-try-functions-list
-        '(
+        '(yas-hippie-try-expand
           ;; Try to expand word "dynamically", searching the current buffer.
           try-expand-dabbrev
           ;; Try to expand word "dynamically", searching all other buffers.
@@ -2736,17 +2736,19 @@ Save a list of recent files visited. (open recent file with C-c f)
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package recentf
     :init
+    ;; Save a list of recent files visited. (open recent file with C-x f)
     (recentf-mode 1)
-    (setq recentf-max-saved-items 0) ;; just 50 is too recent
+    (setq recentf-max-saved-items 1000)   ; just 1000 is too recent
     :config
-    (defun ido-recentf-open ()
-      "Use `ido-completing-read' to \\[find-file] a recent file"
-      (interactive)
-      (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-          (message "Opening file...")
-        (message "Aborting")))
-    :general
-    ("C-c f" 'ido-recentf-open))
+    ;; (defun ido-recentf-open ()
+    ;;   "Use `ido-completing-read' to \\[find-file] a recent file"
+    ;;   (interactive)
+    ;;   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+    ;;       (message "Opening file...")
+    ;;     (message "Aborting")))
+    ;; :general
+    ;; ("C-c f" 'ido-recentf-open)
+    )
 #+END_SRC
 
 ** remind file position
@@ -4089,9 +4091,9 @@ https://github.com/syohex/emacs-zoom-window
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package undo-tree
-    :init
-    (global-undo-tree-mode)
+    :diminish undo-tree-mode
     :config
+    (global-undo-tree-mode)
     (setq undo-tree-auto-save-history t
           undo-tree-visualizer-diff t
           undo-tree-visualizer-timestamps t
@@ -5481,10 +5483,6 @@ Visually summarize progress
   (setq auto-save-mode nil)
 
   (setq backup-by-copying nil)
-
-  ;; Save a list of recent files visited. (open recent file with C-x f)
-  (recentf-mode 1)
-  (setq recentf-max-saved-items 1000)   ; just 20 is too recent
 #+END_SRC
 
 ** Git
@@ -5526,7 +5524,7 @@ Visually summarize progress
                              (set-fill-column 72)
                              (auto-fill-mode 1)))
     :config 
-    (setq magit-completing-read-function 'magit-ido-completing-read                        ; use ido to look for branches
+    (setq ;; magit-completing-read-function 'magit-ido-completing-read                        ; use ido to look for branches
           magit-default-tracking-name-function 'magit-default-tracking-name-branch-only    ; don't put "origin-" in front of new branch names by default
           magit-diff-refine-hunk t        ; highlight word/letter changes in hunk diffs
           magit-save-some-buffers nil)    ; don't attempt to save unsaved buffers
