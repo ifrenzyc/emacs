@@ -2382,8 +2382,13 @@ Emacs extension to increase selected region by semantic units.
 
 ** highlight and search current word
 *About:* 实现类似在 vs 编辑器中，按 =<F3>= 快速搜索光标当前所在的词。
+当光标移到某个词上面的时候自动高亮显示当前的词，当光标处在某个词上面时，高亮其他相同的词。 /效果如下:/
 
-GitHub: https://github.com/nschum/highlight-symbol.el
+[[file:./screenshots/highlight-symbol-at-point.gif]]
+
+- GitHub: https://github.com/nschum/highlight-symbol.el
+- [[https://emacs-china.org/t/package-symbol-overlay-symbol/7706][{推销package} symbol-overlay，同时高亮多个symbol - Emacs-general - Emacs China]] ([[https://github.com/wolray/symbol-overlay/][GitHub]])
+- [[https://github.com/gennad/auto-highlight-symbol][GitHub - gennad/auto-highlight-symbol]]
 | Key      | Function                  | Desc                 |
 |----------+---------------------------+----------------------|
 | =M-<F3>= | highlight-symbol-at-point | 高亮光标当前所在的词 |
@@ -2394,10 +2399,12 @@ GitHub: https://github.com/nschum/highlight-symbol.el
   (use-package highlight-symbol
     :diminish ""
     :hook 
-    (prog-mode . highlight-symbol-mode)
+    ((prog-mode . highlight-symbol-mode)
+    ;; (org-mode . highlight-symbol-mode)
+    )
     :bind (("M-<f3>" . highlight-symbol-at-point)
            ("<f3>" . highlight-symbol-next)
-           ("S-<f3>" . highlight-symbol-prev))
+           ("s-<f3>" . highlight-symbol-prev))
     :config
       (setq highlight-symbol-idle-delay 0.5)
       (highlight-symbol-mode t))
