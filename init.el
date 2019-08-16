@@ -32,9 +32,13 @@
 
   (setq package-archives
         '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
-          ("gnu"          . "https://elpa.gnu.org/packages/")
-          ("melpa"        . "https://melpa.org/packages/")
-          ("org"          . "https://orgmode.org/elpa/")))
+          ;; ("gnu"          . "https://elpa.gnu.org/packages/")
+          ("gnu"          . "https://elpa.emacs-china.org/gnu/")
+          ;; ("melpa"        . "https://melpa.org/packages/")
+          ("melpa"        . "https://elpa.emacs-china.org/melpa/")
+          ;; ("org"          . "https://orgmode.org/elpa/")
+          ("org"          . "http://elpa.emacs-china.org/org/")
+          ))
   )
 
 ;; avoid problems with files newer than their byte-compiled counterparts
