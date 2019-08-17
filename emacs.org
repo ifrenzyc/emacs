@@ -994,7 +994,7 @@ let there be a <leader>
 #+END_SRC
 
 *** evil-search-highlight-persist
-*About:* 显示 evil search 匹配的词，当光标处在某个词上面时，高亮其他相同的词
+*About:* 显示 evil search 匹配的词
 - [[https://github.com/juanjux/evil-search-highlight-persist][GitHub - juanjux/evil-search-highlight-persist]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package evil-search-highlight-persist
@@ -1045,6 +1045,7 @@ This allows me to easily start a * or # search from a visual selection.
 *** evil-surround
 *About:* 快速给选中的代码块加上引号或者括号，这个与 smartparens 有一些重复。
 @see - https://github.com/emacs-evil/evil-surround
+- [[https://github.com/casouri/isolate][GitHub - casouri/isolate: Surrounding magics, extensible]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package evil-surround
     :after evil
@@ -1821,7 +1822,7 @@ https://github.com/dustinlacewell/hera
 - everything
 - helm
 - ivy
-- snail
+- snails
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy
     :defer t
@@ -3579,6 +3580,17 @@ https://github.com/emacs-lsp/lsp-mode
                                ("q" nil "quit"))))
 #+END_SRC
 
+*** COMMENT flycheck-posframe
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck-posframe
+    :quelpa (flycheck-posframe :fetcher github :repo "alexmurray/flycheck-posframe")
+    :after (flycheck posframe)
+    :config (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
+    :custom-face (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
+    :custom-face (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
+    :custom-face (flycheck-posframe-border-face ((t (:background "DarkBlue")))))
+#+END_SRC
+
 ** Info
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package info
@@ -3891,6 +3903,7 @@ https://github.com/syohex/emacs-zoom-window
     (setq pyim-page-length 8)
     :bind
     (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
+    ("s-\\" . pyim-convert-string-at-point)
      ;; ("C-;" . pyim-delete-word-from-personal-buffer)
      ))
 #+END_SRC
@@ -3940,7 +3953,7 @@ https://github.com/syohex/emacs-zoom-window
     (ibuffer . (lambda ()
                  (ibuffer-projectile-set-filter-groups)
                  (unless (eq ibuffer-sorting-mode 'alphabetic)
-                   (ibuffer-do-sort-by-alphabetic)))))
+                   (ibuffer-do-sort-by-project-name)))))
 #+END_SRC
 
 ** autorevert
