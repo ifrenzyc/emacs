@@ -7721,6 +7721,25 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     :commands (command-log-mode))
 #+END_SRC
 
+** markdown、orgmode preview
+*grip-mode*
+
+markdown preview
+- [[https://github.com/seagle0128/grip-mode][GitHub - seagle0128/grip-mode]]
+#+BEGIN_SRC sh
+  pip install grip -g
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package grip-mode
+    :quelpa (grip-mode :fetcher github :repo "seagle0128/grip-mode")
+    :bind (:map markdown-mode-command-map
+                ("g" . grip-mode))
+    :config
+    ;; Path to the grip binary
+    (setq grip-mode-binary-path (executable-find "grip")))
+#+END_SRC
+
 ** Images
 *About:* 
 *TODO:* 这个感觉 image-mode 和 imagex-mode 都没加载到，导致 hydra 按键无法绑定
