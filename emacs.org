@@ -2076,31 +2076,31 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 ** COMMENT ido
 *About:* emacs 下的补全框架
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package ido
-    :defer 1
-    :init
-    (setq ido-use-faces nil)
-    :general
-    ("C-x C-f" 'ido-find-file)
-    :config
-    (ido-vertical-mode 1)
-    (ido-everywhere 1)
-    (ido-mode t)
-    (setq ido-vertical-define-keys 'C-n-and-C-p-only))
+  ;; (use-package ido
+  ;;   :defer 1
+  ;;   :init
+  ;;   (setq ido-use-faces nil)
+  ;;   :general
+  ;;   ("C-x C-f" 'ido-find-file)
+  ;;   :config
+  ;;   (ido-vertical-mode 1)
+  ;;   (ido-everywhere 1)
+  ;;   (ido-mode t)
+  ;;   (setq ido-vertical-define-keys 'C-n-and-C-p-only))
 
-  (use-package ido-vertical-mode :after ido)
+  ;; (use-package ido-vertical-mode :after ido)
 
-  (use-package flx-ido
-    :after ido
-    :config
-    (flx-ido-mode 1)
-    ;; disable ido faces to see flx highlights.
-    (setq ido-enable-flex-matching t))
+  ;; (use-package flx-ido
+  ;;   :after ido
+  ;;   :config
+  ;;   (flx-ido-mode 1)
+  ;;   ;; disable ido faces to see flx highlights.
+  ;;   (setq ido-enable-flex-matching t))
 
-  (use-package ido-completing-read+
-    :after ido
-    :config
-    (ido-ubiquitous-mode 1))
+  ;; (use-package ido-completing-read+
+  ;;   :after ido
+  ;;   :config
+  ;;   (ido-ubiquitous-mode 1))
 #+END_SRC
 
 ** expand-region
