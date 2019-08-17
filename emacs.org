@@ -4305,6 +4305,17 @@ e.g. =<s=
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Set default column view headings: Task Total-Time Time-Stamp
   (define-key global-map "\C-cc" 'org-capture)
+
+
+  ;; @see - https://github.com/bastibe/org-journal#journal-capture-template
+  (defun org-journal-find-location ()
+    ;; Open today's journal, but specify a non-nil prefix argument in order to
+    ;; inhibit inserting the heading; org-capture will insert the heading.
+    (org-journal-new-entry t)
+    ;; Position point on the journal's top-level heading so that org-capture
+    ;; will add the new entry as a child entry.
+    (goto-char (point-min)))
+
   ;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol
   ;; :empty-lines 2
   (setq org-capture-templates
@@ -4334,8 +4345,10 @@ e.g. =<s=
            "* Note %?\n%T")
           ("b" "Blog idea" entry (file+headline org-default-notes-file "Blog Topics:")
            "* %?\n%T" :prepend t)
-          ("j" "Journal" entry (file+datetree org-agenda-file-journal)
-           "* %?\nEntered on %U\n  %i\n  %a")
+          ;; ("j" "Journal" entry (file+datetree org-agenda-file-journal)
+          ;;  "* %?\nEntered on %U\n  %i\n  %a")
+          ("j" "Journal entry" entry (function org-journal-find-location)
+           "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")
           ("s" "Screencast" entry (file org-default-notes-file)
            "* %?\n%i\n")
           ("r" "RESPONED" entry  (file (concat org-directory "/refile.org"))
@@ -4401,7 +4414,7 @@ Configuration
                  (apply 'append org-todo-sets))))
     (call-interactively 'org-todo)))
 
-(define-key org-mode-map (kbd "C-c C-t") 'org-todo-force-notes)
+(define-key org-mode-map (kbd "C-c C-t") 'yc/org-todo-force-notes)
 #+END_SRC
 
 Agenda Files
