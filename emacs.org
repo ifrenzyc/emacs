@@ -611,17 +611,16 @@ Visually highlight the selected buffer.
   ;;   (setq dimmer-percent 0.40))
 #+END_SRC
 
-** COMMENT nyan-mode
+** nyan-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package nyan-mode
-  ;;   :after spaceline
-  ;;   :init
-  ;;   (progn
-  ;;     (nyan-mode)
-  ;;     (setq nyan-animate-nyancat t)
-  ;;     (setq nyan-wavy-trail t)
-  ;;     (setq nyan-bar-length 10))
-  ;;   :config (nyan-start-animation))
+  (use-package nyan-mode
+    :init
+    (nyan-mode)
+    (setq nyan-animate-nyancat t
+          nyan-wavy-trail t
+          ;; nyan-bar-length 40
+          )
+    :config (nyan-start-animation))
 #+END_SRC
 
 ** rainbow-delimiters
