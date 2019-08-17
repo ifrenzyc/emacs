@@ -388,9 +388,11 @@ Unicode is an required aesthetic
     ;; (setq linum-relative-format "%3s ")
     ;; display current line instead of 0
     ;; (setq linum-relative-current-symbol "")
+    :hook
+    (prog-mode . linum-relative-mode)
     :config
     (setq linum-relative-current-symbol ">>")
-    (linum-relative-global-mode))
+    (linum-relative-global-mode nil))
 #+END_SRC
 
 ** icons
