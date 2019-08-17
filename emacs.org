@@ -92,7 +92,7 @@ macOS switch meta key.
   (use-package exec-path-from-shell
     :if IS-MAC
     :config
-    (setq exec-path-from-shell-variables '("PATH" "GOPATH" "GOROOT" "PKG_CONFIG_PATH"))
+    (setq exec-path-from-shell-variables '("PATH" "PKG_CONFIG_PATH"))
     (exec-path-from-shell-initialize))
 #+END_SRC
 
