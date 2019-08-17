@@ -352,13 +352,36 @@ Unicode is an required aesthetic
     :delight (vi-tilde-fringe-mode))
 #+END_SRC
 
+** COMMENT fill-column-indicator
+*About:* 这个代码已经不在维护了，作用是类似于 vim 里面，超过多少列时显示一个线
+- [[https://github.com/alpaker/Fill-Column-Indicator][GitHub - alpaker/fill-column-indicator]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package fill-column-indicator
+  ;;   :config
+  ;;   (defun on-off-fci-before-company(command)
+  ;;     (when (string= "show" command)
+  ;;       (turn-off-fci-mode))
+  ;;     (when (string= "hide" command)
+  ;;       (turn-on-fci-mode)))
+  ;;   (advice-add 'company-call-frontends :before #'on-off-fci-before-company)
+  ;;   (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+  ;;   (add-hook 'prog-mode-hook #'fci-mode)
+  ;;   (add-hook 'text-mode-hook #'fci-mode)
+  ;;   (setq fci-rule-character-color "#383838")
+  ;;   (setq-default fci-rule-color "#906cff")
+  ;;   (setq-default fci-rule-column 119)
+  ;;   (global-fci-mode -1))
+#+END_SRC
+
 ** COMMENT linum
+在编辑器左边显示行号
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hlinum
     :config
     (hlinum-activate))
 
   (use-package linum
+    :hook (prog-mode . linum-mode)
     :config
     (setq linum-format " %3d ")
     (global-linum-mode nil))
