@@ -1878,6 +1878,24 @@ https://github.com/casouri/ivy-filthy-rich
 *About:* 
 https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package ivy-hydra)
+#+END_SRC
+
+*** COMMENT ivy-posframe
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package ivy-posframe
+  ;;   :after (ivy swiper counsel)
+  ;;   :init
+  ;;   (progn
+  ;;     (push '(counsel-M-x . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
+  ;;     (push '(ivy-switch-buffer . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
+  ;;     (ivy-posframe-enable)
+  ;;     (set-face-attribute 'internal-border nil :background "gray50")
+  ;;     (setq ivy-posframe-hide-minibuffer nil)
+  ;;     (setq ivy-posframe-border-width 1)))
+#+END_SRC
+
 ** swiper
 *About:* 类似于 =M-x isearch= 的功能，提供内容查找功能
 - [[https://github.com/abo-abo/swiper][GitHub - abo-abo/swiper]]
@@ -1888,7 +1906,7 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
     :commands (swiper swiper-all)
     :general
     ("C-s" 'swiper
-     "C-r" 'swiper
+     ;; "C-r" 'swiper
      "C-c u" 'swiper-all)
     (swiper-map
     "M-q" 'swiper-query-replace
