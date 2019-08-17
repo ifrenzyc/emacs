@@ -4393,7 +4393,7 @@ Configuration
 - [[https://ivanmalison.github.io/dotfiles/][‎GitHub - IvanMalison/dotfiles: Configuration files for XMonad, Emacs, NixOS, Taffybar and more.]]
 - [[https://emacs.stackexchange.com/questions/90/how-to-sometimes-but-not-always-add-a-note-to-an-org-todo-state-change][org mode - How to sometimes but not always add a note to an Org TODO state ch...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-(defun org-todo-force-notes ()
+(defun yc/org-todo-force-notes ()
   (interactive)
   (let ((org-todo-log-states
          (mapcar (lambda (state)
@@ -5314,6 +5314,12 @@ Visually summarize progress
   ;; (use-package org-dashboard)
 #+END_SRC
 
+** org-analyzer
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-to-list 'load-path (expand-file-name "lisp/org-analyzer-for-emacs-0.3.0" user-emacs-directory))
+  (require 'org-analyzer)
+#+END_SRC
+
 * Deft
 - [[https://jblevins.org/projects/deft/][Deft for Emacs]]
 - [[https://www.reddit.com/r/emacs/comments/agw3o5/3500_note_files_40_mb_of_plain_text_100s_of_tags/][3,500 note files, 40 MB of plain text, 100s of tags. Will Org mode work for m...]]
@@ -5670,7 +5676,7 @@ https://github.com/grafov/go-playground
     :after (go-mode company)
     ;;:commands company-go
     ;;:if (executable-find "gocode")
-    :init 
+    :config
     ;; (add-hook 'after-init-hook (lambda ()(add-to-list 'company-backends 'company-go)))
     ;; 加了这段代码，输入 fmt. 会自动显示这个模块相关的函数
     (with-eval-after-load 'company
@@ -6442,6 +6448,26 @@ GitHub: https://github.com/smihica/emmet-mode
   (use-package yaml-mode
     :defer t
     :mode ("\\.\\(yml\\|yaml\\)$" . yaml-mode))
+#+END_SRC
+
+** Ansible
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ansible :defer t)
+  (use-package ansible-doc
+    :defer t
+    :config
+    (add-hook 'yaml-mode-hook #'ansible-doc-mode)
+    )
+  (use-package ansible-vault
+    :defer t
+    :init (add-hook 'yaml-mode-hook 'ansible-vault-mode))
+  (use-package company-ansible
+    :defer t
+    :config
+    (add-to-list 'company-backends 'company-ansible))
+
+  (use-package poly-ansible
+    :defer t)
 #+END_SRC
 
 ** Logstash
