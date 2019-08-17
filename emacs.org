@@ -777,41 +777,41 @@ https://github.com/davidshepherd7/electric-operator
 
 ** COMMENT xah-fly-keys
 #+BEGIN_SRC emacs-lisp :tangle no
-  (use-package xah-fly-keys
-    :diminish (xah-fly-keys . "∑")
-    :init
-    (setq xah-fly-use-control-key nil)
-    (defun xfk-command-mode-on ()
-      (global-hl-line-mode 1)
-      (set-cursor-color "deep pink")
-      (setq cursor-type 'box)
-      )
-    (defun xfk-insert-mode-on ()
-      (global-hl-line-mode 0)
-      (set-cursor-color "Dark Turquoise")
-      (setq cursor-type 'hbar)
-      )
-    :config
-    ;; comment out for default dvorak layout
-    (xah-fly-keys-set-layout "qwerty") ; required if you use qwerty
-    (message "activating xah-fly-keys")
-    (xah-fly-keys 1)
-    (add-hook 'xah-fly-command-mode-activate-hook 'xfk-command-mode-on)
-    (add-hook 'xah-fly-insert-mode-activate-hook  'xfk-insert-mode-on)
-    (add-hook 'magit-mode-hook 'xah-fly-insert-mode-activate)
-    (add-hook 'magit-popup-mode-hook 'xah-fly-insert-mode-activate)
-    )
+  ;; (use-package xah-fly-keys
+  ;;   :diminish (xah-fly-keys . "∑")
+  ;;   :init
+  ;;   (setq xah-fly-use-control-key nil)
+  ;;   (defun xfk-command-mode-on ()
+  ;;     (global-hl-line-mode 1)
+  ;;     (set-cursor-color "deep pink")
+  ;;     (setq cursor-type 'box)
+  ;;     )
+  ;;   (defun xfk-insert-mode-on ()
+  ;;     (global-hl-line-mode 0)
+  ;;     (set-cursor-color "Dark Turquoise")
+  ;;     (setq cursor-type 'hbar)
+  ;;     )
+  ;;   :config
+  ;;   ;; comment out for default dvorak layout
+  ;;   (xah-fly-keys-set-layout "qwerty") ; required if you use qwerty
+  ;;   (message "activating xah-fly-keys")
+  ;;   (xah-fly-keys 1)
+  ;;   (add-hook 'xah-fly-command-mode-activate-hook 'xfk-command-mode-on)
+  ;;   (add-hook 'xah-fly-insert-mode-activate-hook  'xfk-insert-mode-on)
+  ;;   (add-hook 'magit-mode-hook 'xah-fly-insert-mode-activate)
+  ;;   (add-hook 'magit-popup-mode-hook 'xah-fly-insert-mode-activate)
+  ;;   )
 #+END_SRC
 
 ** Evil
-*** COMMENT evil-collection
+*** evil-collection
 *About:* evil 按键扩展集合
 @see - https://github.com/emacs-evil/evil-collection
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package evil-collection
-  ;;   :init
-  ;;   (setq evil-want-keybinding nil
-  ;;         evil-want-integration nil))
+  (use-package evil-collection
+    :init
+    (setq evil-want-keybinding nil
+          evil-want-integration nil))
 #+END_SRC
 
 *** config
