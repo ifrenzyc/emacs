@@ -33,7 +33,7 @@
 #+END_SRC
 
 ** Personal Information
-设置个人信息。
+*About:* 设置个人信息。
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq user-full-name "Yang Chuang")
   (setq user-mail-address "ifrenzyc@gmail.com")
@@ -78,8 +78,8 @@ macOS switch meta key.
 ** quelpa-use-package
 - [[https://github.com/quelpa/quelpa-use-package][GitHub - quelpa/quelpa-use-package: repo moved to framagit.org, please report...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package quelpa :ensure t)
-  (use-package quelpa-use-package :ensure t)
+  (use-package quelpa)
+  (use-package quelpa-use-package)
 
   ;; Handle the `use-package-always-ensure` setting
   (quelpa-use-package-activate-advice)
@@ -518,7 +518,6 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 - [[https://github.com/lunaryorn/fancy-battery.el][GitHub - lunaryorn/fancy-battery.el: UNMAINTAINED! Display battery in Emacs M...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package fancy-battery
-    :ensure t
     :config (add-hook 'after-init-hook #'fancy-battery-mode))
 #+END_SRC
 
@@ -3016,7 +3015,6 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
   ;;          ("h" . treemacs-projectile)))
 
   (use-package treemacs
-    :ensure t
     :defer t
     :init
     (with-eval-after-load 'winum
@@ -3121,21 +3119,17 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
         ("C-x t M-t" . treemacs-find-tag)))
 
   (use-package treemacs-evil
-    :after treemacs evil
-    :ensure t)
+    :after treemacs evil)
 
   (use-package treemacs-projectile
-    :after treemacs projectile
-    :ensure t)
+    :after treemacs projectile)
 
   ;; (use-package treemacs-icons-dired
   ;;   :after treemacs dired
-  ;;   :ensure t
   ;;   :config (treemacs-icons-dired-mode))
 
   (use-package treemacs-magit
-    :after treemacs magit
-    :ensure t)
+    :after treemacs magit)
 #+END_SRC
 
 * Completion
@@ -4694,7 +4688,6 @@ https://github.com/abo-abo/org-download
 - [[https://coldnew.github.io/hexo-org-example/2018/05/22/use-org-download-to-drag-image-to-emacs/][Use org-download to drag image to emacs | hexo-org-example]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-download
-    :ensure t
     :after org
     :hook ((dired-mode . org-download-enable)
            (org-mode . org-download-enable))
@@ -5821,7 +5814,6 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 - [[https://vxlabs.com/2018/11/19/configuring-emacs-lsp-mode-and-microsofts-visual-studio-code-python-language-server/][Configuring Emacs, lsp-mode and Microsoft's Visual Studio Code Python languag...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-python-ms
-    :ensure t
     :hook (python-mode . (lambda ()
                             (require 'lsp-python-ms)
                             (lsp))))  ; or lsp-deferred
@@ -6536,7 +6528,6 @@ kubernetes
 - [[https://www.reddit.com/r/emacs/comments/ci7s53/conquering_kubernetes_with_emacs/][Conquering Kubernetes with Emacs]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package k8s-mode
-   :ensure t
    :config
    (setq k8s-search-documentation-browser-function 'browse-url-chrome)
    :hook (k8s-mode . yas-minor-mode))
@@ -6544,12 +6535,10 @@ kubernetes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package kubernetes
-    :ensure t
     :commands (kubernetes-overview))
 
   ;; If you want to pull in the Evil compatibility package.
   (use-package kubernetes-evil
-    :ensure t
     :after kubernetes)
 #+END_SRC
 
