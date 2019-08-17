@@ -1930,6 +1930,28 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 *About:* 基于 ivy 扩展了 Emacs 自身的很多功能
 - [[https://github.com/abo-abo/swiper][GitHub - abo-abo/swiper]]
 #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (defun maple/mac-switch-input-source ()
+  ;;   "docstring..."
+  ;;   (interactive)
+  ;;   (shell-command
+  ;;    "osascript -e 'tell application \"System Events\" to tell process \"SystemUIServer\"
+  ;;     set currentLayout to get the value of the first menu bar item of menu bar 1 whose description is \"text input\"
+  ;;     if currentLayout is not \"U.S.\" then
+  ;;       tell (1st menu bar item of menu bar 1 whose description is \"text input\") to {click, click (menu 1'\"'\"'s menu item \"U.S.\")}
+  ;;     end if
+  ;;   end tell' &>/dev/null"))
+
+  ;; ;; (add-hook 'focus-in-hook 'maple/mac-switch-input-source)
+
+  ;; (defun yc/custom-M-x ()
+  ;;   ""
+  ;;   (interactive)
+  ;;   (let 
+  ;;     (maple/mac-switch-input-source)
+  ;;     (counsel-M-x)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package counsel
     :defer t
     :after (ivy)
@@ -2132,7 +2154,7 @@ Emacs extension to increase selected region by semantic units.
 - [[https://github.com/Kungsgeten/selected.el][GitHub - Kungsgeten/selected.el]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package selected
-    :commands selected-minor-mode
+    :commands (selected-minor-mode)
     :init
     (setq selected-org-mode-map (make-sparse-keymap))
     :general (selected-keymap
@@ -3159,16 +3181,17 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     :diminish ""
     :hook 
     ((after-init . global-company-mode)
-    (prog-mode . company-mode)
+     (prog-mode . company-mode)
      (org-mode . company-mode))
-    :bind (("C-." . company-complete)
-           :map company-active-map
-           ("<tab>" . company-complete)
-           ("C-n" . company-select-next)
-           ("C-p" . company-select-previous)
-           ("C-d" . company-show-doc-buffer)
-           ;; ("C-/" . helm-company)
-           )
+    :bind 
+    (("C-." . company-complete)
+     :map company-active-map
+     ("<tab>" . company-complete)
+     ("C-n" . company-select-next)
+     ("C-p" . company-select-previous)
+     ("C-d" . company-show-doc-buffer)
+     ;; ("C-/" . helm-company)
+     )
     :config
     (global-company-mode t)
     ;; Use the tab-and-go frontend.
@@ -3191,8 +3214,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
           company-tooltip-flip-when-above t
           company-auto-complete-chars nil
           company-auto-complete t
-          company-selection-wrap-around t
-          company-transformers '(company-sort-by-occurrence))
+          company-selection-wrap-around t)
 
     (add-to-list 'company-backends '(company-capf company-dabbrev))
     ;; (setq company-backends '(company-dabbrev (company-keywords company-dabbrev-code) company-files))
@@ -3223,20 +3245,16 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     )
 
   ;; (use-package fuzzy :defer t)
-#+END_SRC
+  (defun ztlevi/company-init ()
+    "set my own company-idle-delay and company-minimum-prefix-length"
+    (interactive)
+    (set (make-local-variable 'company-minimum-prefix-length)
+         ztlevi/company-minimum-prefix-length))
 
-*** company-lsp
-*About:* 
-@see - https://github.com/tigersoldier/company-lsp
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package company-lsp
-    :after (lsp-mode company-mode)
-    :config
-    (add-to-list 'company-backends 'company-lsp)
-    (push 'company-lsp company-backends)
-    ;; 开启 yasnippet 支持
-    (setq company-lsp-enable-snippet t)
-    )
+  ;; set the company minimum prefix length and idle delay
+  (defvar ztlevi/company-minimum-prefix-length 3
+    "my own variable for company-minimum-prefix-length")
+  (add-hook 'company-mode-hook #'ztlevi/company-init)
 #+END_SRC
 
 *** company-box
@@ -3244,11 +3262,11 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 @see - https://github.com/sebastiencs/company-box
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company-box
-    :after company
+    :after (company)
     :diminish
     :hook (company-mode . company-box-mode)
     :config
-(setq company-box-show-single-candidate t
+    (setq company-box-show-single-candidate t
           company-box-backends-colors nil
           company-box-max-candidates 50
           company-box-icons-alist 'company-box-icons-all-the-icons
@@ -3318,14 +3336,25 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     )
 #+END_SRC
 
-**** hydra-posframe
+**** COMMENT hydra-posframe
 - [[https://github.com/Ladicle/hydra-posframe][GitHub - Ladicle/hydra-posframe]] 
+  
+#+BEGIN_SRC emacs-lisp :tangle yes 
+  (use-package hydra-posframe
+    :quelpa (hydra-posframe :fetcher github :repo "Ladicle/hydra-posframe")
+    :after (hydra posframe)
+    :hook (after-init . hydra-posframe-enable)
+    :custom-face (hydra-posframe-face ((t (:background "DarkSlateBlue"))))
+    :custom-face (hydra-posframe-border-face ((t (:background "DarkBlue")))))
+#+END_SRC
+
 ** tabnine
 - [[https://github.com/TommyX12/company-tabnine][GitHub - TommyX12/company-tabnine: A company-mode backend for TabNine, the al...]]
 - [[https://tabnine.com/][TabNine]]
 - [[https://emacs-china.org/t/tabnine/9988/50][推荐入坑TabNine - Emacs-general - Emacs China]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company-tabnine
+    :after (company)
     :config
     (add-to-list 'company-backends #'company-tabnine)
 
@@ -3352,6 +3381,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
                  (seq-drop candidates-2 2)))))
 
     (add-to-list 'company-transformers 'company//sort-by-tabnine t)
+    ;; (add-to-list 'company-transformers 'company-sort-by-occurrence)
     ;; `:separate`  使得不同 backend 分开排序
     (add-to-list 'company-backends '(company-lsp :with company-tabnine :separate))
 
@@ -3387,7 +3417,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
                 ("M-h" . company-quickhelp-manual-begin)))
 #+END_SRC
 
-*** company-statistics
+** company-statistics
 *About:* 
 @see - https://github.com/company-mode/company-statistics
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3422,18 +3452,20 @@ https://github.com/emacs-lsp/lsp-mode
                 ([remap xref-find-definitions] . lsp-ui-peek-find-definitions) ; [M-.]
                 ([remap xref-find-references] . lsp-ui-peek-find-references)   ; [M-?]
                 )
-    :hook (lsp-mode . lsp-ui-mode)
+    :hook 
+    (lsp-mode . lsp-ui-mode)
+    (lsp-mode . lsp-ui-sideline-mode)
     :init
     (setq lsp-ui-doc-enable t
           lsp-ui-doc-header t
           lsp-ui-doc-include-signature t
-          ;; lsp-ui-doc-border (face-foreground 'default)
-          lsp-ui-doc-border "orange"
-          ;; lsp-ui-doc-position 'top
-          lsp-ui-doc-position 'at-point
-          lsp-ui-sideline-enable nil
+          lsp-ui-doc-border (face-foreground 'default)
+          ;; lsp-ui-doc-border "orange"
+          lsp-ui-doc-position 'top
+          ;; lsp-ui-doc-position 'at-point
+          lsp-ui-sideline-enable t
           lsp-ui-sideline-ignore-duplicate t
-          lsp-ui-sideline-show-code-actions nil)
+          lsp-ui-sideline-show-code-actions t)
     (setq-default lsp-ui-doc-frame-parameters
                   '((left . -1)
                     (top . -1)
@@ -3461,6 +3493,20 @@ https://github.com/emacs-lsp/lsp-mode
     ;; for "Jimx-/lsp-ui" fork has xwebkit support.
     (if (featurep 'xwidget)
         (setq lsp-ui-doc-use-webkit t))
+    )
+#+END_SRC
+
+*** company-lsp
+*About:* 
+@see - https://github.com/tigersoldier/company-lsp
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company-lsp
+    :after (lsp-mode company-mode)
+    :config
+    ;; (add-to-list 'company-backends 'company-lsp)
+    (push 'company-lsp company-backends)
+    ;; 开启 yasnippet 支持
+    (setq company-lsp-enable-snippet t)
     )
 #+END_SRC
 
