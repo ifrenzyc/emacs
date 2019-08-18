@@ -1811,7 +1811,9 @@ https://github.com/dustinlacewell/hera
     :init
     (key-chord-mode 1)
     :config
-    (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+    ;; (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+    (key-chord-define evil-insert-state-map "jk" 'avy-goto-char)
+    (key-chord-define evil-normal-state-map "jk" 'avy-goto-char)
     )
 #+END_SRC
 
