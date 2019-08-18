@@ -1838,6 +1838,14 @@ https://github.com/dustinlacewell/hera
     (ivy-display-style 'fancy)
     (ivy-use-virtual-buffers t)
     :config
+    ;; @see - [[https://emacs-china.org/t/topic/6069/8][怎样给 Ivy 添加拼音支持 - Emacs-general - Emacs China]]
+    (defun eh-ivy-cregexp (str)
+      (if (string-match-p "^\\." str)
+          (pyim-cregexp-build (substring str 1))
+        (ivy--regex-plus str)))
+
+    (setq ivy-re-builders-alist
+          '((t . eh-ivy-cregexp)))
     (ivy-mode))
 #+END_SRC
 
