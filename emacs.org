@@ -6486,11 +6486,12 @@ GitHub: https://github.com/smihica/emmet-mode
   (use-package ansible-doc
     :defer t
     :config
+    (add-hook 'yaml-mode-hook #'ansible-mode)
     (add-hook 'yaml-mode-hook #'ansible-doc-mode)
     )
-  (use-package ansible-vault
-    :defer t
-    :init (add-hook 'yaml-mode-hook 'ansible-vault-mode))
+  ;; (use-package ansible-vault
+  ;;   :defer t
+  ;;   :init (add-hook 'yaml-mode-hook 'ansible-vault-mode))
   (use-package company-ansible
     :defer t
     :config
