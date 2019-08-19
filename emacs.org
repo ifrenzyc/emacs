@@ -1146,6 +1146,7 @@ This allows me to easily start a * or # search from a visual selection.
     "g"    '(:ignore t :which-key "git/versions-control")
     "gs"   '(magit-status :which-key "git status")
     "gt"   '(git-timemachine-toggle :which-key "git timemachine")
+    "gd"   'lsp-find-definition
     ;; "gs"  'magit-status
     "h"    '(:ignore t :which-key "help")
     ;; "hb"   'helm-descbinds
