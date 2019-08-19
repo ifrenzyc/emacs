@@ -1303,34 +1303,21 @@ https://github.com/jerrypnz/major-mode-hydra.el
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Major mode keys managed by a pretty hydra
   (use-package major-mode-hydra
-    ;; :straight (:host github :repo "jerrypnz/major-mode-hydra.el" :branch "develop")
+    :quelpa (major-mode-hydra :fetcher github :repo "jerrypnz/major-mode-hydra.el")
     :init
     (progn
       (autoload 'pretty-hydra-define "pretty-hydra" nil nil 'macro)
       (autoload 'major-mode-hydra-bind "major-mode-hydra" nil 'macro))
     :config
-    (progn
-      (setq major-mode-hydra-invisible-quit-key "q")
-
-      (defun with-mode-icon (mode str &optional height nospace)
-        (let* ((v-adjust (if (eq major-mode 'emacs-lisp-mode) -0.1 0.05))
-               (icon     (all-the-icons-icon-for-mode mode
-                                                      :height (or height 1)
-                                                      :v-adjust v-adjust))
-               (icon     (if (symbolp icon)
-                             (all-the-icons-icon-for-mode 'fundamental-mode
-                                                          :height (or height 1)
-                                                          :v-adjust v-adjust)
-                           icon)))
-          (s-concat icon (if nospace "" " ") str)))
-
-      (defun jp-major-mode-hydra-title-generator (_)
-        `(with-mode-icon major-mode
-                         (propertize (s-concat (format-mode-line mode-name) " Commands")
-                                     'face '(:weight bold :height 1.1))
-                         1.1))
-
-      (setq major-mode-hydra-title-generator #'jp-major-mode-hydra-title-generator)))
+    (setq major-mode-hydra-invisible-quit-key "q")
+    (setq major-mode-hydra-title-generator
+          '(lambda (mode)
+             (s-concat "\n"
+                       (s-repeat 10 " ")
+                       (all-the-icons-icon-for-mode mode :v-adjust 0.05)
+                       " "
+                       (symbol-name mode)
+                       " commands"))))
 #+END_SRC
 
 *** COMMENT hera
@@ -6990,19 +6977,18 @@ macOS 系统自身的包管理系统： ~brew~
 
 *** keybindings
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defhydra hydra-system (:color blue)
-    "
-  ^
-  ^System^            ^Packages^          ^Processes^
-  ^──────^────────────^────────^──────────^─────────^─────────
-  _q_ quit            _p_ list            _s_ list
-  ^^                  _P_ upgrade         ^^
-  ^^                  ^^                  ^^
-  "
-    ("q" nil)
-    ("p" paradox-list-packages)
-    ("P" paradox-upgrade-packages)
-    ("s" list-processes))
+  (pretty-hydra-define hydra-system 
+    (:hint t :color blue :foreign-keys warn :quit-key "q")
+    ("System"
+     (("q" nil "quit")
+      ("r" restart-emacs "Restart Emacs")
+      ("Q" kill-emacs "Quit Emacs"))
+     "Packages"
+     (("p" paradox-list-packages)
+      ("P" paradox-upgrade-packages))
+     "Processes"
+     (("s" list-processes)))
+    )
 #+END_SRC
 
 ** org-reveal
