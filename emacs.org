@@ -1309,6 +1309,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
       (autoload 'pretty-hydra-define "pretty-hydra" nil nil 'macro)
       (autoload 'major-mode-hydra-bind "major-mode-hydra" nil 'macro))
     :config
+    (setq major-mode-hydra-separator "═")
     (setq major-mode-hydra-invisible-quit-key "q")
     (setq major-mode-hydra-title-generator
           '(lambda (mode)
@@ -1380,8 +1381,13 @@ https://github.com/dustinlacewell/hera
       (when other-buffer
         (set-window-buffer (next-window) other-buffer))))
 
+  (require 'all-the-icons)
+  (defun with-faicon (icon str &optional height v-adjust)
+    (s-concat (all-the-icons-faicon icon :v-adjust (or v-adjust 0) :height (or height 1)) " " str))
 
-  (pretty-hydra-define hydra-window (:hint nil :foreign-keys warn :quit-key "q")
+  (defvar jp-window--title (with-faicon "windows" "Window Management" 1 -0.05))
+  (pretty-hydra-define hydra-window 
+    (:hint nil :foreign-keys warn :quit-key "q" :title jp-window--title :separator "═")
     (;; general window management commands
      "Windows" (("x" ace-delete-window "delete")
                 ("s" ace-swap-window "swap")
@@ -1643,12 +1649,7 @@ https://github.com/dustinlacewell/hera
 
 *** hydra-toggles
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (require 'all-the-icons)
-  (defun with-faicon (icon str &optional height v-adjust)
-    (s-concat (all-the-icons-faicon icon :v-adjust (or v-adjust 0) :height (or height 1)) " " str))
-
-  (defvar jp-toggles--title)
-  (setq jp-toggles--title (with-faicon "toggle-on" "Toggles" 1 -0.05))
+  (defvar jp-toggles--title (with-faicon "toggle-on" "Toggles" 1 -0.05))
 
   (pretty-hydra-define hydra-toggles
     (:hint nil :color amaranth :quit-key "q" :title jp-toggles--title)
@@ -6977,8 +6978,9 @@ macOS 系统自身的包管理系统： ~brew~
 
 *** keybindings
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (defvar jp-system--title (with-faicon "info" "System tools" 1 -0.05))
   (pretty-hydra-define hydra-system 
-    (:hint t :color blue :foreign-keys warn :quit-key "q")
+    (:hint t :color blue :foreign-keys warn :quit-key "q" :title jp-system--title :separator "═")
     ("System"
      (("q" nil "quit")
       ("r" restart-emacs "Restart Emacs")
