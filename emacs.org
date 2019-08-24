@@ -6479,6 +6479,14 @@ GitHub: https://github.com/smihica/emmet-mode
     :mode ("\\.\\(yml\\|yaml\\)$" . yaml-mode))
 #+END_SRC
 
+** systemd
+*About:*
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package systemd
+    :defer t
+      :mode ("\\.\\(service\\|service.j2\\)$" . systemd-mode))
+#+END_SRC
+
 ** Ansible
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ansible :defer t)
