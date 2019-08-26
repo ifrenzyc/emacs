@@ -556,6 +556,9 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 
 *** COMMENT feebleline
 *About:* 隐藏 modeline
+类似 mode
+- [[https://github.com/kiennq/emacs-mini-modeline/blob/master/README.md][emacs-mini-modeline]]
+- [[https://github.com/manateelazycat/awesome-tray][awesome-tray]]
 - [[https://github.com/tautologyclub/feebleline][GitHub - tautologyclub/feebleline]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; (use-package feebleline
@@ -572,6 +575,22 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
   ;;           (feebleline-project-name        :align right)))
   ;;           (window-divider-mode t)
   ;;   (feebleline-mode 1))
+#+END_SRC
+
+*** COMMENT awesome-tray
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package awesome-tray
+    :quelpa (awesome-tray :fetcher github :repo "manateelazycat/awesome-tray")
+    :config
+    (awesome-tray-mode 1))
+#+END_SRC
+
+*** COMMENT emacs-mini-modeline 
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package emacs-mini-modeline
+    :quelpa (mini-modeline :fetcher github :repo "kiennq/emacs-mini-modeline")
+    :config
+    (mini-modeline-mode t))
 #+END_SRC
 
 *** COMMENT hide-mode-line
