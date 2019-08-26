@@ -859,6 +859,8 @@ https://github.com/davidshepherd7/electric-operator
           evil-want-C-i-jump t)
             (set-cursor-color "DarkCyan")
     (setq-default evil-want-Y-yank-to-eol t)
+    
+    (evil-set-initial-state 'dired-mode 'emacs)
     ;; (global-evil-leader-mode +1)
     (evil-mode)
     :general
@@ -878,8 +880,6 @@ https://github.com/davidshepherd7/electric-operator
     ;; (OPTIONAL) Shift width for evil-mode users
     ;; For the vim-like motions of ">>" and "<<".
     (setq-default evil-shift-width 4)
-    
-    (evil-set-initial-state 'dired-mode 'emacs)
   
     ;; @see - https://github.com/rime/squirrel/wiki/vim 用户与 emacs-evil-mode 用户-输入法自动切换成英文状态的实现
     (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
@@ -940,7 +940,7 @@ https://github.com/davidshepherd7/electric-operator
     ("C-c g" . hydra-magit/body)
     ;; ("C-c h" . hydra-helm/body)
     ;; ("C-c o" . yc/ongoing-hydra)
-    ("C-c p" . hydra-projectile/body)
+    ;; ("C-c p" . hydra-projectile/body)
     ("C-c p" . hydra-system/body)
     ("C-c w" . hydra-window/body))
 #+END_SRC
@@ -2411,16 +2411,19 @@ This is a package to perform text folding like in Vim. It has the following feat
 @see - [[https://jonathanabennett.github.io/blog/2019/06/05/file-management-in-emacs-with-dired-mode/][File Management in Emacs with dired-mode - Jonathan Bennett's Blog]]
 @see - [[https://stackoverflow.com/questions/23798021/disabling-evil-mode-for-nav-in-emacs-or-any-read-only-buffers][Disabling evil-mode for Nav in Emacs? Or any read-only buffers? - Stack Overflow]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
-  (setq dired-dwim-target t)
+  (use-package dired
+    :ensure nil
+    :after evil
+    :config
+    ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
+    (setq dired-dwim-target t
+          dired-recursive-copies (quote always)    ;; Recursive Copying and Deleting
+          dired-recursive-deletes (quote top))
 
-  (when (featurep 'evil)
-    (add-to-list 'evil-emacs-state-modes 'dired-mode)
-    (setq evil-emacs-state-modes (delq 'dired-mode evil-emacs-state-modes)))
-    
-  ;; Recursive Copying and Deleting
-  (setq dired-recursive-copies (quote always))
-  (setq dired-recursive-deletes (quote top))
+    (when (featurep 'evil)
+      (add-to-list 'evil-emacs-state-modes 'dired-mode)
+      (setq evil-emacs-state-modes (delq 'dired-mode evil-emacs-state-modes)))
+    )
 #+END_SRC
 
 *** diredx
@@ -2429,9 +2432,15 @@ This is a package to perform text folding like in Vim. It has the following feat
 - [[https://jblevins.org/log/dired-open][Integrating OS X and Emacs Dired]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package direx
+    :after dired
     ;; :init
     ;; show human readable file sizes in dired
     ;; (setq dired-listing-switches "-aBhl")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
+    :config
+    ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
+    (setq dired-dwim-target t
+          dired-recursive-copies (quote always)    ;; Recursive Copying and Deleting
+          dired-recursive-deletes (quote top))
     :general
     ("C-x C-j" 'direx:jump-to-directory))
      ;; "z"       '(lambda () (interactive)
@@ -2442,7 +2451,7 @@ This is a package to perform text folding like in Vim. It has the following feat
 *** all-the-icons-dired
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package all-the-icons-dired
-    :after (all-the-icons)
+    :after (dired all-the-icons)
     :hook
     (dired-mode . all-the-icons-dired-mode))
 #+END_SRC
