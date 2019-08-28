@@ -348,6 +348,50 @@ Unicode is an required aesthetic
     :delight (vi-tilde-fringe-mode))
 #+END_SRC
 
+** scrolling
+*About:* 
+This makes scrolling gradual rather than by half page. I find that the half page scroll really makes me lose where I am in the file so here I make sure to scroll one line at a time. In addition I want to keep what I'm working on centered so I start scrolling when the cursor is 10 lines away from the margin.
+
+This behaviour in general emulates the scrolloff option in vim.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; faster scrolling (see https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746)
+  (setq auto-window-vscroll nil)
+
+  ;; (setq scroll-margin 10
+  ;;       scroll-step 1
+  ;;       scroll-conservatively 10000
+  ;;       scroll-preserve-screen-position 1)
+  (setq  hscroll-margin 1
+         hscroll-step 1
+         scroll-conservatively 1001
+         scroll-margin 0
+         scroll-preserve-screen-position t)
+#+END_SRC
+
+*** COMMENT yascroll
+*About:*
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package yascroll
+  ;;   :init
+  ;;   (global-yascroll-bar-mode t))
+#+END_SRC
+
+*** smooth-scrolling
+*About:*
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package smooth-scrolling
+    :init
+    (smooth-scrolling-mode t)
+    (setq smooth-scroll-margin 5))
+#+END_SRC
+
+*** scrollkeeper
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package scrollkeeper
+    :bind (([remap scroll-up-command] . scrollkeeper-contents-up)
+           ([remap scroll-down-command] . scrollkeeper-contents-down)))
+#+END_SRC
+
 ** COMMENT fill-column-indicator
 *About:* 这个代码已经不在维护了，作用是类似于 vim 里面，超过多少列时显示一个线
 - [[https://github.com/alpaker/Fill-Column-Indicator][GitHub - alpaker/fill-column-indicator]]
