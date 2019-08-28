@@ -590,6 +590,8 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 
           ;; What to dispaly as the version while a new one is being loaded
           doom-modeline-env-load-string "..."
+          
+          doom-modeline-checker-simple-format t
           )
     :config
     (require 'winum)
@@ -890,6 +892,7 @@ https://github.com/davidshepherd7/electric-operator
   (use-package evil-collection
     :init
     (setq evil-want-keybinding nil
+          evil-collection-company-use-tng nil
           evil-want-integration nil))
 #+END_SRC
 
@@ -1865,13 +1868,13 @@ https://github.com/dustinlacewell/hera
 - [[https://github.com/emacsorphanage/key-chord][GitHub - emacsorphanage/key-chord]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package key-chord
+    :after evil
     :init
     (key-chord-mode 1)
     :config
     ;; (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
     (key-chord-define evil-insert-state-map "jk" 'avy-goto-char)
-    (key-chord-define evil-normal-state-map "jk" 'avy-goto-char)
-    )
+    (key-chord-define evil-normal-state-map "jk" 'avy-goto-char))
 #+END_SRC
 
 * Navigation
@@ -1951,6 +1954,7 @@ https://github.com/casouri/ivy-filthy-rich
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy-prescient
     :after ivy
+    :hook (ivy-mode-hook . ivy-prescient-mode)
     :config
     (ivy-prescient-mode t))
 #+END_SRC
@@ -1975,6 +1979,28 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
   ;;     (set-face-attribute 'internal-border nil :background "gray50")
   ;;     (setq ivy-posframe-hide-minibuffer nil)
   ;;     (setq ivy-posframe-border-width 1)))
+#+END_SRC
+
+** COMMENT snails
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package snails
+    :load-path "lisp/snails"
+    :commands snails
+    :bind
+    (:map global-map
+          ("M-p" . (lambda ()
+                     (interactive)
+                     (snails '(
+                               snails-backend-buffer
+                               snails-backend-recentf
+                               snails-backend-projectile
+                               snails-backend-mdfind
+                               snails-backend-rg
+                               snails-backend-imenu))))
+     :map snails-mode-map ([remap next-line] . snails-select-next-item)
+    ))
+    ;; :hook
+    ;; (snails-mode . evil-insert))
 #+END_SRC
 
 ** swiper
@@ -2495,6 +2521,38 @@ This is a package to perform text folding like in Vim. It has the following feat
      ;; "z"       '(lambda () (interactive)
      ;;              (let ((fn (dired-get-file-for-visit)))
      ;;                (start-process "default-app" nil "open" fn)))))
+#+END_SRC
+
+*** dired-rainbow
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dired-rainbow
+    :init
+    (eval-after-load 'dired '(require 'dired-rainbow))
+    :config
+    (dired-rainbow-define audio "#329EE8" ("mp3" "MP3" "ogg" "OGG" "flac" "FLAC" "wav" "WAV"))
+    (dired-rainbow-define media "#ce5c00" ("mp3" "mp4" "MP3" "MP4" "avi" "mpg" "flv" "ogg"))
+    (dired-rainbow-define video "#455AFC" ("vob" "VOB" "mkv" "MKV" "mpe" "mpg" "MPG" "mp4" "MP4" "ts" "TS" "m2ts"))
+    (dired-rainbow-define html "#4e9a06" ("htm" "html" "xhtml"))
+    (dired-rainbow-define xml "DarkGreen" ("xml" "xsd" "xsl" "xslt" "wsdl"))
+    (dired-rainbow-define document "#ce5c00" ("doc" "docx" "odt" "pdb" "pdf" "ps" "rtf" "djvu"))
+    (dired-rainbow-define image "#ff4b4b" ("jpg" "png" "jpeg" "gif"))
+    (dired-rainbow-define sourcefile "#3F82FD" ("el" "groovy" "gradle" "py" "c" "cc" "h" "java" "pl" "rb"))
+    (dired-rainbow-define executable "#8cc4ff" ("exe" "msi"))
+    (dired-rainbow-define compressed "#ad7fa8" ("zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+    (dired-rainbow-define packaged "#e6a8df" ("deb" "rpm"))
+    (dired-rainbow-define encrypted "LightBlue" ("gpg" "pgp"))
+    (dired-rainbow-define-chmod executable-unix "Green" "-.*x.*")
+    (dired-rainbow-define log (:inherit default :italic t) ".*\\.log")
+    (dired-rainbow-define org "#5F9EA0" (".*\\.org")))
+#+END_SRC
+
+*** dired-k
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dired-k
+    :hook (dired-after-readin . dired-k-no-revert)
+    :hook (dired-initial-position . dired-k)
+    :config
+    (setq dired-k-padding 1))
 #+END_SRC
 
 *** all-the-icons-dired
@@ -3277,11 +3335,11 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     (global-company-mode t)
     ;; Use the tab-and-go frontend.
     ;; Allows TAB to select and complete at the same time.
-    (company-tng-configure-default)
-    (setq company-frontends
-          '(company-tng-frontend
-            company-pseudo-tooltip-frontend
-            company-echo-metadata-frontend))
+    ;; (company-tng-configure-default)
+    ;; (setq company-frontends
+    ;;       '(company-tng-frontend
+    ;;         company-pseudo-tooltip-frontend
+    ;;         company-echo-metadata-frontend))
     (setq company-minimum-prefix-length 3
           company-show-numbers t
           company-require-match nil
@@ -3507,6 +3565,16 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     :hook (company-mode . company-statistics-mode)
     :config
     (company-statistics-mode))
+#+END_SRC
+
+** company-english-helper
+- [[https://emacs-china.org/t/company/6322/186][基于 Company 编写了一个带中文注释的英文补全助手 - Emacs-general - Emacs China]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company-english-helper
+    :quelpa (company-english-helper :fetcher github :repo "manateelazycat/company-english-helper")
+    :config
+    (require 'company-english-helper)
+    (setq company-english-helper-fuzz-search-p t))
 #+END_SRC
 
 ** lsp-mode
@@ -4437,6 +4505,7 @@ e.g. =<s=
 - %a -- 插入当前所在文档的 link 地址
 
 @see - https://www.reddit.com/r/emacs/comments/7zqc7b/share_your_org_capture_templates/
+@see - https://github.com/sprig/org-capture-extension
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Set default column view headings: Task Total-Time Time-Stamp
   (define-key global-map "\C-cc" 'org-capture)
@@ -5491,7 +5560,7 @@ Visually summarize progress
    )
 #+END_SRC
 
-* BACKUP & Version 
+* BACKUP & Version
 ** Control BACKUP
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; 设定不产生备份文件
@@ -5551,6 +5620,16 @@ Visually summarize progress
    (when (featurep 'evil)
      (setq evil-emacs-state-modes (delq 'magit-status-mode evil-emacs-state-modes)))
     )
+#+END_SRC
+
+**** magit-todo
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package magit-todos
+    :after magit
+    :hook
+    (magit-mode . magit-todos-mode)
+    :config
+    (setq magit-todos-exclude-globs '("nixpkgs/*")))
 #+END_SRC
 
 **** COMMENT evil-magit
@@ -6595,7 +6674,7 @@ GitHub: https://github.com/smihica/emmet-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yaml-mode
     :defer t
-    :mode ("\\.\\(yml\\|yaml\\)$" . yaml-mode))
+    :mode ("\\.\\(yml\\|yaml\\yml.j2\\|yaml.j2\\)$" . yaml-mode))
 #+END_SRC
 
 ** systemd
