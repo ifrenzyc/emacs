@@ -78,7 +78,12 @@ macOS switch meta key.
 ** quelpa-use-package
 - [[https://github.com/quelpa/quelpa-use-package][GitHub - quelpa/quelpa-use-package: repo moved to framagit.org, please report...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package quelpa)
+  (use-package quelpa
+    :config
+    (setq quelpa-checkout-melpa-p nil
+          quelpa-update-melpa-p nil
+          quelpa-self-upgrade-p nil))
+
   (use-package quelpa-use-package)
 
   ;; Handle the `use-package-always-ensure` setting
