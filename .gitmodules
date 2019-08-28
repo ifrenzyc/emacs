@@ -10,3 +10,9 @@
 [submodule "lisp/multi-libvterm"]
 	path = lisp/multi-libvterm
 	url = git@github.com:suonlight/multi-libvterm.git
+[submodule "lisp/snails"]
+	path = lisp/snails
+	url = git@github.com:manateelazycat/snails.git
+[submodule "lisp/fuz.el"]
+	path = lisp/fuz.el
+	url = git@github.com:cireu/fuz.el.git
