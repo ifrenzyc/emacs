@@ -612,20 +612,20 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 - [[https://github.com/manateelazycat/awesome-tray][awesome-tray]]
 - [[https://github.com/tautologyclub/feebleline][GitHub - tautologyclub/feebleline]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package feebleline
-  ;;   :hook
-  ;;   (after-init . feebleline-mode)
-  ;;   :config 
-  ;;   (setq feebleline-msg-functions
-  ;;         '((feebleline-line-number         :post "" :fmt "%5s")
-  ;;           (feebleline-column-number       :pre ":" :fmt "%-2s")
-  ;;           (feebleline-file-directory      :face feebleline-dir-face :post "")
-  ;;           (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
-  ;;           (feebleline-file-modified-star  :face font-lock-warning-face :post "")
-  ;;           (feebleline-git-branch          :face feebleline-git-face :pre " : ")
-  ;;           (feebleline-project-name        :align right)))
-  ;;           (window-divider-mode t)
-  ;;   (feebleline-mode 1))
+  (use-package feebleline
+    :hook
+    (after-init . feebleline-mode)
+    :config 
+    (setq feebleline-msg-functions
+          '((feebleline-line-number         :post "" :fmt "%5s")
+            (feebleline-column-number       :pre ":" :fmt "%-2s")
+            (feebleline-file-directory      :face feebleline-dir-face :post "")
+            (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
+            (feebleline-file-modified-star  :face font-lock-warning-face :post "")
+            (feebleline-git-branch          :face feebleline-git-face :pre " : ")
+            (feebleline-project-name        :align right)))
+            (window-divider-mode t)
+    (feebleline-mode 1))
 #+END_SRC
 
 *** COMMENT awesome-tray
@@ -638,7 +638,7 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 
 *** COMMENT emacs-mini-modeline 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package emacs-mini-modeline
+  (use-package mini-modeline
     :quelpa (mini-modeline :fetcher github :repo "kiennq/emacs-mini-modeline")
     :config
     (mini-modeline-mode t))
