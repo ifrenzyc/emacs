@@ -397,6 +397,28 @@ This behaviour in general emulates the scrolloff option in vim.
            ([remap scroll-down-command] . scrollkeeper-contents-down)))
 #+END_SRC
 
+*** sublimity
+- [[https://github.com/zk-phi/sublimity][GitHub - zk-phi/sublimity: {emacs} smooth-scrolling and minimap like sublime ...]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package sublimity
+    :defer t
+    :commands (sublimity-map-show sublimity-mode)
+    :config
+    (require 'sublimity)
+    (require 'sublimity-scroll)
+    (require 'sublimity-map)
+    (setq sublimity-scroll-weight 5
+          sublimity-scroll-drift-length 10
+          sublimity-map-size 20
+          sublimity-map-fraction 0.3
+          sublimity-map-text-scale -7)
+    (setq sublimity-map-set-delay 5)
+    (setq sublimity-attractive-hide-bars t)
+    (setq sublimity-attractive-hide-vertical-border t)
+    (setq sublimity-attractive-hide-fringes t)
+    (setq sublimity-attractive-hide-modelines t))
+#+END_SRC
+
 ** COMMENT fill-column-indicator
 *About:* 这个代码已经不在维护了，作用是类似于 vim 里面，超过多少列时显示一个线
 - [[https://github.com/alpaker/Fill-Column-Indicator][GitHub - alpaker/fill-column-indicator]]
@@ -422,8 +444,7 @@ This behaviour in general emulates the scrolloff option in vim.
 在编辑器左边显示行号
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package hlinum
-    :config
-    (hlinum-activate))
+    :hook (prog-mode . hlinum-activate))
 
   (use-package linum
     :hook (prog-mode . linum-mode)
@@ -4963,6 +4984,7 @@ https://github.com/abo-abo/org-download
 - [[https://coldnew.github.io/hexo-org-example/2018/05/22/use-org-download-to-drag-image-to-emacs/][Use org-download to drag image to emacs | hexo-org-example]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-download
+    :ensure-system-package (pngpaste . "brew install pngpaste")
     :after org
     :hook ((dired-mode . org-download-enable)
            (org-mode . org-download-enable))
