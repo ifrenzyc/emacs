@@ -158,7 +158,7 @@ Emacs-plus patch : https://github.com/d12frosted/homebrew-emacs-plus
 #+BEGIN_SRC emacs-lisp :tangle yes
   (when IS-MAC
     (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-    (add-to-list 'default-frame-alist '(ns-appearance . light))    ; light or dark - depending on your theme
+    (add-to-list 'default-frame-alist '(ns-appearance . dark))    ; light or dark - depending on your theme
     )
 #+END_SRC
 
@@ -574,21 +574,25 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
     :hook
     (after-init . doom-modeline-mode)
     :init
-    (setq doom-modeline-icon t
+    (setq doom-modeline-icon (display-graphic-p)
           doom-modeline-major-mode-icon t
           doom-modeline-major-mode-color-icon nil
-          doom-modeline-buffer-file-name-style 'truncate-upto-project
+          doom-modeline-buffer-file-name-style 'truncate-except-project
           ;; Whether display icons for buffer states. It respects `doom-modeline-icon'.
           doom-modeline-buffer-state-icon t
           ;; Whether display buffer modification icon. It respects `doom-modeline-icon'
           ;; and `doom-modeline-buffer-state-icon'.
           doom-modeline-buffer-modification-icon t
           doom-modeline-enable-word-count t
-          doom-modeline-persp-name t
           doom-modeline-lsp t
+
+          ;; Whether display minor modes in mode-line or not.
+          doom-modeline-minor-modes (featurep 'minions)
+          
+          doom-modeline-buffer-encoding t
+
           ;; Whether display perspective name or not. Non-nil to display in mode-line.
           doom-modeline-persp-name t
-
           ;; Whether display icon for persp name. Nil to display a # sign. It respects `doom-modeline-icon'
           doom-modeline-persp-name-icon t
           ;; Whether display environment version or not
@@ -1833,7 +1837,7 @@ https://github.com/dustinlacewell/hera
 
 *** hydra-date
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defhydra hydra-dates (:color blue)
+  (defhydra hydra-dates (:color red)
     "
   ^
   ^Dates^             ^Insert^            ^Insert with Time^
@@ -1980,12 +1984,12 @@ https://github.com/casouri/ivy-filthy-rich
     (ivy-prescient-mode t))
 #+END_SRC
 
-*** COMMENT ivy-hydra
+*** ivy-hydra
 *About:* 
 https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package ivy-hydra)
+  (use-package ivy-hydra)
 #+END_SRC
 
 *** COMMENT ivy-posframe
@@ -2325,7 +2329,7 @@ Emacs extension to increase selected region by semantic units.
      "M-g g" 'avy-goto-line)
     :config
     (use-package link-hint)
-    (defhydra hydra-avy (:color blue)
+    (defhydra hydra-avy (:color red)
       "avy-goto"
       ("c" avy-goto-char "char")
       ("C" avy-goto-char-2 "char-2")
@@ -2510,9 +2514,13 @@ This is a package to perform text folding like in Vim. It has the following feat
   (use-package dired
     :ensure nil
     :after evil
+    :init
+    ;; show human readable file sizes in dired
+    ;; http://pragmaticemacs.com/emacs/dired-human-readable-sizes-and-sort-by-size/
+    (setq dired-listing-switches "-aBhl")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
     :config
     ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
-    (setq dired-dwim-target t
+    (setq dired-dwim-target t    ;; https://emacs.stackexchange.com/a/5604
           dired-recursive-copies (quote always)    ;; Recursive Copying and Deleting
           dired-recursive-deletes (quote top))
 
@@ -2522,6 +2530,18 @@ This is a package to perform text folding like in Vim. It has the following feat
     )
 #+END_SRC
 
+*** wdired
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package wdired
+    :after dired
+    :defer t
+    :commands wdired-change-to-wdired-mode
+    :custom
+    (wdired-allow-to-change-permissions t)
+    :bind (:map dired-mode-map
+                ("C-c C-c" . wdired-change-to-wdired-mode)))
+#+END_SRC
+
 *** diredx
 *About:* dired 模式扩展
 - [[https://github.com/Fuco1/dired-hacks][GitHub - Fuco1/dired-hacks]]
@@ -2529,9 +2549,6 @@ This is a package to perform text folding like in Vim. It has the following feat
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package direx
     :after dired
-    ;; :init
-    ;; show human readable file sizes in dired
-    ;; (setq dired-listing-switches "-aBhl")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
     :config
     ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
     (setq dired-dwim-target t
@@ -2567,7 +2584,7 @@ This is a package to perform text folding like in Vim. It has the following feat
     (dired-rainbow-define org "#5F9EA0" (".*\\.org")))
 #+END_SRC
 
-*** dired-k
+*** COMMENT dired-k
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired-k
     :hook (dired-after-readin . dired-k-no-revert)
@@ -3056,7 +3073,7 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 @see - https://github.com/emacs-evil/evil-collection/blob/master/evil-collection-neotree.el
 
 *** keybindings
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (defhydra hydra-neotree (:color pink :hint nil)
            "
                                                                                  ╭─────────┐
@@ -3114,6 +3131,36 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
   ;; [_'_]   quick look         ^^                ^^
   ;; [_RET_] open               ^^^^              [_?_]   close hints
   ;; "
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defvar jp-neotree--title (with-faicon "tree" "neotree" 1 -0.05))
+  (pretty-hydra-define hydra-neotree 
+    (:hint nil :color red :foreign-keys warn :quit-key "q" :title jp-neotree--title :separator "═")
+    ("Navigation"
+     (("k" neotree-previous-line "↑")
+      ("j" neotree-next-line "↓"))
+     "Resize"
+     (("H" hydra-move-splitter-left "←")
+      ("L" hydra-move-splitter-right "→"))
+     "Enter"
+     (("RET" neotree-enter "Open")
+      ("o" neotree-enter "Open")
+      ("'" neotree-quick-look "Quick Look")
+      ("-" neotree-enter-horizontal-split "Horizontal Split")
+      ("|" neotree-enter-vertical-split "Vertical Split"))
+     "Action"
+     (("gr" neotree-refresh "Refresh")
+      ("R" neotree-change-root "Change Root")
+      ("C" neotree-create-node "Create")
+      ("c" neotree-copy-node "Copy")
+      ("d" neotree-delete-node "Delete")
+      ("r" neotree-rename-node "Rename or Move"))
+     "Help"
+     (("?" nil "close hints" :exit t)
+      ("q" nil :exit t)
+      ("s" neotree-hidden-file-toggle))
+     ))
 #+END_SRC
 
 ** treemacs
@@ -3214,103 +3261,107 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
     (with-eval-after-load 'winum
       (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
     :config
-      (setq treemacs-collapse-dirs                 (if (treemacs--find-python3) 3 0)
-            treemacs-deferred-git-apply-delay      0.5
-            treemacs-display-in-side-window        t
-            treemacs-eldoc-display                 t
-            treemacs-file-event-delay              5000
-            treemacs-file-follow-delay             0.2
-            treemacs-follow-after-init             t
-            treemacs-git-command-pipe              ""
-            treemacs-goto-tag-strategy             'refetch-index
-            treemacs-indentation                   2
-            treemacs-indentation-string            " "
-            treemacs-is-never-other-window         nil
-            treemacs-max-git-entries               5000
-            treemacs-missing-project-action        'ask
-            treemacs-no-png-images                 nil
-            treemacs-no-delete-other-windows       t
-            treemacs-project-follow-cleanup        nil
-            treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-            treemacs-recenter-distance             0.1
-            treemacs-recenter-after-file-follow    nil
-            treemacs-recenter-after-tag-follow     nil
-            treemacs-recenter-after-project-jump   'always
-            treemacs-recenter-after-project-expand 'on-distance
-            treemacs-show-cursor                   nil
-            treemacs-show-hidden-files             t
-            treemacs-silent-filewatch              nil
-            treemacs-silent-refresh                nil
-            treemacs-sorting                       'alphabetic-desc
-            treemacs-space-between-root-nodes      t
-            treemacs-tag-follow-cleanup            t
-            treemacs-tag-follow-delay              1.5
-            treemacs-width                         35)
+    (setq treemacs-collapse-dirs                 (if (treemacs--find-python3) 3 0)
+          treemacs-deferred-git-apply-delay      0.5
+          treemacs-display-in-side-window        t
+          treemacs-eldoc-display                 t
+          treemacs-file-event-delay              5000
+          treemacs-file-follow-delay             0.2
+          treemacs-follow-after-init             t
+          treemacs-git-command-pipe              ""
+          treemacs-goto-tag-strategy             'refetch-index
+          treemacs-indentation                   2
+          treemacs-indentation-string            " "
+          treemacs-is-never-other-window         nil
+          treemacs-max-git-entries               5000
+          treemacs-missing-project-action        'ask
+          treemacs-no-png-images                 nil
+          treemacs-no-delete-other-windows       t
+          treemacs-project-follow-cleanup        nil
+          treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-recenter-distance             0.1
+          treemacs-recenter-after-file-follow    nil
+          treemacs-recenter-after-tag-follow     nil
+          treemacs-recenter-after-project-jump   'always
+          treemacs-recenter-after-project-expand 'on-distance
+          treemacs-show-cursor                   nil
+          treemacs-show-hidden-files             t
+          treemacs-silent-filewatch              nil
+          treemacs-silent-refresh                nil
+          treemacs-sorting                       'alphabetic-desc
+          treemacs-space-between-root-nodes      t
+          treemacs-tag-follow-cleanup            t
+          treemacs-tag-follow-delay              1.5
+          treemacs-width                         35)
 
-      ;; The default width and height of the icons is 22 pixels. If you are
-      ;; using a Hi-DPI display, uncomment this to double the icon size.
-      ;;(treemacs-resize-icons 44)
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;;(treemacs-resize-icons 44)
 
-      (treemacs-follow-mode t)
-      (treemacs-filewatch-mode t)
-      (treemacs-fringe-indicator-mode t)
-      (pcase (cons (not (null (executable-find "git")))
-                   (not (null (treemacs--find-python3))))
-        (`(t . t)
-         (treemacs-git-mode 'deferred))
-        (`(t . _)
-         (treemacs-git-mode 'simple)))
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null (treemacs--find-python3))))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple)))
 
-      ;; ;; Improve treemacs icons
-      ;; (with-eval-after-load 'treemacs
-      ;;   (with-eval-after-load 'all-the-icons
-      ;;     (let ((all-the-icons-default-adjust 0)
-      ;;           (tab-width 1))
-      ;;       ;; Root icon
-      ;;       (setq treemacs-icon-root-png
-      ;;             (concat (all-the-icons-octicon "repo" :height 0.8 :v-adjust -0.2)  " "))
-      ;;       ;; File icons
-      ;;       (setq treemacs-icon-open-png
-      ;;             (concat
-      ;;              (all-the-icons-octicon "chevron-down" :height 0.8 :v-adjust 0.1)
-      ;;              "\t"
-      ;;              (all-the-icons-octicon "file-directory" :v-adjust 0)
-      ;;              "\t")
-      ;;             treemacs-icon-closed-png
-      ;;             (concat
-      ;;              (all-the-icons-octicon "chevron-right" :height 0.8
-      ;;                                     :v-adjust 0.1 :face 'font-lock-doc-face)
-      ;;              "\t"
-      ;;              (all-the-icons-octicon "file-directory" :v-adjust 0 :face 'font-lock-doc-face)
-      ;;              "\t"))
-      ;;       ;; File type icons
-      ;;       (setq treemacs-icons-hash (make-hash-table :size 200 :test #'equal)
-      ;;             treemacs-icon-fallback (concat
-      ;;                                     "\t\t"
-      ;;                                     (all-the-icons-faicon "file-o" :face 'all-the-icons-dsilver
-      ;;                                                           :height 0.8 :v-adjust 0.0)
-      ;;                                     "\t")
-      ;;             treemacs-icon-text treemacs-icon-fallback)
+    ;; ;; Improve treemacs icons
+    ;; (with-eval-after-load 'treemacs
+    ;;   (with-eval-after-load 'all-the-icons
+    ;;     (let ((all-the-icons-default-adjust 0)
+    ;;           (tab-width 1))
+    ;;       ;; Root icon
+    ;;       (setq treemacs-icon-root-png
+    ;;             (concat (all-the-icons-octicon "repo" :height 0.8 :v-adjust -0.2)  " "))
+    ;;       ;; File icons
+    ;;       (setq treemacs-icon-open-png
+    ;;             (concat
+    ;;              (all-the-icons-octicon "chevron-down" :height 0.8 :v-adjust 0.1)
+    ;;              "\t"
+    ;;              (all-the-icons-octicon "file-directory" :v-adjust 0)
+    ;;              "\t")
+    ;;             treemacs-icon-closed-png
+    ;;             (concat
+    ;;              (all-the-icons-octicon "chevron-right" :height 0.8
+    ;;                                     :v-adjust 0.1 :face 'font-lock-doc-face)
+    ;;              "\t"
+    ;;              (all-the-icons-octicon "file-directory" :v-adjust 0 :face 'font-lock-doc-face)
+    ;;              "\t"))
+    ;;       ;; File type icons
+    ;;       (setq treemacs-icons-hash (make-hash-table :size 200 :test #'equal)
+    ;;             treemacs-icon-fallback (concat
+    ;;                                     "\t\t"
+    ;;                                     (all-the-icons-faicon "file-o" :face 'all-the-icons-dsilver
+    ;;                                                           :height 0.8 :v-adjust 0.0)
+    ;;                                     "\t")
+    ;;             treemacs-icon-text treemacs-icon-fallback)
 
-      ;;       (dolist (item all-the-icons-icon-alist)
-      ;;         (let* ((extension (car item))
-      ;;                (func (cadr item))
-      ;;                (args (append (list (caddr item)) '(:v-adjust -0.05) (cdddr item)))
-      ;;                (icon (apply func args))
-      ;;                (key (s-replace-all '(("^" . "") ("\\" . "") ("$" . "") ("." . "")) extension))
-      ;;                (value (concat "\t\t" icon "\t")))
-      ;;           (unless (ht-get treemacs-icons-hash (s-replace-regexp "\\?" "" key))
-      ;;             (ht-set! treemacs-icons-hash (s-replace-regexp "\\?" "" key) value))
-      ;;           (unless (ht-get treemacs-icons-hash (s-replace-regexp ".\\?" "" key))
-      ;;             (ht-set! treemacs-icons-hash (s-replace-regexp ".\\?" "" key) value)))))))
-  :bind
-  (:map global-map
-        ("M-0"       . treemacs-select-window)
-        ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)))
+    ;;       (dolist (item all-the-icons-icon-alist)
+    ;;         (let* ((extension (car item))
+    ;;                (func (cadr item))
+    ;;                (args (append (list (caddr item)) '(:v-adjust -0.05) (cdddr item)))
+    ;;                (icon (apply func args))
+    ;;                (key (s-replace-all '(("^" . "") ("\\" . "") ("$" . "") ("." . "")) extension))
+    ;;                (value (concat "\t\t" icon "\t")))
+    ;;           (unless (ht-get treemacs-icons-hash (s-replace-regexp "\\?" "" key))
+    ;;             (ht-set! treemacs-icons-hash (s-replace-regexp "\\?" "" key) value))
+    ;;           (unless (ht-get treemacs-icons-hash (s-replace-regexp ".\\?" "" key))
+    ;;             (ht-set! treemacs-icons-hash (s-replace-regexp ".\\?" "" key) value)))))))
+    :bind
+    (:map global-map
+          ("M-0"       . treemacs-select-window)
+          ("C-x t 1"   . treemacs-delete-other-windows)
+          ("C-x t t"   . treemacs)
+          ("C-x t B"   . treemacs-bookmark)
+          ("C-x t C-t" . treemacs-find-file)
+          ("C-x t M-t" . treemacs-find-tag))
+    (:map treemacs-mode-map
+          ("H" . hydra-move-splitter-left)
+          ("L" . hydra-move-splitter-right)
+          ))
 
   (use-package treemacs-evil
     :after treemacs evil)
@@ -3324,6 +3375,13 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 
   (use-package treemacs-magit
     :after treemacs magit)
+#+END_SRC
+
+*** lsp-treemacs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package lsp-treemacs
+    :bind (:map lsp-mode-map
+                ("M-9" . lsp-treemacs-errors-list)))
 #+END_SRC
 
 * Completion
@@ -3609,15 +3667,24 @@ https://github.com/emacs-lsp/lsp-mode
     :hook
     (lsp-after-open . lsp-enable-imenu)
     (programming-mode . lsp)
+    (prog-mode . lsp-deferred)
+    :bind (:map lsp-mode-map
+                ("C-c C-d" . lsp-describe-thing-at-point))
     :init 
-    (require 'lsp)
-    (require 'lsp-clients))
+    (require 'lsp-clients)
+    (setq lsp-auto-guess-root t       ; Detect project root
+          lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
+          flymake-fringe-indicator-position 'right-fringe)
+    :config
+    (use-package lsp-clients
+      :ensure nil
+      :init (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))))
 
   (use-package lsp-ui
     ;;  :quelpa (lsp-ui :fetcher github :repo "Jimx-/lsp-ui")
     :demand t
     :after lsp-mode
-    :commands lsp-ui-mode
+    :commands (lsp-ui-mode lsp-ui-doc-hide)
     :bind (:map lsp-ui-mode-map
                 ([remap xref-find-definitions] . lsp-ui-peek-find-definitions) ; [M-.]
                 ([remap xref-find-references] . lsp-ui-peek-find-references)   ; [M-?]
@@ -3648,7 +3715,7 @@ https://github.com/emacs-lsp/lsp-mode
                     (vertical-scroll-bars)
                     (horizontal-scroll-bars)
                     (left-fringe . 0)
-                    (right-fringe . 0)
+                    (right-fringe . 8)
                     (menu-bar-lines . 0)
                     (tool-bar-lines . 0)
                     (line-spacing . 0.1)
@@ -3663,6 +3730,16 @@ https://github.com/emacs-lsp/lsp-mode
     ;; for "Jimx-/lsp-ui" fork has xwebkit support.
     (if (featurep 'xwidget)
         (setq lsp-ui-doc-use-webkit t))
+    :config
+    ;; `C-g'to close doc
+    (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
+
+    ;; Reset `lsp-ui-doc-background' after loading theme
+    (add-hook 'after-load-theme-hook
+              (lambda ()
+                (setq lsp-ui-doc-border (face-foreground 'default))
+                (set-face-background 'lsp-ui-doc-background
+                                     (face-background 'tooltip))))
     )
 #+END_SRC
 
@@ -3754,7 +3831,7 @@ https://github.com/emacs-lsp/lsp-mode
   (use-package flycheck-posframe
     :quelpa (flycheck-posframe :fetcher github :repo "alexmurray/flycheck-posframe")
     :after (flycheck posframe)
-    :config (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
+    :hook (flycheck-mode . flycheck-posframe-mode)
     :custom-face (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
     :custom-face (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
     :custom-face (flycheck-posframe-border-face ((t (:background "DarkBlue")))))
@@ -6079,9 +6156,14 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
     :diminish
     ;; :bind (:map lsp-mode-map
     ;;             ("<f6>" . dap-hydra))
+    :functions dap-hydra/nil
+    :bind (:map lsp-mode-map
+                ("<f5>" . dap-debug)
+                ("M-<f5>" . dap-hydra))
     :hook ((after-init . dap-mode)
            (dap-mode . dap-ui-mode)
-
+           (dap-session-created . (lambda (&_rest) (dap-hydra)))
+           (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
            (python-mode . (lambda () (require 'dap-python)))
            (ruby-mode . (lambda () (require 'dap-ruby)))
            (go-mode . (lambda () (require 'dap-go)))
@@ -6105,6 +6187,8 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package python
     :defer t
+    :mode ("\\.py\\'" . python-mode)
+    :defines gud-pdb-command-name pdb-path
     :config
     ;; use IPython
     (setq-default py-shell-name "ipython")
@@ -6120,13 +6204,16 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
     ;; don't split windows
     (setq py-split-windows-on-execute-p nil)
     ;; try to automagically figure out indentation
-    (setq py-smart-indentation t))
+    (setq py-smart-indentation t)
+
+    (use-package live-py-mode))
 #+END_SRC
 
 *** lsp-python-ms
 - [[https://vxlabs.com/2018/11/19/configuring-emacs-lsp-mode-and-microsofts-visual-studio-code-python-language-server/][Configuring Emacs, lsp-mode and Microsoft's Visual Studio Code Python languag...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-python-ms
+    :after python
     :hook (python-mode . (lambda ()
                             (require 'lsp-python-ms)
                             (lsp))))  ; or lsp-deferred
@@ -6152,11 +6239,13 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
       '(add-to-list 'company-backends '(company-anaconda :with company-capf))))
 #+END_SRC
 
-*** COMMENT elpy
+*** elpy
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package elpy
-  ;;   :init
-  ;;   (elpy-enable))
+  (use-package elpy
+    :after python
+    :defer t
+    :config
+    (elpy-enable))
 #+END_SRC
 
 *** COMMENT helm-pydoc
@@ -6167,6 +6256,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 *** pyenv-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package pyenv-mode
+    :after python
     :defer t
     :if (executable-find "pyenv")
     :commands (pyenv-mode-versions))
@@ -6175,19 +6265,24 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 *** pyvenv
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package pyvenv
+    :after python
     :defer t)
 #+END_SRC
 
 *** py-isort
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package py-isort
+    :after python
     :defer t)
 #+END_SRC
 
 *** yapfify
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yapfify
-    :defer t)
+    :ensure-system-package (yapf . "brew install yapf")
+    :after python
+    :defer t
+    :hook (python-mode . yapf-mode))
 #+END_SRC
 
 *** keybindings
@@ -6231,8 +6326,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
                          ("i" elpy-importmagic-fixup "Importmagic fixup")
                          ("d" elpy-goto-definition   "Goto definition")
                          ("r" elpy-multiedit-python-symbol-at-point   "Rename symbol")
-                         ("f" elpy-format-code   "Format code")
-                         )
+                         ("f" elpy-format-code   "Format code"))
 #+END_SRC
 
 ** Clojure
@@ -6582,7 +6676,6 @@ Automatic chmod +x
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package web-mode
-    :demand t
     :defer t
     :mode
     ("\\.js\\'" . web-mode)
@@ -6607,7 +6700,6 @@ Automatic chmod +x
 *** vue-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package vue-mode
-    :demand t
     :defer t
     :after lsp-mode
     :mode ("\\.vue\\'" . vue-mode)
@@ -6688,7 +6780,7 @@ GitHub: https://github.com/smihica/emmet-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package json-mode
     :defer t
-    :mode ("\\.\\(json\\|jsonld\\|tern-project\\|jshintrc\\)$" . json-mode)
+    :mode ("\\.\\(json\\|json.j2\\|json.template\\|jsonld\\|tern-project\\|jshintrc\\)$" . json-mode)
     :hook
     (json-mode . flycheck-mode)
     :general
@@ -6711,7 +6803,7 @@ GitHub: https://github.com/smihica/emmet-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yaml-mode
     :defer t
-    :mode ("\\.\\(yml\\|yaml\\yml.j2\\|yaml.j2\\)$" . yaml-mode))
+    :mode ("\\.\\(yml\\|yaml\\|yml.j2\\|yaml.j2\\|yml.template\\|yaml.template\\)$" . yaml-mode))
 #+END_SRC
 
 ** systemd
@@ -6719,7 +6811,7 @@ GitHub: https://github.com/smihica/emmet-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package systemd
     :defer t
-      :mode ("\\.\\(service\\|service.j2\\)$" . systemd-mode))
+      :mode ("\\.\\(service\\|service.j2\\|service.template\\)$" . systemd-mode))
 #+END_SRC
 
 ** Ansible
@@ -7430,7 +7522,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
   (when (package-installed-p 'hydra)
     ;; (bind-keys :map pdf-view-mode-map
     ;;            ("\\" . hydra-pdftools/body))
-    (defhydra hydra-pdftools (:color blue :hint nil)
+    (defhydra hydra-pdftools (:color red :hint nil)
       "
                                                                           ╭───────────┐
            Move  History   Scale/Fit     Annotations  Search/Link    Do   │ PDF Tools │
@@ -7815,8 +7907,19 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
           tramp-inline-compress-start-size 10000000
           ;; Make SSH work faster by reusing connections
           tramp-ssh-controlmaster-options
-          "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
+          "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+
+    ;; https://github.com/masasam/emacs-counsel-tramp#if-you-want-to-speed-up-tramp
+    (add-hook 'counsel-tramp-pre-command-hook '(lambda ()
+                                                 (projectile-mode 0)
+                                                 ))
+    (add-hook 'counsel-tramp-quit-hook '(lambda ()
+                                          (projectile-mode 1)
+                                          )))
 #+END_SRC
+
+#+RESULTS:
+: #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8125 data (:use-package (23919 51409 643650 0) :init (23919 51409 643605 0) :config (23919 51409 643455 0) :config-secs (0 0 327 0) :init-secs (0 0 750 0) :use-package-secs (0 0 6329 0)))
 
 *** counsel-tramp
 *About:* 
@@ -7854,9 +7957,18 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
   (epa-file-enable)
 #+END_SRC
 
-** COMMENT View Large Files
+** View Large Files
 *About:* 
 @see - https://github.com/m00natic/vlfi
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package vlf
+    :config
+    ;; https://writequit.org/articles/working-with-logs-in-emacs.html
+    (require 'vlf-setup)
+    ;;; very long lines
+    ;; https://www.reddit.com/r/emacs/comments/ccoksw/solong_mitigating_slowness_due_to_extremely_long/
+    (global-so-long-mode))
+#+END_SRC
 
 ** Command Log Mode
 *About:* 列出 Emacs 触发的函数或按键历史操作列表
@@ -7921,7 +8033,7 @@ markdown preview
     ;;      (bind-keys :map image-mode-map
     ;;                 ("\\" . hydra-image-sticky/body))
     ;;      ))
-    (defhydra hydra-imagex-sticky (:color blue)
+    (defhydra hydra-imagex-sticky (:color red)
       "
             Manipulating Image
             ^Resize^             ^Rotate^           ^Save             ^Quit

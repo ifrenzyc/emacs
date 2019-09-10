@@ -32,12 +32,12 @@
 
   (setq package-archives
         '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
-          ;; ("gnu"          . "https://elpa.gnu.org/packages/")
-          ("gnu"          . "https://elpa.emacs-china.org/gnu/")
-          ;; ("melpa"        . "https://melpa.org/packages/")
-          ("melpa"        . "https://elpa.emacs-china.org/melpa/")
-          ;; ("org"          . "https://orgmode.org/elpa/")
-          ("org"          . "http://elpa.emacs-china.org/org/")
+          ("gnu"          . "https://elpa.gnu.org/packages/")
+          ;; ("gnu"          . "https://elpa.emacs-china.org/gnu/")
+          ("melpa"        . "https://melpa.org/packages/")
+          ;; ("melpa"        . "https://elpa.emacs-china.org/melpa/")
+          ("org"          . "https://orgmode.org/elpa/")
+          ;; ("org"          . "http://elpa.emacs-china.org/org/")
           ))
   )
 
