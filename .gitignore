@@ -9,6 +9,7 @@ custom.el
 elpa/
 emacs.el
 emojis/
+eshell/
 ido.last
 places
 projectile-bookmarks.eld
@@ -28,3 +29,4 @@ network-security.data
 .dap-breakpoints
 .last-package-update-day
 eclipse.jdt.ls/
+org-journal.cache

@@ -1,11 +1,6 @@
 #+TITLE: ITSYC's Literate Emacs Config
 #+Author: Yang Chuang
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="readtheorg.css"/>
-#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-#+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
-#+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>
+#+SETUPFILE: ~/notes/setup.org
 
 * About
 这个是我个人的 Emacs 配置文件，采用 Orgmode 方式管理。
@@ -151,7 +146,7 @@ macOS switch meta key.
   (setq-default kill-whole-line t)
 
   (hl-line-mode t)
-  (global-prettify-symbols-mode t)
+  ;; (global-prettify-symbols-mode t)
 #+END_SRC
 
 Emacs-plus patch : https://github.com/d12frosted/homebrew-emacs-plus
@@ -397,7 +392,7 @@ This behaviour in general emulates the scrolloff option in vim.
            ([remap scroll-down-command] . scrollkeeper-contents-down)))
 #+END_SRC
 
-*** sublimity
+*** COMMENT sublimity
 - [[https://github.com/zk-phi/sublimity][GitHub - zk-phi/sublimity: {emacs} smooth-scrolling and minimap like sublime ...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package sublimity
@@ -535,14 +530,18 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 
     ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
     ;; theme may have their own settings.
-    (load-theme 'doom-one t)
+    ;; (load-theme 'doom-one t)
     ;; (load-theme 'doom-solarized-light t)
+    ;; (load-theme 'doom-nord t)
+    (load-theme 'doom-spacegrey t)
     :config
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
 
     ;; Enable custom neotree theme
     (doom-themes-neotree-config)    ; all-the-icons fonts must be installed!
+    
+    (setq doom-themes-treemacs-theme "doom-colors")
     (doom-themes-treemacs-config)    ; all-the-icons fonts must be installed!
 
     ;; Corrects (and improves) org-mode's native fontification.
@@ -910,7 +909,7 @@ https://github.com/davidshepherd7/electric-operator
 #+END_SRC
 
 ** Evil
-*** evil-collection
+*** COMMENT evil-collection
 *About:* evil 按键扩展集合
 @see - https://github.com/emacs-evil/evil-collection
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -937,7 +936,7 @@ https://github.com/davidshepherd7/electric-operator
             (set-cursor-color "DarkCyan")
     (setq-default evil-want-Y-yank-to-eol t)
     
-    (evil-set-initial-state 'dired-mode 'emacs)
+    ;; (evil-set-initial-state 'dired-mode 'emacs)
     ;; (global-evil-leader-mode +1)
     (evil-mode)
     :general
@@ -1051,7 +1050,7 @@ let there be a <leader>
   ;;    "b" 'switch-to-buffer))
 #+END_SRC
 
-*** evil-nerd-commenter
+*** COMMENT evil-nerd-commenter
 *About:* Comment/uncomment lines efficiently.
 - [[https://github.com/redguardtoo/evil-nerd-commenter][GitHub - redguardtoo/evil-nerd-commenter]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1069,7 +1068,7 @@ let there be a <leader>
   ))
 #+END_SRC
 
-*** evil-commentary
+*** COMMENT evil-commentary
 *About:* Comment/uncomment
 - [[https://github.com/linktohack/evil-commentary][GitHub - linktohack/evil-commentary]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1079,7 +1078,7 @@ let there be a <leader>
     (evil-commentary-mode))
 #+END_SRC
 
-*** evil-goggles
+*** COMMENT evil-goggles
 *About:* 高亮 evil 要编辑选中的块
 - [[https://github.com/edkolev/evil-goggles][GitHub - edkolev/evil-goggles]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1091,7 +1090,7 @@ let there be a <leader>
     (evil-goggles-mode))
 #+END_SRC
 
-*** evil-search-highlight-persist
+*** COMMENT evil-search-highlight-persist
 *About:* 显示 evil search 匹配的词
 - [[https://github.com/juanjux/evil-search-highlight-persist][GitHub - juanjux/evil-search-highlight-persist]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1105,7 +1104,7 @@ let there be a <leader>
     )
 #+END_SRC
 
-*** evil-indent-plus
+*** COMMENT evil-indent-plus
 *About:* 代码缩进按键绑定
 - [[https://github.com/TheBB/evil-indent-plus][GitHub - TheBB/evil-indent-plus]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1120,7 +1119,7 @@ let there be a <leader>
 *About:* 
 @see - https://github.com/edkolev/evil-lion
 
-*** evil-matchit
+*** COMMENT evil-matchit
 *About:* 快速在匹配的代码块分隔符跳转，按键 =%= ，比如 html 里面同级的 ~<div>~ ~</div>~ 。
 - [[https://github.com/redguardtoo/evil-matchit][GitHub - redguardtoo/evil-matchit]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1130,7 +1129,7 @@ let there be a <leader>
     (global-evil-matchit-mode 1))
 #+END_SRC
 
-*** evil-visualstar
+*** COMMENT evil-visualstar
 *About:* 通过 =*= ， =#= 快速查找选中的代码
 This allows me to easily start a * or # search from a visual selection.
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1140,7 +1139,7 @@ This allows me to easily start a * or # search from a visual selection.
     (global-evil-visualstar-mode t))
 #+END_SRC
 
-*** evil-surround
+*** COMMENT evil-surround
 *About:* 快速给选中的代码块加上引号或者括号，这个与 smartparens 有一些重复。
 @see - https://github.com/emacs-evil/evil-surround
 - [[https://github.com/casouri/isolate][GitHub - casouri/isolate: Surrounding magics, extensible]]
@@ -1151,7 +1150,7 @@ This allows me to easily start a * or # search from a visual selection.
     (global-evil-surround-mode 1))
 #+END_SRC
 
-*** evil-anzu
+*** COMMENT evil-anzu
 *About:* anzu 的 evil 扩展，用于快速替换文本
 @see - https://github.com/syohex/emacs-anzu
 @see - https://github.com/syohex/emacs-evil-anzu
@@ -1160,7 +1159,7 @@ This allows me to easily start a * or # search from a visual selection.
     :after (evil anzu))
 #+END_SRC
 
-*** evil-multiedit
+*** COMMENT evil-multiedit
 
 *** COMMENT evil-number
 *About:* 
@@ -1914,7 +1913,6 @@ https://github.com/dustinlacewell/hera
 - snails
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy
-    :defer t
     :diminish ""
     :general
     ("C-x b" 'ivy-switch-buffer
@@ -1925,27 +1923,26 @@ https://github.com/dustinlacewell/hera
     (ivy-display-style 'fancy)
     (ivy-use-virtual-buffers t)
     :config
-    ;; @see - [[https://emacs-china.org/t/topic/6069/8][怎样给 Ivy 添加拼音支持 - Emacs-general - Emacs China]]
-    (defun eh-ivy-cregexp (str)
-      (if (string-match-p "^\\." str)
-          (pyim-cregexp-build (substring str 1))
-        (ivy--regex-plus str)))
-
-    (setq ivy-re-builders-alist
-          '((t . eh-ivy-cregexp)))
-    (ivy-mode))
+    (ivy-mode 1))
 #+END_SRC
 
 *** ivy-rich
 *About:* 
 https://github.com/Yevgnen/ivy-rich
 https://github.com/casouri/ivy-filthy-rich
+
+- [[https://gist.github.com/tam17aki/695995d23166683e7b4f04774e0eeda9][tam17aki/ivy-rich-settings.el]]
+- [[https://github.com/walseb/QualityEmacsConfig][GitHub - walseb/QualityEmacsConfig]]
+- [[https://github.com/11182711114/emacs-config/blob/master/emacsconfig.org][emacs-config/emacsconfig.org at master · 11182711114/emacs-config · GitHub]]
+- [[https://github.com/mpereira/.emacs.d/blob/master/configuration.org][.emacs.d/configuration.org at master · mpereira/.emacs.d · GitHub]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy-rich
     :after ivy
     :config
     (ivy-rich-mode t)
-    (setq ivy-rich--display-transformers-list
+    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+    (setq ivy-rich-path-style 'abbreviate)
+    (setq ivy-rich-display-transformers-list
           '(ivy-switch-buffer
             (:columns
              ((ivy-rich-candidate (:width 30))  ; return the candidate itself
@@ -1956,6 +1953,10 @@ https://github.com/casouri/ivy-filthy-rich
               (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))  ; return file path relative to project root or `default-directory' if project is nil
              :predicate
              (lambda (cand) (get-buffer cand)))
+            counsel-find-file
+            (:columns
+             ((ivy-read-file-transformer)
+              (ivy-rich-counsel-find-file-truename (:face font-lock-doc-face))))
             counsel-M-x
             (:columns
              ((counsel-M-x-transformer (:width 40))  ; thr original transfomer
@@ -1968,14 +1969,122 @@ https://github.com/casouri/ivy-filthy-rich
             (:columns
              ((counsel-describe-variable-transformer (:width 40))  ; the original transformer
               (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))  ; return the docstring of the variable
+            package-install
+            (:columns
+             ((ivy-rich-candidate (:width 30))
+              (ivy-rich-package-version (:width 16 :face font-lock-comment-face))
+              (ivy-rich-package-archive-summary (:width 7 :face font-lock-builtin-face))
+              (ivy-rich-package-install-summary (:face font-lock-doc-face))))
             counsel-recentf
             (:columns
              ((ivy-rich-candidate (:width 0.8)) ; return the candidate itself
               (ivy-rich-file-last-modified-time (:face font-lock-comment-face))))) ; return the last modified time of the file
-          ))
+          )
+
+    ;; (setq ivy-rich-display-transformers-list
+    ;;       '(ivy-switch-buffer
+    ;;         (:columns
+    ;;          ((ivy-rich-candidate (:width 30))
+    ;;           (ivy-rich-switch-buffer-size (:width 7))
+    ;;           (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right))
+    ;;           (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))
+    ;;           (ivy-rich-switch-buffer-project (:width 15 :face success))
+    ;;           (ivy-rich-switch-buffer-path
+    ;;            (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path
+    ;;                                 x (ivy-rich-minibuffer-width 0.3))))))
+    ;;          :predicate
+    ;;          (lambda (cand) (get-buffer cand)))
+    ;;         counsel-M-x
+    ;;         (:columns
+    ;;          ((counsel-M-x-transformer (:width 40))
+    ;;           (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))
+    ;;         counsel-describe-function
+    ;;         (:columns
+    ;;          ((counsel-describe-function-transformer (:width 40))
+    ;;           (ivy-rich-counsel-function-docstring (:face font-lock-doc-face))))
+    ;;         counsel-describe-variable
+    ;;         (:columns
+    ;;          ((counsel-describe-variable-transformer (:width 40))
+    ;;           (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))
+    ;;         counsel-recentf
+    ;;         (:columns
+    ;;          ((ivy-rich-candidate (:width 0.8))
+    ;;           (ivy-rich-file-last-modified-time (:face font-lock-comment-face))))
+    ;;         package-install
+    ;;         (:columns
+    ;;          ((ivy-rich-candidate (:width 30))
+    ;;           (ivy-rich-package-version (:width 16 :face font-lock-comment-face))
+    ;;           (ivy-rich-package-archive-summary
+    ;;            (:width 7 :face font-lock-builtin-face))
+    ;;           (ivy-rich-package-install-summary (:face font-lock-doc-face))))))
+
+    ;; (declare-function project-roots "projects")
+    ;; (declare-function projectile-project-root "projectile")
+
+    ;; (defun ivy-rich-switch-buffer-path (candidate)
+    ;;   (if-let ((result (ivy-rich--switch-buffer-root-and-filename candidate)))
+    ;;       (cl-destructuring-bind (root . filename) result
+    ;;         (cond
+    ;;          ;; Case: absolute
+    ;;          ((or (memq ivy-rich-path-style '(full absolute))
+    ;;               (and (null ivy-rich-parse-remote-file-path)
+    ;;                    (or (file-remote-p root))))
+    ;;           (or filename root))
+    ;;          ;; Case: abbreviate
+    ;;          ((memq ivy-rich-path-style '(abbreviate abbrev))
+    ;;           (abbreviate-file-name (or filename root)))
+    ;;          ;; Case: relative
+    ;;          ((or (eq ivy-rich-path-style 'relative)
+    ;;               t)            ; make 'relative default
+    ;;           (if (and filename root)
+    ;;               (let ((relative-path (string-remove-prefix root filename)))
+    ;;                 (if (string= relative-path candidate)
+    ;;                     (concat (file-name-as-directory
+    ;;                              (file-name-nondirectory
+    ;;                               (directory-file-name (file-name-directory
+    ;;                                                     filename))))
+    ;;                             candidate)
+    ;;                   relative-path))
+    ;;             ""))))
+    ;;     ""))
+
+    ;; (defun ivy-rich--switch-buffer-root-and-filename (candidate)
+    ;;   (let* ((buffer (get-buffer candidate))
+    ;;          (truenamep t))
+    ;;     (cl-destructuring-bind
+    ;;         (filename directory mode)
+    ;;         (ivy-rich--local-values
+    ;;          buffer '(buffer-file-name default-directory major-mode))
+    ;;       ;; Only make sense when `filename' and `root' are both not `nil'
+    ;;       (unless (and filename
+    ;;                    directory
+    ;;                    (if (file-remote-p filename) ivy-rich-parse-remote-buffer t)
+    ;;                    (not (eq mode 'dired-mode)))
+    ;;         (setq truenamep nil))
+    ;;       (when (and truenamep
+    ;;                  (ivy-rich-switch-buffer-in-project-p candidate))
+    ;;         ;; Find the project root directory or `default-directory'
+    ;;         (setq directory (cond ((bound-and-true-p projectile-mode)
+    ;;                                (or (ivy-rich--local-values
+    ;;                                     buffer 'projectile-project-root)
+    ;;                                    (with-current-buffer buffer
+    ;;                                      (projectile-project-root))))
+    ;;                               ((require 'project nil t)
+    ;;                                (with-current-buffer buffer
+    ;;                                  (setq truenamep nil)
+    ;;                                  (car (project-roots (project-current))))))))
+    ;;       (progn
+    ;;         (if (not (eq mode 'dired-mode))
+    ;;             (setq filename (or (ivy-rich--local-values
+    ;;                                 buffer 'buffer-file-truename)
+    ;;                                (file-truename filename)))
+    ;;           (setq filename ""))
+    ;;         (cons (expand-file-name directory)
+    ;;               (expand-file-name filename))))))
+    )
 #+END_SRC
 
-*** ivy-prescient
+*** COMMENT ivy-prescient
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy-prescient
     :after ivy
@@ -1984,7 +2093,7 @@ https://github.com/casouri/ivy-filthy-rich
     (ivy-prescient-mode t))
 #+END_SRC
 
-*** ivy-hydra
+*** COMMENT ivy-hydra
 *About:* 
 https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
@@ -2006,38 +2115,15 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
   ;;     (setq ivy-posframe-border-width 1)))
 #+END_SRC
 
-** COMMENT snails
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package snails
-    :load-path "lisp/snails"
-    :commands snails
-    :bind
-    (:map global-map
-          ("M-p" . (lambda ()
-                     (interactive)
-                     (snails '(
-                               snails-backend-buffer
-                               snails-backend-recentf
-                               snails-backend-projectile
-                               snails-backend-mdfind
-                               snails-backend-rg
-                               snails-backend-imenu))))
-     :map snails-mode-map ([remap next-line] . snails-select-next-item)
-    ))
-    ;; :hook
-    ;; (snails-mode . evil-insert))
-#+END_SRC
-
 ** swiper
 *About:* 类似于 =M-x isearch= 的功能，提供内容查找功能
 - [[https://github.com/abo-abo/swiper][GitHub - abo-abo/swiper]]
 - [[https://oremacs.com/swiper/][Ivy User Manual]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package swiper
-    :defer t     
-    :commands (swiper swiper-all)
+    :commands (swiper swiper-all swiper-isearch)
     :general
-    ("C-s" 'swiper
+    ("C-s" 'swiper-isearch
      ;; "C-r" 'swiper
      "C-c u" 'swiper-all)
     (swiper-map
@@ -2074,11 +2160,10 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package counsel
-    :defer t
     :after (ivy)
     :ensure-system-package
-    ((ag . the_silver_searcher)
-     (rg . ripgrep))
+    ((ag . "brew install the_silver_searcher")
+     (rg . "brew install ripgrep"))
     :general
     ("C-x C-f" 'counsel-find-file
      "M-x"     'counsel-M-x
@@ -2107,6 +2192,28 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
   (use-package counsel-osx-app
     :after counsel
     :general ("s-o" 'counsel-osx-app))
+#+END_SRC
+
+** COMMENT snails
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package snails
+    :load-path "lisp/snails"
+    :commands snails
+    :bind
+    (:map global-map
+          ("M-p" . (lambda ()
+                     (interactive)
+                     (snails '(
+                               snails-backend-buffer
+                               snails-backend-recentf
+                               snails-backend-projectile
+                               snails-backend-mdfind
+                               snails-backend-rg
+                               snails-backend-imenu))))
+     :map snails-mode-map ([remap next-line] . snails-select-next-item)
+    ))
+    ;; :hook
+    ;; (snails-mode . evil-insert))
 #+END_SRC
 
 ** COMMENT smex
@@ -2257,7 +2364,7 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
   ;;   (ido-ubiquitous-mode 1))
 #+END_SRC
 
-** expand-region
+** COMMENT expand-region
 *About:* 快速选中文本块
 Emacs extension to increase selected region by semantic units.
 - [[https://github.com/magnars/expand-region.el][GitHub - magnars/expand-region.el]]
@@ -2270,7 +2377,7 @@ Emacs extension to increase selected region by semantic units.
     ("C-=" 'er/expand-region))
 #+END_SRC
 
-** selected
+** COMMENT selected
 *About:* 针对选中的区域自定义一些按键
 - [[https://github.com/Kungsgeten/selected.el][GitHub - Kungsgeten/selected.el]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2322,6 +2429,7 @@ Emacs extension to increase selected region by semantic units.
 @see - https://github.com/abo-abo/avy
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package avy
+    :defer t
     :init
     (setq avy-background t)
     :general
@@ -2374,7 +2482,7 @@ Emacs extension to increase selected region by semantic units.
 *** TODO 参考这个优化按键及显示方式
 https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace-related.el
 
-** iedit
+** COMMENT iedit
 *About:* 快速编辑选中的区域
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit)
@@ -2409,7 +2517,7 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
           try-complete-lisp-symbol))
 #+END_SRC
 
-** folding
+** COMMENT folding
 *About:* 快速折叠代码
 - [[https://github.com/mrkkrp/vimish-fold][GitHub - mrkkrp/vimish-fold]]
 #+BEGIN_QUOTE
@@ -2454,7 +2562,8 @@ This is a package to perform text folding like in Vim. It has the following feat
 *About:* 基于 Silver Searcher 的多文件内容查找
 - [[https://github.com/Wilfred/ag.el][GitHub - Wilfred/ag.el]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package ag)
+  (use-package ag
+    :ensure-system-package (ag . "brew info the_silver_searcher"))
 #+END_SRC
 
 ** rg
@@ -2527,10 +2636,14 @@ This is a package to perform text folding like in Vim. It has the following feat
     (when (featurep 'evil)
       (add-to-list 'evil-emacs-state-modes 'dired-mode)
       (setq evil-emacs-state-modes (delq 'dired-mode evil-emacs-state-modes)))
+      
+  (eval-after-load 'evil
+   '(progn
+      (evil-set-initial-state 'dired-mode 'emacs)))
     )
 #+END_SRC
 
-*** wdired
+*** COMMENT wdired
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package wdired
     :after dired
@@ -2542,7 +2655,7 @@ This is a package to perform text folding like in Vim. It has the following feat
                 ("C-c C-c" . wdired-change-to-wdired-mode)))
 #+END_SRC
 
-*** diredx
+*** COMMENT diredx
 *About:* dired 模式扩展
 - [[https://github.com/Fuco1/dired-hacks][GitHub - Fuco1/dired-hacks]]
 - [[https://jblevins.org/log/dired-open][Integrating OS X and Emacs Dired]]
@@ -2561,7 +2674,7 @@ This is a package to perform text folding like in Vim. It has the following feat
      ;;                (start-process "default-app" nil "open" fn)))))
 #+END_SRC
 
-*** dired-rainbow
+*** COMMENT dired-rainbow
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired-rainbow
     :init
@@ -2593,15 +2706,7 @@ This is a package to perform text folding like in Vim. It has the following feat
     (setq dired-k-padding 1))
 #+END_SRC
 
-*** all-the-icons-dired
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package all-the-icons-dired
-    :after (dired all-the-icons)
-    :hook
-    (dired-mode . all-the-icons-dired-mode))
-#+END_SRC
-
-*** dired-subtree
+*** COMMENT dired-subtree
 *About:* 
 Show subtree when pressing i
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2613,7 +2718,7 @@ Show subtree when pressing i
      "<backtab>" 'dired-subtree-cycle))
 #+END_SRC
 
-*** dired-narrow
+*** COMMENT dired-narrow
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired-narrow
@@ -2625,11 +2730,19 @@ Show subtree when pressing i
      "C-c C-N" 'dired-narrow-regexp))
 #+END_SRC
 
-*** dired-ranger
+*** COMMENT dired-ranger
 *About:* Multi-stage copy/pasting of files and bookmarks
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired-ranger
     :after (dired))
+#+END_SRC
+
+*** all-the-icons-dired
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package all-the-icons-dired
+    :after (dired all-the-icons)
+    :hook
+    (dired-mode . all-the-icons-dired-mode))
 #+END_SRC
 
 *** keybindings
@@ -2912,20 +3025,20 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
     ("g" nil))
 #+END_SRC
 
-** Corral
+** COMMENT Corral
 - [[https://github.com/nivekuil/corral][GitHub - nivekuil/corral]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package corral
-  :config
-  (defhydra hydra-corral (:columns 4)
-    "Corral"
-    ("(" corral-parentheses-backward "Back")
-    (")" corral-parentheses-forward "Forward")
-    ("[" corral-brackets-backward "Back")
-    ("]" corral-brackets-forward "Forward")
-    ("{" corral-braces-backward "Back")
-    ("}" corral-braces-forward "Forward")
-    ("." hydra-repeat "Repeat")))
+  (use-package corral
+    :config
+    (defhydra hydra-corral (:columns 4)
+      "Corral"
+      ("(" corral-parentheses-backward "Back")
+      (")" corral-parentheses-forward "Forward")
+      ("[" corral-brackets-backward "Back")
+      ("]" corral-brackets-forward "Forward")
+      ("{" corral-braces-backward "Back")
+      ("}" corral-braces-forward "Forward")
+      ("." hydra-repeat "Repeat")))
 #+END_SRC
 
 ** neotree
@@ -3646,7 +3759,15 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     (company-statistics-mode))
 #+END_SRC
 
-** company-english-helper
+** company-prescient
+*About:*
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company-prescient
+    :after company
+    :hook (company-mode . company-prescient-mode))
+#+END_SRC
+
+** COMMENT company-english-helper
 - [[https://emacs-china.org/t/company/6322/186][基于 Company 编写了一个带中文注释的英文补全助手 - Emacs-general - Emacs China]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company-english-helper
@@ -3773,7 +3894,7 @@ https://github.com/emacs-lsp/lsp-mode
       (yas-global-mode t))
 #+END_SRC
 
-** spell check
+** COMMENT spell check
 *About:* spell checking
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ispell
@@ -4046,6 +4167,7 @@ https://github.com/emacs-lsp/lsp-mode
 - TODO: 把这个 eyebrowse 的按键配置到 Hydra 上面。
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package eyebrowse
+    :defer t
     :init
     (eyebrowse-mode 1)
     :config
@@ -4105,14 +4227,10 @@ https://github.com/syohex/emacs-zoom-window
   (use-package pyim
     :demand t
     ;; :after liberime-config
-    :defer t
+    :after ivy
     :config
     (require 'liberime)  ; use RIME
 
-    ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-    (use-package pyim-basedict
-      :ensure nil
-      :config (pyim-basedict-enable))
     (setq default-input-method "pyim")
     ;; 使用全拼
     ;; (setq pyim-default-scheme 'quanpin)
@@ -4147,14 +4265,26 @@ https://github.com/syohex/emacs-zoom-window
 
     ;; 选词框显示 5 个候选词
     (setq pyim-page-length 8)
+
+    ;; ;; @see - [[https://emacs-china.org/t/topic/6069/8][怎样给 Ivy 添加拼音支持 - Emacs-general - Emacs China]]
+    (defun eh-ivy-cregexp (str)
+      (let ((a (ivy--regex-plus str))
+            (b (let ((case-fold-search nil))
+                 (pyim-cregexp-build str))))
+        (if (and a (stringp a))
+            (concat a "\\|" b)
+          a)))
+
+    (setq ivy-re-builders-alist
+          '((t . eh-ivy-cregexp)))
     :bind
     (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
-    ("s-\\" . pyim-convert-string-at-point)
+     ("s-\\" . pyim-convert-string-at-point)
      ;; ("C-;" . pyim-delete-word-from-personal-buffer)
      ))
 #+END_SRC
 
-*** COMMENT pyim-basedict
+*** pyim-basedict
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
   (use-package pyim-basedict
@@ -4703,6 +4833,8 @@ Configuration
   ;; don't give awarning colour to tasks with impending deadlines
   ;; if they are scheduled to be done
   (setq org-agenda-skip-deadline-prewarning-if-scheduled '(pre-scheduled))
+  
+  (setq org-agenda-todo-ignore-scheduled 'future)
 #+END_SRC
 
 - [[https://ivanmalison.github.io/dotfiles/][‎GitHub - IvanMalison/dotfiles: Configuration files for XMonad, Emacs, NixOS, Taffybar and more.]]
@@ -4737,6 +4869,7 @@ Agenda Files
   (setq org-agenda-file-reading (expand-file-name "reading.org" org-directory))
   (setq org-agenda-file-notes (expand-file-name "notes.org" org-directory))
   (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
+  (setq org-agenda-diary-file (expand-file-name "diary.org" org-directory))
   (setq org-default-notes-file (expand-file-name "0x00_GTD/00_inbox.org" org-directory))
   (setq org-agenda-files (list (concat org-directory "/0x00_GTD")))
 
@@ -4841,6 +4974,77 @@ Archive subtrees under the same hierarchy as original in the archive files
   ;; (defun yc/org-archive-done-tasks ()
   ;;   (interactive)
   ;;   (org-map-entries 'org-archive-subtree "/DONE" 'file))
+#+END_SRC
+
+@see - https://gist.github.com/amirrajan/301e74dc844a4c9ffc3830dc4268f177
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (eval-after-load 'evil
+    '(progn
+       (evil-set-initial-state 'org-agenda-mode 'emacs)
+       ;; (evil-define-key 'normal org-agenda-mode-map
+       ;;   (kbd "<RET>") 'org-agenda-switch-to
+       ;;   (kbd "\t") 'org-agenda-goto
+
+       ;;   "q" 'org-agenda-quit
+       ;;   "r" 'org-agenda-redo
+       ;;   "S" 'org-save-all-org-buffers
+       ;;   "gj" 'org-agenda-goto-date
+       ;;   "gJ" 'org-agenda-clock-goto
+       ;;   "gm" 'org-agenda-bulk-mark
+       ;;   "go" 'org-agenda-open-link
+       ;;   "s" 'org-agenda-schedule
+       ;;   "+" 'org-agenda-priority-up
+       ;;   "," 'org-agenda-priority
+       ;;   "-" 'org-agenda-priority-down
+       ;;   "y" 'org-agenda-todo-yesterday
+       ;;   "n" 'org-agenda-add-note
+       ;;   "t" 'org-agenda-todo
+       ;;   ":" 'org-agenda-set-tags
+       ;;   ";" 'org-timer-set-timer
+       ;;   "I" 'helm-org-task-file-headings
+       ;;   "i" 'org-agenda-clock-in-avy
+       ;;   "O" 'org-agenda-clock-out-avy
+       ;;   "u" 'org-agenda-bulk-unmark
+       ;;   "x" 'org-agenda-exit
+       ;;   "j"  'org-agenda-next-line
+       ;;   "k"  'org-agenda-previous-line
+       ;;   "vt" 'org-agenda-toggle-time-grid
+       ;;   "va" 'org-agenda-archives-mode
+       ;;   "vw" 'org-agenda-week-view
+       ;;   "vl" 'org-agenda-log-mode
+       ;;   "vd" 'org-agenda-day-view
+       ;;   "vc" 'org-agenda-show-clocking-issues
+       ;;   "g/" 'org-agenda-filter-by-tag
+       ;;   "o" 'delete-other-windows
+       ;;   "gh" 'org-agenda-holiday
+       ;;   "gv" 'org-agenda-view-mode-dispatch
+       ;;   "f" 'org-agenda-later
+       ;;   "b" 'org-agenda-earlier
+       ;;   "c" 'helm-org-capture-templates
+       ;;   "e" 'org-agenda-set-effort
+       ;;   "n" nil  ; evil-search-next
+       ;;   "{" 'org-agenda-manipulate-query-add-re
+       ;;   "}" 'org-agenda-manipulate-query-subtract-re
+       ;;   "A" 'org-agenda-toggle-archive-tag
+       ;;   "." 'org-agenda-goto-today
+       ;;   "0" 'evil-digit-argument-or-evil-beginning-of-line
+       ;;   "<" 'org-agenda-filter-by-category
+       ;;   ">" 'org-agenda-date-prompt
+       ;;   "F" 'org-agenda-follow-mode
+       ;;   "D" 'org-agenda-deadline
+       ;;   "H" 'org-agenda-holidays
+       ;;   "J" 'org-agenda-next-date-line
+       ;;   "K" 'org-agenda-previous-date-line
+       ;;   "L" 'org-agenda-recenter
+       ;;   "P" 'org-agenda-show-priority
+       ;;   "R" 'org-agenda-clockreport-mode
+       ;;   "Z" 'org-agenda-sunrise-sunset
+       ;;   "T" 'org-agenda-show-tags
+       ;;   "X" 'org-agenda-clock-cancel
+       ;;   "[" 'org-agenda-manipulate-query-add
+       ;;   "g\\" 'org-agenda-filter-by-tag-refine
+       ;;   "]" 'org-agenda-manipulate-query-subtract)
+       ))
 #+END_SRC
 
 *** org-super-agenda
@@ -5061,6 +5265,7 @@ https://github.com/abo-abo/org-download
 - [[https://coldnew.github.io/hexo-org-example/2018/05/22/use-org-download-to-drag-image-to-emacs/][Use org-download to drag image to emacs | hexo-org-example]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-download
+    :defer t
     :ensure-system-package (pngpaste . "brew install pngpaste")
     :after org
     :hook ((dired-mode . org-download-enable)
@@ -5102,6 +5307,7 @@ https://github.com/abo-abo/org-download
 [[https://github.com/rexim/org-cliplink][GitHub - rexim/org-cliplink: Insert org-mode links from clipboard]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-cliplink
+    :defer t
     :commands (org-cliplink-clipboard-content)
     ;; :bind ("C-x p i" . org-cliplink)
     )
@@ -5173,6 +5379,8 @@ Paste an image on clipboard to Emacs Org mode file.
     (insert (concat "[[file:" filename "]]"))
     )
 #+END_SRC
+
+** TODO electric-quote-mode
 
 ** 重新定义不同状态的 todoList 的排版
 @see - [[http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/][Emacs: Strike through headlines for DONE tasks in Org]]
@@ -5252,11 +5460,11 @@ documentation: https://mobileorg.github.io/documentation/
   ;; (setq org-mobile-directory "~/Dropbox/应用/MobileOrg")
 #+END_SRC
 
-** outline-toc
+** COMMENT outline-toc
 *About:* Table-of-contents sidebar for Emacs.
 暂时还没在 mpla 里
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package outline-toc)
+  (use-package outline-toc :defer t)
 #+END_SRC
 
 ** Babel
@@ -5287,6 +5495,21 @@ https://github.com/astahlman/ob-async
   ;;   :after org org-agenda
   ;;   :bind (:map org-agenda-mode-map
   ;;               ("P" . org-pomodoro)))
+#+END_SRC
+
+** COMMENT org-dashboard
+*About:* 
+Visually summarize progress
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; (use-package org-dashboard)
+#+END_SRC
+
+** COMMENT org-analyzer
+@see - [[https://github.com/rksm/clj-org-analyzer][GitHub - rksm/clj-org-analyzer: Fun with org data]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-analyzer
+    :defer t
+    :commands (org-analyzer-start))
 #+END_SRC
 
 ** keybindings
@@ -5589,9 +5812,10 @@ https://github.com/astahlman/ob-async
     ("g" org-goto "goto" :exit t))
 #+END_SRC
 
-*** evil-org
+*** COMMENT evil-org
 *About:* org-mode 的 evil 按键扩展
 @see - https://github.com/Somelauw/evil-org-mode
+@see - https://github.com/edwtjo/evil-org-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package evil-org
     :defer t
@@ -5608,7 +5832,7 @@ https://github.com/astahlman/ob-async
     (evil-org-agenda-set-keys))
 #+END_SRC
 
-*** org-evil
+*** COMMENT org-evil
 *About:* 这个和上面的 evil-org-mode 是相同功能的两个
 @see - https://github.com/GuiltyDolphin/org-evil
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -5623,25 +5847,13 @@ https://github.com/astahlman/ob-async
     (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
 #+END_SRC
 
-** COMMENT org-dashboard
-*About:* 
-Visually summarize progress
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package org-dashboard)
-#+END_SRC
-
-** org-analyzer
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (add-to-list 'load-path (expand-file-name "lisp/org-analyzer-for-emacs-0.3.0" user-emacs-directory))
-  (require 'org-analyzer)
-#+END_SRC
-
-* Deft
+* COMMENT Deft
 - [[https://jblevins.org/projects/deft/][Deft for Emacs]]
 - [[https://www.reddit.com/r/emacs/comments/agw3o5/3500_note_files_40_mb_of_plain_text_100s_of_tags/][3,500 note files, 40 MB of plain text, 100s of tags. Will Org mode work for m...]]
 - [[https://github.com/EFLS/zetteldeft][GitHub - EFLS/zetteldeft: A Zettelkasten system! Or rather, some functions on...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package deft
+    :defer t
     :bind (("<f8>" . deft))
     :commands (deft deft-open-file deft-new-file-named)
     :config
@@ -5679,6 +5891,7 @@ Visually summarize progress
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; highlight git changes
   (use-package git-gutter
+    :defer t
     :diminish git-gutter-mode
     :config (global-git-gutter-mode))
 
@@ -5691,6 +5904,7 @@ Visually summarize progress
 高亮显示未提交的代码块
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package diff-hl
+    :defer t
     :config (global-diff-hl-mode t)
     :hook 
     ((magit-post-refresh . diff-hl-magit-post-refresh)
@@ -5724,6 +5938,7 @@ Visually summarize progress
 **** magit-todo
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit-todos
+    :defer t
     :after magit
     :hook
     (magit-mode . magit-todos-mode)
@@ -5759,6 +5974,7 @@ Visually summarize progress
 @see - https://github.com/bbatsov/projectile
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
+    :defer t
     :commands (projectile-project-root)
     :config (progn (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
                    (setq projectile-enable-caching t
@@ -6138,6 +6354,7 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
 *** Java LSP
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-java
+    :defer t
     :after lsp-mode
     :init
     (use-package request :defer t)
@@ -6153,6 +6370,7 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Debug
   (use-package dap-mode
+    :defer t
     :diminish
     ;; :bind (:map lsp-mode-map
     ;;             ("<f6>" . dap-hydra))
@@ -6173,6 +6391,37 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
            (elixir-mode . (lambda () (require 'dap-elixir)))
            ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
 #+END_SRC
+
+*** dumb-jump
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dumb-jump
+    :defer t
+    :bind (("M-g o" . dumb-jump-go-other-window)
+           ("M-g j" . dumb-jump-go)
+           ("M-g i" . dumb-jump-go-prompt)
+           ("M-g x" . dumb-jump-go-prefer-external)
+           ("M-g z" . dumb-jump-go-prefer-external-other-window))
+    :config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
+    :ensure)
+
+  (defhydra hydra-dumb-jump (:color blue :columns 3)
+    "Dumb Jump"
+    ("j" dumb-jump-go "Go")
+    ("o" dumb-jump-go-other-window "Other window")
+    ("e" dumb-jump-go-prefer-external "Go external")
+    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+    ("i" dumb-jump-go-prompt "Prompt")
+    ("l" dumb-jump-quick-look "Quick look")
+    ("b" dumb-jump-back "Back"))
+#+END_SRC
+
+*** intellij-lsp-serves
+- [[https://github.com/Ruin0x11/intellij-lsp-server][GitHub - Ruin0x11/intellij-lsp-server: Exposes IntelliJ IDEA features through...]]
+
+*** lsp-intellij
+- [[https://github.com/Ruin0x11/lsp-intellij][GitHub - Ruin0x11/lsp-intellij: Emacs client for lsp-intellij-server]]
+
+*** ensime/meghanada
 
 *** Gradle
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -6213,6 +6462,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 - [[https://vxlabs.com/2018/11/19/configuring-emacs-lsp-mode-and-microsofts-visual-studio-code-python-language-server/][Configuring Emacs, lsp-mode and Microsoft's Visual Studio Code Python languag...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-python-ms
+    :defer t
     :after python
     :hook (python-mode . (lambda ()
                             (require 'lsp-python-ms)
@@ -6497,6 +6747,7 @@ Automatic chmod +x
 *** flycheck-checkbashisms
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flycheck-checkbashisms
+    :defer t
     :ensure-system-package (checkbashisms . "brew install checkbashisms")
     :config
     ;; Check 'echo -n' usage
@@ -6511,7 +6762,25 @@ Automatic chmod +x
 
 ** Common Lisp
 
-** Emacs Lisp
+** COMMENT Emacs Lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package cl-indent
+    :demand
+    :config
+    (setq lisp-indent-function #'common-lisp-indent-function)
+    (defvar cm/correct-indentation-list
+      '((defface . nil)
+        (defalias . nil)
+        (define-minor-mode . 1)
+        (define-derived-mode . 3)
+        (defface . 1)
+        ;; (unwind-protect . 1)
+        (define-globalized-minor-mode . nil)
+        ;; Fix `use-pacakge' indentation.
+        (use-package . 1)))
+    (pcase-dolist (`(,sym . ,spec) cm/correct-indentation-list)
+      (put sym 'common-lisp-indent-function-for-elisp spec)))
+#+END_SRC
 
 ** Javascript
 *About:* 
@@ -6811,7 +7080,7 @@ GitHub: https://github.com/smihica/emmet-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package systemd
     :defer t
-      :mode ("\\.\\(service\\|service.j2\\|service.template\\)$" . systemd-mode))
+    :mode ("\\.\\(service\\|service.j2\\|service.template\\)$" . systemd-mode))
 #+END_SRC
 
 ** Ansible
@@ -6972,11 +7241,12 @@ Config for setting markdown mode and stuff
     :mode ("Dockerfile\\'" . dockerfile-mode))
 #+END_SRC
 
-** k8s
+** COMMENT k8s
 kubernetes
 - [[https://www.reddit.com/r/emacs/comments/ci7s53/conquering_kubernetes_with_emacs/][Conquering Kubernetes with Emacs]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package k8s-mode
+   :defer t
    :config
    (setq k8s-search-documentation-browser-function 'browse-url-chrome)
    :hook (k8s-mode . yas-minor-mode))
@@ -6984,10 +7254,12 @@ kubernetes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package kubernetes
+    :defer t
     :commands (kubernetes-overview))
 
   ;; If you want to pull in the Evil compatibility package.
   (use-package kubernetes-evil
+    :defer t
     :after kubernetes)
 #+END_SRC
 
@@ -7079,7 +7351,7 @@ kubernetes
           eshell-prompt-function 'epe-theme-dakrone))
 #+END_SRC
 
-** better-shell
+** COMMENT better-shell
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package better-shell
@@ -7219,6 +7491,7 @@ On macOS:
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; scratch
   (use-package scratch
+    :ensure nil
     :defer t
     :commands (scratch))
 
@@ -7270,7 +7543,7 @@ On macOS:
   (use-package use-package-ensure-system-package)
 #+END_SRC
 
-*** auto-package-update
+*** COMMENT auto-package-update
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package auto-package-update
     :config
@@ -7294,7 +7567,7 @@ macOS 系统自身的包管理系统： ~brew~
                            (install . "proxychains4 brew install")
                            (search . "proxychains4 brew search")
                            (uninstall . "brew uninstall")
-                           (update . ("proxychains4 brew update" "proxychains4 brew upgrade"))
+                           (update . ("proxychains4 brew update" "proxychains4 brew upgrade" "proxychains4 brew cask upgrade"))
                            (clean-cache . "brew cleanup")
                            (log . nil)
                            (get-info . nil)
@@ -7322,13 +7595,14 @@ macOS 系统自身的包管理系统： ~brew~
       ("Q" kill-emacs "Quit Emacs"))
      "Packages"
      (("p" paradox-list-packages)
-      ("P" paradox-upgrade-packages))
+      ("P" paradox-upgrade-packages)
+      ("b" system-packages-update "Homebrew update"))
      "Processes"
      (("s" list-processes)))
     )
 #+END_SRC
 
-** org-reveal
+** COMMENT org-reveal
 *About:* 
 Exports Org-mode contents to Reveal.js HTML presentation.
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -7352,6 +7626,7 @@ https://github.com/justbur/emacs-vdiff
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package pandoc-mode
     :defer t
+    :ensure-system-package (pandoc . "brew install pandoc")
     :hook
     (pandoc-mode . pandoc-load-default-settings)
     :config
@@ -7474,7 +7749,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
                         ("\\.jpg\\'" . "kde-open %s")))
 #+END_SRC
 
-** 在 Emacs 中查看 pdf
+** COMMENT 在 Emacs 中查看 pdf
 参考：https://irreal.org/blog/?p=7000
 
 在 org 上打开 pdf 例子
@@ -7575,6 +7850,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 ** youdao-dictionary
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package youdao-dictionary
+    :defer t
     :functions (posframe-show posframe-hide)
     :preface
     (with-eval-after-load 'posframe
@@ -7615,7 +7891,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     (setq youdao-dictionary-use-chinese-word-segmentation t))
 #+END_SRC
 
-** 使用 PlantUML
+** COMMENT 使用 PlantUML
 *About:* 
 需要依赖 Java 环境及 plantuml.jar（[[http://plantuml.com/download][下载]]）。
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -7641,7 +7917,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 #+END_SRC
 
 ** blog
-*** hexo 博客系统
+*** COMMENT hexo 博客系统
 *About:* 
 我的 hexo 设置
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -7658,7 +7934,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
   (org-add-link-type "img" 'org-custom-link-img-follow 'org-custom-link-img-export)
 #+END_SRC
 
-*** hugo
+*** COMMENT hugo
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package easy-hugo
@@ -7675,7 +7951,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     :general ("C-c C-e" 'easy-hugo))
 #+END_SRC
 
-*** ox-hugo
+*** COMMENT ox-hugo
 *About:* 
 - https://github.com/kaushalmodi/ox-hugo
 - https://ox-hugo.scripter.co/doc/custom-front-matter/
@@ -7685,7 +7961,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     :after ox)
 #+END_SRC
 
-*** dokuwiki
+*** COMMENT dokuwiki
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dokuwiki-mode
@@ -7699,7 +7975,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     (use-package xml-rpc))
 #+END_SRC
 
-** IRC
+** COMMENT IRC
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'erc)
   (require 'erc-log)
@@ -7918,10 +8194,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
                                           )))
 #+END_SRC
 
-#+RESULTS:
-: #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8125 data (:use-package (23919 51409 643650 0) :init (23919 51409 643605 0) :config (23919 51409 643455 0) :config-secs (0 0 327 0) :init-secs (0 0 750 0) :use-package-secs (0 0 6329 0)))
-
-*** counsel-tramp
+*** COMMENT counsel-tramp
 *About:* 
 @see - https://github.com/masasam/emacs-counsel-tramp
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -7935,7 +8208,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
 #+END_SRC
 
-*** docker-tramp
+*** COMMENT docker-tramp
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes :async
   (use-package docker-tramp
@@ -7946,7 +8219,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 *** COMMENT vagrant-tramp
 *About:* 
 
-** Encrypt
+** COMMENT Encrypt
 #+BEGIN_SRC sh
   brew install gnupg
 #+END_SRC
@@ -7970,7 +8243,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     (global-so-long-mode))
 #+END_SRC
 
-** Command Log Mode
+** COMMENT Command Log Mode
 *About:* 列出 Emacs 触发的函数或按键历史操作列表
 - [ ] *TODO* 看把 command-log-mode 的字体单独调小
 
@@ -7979,7 +8252,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 *keybindings:* 
 | keybindings | function                      | 描述                           |
 |-------------+-------------------------------+--------------------------------|
-| ~C-c o~       | clm/toggle-command-log-buffer | 这个是默认按键，不是自己绑定的 |
+| ~C-c o~     | clm/toggle-command-log-buffer | 这个是默认按键，不是自己绑定的 |
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package command-log-mode
     :defer t
@@ -7998,6 +8271,7 @@ markdown preview
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package grip-mode
     :quelpa (grip-mode :fetcher github :repo "seagle0128/grip-mode")
+    :ensure-system-package (grip . "pip install grip -g")
     :bind (:map markdown-mode-command-map
                 ("g" . grip-mode))
     :config
@@ -8054,7 +8328,7 @@ markdown preview
       ("l" imagex-sticky-rotate-left)))
 #+END_SRC
 
-** restful api client
+** COMMENT restful api client
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package restclient 
@@ -8084,15 +8358,17 @@ markdown preview
 #+END_SRC
 
 ** Debug Emacs
-*** manage-minor-mode
+*** COMMENT manage-minor-mode
 *About:* 
 @see - https://github.com/ShingoFukuyama/manage-minor-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (add-to-list 'load-path (expand-file-name "lisp/manage-minor-mode" user-emacs-directory))
-  (require 'manage-minor-mode)
+  (use-package manage-minor-mode
+    :defer t
+    :quelpa (manage-minor-mode :fetcher github :repo "ShingoFukuyama/manage-minor-mode")
+    :commands manage-minor-mode)
 #+END_SRC
 
-*** bug-hunter
+*** COMMENT bug-hunter
 *About:* Hunt down errors by bisecting elisp files
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package bug-hunter :defer t)
