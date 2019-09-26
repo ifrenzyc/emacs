@@ -540,7 +540,7 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 
     ;; Enable custom neotree theme
     (doom-themes-neotree-config)    ; all-the-icons fonts must be installed!
-    
+
     (setq doom-themes-treemacs-theme "doom-colors")
     (doom-themes-treemacs-config)    ; all-the-icons fonts must be installed!
 
@@ -615,8 +615,7 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
           ;; What to dispaly as the version while a new one is being loaded
           doom-modeline-env-load-string "..."
           
-          doom-modeline-checker-simple-format t
-          )
+          doom-modeline-checker-simple-format t)
     :config
     (require 'winum)
     (winum-mode))
@@ -1270,6 +1269,7 @@ This allows me to easily start a * or # search from a visual selection.
     "p."   'hydra-projectile/body
     "p$"   '(:ignore t :which-key "projects/shell")
     "pf"   'projectile-find-file
+    "pa"   'projectile-ag
     ;; "ps"   'helm-projectile-switch-project
     "q"    '(:ignore t :which-key "quit")
     "qs"   'save-buffers-kill-emacs
@@ -1288,7 +1288,12 @@ This allows me to easily start a * or # search from a visual selection.
     "st"   '(:ignore t :which-key "pt")
     "sw"   '(:ignore t :which-key "web")
     "saa"  'ag
+    "sar"  'rg
     "sap"  'ag-project
+    "saA"  'counsel-ag
+    "saR"  'counsel-rg
+    "sad"  'deadgrep
+    "sag"  'counsel-git-grep
     ;; "sas"  'helm-ag
     ;; "saf"  'helm-do-ag
     ;; "sap"  'helm-do-ag-project-root
@@ -2160,7 +2165,6 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package counsel
-    :after (ivy)
     :ensure-system-package
     ((ag . "brew install the_silver_searcher")
      (rg . "brew install ripgrep"))
@@ -3800,7 +3804,10 @@ https://github.com/emacs-lsp/lsp-mode
     (use-package lsp-clients
       :ensure nil
       :init (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/"))))
+#+END_SRC
 
+*** lsp-ui
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-ui
     ;;  :quelpa (lsp-ui :fetcher github :repo "Jimx-/lsp-ui")
     :demand t
@@ -6453,9 +6460,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
     ;; don't split windows
     (setq py-split-windows-on-execute-p nil)
     ;; try to automagically figure out indentation
-    (setq py-smart-indentation t)
-
-    (use-package live-py-mode))
+    (setq py-smart-indentation t))
 #+END_SRC
 
 *** lsp-python-ms
@@ -6533,6 +6538,13 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
     :after python
     :defer t
     :hook (python-mode . yapf-mode))
+#+END_SRC
+
+*** live-py-mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package live-py-mode
+    :defer t
+    :after python)
 #+END_SRC
 
 *** keybindings
