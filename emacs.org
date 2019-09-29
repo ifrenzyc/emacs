@@ -1,6 +1,7 @@
 #+TITLE: ITSYC's Literate Emacs Config
 #+Author: Yang Chuang
 #+SETUPFILE: ~/notes/setup.org
+#+PROPERTY: header-args :results silent
 
 * About
 这个是我个人的 Emacs 配置文件，采用 Orgmode 方式管理。
@@ -736,7 +737,7 @@ Visually highlight the selected buffer.
   ;;   (setq dimmer-percent 0.40))
 #+END_SRC
 
-** nyan-mode
+** COMMENT nyan-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nyan-mode
     :init
@@ -3683,7 +3684,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
     :custom-face (hydra-posframe-border-face ((t (:background "DarkBlue")))))
 #+END_SRC
 
-** tabnine
+** COMMENT tabnine
 - [[https://github.com/TommyX12/company-tabnine][GitHub - TommyX12/company-tabnine: A company-mode backend for TabNine, the al...]]
 - [[https://tabnine.com/][TabNine]]
 - [[https://emacs-china.org/t/tabnine/9988/50][推荐入坑TabNine - Emacs-general - Emacs China]]
@@ -3824,8 +3825,8 @@ https://github.com/emacs-lsp/lsp-mode
     (setq lsp-ui-doc-enable t
           lsp-ui-doc-header t
           lsp-ui-doc-include-signature t
-          lsp-ui-doc-border (face-foreground 'default)
-          ;; lsp-ui-doc-border "orange"
+          ;; lsp-ui-doc-border (face-foreground 'default)
+          lsp-ui-doc-border "orange"
           lsp-ui-doc-position 'top
           ;; lsp-ui-doc-position 'at-point
           lsp-ui-sideline-enable t
@@ -3865,7 +3866,7 @@ https://github.com/emacs-lsp/lsp-mode
     ;; Reset `lsp-ui-doc-background' after loading theme
     (add-hook 'after-load-theme-hook
               (lambda ()
-                (setq lsp-ui-doc-border (face-foreground 'default))
+                ;; (setq lsp-ui-doc-border (face-foreground 'default))
                 (set-face-background 'lsp-ui-doc-background
                                      (face-background 'tooltip))))
     )
@@ -4274,16 +4275,16 @@ https://github.com/syohex/emacs-zoom-window
     (setq pyim-page-length 8)
 
     ;; ;; @see - [[https://emacs-china.org/t/topic/6069/8][怎样给 Ivy 添加拼音支持 - Emacs-general - Emacs China]]
-    (defun eh-ivy-cregexp (str)
-      (let ((a (ivy--regex-plus str))
-            (b (let ((case-fold-search nil))
-                 (pyim-cregexp-build str))))
-        (if (and a (stringp a))
-            (concat a "\\|" b)
-          a)))
+    ;; (defun eh-ivy-cregexp (str)
+    ;;   (let ((a (ivy--regex-plus str))
+    ;;         (b (let ((case-fold-search nil))
+    ;;              (pyim-cregexp-build str))))
+    ;;     (if (and a (stringp a))
+    ;;         (concat a "\\|" b)
+    ;;       a)))
 
-    (setq ivy-re-builders-alist
-          '((t . eh-ivy-cregexp)))
+    ;; (setq ivy-re-builders-alist
+    ;;       '((t . eh-ivy-cregexp)))
     :bind
     (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
      ("s-\\" . pyim-convert-string-at-point)
