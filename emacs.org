@@ -71,6 +71,12 @@ macOS switch meta key.
   ;; (use-package straight)
 #+END_SRC
 
+** use-package-ensure-system-package
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package use-package-ensure-system-package
+    :demand t)
+#+END_SRC
+
 ** quelpa-use-package
 - [[https://github.com/quelpa/quelpa-use-package][GitHub - quelpa/quelpa-use-package: repo moved to framagit.org, please report...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -377,7 +383,7 @@ This behaviour in general emulates the scrolloff option in vim.
   ;;   (global-yascroll-bar-mode t))
 #+END_SRC
 
-*** smooth-scrolling
+*** COMMENT smooth-scrolling
 *About:*
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smooth-scrolling
@@ -386,7 +392,7 @@ This behaviour in general emulates the scrolloff option in vim.
     (setq smooth-scroll-margin 5))
 #+END_SRC
 
-*** scrollkeeper
+*** COMMENT scrollkeeper
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package scrollkeeper
     :bind (([remap scroll-up-command] . scrollkeeper-contents-up)
@@ -737,7 +743,7 @@ Visually highlight the selected buffer.
   ;;   (setq dimmer-percent 0.40))
 #+END_SRC
 
-** COMMENT nyan-mode
+** nyan-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nyan-mode
     :init
@@ -909,7 +915,7 @@ https://github.com/davidshepherd7/electric-operator
 #+END_SRC
 
 ** Evil
-*** COMMENT evil-collection
+*** evil-collection
 *About:* evil 按键扩展集合
 @see - https://github.com/emacs-evil/evil-collection
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1034,7 +1040,7 @@ use 'keyfreq-show'
 #+END_SRC
 
 ** evil-extends
-*** COMMENT evil-leader
+*** evil-leader
 let there be a <leader>
 [[https://github.com/cofi/evil-leader][GitHub - cofi/evil-leader: <leader> key for evil]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1050,7 +1056,7 @@ let there be a <leader>
   ;;    "b" 'switch-to-buffer))
 #+END_SRC
 
-*** COMMENT evil-nerd-commenter
+*** evil-nerd-commenter
 *About:* Comment/uncomment lines efficiently.
 - [[https://github.com/redguardtoo/evil-nerd-commenter][GitHub - redguardtoo/evil-nerd-commenter]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1068,7 +1074,7 @@ let there be a <leader>
   ))
 #+END_SRC
 
-*** COMMENT evil-commentary
+*** evil-commentary
 *About:* Comment/uncomment
 - [[https://github.com/linktohack/evil-commentary][GitHub - linktohack/evil-commentary]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1078,7 +1084,7 @@ let there be a <leader>
     (evil-commentary-mode))
 #+END_SRC
 
-*** COMMENT evil-goggles
+*** evil-goggles
 *About:* 高亮 evil 要编辑选中的块
 - [[https://github.com/edkolev/evil-goggles][GitHub - edkolev/evil-goggles]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1090,7 +1096,7 @@ let there be a <leader>
     (evil-goggles-mode))
 #+END_SRC
 
-*** COMMENT evil-search-highlight-persist
+*** evil-search-highlight-persist
 *About:* 显示 evil search 匹配的词
 - [[https://github.com/juanjux/evil-search-highlight-persist][GitHub - juanjux/evil-search-highlight-persist]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1104,7 +1110,7 @@ let there be a <leader>
     )
 #+END_SRC
 
-*** COMMENT evil-indent-plus
+*** evil-indent-plus
 *About:* 代码缩进按键绑定
 - [[https://github.com/TheBB/evil-indent-plus][GitHub - TheBB/evil-indent-plus]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1119,7 +1125,7 @@ let there be a <leader>
 *About:* 
 @see - https://github.com/edkolev/evil-lion
 
-*** COMMENT evil-matchit
+*** evil-matchit
 *About:* 快速在匹配的代码块分隔符跳转，按键 =%= ，比如 html 里面同级的 ~<div>~ ~</div>~ 。
 - [[https://github.com/redguardtoo/evil-matchit][GitHub - redguardtoo/evil-matchit]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1129,7 +1135,7 @@ let there be a <leader>
     (global-evil-matchit-mode 1))
 #+END_SRC
 
-*** COMMENT evil-visualstar
+*** evil-visualstar
 *About:* 通过 =*= ， =#= 快速查找选中的代码
 This allows me to easily start a * or # search from a visual selection.
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1139,7 +1145,7 @@ This allows me to easily start a * or # search from a visual selection.
     (global-evil-visualstar-mode t))
 #+END_SRC
 
-*** COMMENT evil-surround
+*** evil-surround
 *About:* 快速给选中的代码块加上引号或者括号，这个与 smartparens 有一些重复。
 @see - https://github.com/emacs-evil/evil-surround
 - [[https://github.com/casouri/isolate][GitHub - casouri/isolate: Surrounding magics, extensible]]
@@ -1150,7 +1156,7 @@ This allows me to easily start a * or # search from a visual selection.
     (global-evil-surround-mode 1))
 #+END_SRC
 
-*** COMMENT evil-anzu
+*** evil-anzu
 *About:* anzu 的 evil 扩展，用于快速替换文本
 @see - https://github.com/syohex/emacs-anzu
 @see - https://github.com/syohex/emacs-evil-anzu
@@ -1920,6 +1926,7 @@ https://github.com/dustinlacewell/hera
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy
     :diminish ""
+    :demand t
     :general
     ("C-x b" 'ivy-switch-buffer
      "C-x B" 'ivy-switch-buffer-other-window)
@@ -1929,7 +1936,18 @@ https://github.com/dustinlacewell/hera
     (ivy-display-style 'fancy)
     (ivy-use-virtual-buffers t)
     :config
-    (ivy-mode 1))
+    (ivy-mode 1)
+
+    ;; @see - [[http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/][Why are you changing gc-cons-threshold?]]
+    (defun my-minibuffer-setup-hook ()
+      (setq gc-cons-threshold most-positive-fixnum))
+
+    (defun my-minibuffer-exit-hook ()
+      (setq gc-cons-threshold 800000))
+
+    (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+    (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+    )
 #+END_SRC
 
 *** ivy-rich
@@ -1944,6 +1962,7 @@ https://github.com/casouri/ivy-filthy-rich
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy-rich
     :after ivy
+    :demand t
     :config
     (ivy-rich-mode t)
     (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
@@ -2090,7 +2109,7 @@ https://github.com/casouri/ivy-filthy-rich
     )
 #+END_SRC
 
-*** COMMENT ivy-prescient
+*** ivy-prescient
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ivy-prescient
     :after ivy
@@ -2099,7 +2118,7 @@ https://github.com/casouri/ivy-filthy-rich
     (ivy-prescient-mode t))
 #+END_SRC
 
-*** COMMENT ivy-hydra
+*** ivy-hydra
 *About:* 
 https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
@@ -2166,6 +2185,7 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package counsel
+    :demand t
     :ensure-system-package
     ((ag . "brew install the_silver_searcher")
      (rg . "brew install ripgrep"))
@@ -2339,37 +2359,37 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 *** COMMENT helm-apropos
 
-** COMMENT ido
+** ido
 *About:* emacs 下的补全框架
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; (use-package ido
-  ;;   :defer 1
-  ;;   :init
-  ;;   (setq ido-use-faces nil)
-  ;;   :general
-  ;;   ("C-x C-f" 'ido-find-file)
-  ;;   :config
-  ;;   (ido-vertical-mode 1)
-  ;;   (ido-everywhere 1)
-  ;;   (ido-mode t)
-  ;;   (setq ido-vertical-define-keys 'C-n-and-C-p-only))
+  (use-package ido
+    :defer 1
+    :init
+    (setq ido-use-faces nil)
+    :general
+    ("C-x C-f" 'ido-find-file)
+    :config
+    (ido-vertical-mode 1)
+    (ido-everywhere 1)
+    (ido-mode t)
+    (setq ido-vertical-define-keys 'C-n-and-C-p-only))
 
-  ;; (use-package ido-vertical-mode :after ido)
+  (use-package ido-vertical-mode :after ido)
 
-  ;; (use-package flx-ido
-  ;;   :after ido
-  ;;   :config
-  ;;   (flx-ido-mode 1)
-  ;;   ;; disable ido faces to see flx highlights.
-  ;;   (setq ido-enable-flex-matching t))
+  (use-package flx-ido
+    :after ido
+    :config
+    (flx-ido-mode 1)
+    ;; disable ido faces to see flx highlights.
+    (setq ido-enable-flex-matching t))
 
-  ;; (use-package ido-completing-read+
-  ;;   :after ido
-  ;;   :config
-  ;;   (ido-ubiquitous-mode 1))
+  (use-package ido-completing-read+
+    :after ido
+    :config
+    (ido-ubiquitous-mode 1))
 #+END_SRC
 
-** COMMENT expand-region
+** expand-region
 *About:* 快速选中文本块
 Emacs extension to increase selected region by semantic units.
 - [[https://github.com/magnars/expand-region.el][GitHub - magnars/expand-region.el]]
@@ -2382,7 +2402,7 @@ Emacs extension to increase selected region by semantic units.
     ("C-=" 'er/expand-region))
 #+END_SRC
 
-** COMMENT selected
+** selected
 *About:* 针对选中的区域自定义一些按键
 - [[https://github.com/Kungsgeten/selected.el][GitHub - Kungsgeten/selected.el]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2400,7 +2420,7 @@ Emacs extension to increase selected region by semantic units.
                 "t" 'org-table-convert-region))
 #+END_SRC
 
-** COMMENT multiple-cursors
+** multiple-cursors
 参考：[[http://www.cauchy.me/2015/08/20/emacs-multi-cursors/][My Favourite Emacs Modes - multiple-cursors · Thinking Aloud]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (defhydra hydra-multiple-cursors (:hint nil)
@@ -2487,7 +2507,7 @@ Emacs extension to increase selected region by semantic units.
 *** TODO 参考这个优化按键及显示方式
 https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace-related.el
 
-** COMMENT iedit
+** iedit
 *About:* 快速编辑选中的区域
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package iedit)
@@ -2628,6 +2648,7 @@ This is a package to perform text folding like in Vim. It has the following feat
   (use-package dired
     :ensure nil
     :after evil
+    :hook (dired-mode . dired-hide-details-mode)
     :init
     ;; show human readable file sizes in dired
     ;; http://pragmaticemacs.com/emacs/dired-human-readable-sizes-and-sort-by-size/
@@ -2648,7 +2669,7 @@ This is a package to perform text folding like in Vim. It has the following feat
     )
 #+END_SRC
 
-*** COMMENT wdired
+*** wdired
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package wdired
     :after dired
@@ -2660,7 +2681,7 @@ This is a package to perform text folding like in Vim. It has the following feat
                 ("C-c C-c" . wdired-change-to-wdired-mode)))
 #+END_SRC
 
-*** COMMENT diredx
+*** diredx
 *About:* dired 模式扩展
 - [[https://github.com/Fuco1/dired-hacks][GitHub - Fuco1/dired-hacks]]
 - [[https://jblevins.org/log/dired-open][Integrating OS X and Emacs Dired]]
@@ -2679,7 +2700,7 @@ This is a package to perform text folding like in Vim. It has the following feat
      ;;                (start-process "default-app" nil "open" fn)))))
 #+END_SRC
 
-*** COMMENT dired-rainbow
+*** dired-rainbow
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired-rainbow
     :init
@@ -2702,7 +2723,7 @@ This is a package to perform text folding like in Vim. It has the following feat
     (dired-rainbow-define org "#5F9EA0" (".*\\.org")))
 #+END_SRC
 
-*** COMMENT dired-k
+*** dired-k
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired-k
     :hook (dired-after-readin . dired-k-no-revert)
@@ -2711,7 +2732,7 @@ This is a package to perform text folding like in Vim. It has the following feat
     (setq dired-k-padding 1))
 #+END_SRC
 
-*** COMMENT dired-subtree
+*** dired-subtree
 *About:* 
 Show subtree when pressing i
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -2723,7 +2744,7 @@ Show subtree when pressing i
      "<backtab>" 'dired-subtree-cycle))
 #+END_SRC
 
-*** COMMENT dired-narrow
+*** dired-narrow
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired-narrow
@@ -2735,19 +2756,34 @@ Show subtree when pressing i
      "C-c C-N" 'dired-narrow-regexp))
 #+END_SRC
 
-*** COMMENT dired-ranger
+*** dired-ranger
 *About:* Multi-stage copy/pasting of files and bookmarks
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dired-ranger
     :after (dired))
 #+END_SRC
 
+*** diredfl
+Colourful columns.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package diredfl
+    :config
+    (diredfl-global-mode 1))
+#+END_SRC
+
+*** dired-git-info
+adds git logs to dired file and directory details.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dired-git-info
+    :bind (:map dired-mode-map
+                (")" . dired-git-info-mode)))
+#+END_SRC
+
 *** all-the-icons-dired
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package all-the-icons-dired
     :after (dired all-the-icons)
-    :hook
-    (dired-mode . all-the-icons-dired-mode))
+    :hook (dired-mode . all-the-icons-dired-mode))
 #+END_SRC
 
 *** keybindings
@@ -3902,7 +3938,7 @@ https://github.com/emacs-lsp/lsp-mode
       (yas-global-mode t))
 #+END_SRC
 
-** COMMENT spell check
+** spell check
 *About:* spell checking
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ispell
@@ -3964,6 +4000,17 @@ https://github.com/emacs-lsp/lsp-mode
     :custom-face (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
     :custom-face (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
     :custom-face (flycheck-posframe-border-face ((t (:background "DarkBlue")))))
+#+END_SRC
+
+*** flycheck-indicator
+@see - [[https://github.com/gexplorer/flycheck-indicator][GitHub - gexplorer/flycheck-indicator: A fancy mode line indicator for `flych...]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck-indicator
+    :quelpa (flycheck-indicator :fetcher github :repo "gexplorer/flycheck-indicator")
+    :after (flycheck)
+    :config
+    (eval-after-load "flycheck"
+    '(add-hook 'flycheck-mode-hook 'flycheck-indicator-mode)))
 #+END_SRC
 
 ** Info
@@ -4274,17 +4321,17 @@ https://github.com/syohex/emacs-zoom-window
     ;; 选词框显示 5 个候选词
     (setq pyim-page-length 8)
 
-    ;; ;; @see - [[https://emacs-china.org/t/topic/6069/8][怎样给 Ivy 添加拼音支持 - Emacs-general - Emacs China]]
-    ;; (defun eh-ivy-cregexp (str)
-    ;;   (let ((a (ivy--regex-plus str))
-    ;;         (b (let ((case-fold-search nil))
-    ;;              (pyim-cregexp-build str))))
-    ;;     (if (and a (stringp a))
-    ;;         (concat a "\\|" b)
-    ;;       a)))
+    ;; @see - [[https://emacs-china.org/t/topic/6069/8][怎样给 Ivy 添加拼音支持 - Emacs-general - Emacs China]]
+    (defun eh-ivy-cregexp (str)
+      (let ((a (ivy--regex-plus str))
+            (b (let ((case-fold-search nil))
+                 (pyim-cregexp-build str))))
+        (if (and a (stringp a))
+            (concat a "\\|" b)
+          a)))
 
-    ;; (setq ivy-re-builders-alist
-    ;;       '((t . eh-ivy-cregexp)))
+    (setq ivy-re-builders-alist
+          '((t . eh-ivy-cregexp)))
     :bind
     (("M-j" . pyim-convert-string-at-point)  ; 与 pyim-probe-dynamic-english 配合
      ("s-\\" . pyim-convert-string-at-point)
@@ -4775,12 +4822,12 @@ e.g. =<s=
            "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
           ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
            "** NEXT %? \nDEADLINE: %t")
-          ("l" "A link, for reading later." entry (file+headline org-agenda-file-reading "Reading List")
+          ("l" "Link" entry (file+headline org-agenda-file-reading "Reading List")
+           "* READ %:description\n%u\n\n%c\n\n%i" :prepend t :empty-lines 1)
+          ("L" "A link, for reading later." entry (file+headline org-agenda-file-reading "Reading List")
            "* READ %?%^L %^g \n%T" :prepend t :empty-lines 1)
           ("K" "Cliplink capture task" entry (file+headline org-agenda-file-reading "Reading List")
            "* READ %(org-cliplink-capture) \nSCHEDULED: %t\n" :prepend t :empty-lines 1)
-          ("L" "Link" entry (file+headline org-agenda-file-reading "Reading List")
-           "* %:description\n%u\n\n%c\n\n%i" :prepend t :empty-lines 1)
           ("n" "Note" entry (file+headline org-agenda-file-notes "Notes")
            "* Note %?\n%T")
           ("b" "Blog idea" entry (file+headline org-default-notes-file "Blog Topics:")
@@ -4808,6 +4855,15 @@ e.g. =<s=
 
 *** TODO 还可以参考这里用于快速粘贴网页书签。
 [[https://github.com/tumashu/org-capture-pop-frame][tumashu/org-capture-pop-frame - GitHub]]
+
+** org-ql
+@see - [[https://github.com/alphapapa/org-ql][GitHub - alphapapa/org-ql: An Org-mode query language, including search comma...]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-ql
+    :defer t
+    :commands (org-ql-view org-ql-search)
+    :quelpa (org-ql :fetcher github :repo "alphapapa/org-ql"))
+#+END_SRC
 
 ** org-agenda
 参考：https://writequit.org/denver-emacs/presentations/2017-04-11-time-clocking-with-org.html
@@ -4874,7 +4930,7 @@ Agenda Files
   (setq org-agenda-file-done (expand-file-name "done.org_archive" org-directory))
   (setq org-agenda-file-journal (expand-file-name "journal.org" org-directory))
   (setq org-agenda-file-thoughts (expand-file-name "thoughts.org" org-directory))
-  (setq org-agenda-file-reading (expand-file-name "reading.org" org-directory))
+  (setq org-agenda-file-reading (expand-file-name "0x00_GTD/05_reading.org" org-directory))
   (setq org-agenda-file-notes (expand-file-name "notes.org" org-directory))
   (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
   (setq org-agenda-diary-file (expand-file-name "diary.org" org-directory))
@@ -4883,7 +4939,7 @@ Agenda Files
 
   (setq org-refile-targets '((org-agenda-file-inbox   :maxlevel . 1)
                              (org-agenda-file-gtd     :maxlevel . 2)
-                             (org-agenda-file-reading :maxlevel . 2)
+                             (org-agenda-file-reading :maxlevel . 1)
                              (org-agenda-file-someday :level .    1)
                              (org-agenda-file-tickler :maxlevel . 2)))
 
@@ -5128,13 +5184,13 @@ Archive subtrees under the same hierarchy as original in the archive files
             (tags-todo "personal")))
 
             ;; - [[https://emacs.stackexchange.com/questions/16551/how-do-i-view-all-org-mode-todos-that-are-not-recurring-or-not-scheduled][org agenda - How do I view all org-mode TODOs that are not recurring, or not ...]]
-          ("cu" "Unscheduled TODO"
+          ("c" "Unscheduled TODO"
            ((todo ""
            ((org-agenda-overriding-header "\nUnscheduled TODO")
-                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled)))))
+                   (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline))))))
            nil
            nil)
-           
+
           ("u" "UDAL 安排给其他人的任务"
            ((agenda "" ((org-agenda-ndays 14)
                         (org-agenda-start-on-weekday nil)
@@ -5410,6 +5466,34 @@ Paste an image on clipboard to Emacs Org mode file.
   (eval-after-load "org" (add-hook 'org-add-hook 'modify-org-done-face))
 #+END_SRC
 
+** org-tree-slide
+[[https://github.com/takaxp/org-tree-slide][GitHub - takaxp/org-tree-slide: A presentation tool for org-mode based on the...]]
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-tree-slide
+    :defer t
+    :commands (org-tree-slide-mode org-tree-slide-skip-done-toggle)
+    :config
+    (when (require 'org-tree-slide nil t)
+      (define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
+      (define-key org-mode-map (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
+      (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
+      (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
+      (define-key org-tree-slide-mode-map (kbd "<f11>") 'org-tree-slide-content)
+      (setq org-tree-slide-skip-outline-level 4)
+      (org-tree-slide-narrowing-control-profile)
+      (setq org-tree-slide-skip-done nil)))
+#+END_SRC
+
+** org-sidebar
+@see - [[https://github.com/alphapapa/org-sidebar][GitHub - alphapapa/org-sidebar: A helpful sidebar for Org mode]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-sidebar
+    :defer t
+    :commands (org-sidebar org-sidebar-tree)
+    :quelpa (org-sidebar :fetcher github :repo "alphapapa/org-sidebar"))
+#+END_SRC
+
 ** export
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -5512,7 +5596,7 @@ Visually summarize progress
   ;; (use-package org-dashboard)
 #+END_SRC
 
-** COMMENT org-analyzer
+** org-analyzer
 @see - [[https://github.com/rksm/clj-org-analyzer][GitHub - rksm/clj-org-analyzer: Fun with org data]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-analyzer
@@ -5840,7 +5924,7 @@ Visually summarize progress
     (evil-org-agenda-set-keys))
 #+END_SRC
 
-*** COMMENT org-evil
+*** org-evil
 *About:* 这个和上面的 evil-org-mode 是相同功能的两个
 @see - https://github.com/GuiltyDolphin/org-evil
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -5855,7 +5939,7 @@ Visually summarize progress
     (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
 #+END_SRC
 
-* COMMENT Deft
+* Deft
 - [[https://jblevins.org/projects/deft/][Deft for Emacs]]
 - [[https://www.reddit.com/r/emacs/comments/agw3o5/3500_note_files_40_mb_of_plain_text_100s_of_tags/][3,500 note files, 40 MB of plain text, 100s of tags. Will Org mode work for m...]]
 - [[https://github.com/EFLS/zetteldeft][GitHub - EFLS/zetteldeft: A Zettelkasten system! Or rather, some functions on...]]
@@ -5922,6 +6006,7 @@ Visually summarize progress
 *** magit
 *About:* Git 客户端
 - [[https://github.com/magit/magit][GitHub - magit/magit]]
+- [[https://emacsair.me/2017/09/01/magit-walk-through/][Emacsair! A walk through the Magit interface]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
     :defer t
@@ -6744,6 +6829,21 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 
 *** COMMENT keybindings
 
+** SQL
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package sql-mode
+    :ensure nil
+    :defer t
+    :mode ("\\.sql\\'" . sql-mode))
+
+  (use-package sqlformat
+    :defer t
+    :ensure-system-package (sqlformat . "pip install sqlparse")
+    :general
+    (sql-mode-map
+     "C-c C-f" 'sqlformat))
+#+END_SRC
+
 ** shell
 Automatic chmod +x
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -7552,8 +7652,6 @@ On macOS:
                   paradox-github-token t
                   paradox-hide-wiki-packages t)
     (remove-hook 'paradox--report-buffer-print 'paradox-after-execute-functions))
-
-  (use-package use-package-ensure-system-package)
 #+END_SRC
 
 *** COMMENT auto-package-update
@@ -7762,7 +7860,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
                         ("\\.jpg\\'" . "kde-open %s")))
 #+END_SRC
 
-** COMMENT 在 Emacs 中查看 pdf
+** 在 Emacs 中查看 pdf
 参考：https://irreal.org/blog/?p=7000
 
 在 org 上打开 pdf 例子
@@ -8207,7 +8305,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
                                           )))
 #+END_SRC
 
-*** COMMENT counsel-tramp
+*** counsel-tramp
 *About:* 
 @see - https://github.com/masasam/emacs-counsel-tramp
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -8221,7 +8319,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
 #+END_SRC
 
-*** COMMENT docker-tramp
+*** docker-tramp
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes :async
   (use-package docker-tramp
@@ -8229,7 +8327,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     :custom (docker-tramp-use-names t))
 #+END_SRC
 
-*** COMMENT vagrant-tramp
+*** vagrant-tramp
 *About:* 
 
 ** COMMENT Encrypt
@@ -8256,7 +8354,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
     (global-so-long-mode))
 #+END_SRC
 
-** COMMENT Command Log Mode
+** Command Log Mode
 *About:* 列出 Emacs 触发的函数或按键历史操作列表
 - [ ] *TODO* 看把 command-log-mode 的字体单独调小
 
@@ -8371,7 +8469,7 @@ markdown preview
 #+END_SRC
 
 ** Debug Emacs
-*** COMMENT manage-minor-mode
+*** manage-minor-mode
 *About:* 
 @see - https://github.com/ShingoFukuyama/manage-minor-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -8408,8 +8506,10 @@ markdown preview
 
 ** Reset GC
 *About:* 参考 doom-emacs 调整 GC：[[https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast][How is Doom’s startup so fast?]]
+@see - [[http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/][Why are you changing gc-cons-threshold?]]
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Then reset it as late as possible; these are the reasonable defaults I use.
   (add-hook 'emacs-startup-hook '(lambda () (setq gc-cons-threshold 16777216
           gc-cons-percentage 0.1)))
+  (run-with-idle-timer 3 t (lambda () (garbage-collect)))
 #+END_SRC
