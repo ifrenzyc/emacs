@@ -101,4 +101,3 @@
 (load custom-file)
 
 ;;; init.el ends here
-(put 'downcase-region 'disabled nil)
