@@ -1,13 +1,13 @@
 
 ;; ----- amx-history -----
 (
+ paradox-upgrade-packages
+ quelpa-upgrade-all
+ org-num-mode
+ org-display-inline-images
+ yc/org-insert-clipboard-image
+ rg
  eval-region
- which-key-show-next-page-cycle
- org-insert-link
- org-store-link
- yc/new-buffer-frame
- counsel-org-goto
- counsel-org-tag
 )
 
 ;; ----- amx-data -----
@@ -25,7 +25,7 @@
  (grip-mode . 4)
  (yc/org-toggle-link-display . 2)
  (emacs-uptime . 2)
- (paradox-upgrade-packages . 13)
+ (paradox-upgrade-packages . 14)
  (quelpa-upgrade . 3)
  (quelpa-self-upgrade . 3)
  (package-list-packages . 12)
@@ -35,13 +35,13 @@
  (custom-org-faces . 1)
  (counsel-ag . 5)
  (fundamental-mode . 1)
- (quelpa-upgrade-all . 9)
+ (quelpa-upgrade-all . 10)
  (org-toggle-link-display . 1)
  (org-mode . 1)
  (describe-function . 7)
  (org-insert-all-links . 3)
  (describe-variable . 1)
- (yc/org-insert-clipboard-image . 1)
+ (yc/org-insert-clipboard-image . 2)
  (describe-char . 2)
  (org-journal-new-entry . 3)
  (describe-font . 1)
@@ -58,7 +58,7 @@
  (org-version . 1)
  (snails . 3)
  (counsel-rg . 2)
- (rg . 5)
+ (rg . 6)
  (snails-everywhere . 1)
  (eval-region . 2)
  (counsel-dired . 1)
@@ -74,4 +74,6 @@
  (org-store-link . 1)
  (org-insert-link . 1)
  (which-key-show-next-page-cycle . 1)
+ (org-display-inline-images . 1)
+ (org-num-mode . 1)
 )
