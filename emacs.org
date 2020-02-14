@@ -4869,6 +4869,18 @@ e.g. =<s=
 )
 #+END_SRC
 
+** org-pretty-tags
+
+** org-num
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package org-num
+  :ensure org-plus-contrib
+  :after org
+  :defer t
+  ;; :hook (org-mode . org-num-mode)
+  )
+#+END_SRC
+
 ** COMMENT pretty-symbol
 代码来源：[[https://www.reddit.com/r/emacs/comments/ctfxbg/emacs_doom_e15_fancy_task_priorities_in_org_mode/][Emacs Doom E15: Fancy Task Priorities in Org Mode]]
 #+BEGIN_SRC emacs-lisp :tangle yes
