@@ -501,6 +501,13 @@ M-x all-the-icons-install-fonts
   :init (all-the-icons-ivy-rich-mode 1))
 #+END_SRC
 
+*** COMMENT all-the-icons-ibuffer
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package all-the-icons-ibuffer
+  :ensure t
+  :init (all-the-icons-ibuffer-mode 1))
+#+END_SRC
+
 ** Dashboard
 修改 Emacs 的启动界面，展现 Dashboard，特别是 Recent files（最近打开的列表），特别适用于我这种基本采用打开最近文件的方式。
 Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载不了。
@@ -4869,7 +4876,33 @@ e.g. =<s=
 )
 #+END_SRC
 
-** org-pretty-tags
+** COMMENT org-pretty-tags
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package org-pretty-tags
+  :demand t
+  :config
+   (setq org-pretty-tags-surrogate-strings
+         (quote
+          (("TOPIC" . "☆")
+           ("PROJEKT" . "💡")
+           ("SERVICE" . "✍")
+           ("Blog" . "✍")
+           ("music" . "♬")
+           ("security" . "🔥"))))
+   (org-pretty-tags-global-mode))
+#+END_SRC
+
+** COMMENT org-fancy-priorities
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package org-fancy-priorities
+  :diminish
+  :demand t
+  :defines org-fancy-priorities-list
+  :hook (org-mode . org-fancy-priorities-mode)
+  :config
+  (unless (char-displayable-p ?❗)
+    (setq org-fancy-priorities-list '("HIGH" "MID" "LOW" "OPTIONAL"))))
+#+END_SRC
 
 ** org-num
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -4879,6 +4912,19 @@ e.g. =<s=
   :defer t
   ;; :hook (org-mode . org-num-mode)
   )
+#+END_SRC
+
+** prettify-symbols
+Builtin mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "†")
+                                       ("#+END_SRC" . "†")
+                                       ("#+begin_src" . "†")
+                                       ("#+end_src" . "†")
+                                       (">=" . "≥")
+                                       ("=>" . "⇨")))
+(setq prettify-symbols-unprettify-at-point 'right-edge)
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
 #+END_SRC
 
 ** COMMENT pretty-symbol
@@ -4971,14 +5017,14 @@ e.g. =<s=
 (setq org-capture-templates
       '(("t" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
          "* TODO %i%?\n%U\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
-        ("d" "Today's Task" entry (file+headline org-default-notes-file "Tasks")
+        ("d" "Today's Task" entry (file+headline org-default-notes-file "NEXTACTIONS")
          "** NEXT %? \nDEADLINE: %t\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
+        ("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")
+         "* DONE MEETING with %? :MEETING:\n:SUBJECT:\n%U\n" :clock-in t :clock-resume t :empty-lines 1)
         ("w" "Work TODO" entry (file+olp org-default-notes-file "Work" "Tasks")
          "* TODO %? :work:\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t)
         ("a" "Appointment" entry (file+headline org-default-notes-file "Appointments")
          "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
-        ("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")
-         "* DONE MEETING with %? :MEETING:\n:SUBJECT:\n%U\n" :clock-in t :clock-resume t :empty-lines 1)
         ("l" "Link" entry (file+headline org-agenda-file-reading "Reading List")
          "* READ %:description\n%u\n\n%c\n\n%i" :prepend t :empty-lines 1)
         ("L" "A link, for reading later." entry (file+headline org-agenda-file-reading "Reading List")
@@ -5333,6 +5379,11 @@ Archive subtrees under the same hierarchy as original in the archive files
 #+BEGIN_SRC emacs-lisp :tangle yes
 (setq org-agenda-custom-commands
       '(
+        ("d" "Daily Tasks"
+         todo "" ((org-super-agenda-groups
+                  '((:name "Today's Tasks"
+                           :todo "NEXT")
+                     (:discard (:anything))))))
         ("S" "Super view"
          ((agenda "" ((org-super-agenda-groups
                        '((:name "Today"
@@ -5367,15 +5418,15 @@ Archive subtrees under the same hierarchy as original in the archive files
                       (org-agenda-prefix-format " %-12:c%?-12t% s")))
           (tags-todo "@work")))
 
-        ("W" "Weekly Overview" todo ""
-         ((org-super-agenda-groups
-           '((:name "This Week's Tasks"
-                    :todo "NEXT")
-             (:name "Delayed Tasks"
-                    :todo "DELAYED")
-             (:name "In Progress"
-                    :todo "STARTED")
-             (:discard (:anything))))))
+        ("W" "Weekly Overview"
+         todo "" ((org-super-agenda-groups
+                  '((:name "This Week's Tasks"
+                           :todo "NEXT")
+                    (:name "Delayed Tasks"
+                           :todo "DELAYED")
+                    (:name "In Progress"
+                           :todo "STARTED")
+                    (:discard (:anything))))))
 
         ("z" "Super view" (
                            (agenda "" ((org-agenda-span 'day)

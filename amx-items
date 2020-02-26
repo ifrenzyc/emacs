@@ -1,18 +1,18 @@
 
 ;; ----- amx-history -----
 (
+ emacs-version
+ org-version
+ emacs-uptime
+ org-toggle-inline-images
+ package-autoremove
+ package-list-packages
  paradox-upgrade-packages
- quelpa-upgrade-all
- org-num-mode
- org-display-inline-images
- yc/org-insert-clipboard-image
- rg
- eval-region
 )
 
 ;; ----- amx-data -----
 (
- (org-toggle-inline-images . 8)
+ (org-toggle-inline-images . 9)
  (org-time-stamp-inactive . 4)
  (amx . 2)
  (beacon-mode . 1)
@@ -24,20 +24,20 @@
  (org-cliplink . 3)
  (grip-mode . 4)
  (yc/org-toggle-link-display . 2)
- (emacs-uptime . 2)
- (paradox-upgrade-packages . 14)
+ (emacs-uptime . 3)
+ (paradox-upgrade-packages . 17)
  (quelpa-upgrade . 3)
  (quelpa-self-upgrade . 3)
- (package-list-packages . 12)
+ (package-list-packages . 13)
  (restart-emacs . 1)
  (image-previous-file . 1)
  (image-next-file . 1)
  (custom-org-faces . 1)
  (counsel-ag . 5)
- (fundamental-mode . 1)
- (quelpa-upgrade-all . 10)
+ (fundamental-mode . 2)
+ (quelpa-upgrade-all . 26)
  (org-toggle-link-display . 1)
- (org-mode . 1)
+ (org-mode . 3)
  (describe-function . 7)
  (org-insert-all-links . 3)
  (describe-variable . 1)
@@ -47,7 +47,7 @@
  (describe-font . 1)
  (markdown-insert-bold . 1)
  (markdown-insert-pre . 1)
- (emacs-version . 1)
+ (emacs-version . 3)
  (proced . 1)
  (quelpa . 1)
  (swiper-thing-at-point . 1)
@@ -55,7 +55,7 @@
  (magit-log-current . 1)
  (magit-log-buffer-file . 3)
  (magit-checkout . 1)
- (org-version . 1)
+ (org-version . 2)
  (snails . 3)
  (counsel-rg . 2)
  (rg . 6)
@@ -76,4 +76,11 @@
  (which-key-show-next-page-cycle . 1)
  (org-display-inline-images . 1)
  (org-num-mode . 1)
+ (eyebrowse-next-window-config . 3)
+ (java-mode . 1)
+ (org-tags-view . 1)
+ (undo-tree-mode . 4)
+ (undo-tree-visualize . 1)
+ (counsel-osx-app . 1)
+ (package-autoremove . 1)
 )
