@@ -1,18 +1,18 @@
 
 ;; ----- amx-history -----
 (
- emacs-version
- org-version
- emacs-uptime
- org-toggle-inline-images
- package-autoremove
- package-list-packages
- paradox-upgrade-packages
+ org-ql-search
+ org-agenda-bulk-action
+ org-agenda-refile
+ org-refile
+ org-cliplink
+ org-agenda-diary-entry
+ org-agenda-filter-remove-all
 )
 
 ;; ----- amx-data -----
 (
- (org-toggle-inline-images . 9)
+ (org-toggle-inline-images . 12)
  (org-time-stamp-inactive . 4)
  (amx . 2)
  (beacon-mode . 1)
@@ -21,11 +21,11 @@
  (amx-describe-function . 2)
  (amx-where-is . 1)
  (amx-mode . 1)
- (org-cliplink . 3)
+ (org-cliplink . 9)
  (grip-mode . 4)
- (yc/org-toggle-link-display . 2)
+ (yc/org-toggle-link-display . 4)
  (emacs-uptime . 3)
- (paradox-upgrade-packages . 17)
+ (paradox-upgrade-packages . 23)
  (quelpa-upgrade . 3)
  (quelpa-self-upgrade . 3)
  (package-list-packages . 13)
@@ -35,19 +35,19 @@
  (custom-org-faces . 1)
  (counsel-ag . 5)
  (fundamental-mode . 2)
- (quelpa-upgrade-all . 26)
+ (quelpa-upgrade-all . 35)
  (org-toggle-link-display . 1)
- (org-mode . 3)
+ (org-mode . 4)
  (describe-function . 7)
  (org-insert-all-links . 3)
  (describe-variable . 1)
- (yc/org-insert-clipboard-image . 2)
+ (yc/org-insert-clipboard-image . 5)
  (describe-char . 2)
  (org-journal-new-entry . 3)
  (describe-font . 1)
  (markdown-insert-bold . 1)
  (markdown-insert-pre . 1)
- (emacs-version . 3)
+ (emacs-version . 4)
  (proced . 1)
  (quelpa . 1)
  (swiper-thing-at-point . 1)
@@ -74,13 +74,30 @@
  (org-store-link . 1)
  (org-insert-link . 1)
  (which-key-show-next-page-cycle . 1)
- (org-display-inline-images . 1)
+ (org-display-inline-images . 3)
  (org-num-mode . 1)
  (eyebrowse-next-window-config . 3)
  (java-mode . 1)
- (org-tags-view . 1)
+ (org-tags-view . 2)
  (undo-tree-mode . 4)
  (undo-tree-visualize . 1)
  (counsel-osx-app . 1)
  (package-autoremove . 1)
+ (recover-this-file . 1)
+ (customize-variable . 6)
+ (org-toggle-tags-groups . 1)
+ (org-info . 1)
+ (hydra-imagex-sticky/body . 1)
+ (org-set-property . 2)
+ (org-property-action . 1)
+ (org-timer-stop . 2)
+ (yc/open-agenda . 2)
+ (yc/dired-open-in-finder . 1)
+ (org-add-note . 1)
+ (org-agenda-filter-remove-all . 1)
+ (org-agenda-diary-entry . 1)
+ (org-agenda-refile . 6)
+ (org-refile . 2)
+ (org-agenda-bulk-action . 2)
+ (org-ql-search . 1)
 )

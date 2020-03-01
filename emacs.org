@@ -756,13 +756,18 @@ Emojis in Emacs! :cat:
 
 ** COMMENT dimmer
 *About:* 高亮光标所在的 window
+@see - https://github.com/gonewest818/dimmer.el
 Visually highlight the selected buffer.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package dimmer
   :init
   (dimmer-activate)
   :config
-  (setq dimmer-percent 0.40))
+  (setq dimmer-percent 0.40)
+  (dimmer-configure-hydra)
+  (dimmer-configure-which-key)
+  ;; (dimmer-configure-org)
+  )
 #+END_SRC
 
 ** COMMENT solaire-mode
@@ -4892,7 +4897,7 @@ e.g. =<s=
    (org-pretty-tags-global-mode))
 #+END_SRC
 
-** COMMENT org-fancy-priorities
+** org-fancy-priorities
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package org-fancy-priorities
   :diminish
@@ -5016,11 +5021,11 @@ Builtin mode
 ;; :empty-lines 2
 (setq org-capture-templates
       '(("t" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
-         "* TODO %i%?\n%U\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
+         "* TODO %i%?\n%T\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
         ("d" "Today's Task" entry (file+headline org-default-notes-file "NEXTACTIONS")
-         "** NEXT %? \nDEADLINE: %t\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
+         "** NEXT %? \nDEADLINE: %t\n:PROPERTIES:\n:CREATED: %T\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
         ("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")
-         "* DONE MEETING with %? :MEETING:\n:SUBJECT:\n%U\n" :clock-in t :clock-resume t :empty-lines 1)
+         "* DONE MEETING with %? :MEETING:\n:SUBJECT:\n%T\n\n*会议内容*\n\n*重点结论*\n\n*遗留问题*\n" :clock-in t :clock-resume t :empty-lines 1)
         ("w" "Work TODO" entry (file+olp org-default-notes-file "Work" "Tasks")
          "* TODO %? :work:\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t)
         ("a" "Appointment" entry (file+headline org-default-notes-file "Appointments")
@@ -5083,14 +5088,14 @@ Builtin mode
 Configuration
 #+BEGIN_SRC emacs-lisp :tangle yes
 (require 'org-habit)
-(setq ;; org-agenda-inhibit-startup t ;; faster with no hidden headings (agenda performance)
- org-agenda-show-future-repeats nil
- org-agenda-start-on-weekday nil
- org-reverse-note-order t
- org-log-note-state 'note
- org-todo-log-states 'note
- org-agenda-skip-deadline-if-done t
- org-agenda-skip-scheduled-if-done t)
+(setq org-agenda-show-future-repeats nil
+      org-agenda-start-on-weekday nil
+      ;; org-agenda-inhibit-startup t ;; faster with no hidden headings (agenda performance)
+      org-reverse-note-order t
+      org-log-note-state 'note
+      org-todo-log-states 'note
+      org-agenda-skip-deadline-if-done nil
+      org-agenda-skip-scheduled-if-done nil)
 
 ;; warn of deadlines in the next 7 days
 (setq org-deadline-warning-days 7)
@@ -5384,6 +5389,15 @@ Archive subtrees under the same hierarchy as original in the archive files
                   '((:name "Today's Tasks"
                            :todo "NEXT")
                      (:discard (:anything))))))
+
+        ("w" "WORK"
+         ((agenda "" ((org-agenda-ndays 14)
+                      (org-agenda-start-on-weekday nil)
+                      (org-agenda-prefix-format " %-12:c%?-12t% s")))
+          (tags-todo "yundao")
+          (tags-todo "clouddesktop")
+          (tags-todo "@work")))
+
         ("S" "Super view"
          ((agenda "" ((org-super-agenda-groups
                        '((:name "Today"
@@ -5411,12 +5425,6 @@ Archive subtrees under the same hierarchy as original in the archive files
                       (org-agenda-start-on-weekday nil)
                       (org-agenda-prefix-format " %-12:c%?-12t% s")))
           (tags-todo "刘志斌\|房燕文\|骆建斌")))
-
-        ("w" "WORK"
-         ((agenda "" ((org-agenda-ndays 14)
-                      (org-agenda-start-on-weekday nil)
-                      (org-agenda-prefix-format " %-12:c%?-12t% s")))
-          (tags-todo "@work")))
 
         ("W" "Weekly Overview"
          todo "" ((org-super-agenda-groups
