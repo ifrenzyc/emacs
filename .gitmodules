@@ -16,3 +16,9 @@
 [submodule "lisp/fuz.el"]
 	path = lisp/fuz.el
 	url = git@github.com:cireu/fuz.el.git
+[submodule "lisp/aweshell"]
+	path = lisp/aweshell
+	url = git@github.com:manateelazycat/aweshell.git
+[submodule "lisp/nox"]
+	path = lisp/nox
+	url = git@github.com:manateelazycat/nox.git

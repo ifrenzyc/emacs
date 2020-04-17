@@ -31,3 +31,10 @@ network-security.data
 .last-package-update-day
 eclipse.jdt.ls/
 org-journal.cache
+forge-database.sqlite
+rime/
+rime_bak/
+nox-eclipse-jdt-cache/
+request/
+.org-id-locations
+amx-items
