@@ -601,6 +601,8 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 *About:* 
 - [[https://github.com/seagle0128/doom-modeline][GitHub - seagle0128/doom-modeline]]
 #+BEGIN_SRC emacs-lisp :tangle yes
+;; (require 'winum)
+
 (use-package doom-modeline
   :hook
   (after-init . doom-modeline-mode)
@@ -681,7 +683,6 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
         
         doom-modeline-checker-simple-format t)
   :config
-  (require 'winum)
   (winum-mode))
 #+END_SRC
 
@@ -745,6 +746,18 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
   :config
   (with-current-buffer "*command-log*"
     (hide-mode-line-mode)))
+#+END_SRC
+
+*** nyan-mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package nyan-mode
+  :init
+  (nyan-mode)
+  (setq nyan-animate-nyancat t
+        nyan-wavy-trail t
+        ;; nyan-bar-length 40
+        )
+  :config (nyan-start-animation))
 #+END_SRC
 
 ** COMMENT centaur-tabs 
@@ -898,18 +911,6 @@ like dimmer-mode
   :config
   (solaire-global-mode +1)
   (solaire-mode-swap-bg))
-#+END_SRC
-
-** nyan-mode
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package nyan-mode
-  :init
-  (nyan-mode)
-  (setq nyan-animate-nyancat t
-        nyan-wavy-trail t
-        ;; nyan-bar-length 40
-        )
-  :config (nyan-start-animation))
 #+END_SRC
 
 ** rainbow-delimiters
@@ -1435,7 +1436,7 @@ This allows me to easily start a * or # search from a visual selection.
   "aokg" 'org-clock-goto
   "aokd" 'org-clock-display
   "aokr" 'org-clock-report
-  "ar"   '(ranger :which-key "call ranger")
+  "aR"   '(ranger :which-key "call ranger")
   "b"    '(:ignore t :which-key "buffers")
   ;; "bb"   'helm-mini
   "bk"   'kill-this-buffer
@@ -1482,6 +1483,7 @@ This allows me to easily start a * or # search from a visual selection.
   "jj"   'avy-goto-word-or-subword-1
   "jk"   'avy-goto-char
   "jl"   'avy-goto-line
+  "jb"   'counsel-bookmark
   "u"    '(:ignore t :which-key "Undo/Redo")
   "uu"   'undo-tree-visualize
   "k"    '(:ignore t :which-key "lisp")
@@ -5604,7 +5606,7 @@ Builtin mode
       '(("t" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
          "* TODO %i%? %^g\n%T\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
         ("d" "Today's Task" entry (file+headline org-default-notes-file "NEXTACTIONS")
-         "** NEXT %? %^g \nDEADLINE: %t\n:PROPERTIES:\n:CREATED: %T\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
+         "** NEXT %? %^g \nDEADLINE: %t\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
         ("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")
          "* MEETING MEETING with %? :MEETING:\n:SUBJECT:\n%T\n\n*会议内容*\n\n*重点结论*\n\n*遗留问题*\n" :clock-in t :clock-resume t :empty-lines 1)
         ("w" "Work TODO" entry (file+olp org-default-notes-file "Work" "Tasks")
@@ -6295,12 +6297,22 @@ Headline^^            Visit entry^^               Filter^^                    Da
   (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/2.42.3/bin/dot")
   (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
   (setq org-roam-completion-system 'ivy)
-  :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-show-graph))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert))))
+  :general
+  (yc/leader-keys
+    "ar"  '(:ignore t :which-key "org-roam")
+    "arl" 'org-roam
+    "art" 'org-roam-dailies-today
+    "arf" 'org-roam-find-file
+    "arg" 'org-roam-show-graph)
+  (yc/leader-keys-major-mode
+    :keymaps 'org-mode-map
+    "r"  '(:ignore t :which-key "org-roam")
+    "rl" 'org-roam
+    "rt" 'org-roam-dailies-today
+    "rb" 'org-roam-switch-to-buffer
+    "rf" 'org-roam-find-file
+    "ri" 'org-roam-insert
+    "rg" 'org-roam-show-graph))
 #+END_SRC
 
 ** org-noter
@@ -6785,7 +6797,7 @@ Visually summarize progress
   "C" '(:ignore t :which-key "clocks")
   "s" 'org-schedule
   "d" 'org-deadline
-  "r" 'org-refile
+  "R" '(org-refile :which-key "org-refile")
   "l" 'worf-right
   "j" 'worf-down
   "k" 'worf-up
@@ -7053,8 +7065,10 @@ Visually summarize progress
 - [[https://github.com/EFLS/zetteldeft][GitHub - EFLS/zetteldeft: A Zettelkasten system! Or rather, some functions on...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package deft
-  :defer t
-  :bind (("<f8>" . deft))
+  :general
+  (yc/leader-keys
+  "d"  '(:ignore t :which-key "deft")
+  "dd" '(deft :which-key "deft"))
   :commands (deft deft-open-file deft-new-file-named)
   :config
   (setq deft-directory "~/notes/"
@@ -7074,8 +7088,28 @@ Visually summarize progress
 ** zetteldeft
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package zetteldeft
-  :after deft)
+  :after deft
+  :general
+  (yc/leader-keys
+  "dD" '(zetteldeft-deft-new-search :which-key "new search")
+  "dR" '(deft-refresh :which-key "refresh")
+  "ds" '(zetteldeft-search-at-point :which-key "search at point")
+  "dc" '(zetteldeft-search-current-id :which-key "search current id")
+  "df" '(zetteldeft-follow-link :which-key "follow link")
+  "dF" '(zetteldeft-avy-file-search-ace-window :which-key "avy file other window")
+  "dl" '(zetteldeft-avy-link-search :which-key "avy link search")
+  "dt" '(zetteldeft-avy-tag-search :which-key "avy tag search")
+  "dT" '(zetteldeft-tag-buffer :which-key "tag list")
+  "di" '(zetteldeft-find-file-id-insert :which-key "insert id")
+  "dI" '(zetteldeft-find-file-full-title-insert :which-key "insert full title")
+  "do" '(zetteldeft-find-file :which-key "find file")
+  "dn" '(zetteldeft-new-file :which-key "new file")
+  "dN" '(zetteldeft-new-file-and-link :which-key "new file & link")
+  "dr" '(zetteldeft-file-rename :which-key "rename")
+  "dx" '(zetteldeft-count-words :which-key "count words")))
 #+END_SRC
+
+** org-notdeft
 
 * BACKUP & Version
 ** Control BACKUP
