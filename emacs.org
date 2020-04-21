@@ -760,6 +760,14 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
   :config (nyan-start-animation))
 #+END_SRC
 
+*** minions-mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package minions
+  :demand t
+  :config
+  (minions-mode))
+#+END_SRC
+
 ** COMMENT centaur-tabs 
 [[https://github.com/ema2159/centaur-tabs][GitHub - ema2159/centaur-tabs: Emacs plugin aiming to become an aesthetic, mo...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3013,31 +3021,37 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
 
 ** Hippie Expand
 #+BEGIN_SRC emacs-lisp :tangle yes
-(bind-key "M-/" 'hippie-expand)
-;; (define-key evil-insert-state-map [remap evil-complete-previous] 'hippie-expand)
-(setq hippie-expand-try-functions-list
-      '(yas-hippie-try-expand
-        ;; Try to expand word "dynamically", searching the current buffer.
-        try-expand-dabbrev
-        ;; Try to expand word "dynamically", searching all other buffers.
-        try-expand-dabbrev-all-buffers
-        ;; Try to expand word "dynamically", searching the kill ring.
-        try-expand-dabbrev-from-kill
-        ;; Try to complete text as a file name, as many characters as unique.
-        try-complete-file-name-partially
-        ;; Try to complete text as a file name.
-        try-complete-file-name
-        ;; Try to expand word before point according to all abbrev tables.
-        try-expand-all-abbrevs
-        ;; Try to complete the current line to an entire line in the buffer.
-        try-expand-list
-        ;; Try to complete the current line to an entire line in the buffer.
-        try-expand-line
-        ;; Try to complete as an Emacs Lisp symbol, as many characters as
-        ;; unique.
-        try-complete-lisp-symbol-partially
-        ;; Try to complete word as an Emacs Lisp symbol.
-        try-complete-lisp-symbol))
+(use-package hippie-expand
+  :ensure nil
+  :init
+  (setq hippie-expand-try-functions-list
+	  '(
+	    ;; Try to expand yasnippet snippets based on prefix
+	    yas-hippie-try-expand
+	    ;; Try to expand word "dynamically", searching the current buffer.
+	    try-expand-dabbrev
+	    ;; Try to expand word "dynamically", searching all other buffers.
+	    try-expand-dabbrev-all-buffers
+	    ;; Try to expand word "dynamically", searching the kill ring.
+	    try-expand-dabbrev-from-kill
+	    ;; Try to complete text as a file name, as many characters as unique.
+	    try-complete-file-name-partially
+	    ;; Try to complete text as a file name.
+	    try-complete-file-name
+	    ;; Try to expand word before point according to all abbrev tables.
+	    try-expand-all-abbrevs
+	    ;; Try to complete the current line to an entire line in the buffer.
+	    try-expand-list
+	    ;; Try to complete the current line to an entire line in the buffer.
+	    try-expand-line
+	    ;; Try to complete as an Emacs Lisp symbol, as many characters as
+	    ;; unique.
+	    try-complete-lisp-symbol-partially
+	    ;; Try to complete word as an Emacs Lisp symbol.
+	    try-complete-lisp-symbol
+	    ))
+  :general
+  ("M-/" 'hippie-expand))
 #+END_SRC
 
 ** COMMENT folding
@@ -4348,7 +4362,7 @@ M-x company-tabnine-install-binary
   (setq company-english-helper-fuzz-search-p t))
 #+END_SRC
 
-** COMMENT lsp-mode
+** lsp-mode
 *About:* 
 https://github.com/emacs-lsp/lsp-mode
 
@@ -4393,9 +4407,15 @@ https://github.com/emacs-lsp/lsp-mode
               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions) ; [M-.]
               ([remap xref-find-references] . lsp-ui-peek-find-references)   ; [M-?]
               )
-  :hook 
+  :general
+  (my/leader-keys-major-mode
+    :keymaps 'lsp-ui-mode-map
+	"jp" '(:ignore t :wk "peek")
+	"jpd" 'lsp-ui-peek-find-definitions
+	"jpr" 'lsp-ui-peek-find-references)
+  :hook
   (lsp-mode . lsp-ui-mode)
-  (lsp-mode . lsp-ui-sideline-mode)
+  ;; (lsp-mode . lsp-ui-sideline-mode)
   :init
   (setq lsp-ui-doc-enable t
         lsp-ui-doc-header t
@@ -4404,7 +4424,7 @@ https://github.com/emacs-lsp/lsp-mode
         lsp-ui-doc-border "orange"
         lsp-ui-doc-position 'top
         ;; lsp-ui-doc-position 'at-point
-        lsp-ui-sideline-enable t
+        lsp-ui-sideline-enable nil
         lsp-ui-sideline-ignore-duplicate t
         lsp-ui-sideline-show-code-actions t)
   (setq-default lsp-ui-doc-frame-parameters
@@ -4431,6 +4451,9 @@ https://github.com/emacs-lsp/lsp-mode
                   (no-other-frame . t)
                   (cursor-type)
                   (no-special-glyphs . t)))
+  ;; (set-face-attribute 'lsp-ui-sideline-global nil
+  ;;                     :inherit 'shadow
+  ;;                     :background "#f9f")
   ;; for "Jimx-/lsp-ui" fork has xwebkit support.
   (if (featurep 'xwidget)
       (setq lsp-ui-doc-use-webkit t))
@@ -4447,7 +4470,7 @@ https://github.com/emacs-lsp/lsp-mode
   )
 #+END_SRC
 
-*** COMMENT company-lsp
+*** company-lsp
 *About:* 
 @see - https://github.com/tigersoldier/company-lsp
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -4461,7 +4484,7 @@ https://github.com/emacs-lsp/lsp-mode
   )
 #+END_SRC
 
-** nox
+** COMMENT nox
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package nox
   ;; :load-path "lisp/nox"
@@ -5066,14 +5089,26 @@ add view mode keybindings
   ;;           :foreground-color "#dcdccc"
   ;;           :font "WenQuanYi Micro Hei Mono-14"
   ;;           :internal-border-width 10))
-  :bind
-  (:map rime-mode-map
-        ("C-`" . 'rime-send-keybinding))
+  :general
+  (yc/nonprefix-keys
+    :keymaps rime-mode-map
+    "C-`" 'rime-send-keybinding
+    "M-j" 'rime-force-enable) 
   :config
+  ;; 增加断言列表，当其中有任何一个断言的值不是 nil 时，会自动使用英文。
+  (setq rime-disable-predicates
+        '(;; rime-predicate-evil-mode-p  ;; evil-normal-state
+          rime-predicate-after-ascii-char-p     ;; 任意英文字符后
+          rime-predicate-after-alphabet-char-p  ;; 在英文字符串之后（必须为以字母开头的英文字符串）
+          rime-predicate-ace-window-p           ;; 激活 ace-window-mode
+          rime-predicate-hydra-p                ;; 激活了一个 hydra keymap
+          rime-predicate-punctuation-after-space-cc-p  ;; 当要在中文字符且有空格之后输入符号时
+          rime-predicate-space-after-cc-p       ;; 在中文字符且有空格之后
+          rime-predicate-prog-in-code-p))  ;; 代码中自动使用英文  
   (setq rime-cursor "˰")
   ;; 默认值
   (setq rime-translate-keybindings
-    '("C-f" "C-b" "C-n" "C-p" "C-g")))
+        '("C-f" "C-b" "C-n" "C-p" "C-g")))
 #+END_SRC
 
 ** COMMENT smart-input-source
@@ -7653,7 +7688,7 @@ https://github.com/grafov/go-playground
     :after go-mode)
 #+END_SRC
 
-*** COMMENT lsp-go
+*** lsp-go
 #+BEGIN_SRC emacs-lisp :tangle 
   (use-package lsp-go
     :after (go lsp)
@@ -7706,7 +7741,7 @@ https://github.com/grafov/go-playground
 *About:* 
 Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
 
-*** COMMENT Java LSP
+*** Java LSP
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package lsp-java
   :after lsp
@@ -7735,10 +7770,6 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
   :config
   (setq lsp-java-server-install-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/server/")
         lsp-java-workspace-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/workspace/")))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package dap-java :after (lsp-java))
 #+END_SRC
 
 *** debug
@@ -7840,7 +7871,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
   (setq py-smart-indentation t))
 #+END_SRC
 
-*** COMMENT lsp-python-ms
+*** lsp-python-ms
 - [[https://vxlabs.com/2018/11/19/configuring-emacs-lsp-mode-and-microsofts-visual-studio-code-python-language-server/][Configuring Emacs, lsp-mode and Microsoft's Visual Studio Code Python languag...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package lsp-python-ms
@@ -8088,11 +8119,11 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
   (setq company-tooltip-align-annotations t))
 #+END_SRC
 
-*** COMMENT lsp-rust
+*** lsp-rust
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; `lsp-mode' client using the Rust Language Server
 (use-package lsp-rust
-  :defer t
+  :ensure nil
   :after (lsp-mode rust-mode)
   :hook
   (rust-mode . lsp-mode)
@@ -8365,7 +8396,7 @@ Automatic chmod +x
   ))
 #+END_SRC
 
-*** COMMENT lsp-vue
+*** lsp-vue
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package lsp-vue 
   :after (vue-mode lsp-mode)
