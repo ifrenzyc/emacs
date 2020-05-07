@@ -30,6 +30,7 @@ network-security.data
 .dap-breakpoints
 .last-package-update-day
 eclipse.jdt.ls/
+workspace/
 org-journal.cache
 forge-database.sqlite
 rime/
@@ -38,3 +39,6 @@ nox-eclipse-jdt-cache/
 request/
 .org-id-locations
 amx-items
+anaconda-mode/
+prescient-items
+nov-places
