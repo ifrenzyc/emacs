@@ -74,10 +74,10 @@
         use-package-verbose t))
 
 (use-package bind-key :demand t)                ;; if you use any :bind variant
-(use-package diminish
-  :demand t
-  :config
-  (diminish 'visual-line-mode "↩️ "))
+;; (use-package diminish
+;;   :demand t
+;;   :config
+;;   (diminish 'visual-line-mode "↩️ "))
 
 ;; Use latest org before calling babel
 (use-package-pin-package 'org "org")
@@ -101,3 +101,4 @@
 (load custom-file)
 
 ;;; init.el ends here
+(put 'upcase-region 'disabled nil)

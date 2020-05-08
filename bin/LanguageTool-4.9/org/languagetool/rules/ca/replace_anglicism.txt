@@ -1,0 +1,33 @@
+# anglicismes innecesaris
+blockchain=cadena de blocs
+crowdfunding=finançament col·lectiu
+influencer=influenciador|influenciadora
+influencers=influenciadors|influenciadores
+fixing=fixació
+know-how=saber fer
+lockout=locaut|tancament patronal
+leaker=filtrador|filtradora
+leakers=filtradors|filtradores
+merchandising=marxandatge
+online=en línia|digital|electrònic|connectat|en internet|per internet
+prosumerisme|prosumerism=consum proactiu
+sell-off=venda massiva
+smartphone=telèfon intel·ligent
+smartphones=telèfons intel·ligents
+snorkel=respirador de superfície|tub respirador
+snorkels=respiradors de superfície|tubs respiradors
+spin-offs|spinoffs=empreses derivades
+spin-off|spinoff=empresa derivada
+stakeholder=part interessada
+stakeholders=parts interessades
+startups|start-ups=empreses emergents
+startup|start-up=empresa emergent
+storyboard=guió il·lustrat
+whistleblower=alertador|alertadora|denunciant
+whistleblowers=alertadors|alertadores|denunciants
+# adaptacions
+troll=trol
+trolls=trols
+squash=esquaix
+smoking=esmòquing
+smokings=esmòquings
