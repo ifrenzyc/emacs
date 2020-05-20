@@ -151,6 +151,8 @@ macOS switch meta key.
 ;; i.e. full width of a TAB
 (setq x-stretch-cursor t)
 
+(setq-default cursor-in-non-selected-windows nil)
+
 (global-visual-line-mode nil)
 (setq word-wrap t)
 (setq truncate-lines nil)
@@ -1053,7 +1055,7 @@ https://github.com/tarsius/keycast
 (general-create-definer yc/nonprefix-keys
   :keymaps 'override)
 
-(general-define-key "<f18>" nil)
+(general-define-key "<f16>" nil)
 (general-define-key "s-m" nil)
 (general-create-definer yc/leader-keys
   ;; :states '(normal motion visual)
@@ -1061,7 +1063,7 @@ https://github.com/tarsius/keycast
   ;; :non-normal-prefix "s-SPC")
   ;; :prefix "C-c C-g")
   :keymaps 'override
-  :prefix "<f18>")
+  :prefix "<f16>")
 (general-create-definer yc/leader-keys-major-mode
   ;;:states '(normal motion visual)
   ;;:prefix "SPC m"
@@ -1248,7 +1250,6 @@ https://github.com/tarsius/keycast
 - [[https://github.com/mrbig033/emacs/blob/master/modules/packages/misc/hydra/hydras.org][emacs/hydras.org at master · mrbig033/emacs · GitHub]] - [[https://www.reddit.com/r/emacs/comments/c29edh/does_anybody_have_any_more_real_cool_hydras_to][Does anybody have any (more) real cool Hydras to share?]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package hydra
-  :defer t
   ;; :preface
   ;; (defvar-local yc/ongoing-hydra-body nil)
   ;; (defun yc/ongoing-hydra ()
@@ -1538,8 +1539,9 @@ This allows me to easily start a * or # search from a visual selection.
   "jk"   'avy-goto-char
   "jl"   'avy-goto-line
   "jb"   'counsel-bookmark
+  "jx"   '(:ignore t :which-key "lsp") 
   "jxd"  'lsp-find-definition
-  "jxr"  'lsp-find-reference
+  "jxr"  'lsp-find-references
   "jxh"  'lsp-ui-doc-show
   "jxi"  'lsp-goto-implementation
   "jxt"  'lsp-goto-type-definition
@@ -2987,6 +2989,8 @@ repository, then the corresponding root is used instead."
 
 (use-package ido-vertical-mode :after ido)
 
+(use-package flx)
+
 (use-package flx-ido
   :after ido
   :config
@@ -3090,11 +3094,10 @@ Version 2015-05-16"
   (("C->" . mc/mark-next-like-this)
    ("C-<" . mc/mark-previous-like-this)
    ("S-<mouse-1>" . mc/add-cursor-on-click)
-   ("C-c m" . bk/hydra-multiple-cursors/body))
+   ("C-c m" . hydra-multiple-cursors/body))
   :requires hydra
   :config
-
-  (defhydra bk/hydra-multiple-cursors (:hint nil :color pink)
+  (defhydra hydra-multiple-cursors (:hint nil :color pink)
     "
  ^Select^                 ^Discard^                     ^Edit^               ^Navigate^
 ─^──────^─────────────────^───────^─────────────────────^────^───────────────^────────^─────────
@@ -3219,8 +3222,53 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
 
 ** iedit
 *About:* 快速编辑选中的区域
+参考：https://github.com/andreyorst/dotfiles/tree/master/.config/emacs
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package iedit)
+(use-package iedit
+  :bind (("M-n" . aorst/iedit-current-or-expand))
+  :custom
+  (iedit-toggle-key-default nil)
+  :init
+  (defun aorst/iedit-to-mc-hydrant ()
+    "Calls `iedit-to-mc-mode' and opens hydra for multiple cursors."
+    (interactive)
+    (iedit-switch-to-mc-mode)
+    (hydra-iedit/body))
+  (defun aorst/iedit-current-or-expand (&optional arg)
+    "Select only currnent occurrence with `iedit-mode'.  Expand to
+  next occurrence if `iedit-mode' is already active."
+    (interactive "P")
+    (if (bound-and-true-p iedit-mode)
+        (if (symbolp arg)
+            (iedit-expand-down-to-occurrence)
+          (iedit-expand-up-to-occurrence))
+      (iedit-mode 1)))
+  (defun aorst/iedit-hydrant ()
+    "toggle iedit mode for item under point, and open `hydrant/iedit'."
+    (interactive)
+    (ignore-errors
+      (iedit-mode 1)
+      (hydra-iedit/body)))
+  (defhydra hydra-iedit (:hint nil :color pink)
+    "
+ ^Select^                  ^Discard^                   ^Edit^               ^Navigate^
+─^──────^──────────────────^───────^───────────────────^────^───────────────^────────^─────────────
+ _n_: next occurrence      _M-SPC_:  toggle selection  _u_: uppercase       _(_: previous selection
+ _p_: previous occurrence  _q_ or _g_: exit hydrant      _d_: downcase        _)_: next selection
+ ^ ^                       _G_:      exit iedit-mode   _#_: insert numbers
+ ^ ^                       _m_:      switch to mc"
+    ("n" iedit-expand-down-to-occurrence)
+    ("m" aorst/iedit-to-mc-hydrant :exit t)
+    ("p" iedit-expand-up-to-occurrence)
+    ("u" iedit-upcase-occurrences)
+    ("d" iedit-downcase-occurrences)
+    ("#" iedit-number-occurrences)
+    ("(" iedit-prev-occurrence)
+    (")" iedit-next-occurrence)
+    ("M-SPC" iedit-toggle-selection)
+    ("q" ignore :exit t)
+    ("g" ignore :exit t)
+    ("G" #'(lambda () (interactive) (iedit-mode -1)) :exit t)))
 #+END_SRC
 
 ** Hippie Expand
@@ -3292,7 +3340,7 @@ This is a package to perform text folding like in Vim. It has the following feat
   (vimish-fold-global-mode)
   :config
   (setq-default vimish-fold-header-width 119)
-  (defhydra bk/hydra-vimish-fold (:color red :hint nil)
+  (defhydra hydra-vimish-fold (:color red :hint nil)
     "
  _f_: fold  _u_: unfold  _r_: refold  _t_: toggle  _d_: delete    _n_: next      _q_: quit
           _U_: Unfold  _R_: Refold  _T_: Toggle  _D_: Delete    _p_: previous
@@ -3315,7 +3363,7 @@ This is a package to perform text folding like in Vim. It has the following feat
 (use-package origami
   :commands (origami-toggle-node)
   :config
-  (defhydra bk/hydra-origami (:color red)
+  (defhydra hydra-origami (:color red)
     "
   _o_pen node    _n_ext fold       toggle _f_orward
   _c_lose node   _p_revious fold   toggle _a_ll
@@ -5075,6 +5123,30 @@ eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工�
   (setq-default eyebrowse-new-workspace t))
 #+END_SRC
 
+** workgroups2
+- https://github.com/pashinin/workgroups2
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package workgroups2
+  :config
+  ;; Change prefix key (before activating WG)
+  (setq wg-prefix-key (kbd "C-c z"))
+
+  ;; Change workgroups session file
+  (setq wg-session-file "~/.emacs.d/.cache/.emacs_workgroups")
+  ;; What to do on Emacs exit / workgroups-mode exit?
+  (setq wg-emacs-exit-save-behavior           'save)      ; Options: 'save 'ask nil
+  (setq wg-workgroups-mode-exit-save-behavior 'save)      ; Options: 'save 'ask nil
+
+  ;; Mode Line changes
+  ;; Display workgroups in Mode Line?
+  (setq wg-mode-line-display-on t)          ; Default: (not (featurep 'powerline))
+  (setq wg-flag-modified t)                 ; Display modified flags as well
+  (setq wg-mode-line-decor-left-brace "["
+        wg-mode-line-decor-right-brace "]"  ; how to surround it
+        wg-mode-line-decor-divider ":")
+    (workgroups-mode 1))
+#+END_SRC
+
 ** ELScreen & window-zoom
 *About:* 类似于 tmux 的最大化当前窗口功能，保持和我在 tmux 下的习惯一致。
 https://github.com/syohex/emacs-zoom-window
@@ -5121,7 +5193,7 @@ add view mode keybindings
 (use-package view
   :ensure nil
   :diminish (view-mode . "∑")
-  :bind (("<f16>" . view-mode)  ;; remap R-Shift to F 13
+  :bind (("<f18>" . view-mode)  ;; remap R-Shift to F 13
          :map view-mode-map
          ("n" . next-line)
          ("p" . previous-line))
@@ -5132,7 +5204,7 @@ add view mode keybindings
 
   (general-define-key
    :keymaps 'view-mode-map
-   "SPC" (general-simulate-key "<f18>"))
+   "SPC" (general-simulate-key "<f16>"))
 
   ;; (defun xfk-command-mode-on ()
   ;;   (global-hl-line-mode 1)
@@ -5893,7 +5965,7 @@ Builtin mode
 (setq org-capture-templates
       '(("t" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
          "* TODO %i%? %^g\n%T\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
-        ("d" "Today's Task" entry (file+headline org-default-notes-file "NEXTACTIONS")
+        ("d" "Today's Task" entry (file+headline org-default-notes-file "Inbox")
          "** NEXT %? %^g \nDEADLINE: %t\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
         ("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")
          "* MEETING MEETING with %? :MEETING:\n:SUBJECT:\n%T\n\n*会议内容*\n\n*重点结论*\n\n*遗留问题*\n" :clock-in t :clock-resume t :empty-lines 1)
@@ -6600,6 +6672,12 @@ Headline^^            Visit entry^^               Filter^^                    Da
     "rf" 'org-roam-find-file
     "ri" 'org-roam-insert
     "rg" 'org-roam-show-graph))
+#+END_SRC
+
+** org-roam-server
+- https://github.com/org-roam/org-roam-server
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package org-roam-server)
 #+END_SRC
 
 ** org-noter
@@ -8177,18 +8255,22 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
         )
   :hook
   (java-mode . lsp)
+  :general
+  (java-mode-map
+   "C-c C-f" 'lsp-format-buffer)
   :config
   (setq lsp-java-server-install-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/server/")
         lsp-java-workspace-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/workspace/")))
 
 (yc/leader-keys-major-mode
   :keymaps 'java-mode-map
-  "r"   'ggtags-find-reference
-  "d"   'ggtags-find-definition
-  "D"   'ggtags-show-definition
+  "r"   'ggtags-find-tag-dwim
+  "c"   '(:ignore t :which-key "Run/Compile")
+  "cd"  'dap-java-debug
   "l"   '(:ignore t :which-key "lsp")
+  "lm"  'lsp-ui-imenu
   "la"  'lsp-find-definition
-  "lb"  'lsp-find-reference
+  "lb"  'lsp-find-references
   "lh"  'lsp-ui-doc-show
   "le"  'lsp-goto-implementation
   "lr"  'lsp-goto-type-definition
@@ -8206,8 +8288,7 @@ Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
   "lu"  'lsp-java-add-unimplemented-methods
   "lv"  'lsp-java-extract-to-local-variable
   "lg"  'lsp-java-generate-getters-and-setters
-  "lu"  'lsp-java-generate-equals-and-hash-code
-  )
+  "lu"  'lsp-java-generate-equals-and-hash-code)
 #+END_SRC
 
 *** debug
@@ -8577,6 +8658,21 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
   (add-hook 'sql-mode-hook 'sqlind-minor-mode))
 #+END_SRC
 
+*** ejc-sql
+- https://github.com/kostafey/ejc-sql#use-with-org-mode
+- [[https://gist.githubusercontent.com/stardiviner/7243e6c4a6ad4843304e796149f32c04/raw/d1eeda552b7a344a78d2e06330c78a357c32ecc6/ejc-sql%2520reproduce.org][MySQL/MariaDB workflow]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package ejc-sql
+  :mode ("\\.sql\\'" . ejc-sql-mode)
+  :config
+  (setq ejc-org-mode-show-results nil)
+  (add-hook 'ejc-sql-minor-mode-hook
+            (lambda ()
+              (auto-complete-mode t)
+              (ejc-ac-setup)
+              (ejc-eldoc-setup))))
+#+END_SRC
+
 ** shell
 Automatic chmod +x
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -8930,7 +9026,10 @@ GitHub: https://github.com/smihica/emmet-mode
 (use-package xml-format
   :demand t
   :ensure-system-package (xmllint . "brew install libxml2")
-  :after nxml-mode)
+  :after nxml-mode
+  :general
+  (nxml-mode-map
+    "C-c C-f" 'xml-format))
 #+END_SRC
 
 ** YAML
@@ -9029,7 +9128,38 @@ Config for setting markdown mode and stuff
 *** edit-indirect
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package edit-indirect
-  :after markdown-mode)
+  :hook ((edit-indirect-after-creation . aorst/real-buffer-setup)
+         (edit-indirect-after-creation . aorst/edit-indirect-header-line-setup))
+  :bind (:map
+         edit-indirect-mode-map
+         ("C-c C-c" . edit-indirect-commit)
+         ("C-c C-k" . edit-indirect-abort)
+         ("C-c '" . nil))
+  :init
+  (defun aorst/edit-indirect-header-line-setup ()
+    (setq-local
+     header-line-format
+     (substitute-command-keys
+      "\\<edit-indirect-mode-map>Edit, then exit with `\\[edit-indirect-commit]' or abort with `\\[edit-indirect-abort]'"))))
+#+END_SRC
+
+*** Separedit
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package separedit
+  :hook (separedit-buffer-creation . aorst/separedit-header-line-setup)
+  :bind (:map
+         prog-mode-map
+         ("C-c '" . separedit)
+         :map edit-indirect-mode-map
+         ("C-c '" . separedit))
+  :custom
+  (separedit-default-mode 'markdown-mode)
+  :init
+  (defun aorst/separedit-header-line-setup ()
+    (setq-local
+     header-line-format
+     (substitute-command-keys
+      "Edit, then exit with `\\[separedit-commit]' or abort with `\\[edit-indirect-abort]'"))))
 #+END_SRC
 
 *** keybindings
@@ -9383,6 +9513,8 @@ brew install libvterm
 (use-package scratch
   :ensure nil
   :defer t
+  :custom
+  (initial-major-mode 'fundamental-mode)
   :commands (scratch))
 
 (use-package scratch-ext
@@ -9405,7 +9537,6 @@ brew install libvterm
 ;; Recreate scratch buffer
 ;; just recreates scratch buffer when it's killed, I got this from the EmacsWiki
 (with-current-buffer "*scratch*"
-  (lisp-interaction-mode)
   (make-local-variable 'kill-buffer-query-functions)
   (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer))
 
@@ -9417,7 +9548,6 @@ brew install libvterm
   (kill-buffer (current-buffer))
   ;; Make a brand new *scratch* buffer
   (set-buffer (get-buffer-create "*scratch*"))
-  (lisp-interaction-mode)
   (make-local-variable 'kill-buffer-query-functions)
   (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer)
   ;; Since we killed it, don't let caller do that.
