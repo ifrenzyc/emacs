@@ -966,6 +966,7 @@ Colorize colors as text with their value.
   :hook (prog-mode . highlight-indent-guides-mode)
   :config
   (setq highlight-indent-guides-auto-character-face-perc 25
+        highlight-indent-guides-responsive 'stack
         highlight-indent-guides-method 'character))
 #+END_SRC
 
@@ -1477,7 +1478,7 @@ This allows me to easily start a * or # search from a visual selection.
   "ai"   '(:ignore t :which-key "irc")
   "as"   '(:ignore t :which-key "shells")
   "asa"  'shell-pop
-  "asp"  'multi-libvterm-projectile
+  "asp"  'multi-vterm-projectile
   "asP"  'projectile-run-vterm
   "ao"   '(:ignore t :which-key "org")
   "aoa"  'org-agenda
@@ -2260,7 +2261,7 @@ https://github.com/dustinlacewell/hera
     (setq gc-cons-threshold most-positive-fixnum))
 
   (defun my-minibuffer-exit-hook ()
-    (setq gc-cons-threshold 800000))
+    (setq gc-cons-threshold 16777216))
 
   (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
   (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
@@ -2563,6 +2564,18 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 
 ** isearch 
 #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package isearch
+  :ensure nil
+  :no-require t
+  :commands swiper-from-isearch
+  :bind (("M-s ." . isearch-forward-symbol-at-point)
+         ("C-s" . isearch-forward-regexp)
+         ("C-r" . isearch-backward-regexp)
+         :map isearch-mode-map
+         ("C-;" . swiper-from-isearch)
+         ("C-'" . avy-isearch)
+         ("C-l" . counsel-git-grep-from-isearch)))
+
 (defun xah-search-current-word ()
   "Call `isearch' on current word or text selection.
 “word” here is A to Z, a to z, and hyphen 「-」 and underline 「_」, independent of syntax table.
@@ -2618,6 +2631,7 @@ Version 2015-04-09"
   :commands (swiper swiper-all swiper-isearch)
   :general
   ("C-M-s" 'swiper-isearch
+   "M-s s" 'swiper-isearch
    ;; "C-r" 'swiper
    "C-c u" 'swiper-all)
   (swiper-map
@@ -2810,8 +2824,7 @@ repository, then the corresponding root is used instead."
     (interactive)
     (snails '(snails-backend-everything snails-backend-mdfind)))
   :bind
-  (("M-s s" . snails)
-   ("M-s p" . snails-current-project)
+  (("M-s p" . snails-current-project)
    ("M-s b" . snails-active-recent-buffers)
    ("M-s e" . snails-everywhere)
    ("M-p" . (lambda ()
@@ -3161,6 +3174,8 @@ Version 2015-05-16"
   (setq avy-background t)
   :general
   ("C-'"   'avy-goto-char-timer
+   "M-g A" 'avy-goto-char-timer
+   "M-g a" 'avy-goto-char
    "M-g g" 'avy-goto-line)
   :config
   (use-package link-hint)
@@ -3383,6 +3398,11 @@ This is a package to perform text folding like in Vim. It has the following feat
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package pulse)
+#+END_SRC
+
+** fzf
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package fzf)
 #+END_SRC
 
 ** ag
@@ -4393,7 +4413,178 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package lsp-treemacs
   :bind (:map lsp-mode-map
-              ("M-9" . lsp-treemacs-errors-list)))
+              ("M-9" . lsp-treemacs-errors-list))
+  :config
+  (with-no-warnings
+         (when (require 'all-the-icons nil t)
+           (treemacs-create-theme "centaur-colors"
+             :extends "doom-colors"
+             :config
+             (progn
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "repo" :height 1.0 :v-adjust -0.1 :face 'all-the-icons-blue))
+                :extensions (root))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "tag" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-lblue))
+                :extensions (boolean-data))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "settings_input_component" :height 0.95 :v-adjust -0.15 :face 'all-the-icons-orange))
+                :extensions (class))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "palette" :height 0.95 :v-adjust -0.15))
+                :extensions (color-palette))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "square-o" :height 0.95 :v-adjust -0.15))
+                :extensions (constant))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "file-text-o" :height 0.95 :v-adjust -0.05))
+                :extensions (document))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "storage" :height 0.95 :v-adjust -0.15 :face 'all-the-icons-orange))
+                :extensions (enumerator))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "format_align_right" :height 0.95 :v-adjust -0.15 :face 'all-the-icons-lblue))
+                :extensions (enumitem))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "bolt" :height 0.95 :v-adjust -0.05 :face 'all-the-icons-orange))
+                :extensions (event))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "tag" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-lblue))
+                :extensions (field))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "search" :height 0.95 :v-adjust -0.05))
+                :extensions (indexer))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "filter_center_focus" :height 0.95 :v-adjust -0.15))
+                :extensions (intellisense-keyword))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "share" :height 0.95 :v-adjust -0.15 :face 'all-the-icons-lblue))
+                :extensions (interface))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "tag" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-lblue))
+                :extensions (localvariable))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "cube" :height 0.95 :v-adjust -0.05 :face 'all-the-icons-purple))
+                :extensions (method))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "view_module" :height 0.95 :v-adjust -0.15 :face 'all-the-icons-lblue))
+                :extensions (namespace))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "format_list_numbered" :height 0.95 :v-adjust -0.15))
+                :extensions (numeric))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "control_point" :height 0.95 :v-adjust -0.2))
+                :extensions (operator))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "wrench" :height 0.8 :v-adjust -0.05))
+                :extensions (property))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "format_align_center" :height 0.95 :v-adjust -0.15))
+                :extensions (snippet))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "text-width" :height 0.9 :v-adjust -0.05))
+                :extensions (string))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "settings_input_component" :height 0.9 :v-adjust -0.15 :face 'all-the-icons-orange))
+                :extensions (structure))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "format_align_center" :height 0.95 :v-adjust -0.15))
+                :extensions (template))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "chevron-right" :height 0.75 :v-adjust 0.1 :face 'font-lock-doc-face))
+                :extensions (collapsed) :fallback "+")
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "chevron-down" :height 0.75 :v-adjust 0.1 :face 'font-lock-doc-face))
+                :extensions (expanded) :fallback "-")
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-binary" :height 0.9  :v-adjust 0.0 :face 'font-lock-doc-face))
+                :extensions (classfile))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05 :face 'all-the-icons-blue))
+                :extensions (default-folder-opened))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-directory" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-blue))
+                :extensions (default-folder))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05 :face 'all-the-icons-green))
+                :extensions (default-root-folder-opened))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-directory" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-green))
+                :extensions (default-root-folder))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-binary" :height 0.9 :v-adjust 0.0 :face 'font-lock-doc-face))
+                :extensions ("class"))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-zip" :height 0.9 :v-adjust 0.0 :face 'font-lock-doc-face))
+                :extensions (file-type-jar))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05 :face 'font-lock-doc-face))
+                :extensions (folder-open))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-directory" :height 0.9 :v-adjust 0.0 :face 'font-lock-doc-face))
+                :extensions (folder))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05 :face 'all-the-icons-orange))
+                :extensions (folder-type-component-opened))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-directory" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-orange))
+                :extensions (folder-type-component))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05 :face 'all-the-icons-green))
+                :extensions (folder-type-library-opened))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-directory" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-green))
+                :extensions (folder-type-library))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05 :face 'all-the-icons-pink))
+                :extensions (folder-type-maven-opened))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-directory" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-pink))
+                :extensions (folder-type-maven))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "folder-open" :height 0.9 :v-adjust -0.05 :face 'font-lock-type-face))
+                :extensions (folder-type-package-opened))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-directory" :height 0.9 :v-adjust 0.0 :face 'font-lock-type-face))
+                :extensions (folder-type-package))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "plus" :height 0.9 :v-adjust -0.05 :face 'font-lock-doc-face))
+                :extensions (icon-create))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "list" :height 0.9 :v-adjust -0.05 :face 'font-lock-doc-face))
+                :extensions (icon-flat))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-material "share" :height 0.95 :v-adjust -0.2 :face 'all-the-icons-lblue))
+                :extensions (icon-hierarchical))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "link" :height 0.9 :v-adjust -0.05 :face 'font-lock-doc-face))
+                :extensions (icon-link))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "refresh" :height 0.9 :v-adjust -0.05 :face 'font-lock-doc-face))
+                :extensions (icon-refresh))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "chain-broken" :height 0.9 :v-adjust -0.05 :face 'font-lock-doc-face))
+                :extensions (icon-unlink))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-alltheicon "java" :height 1.0 :v-adjust 0.0 :face 'all-the-icons-orange))
+                :extensions (jar))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "book" :height 0.95 :v-adjust -0.05 :face 'all-the-icons-green))
+                :extensions (library))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "folder-open" :face 'all-the-icons-lblue))
+                :extensions (packagefolder-open))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "file-directory" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-lblue))
+                :extensions (packagefolder))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-faicon "archive" :height 0.9 :v-adjust -0.05 :face 'font-lock-doc-face))
+                :extensions (package))
+               (treemacs-create-icon
+                :icon (format "%s " (all-the-icons-octicon "repo" :height 1.0 :v-adjust -0.1 :face 'all-the-icons-blue))
+                :extensions (java-project))))
+
+           (setq lsp-treemacs-theme "centaur-colors"))))
 #+END_SRC
 
 * Completion
@@ -5123,7 +5314,7 @@ eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工�
   (setq-default eyebrowse-new-workspace t))
 #+END_SRC
 
-** workgroups2
+** COMMENT workgroups2
 - https://github.com/pashinin/workgroups2
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package workgroups2
@@ -6644,7 +6835,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
 (yc/leader-keys "jo"  'org-journal-new-entry)
 #+END_SRC
 
-** org-roam
+** COMMENT org-roam
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package org-roam
   :hook 
@@ -6674,7 +6865,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
     "rg" 'org-roam-show-graph))
 #+END_SRC
 
-** org-roam-server
+** COMMENT org-roam-server
 - https://github.com/org-roam/org-roam-server
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package org-roam-server)
@@ -6854,7 +7045,7 @@ Paste an image on clipboard to Emacs Org mode file.
 #+END_SRC
 
 #+BEGIN_SRC sh
-brew install pngpaste
+$ brew install pngpaste
 #+END_SRC
 
 - [[http://bianle.blog/2016/10/26/emacs-paste-image-from-clipboard/][emacs从剪贴板粘贴图片 | Bianle's Blog]]
@@ -7465,8 +7656,17 @@ Visually summarize progress
 highlight git changes.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package git-gutter
-  :diminish git-gutter-mode
-  :config (global-git-gutter-mode))
+  :config (global-git-gutter-mode)
+  (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
+                                        :hint nil)
+    ("n" git-gutter:next-hunk "next hunk")
+    ("p" git-gutter:previous-hunk "previous hunk")
+    ("h" (progn (goto-char (point-min)) (git-gutter:next-hunk 1)) "first hunk")
+    ("l" (progn (goto-char (point-min)) (git-gutter:previous-hunk 1)) "last hunk")
+    ("<SPC>" git-gutter:popup-hunk "popup hunk")
+    ("s" git-gutter:stage-hunk "stage hunk")
+    ("r" git-gutter:revert-hunk "revert hunk")
+    ("q" nil "quit")))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -7573,11 +7773,10 @@ copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L
   :init
   (setq diff-hl-side 'left)
   :hook 
-  ((magit-post-refresh . diff-hl-magit-post-refresh)
-   (dired-mode . diff-hl-dired-mode))
+  (dired-mode . diff-hl-dired-mode)
   :config
   (diff-hl-flydiff-mode)
-  (global-diff-hl-mode t)
+  (global-diff-hl-mode +1)
   ;; (custom-set-faces
   ;;  '(diff-hl-change ((t (:background "#3a81c3"))))
   ;;  '(diff-hl-insert ((t (:background "#7ccd7c"))))
@@ -7755,6 +7954,7 @@ https://github.com/emacs-lsp/lsp-mode
   (lsp-after-open . lsp-enable-imenu)
   (programming-mode . lsp)
   (prog-mode . lsp-deferred)
+  (lsp . lsp-lens-mode)
   :bind (:map lsp-mode-map
               ("C-c C-d" . lsp-describe-thing-at-point))
   :init 
@@ -7765,21 +7965,24 @@ https://github.com/emacs-lsp/lsp-mode
   :config
   ;; Performance tweaks, see
   ;; https://github.com/emacs-lsp/lsp-mode#performance
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024)) ;; 1mb
-  (setq lsp-idle-delay 0.500)
-)
+  (setq gc-cons-threshold 100000000
+        read-process-output-max (* 1024 1024) ;; 1mb
+        lsp-idle-delay 0.500
+        lsp-prefer-capf t
+        lsp-diagnostics-modeline-scope :project    ;; :project/:workspace/:file
+        read-process-output-max (* 1024 1024)) ;; 1mb
+
+  (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode))
 
 (use-package lsp-clients
-    :ensure nil
-    :init 
-    (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/")))
+  :ensure nil
+  :init 
+  (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/")))
 #+END_SRC
 
 *** lsp-ui
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package lsp-ui
-  ;;  :quelpa (lsp-ui :fetcher github :repo "Jimx-/lsp-ui")
   :demand t
   :after lsp-mode
   :commands (lsp-ui-mode lsp-ui-doc-hide lsp-ui-doc-show)
@@ -7850,6 +8053,14 @@ https://github.com/emacs-lsp/lsp-mode
   )
 #+END_SRC
 
+*** lsp-ivy
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package lsp-ivy
+  :after lsp-mode
+  :bind (:map lsp-mode-map
+              ([remap xref-find-apropos] . lsp-ivy-workspace-symbol)))
+#+END_SRC
+
 *** company-lsp
 *About:* 
 @see - https://github.com/tigersoldier/company-lsp
@@ -7864,7 +8075,7 @@ https://github.com/emacs-lsp/lsp-mode
   )
 #+END_SRC
 
-** COMMENT nox
+*** COMMENT nox
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package nox
   ;; :load-path "lisp/nox"
@@ -7916,6 +8127,30 @@ https://github.com/emacs-lsp/lsp-mode
   ("b" dumb-jump-back "Back"))
 #+END_SRC
 
+*** dap-mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+;; Debug
+(use-package dap-mode
+  ;; :bind (:map lsp-mode-map
+  ;;             ("<f6>" . dap-hydra))
+  :functions dap-hydra/nil
+  :bind (:map lsp-mode-map
+              ("<f5>" . dap-debug)
+              ("M-<f5>" . dap-hydra))
+  :hook ((after-init . dap-mode)
+         (dap-mode . dap-ui-mode)
+         (dap-session-created . (lambda (&_rest) (dap-hydra)))
+         (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
+         (python-mode . (lambda () (require 'dap-python)))
+         (ruby-mode . (lambda () (require 'dap-ruby)))
+         (go-mode . (lambda () (require 'dap-go)))
+         (java-mode . (lambda () (require 'dap-java)))
+         ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
+         (php-mode . (lambda () (require 'dap-php)))
+         (elixir-mode . (lambda () (require 'dap-elixir)))
+         ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
+#+END_SRC
+
 *** ctags
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ggtags
@@ -7928,6 +8163,106 @@ https://github.com/emacs-lsp/lsp-mode
 
   (setq ggtags-global-ignore-case t
         ggtags-sort-by-nearness t))
+#+END_SRC
+
+** Java
+*About:* 
+Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
+
+*** Java LSP
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package lsp-java
+  ;; :after lsp
+  ;; :mode ("\\.java\\'" . java-mode)
+  :init
+  (use-package request)
+  (setq lsp-java-vmargs
+        (list
+         "-noverify"
+         "-Xmx1G"
+         "-XX:+UseG1GC"
+         "-XX:+UseStringDeduplication"
+         "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.8/lombok-1.18.8.jar"
+         )
+
+        ;; Don't organise imports on save
+        lsp-java-save-action-organize-imports nil
+
+        ;; Currently (2019-04-24), dap-mode works best with Oracle
+        ;; JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
+        ;;
+        ;; lsp-java-java-path "~/.emacs.d/oracle-jdk-12.0.1/bin/java"
+        lsp-java-java-path "/usr/local/opt/openjdk@13/bin/java"
+        ;; lsp-java-java-path "/usr/bin/java"
+        )
+  :bind
+  (:map java-mode-map
+   ("C-c C-f" . lsp-format-buffer))
+  :config
+  (require 'lsp-java-boot)
+
+  ;; to enable the lenses
+  (add-hook 'java-mode-hook #'lsp)
+  (add-hook 'lsp-mode-hook #'lsp-java-lens-mode)
+  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+  (setq lsp-prefer-capf t)
+  (setq lsp-java-server-install-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/server/")
+        lsp-java-workspace-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/workspace/")))
+
+(yc/leader-keys-major-mode
+  :keymaps 'java-mode-map
+  "r"   'ggtags-find-tag-dwim
+  "c"   '(:ignore t :which-key "Run/Compile")
+  "cd"  'dap-java-debug
+  "l"   '(:ignore t :which-key "lsp")
+  "lm"  'lsp-ui-imenu
+  "la"  'lsp-find-definition
+  "lb"  'lsp-find-references
+  "lh"  'lsp-ui-doc-show
+  "le"  'lsp-goto-implementation
+  "lr"  'lsp-goto-type-definition
+  "li"  'lsp-java-organize-imports
+  "ld"  'lsp-describe-thing-at-point
+  "lf"  'lsp-format-buffer
+  "lr"  'lsp-format-region
+  "la"  'lsp-java-add-import
+  "lt"  'lsp-java-add-throws
+  "lc"  'lsp-java-create-field
+  "ll"  'lsp-java-create-local
+  "lp"  'lsp-java-create-parameter
+  "ls"  'lsp-java-spring-initializr
+  "lx"  'lsp-java-extract-to-constant
+  "lu"  'lsp-java-add-unimplemented-methods
+  "lv"  'lsp-java-extract-to-local-variable
+  "lg"  'lsp-java-generate-getters-and-setters
+  "lu"  'lsp-java-generate-equals-and-hash-code)
+#+END_SRC
+
+*** debug
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package dap-java
+  :ensure nil
+  :after (lsp-java dap)
+  ;; :config
+  ;; (global-set-key (kbd "<f7>") 'dap-step-in)
+  ;; (global-set-key (kbd "<f8>") 'dap-next)
+  ;; (global-set-key (kbd "<f9>") 'dap-continue)
+)
+#+END_SRC
+
+*** COMMENT intellij-lsp-serves
+- [[https://github.com/Ruin0x11/intellij-lsp-server][GitHub - Ruin0x11/intellij-lsp-server: Exposes IntelliJ IDEA features through...]]
+
+*** COMMENT lsp-intellij
+- [[https://github.com/Ruin0x11/lsp-intellij][GitHub - Ruin0x11/lsp-intellij: Emacs client for lsp-intellij-server]]
+
+*** COMMENT ensime/meghanada
+
+*** Gradle
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package gradle-mode
+  :defer t
+  :mode ("\\.gradle\\'". gradle-mode))
 #+END_SRC
 
 ** Go
@@ -8222,124 +8557,6 @@ https://github.com/grafov/go-playground
     "fo" 'go-guru-set-scope
     "r" '(:ignore t :which-key "rename")
     "rn" 'go-rename)
-#+END_SRC
-
-** Java
-*About:* 
-Java 环境设置参考这个：https://searchcode.com/codesearch/view/87114678/
-
-*** Java LSP
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package lsp-java
-  :after lsp
-  :mode ("\\.java\\'" . java-mode)
-  :init
-  (use-package request :defer t)
-  (setq lsp-java-vmargs
-        (list
-         "-noverify"
-         "-Xmx1G"
-         "-XX:+UseG1GC"
-         "-XX:+UseStringDeduplication"
-         "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.6/lombok-1.18.6.jar"
-         )
-
-        ;; Don't organise imports on save
-        lsp-java-save-action-organize-imports nil
-
-        ;; Currently (2019-04-24), dap-mode works best with Oracle
-        ;; JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
-        ;;
-        ;; lsp-java-java-path "~/.emacs.d/oracle-jdk-12.0.1/bin/java"
-        lsp-java-java-path "/usr/local/opt/openjdk@13/bin/java"
-        )
-  :hook
-  (java-mode . lsp)
-  :general
-  (java-mode-map
-   "C-c C-f" 'lsp-format-buffer)
-  :config
-  (setq lsp-java-server-install-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/server/")
-        lsp-java-workspace-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/workspace/")))
-
-(yc/leader-keys-major-mode
-  :keymaps 'java-mode-map
-  "r"   'ggtags-find-tag-dwim
-  "c"   '(:ignore t :which-key "Run/Compile")
-  "cd"  'dap-java-debug
-  "l"   '(:ignore t :which-key "lsp")
-  "lm"  'lsp-ui-imenu
-  "la"  'lsp-find-definition
-  "lb"  'lsp-find-references
-  "lh"  'lsp-ui-doc-show
-  "le"  'lsp-goto-implementation
-  "lr"  'lsp-goto-type-definition
-  "li"  'lsp-java-organize-imports
-  "ld"  'lsp-describe-thing-at-point
-  "lf"  'lsp-format-buffer
-  "lr"  'lsp-format-region
-  "la"  'lsp-java-add-import
-  "lt"  'lsp-java-add-throws
-  "lc"  'lsp-java-create-field
-  "ll"  'lsp-java-create-local
-  "lp"  'lsp-java-create-parameter
-  "ls"  'lsp-java-spring-initializr
-  "lx"  'lsp-java-extract-to-constant
-  "lu"  'lsp-java-add-unimplemented-methods
-  "lv"  'lsp-java-extract-to-local-variable
-  "lg"  'lsp-java-generate-getters-and-setters
-  "lu"  'lsp-java-generate-equals-and-hash-code)
-#+END_SRC
-
-*** debug
-#+BEGIN_SRC emacs-lisp :tangle yes
-;; Debug
-(use-package dap-mode
-  :diminish
-  ;; :bind (:map lsp-mode-map
-  ;;             ("<f6>" . dap-hydra))
-  :functions dap-hydra/nil
-  :bind (:map lsp-mode-map
-              ("<f5>" . dap-debug)
-              ("M-<f5>" . dap-hydra))
-  :hook ((after-init . dap-mode)
-         (dap-mode . dap-ui-mode)
-         (dap-session-created . (lambda (&_rest) (dap-hydra)))
-         (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
-         (python-mode . (lambda () (require 'dap-python)))
-         (ruby-mode . (lambda () (require 'dap-ruby)))
-         (go-mode . (lambda () (require 'dap-go)))
-         (java-mode . (lambda () (require 'dap-java)))
-         ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
-         (php-mode . (lambda () (require 'dap-php)))
-         (elixir-mode . (lambda () (require 'dap-elixir)))
-         ((js-mode js2-mode) . (lambda () (require 'dap-chrome)))))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package dap-java
-  :ensure nil
-  :after (lsp-java dap)
-  :config
-  ;; (global-set-key (kbd "<f7>") 'dap-step-in)
-  ;; (global-set-key (kbd "<f8>") 'dap-next)
-  ;; (global-set-key (kbd "<f9>") 'dap-continue)
-)
-#+END_SRC
-
-*** COMMENT intellij-lsp-serves
-- [[https://github.com/Ruin0x11/intellij-lsp-server][GitHub - Ruin0x11/intellij-lsp-server: Exposes IntelliJ IDEA features through...]]
-
-*** COMMENT lsp-intellij
-- [[https://github.com/Ruin0x11/lsp-intellij][GitHub - Ruin0x11/lsp-intellij: Emacs client for lsp-intellij-server]]
-
-*** ensime/meghanada
-
-*** Gradle
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package gradle-mode
-  :defer t
-  :mode ("\\.gradle\\'". gradle-mode))
 #+END_SRC
 
 ** Python
@@ -9389,7 +9606,7 @@ kubernetes
         ;; shell-pop-term-shell      "eshell"
         shell-pop-term-shell      "/bin/zsh"
         multi-term-program        "/bin/zsh"
-        shell-pop-shell-type '("term" "*terminal*" (lambda () (vterm)))
+        shell-pop-shell-type '("term" "*vterminal*" (lambda () (multi-vterm-projectile)))
         ;; shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
         ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/fish" "*ansi-terminal*")))
         ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
