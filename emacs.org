@@ -9234,11 +9234,9 @@ GitHub: https://github.com/smihica/emmet-mode
 ** XML
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; (use-package nxml-mode
-;;   :defer t
-;;   :init (progn (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
-;;                (add-to-list 'auto-mode-alist '("\\.gapp$" . nxml-mode)))
-;;   :config (progn (bind-key "C-S-f" 'beautify-xml nxml-mode-map)))
+(use-package nxml-mode
+  :ensure nil
+  :mode ("\\.\\(xml\\|gapp\\)$" . nxml-mode))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -9246,6 +9244,7 @@ GitHub: https://github.com/smihica/emmet-mode
   :demand t
   :ensure-system-package (xmllint . "brew install libxml2")
   :after nxml-mode
+  :hook (nxml-mode . highlight-indent-guides-mode)
   :general
   (nxml-mode-map
     "C-c C-f" 'xml-format))
