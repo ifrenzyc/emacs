@@ -9241,13 +9241,17 @@ GitHub: https://github.com/smihica/emmet-mode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package xml-format
-  :demand t
-  :ensure-system-package (xmllint . "brew install libxml2")
   :after nxml-mode
+  :ensure-system-package (xmllint . "brew install libxml2")
   :hook (nxml-mode . highlight-indent-guides-mode)
   :general
   (nxml-mode-map
     "C-c C-f" 'xml-format))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package noxml-fold
+  :hook (nxml-mode . noxml-fold-mode))
 #+END_SRC
 
 ** YAML
