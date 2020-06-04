@@ -6,6 +6,7 @@
 
 (define-abbrev-table 'org-mode-abbrev-table
   '(
+    ("envorment" "env" nil :count 0)
     ("flyspell" "fly-spell" nil :count 0)
    ))
 

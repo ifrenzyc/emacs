@@ -1,4 +1,4 @@
-;;;; init.el ---- -*- lexical-binding: t -*-
+;;;; init.el ---- -*- lexical-binding: t; -*-
 
 ;; Emacs Initialization File
 
@@ -19,12 +19,41 @@
 ;; Set garbage collect high to speed up startup
 (let ((gc-cons-threshold most-positive-fixnum)
       (ad-redefinition-action 'accept)))     ; Ignore advice warnings
-(require 'package)
+
+;;;;;;;;;;;;;;
+;; Straight ;;
+;;;;;;;;;;;;;;
+;; Straight.el is a functional package manager for Emacs. It server as
+;; a replacement for the native package.el
+
+;; Bootstrap the package manager, straight.el.
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+(defun straight-reload-init ()
+  "Reload init.el."
+  (interactive)
+  (straight-transaction
+   (straight-mark-transaction-as-init)
+   (message "Reloading init.el...")
+   (load user-init-file nil 'nomessage)
+   (message "Reloading init.el... done.")))
 
 ;; Added by package.el. This must come before configurations of
 ;; installed packages. Don't delete this line. If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; uncomment this line in first time startup.
+(require 'package)
 (unless package--initialized (package-initialize))
 
 (when (>= emacs-major-version 26)
@@ -67,6 +96,9 @@
   (package-install 'bind-key)
   (package-install 'diminish)
   (package-install 'use-package))
+
+;; Call straight-use-package to bootstrap use-package so we can use it.
+(straight-use-package 'use-package)
 
 (eval-when-compile
   (require 'use-package)

@@ -13,6 +13,8 @@
 * Bootstrap
 ** Constants
 #+BEGIN_SRC emacs-lisp :tangle yes
+;;; emacs.org -*- lexical-binding: t; -*-
+
 (defconst yc/cache-dir (expand-file-name ".cache" user-emacs-directory)
   "Every cached or moving file should be here like with Spacemacs")
 (make-directory yc/cache-dir t)
@@ -36,7 +38,7 @@
 #+END_SRC
 
 ** Encoding system
-Use UTF-8 for enivorment.
+Use UTF-8 for env.
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; set the default encoding system
 (set-default-coding-systems 'utf-8)
@@ -303,7 +305,6 @@ Maximized Window when startup
   (setq cnfonts-verbose nil)
   (setq cnfonts-profiles
   '("org-mode" "program" "read-book"))
-  :diminish ""
   :bind 
   (([remap text-scale-increase] . cnfonts-increase-fontsize)
    ([remap text-scale-decrease] . cnfonts-decrease-fontsize)
@@ -358,7 +359,6 @@ Unicode is an required aesthetic
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package whitespace
-  :diminish whitespace-mode
   :hook 
   (prog-mode . whitespace-mode)
   (org-mode . whitespace-mode)
@@ -584,8 +584,8 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 
   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
   ;; theme may have their own settings.
-  ;; (load-theme 'doom-one t)
-  (load-theme 'doom-one-light t)
+  (load-theme 'doom-one t)
+  ;; (load-theme 'doom-one-light t)
   ;; (load-theme 'doom-solarized-light t)
   ;; (load-theme 'doom-nord t)
   ;; (load-theme 'doom-spacegrey t)
@@ -967,7 +967,12 @@ Colorize colors as text with their value.
   :config
   (setq highlight-indent-guides-auto-character-face-perc 25
         highlight-indent-guides-responsive 'stack
-        highlight-indent-guides-method 'character))
+        highlight-indent-guides-method 'character)
+  )
+;; (eval-after-load 'highlight-indent-guides
+;;   (custom-set-faces
+;;    '(highlight-indent-guides-top-character-face ((t (:foreground "turquoise1")))))
+;;   )
 #+END_SRC
 
 ** beacon
@@ -976,7 +981,6 @@ makes sure you don’t lose track of your cursor when jumping around a buffer.
 - [[https://github.com/Malabarba/beacon][GitHub - Malabarba/beacon]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package beacon
-  :diminish beacon-mode
   :init
   (beacon-mode +1))
 #+END_SRC
@@ -988,7 +992,6 @@ makes sure you don’t lose track of your cursor when jumping around a buffer.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package pangu-spacing
   :defer t
-  :diminish ""
   :config
   (global-pangu-spacing-mode 1)
   ;; :hook
@@ -1013,7 +1016,6 @@ https://github.com/davidshepherd7/electric-operator
 - [[https://github.com/justbur/emacs-which-key][GitHub - justbur/emacs-which-key]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package which-key
-  :diminish ""
   :init
   (which-key-mode)
   :config
@@ -1087,7 +1089,6 @@ https://github.com/tarsius/keycast
 ** COMMENT xah-fly-keys
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package xah-fly-keys
-  :diminish (xah-fly-keys . "∑")
   :init
   (setq xah-fly-use-control-key nil)
   (defun xfk-command-mode-on ()
@@ -1358,7 +1359,6 @@ let there be a <leader>
 - [[https://github.com/edkolev/evil-goggles][GitHub - edkolev/evil-goggles]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-goggles
-  :diminish ""
   :after evil
   :config
   (setq evil-goggles-duration 0.150)
@@ -2181,9 +2181,9 @@ https://github.com/dustinlacewell/hera
                                      :hint nil
                                      :post (deactivate-mark))
   "
-    ^_k_^       _w_ copy      _o_pen       _N_umber-lines               |\\     -,,,--,,_
-  _h_   _l_     _y_ank        _t_ype       _e_xchange-point             /,`.-'`'   ..  \-;;,_
-    ^_j_^       _d_ kill      _c_lear      _r_eset-region-mark         |,4-  ) )_   .;.(  `'-'
+    ^_k_^       _w_ copy      _o_pen       _N_umber-lines                |\\     -,,,--,,_
+  _h_   _l_     _y_ank        _t_ype       _e_xchange-point              /,`.-'`'   ..  \-;;,_
+    ^_j_^       _d_ kill      _c_lear      _r_eset-region-mark          |,4-  ) )_   .;.(  `'-'
   ^^^^          _u_ndo        _g_ quit     _C_ua-rectangle-mark-mode   '---''(./..)-'(_\_)
   "
   ("k" rectangle-previous-line)
@@ -2244,7 +2244,6 @@ https://github.com/dustinlacewell/hera
 - snails
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ivy
-  :diminish ""
   :demand t
   :general
   ("C-x b" 'ivy-switch-buffer
@@ -2874,7 +2873,6 @@ repository, then the corresponding root is used instead."
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package helm
-  :diminish ""
   :defer t
   :config
   (helm-mode t)
@@ -3218,7 +3216,6 @@ Version 2015-05-16"
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package highlight-symbol
-  :diminish ""
   :hook 
   ((prog-mode . highlight-symbol-mode)
    (highlight-symbol-mode . highlight-symbol-nav-mode)
@@ -3809,7 +3806,6 @@ Highlight matching and auto insert parenthesis.
 这个要看看，结合 evil 要怎么用，或者有其他的 mode 可以替代，比如 evil-xxx？
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package smartparens
-  :diminish ""
   :defer t
   ;; :after (evil general)
   :after (general)
@@ -3849,6 +3845,9 @@ Highlight matching and auto insert parenthesis.
   (sp-local-pair 'prog-mode "{" nil :post-handlers '((indent-between-pair "RET")))
   (sp-local-pair 'prog-mode "[" nil :post-handlers '((indent-between-pair "RET")))
   (sp-local-pair 'prog-mode "(" nil :post-handlers '((indent-between-pair "RET")))
+
+  (custom-set-faces
+   '(sp-show-pair-match-face ((t (:weight regular :foreground "SpringGreen3" :underline t)))))
   :general
   (smartparens-mode-map
    ;; custom keybindings for smartparens mode
@@ -3926,6 +3925,70 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
   ("g" nil))
 #+END_SRC
 
+** awesome-pair
+- https://emacs-china.org/t/awesome-pair-el/7558/39
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package awesome-pair
+  :quelpa (awesome-pair :fetcher github :repo "manateelazycat/awesome-pair")
+  :config
+  (dolist (hook (list
+                 'c-mode-common-hook
+                 'c-mode-hook
+                 'c++-mode-hook
+                 'java-mode-hook
+                 'haskell-mode-hook
+                 'emacs-lisp-mode-hook
+                 'lisp-interaction-mode-hook
+                 'lisp-mode-hook
+                 'maxima-mode-hook
+                 'ielm-mode-hook
+                 'sh-mode-hook
+                 'makefile-gmake-mode-hook
+                 'php-mode-hook
+                 'python-mode-hook
+                 'js-mode-hook
+                 'go-mode-hook
+                 'qml-mode-hook
+                 'jade-mode-hook
+                 'css-mode-hook
+                 'ruby-mode-hook
+                 'coffee-mode-hook
+                 'rust-mode-hook
+                 'qmake-mode-hook
+                 'lua-mode-hook
+                 'swift-mode-hook
+                 'minibuffer-inactive-mode-hook
+                 ))
+    (add-hook hook '(lambda () (awesome-pair-mode 1))))
+
+  (define-key awesome-pair-mode-map (kbd "(") 'awesome-pair-open-round)
+  (define-key awesome-pair-mode-map (kbd "[") 'awesome-pair-open-bracket)
+  (define-key awesome-pair-mode-map (kbd "{") 'awesome-pair-open-curly)
+  (define-key awesome-pair-mode-map (kbd ")") 'awesome-pair-close-round)
+  (define-key awesome-pair-mode-map (kbd "]") 'awesome-pair-close-bracket)
+  (define-key awesome-pair-mode-map (kbd "}") 'awesome-pair-close-curly)
+  (define-key awesome-pair-mode-map (kbd "=") 'awesome-pair-equal)
+
+  (define-key awesome-pair-mode-map (kbd "%") 'awesome-pair-match-paren)
+  (define-key awesome-pair-mode-map (kbd "\"") 'awesome-pair-double-quote)
+
+  (define-key awesome-pair-mode-map (kbd "SPC") 'awesome-pair-space)
+
+  (define-key awesome-pair-mode-map (kbd "M-o") 'awesome-pair-backward-delete)
+  (define-key awesome-pair-mode-map (kbd "C-d") 'awesome-pair-forward-delete)
+  (define-key awesome-pair-mode-map (kbd "C-k") 'awesome-pair-kill)
+
+  (define-key awesome-pair-mode-map (kbd "M-\"") 'awesome-pair-wrap-double-quote)
+  (define-key awesome-pair-mode-map (kbd "M-[") 'awesome-pair-wrap-bracket)
+  (define-key awesome-pair-mode-map (kbd "M-{") 'awesome-pair-wrap-curly)
+  (define-key awesome-pair-mode-map (kbd "M-(") 'awesome-pair-wrap-round)
+  (define-key awesome-pair-mode-map (kbd "M-)") 'awesome-pair-unwrap)
+
+  (define-key awesome-pair-mode-map (kbd "M-p") 'awesome-pair-jump-right)
+  (define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
+  (define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline))
+#+END_SRC
+
 ** cycle-quotes
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package cycle-quotes
@@ -3954,7 +4017,6 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package neotree
   :defer t
-  :diminish ""
   :commands (neotree-toggle)
   :hook
   ;; Use with evil mode
@@ -4197,98 +4259,15 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 @see - https://github.com/Alexander-Miller/treemacs
 - [[https://blog.jft.rocks/emacs/treemacs-icons.html][Using all-the-icons for Treemacs]] 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; ;; A tree layout file explorer
-;; (use-package treemacs
-;;   :defines winum-keymap
-;;   :commands (treemacs-follow-mode
-;;              treemacs-filewatch-mode
-;;              treemacs-fringe-indicator-mode
-;;              treemacs-git-mode)
-;;   :bind (;; ([f8]        . treemacs)
-;;          ;; ("M-9"       . treemacs-select-window)
-;;          ("C-x 1"     . treemacs-delete-other-windows)
-;;          ("C-x t 1"   . treemacs-delete-other-windows)
-;;          ("C-x t t"   . treemacs)
-;;          ("C-x t B"   . treemacs-bookmark)
-;;          ("C-x t C-t" . treemacs-find-file)
-;;          ("C-x t M-t" . treemacs-find-tag)
-;;          :map treemacs-mode-map
-;;          ([mouse-1]   . treemacs-single-click-expand-action))
-;;   :init
-;;   (with-eval-after-load 'winum
-;;     (bind-key (kbd "M-9") #'treemacs-select-window winum-keymap))
-;;   :config
-;;   (setq treemacs-collapse-dirs              (if (executable-find "python") 3 0)
-;;         treemacs-file-event-delay           5000
-;;         treemacs-silent-refresh             t
-;;         treemacs-follow-after-init          t
-;;         treemacs-follow-recenter-distance   0.1
-;;         treemacs-goto-tag-strategy          'refetch-index
-;;         treemacs-indentation                2
-;;         treemacs-indentation-string         " "
-;;         treemacs-is-never-other-window      nil
-;;         treemacs-no-png-images              nil
-;;         treemacs-recenter-after-file-follow nil
-;;         treemacs-recenter-after-tag-follow  nil
-;;         treemacs-show-hidden-files          t
-;;         treemacs-silent-filewatch           nil
-;;         treemacs-silent-refresh             nil
-;;         treemacs-sorting                    'alphabetic-desc
-;;         treemacs-tag-follow-cleanup         t
-;;         treemacs-tag-follow-delay           1.5
-;;         treemacs-width                      30)
-
-;;   (treemacs-follow-mode t)
-;;   (treemacs-filewatch-mode t)
-;;   (treemacs-fringe-indicator-mode t)
-;;   (pcase (cons (not (null (executable-find "git")))
-;;                (not (null (executable-find "python3"))))
-;;     (`(t . t)
-;;      (treemacs-git-mode 'extended))
-;;     (`(t . _)
-;;      (treemacs-git-mode 'simple)))
-
-;;   (if (fboundp 'define-fringe-bitmap)
-;;       (define-fringe-bitmap 'treemacs--fringe-indicator-bitmap
-;;         (vector #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111
-;;                 #b00000111111))))
-
-;; ;; Projectile integration for treemacs
-;; (use-package treemacs-projectile
-;;   :after projectile
-;;   :bind (([M-f8] . treemacs-projectile)
-;;          :map projectile-command-map
-;;          ("h" . treemacs-projectile)))
-
 (use-package treemacs
   :defer t
   :init
   (with-eval-after-load 'winum
     (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :commands (treemacs-follow-mode
+             treemacs-filewatch-mode
+             treemacs-fringe-indicator-mode
+             treemacs-git-mode)
   :config
   (setq treemacs-collapse-dirs                 (if (treemacs--find-python3) 3 0)
         treemacs-deferred-git-apply-delay      0.5
@@ -4390,6 +4369,8 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
   (:map treemacs-mode-map
         ("H" . hydra-move-splitter-left-2x)
         ("L" . hydra-move-splitter-right-2x))
+  ;; (:map treemacs-mode-map
+  ;;       ([mouse-1]   . treemacs-single-click-expand-action))
 )
 
 ;; (use-package treemacs-evil
@@ -4401,11 +4382,10 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 ;;         ))
 
 (use-package treemacs-projectile
-  :after treemacs projectile)
-
-;; (use-package treemacs-icons-dired
-;;   :after treemacs dired
-;;   :config (treemacs-icons-dired-mode))
+  :after treemacs projectile
+  :bind (([M-f8] . treemacs-projectile)
+         :map projectile-command-map
+         ("h" . treemacs-projectile)))
 
 (use-package treemacs-magit
   :after treemacs magit)
@@ -4599,17 +4579,11 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 - autocomplete
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company
-  :defer 1
-  :commands (company-mode company-indent-or-complete-common global-company-mode)
-  :diminish ""
-  :hook 
-  ((after-init . global-company-mode)
-   (prog-mode . company-mode)
-   (org-mode . company-mode))
+  :demand t
   :bind 
   (("C-." . company-complete)
    :map company-active-map
-   ("<tab>" . company-complete)
+   ("<tab>" . company-complete-selection)
    ("C-n" . company-select-next)
    ("C-p" . company-select-previous)
    ("C-d" . company-show-doc-buffer)
@@ -4639,56 +4613,39 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
         company-auto-complete t
         company-selection-wrap-around t)
 
-  (add-to-list 'company-backends '(company-capf company-dabbrev))
+  ;; (add-to-list 'company-backends '(company-capf company-dabbrev company-files company-yasnippet))
   ;; (setq company-backends '(company-dabbrev (company-keywords company-dabbrev-code) company-files))
   (setq company-begin-commands '(self-insert-command org-self-insert-command c-electric-lt-gt c-electric-colon)) ; start autocompletion only after typing
   ;; (setq company-begin-commands '(self-insert-command)) 
 
-  ;; (define-key company-active-map [tab] 'company-select-next)
-  ;; (define-key company-active-map (kbd "C-n") 'company-select-next)
-  ;; (define-key company-active-map (kbd "C-p") 'company-select-previous)
-  ;; (define-key company-active-map [return] 'company-complete-selection)
-  ;; (define-key company-active-map (kbd "C-/") 'helm-company)
-  :custom
-  (custom-set-faces
-   '(company-preview
-     ((t (:foreground "darkgray" :underline t))))
-   '(company-preview-common
-     ((t (:inherit company-preview))))
-   '(company-tooltip
-     ((t (:background "lightgray" :foreground "black"))))
-   '(company-tooltip-selection
-     ((t (:background "steelblue" :foreground "white"))))
-   '(company-tooltip-common
-     ((((type x)) (:inherit company-tooltip :weight bold))
-      (t (:inherit company-tooltip))))
-   '(company-tooltip-common-selection
-     ((((type x)) (:inherit company-tooltip-selection :weight bold))
-      (t (:inherit company-tooltip-selection)))))
+  ;; :custom
+  ;; (custom-set-faces
+  ;;  '(company-preview
+  ;;    ((t (:foreground "darkgray" :underline t))))
+  ;;  '(company-preview-common
+  ;;    ((t (:inherit company-preview))))
+  ;;  '(company-tooltip
+  ;;    ((t (:background "lightgray" :foreground "black"))))
+  ;;  '(company-tooltip-selection
+  ;;    ((t (:background "steelblue" :foreground "white"))))
+  ;;  '(company-tooltip-common
+  ;;    ((((type x)) (:inherit company-tooltip :weight bold))
+  ;;     (t (:inherit company-tooltip))))
+  ;;  '(company-tooltip-common-selection
+  ;;    ((((type x)) (:inherit company-tooltip-selection :weight bold))
+  ;;     (t (:inherit company-tooltip-selection)))))
   )
 
 ;; (use-package fuzzy :defer t)
-(defun ztlevi/company-init ()
-  "set my own company-idle-delay and company-minimum-prefix-length"
-  (interactive)
-  (set (make-local-variable 'company-minimum-prefix-length)
-       ztlevi/company-minimum-prefix-length))
-
-;; set the company minimum prefix length and idle delay
-(defvar ztlevi/company-minimum-prefix-length 3
-  "my own variable for company-minimum-prefix-length")
-(add-hook 'company-mode-hook #'ztlevi/company-init)
 #+END_SRC
 
-*** company-flx
+** company-flx
 
-*** company-box
+** company-box
 *About:* 
 @see - https://github.com/sebastiencs/company-box
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-box
-  :after (company)
-  :diminish
   :hook (company-mode . company-box-mode)
   :config
   (setq company-box-show-single-candidate t
@@ -4722,7 +4679,6 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
           (Event         . ,(all-the-icons-material "event"                    :height 0.8 :face 'all-the-icons-red))
           (Operator      . ,(all-the-icons-material "control_point"            :height 0.8 :face 'all-the-icons-red))
           (TypeParameter . ,(all-the-icons-material "class"                    :height 0.8 :face 'all-the-icons-red))
-          ;; (Template   . ,(company-box-icons-image "Template.png"))))
           (Yasnippet     . ,(all-the-icons-material "short_text"               :height 0.8 :face 'all-the-icons-green))
           (ElispFunction . ,(all-the-icons-material "functions"                :height 0.8 :face 'all-the-icons-red))
           (ElispVariable . ,(all-the-icons-material "check_circle"             :height 0.8 :face 'all-the-icons-blue))
@@ -4730,7 +4686,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
           (ElispFace     . ,(all-the-icons-material "format_paint"             :height 0.8 :face 'all-the-icons-pink)))))
 #+END_SRC
 
-*** COMMENT company-posframe
+** company-posframe
 *About:* 
 在 MacOS 下使用 posframe 时，Emacs 全屏状态下的问题：https://emacs-china.org/t/topic/4662/132
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -4745,25 +4701,54 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
   ;; (setq ns-use-native-fullscreen nil)
   ;; (setq ns-use-fullscreen-animation nil)
   :config
-;;   (push '(company-posframe-mode . nil)
-;; 	  desktop-minor-mode-table)
+  ;;   (push '(company-posframe-mode . nil)
+  ;; 	  desktop-minor-mode-table)
   (setq company-posframe-show-indicator nil
-	  company-posframe-show-metadata nil
-	  company-posframe-quickhelp-delay nil)
+	    company-posframe-show-metadata nil
+	    company-posframe-quickhelp-delay nil)
   (company-posframe-mode 1)
-  ;; (run-at-time "5sec" nil
-  ;;              (lambda ()
-  ;;                (let ((fullscreen (frame-parameter (selected-frame) 'fullscreen)))
-  ;;                  ;; If emacs has in fullscreen status, maximized window first, drag from Mac's single space.
-  ;;                  (when (memq fullscreen '(fullscreen fullboth))
-  ;;                    (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
-  ;;                  ;; Manipulating a frame without waiting for the fullscreen
-  ;;                  ;; animation to complete can cause a crash, or other unexpected
-  ;;                  ;; behavior, on macOS (bug#28496).
-  ;;                  (when (featurep 'cocoa) (sleep-for 0.5))
-  ;;                  ;; Call `toggle-frame-fullscreen' to fullscreen emacs.
-  ;;                  (toggle-frame-fullscreen))))
-  )
+)
+#+END_SRC
+
+** company-quickhelp
+*About:* 
+@see - https://github.com/expez/company-quickhelp
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package company-quickhelp
+  :hook (company-mode . company-quickhelp-mode)
+  :config
+  (setq company-quickhelp-delay 0.2)
+  (setq pos-tip-background-color (face-background 'company-tooltip)
+        pos-tip-foreground-color (face-foreground 'company-tooltip))
+  :bind (:map company-active-map
+              ("M-h" . company-quickhelp-manual-begin)))
+#+END_SRC
+
+** company-statistics
+*About:* 
+@see - https://github.com/company-mode/company-statistics
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package company-statistics
+  :hook (company-mode . company-statistics-mode)
+  :config
+  (company-statistics-mode))
+#+END_SRC
+
+** company-prescient
+*About:*
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package company-prescient
+  :hook (company-mode . company-prescient-mode))
+#+END_SRC
+
+** COMMENT company-english-helper
+- [[https://emacs-china.org/t/company/6322/186][基于 Company 编写了一个带中文注释的英文补全助手 - Emacs-general - Emacs China]]
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package company-english-helper
+  :quelpa (company-english-helper :fetcher github :repo "manateelazycat/company-english-helper")
+  :config
+  (require 'company-english-helper)
+  (setq company-english-helper-fuzz-search-p t))
 #+END_SRC
 
 ** COMMENT tabnine
@@ -4774,7 +4759,7 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 (use-package company-tabnine
   :after (company)
   :config
-  (add-to-list 'company-backends #'company-tabnine)
+  (add-to-list 'company-backends 'company-tabnine)
 
   ;; 可以通过 company-transformers 实现 TabNine 和 lsp 同时用
   (defun company//sort-by-tabnine (candidates)
@@ -4819,51 +4804,6 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 M-x company-tabnine-install-binary
 #+END_QUOTE
 
-** company-quickhelp
-*About:* 
-@see - https://github.com/expez/company-quickhelp
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package company-quickhelp
-  :after company
-  :hook
-  (company-mode . company-quickhelp-mode)
-  :config
-  (company-quickhelp-mode t)
-  (setq pos-tip-background-color (face-background 'company-tooltip)
-        pos-tip-foreground-color (face-foreground 'company-tooltip))
-  :bind (:map company-active-map
-              ("M-h" . company-quickhelp-manual-begin)))
-#+END_SRC
-
-** company-statistics
-*About:* 
-@see - https://github.com/company-mode/company-statistics
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package company-statistics
-  :after company
-  :hook (company-mode . company-statistics-mode)
-  :config
-  (company-statistics-mode))
-#+END_SRC
-
-** company-prescient
-*About:*
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package company-prescient
-  :after company
-  :hook (company-mode . company-prescient-mode))
-#+END_SRC
-
-** COMMENT company-english-helper
-- [[https://emacs-china.org/t/company/6322/186][基于 Company 编写了一个带中文注释的英文补全助手 - Emacs-general - Emacs China]]
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package company-english-helper
-  :quelpa (company-english-helper :fetcher github :repo "manateelazycat/company-english-helper")
-  :config
-  (require 'company-english-helper)
-  (setq company-english-helper-fuzz-search-p t))
-#+END_SRC
-
 ** yasnippet
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -4871,7 +4811,6 @@ M-x company-tabnine-install-binary
   :hook
   (prog-mode . yas-minor-mode)
   (org-mode . yas-minor-mode)
-  :diminish yas-minor-mode
   :config
   ;; Suppress excessive log messages
   (setq yas-verbosity 1
@@ -4880,8 +4819,14 @@ M-x company-tabnine-install-binary
   (yas-global-mode t))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package java-snippets
+  :after yasnippet)
+#+END_SRC
+
 ** spell check
 *About:* spell checking
+- 其他：https://github.com/redguardtoo/wucuo
 #+BEGIN_SRC emacs-lisp :tangle yes
 ;; (use-package ispell
 ;;   :defer 5
@@ -4892,7 +4837,6 @@ M-x company-tabnine-install-binary
 ;;   )
 
 (use-package flyspell
-  :defer 2
   :commands flyspell-mode
   :hook
   (text-mode . turn-on-flyspell)
@@ -4945,7 +4889,6 @@ M-x company-tabnine-install-binary
 https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#using-a-grammar--style-checker
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package langtool
-  :ensure t
   :config
   (setq langtool-language-tool-jar "~/.emacs.d/bin/LanguageTool-4.9/languagetool-commandline.jar"))
 #+END_SRC
@@ -4954,7 +4897,6 @@ https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#using-a-gr
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package flycheck
-  :diminish ""
   :commands global-flycheck-mode
   :init
   (setenv "DICTIONARY" "en_US")
@@ -5006,16 +4948,14 @@ https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#using-a-gr
 *** flycheck-inline
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package flycheck-inline
-  :after flycheck
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
+  :hook
+  (flycheck-mode . flycheck-inline-mode))
 #+END_SRC
 
 *** COMMENT flycheck-posframe
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package flycheck-posframe
   :quelpa (flycheck-posframe :fetcher github :repo "alexmurray/flycheck-posframe")
-  :after (flycheck posframe)
   :hook (flycheck-mode . flycheck-posframe-mode)
   :custom-face (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
   :custom-face (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
@@ -5029,7 +4969,6 @@ https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#using-a-gr
 @see - [[https://github.com/gexplorer/flycheck-indicator][GitHub - gexplorer/flycheck-indicator: A fancy mode line indicator for `flych...]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package flycheck-indicator
-  :after (flycheck)
   :hook (flycheck-mode . flycheck-indicator-mode))
 #+END_SRC
 
@@ -5385,7 +5324,6 @@ add view mode keybindings
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package view
   :ensure nil
-  :diminish (view-mode . "∑")
   :bind (("<f18>" . view-mode)  ;; remap R-Shift to F 13
          :map view-mode-map
          ("n" . next-line)
@@ -5651,7 +5589,6 @@ add view mode keybindings
 *About:* 当文件内容有修改时，可以通过 autorevert 重新加载这个文件
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package autorevert
-  :diminish t
   :hook (dired-mode . auto-revert-mode)
   :config
   (global-auto-revert-mode +1))
@@ -5661,7 +5598,6 @@ add view mode keybindings
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package undo-tree
-  :diminish undo-tree-mode
   :config
   (global-undo-tree-mode)
   (setq undo-tree-auto-save-history t
@@ -6019,8 +5955,6 @@ e.g. =<s=
 ** COMMENT org-fancy-priorities
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package org-fancy-priorities
-  :diminish
-  :demand t
   :defines org-fancy-priorities-list
   :hook (org-mode . org-fancy-priorities-mode)
   :config
@@ -6033,8 +5967,16 @@ e.g. =<s=
 (use-package org-num
   :ensure org-plus-contrib
   :after org
-  :defer t
   ;; :hook (org-mode . org-num-mode)
+  )
+#+END_SRC
+
+** COMMENT valign
+- https://github.com/casouri/valign
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package valign
+  :quelpa (valign :fetcher github :repo "casouri/valign")
+  :after org
   )
 #+END_SRC
 
@@ -7549,8 +7491,6 @@ Visually summarize progress
 @see - https://github.com/edwtjo/evil-org-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-org
-  :defer t
-  :after (org evil)
   :hook
   (org-mode . evil-org-mode)
   (evil-org-mode . (lambda ()
@@ -7817,7 +7757,6 @@ copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L
 *** magit-todo
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package magit-todos
-  :defer t
   :after magit
   :commands (magit-todos-mode)
   :config
@@ -7969,6 +7908,7 @@ https://github.com/emacs-lsp/lsp-mode
   ;; https://github.com/emacs-lsp/lsp-mode#performance
   (setq gc-cons-threshold 100000000
         read-process-output-max (* 1024 1024) ;; 1mb
+        lsp-file-watch-threshold 1000
         lsp-idle-delay 0.500
         lsp-prefer-capf t
         lsp-diagnostics-modeline-scope :project    ;; :project/:workspace/:file
@@ -8068,10 +8008,10 @@ https://github.com/emacs-lsp/lsp-mode
 @see - https://github.com/tigersoldier/company-lsp
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-lsp
-  :after (lsp-mode company-mode)
+  :after (lsp company-mode)
+  :init
+  (add-to-list 'company-backends 'company-lsp)
   :config
-  ;; (add-to-list 'company-backends 'company-lsp)
-  (push 'company-lsp company-backends)
   ;; 开启 yasnippet 支持
   (setq company-lsp-enable-snippet t)
   )
@@ -8135,11 +8075,11 @@ https://github.com/emacs-lsp/lsp-mode
 (use-package dap-mode
   ;; :bind (:map lsp-mode-map
   ;;             ("<f6>" . dap-hydra))
-  :functions dap-hydra/nil
+  :functions dap-hydra/body
   :bind (:map lsp-mode-map
               ("<f5>" . dap-debug)
               ("M-<f5>" . dap-hydra))
-  :hook ((after-init . dap-mode)
+  :hook ((prog-mode . dap-mode)
          (dap-mode . dap-ui-mode)
          (dap-session-created . (lambda (&_rest) (dap-hydra)))
          (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
@@ -8435,21 +8375,12 @@ https://github.com/grafov/go-playground
 
 *** company-go 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package company-go
-    :after (go-mode company)
-    ;;:commands company-go
-    ;;:if (executable-find "gocode")
-    :config
-    ;; (add-hook 'after-init-hook (lambda ()(add-to-list 'company-backends 'company-go)))
-    ;; 加了这段代码，输入 fmt. 会自动显示这个模块相关的函数
-    (with-eval-after-load 'company
-      (add-to-list 'company-backends 'company-go))
-
-    ;; (add-hook 'go-mode-hook (lambda ()
-    ;;                           (set (make-local-variable 'company-backends) '(company-go))
-    ;;                           ;; (company-mode)
-    ;;                          ))      
-    )
+(use-package company-go
+  :after (go-mode company-mode)
+  :config
+  ;; 加了这段代码，输入 fmt. 会自动显示这个模块相关的函数
+  (add-to-list 'company-backends 'company-go)
+  )
 #+END_SRC
 
 *** go-direx 
@@ -8771,7 +8702,6 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 *About:* The Rust Programming Language
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package rust-mode
-  :defer t
   :mode ("\\.rs\\'" . rust-mode)
   :commands (rust-mode)
   :config
@@ -8790,7 +8720,6 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 (use-package racer                      ; Completion and navigation for Rust
   :after rust-mode
   :hook (rust-mode . racer-mode)
-  :diminish (racer-mode . "ⓡ")
   :init
   (setq racer-rust-src-path "~/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
   ;;:config
@@ -8852,29 +8781,24 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package sql-mode
   :ensure nil
-  :defer t
   :mode ("\\.sql\\'" . sql-mode))
 
 (use-package sqlformat
-  :defer t
   :ensure-system-package (sqlformat . "pip install sqlparse")
+  :after sql-mode
   :general
   (sql-mode-map
    "C-c C-f" 'sqlformat))
 
 (use-package sqlup-mode
-  :after sql-mode
+  :hook
+  (sql-mode . sqlup-mode)
   :config
-  (add-hook 'sql-mode-hook 'sqlup-mode)
-  (add-hook 'sql-interactive-hook 'sqlup-mode)
   (add-to-list 'sqlup-blacklist "name"))
 
 (use-package sql-indent
-  :after sql-mode
-  :delight sql-mode "Σ "
-  :after (:any sql sql-interactive-mode)
-  :config
-  (add-hook 'sql-mode-hook 'sqlind-minor-mode))
+  :hook
+  (sql-mode . sqlind-minor-mode))
 #+END_SRC
 
 *** ejc-sql
@@ -8882,7 +8806,8 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 - [[https://gist.githubusercontent.com/stardiviner/7243e6c4a6ad4843304e796149f32c04/raw/d1eeda552b7a344a78d2e06330c78a357c32ecc6/ejc-sql%2520reproduce.org][MySQL/MariaDB workflow]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ejc-sql
-  :mode ("\\.sql\\'" . ejc-sql-mode)
+  :hook
+  (sql-mode . ejc-sql-mode)
   :config
   (setq ejc-org-mode-show-results nil)
   (add-hook 'ejc-sql-minor-mode-hook
@@ -8965,9 +8890,8 @@ Automatic chmod +x
 *** tern
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package tern
-  :defer t
   :commands tern-mode
-  :init (add-hook 'js2-mode-hook 'tern-mode)
+  :hook (js2-mode . tern-mode)
   :general
   (tern-mode-keymap
    "M-."        'tern-find-definition
@@ -8980,7 +8904,7 @@ Automatic chmod +x
 
 (use-package company-tern
   :after (tern company)
-  :init (add-to-list 'company-backends 'company-tern))
+  :config (add-to-list 'company-backends 'company-tern))
 #+END_SRC
 
 ** Typesciprt & AngularJS 2/4 & Vue.js
@@ -9137,7 +9061,6 @@ Automatic chmod +x
 *** vue-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package vue-mode
-  :defer t
   ;; :after lsp-mode
   :mode ("\\.vue\\'" . vue-mode)
   :config
@@ -9236,7 +9159,10 @@ GitHub: https://github.com/smihica/emmet-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package nxml-mode
   :ensure nil
-  :mode ("\\.\\(xml\\|gapp\\)$" . nxml-mode))
+  :mode ("\\.\\(xml\\|gapp\\|plist\\|pom\\|xsd\\|xslt\\)$" . nxml-mode)
+  :config
+  (setq nxml-slash-auto-complete-flag t
+        nxml-auto-insert-xml-declaration-flag t))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -9341,7 +9267,7 @@ Config for setting markdown mode and stuff
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package markdownfmt
   :after markdown-mode
-  :config
+  ;; :config
   ;; (add-hook 'markdown-mode-hook #'markdownfmt-enable-on-save)
   :general
   (markdown-mode-map "C-c C-f" 'markdownfmt-format-buffer))
@@ -9611,7 +9537,7 @@ kubernetes
         ;; shell-pop-term-shell      "eshell"
         shell-pop-term-shell      "/bin/zsh"
         multi-term-program        "/bin/zsh"
-        shell-pop-shell-type '("term" "*vterminal*" (lambda () (multi-vterm-projectile)))
+        shell-pop-shell-type '("term" "*vterminal*" (lambda () (multi-vterm)))
         ;; shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
         ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/fish" "*ansi-terminal*")))
         ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
@@ -9734,7 +9660,6 @@ brew install libvterm
 ;; scratch
 (use-package scratch
   :ensure nil
-  :defer t
   :custom
   (initial-major-mode 'fundamental-mode)
   :commands (scratch))
@@ -10602,9 +10527,9 @@ brew install gnupg
 #+END_SRC
 
 ** View long line file
-有时候会打开一些文件，这些文件里的某一行特别长，而Emacs没有针对这种情况做特殊 处理，会导致整个界面卡死。现在它来了！
+有时候会打开一些文件，这些文件里的某一行特别长，而 Emacs 没有针对这种情况做特殊 处理，会导致整个界面卡死。现在它来了！
 
-当打开一个具有长行的文件时，它会自动检测并将一些可能导致严重性能的mode关闭， 如font-lock (syntax highlight)。
+当打开一个具有长行的文件时，它会自动检测并将一些可能导致严重性能的 mode 关闭， 如 font-lock (syntax highlight)。
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package so-long
   :ensure nil
@@ -10721,16 +10646,17 @@ pip3 install grip -g
   )
 #+END_SRC
 
-** COMMENT restful api client
+** restful api client
 *About:* 
+- https://github.com/pashky/restclient.el
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package restclient 
-  :defer t
   :commands (restclient-mode)
   :mode ("\\.\\(http\\|rest\\)$" . restclient-mode))
 #+END_SRC
 
 *** ob-restclient
+https://github.com/alf/ob-restclient.el
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package ob-restclient
   :after (org restclient)
@@ -10743,7 +10669,6 @@ pip3 install grip -g
 *** company-restclient
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package company-restclient
-  :defer t
   :after (company restclient)
   :config
   (add-to-list 'company-backends 'company-restclient))

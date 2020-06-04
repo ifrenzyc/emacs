@@ -42,3 +42,7 @@ amx-items
 anaconda-mode/
 prescient-items
 nov-places
+.vimish-fold/
+straight/
+ac-comphist.dat
+.mc-lists.el
