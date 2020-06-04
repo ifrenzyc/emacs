@@ -16,13 +16,7 @@
 ;;; emacs.org -*- lexical-binding: t; -*-
 
 (defconst yc/cache-dir (expand-file-name ".cache" user-emacs-directory)
-  "Every cached or moving file should be here like with Spacemacs")
-(make-directory yc/cache-dir t)
-#+END_SRC
-
-** Detect Operating System
-#+BEGIN_SRC emacs-lisp :tangle yes
-(defconst IS-MAC   (eq system-type 'darwin))
+  "Every cached or win))
 (defconst IS-LINUX (eq system-type 'gnu/linux))
 (defconst IS-BSD   (eq system-type 'gnu/kfreebsd))
 (defconst IS-WINDOWS (or (eq system-type 'ms-dos)
@@ -67,7 +61,7 @@ macOS switch meta key.
         ns-function-modifier 'hyper))
 #+END_SRC
 
-** COMMENT Implement use-package
+** COMMENT straight use-package
 - [[https://github.com/raxod502/straight.el][GitHub - raxod502/straight.el]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package straight)
@@ -1046,44 +1040,44 @@ https://github.com/tarsius/keycast
 - [[https://github.com/noctuid/general.el][GitHub - noctuid/general.el: More convenient key definitions in emacs]]
 - 重点参考下这个设置：https://github.com/yanghaoxie/emacs-dotfile#install-general
 #+BEGIN_SRC emacs-lisp :tangle yes
-(use-package general
-  :demand t
-  ;; :init
-  ;; (general-def :states '(normal motion visual) "SPC" nil)
-  :config
-  ;; Vim-like definitions
-  ;; (general-evil-setup t)
-  )
+  (use-package general
+    :demand t
+    :init
+    (general-def :states '(normal motion visual) "<SPC>" nil)
+    :config
+    ;; Vim-like definitions
+    (general-evil-setup t)
+    )
 
-(general-create-definer yc/nonprefix-keys
-  :keymaps 'override)
+  (general-create-definer yc/nonprefix-keys
+    :keymaps 'override)
 
-(general-define-key "<f16>" nil)
-(general-define-key "s-m" nil)
-(general-create-definer yc/leader-keys
-  ;; :states '(normal motion visual)
-  ;; :prefix "SPC"
-  ;; :non-normal-prefix "s-SPC")
+  ;; (general-define-key "<SPC>" nil)
+  ;; (general-define-key "<f16>" nil)
+  (general-create-definer yc/leader-keys
+    :states '(normal motion visual)
+    :prefix "<SPC>"
+    :non-normal-prefix "s-<SPC>")
   ;; :prefix "C-c C-g")
-  :keymaps 'override
-  :prefix "<f16>")
-(general-create-definer yc/leader-keys-major-mode
-  ;;:states '(normal motion visual)
-  ;;:prefix "SPC m"
-  ;; :non-normal-prefix "s-SPC m")
-  ;; :prefix "C-c C-g m")
-  :keymaps 'override
-  :prefix "s-m")
+  ;; :keymaps 'override
+  ;; :prefix "<SPC>")
+  (general-create-definer yc/leader-keys-major-mode
+    :states '(normal motion visual)
+    ;;:prefix "SPC m"
+    ;; :non-normal-prefix "s-SPC m")
+    ;; :prefix "C-c C-g m")
+    :keymaps 'override
+    :prefix "<f16>")
 
-;; (general-create-definer my-leader-def-2
-;;   :states '(normal motion visual)
-;;   :global-prefix ",")
+  ;; (general-create-definer my-leader-def-2
+  ;;   :states '(normal motion visual)
+  ;;   :global-prefix ",")
 
-;; for frequently used prefix keys, the user can create a custom definer with a
-;; default :prefix
-;; using a variable is not necessary, but it may be useful if you want to
-;; experiment with different prefix keys and aren't using `general-create-definer'
-(defconst my-leader ",")
+  ;; for frequently used prefix keys, the user can create a custom definer with a
+  ;; default :prefix
+  ;; using a variable is not necessary, but it may be useful if you want to
+  ;; experiment with different prefix keys and aren't using `general-create-definer'
+  (defconst my-leader ",")
 #+END_SRC
 
 ** COMMENT xah-fly-keys
@@ -1141,7 +1135,7 @@ https://github.com/tarsius/keycast
    '("SPC" . eval-defun)))
 #+END_SRC
 
-** COMMENT Evil
+** Evil
 *** evil-collection
 *About:* evil 按键扩展集合
 @see - https://github.com/emacs-evil/evil-collection
@@ -1169,14 +1163,15 @@ https://github.com/tarsius/keycast
         evil-want-C-i-jump t)
   (setq-default evil-want-Y-yank-to-eol t)
 
-  ;; (evil-set-initial-state 'dired-mode 'emacs)
-  ;; (global-evil-leader-mode +1)
-  ;; (evil-mode)
+  
+  (global-evil-leader-mode +1)
+  (evil-mode)
   ;; :hook
   ;; ;; 指定哪些 mode 才启用 evil-mode https://github.com/louisch/dotemacs/blob/a354bbf1f9b9854a32353dd65b34557f0e594a1a/personal/package-config.el
   ;; (prog-mode . evil-local-mode)
   ;; (fundamental-mode . evil-local-mode)
   ;; (text-mode . evil-local-mode)
+;; (evil-set-initial-state 'dired-mode 'emacs)
   ;; :general
   ;; (evil-normal-state-map [escape] 'keyboard-quit)
   ;; (evil-visual-state-map [escape] 'keyboard-quit)
@@ -1191,8 +1186,8 @@ https://github.com/tarsius/keycast
   ;; (evil-visual-state-map "\C-y" 'yank)
   ;; (evil-insert-state-map "\C-e" 'end-of-line)
   :bind (
-         ;; :map evil-normal-state-map (("<esc>" . keyboard-quit))
-         ;; :map evil-visual-state-map (("<esc>" . keyboard-quit))
+         :map evil-normal-state-map (("<esc>" . keyboard-quit))
+         :map evil-visual-state-map (("<esc>" . keyboard-quit))
          :map minibuffer-local-map (("<esc>" . minibuffer-keyboard-quit))
          :map minibuffer-local-ns-map (("<esc>" . minibuffer-keyboard-quit))
          :map minibuffer-local-completion-map (("<esc>" . minibuffer-keyboard-quit))
@@ -1209,21 +1204,21 @@ https://github.com/tarsius/keycast
   ;; (setq-default evil-shift-width 4)
 
   ;; @see - https://github.com/rime/squirrel/wiki/vim 用户与 emacs-evil-mode 用户-输入法自动切换成英文状态的实现
-  ;; (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
-  ;;   "C-g back to normal state"
-  ;;   (when  (evil-insert-state-p)
-  ;;     (cond
-  ;;      ((equal (evil-initial-state major-mode) 'normal)
-  ;;       (evil-normal-state))
-  ;;      ((equal (evil-initial-state major-mode) 'insert)
-  ;;       (evil-normal-state))
-  ;;      ((equal (evil-initial-state major-mode) 'motion)
-  ;;       (evil-motion-state))
-  ;;      (t
-  ;;       (if (equal last-command 'keyboard-quit)
-  ;;           (evil-normal-state)           ; 如果初始化 state 不是 normal，按两次才允许转到 normal state
-  ;;         (evil-change-to-initial-state)) ; 如果初始化 state 不是 normal，按一次转到初始状态
-  ;;       ))))
+  (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
+    "C-g back to normal state"
+    (when  (evil-insert-state-p)
+      (cond
+       ((equal (evil-initial-state major-mode) 'normal)
+        (evil-normal-state))
+       ((equal (evil-initial-state major-mode) 'insert)
+        (evil-normal-state))
+       ((equal (evil-initial-state major-mode) 'motion)
+        (evil-motion-state))
+       (t
+        (if (equal last-command 'keyboard-quit)
+            (evil-normal-state)           ; 如果初始化 state 不是 normal，按两次才允许转到 normal state
+          (evil-change-to-initial-state)) ; 如果初始化 state 不是 normal，按一次转到初始状态
+        ))))
 
   ;; esc quits
   ;; @see - http://stackoverflow.com/questions/8483182/evil-mode-best-practice
@@ -1309,8 +1304,8 @@ use 'keyfreq-show'
   (keyfreq-autosave-mode 1))
 #+END_SRC
 
-** COMMENT evil-extends
-*** COMMENT evil-leader
+** evil-extends
+*** evil-leader
 let there be a <leader>
 [[https://github.com/cofi/evil-leader][GitHub - cofi/evil-leader: <leader> key for evil]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1439,6 +1434,8 @@ This allows me to easily start a * or # search from a visual selection.
 *** COMMENT evil-number
 *About:* 
 
+*** COMMENT evil-vimish-fold
+
 ** general-extends
 *About:* 
 @see - [[https://github.com/noctuid/general.el][noctuid/general.el - GitHub]]
@@ -1509,6 +1506,7 @@ This allows me to easily start a * or # search from a visual selection.
   ;; "fh"   'helm-find-files
   ;; "fc"   'helm-recentf
   "ff"   'counsel-find-file
+  "fr"   'counsel-recentf
   "ft"   'treemacs
   "fs"   'save-buffer
   "fo"   'yc/dired-open-in-finder
@@ -2135,24 +2133,6 @@ https://github.com/dustinlacewell/hera
 ;;         ("f" helm-follow-mode))
 #+END_SRC
 
-*** hydra-fold
-#+BEGIN_SRC emacs-lisp :tangle yes
-(pretty-hydra-define hydra-fold 
-  (:hint nil :foreign-keys warn :quit-key "q")
-  ("Fold"
-   (("q" nil "Quit"))
-   "Do" (("f" vimish-fold)
-         ("k" vimish-fold-delete)
-         ("K" vimish-fold-delete-all))
-   "Jump"
-   (("<tab>" vimish-fold-toggle)
-    ("S-<tab>" vimish-fold-toggle-all))
-   "Toggle"
-   (("<" vimish-fold-previous-fold)
-    (">" vimish-fold-next-fold))
-   ))
-#+END_SRC
-
 *** hydra-date
 #+BEGIN_SRC emacs-lisp :tangle yes
 (defhydra hydra-dates (:color red)
@@ -2218,7 +2198,7 @@ https://github.com/dustinlacewell/hera
   ("q" nil "quit"))
 #+END_SRC
 
-** COMMENT key-chord
+** key-chord
 *About:* 通过在 evil mode 里面绑定组合键调用命令
 - [[https://github.com/emacsorphanage/key-chord][GitHub - emacsorphanage/key-chord]]
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -3322,76 +3302,6 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
   ;; override dabbrev-expand’s keybinding to use hippie-expand instead
   (define-key (current-global-map) [remap dabbrev-expand] 'hippie-expand))
 #+END_SRC
-
-** COMMENT folding
-*About:* 快速折叠代码
-- [[https://github.com/mrkkrp/vimish-fold][GitHub - mrkkrp/vimish-fold]]
-#+BEGIN_QUOTE
-This is a package to perform text folding like in Vim. It has the following features:
-
-- folding of active regions;
-- good visual feedback: it’s obvious which part of text is folded;
-- persistence by default: when you close file your folds don’t disappear;
-- persistence scales well, you can work on hundreds of files with lots of folds without adverse effects;
-- it doesn’t break indentation or something;
-- folds can be toggled from folded state to unfolded and back very easily;
-- quick navigation between existing folds;
-- you can use mouse to unfold folds (good for beginners and not only for them);
-- for fans of avy package: you can use avy to fold text with minimal number of key strokes!
-#+END_QUOTE
-
-- origami
-- hideshow
-- vimish-fold 
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package vimish-fold
-  :defer t
-  :bind
-  (:map vimish-fold-folded-keymap ("<tab>" . vimish-fold-unfold)
-        :map vimish-fold-unfolded-keymap ("<tab>" . vimish-fold-refold))
-  :init
-  (setq-default vimish-fold-dir (expand-file-name ".vimish-fold/" user-emacs-directory))
-  (vimish-fold-global-mode)
-  :config
-  (setq-default vimish-fold-header-width 119)
-  (defhydra hydra-vimish-fold (:color red :hint nil)
-    "
- _f_: fold  _u_: unfold  _r_: refold  _t_: toggle  _d_: delete    _n_: next      _q_: quit
-          _U_: Unfold  _R_: Refold  _T_: Toggle  _D_: Delete    _p_: previous
-  "
-    ("f" vimish-fold)
-    ("u" vimish-fold-unfold)
-    ("r" vimish-fold-refold)
-    ("t" vimish-fold-toggle)
-    ("d" vimish-fold-delete)
-    ("U" vimish-fold-unfold-all)
-    ("R" vimish-fold-refold-all)
-    ("T" vimish-fold-toggle-all)
-    ("D" vimish-fold-delete-all)
-    ("n" vimish-fold-next-fold)
-    ("p" vimish-fold-previous-fold)
-    ("q" nil :color blue)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package origami
-  :commands (origami-toggle-node)
-  :config
-  (defhydra hydra-origami (:color red)
-    "
-  _o_pen node    _n_ext fold       toggle _f_orward
-  _c_lose node   _p_revious fold   toggle _a_ll
-  "
-    ("o" origami-open-node)
-    ("c" origami-close-node)
-    ("n" origami-next-fold)
-    ("p" origami-previous-fold)
-    ("f" origami-forward-toggle-node)
-    ("a" origami-toggle-all-nodes)
-    ("t" origami-toggle-node)))
-#+END_SRC
-
-*** COMMENT evil-vimish-fold
 
 ** COMMENT Pulse
 *About:* 
@@ -7485,7 +7395,7 @@ Visually summarize progress
   ("g" org-goto "goto" :exit t))
 #+END_SRC
 
-*** COMMENT evil-org
+*** evil-org
 *About:* org-mode 的 evil 按键扩展
 @see - https://github.com/Somelauw/evil-org-mode
 @see - https://github.com/edwtjo/evil-org-mode
@@ -7594,7 +7504,7 @@ Visually summarize progress
   :after (magit))
 #+END_SRC
 
-*** COMMENT git-gutter
+*** git-gutter
 highlight git changes.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package git-gutter
@@ -7603,6 +7513,8 @@ highlight git changes.
                                         :hint nil)
     ("n" git-gutter:next-hunk "next hunk")
     ("p" git-gutter:previous-hunk "previous hunk")
+    ("N" git-gutter+-next-hunk "next hunk+")
+    ("P" git-gutter+-previous-hunk "previous hunk+")
     ("h" (progn (goto-char (point-min)) (git-gutter:next-hunk 1)) "first hunk")
     ("l" (progn (goto-char (point-min)) (git-gutter:previous-hunk 1)) "last hunk")
     ("<SPC>" git-gutter:popup-hunk "popup hunk")
@@ -7614,13 +7526,10 @@ highlight git changes.
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package git-gutter+
   :after (git-gutter)
-  :config
-  ;; Move between local changes
-  (global-set-key (kbd "M-<up>") 'git-gutter+-previous-hunk)
-  (global-set-key (kbd "M-<down>") 'git-gutter+-next-hunk))
+  )
 #+END_SRC
 
-*** COMMENT git-messenger
+*** git-messenger
 ;; git-messenger: popup commit message at current line
 ;; https://github.com/syohex/emacs-git-messenger
 copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L79
@@ -7636,7 +7545,7 @@ copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L
   :config
   (with-no-warnings
     (with-eval-after-load 'hydra
-      (defhydra git-messenger-hydra (:color blue)
+      (defhydra hydra-git-messenger (:color blue)
         ("s" git-messenger:popup-show "show")
         ("c" git-messenger:copy-commit-id "copy hash")
         ("m" git-messenger:copy-message "copy message")
@@ -7682,7 +7591,7 @@ copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L
               git-messenger:last-message msg
               git-messenger:last-commit-id commit-id)
         (run-hook-with-args 'git-messenger:before-popup-hook popuped-message)
-        (git-messenger-hydra/body)
+        (hydra-git-messenger/body)
         (cond ((and (fboundp 'posframe-workable-p) (posframe-workable-p))
                (let ((buffer-name "*git-messenger*"))
                  (posframe-show buffer-name
@@ -8105,6 +8014,93 @@ https://github.com/emacs-lsp/lsp-mode
 
   (setq ggtags-global-ignore-case t
         ggtags-sort-by-nearness t))
+#+END_SRC
+
+*** COMMENT folding
+*About:* 快速折叠代码
+- [[https://github.com/mrkkrp/vimish-fold][GitHub - mrkkrp/vimish-fold]]
+#+BEGIN_QUOTE
+This is a package to perform text folding like in Vim. It has the following features:
+
+- folding of active regions;
+- good visual feedback: it’s obvious which part of text is folded;
+- persistence by default: when you close file your folds don’t disappear;
+- persistence scales well, you can work on hundreds of files with lots of folds without adverse effects;
+- it doesn’t break indentation or something;
+- folds can be toggled from folded state to unfolded and back very easily;
+- quick navigation between existing folds;
+- you can use mouse to unfold folds (good for beginners and not only for them);
+- for fans of avy package: you can use avy to fold text with minimal number of key strokes!
+#+END_QUOTE
+
+- origami
+- hideshow
+- vimish-fold 
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package vimish-fold
+  :defer t
+  :bind
+  (:map vimish-fold-folded-keymap ("<tab>" . vimish-fold-unfold)
+        :map vimish-fold-unfolded-keymap ("<tab>" . vimish-fold-refold))
+  :init
+  (setq-default vimish-fold-dir (expand-file-name ".vimish-fold/" user-emacs-directory))
+  (vimish-fold-global-mode)
+  :config
+  (setq-default vimish-fold-header-width 119)
+  (defhydra hydra-vimish-fold (:color red :hint nil)
+    "
+ _f_: fold  _u_: unfold  _r_: refold  _t_: toggle  _d_: delete    _n_: next      _q_: quit
+          _U_: Unfold  _R_: Refold  _T_: Toggle  _D_: Delete    _p_: previous
+  "
+    ("f" vimish-fold)
+    ("u" vimish-fold-unfold)
+    ("r" vimish-fold-refold)
+    ("t" vimish-fold-toggle)
+    ("d" vimish-fold-delete)
+    ("U" vimish-fold-unfold-all)
+    ("R" vimish-fold-refold-all)
+    ("T" vimish-fold-toggle-all)
+    ("D" vimish-fold-delete-all)
+    ("n" vimish-fold-next-fold)
+    ("p" vimish-fold-previous-fold)
+    ("q" nil :color blue)))
+#+END_SRC
+
+*** hydra-fold
+#+BEGIN_SRC emacs-lisp :tangle yes
+(pretty-hydra-define hydra-fold 
+  (:hint nil :foreign-keys warn :quit-key "q")
+  ("Fold"
+   (("q" nil "Quit"))
+   "Do" (("f" vimish-fold)
+         ("k" vimish-fold-delete)
+         ("K" vimish-fold-delete-all))
+   "Jump"
+   (("<tab>" vimish-fold-toggle)
+    ("S-<tab>" vimish-fold-toggle-all))
+   "Toggle"
+   (("<" vimish-fold-previous-fold)
+    (">" vimish-fold-next-fold))
+   ))
+#+END_SRC
+
+*** origami
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package origami
+  :commands (origami-toggle-node)
+  :config
+  (defhydra hydra-origami (:color red)
+    "
+  _o_pen node    _n_ext fold       toggle _f_orward
+  _c_lose node   _p_revious fold   toggle _a_ll
+  "
+    ("o" origami-open-node)
+    ("c" origami-close-node)
+    ("n" origami-next-fold)
+    ("p" origami-previous-fold)
+    ("f" origami-forward-toggle-node)
+    ("a" origami-toggle-all-nodes)
+    ("t" origami-toggle-node)))
 #+END_SRC
 
 ** Java
