@@ -27,27 +27,27 @@
 ;; a replacement for the native package.el
 
 ;; Bootstrap the package manager, straight.el.
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; (defvar bootstrap-version)
+;; (let ((bootstrap-file
+;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+;;       (bootstrap-version 5))
+;;   (unless (file-exists-p bootstrap-file)
+;;     (with-current-buffer
+;;         (url-retrieve-synchronously
+;;          "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+;;          'silent 'inhibit-cookies)
+;;       (goto-char (point-max))
+;;       (eval-print-last-sexp)))
+;;   (load bootstrap-file nil 'nomessage))
 
-(defun straight-reload-init ()
-  "Reload init.el."
-  (interactive)
-  (straight-transaction
-   (straight-mark-transaction-as-init)
-   (message "Reloading init.el...")
-   (load user-init-file nil 'nomessage)
-   (message "Reloading init.el... done.")))
+;; (defun straight-reload-init ()
+;;   "Reload init.el."
+;;   (interactive)
+;;   (straight-transaction
+;;    (straight-mark-transaction-as-init)
+;;    (message "Reloading init.el...")
+;;    (load user-init-file nil 'nomessage)
+;;    (message "Reloading init.el... done.")))
 
 ;; Added by package.el. This must come before configurations of
 ;; installed packages. Don't delete this line. If you don't want it,
@@ -61,12 +61,12 @@
 
   (setq package-archives
         '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
-          ("gnu"          . "https://elpa.gnu.org/packages/")
-          ;; ("gnu"          . "https://elpa.emacs-china.org/gnu/")
-          ("melpa"        . "https://melpa.org/packages/")
-          ;; ("melpa"        . "https://elpa.emacs-china.org/melpa/")
-          ("org"          . "https://orgmode.org/elpa/")
-          ;; ("org"          . "http://elpa.emacs-china.org/org/")
+          ;; ("gnu"          . "https://elpa.gnu.org/packages/")
+          ("gnu"          . "https://elpa.emacs-china.org/gnu/")
+          ;; ("melpa"        . "https://melpa.org/packages/")
+          ("melpa"        . "https://elpa.emacs-china.org/melpa/")
+          ;; ("org"          . "https://orgmode.org/elpa/")
+          ("org"          . "http://elpa.emacs-china.org/org/")
           ))
   )
 
@@ -98,7 +98,7 @@
   (package-install 'use-package))
 
 ;; Call straight-use-package to bootstrap use-package so we can use it.
-(straight-use-package 'use-package)
+;; (straight-use-package 'use-package)
 
 (eval-when-compile
   (require 'use-package)
