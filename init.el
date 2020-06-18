@@ -76,7 +76,6 @@
   (setq load-prefer-newer t
         package-user-dir "~/.emacs.d/elpa"
         package--init-file-ensured t
-        use-package-compute-statistics t
         ))
 
 (unless (file-directory-p package-user-dir)
@@ -94,16 +93,23 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'bind-key)
-  (package-install 'diminish)
+  ;; (package-install 'diminish)
   (package-install 'use-package))
 
 ;; Call straight-use-package to bootstrap use-package so we can use it.
 ;; (straight-use-package 'use-package)
 
+;; Should set before loading `use-package'
 (eval-when-compile
-  (require 'use-package)
   (setq use-package-always-ensure t
+        use-package-always-defer t
+        use-package-compute-statistics t
+        use-package-expand-minimally t
+        use-package-enable-imenu-support t
         use-package-verbose t))
+
+(eval-when-compile
+  (require 'use-package))
 
 (use-package bind-key :demand t)                ;; if you use any :bind variant
 ;; (use-package diminish
