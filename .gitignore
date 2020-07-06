@@ -14,10 +14,12 @@ ido.last
 places
 projectile-bookmarks.eld
 projectile.cache
+projects
 pyim/
 elpy/
 recentf
 smex-items
+amx-items
 tramp
 transient/
 tutorial/
@@ -38,7 +40,6 @@ rime_bak/
 nox-eclipse-jdt-cache/
 request/
 .org-id-locations
-amx-items
 anaconda-mode/
 prescient-items
 nov-places
