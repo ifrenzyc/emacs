@@ -2,6 +2,7 @@
 .cache/
 .emacs.desktop
 .emacs.desktop.lock
+.persistent-scratch
 auto-save-list
 bookmarks
 company-statistics-cache.el
