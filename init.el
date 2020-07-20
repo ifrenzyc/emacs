@@ -66,7 +66,7 @@
           ;; ("melpa"        . "https://melpa.org/packages/")
           ("melpa"        . "https://elpa.emacs-china.org/melpa/")
           ;; ("org"          . "https://orgmode.org/elpa/")
-          ("org"          . "http://elpa.emacs-china.org/org/")
+          ("org"          . "https://elpa.emacs-china.org/org/")
           ))
   )
 

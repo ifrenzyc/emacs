@@ -255,7 +255,8 @@ Maximized Window when startup
 - [[http://ergoemacs.org/emacs/emacs_list_and_set_font.html][Emacs: Font Setup]]
 - [[https://archive.casouri.co.uk/note/2019/emacs-%E5%AD%97%E4%BD%93%E4%B8%8E%E5%AD%97%E4%BD%93%E9%9B%86/index.html][Emacs，字体与字符集]]
 #+BEGIN_SRC emacs-lisp :tangle yes
-(defvar user/cjk-font "JetBrains Mono"
+;; JetBrains Mono
+(defvar user/cjk-font "Sarasa Mono SC"
   "Default font for CJK characters.")
 
 (defvar user/latin-font "JetBrains Mono"
@@ -266,6 +267,9 @@ Maximized Window when startup
 
 (defvar user/font-size 13
   "Default font size in px.")
+  
+(defvar user/cjk-font-size 13
+  "Default cjk font size in px.")
 
 (defvar user/standard-fontset
   (create-fontset-from-fontset-spec standard-fontset-spec)
@@ -293,7 +297,7 @@ Maximized Window when startup
   ;; CJK font.
   (dolist (charset '(kana han cjk-misc hangul kanbun bopomofo))
     (set-fontset-font user/standard-fontset charset
-                      (font-spec :family user/cjk-font)
+                      (font-spec :family user/cjk-font :size user/cjk-font-size)
                       nil 'prepend))
   ;; Special settings for certain CJK puncuation marks.
   ;; These are full-width characters but by default uses half-width glyphs.
@@ -301,7 +305,7 @@ Maximized Window when startup
                      (#xFF08 . #xFF09)    ;; Curly "（）"
                      (#x201c . #x201d)))  ;; Curly double quotes "“”"
     (set-fontset-font user/standard-fontset charset
-                      (font-spec :family user/cjk-font)
+                      (font-spec :family user/cjk-font :size user/cjk-font-size)
                       nil 'prepend)))
 
 ;; Apply changes.
@@ -729,7 +733,7 @@ like dimmer-mode
         doom-modeline-lsp t
         doom-modeline-modal-icon t
         
-        doom-modeline-height 28
+        doom-modeline-height 20
         doom-modeline-bar-width 3
 
         ;; Whether display minor modes in mode-line or not.
@@ -831,15 +835,15 @@ Use fixed pitch where it's sensible
     (hide-mode-line-mode)))
 #+END_SRC
 
-*** COMMENT nyan-mode
+*** nyan-mode
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package nyan-mode
   :init
-  (nyan-mode)
   (setq nyan-animate-nyancat t
         nyan-wavy-trail t
         ;; nyan-bar-length 40
         )
+  (nyan-mode)
   :config (nyan-start-animation))
 #+END_SRC
 
@@ -1193,14 +1197,14 @@ https://github.com/tarsius/keycast
 
 (general-create-definer yc/leader-keys
   ;; :states '(normal motion visual)
-  :states '(normal insert emacs)
+  :states '(normal motion visual insert emacs)
   :prefix "SPC"
   :non-normal-prefix "s-SPC")
 ;; :prefix "C-c C-g")
 ;; :keymaps 'override
 ;; :prefix "<SPC>")
 (general-create-definer yc/leader-keys-major-mode
-  :states '(normal insert emacs)
+  :states '(normal motion visual insert emacs)
   ;; :keymaps 'override
   :prefix "SPC m"
   :non-normal-prefix "s-SPC m"
@@ -1305,7 +1309,6 @@ https://github.com/tarsius/keycast
         evil-want-C-i-jump t)
   (setq-default evil-want-Y-yank-to-eol t)
 
-  
   (global-evil-leader-mode +1)
   (evil-mode)
   ;; :hook
@@ -1454,16 +1457,18 @@ let there be a <leader>
    "b" 'switch-to-buffer))
 #+END_SRC
 
-*** evil-pinyin
+*** COMMENT evil-pinyin
 https://github.com/laishulu/evil-pinyin
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package evil-pinyin
   :quelpa (evil-pinyin :fetcher github :repo "laishulu/evil-pinyin")
-  ;; :custom
-  ;; (evil-pinyin-with-search t)
+  :init
+  (setq evil-pinyin-with-search-rule 'exclam)  ; 'exclam 感叹号开启，即: /!hy 可以匹配“汉语”
   :config
-  (global-evil-pinyin-mode))
+  (evil-select-search-module 'evil-search-module 'evil-search)
+
+  (global-evil-pinyin-mode t))
 #+END_SRC
 
 *** COMMENT evil-nerd-commenter
@@ -1543,6 +1548,10 @@ https://github.com/laishulu/evil-pinyin
   (global-evil-matchit-mode 1))
 #+END_SRC
 
+*** COMMENT evil-better-visual-line
+
+*** COMMENT evil-easymotion
+
 *** COMMENT evil-visualstar
 *About:* 通过 =*= ， =#= 快速查找选中的代码
 This allows me to easily start a * or # search from a visual selection.
@@ -1574,6 +1583,8 @@ This allows me to easily start a * or # search from a visual selection.
 #+END_SRC
 
 *** COMMENT evil-multiedit
+
+*** COMMENT evil-mc & evil-mc-extras
 
 *** COMMENT evil-number
 *About:* 
@@ -1621,18 +1632,6 @@ This allows me to easily start a * or # search from a visual selection.
   "asa"  'shell-pop
   "asp"  'multi-vterm-projectile
   "asP"  'projectile-run-vterm
-  "ao"   '(:ignore t :which-key "org")
-  "aoa"  'org-agenda
-  "aoc"  'org-capture
-  "aok"  '(:ignore t :which-key "clock")
-  "aoki" 'org-clock-in
-  "aoko" 'org-clock-out
-  "aokc" 'org-clock-in-last
-  "aoke" 'org-clock-modify-effort-estimate
-  "aokq" 'org-clock-cancel
-  "aokg" 'org-clock-goto
-  "aokd" 'org-clock-display
-  "aokr" 'org-clock-report
   "aR"   '(ranger :which-key "call ranger")
   "b"    '(:ignore t :which-key "buffers")
   ;; "bb"   'helm-mini
@@ -1695,12 +1694,6 @@ This allows me to easily start a * or # search from a visual selection.
   "kD"   '(:ignore t :which-key "delete-backward")
   "k`"   '(:ignore t :which-key "hybrid")
   "n"    '(:ignore t :which-key "narrow/numbers")
-  "p"    '(:ignore t :which-key "projects")
-  "p."   'hydra-projectile/body
-  "p$"   '(:ignore t :which-key "projects/shell")
-  "pf"   'projectile-find-file
-  "pa"   'projectile-ag
-  ;; "ps"   'helm-projectile-switch-project
   "q"    '(:ignore t :which-key "quit")
   "qs"   'save-buffers-kill-emacs
   "qq"   'delete-window
@@ -1730,19 +1723,6 @@ This allows me to easily start a * or # search from a visual selection.
   ;; "sc"   'evil-search-highlight-persist-remove-all
   ;; "ss"   'helm-swoop
   ;; "sS"   'helm-swoop-region-or-symbol
-  "w"    '(:ignore t :which-key "windows")
-  "wp"   '(:ignore t :which-key "popup")
-  "w."   'hydra-window/body
-  "wh"   'windmove-left
-  "wl"   'windmove-right
-  "wk"   'windmove-up
-  "wj"   'windmove-down
-  "w-"   'yc/split-window-vertically
-  "w|"   'yc/split-window-horizontally
-  "wc"   'delete-window
-  "wd"   'delete-frame
-  "wu"   'winner-undo
-  "wr"   'winner-redo
   ;; "mH"   'hydra-move-splitter-left
   ;; "mJ"   'hydra-move-splitter-down
   ;; "mK"   'hydra-move-splitter-up
@@ -1785,6 +1765,18 @@ This allows me to easily start a * or # search from a visual selection.
   "okd"  'org-clock-display
   "okg"  'org-clock-goto
   "okr"  'org-clock-report
+  "ao"   '(:ignore t :which-key "org")
+  "aoa"  'org-agenda
+  "aoc"  'org-capture
+  "aok"  '(:ignore t :which-key "clock")
+  "aoki" 'org-clock-in
+  "aoko" 'org-clock-out
+  "aokc" 'org-clock-in-last
+  "aoke" 'org-clock-modify-effort-estimate
+  "aokq" 'org-clock-cancel
+  "aokg" 'org-clock-goto
+  "aokd" 'org-clock-display
+  "aokr" 'org-clock-report
   "v"    'er/expand-region)
 
 ;; (general-nmap
@@ -1900,6 +1892,17 @@ https://github.com/dustinlacewell/hera
   (progn
     (hydra-move-splitter-right 2)))
 
+(defun hydra-move-splitter-left-4x ()
+  "Move window splitter left 2x speed."
+  (interactive)
+  (progn
+    (hydra-move-splitter-left 4)))
+(defun hydra-move-splitter-right-4x ()
+  "Move window splitter right 2x speed."
+  (interactive)
+  (progn
+    (hydra-move-splitter-right 4)))
+
 (defun hydra-move-splitter-up (arg)
   "Move window splitter up."
   (interactive "p")
@@ -1967,10 +1970,10 @@ https://github.com/dustinlacewell/hera
              ("k" hydra-move-splitter-up "↑")
              ("l" hydra-move-splitter-right "→")
              ("n" balance-windows "balance")
-             ("H" shrink-window-horizontally "←")
+             ("H" hydra-move-splitter-left-4x "←")
              ("J" enlarge-window "↓")
              ("K" shrink-window "↑")
-             ("L" enlarge-window-horizontally "→")
+             ("L" hydra-move-splitter-right-4x "→")
              )
    ;; split
    "Split"  (("b" split-window-right "horizontally")
@@ -2889,7 +2892,7 @@ Version 2015-04-09"
   (setq counsel-find-file-occur-cmd; TODO Simplify this
         "ls -a | grep -i -E '%s' | tr '\\n' '\\0' | xargs -0 ls -d --dired-listing-switches")
 
-    (defun prot/counsel-fzf-rg-files (&optional input dir)
+  (defun prot/counsel-fzf-rg-files (&optional input dir)
     "Run `fzf' in tandem with `ripgrep' to find files in the
 present directory.  If invoked from inside a version-controlled
 repository, then the corresponding root is used instead."
@@ -2927,33 +2930,182 @@ repository, then the corresponding root is used instead."
           (find-file arg)
         (find-file-other-window arg))
       (balance-windows (current-buffer))))
+  
+  ;;
+  ;; Improve search experience of `swiper' and `counsel'
+  ;;
+  (defun my-ivy-switch-to-swiper (&rest _)
+    "Switch to `swiper' with the current input."
+    (swiper ivy-text))
 
+  (defun my-ivy-switch-to-swiper-isearch (&rest _)
+    "Switch to `swiper-isearch' with the current input."
+    (swiper-isearch ivy-text))
+
+  (defun my-ivy-switch-to-swiper-all (&rest _)
+    "Switch to `swiper-all' with the current input."
+    (swiper-all ivy-text))
+
+  (defun my-ivy-switch-to-rg-dwim (&rest _)
+    "Switch to `rg-dwim' with the current input."
+    (rg-dwim default-directory))
+
+  (defun my-ivy-switch-to-counsel-rg (&rest _)
+    "Switch to `counsel-rg' with the current input."
+    (counsel-rg ivy-text default-directory))
+
+  (defun my-ivy-switch-to-counsel-git-grep (&rest _)
+    "Switch to `counsel-git-grep' with the current input."
+    (counsel-git-grep ivy-text default-directory))
+
+  (defun my-ivy-switch-to-counsel-find-file (&rest _)
+    "Switch to `counsel-find-file' with the current input."
+    (counsel-find-file ivy-text))
+
+  (defun my-ivy-switch-to-counsel-fzf (&rest _)
+    "Switch to `counsel-fzf' with the current input."
+    (counsel-fzf ivy-text default-directory))
+
+  (defun my-ivy-switch-to-counsel-git (&rest _)
+    "Switch to `counsel-git' with the current input."
+    (counsel-git ivy-text))
+
+  ;; @see https://emacs-china.org/t/swiper-swiper-isearch/9007/12
+  (defun my-swiper-toggle-counsel-rg ()
+    "Toggle `counsel-rg' and `swiper'/`swiper-isearch' with the current input."
+    (interactive)
+    (ivy-quit-and-run
+      (if (memq (ivy-state-caller ivy-last) '(swiper swiper-isearch))
+          (my-ivy-switch-to-counsel-rg)
+        (my-ivy-switch-to-swiper-isearch))))
+  (bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
+  (bind-key "<C-return>" #'my-swiper-toggle-counsel-rg counsel-ag-map)
+
+  (with-eval-after-load 'rg
+    (defun my-swiper-toggle-rg-dwim ()
+      "Toggle `rg-dwim' with the current input."
+      (interactive)
+      (ivy-quit-and-run
+        (rg-dwim default-directory)))
+    (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
+    (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim counsel-ag-map))
+
+  (defun my-swiper-toggle-swiper-isearch ()
+    "Toggle `swiper' and `swiper-isearch' with the current input."
+    (interactive)
+    (ivy-quit-and-run
+      (if (eq (ivy-state-caller ivy-last) 'swiper-isearch)
+          (swiper ivy-text)
+        (swiper-isearch ivy-text))))
+  (bind-key "<s-return>" #'my-swiper-toggle-swiper-isearch swiper-map)
+
+  (defun my-counsel-find-file-toggle-fzf ()
+    "Toggle `counsel-fzf' with the current `counsel-find-file' input."
+    (interactive)
+    (ivy-quit-and-run
+      (counsel-fzf (or ivy-text "") default-directory)))
+  (bind-key "<C-return>" #'my-counsel-find-file-toggle-fzf counsel-find-file-map)
+
+  (defun my-swiper-toggle-rg-dwim ()
+    "Toggle `rg-dwim' with the current input."
+    (interactive)
+    (ivy-quit-and-run (my-ivy-switch-to-rg-dwim)))
+  (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
+  (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim counsel-ag-map)
+
+  (defun my-swiper-toggle-swiper-isearch ()
+    "Toggle `swiper' and `swiper-isearch' with the current input."
+    (interactive)
+    (ivy-quit-and-run
+      (if (eq (ivy-state-caller ivy-last) 'swiper-isearch)
+          (my-ivy-switch-to-swiper)
+        (my-ivy-switch-to-swiper-isearch))))
+  (bind-key "<s-return>" #'my-swiper-toggle-swiper-isearch swiper-map)
+
+  (ivy-add-actions
+   'ivy-switch-buffer
+   '(("r" my-ivy-switch-to-counsel-rg "rg")
+     ("d" my-ivy-switch-to-rg-dwim "rg dwim")
+     ("g" my-ivy-switch-to-counsel-git "git")
+     ("z" my-ivy-switch-to-counsel-fzf "fzf")
+     ("G" prot/counsel-rg-dir "use ripgrep in root directory")
+     ("Z" prot/counsel-fzf-dir "find file with fzf in root directory")
+     ))
   ;; Pass functions as appropriate Ivy actions (accessed via M-o)
+  (ivy-add-actions
+   'swiper-isearch
+   '(("r" my-ivy-switch-to-counsel-rg "rg")
+     ("d" my-ivy-switch-to-rg-dwim "rg dwim")
+     ("s" my-ivy-switch-to-swiper "swiper")
+     ("a" my-ivy-switch-to-swiper-all "swiper all")))
+
+  (ivy-add-actions
+   'swiper
+   '(("r" my-ivy-switch-to-counsel-rg "rg")
+     ("d" my-ivy-switch-to-rg-dwim "rg dwim")
+     ("s" my-ivy-switch-to-swiper-isearch "swiper isearch")
+     ("a" my-ivy-switch-to-swiper-all "swiper all")))
+
+  (ivy-add-actions
+   'swiper-all
+   '(("g" my-ivy-switch-to-counsel-git-grep "git grep")
+     ("r" my-ivy-switch-to-counsel-rg "rg")
+     ("d" my-ivy-switch-to-rg-dwim "rg dwim")
+     ("s" my-swiper-toggle-swiper-isearch "swiper isearch")
+     ("S" my-ivy-switch-to-swiper "swiper")))
+
+  (ivy-add-actions
+   'counsel-git-grep
+   '(("s" my-ivy-switch-to-swiper-isearch "swiper isearch")
+     ("S" my-ivy-switch-to-swiper "swiper")
+     ("r" my-ivy-switch-to-rg-dwim "rg")
+     ("d" my-ivy-switch-to-rg-dwim "rg dwim")
+     ("a" my-ivy-switch-to-swiper-all "swiper all")))
+
   (ivy-add-actions 
    'counsel-find-file 
-   '(("l" vlf "view large file (vlf)")))
+   '(("g" my-ivy-switch-to-counsel-git "git")
+     ("z" my-ivy-switch-to-counsel-fzf "fzf")
+     ("G" prot/counsel-rg-dir "use ripgrep in root directory")
+     ("Z" prot/counsel-fzf-dir "find file with fzf in root directory")
+     ("l" vlf "view large file (vlf)")))
 
   (ivy-add-actions
    'counsel-fzf
    '(("r" prot/counsel-fzf-dir "change root directory")
-     ("g" prot/counsel-rg-dir "use ripgrep in root directory")
+     ("f" my-ivy-switch-to-counsel-find-file "find file")
+     ("g" my-ivy-switch-to-counsel-git "git")
+     ("G" prot/counsel-rg-dir "use ripgrep in root directory")
      ("a" prot/counsel-fzf-ace-window "ace-window switch")))
 
   (ivy-add-actions
    'counsel-rg
-   '(("r" prot/counsel-rg-dir "change root directory")
+   '(("s" my-ivy-switch-to-swiper-isearch "swiper isearch")
+     ("S" my-ivy-switch-to-swiper "swiper")
+     ("a" my-ivy-switch-to-swiper-all "swiper all")
+     ("d" my-ivy-switch-to-rg-dwim "rg dwim")
+     ("r" prot/counsel-rg-dir "change root directory")
      ("z" prot/counsel-fzf-dir "find file with fzf in root directory")))
 
   (ivy-add-actions
-   'counsel-find-file
-   '(("g" prot/counsel-rg-dir "use ripgrep in root directory")
-     ("z" prot/counsel-fzf-dir "find file with fzf in root directory")))
+   'counsel-git
+   '(("f" my-ivy-switch-to-counsel-find-file "find file")
+     ("z" my-ivy-switch-to-counsel-fzf "fzf")))
+  
+  (ivy-add-actions
+   'counsel-projectile-find-file
+   '(("f" my-ivy-switch-to-counsel-find-file "find file")
+     ("d" my-ivy-switch-to-rg-dwim "rg dwim")
+     ("R" my-ivy-switch-to-counsel-rg "rg")
+     ("g" my-ivy-switch-to-counsel-git "git")
+     ("G" prot/counsel-rg-dir "use ripgrep in root directory")
+     ("z" my-ivy-switch-to-counsel-fzf "fzf")))
   :general
   ("C-x C-f" 'counsel-find-file
    "C-x d"   'counsel-dired
    "M-x"     'counsel-M-x
    "M-y"     'counsel-yank-pop
-   "M-s M-r"   'counsel-rg
+   "M-s M-r" 'counsel-rg
    "M-s r"   'rg
    "M-s R"   'rg-project
    "M-s a"   'counsel-ag
@@ -3925,11 +4077,12 @@ Highlight matching and auto insert parenthesis.
   :after (general)
   :init
   (require 'smartparens-config)
+  (require 'smartparens-org)
   (setq sp-highlight-pair-overlay nil)
   :config 
   (smartparens-global-mode t)
-  ;; highlights matching pairs
-  (show-smartparens-global-mode t)
+  ;; Toggle Show-Smartparens mode in all buffers.
+  (show-smartparens-global-mode 1)
   ;; (smartparens-strict-mode t)
   ;; (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
   ;; (add-hook 'org-mode-hook 'turn-on-smartparens-strict-mode)
@@ -5315,6 +5468,30 @@ _v_ariable
 #+END_SRC
 
 * Windows and Frames
+** window
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package window
+  :ensure nil
+  :general
+  (yc/leader-keys
+  "w"   '(:ignore t :which-key "windows")
+  "w SPC"  'hydra-rotate-window/body 
+  "w."  'hydra-window/body
+  "wp"  '(:ignore t :which-key "popup")
+  "w1"  'delete-other-windows
+  "w0"  'delete-window 
+  "wh"  'windmove-left
+  "wl"  'windmove-right
+  "wk"  'windmove-up
+  "wj"  'windmove-down
+  "w-"  'yc/split-window-vertically
+  "w|"  'yc/split-window-horizontally
+  "wd"  'delete-frame
+  "wu"  'winner-undo
+  "wr"  'winner-redo)
+)
+#+END_SRC
+
 ** winner
 *About:* 
 #+BEGIN_QUOTE
@@ -5449,10 +5626,17 @@ https://github.com/syohex/emacs-zoom-window
 ** rotate window like tmux
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package rotate
-  :commands (rotate-layout rotate-window)
+  ;; :commands (rotate-layout rotate-window hydra-rotate-window/body)
   :init
+  (defhydra hydra-rotate-window ()
+    "rotate-layout"
+    ("SPC" rotate-layout "rotate")
+    ("w"   rotate-window "swap")
+    ("1"   delete-other-windows "maximize" :exit t)  ; 暂时不加这个，因为旋转窗口就是因为有多窗口的需要
+    ("C-g" nil "quit")
+    ("q" nil "quit"))
   (evil-leader/set-key
-   "SPC" 'rotate-layout)
+    "SPC" 'hydra-rotate-window/body)
   )
 #+END_SRC
 
@@ -5585,6 +5769,14 @@ https://github.com/syohex/emacs-zoom-window
           ((process-menu-mode cargo-process-mode) :select t :size 0.3 :align 'below :autoclose t)
           (list-environment-mode :select t :size 0.3 :align 'below :autoclose t)
           (tabulated-list-mode :size 0.4 :align 'below))))
+#+END_SRC
+
+** transwin
+透明化窗口设置
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package transwin
+  :config
+  (transwin-toggle-transparent-frame))
 #+END_SRC
 
 ** COMMENT writeroom-mode
@@ -6017,6 +6209,15 @@ add view mode keybindings
 
   (setq org-goto-interface 'outline-path-completion org-goto-max-level 10)
 
+  ;; Blank lines.
+  (setq org-blank-before-new-entry
+        '(;; Insert  a blank line before new heading.
+          (heading . t)
+
+          ;; Try to make an intelligent decision whether to insert a
+          ;; blank line or not before a new item.
+          (plain-list-item . auto)))
+
   ;; Disabling underscore-to-subscript in Emacs Org-Mode export
   ;; @see - http://stackoverflow.com/questions/698562/disabling-underscore-to-subscript-in-emacs-org-mode-export/701201#701201
   (setq org-export-with-sub-superscripts nil    ; 全局禁用导出时 ^ 和 _ 作为上下标符号
@@ -6216,13 +6417,14 @@ e.g. =<s=
 - [[https://github.com/sabof/org-bullets][GitHub - sabof/org-bullets]]
 - [[https://github.com/integral-dw/org-superstar-mode][GitHub - integral-dw/org-superstar-mode: Make org-mode stars a little more super]]
 #+BEGIN_SRC emacs-lisp :tangle yes
+;; Prettify UI
 (use-package org-bullets
-  :after org
+  :if (char-displayable-p ?⚫)
   :hook (org-mode . org-bullets-mode)
-  :config
   ;; ◎ ⊛ ✪ ☯ ⊙ ➲ ● 🌑 ⬤ ⚉ ⸖ ͼ ͽ ○ ￮ ⚬ ⦾ ◦ ∙ ∘ ⚪ ◯ ⌾ ⎉ ⎊ ☉ ✿ ☀ ⚆ ⚇ ⚈ ⚝ ☼ ⚭ ⛒  ⛮ ⚫ ⌀  ⍟ ⎔
-  (setq org-bullets-bullet-list '("☀" "✪" "❂" "✸" "☼" "☉" "⊛" "◉" "◌"))
-)
+  ;; (setq org-bullets-bullet-list '("☀" "✪" "❂" "✸" "☼" "☉" "⊛" "◉" "◌"))
+  :init
+  (setq org-bullets-bullet-list '("⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫")))
 #+END_SRC
 
 ** COMMENT org-pretty-tags
@@ -6387,10 +6589,11 @@ Builtin mode
 ;; Capture templates for: TODO tasks, Notes, appointments, phone calls, meetings, and org-protocol
 ;; :empty-lines 2
 (setq org-capture-templates
-      '(("t" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
-         "* TODO %i%? %^g\n%T\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
-        ("d" "Today's Task" entry (file+headline org-default-notes-file "Inbox")
-         "** NEXT %? %^g \nDEADLINE: %t\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
+      '(
+        ;; ("t" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
+        ;;  "* TODO %i%? %^g\n%T\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
+        ("d" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
+         "** TODO %? %^g \nDEADLINE: %t\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
         ("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")
          "* MEETING MEETING with %? :MEETING:\n:SUBJECT:\n%T\n\n*会议内容*\n\n*重点结论*\n\n*遗留问题*\n" :clock-in t :clock-resume t :empty-lines 1)
         ("w" "Work TODO" entry (file+olp org-default-notes-file "Work" "Tasks")
@@ -6492,6 +6695,9 @@ Configuration
 
 ;; org sorthing strategy
 (setq org-agenda-sorting-strategy '(time-up priority-down))
+
+;; Enable sticky agenda: `q' key will bury agenda buffers (instead of killing).
+(setq org-agenda-sticky t)
 
 ;; don't show tasks as scheduled if they are already shown as a deadline
 (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
@@ -7992,11 +8198,11 @@ copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L
 (use-package diff-hl
   :init
   (setq diff-hl-side 'left)
+  (global-diff-hl-mode t)
   :hook 
   (dired-mode . diff-hl-dired-mode)
   :config
   (diff-hl-flydiff-mode)
-  (global-diff-hl-mode t)
   ;; (custom-set-faces
   ;;  '(diff-hl-change ((t (:background "#3a81c3"))))
   ;;  '(diff-hl-insert ((t (:background "#7ccd7c"))))
@@ -8089,23 +8295,24 @@ copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package projectile
   :commands (projectile-project-root)
-  :config (progn (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
-                 (setq projectile-enable-caching t
-                       projectile-completion-system 'ivy
-                       projectile-indexing-method 'alien)
+  :general
+  (yc/leader-keys
+    "p"    '(:ignore t :which-key "projects")
+    "p."   'hydra-projectile/body
+    "p$"   '(:ignore t :which-key "projects/shell")
+    "pf"   'projectile-find-file
+    "pa"   'projectile-ag
+    "pp"   'counsel-projectile-switch-project)
+  :config 
+  (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
+  (setq projectile-enable-caching t
+        projectile-completion-system 'ivy
+        projectile-indexing-method 'alien)
 
-                 ;; add to the globally ignored files
-                 (dolist (file-name '("*~" "*.elc"))
-                   (add-to-list 'projectile-globally-ignored-files file-name)))
+  ;; add to the globally ignored files
+  (dolist (file-name '("*~" "*.elc" "*.class"))
+    (add-to-list 'projectile-globally-ignored-files file-name))
   (projectile-mode +1))
-
-;; (defun yc/helm-project-do-ag ()
-;;   "Search in current project with `ag'."
-;;   (interactive)
-;;   (let ((dir (projectile-project-root)))
-;;     (if dir
-;;         (helm-do-ag dir)
-;;       (message "error: Not in a project."))))
 #+END_SRC
 
 *** keybindings
@@ -8258,7 +8465,7 @@ https://github.com/emacs-lsp/lsp-mode
   ;;                     :inherit 'shadow
   ;;                     :background "#f9f")
   ;; for "Jimx-/lsp-ui" fork has xwebkit support.
-  (if (featurep 'xwidget)
+  (if (featurep 'xwidget-internal)
       (setq lsp-ui-doc-use-webkit t))
   :config
   ;; `C-g'to close doc
@@ -10036,35 +10243,27 @@ brew install libvterm
 ** Scratch
 *About:* 
 #+BEGIN_SRC emacs-lisp :tangle yes
-;; scratch
-;; (use-package scratch
-;;   :ensure nil
-  ;; :custom
-  ;; (initial-major-mode 'fundamental-mode)
-;; )
-
-;; (use-package scratch-ext
-;;   :config
-;;   (setq scratch-ext-log-directory (expand-file-name ".scratch" yc/cache-dir)))
-
 ;; Scratch message
-;; (setq initial-scratch-message ";; ╔═╗┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬\n;; ╚═╗│  ├┬┘├─┤ │ │  ├─┤\n;; ╚═╝└─┘┴└─┴ ┴ ┴ └─┘┴ ┴\n\n")
-(setq initial-scratch-message "\
-;; Don't Complain!
+;; (setq initial-scratch-message "\
+;; ╔═╗┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬
+;; ╚═╗│  ├┬┘├─┤ │ │  ├─┤
+;; ╚═╝└─┘┴└─┴ ┴ ┴ └─┘┴ ┴
 
-")
+
+;; ")
 
 ;; (setq initial-scratch-message "\
 ;; ;; Happy cake day!
 
 ;; ")
 
+(setq initial-scratch-message "\
+;; Don't Complain!
+
+")
+
 ;; Recreate scratch buffer
 ;; just recreates scratch buffer when it's killed, I got this from the EmacsWiki
-(with-current-buffer "*scratch*"
-  (make-local-variable 'kill-buffer-query-functions)
-  (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer))
-
 (defun kill-scratch-buffer ()
   ;; The next line is just in case someone calls this manually
   (set-buffer (get-buffer-create "*scratch*"))
@@ -10077,6 +10276,14 @@ brew install libvterm
   (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer)
   ;; Since we killed it, don't let caller do that.
   nil)
+
+(with-current-buffer "*scratch*"
+  (make-local-variable 'kill-buffer-query-functions)
+  (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer))
+
+;; (use-package scratch-ext
+;;   :config
+;;   (setq scratch-ext-log-directory (expand-file-name ".scratch" yc/cache-dir)))
 
 ;; Persistent the scratch buffer
 (use-package persistent-scratch
@@ -11070,6 +11277,9 @@ https://github.com/alf/ob-restclient.el
 *About:* 使用服务模式启动 Emacs，这样子在其他地方可以快速启动一个 Emacs 窗口用于类似编辑文件操作等。
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package server
+  :ensure nil
+  :init
+  (require 'server)
   :hook
   (after-init . (server-mode)))
 #+END_SRC
