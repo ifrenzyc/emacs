@@ -5994,13 +5994,23 @@ add view mode keybindings
 在 Emacs 中使用原生的输入法，[[https://emacs-china.org/t/smart-input-source-evil/12592/37][原生输入法切换：smart-input-source ，配合evil使用更佳。 - Emacs-general - Emacs China]]
 #+BEGIN_SRC emacs-lisp :tangle yes
 (use-package smart-input-source
+  :hook
+  ;; enable the /follow context/ and /inline region/ mode for specific buffers
+  ((text-mode prog-mode) . smart-input-source-follow-context-mode)
+  ;;  ((text-mode prog-mode) . smart-input-source-inline-mode))
   :config
-  (setq smart-input-source-english-input-source
-        "com.apple.keylayout.ABC")
-  (setq smart-input-source-other-input-source
-        "im.rime.inputmethod.Squirrel.Rime")
-  (add-hook text-mode-hook #'smart-input-source-mode)
-  (add-hook prog-mode-hook #'smart-input-source-mode))
+  (smart-input-source-ism-lazyman-config
+   "com.apple.keylayout.US"
+   "im.rime.inputmethod.Squirrel.Rime")
+
+  ;; enable the /cursor color/ mode
+  (smart-input-source-global-cursor-color-mode t)
+  ;; enable the /respect/ mode
+  (smart-input-source-global-respect-mode t)
+  ;; enable the /follow context/ mode for all buffers
+  (smart-input-source-global-follow-context-mode t)
+  ;; enable the /inline english/ mode for all buffers
+  (smart-input-source-global-inline-mode t))
 #+END_SRC
 
 ** Buffer
