@@ -22,3 +22,15 @@
 [submodule "lisp/nox"]
 	path = lisp/nox
 	url = git@github.com:manateelazycat/nox.git
+[submodule "lisp/counsel-mu"]
+	path = lisp/counsel-mu
+	url = git@github.com:seanfarley/counsel-mu.git
+[submodule "lisp/mu4e-patch"]
+	path = lisp/mu4e-patch
+	url = git@github.com:seanfarley/mu4e-patch.git
+[submodule "lisp/mu4e"]
+	path = lisp/mu4e
+	url = git@github.com:emacsmirror/mu4e.git
+[submodule "lisp/xwwp"]
+	path = lisp/xwwp
+	url = git@github.com:BlueFlo0d/xwwp.git

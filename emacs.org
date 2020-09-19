@@ -155,8 +155,8 @@ macOS switch meta key.
 (global-visual-line-mode t)
 (setq word-wrap t)
 (setq truncate-lines nil)
-(set-fill-column 89)
-(auto-fill-mode t)    ; 自动将内容换行
+;; (set-fill-column 89)
+;; (auto-fill-mode t)    ; 自动将内容换行
 
 ;; respect ansi colors
 ;; (ansi-color-for-comint-mode-on)
@@ -569,10 +569,11 @@ M-x all-the-icons-install-fonts
 
 #+begin_src emacs-lisp :tangle yes
 (use-package all-the-icons
-  :init
+  ;; :init
   ;; 解决 modeline 有一些图标被隐藏的问题
   ;; see https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/README.org#the-right-side-of-the-modeline-is-cut-off
-  (setq all-the-icons-scale-factor 1.1))
+  ;; (setq all-the-icons-scale-factor 1.1)
+)
 #+end_src
 
 *** COMMENT all-the-icons-ivy
@@ -669,12 +670,13 @@ like dimmer-mode
   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each
   ;; theme may have their own settings.
   ;; (load-theme 'doom-one t)
-  (load-theme 'doom-one-light t)
+  ;; (load-theme 'doom-one-light t)
   ;; (load-theme 'doom-solarized-light t)
   ;; (load-theme 'doom-nord t)
-  (load-theme 'doom-nord-light t)
+  ;; (load-theme 'doom-nord-light t)
   ;; (load-theme 'doom-spacegrey t)
   ;; (load-theme 'doom-wilmersdorf t)
+  (load-theme 'modus-vivendi t)
   :config
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -1185,7 +1187,8 @@ https://github.com/tarsius/keycast
 
 ** general
 - [[https://github.com/noctuid/general.el][GitHub - noctuid/general.el: More convenient key definitions in emacs]]
-- 重点参考下这个设置：https://github.com/yanghaoxie/emacs-dotfile#install-general
+- leader key 主要参考了这个设置：https://github.com/yanghaoxie/emacs-dotfile#install-general
+- [[https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-emacs/][Keybindings strategies in Emacs · Samuel Barreto]]
 #+begin_src emacs-lisp :tangle yes
 ;; (general-define-key "<f16>" nil)
 ;;(general-define-key "<SPC>" nil)
@@ -4032,6 +4035,7 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 ** COMMENT smartparens
 *About:* 高亮显示匹配的分隔符，自动输入删除
 - [[https://github.com/Fuco1/smartparens][GitHub - Fuco1/smartparens]]
+- [[https://ebzzry.io/en/emacs-pairs/][Emacs and Pairs]] (paredit: [[http://emacsrocks.com/e14.html][Emacs Rocks! Episode 14: Paredit]])
 Highlight matching and auto insert parenthesis.
 这个要看看，结合 evil 要怎么用，或者有其他的 mode 可以替代，比如 evil-xxx？
 #+begin_src emacs-lisp :tangle yes
@@ -4853,6 +4857,8 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
 这里需要参考[[http://emacs.stackexchange.com/questions/10837/how-to-make-company-mode-be-case-sensitive-on-plain-text][这篇 StackExchange 文章]]，解决 company-mode 自动完成是转换为小写的问题，具体原因参考[[https://emacs-china.org/t/company/187][这里]]。
 - company
 - autocomplete
+  
+company-backends 的设置逻辑：[[https://emacs.stackexchange.com/questions/17537/best-company-backends-lists][Best company-backends lists - Emacs Stack Exchange]]
 #+begin_src emacs-lisp :tangle yes
 (use-package company
   :demand t
@@ -4863,7 +4869,9 @@ company-mode 是 Emacs 的自动完成插件，与 auto-complete 插件功能类
    ("C-n" . company-select-next)
    ("C-p" . company-select-previous)
    ("C-d" . company-show-doc-buffer)
-   ;; ("C-/" . helm-company)
+   ("C-f" . company-filter-candidates)
+   ("C-r" . company-search-candidates)
+   ("C-/" . counsel-company)
    )
   :config
   (global-company-mode t)
@@ -5582,7 +5590,8 @@ https://github.com/syohex/emacs-zoom-window
 #+begin_src emacs-lisp :tangle yes
 (use-package zoom-window
   :commands zoom-window-zoom
-  :general ("C-x C-z" 'zoom-window-zoom)
+  :general 
+  ("C-x C-z" 'zoom-window-zoom)
   :config
   (setq zoom-window-mode-line-color "DarkGreen"))
 #+end_src
@@ -6085,6 +6094,8 @@ add view mode keybindings
 (use-package bufler
   ;; :quelpa (bufler :fetcher github :repo "alphapapa/bufler.el"
   ;;                 :files (:defaults (:exclude "helm-bufler.el")))
+  :hook
+  (bufler-list-mode . evil-emacs-state)
 )
 #+end_src
 
@@ -6196,7 +6207,8 @@ add view mode keybindings
   :ensure org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
   :delight org-mode "Org"
-  ;; :hook
+  :hook
+  (org-mode . visual-line-mode) 
   ;; (org-mode . (lambda ()
   ;;               ;; (auto-fill-mode t)
   ;;               ;; (set-fill-column 89)
@@ -6221,6 +6233,7 @@ add view mode keybindings
 
   (setq org-log-done 'time       ; 记录时间
         org-log-done 'note    ; 记录提示信息
+        org-log-into-drawer t                           ; hide org todo state changes in drawer or properties
         org-drawers (quote ("PROPERTIES" "LOGBOOK"))    ; separate drawers for clocking and logs
         org-clock-into-drawer t                         ; save clock data and state changes and notes in the LOGBOOK drawer
         org-clock-out-remove-zero-time-clocks t         ; removes clocked tasks with 0:00 duration
@@ -6245,7 +6258,7 @@ add view mode keybindings
   ;; 打开文件时，隐藏内容
   ;; Keep the headlines expanded in Org-Mode
   ;; @see - http://emacs.stackexchange.com/questions/9709/keep-the-headlines-expanded-in-org-mode
-  (setq org-startup-folded t)
+  (setq org-startup-folded "showall")
 
   ;; 所有标题按 4 个字符缩进
   (setq org-startup-indented t)                ; turn on header line 'org-indent-mode' by default
@@ -6448,6 +6461,9 @@ e.g. =<s=
   :init
   (setq org-bullets-bullet-list '("⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫")))
 #+end_src
+
+** org-link-beautify
+- https://github.com/stardiviner/org-link-beautify
 
 ** COMMENT org-pretty-tags
 #+begin_src emacs-lisp :tangle yes
@@ -8275,6 +8291,9 @@ copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L
 *** diff-hl
 *About:* Highlight uncommitted changes using VC
 高亮显示未提交的代码块
+
+参考：采用 hook 方式解决：参考 leuven 的配置，解决 magit commit 后，当前打开的文件 diff-hl 还显示文件变更差异
+file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
 #+begin_src emacs-lisp :tangle yes
 (use-package diff-hl
   :init
@@ -8454,6 +8473,14 @@ copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L
 https://github.com/emacs-lsp/lsp-mode
 
 - lsp-mode 的优化提速 :: [[http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html][How to speed up lsp-mode | Chen's blog]]
+
+解决 macOS 下，使用 nvm 管理 nodejs，在执行 (lsp-install-server) 时报错 =env: node: No such file or directory=，原因应该是 lsp 在系统路径上找 node 和 npm 没找到
+
+#+begin_src 
+ln -s ~/.nvm/versions/node/v14.11.0/bin/npm /usr/local/bin/npm 
+ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
+#+end_src
+
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -8471,8 +8498,15 @@ https://github.com/emacs-lsp/lsp-mode
   ;; (setq lsp-eldoc-enable-hover nil
   ;;       lsp-signature-auto-activate nil
   ;;       lsp-signature-render-documentation nil)
-  ;; :config
-  ;; (setq exec-path (append exec-path '("~/.nvm/versions/node/v12.7.0/bin")))
+  :config
+  (setq lsp-headerline-breadcrumb-enable t)
+  (setq exec-path (append exec-path '("~/.nvm/versions/node/v14.11.0/bin/")))
+  (setq lsp-sqls-server "/usr/local/Cellar/go/1.15.2/libexec/bin/sqls")
+
+  ;; lsp-xml 依赖 eclipse/lemminx 项目，工程： ~/src/opensource/lemminx
+  ;; 需要将 jar 包拷贝 emacs 下，并指定路径
+  ;; 参考 https://emacs-lsp.github.io/lsp-mode/page/lsp-xml/
+  (setq lsp-xml-jar-file "/Users/yangc/.emacs.d/bin/org.eclipse.lemminx-uber.jar")
   ;; ;; Performance tweaks, see
   ;; ;; https://github.com/emacs-lsp/lsp-mode#performance
   ;; (setq gc-cons-threshold 100000000
@@ -8584,6 +8618,31 @@ https://github.com/emacs-lsp/lsp-mode
   ;; 开启 yasnippet 支持
   (setq company-lsp-enable-snippet t)
   )
+#+end_src
+
+*** eglot
+#+begin_src emacs-lisp :tangle yes
+(use-package eglot
+  :pin melpa
+  :hook (((java-mode c-mode c++-mode python-mode html-mode css-mode clojure-mode dart-mode) . eglot-ensure))
+  :custom
+  (eglot-ignored-server-capabilites '(:documentHighlightProvider
+                                      :signatureHelpProvider
+                                      :hoverProvider))
+  :config
+  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  (progn
+    (setenv "CLASSPATH"
+            (concat (getenv "CLASSPATH") ":~/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.5.700.v20200207-2156.jar"))
+    (mapc (lambda (pair)
+            (add-to-list 'eglot-server-programs pair))
+          '((clojure-mode . ("bash" "-c" "clojure-lsp"))
+            (html-mode . ("html-languageserver" "--stdio"))
+            (css-mode . ("css-languageserver" "--stdio"))
+            (js-mode . ("javascript-typescript-stdio"))
+            (c++-mode . ("clangd"))
+            (c-mode . ("clangd"))
+            (rust-mode . ("rls"))))))
 #+end_src
 
 *** COMMENT nox
@@ -8790,6 +8849,16 @@ This is a package to perform text folding like in Vim. It has the following feat
 #+end_src
 
 *** origami-predef
+
+*** COMMENT lsp-origami
+lsp =textDocument/foldingRange=
+- [[https://github.com/emacs-lsp/lsp-origami][GitHub - emacs-lsp/lsp-origami: lsp-mode origami.el]]
+#+begin_src emacs-lisp :tangle yes
+(use-package lsp-origami
+  :hook
+  (lsp-after-open . lsp-origami-try-enable)
+)
+#+end_src
 
 *** COMMENT comment-dwim-2
 An all-in-one comment command to rule them all
@@ -9585,6 +9654,8 @@ Automatic chmod +x
 #+begin_src emacs-lisp :tangle yes
 (use-package js2-mode
   :mode ("\\.js\\'" . js2-mode)
+  :hook
+  (js-mode . js2-minor-mode)
   :config 
   (setq js-indent-level 4
         typescript-indent-level 4))
@@ -9839,6 +9910,7 @@ GitHub: https://github.com/smihica/emmet-mode
   :mode ("\\.\\(json\\|json.j2\\|json.template\\|jsonld\\|tern-project\\|jshintrc\\)$" . json-mode)
   :hook
   (json-mode . flycheck-mode)
+  (json-mode . lsp)
   :general
   (json-mode-map
    "C-c C-f" 'json-mode-beautify))
@@ -9847,6 +9919,7 @@ GitHub: https://github.com/smihica/emmet-mode
 ** COMMENT Makefile
 #+begin_src emacs-lisp :tangle yes
 (use-package make-mode
+  :ensure nil
   :mode (("Makefile" . makefile-gmake-mode)))
 #+end_src
 
@@ -9856,6 +9929,9 @@ GitHub: https://github.com/smihica/emmet-mode
 (use-package nxml-mode
   :ensure nil
   :mode ("\\.\\(xml\\|gapp\\|plist\\|pom\\|xsd\\|xslt\\)$" . nxml-mode)
+  :hook
+  (nxml-mode . lsp)
+  (nxml-mode . highlight-indent-guides-mode)
   :config
   (setq-default nxml-child-indent 4
                 nxml-attribute-indent 4)
@@ -9867,7 +9943,6 @@ GitHub: https://github.com/smihica/emmet-mode
 (use-package xml-format
   :after nxml-mode
   :ensure-system-package (xmllint . "brew install libxml2")
-  :hook (nxml-mode . highlight-indent-guides-mode)
   :general
   (nxml-mode-map
     "C-c C-f" 'xml-format))
@@ -9921,6 +9996,11 @@ GitHub: https://github.com/smihica/emmet-mode
 ** markdown
 *About:* 
 Config for setting markdown mode and stuff
+需要先安装 mulitmarkdown
+#+begin_src sh
+brew install multimarkdown
+#+end_src
+
 参考：http://aaronbedra.com/emacs.d/
 - [[https://leanpub.com/markdown-mode/read#leanpub-auto-quick-reference][Read Guide to Markdown Mode for Emacs | Leanpub]]
 #+begin_src emacs-lisp :tangle yes
@@ -9931,8 +10011,9 @@ Config for setting markdown mode and stuff
    ("\\.markdown\\'" . markdown-mode))
   :commands
   (markdown-mode gfm-mode)
+  :ensure-system-package (multimarkdown . "brew install multimarkdown")
   :init
-  (setq markdown-command "/usr/local/Cellar/multimarkdown/6*/bin/multimarkdown")
+  (setq markdown-command "/usr/local/bin/multimarkdown")
   :hook
   ;; Turn on flyspell mode when editing markdown files
   (markdown-mode . flyspell-mode)
@@ -10191,6 +10272,9 @@ kubernetes
         eshell-prompt-function 'epe-theme-dakrone))
 #+end_src
 
+*** eshell-syntax-highlighting
+- [[https://github.com/akreisher/eshell-syntax-highlighting/][GitHub - akreisher/eshell-syntax-highlighting: Syntax highlighting for Eshell]]
+
 ** COMMENT better-shell
 *About:* 
 #+begin_src emacs-lisp :tangle yes
@@ -10295,14 +10379,560 @@ brew install libvterm
   (define-key vterm-mode-map (kbd "s-n")   'multi-vterm-next)
   ;; Switch to previous vterm buffer
   (define-key vterm-mode-map (kbd "s-p")   'multi-vterm-prev)
-  (define-key vterm-mode-map (kbd "<f8>")  'treemacs))
+  (define-key vterm-mode-map (kbd "<f8>")  'treemacs)
+  (define-key vterm-mode-map (kbd "<f9>")   'shell-pop))
 #+end_src
 
-* COMMENT Mail
+* Mail
+- mu4e
+- notmuch
+  
+参考 [[/Users/yangc/src/emacs.d/dakra-dmacs/init.org][dakra-dmacs]]，使用 mu4e 查收邮件
+
+** SMTP
+#+begin_src emacs-lisp :tangle yes
+(use-package smtpmail
+  :init
+  (setq smtpmail-default-smtp-server "smtp.chinatelecom.cn")
+  :config
+  (setq smtpmail-smtp-server "smtp.chinatelecom.cn")
+  (setq smtpmail-stream-type 'ssl)
+  (setq smtpmail-smtp-service 465)
+  (setq smtpmail-queue-mail nil))
+
+;; (use-package smtpmail-async
+;;   :after smtpmail
+;;   :config
+;;   (setq send-mail-function 'async-smtpmail-send-it)
+;;   (setq message-send-mail-function 'async-smtpmail-send-it))
+#+end_src
+
+** mu4e
+- Mike Zamansky 视频 [[https://www.youtube.com/watch?v=newRHXKm4H4][Using Emacs 39 - mu4e]]
+- [[https://www.reddit.com/r/emacs/comments/bfsck6/mu4e_for_dummies/][mu4e for Dummies]]
+- [[https://coldnew.github.io/6a7aa5c1/][在 emacs 下使用 mu4e 收發郵件 | coldnew's blog]]
+- [[http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/][A Complete Guide to Email in Emacs using Mu and Mu4e]]
+- [[https://rakhim.org/fastmail-setup-with-emacs-mu4e-and-mbsync-on-macos/][Fastmail setup with Emacs, mu4e and mbsync on macOS - Rakhim.org]]
+- [[https://emacs.lujianmei.com/init-daily-using/init-mu4e][Mu4e邮件管理 - emacs]]
+  
+GitHub 上，这两个工程 [[https://github.com/cemkeylan/mu-wizard][mu-wizard]]、[[https://github.com/JackMoffat/Mu4Easy][Mu4Easy]] 提供简化 mail 的脚本，思路也是用 mbsync offlineimap mu 实现。
+#+begin_src emacs-lisp :tangle yes
+(use-package mu4e
+  :load-path "lisp/mu4e/mu4e"
+  :commands (mu4e)
+  ;; Open mu4e with the 'Mail' key (if your keyboard has one)
+  :bind (
+         :map mu4e-main-mode-map
+         ("U" . mu4e-update-mail-and-index-background)
+         :map mu4e-headers-mode-map
+         ("TAB" . mu4e-headers-next-unread)
+         ("d" . my-move-to-trash)
+         ("D" . my-move-to-trash)
+         ("M" . mu4e-headers-mark-all-unread-read) ; Mark all as read
+         :map mu4e-view-mode-map
+         ("A" . mu4e-view-attachment-action)
+         ("M-o" . ace-link-mu4e)
+         ("o" . ace-link-mu4e)
+         ("n" . mu4e-scroll-up)
+         ("p" . mu4e-scroll-down)
+         ("N" . mu4e-view-headers-next)
+         ("P" . mu4e-view-headers-prev)
+         ("d" . my-move-to-trash)
+         ("D" . my-move-to-trash))
+  :init
+  ;; Use gnus view-mode by default
+  (setq mu4e-view-use-gnus t)
+  ;; and prefer text over html/ritchtext
+  (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
+
+  ;; Use completing-read (which is ivy) instead of ido
+  (setq mu4e-completing-read-function 'completing-read)
+
+  ;; set mu4e as default mail client
+  (setq mail-user-agent 'mu4e-user-agent)
+
+  ;; Always use local smtp server (msmtp in my case) to send mails
+  (setq send-mail-function 'sendmail-send-it
+        sendmail-program "~/bin/msmtp-enqueue.sh"
+        mail-specify-envelope-from t
+        message-sendmail-f-is-evil nil
+        mail-envelope-from 'header
+        message-sendmail-envelope-from 'header)
+  :config
+  (defun mu4e-update-mail-and-index-background ()
+    "Call `mu4e-update-mail-and-index' to run in background."
+    (interactive)
+    (mu4e-update-mail-and-index t))
+
+  ;; gmail delete == move mail to trash folder
+  (fset 'my-move-to-trash "mt")
+
+  ;; Fix mu4e highlighting in moe-dark theme
+  (set-face-attribute 'mu4e-header-highlight-face nil :background "#626262" :foreground "#eeeeee")
+
+  ;;; Save attachment (this can also be a function)
+  (setq-default mu4e-attachment-dir "~/Downloads")
+
+  ;; When saving multiple attachments (C-u prefix) save all in same directory
+  ;; without asking for the location of every attachment
+  (setq-default mu4e-save-multiple-attachments-without-asking t)
+
+  ;; Always display plain text messages.
+  (setq mu4e-view-html-plaintext-ratio-heuristic most-positive-fixnum)
+
+  (setq mu4e-msg2pdf "/usr/bin/msg2pdf")  ; to display html messages as pdf
+
+  ;; Show additional user-agent header
+  (setq-default mu4e-view-fields
+                '(:from :to :cc :subject :flags :date :maildir :user-agent :mailing-list
+                  :tags :attachments :signature :decryption))
+
+  ;; Attach file with helm-locate
+  ;;(helm-add-action-to-source "Attach to Email" #'mml-attach-file helm-source-locate)
+
+  ;; default
+  (setq-default mu4e-maildir "~/Maildir")
+  (setq-default mu4e-drafts-folder "/private/Drafts")
+  (setq-default mu4e-sent-folder   "/private/Sent")
+  (setq-default mu4e-trash-folder  "/private/Trash")
+
+  ;; Setup some handy shortcuts
+  ;; you can quickly switch to your Inbox -- press ``ji''
+  ;; then, when you want archive some messages, move them to
+  ;; the 'All Mail' folder by pressing ``ma''.
+
+  (setq mu4e-maildir-shortcuts
+        '(("/private/Inbox"      . ?i)
+          ("/private/Sent"       . ?s)
+          ("/private/Trash"      . ?t)
+          ("/private/Drafts"     . ?d)
+          ("/private/Archive"   . ?a)))
+
+  ;; Dynamically refile
+  ;; See: https://www.djcbsoftware.nl/code/mu/mu4e/Smart-refiling.html#Smart-refiling
+  (defun dakra-mu4e-private-refile (msg)
+    (cond
+     ;; refile all messages from Uber to the 'uber' folder
+     ((mu4e-message-contact-field-matches msg :from "@uber\\.com")
+      "/private/uber")
+     ;; important to have a catch-all at the end!
+     (t  "/private/Archive")))
+
+  (setq-default mu4e-refile-folder 'dakra-mu4e-private-refile)
+
+  ;; Don't show duplicate mails when searching
+  (setq-default mu4e-headers-skip-duplicates t)
+
+  ;; Show email address as well and not only the name
+  (setq-default mu4e-view-show-addresses t)
+
+  ;; Don't show related messages by default.
+  ;; Activate with 'W' on demand
+  (setq-default mu4e-headers-include-related nil)
+
+  ;; Don't ask to quit
+  (setq-default mu4e-confirm-quit nil)
+
+  ;; Don't spam the minibuffer with 'Indexing...' messages
+  (setq-default mu4e-hide-index-messages t)
+
+  ;; Always update in background otherwise mu4e manipulates the window layout
+  ;; when the update is finished but this breaks when we switch exwm workspaces
+  ;; and the current focused window just gets hidden.
+  (setq-default mu4e-index-update-in-background t)
+
+  ;; Add some mailing lists
+  (dolist (mailing-list '(("intern.lists.entropia.de" . "Entropia")
+                          ("intern.lists.ccc.de" . "CCC")
+                          ("pylons-discuss.googlegroups.com" . "PyrUsr")
+                          ("pylons-devel.googlegroups.com" . "PyrDev")
+                          ("sqlalchemy.googlegroups.com" . "SQLA")))
+    (add-to-list 'mu4e~mailing-lists mailing-list))
+
+  (setq mu4e-bookmarks `((,(concat "maildir:/private/Inbox OR "
+                                   "maildir:/paessler/Inbox OR "
+                                   "maildir:/sap/Inbox OR "
+                                   "maildir:/gmail/inbox OR "
+                                   "maildir:/atomx/inbox OR "
+                                   "maildir:/hogaso/inbox OR "
+                                   "maildir:/e5/Inbox")
+                          "All inboxes" ?i)
+                         ("flag:flagged" "Flagged messages" ?f)
+                         (,(concat "flag:unread AND "
+                                   "NOT flag:trashed AND "
+                                   "NOT flag:seen AND "
+                                   "NOT list:emacs-devel.gnu.org AND "
+                                   "NOT list:emacs-orgmode.gnu.org AND "
+                                   "NOT maildir:/private/Junk AND "
+                                   "NOT maildir:/private/Trash AND "
+                                   "NOT maildir:/atomx/spam AND "
+                                   "NOT maildir:/atomx/trash AND "
+                                   "NOT maildir:/paessler/Deleted\\ Items AND "
+                                   "NOT maildir:/sap/Deleted\\ Items AND "
+                                   "NOT maildir:/gmail/spam AND "
+                                   "NOT maildir:/gmail/trash")
+                          "Unread messages" ?a)
+                         (,(concat "flag:unread AND "
+                                   "NOT flag:trashed AND "
+                                   "NOT flag:seen AND "
+                                   "NOT maildir:/private/Junk AND "
+                                   "NOT maildir:/private/Trash AND "
+                                   "NOT maildir:/atomx/spam AND "
+                                   "NOT maildir:/atomx/trash AND "
+                                   "NOT maildir:/paessler/Deleted\\ Items AND "
+                                   "NOT maildir:/sap/Deleted\\ Items AND "
+                                   "NOT maildir:/gmail/spam AND "
+                                   "NOT maildir:/gmail/trash")
+                          "All Unread messages" ?A)
+                         ("list:emacs-devel.gnu.org" "Emacs dev" ?d)
+                         ("list:emacs-orgmode.gnu.org" "Emacs orgmode" ?o)
+                         ("list:magit.googlegroups.com OR list:mu-discuss.googlegroups.com" "Elisp" ?e)
+                         ("list:pylons-discuss.googlegroups.com OR list:pylons-devel.googlegroups.com OR list:sqlalchemy.googlegroups.com" "Python" ?p)
+                         ("list:intern.lists.ccc.de" "CCC Intern" ?c)
+                         ("list:intern.lists.entropia.de" "Entropia Intern" ?k)
+                         ("list:uwsgi.lists.unbit.it" "uwsgi" ?u)))
+
+  ;; (add-hook 'mu4e-mark-execute-pre-hook
+  ;;           (lambda (mark msg)
+  ;;             (cond ((member mark '(refile trash)) (mu4e-action-retag-message msg "-\\Inbox"))
+  ;;                   ((equal mark 'flag) (mu4e-action-retag-message msg "\\Starred"))
+  ;;                   ((equal mark 'unflag) (mu4e-action-retag-message msg "-\\Starred")))))
+
+  ;; allow for updating mail using 'U' in the main view:
+  ;; (only update inboxes)
+  (setq mu4e-get-mail-command "mbsync private:Inbox paessler:Inbox e5:Inbox gmail-inbox chinatelecom-inbox hogaso-inbox")
+  ;; for update all:
+  ;;(setq mu4e-get-mail-command "mbsync -a")
+
+  ;; update database every ten minutes
+  ;; (setq  mu4e-update-interval (* 60 10))
+  (setq  mu4e-update-interval nil)
+
+  ;; We do a full index (that verify integrity) with a systemd job
+  ;; Go fast inside emacs
+  (setq mu4e-index-cleanup nil      ;; don't do a full cleanup check
+        mu4e-index-lazy-check t)    ;; don't consider up-to-date dirs
+
+  ;;; Use 'fancy' non-ascii characters in various places in mu4e
+  (setq mu4e-use-fancy-chars t)
+  ;; And change default threading characters to some "nicer" looking chars
+  (setq mu4e-headers-thread-child-prefix '("├>" . "├▶ "))
+  (setq mu4e-headers-thread-last-child-prefix '("└>" . "└▶ "))
+  (setq mu4e-headers-thread-connection-prefix '("│" . "│ "))
+  (setq mu4e-headers-thread-orphan-prefix '("┬>" . "┬▶ "))
+  (setq mu4e-headers-thread-single-orphan-prefix '("─>" . "─▶ "))
+
+  ;; Also change to some nicer characters for marks
+  (setq mu4e-headers-new-mark    '("N" . "☉"))
+  (setq mu4e-headers-passed-mark  '("P" . "›"))
+  (setq mu4e-headers-replied-mark '("R" . "‹"))
+  (setq mu4e-headers-seen-mark   '("S" . ""))
+  (setq mu4e-headers-attach-mark '("a" . "📎"))
+  (setq mu4e-headers-unread-mark '("u" . "✉"))
+
+  ;; I want my format=flowed thank you very much
+  ;; mu4e sets up visual-line-mode and also fill (M-q) to do the right thing
+  ;; each paragraph is a single long line; at sending, emacs will add the
+  ;; special line continuation characters.
+  (setq mu4e-compose-format-flowed nil)
+
+  ;; Don't open new frame for composing mails
+  (setq mu4e-compose-in-new-frame nil)
+
+  ;; Don't reply to self
+  (setq mu4e-user-mail-address-list
+        '("daniel@kraus.my" "daniel.kraus@gmail.com" "dakra@tr0ll.net" "daniel@tr0ll.net" "d@niel-kraus.de"
+          "arlo@kraus.my"
+          "dakra-cepheus@tr0ll.net"
+          "daniel@skor.buzz"
+          "daniel@atomx.com"
+          "daniel@hogaso.com"
+          "daniel@restalchemy.org" "daniel@restalchemy.com"
+          "d.kraus@sap.com"
+          "daniel.kraus@paessler.com"
+          "daniel.kraus@ebenefuenf.de"))
+  (setq mu4e-compose-dont-reply-to-self t)
+
+  ;; Extract name from email for yasnippet template
+  ;; http://pragmaticemacs.com/emacs/email-templates-in-mu4e-with-yasnippet/
+  (defun bjm/mu4e-get-names-for-yasnippet ()
+    "Return comma separated string of names for an email"
+    (interactive)
+    (let ((email-name "") str email-string email-list email-name2 tmpname)
+      (save-excursion
+        (goto-char (point-min))
+        ;; first line in email could be some hidden line containing NO to field
+        (setq str (buffer-substring-no-properties (point-min) (point-max))))
+      ;; take name from TO field - match series of names
+      (when (string-match "^To: \"?\\(.+\\)" str)
+        (setq email-string (match-string 1 str)))
+      ;;split to list by comma
+      (setq email-list (split-string email-string " *, *"))
+      ;;loop over emails
+      (dolist (tmpstr email-list)
+        ;;get first word of email string
+        (setq tmpname (car (split-string tmpstr " ")))
+        ;;remove whitespace or ""
+        (setq tmpname (replace-regexp-in-string "[ \"]" "" tmpname))
+        ;;join to string
+        (setq email-name
+              (concat email-name ", " tmpname)))
+      ;;remove initial comma
+      (setq email-name (replace-regexp-in-string "^, " "" email-name))
+
+      ;;see if we want to use the name in the FROM field
+      ;;get name in FROM field if available, but only if there is only
+      ;;one name in TO field
+      (if (< (length email-list) 2)
+          (when (string-match "^\\([^ ,\n]+\\).+writes:$" str)
+            (progn (setq email-name2 (match-string 1 str))
+                   ;;prefer name in FROM field if TO field has "@"
+                   (when (string-match "@" email-name)
+                     (setq email-name email-name2))
+                   )))
+      email-name))
+
+  ;; Always store contacts as first last <email>
+  ;; https://martinralbrecht.wordpress.com/2016/05/30/handling-email-with-emacs/
+  (defun malb/canonicalise-contact-name (name)
+    (let ((case-fold-search nil))
+      (setq name (or name ""))
+      (if (string-match-p "^[^ ]+@[^ ]+\.[^ ]" name)
+          ""
+        (progn
+          ;; drop email address
+          (setq name (replace-regexp-in-string "^\\(.*\\) [^ ]+@[^ ]+\.[^ ]" "\\1" name))
+          ;; strip quotes
+          (setq name (replace-regexp-in-string "^\"\\(.*\\)\"" "\\1" name))
+          ;; deal with YELL’d last names
+          (setq name (replace-regexp-in-string "^\\(\\<[[:upper:]]+\\>\\) \\(.*\\)" "\\2 \\1" name))
+          ;; Foo, Bar becomes Bar Foo
+          (setq name (replace-regexp-in-string "^\\(.*\\), \\([^ ]+\\).*" "\\2 \\1" name))))))
+
+  (defun malb/mu4e-contact-rewrite-function (contact)
+    (let* ((name (or (plist-get contact :name) ""))
+           ;; (mail (plist-get contact :mail))
+           (case-fold-search nil))
+      (plist-put contact :name (malb/canonicalise-contact-name name))
+      contact))
+
+  (setq mu4e-contact-rewrite-function #'malb/mu4e-contact-rewrite-function)
+
+
+  (defun dakra-mu4e-action-attachment-import-gcalcli (msg attachnum)
+    "Import ical attachments with gcalcli"
+    (mu4e-view-open-attachment-with msg attachnum "~/bin/icalimport.sh"))
+
+  (add-to-list 'mu4e-view-attachment-actions '("iImport ical" . dakra-mu4e-action-attachment-import-gcalcli) t)
+
+  (defun mu4e-action-view-in-firefox (msg)
+    "View the body of the message in a new Firefox window."
+    (let ((browse-url-browser-function 'browse-url-firefox)
+          (browse-url-new-window-flag t))
+      (browse-url (concat "file://" (mu4e~write-body-to-html msg)))))
+
+  ;; View mail in browser with "a V"
+  (add-to-list 'mu4e-view-actions
+               '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+  (add-to-list 'mu4e-view-actions
+               '("fViewInFirefox" . mu4e-action-view-in-firefox) t)
+  (add-to-list 'mu4e-view-actions
+               '("xViewXWidget" . mu4e-action-view-with-xwidget) t)
+  ;; enable inline images
+  (setq mu4e-view-show-images t)
+  ;; use imagemagick, if available
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
+
+  ;;rename files when moving
+  ;;NEEDED FOR MBSYNC
+  (setq mu4e-change-filenames-when-moving t)
+
+  (defun mu4e-message-maildir-matches (msg rx)
+    "Match message MSG with regex RX based on maildir."
+    (when rx
+      (if (listp rx)
+          ;; if rx is a list, try each one for a match
+          (or (mu4e-message-maildir-matches msg (car rx))
+              (mu4e-message-maildir-matches msg (cdr rx)))
+        ;; not a list, check rx
+        (string-match rx (mu4e-message-field msg :maildir)))))
+
+  (defmacro mu4e-context-match-fun (maildir)
+    "Return lambda for context switching which checks if a message is in MAILDIR."
+    `(lambda (msg)
+       (when msg
+         (mu4e-message-maildir-matches msg ,maildir))))
+
+  (setq mu4e-contexts
+        `( 
+           ;; ,(make-mu4e-context
+           ;;   :name "private"
+           ;;   :enter-func (lambda () (mu4e-message "Switch to the Private context"))
+           ;;   :match-func (mu4e-context-match-fun "^/private")
+           ;;   :vars '((gnus-icalendar-org-capture-file "~/org/personal.org")
+           ;;           ( user-mail-address  . "daniel@kraus.my" )
+           ;;           ( mu4e-maildir-shortcuts . (("/private/Inbox"      . ?i)
+           ;;                                       ("/private/Sent"       . ?s)
+           ;;                                       ("/private/Trash"      . ?t)
+           ;;                                       ("/private/Drafts"     . ?d)
+           ;;                                       ("/private/Archive"   . ?a)))
+           ;;           ( mu4e-drafts-folder . "/private/Drafts" )
+           ;;           ( mu4e-sent-folder   . "/private/Sent" )
+           ;;           ( mu4e-trash-folder  . "/private/Trash" )
+           ;;           ( mu4e-refile-folder . dakra-mu4e-private-refile)))
+           ,(make-mu4e-context
+             :name "gmail"
+             :enter-func (lambda () (mu4e-message "Switch to the gmail context"))
+             :match-func (mu4e-context-match-fun "^/gmail")
+             :vars '(;; (gnus-icalendar-org-capture-file "~/org/personal.org")
+                     ( user-mail-address  . "ifrenzyc@gmail.com"  )
+                     ( mu4e-maildir-shortcuts . (("/gmail/inbox"      . ?i)
+                                                 ("/gmail/sent_mail"  . ?s)
+                                                 ("/gmail/trash"      . ?t)
+                                                 ("/gmail/drafts"     . ?d)
+                                                 ("/gmail/all_mail"   . ?a)))
+                     ( mu4e-drafts-folder . "/gmail/drafts" )
+                     ( mu4e-sent-folder   . "/gmail/sent_mail" )
+                     ( mu4e-trash-folder  . "/gmail/trash" )
+                     ( mu4e-refile-folder . "/gmail/all_mail" )
+                     ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
+                     ( mu4e-sent-messages-behavior  . delete)))
+           ,(make-mu4e-context
+             :name "chinatelecom"
+             :enter-func (lambda () (mu4e-message "Switch to the chinatelecom context"))
+             :match-func (mu4e-context-match-fun "^/chinatelecom")
+             :vars '(( user-mail-address  . "yangchuang.gd@chinatelecom.cn" )
+                     ( mu4e-maildir-shortcuts . (("/chinatelecom/inbox"      . ?i)
+                                                 ("/chinatelecom/sent_mail"  . ?s)
+                                                 ("/chinatelecom/trash"      . ?t)
+                                                 ("/chinatelecom/drafts"     . ?d)
+                                                 ("/chinatelecom/all_mail"   . ?a)))
+                     ( mu4e-drafts-folder . "/chinatelecom/drafts" )
+                     ( mu4e-sent-folder   . "/chinatelecom/sent_mail" )
+                     ( mu4e-trash-folder  . "/chinatelecom/trash" )
+                     ( mu4e-refile-folder . "/chinatelecom/all_mail" )
+                     ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
+                     ( mu4e-sent-messages-behavior  . delete)))))
+
+  ;; start with the first (default) context;
+  ;; default is to ask-if-none (ask when there's no context yet, and none match)
+  (setq mu4e-context-policy 'pick-first)
+
+  ;; compose with the current context is no context matches;
+  ;; default is to ask
+  '(setq mu4e-compose-context-policy nil)
+
+  ;; don't keep message buffers around
+  (setq message-kill-buffer-on-exit t)
+
+  ;; something about ourselves
+  ;; (setq
+  ;;  user-mail-address "daniel@kraus.my"
+  ;;  user-full-name  "Daniel Kraus"
+  ;;  mu4e-compose-signature
+  ;;  (concat
+  ;;   "regards,\n"
+  ;;   "  Daniel\n"))
+
+  ;; If there's 'attach' 'file' 'pdf' in the message warn when sending w/o attachment
+  (defun mbork/message-attachment-present-p ()
+    "Return t if an attachment is found in the current message."
+    (save-excursion
+      (save-restriction
+        (widen)
+        (goto-char (point-min))
+        (when (search-forward "<#part" nil t) t))))
+
+  (defcustom mbork/message-attachment-intent-re
+    (regexp-opt '("attach"
+                  "anhang"
+                  "angehängt"
+                  "angehaengt"
+                  "datei"
+		  "file"
+                  "pdf"))
+    "A regex which - if found in the message, and if there is no
+attachment - should launch the no-attachment warning."
+    :type '(sexp)
+    :group 'mu4e)
+
+  (defcustom mbork/message-attachment-reminder
+    "Are you sure you want to send this message without any attachment? "
+    "The default question asked when trying to send a message
+containing `mbork/message-attachment-intent-re' without an
+actual attachment."
+    :type '(string)
+    :group 'mu4e)
+
+  (defun mbork/message-warn-if-no-attachments ()
+    "Ask the user if s?he wants to send the message even though
+there are no attachments."
+    (when (and (save-excursion
+	         (save-restriction
+		   (widen)
+		   (goto-char (point-min))
+		   (re-search-forward mbork/message-attachment-intent-re nil t)))
+	       (not (mbork/message-attachment-present-p)))
+      (unless (y-or-n-p mbork/message-attachment-reminder)
+        (keyboard-quit))))
+
+  (add-hook 'message-send-hook #'mbork/message-warn-if-no-attachments))
+
+;; Show overview of unread/all mails for each maildir/bookmarks in mu4e main window
+(use-package mu4e-maildirs-extension
+  :disabled t
+  :commands mu4e-maildirs-extension-force-update
+  :config
+  (setq-default mu4e-maildirs-extension-use-bookmarks t)
+  (setq-default mu4e-maildirs-extension-use-maildirs nil)
+  (mu4e-maildirs-extension))
+
+;; (define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
+;; (define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
+;; ;; Overwrite normal 'D' keybinding
+;; (define-key mu4e-headers-mode-map (kbd "D") 'my-move-to-trash)
+;; (define-key mu4e-view-mode-map (kbd "D") 'my-move-to-trash)
+
+;; ;; Mark all as read with 'M'
+;; (define-key mu4e-headers-mode-map (kbd "M") 'mu4e-headers-mark-all-unread-read)
+
+#+end_src
+
+** counsel-mu4e
+provide counsel integrate.
+- [[https://github.com/seanfarley/counsel-mu][GitHub - seanfarley/counsel-mu: Search emails in mu4e asynchronously with ivy]]
+#+begin_src emacs-lisp :tangle yes
+(use-package counsel-mu
+  :load-path "lisp/counsel-mu"
+  :commands (counsel-mu4e))
+#+end_src
+
+** mu4e-patch
+- [[https://github.com/seanfarley/mu4e-patch][GitHub - seanfarley/mu4e-patch: Colorize patch emails in mu4e]]
+#+begin_src emacs-lisp :tangle yes
+(use-package mu4e-patch
+  :load-path "lisp/mu4e-patch"
+  :config
+  ;; colorize patch-based emails
+  (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight))
+#+end_src
 
 * Browser
 #+begin_src emacs-lisp :tangle yes
 (set browse-url-browser-function 'xwidget-webkit-browse-url)
+#+end_src
+
+** xwwp
+xwidget-webkit enhancement suite
+- [[https://github.com/BlueFlo0d/xwwp][GitHub - BlueFlo0d/xwwp: Enhance the Emacs xwidget-webkit browser]]
+#+begin_src emacs-lisp :tangle yes
+(use-package xwwp-follow-link
+  :load-path "lisp/xwwp"
+  :custom
+  (xwwp-follow-link-completion-system 'ivy)
+  :bind (:map xwidget-webkit-mode-map
+              ("v" . xwwp-follow-link)))
 #+end_src
 
 * Utility
@@ -10311,9 +10941,9 @@ brew install libvterm
 Scratch message
 #+begin_src emacs-lisp :tangle yes
 (setq initial-scratch-message "\
-╔═╗┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬
-╚═╗│  ├┬┘├─┤ │ │  ├─┤
-╚═╝└─┘┴└─┴ ┴ ┴ └─┘┴ ┴
+;; ╔═╗┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬
+;; ╚═╗│  ├┬┘├─┤ │ │  ├─┤
+;; ╚═╝└─┘┴└─┴ ┴ ┴ └─┘┴ ┴
 
 
 ")
@@ -10476,20 +11106,6 @@ Exports Org-mode contents to Reveal.js HTML presentation.
                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
 #+end_src
 
-** COMMENT diff
-https://github.com/justbur/emacs-vdiff
-
-同时，它也可以应用在 ediff 上，恢复由 ediff 导致的窗体变动。
-#+begin_src emacs-lisp :tangle yes
-(use-package ediff
-  :ensure nil
-  :hook (ediff-quit . winner-undo)
-  :config
-  (setq ediff-diff-options "-w"
-        ediff-split-window-function 'split-window-horizontally
-        ediff-window-setup-function 'ediff-setup-windows-plain))
-#+end_src
-
 ** COMMENT Document Conversions (Pandoc)
 *About:* 
 #+begin_src emacs-lisp :tangle yes
@@ -10499,7 +11115,116 @@ https://github.com/justbur/emacs-vdiff
   (pandoc-mode . pandoc-load-default-settings)
   :config
   (when IS-MAC
-    (add-to-list 'exec-path "/usr/local/texlive/2019/bin/x86_64-darwin")))
+    (add-to-list 'exec-path "/usr/local/texlive/2020/bin/x86_64-darwin")))
+#+end_src
+
+** COMMENT 在 Emacs 中查看 pdf
+参考：https://irreal.org/blog/?p=7000
+
+在 org 上打开 pdf 例子
+#+begin_example
+[[pdfview:~/Desktop/Ansible 介绍.pdf]]
+#+end_example
+
+*About:* 
+#+begin_src emacs-lisp :tangle yes
+(use-package pdf-tools
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-page
+                pdf-view-use-imagemagick t
+                pdf-view-midnight-colors '("white smoke" . "gray5"))
+  :general
+  (pdf-view-mode-map
+   "\\" 'hydra-pdftools/body
+   "<s-spc>" 'pdf-view-scroll-down-or-next-page
+   "g"  'pdf-view-first-page
+   "G"  'pdf-view-last-page
+   "l"  'image-forward-hscroll
+   "h"  'image-backward-hscroll
+   "j"  'pdf-view-next-page
+   "k"  'pdf-view-previous-page
+   "e"  'pdf-view-goto-page
+   "u"  'pdf-view-revert-buffer
+   "al" 'pdf-annot-list-annotations
+   "ad" 'pdf-annot-delete
+   "aa" 'pdf-annot-attachment-dired
+   "am" 'pdf-annot-add-markup-annotation
+   "at" 'pdf-annot-add-text-annotation
+   "y"  'pdf-view-kill-ring-save
+   "i"  'pdf-misc-display-metadata
+   "s"  'pdf-occur
+   "b"  'pdf-view-set-slice-from-bounding-box
+   "r"  'pdf-view-reset-slice))
+
+(use-package pdf-view
+  :ensure nil
+  :after pdf-tools
+  :custom
+  (pdf-view-resize-factor 1.1)
+  (pdf-view-use-unicode-ligther nil))
+
+(use-package org-pdfview
+  :after org)
+
+;; Emacs has the built-in DocView mode which lets you view PDFs. The
+;; below setting allows continue scrolling
+(setq doc-view-continuous t)
+#+end_src
+
+*** keybindings
+#+begin_src emacs-lisp :tangle yes
+(when (package-installed-p 'hydra)
+  ;; (bind-keys :map pdf-view-mode-map
+  ;;            ("\\" . hydra-pdftools/body))
+  (defhydra hydra-pdftools (:color red :hint nil)
+    "
+                                                                          ╭───────────┐
+           Move  History   Scale/Fit     Annotations  Search/Link    Do   │ PDF Tools │
+       ╭──────────────────────────────────────────────────────────────────┴───────────╯
+             ^^_g_^^      _B_    ^↧^    _+_    ^ ^     [_al_] list    [_s_] search    [_u_] revert buffer
+             ^^^↑^^^      ^↑^    _H_    ^↑^  ↦ _W_ ↤   [_am_] markup  [_o_] outline   [_i_] info
+             ^^_p_^^      ^ ^    ^↥^    _0_    ^ ^     [_at_] text    [_F_] link      [_d_] dark mode
+             ^^^↑^^^      ^↓^  ╭─^─^─┐  ^↓^  ╭─^ ^─┐   [_ad_] delete  [_f_] search link
+        _h_ ←pag_e_→ _l_  _N_  │ _P_ │  _-_    _b_     [_aa_] dired
+             ^^^↓^^^      ^ ^  ╰─^─^─╯  ^ ^  ╰─^ ^─╯   [_y_]  yank
+             ^^_n_^^      ^ ^  _r_eset slice box
+             ^^^↓^^^
+             ^^_G_^^
+       --------------------------------------------------------------------------------
+            "
+    ("\\" hydra-master/body "back")
+    ("<ESC>" nil "quit")
+    ("al" pdf-annot-list-annotations)
+    ("ad" pdf-annot-delete)
+    ("aa" pdf-annot-attachment-dired)
+    ("am" pdf-annot-add-markup-annotation)
+    ("at" pdf-annot-add-text-annotation)
+    ("y"  pdf-view-kill-ring-save)
+    ("+" pdf-view-enlarge :color red)
+    ("-" pdf-view-shrink :color red)
+    ("0" pdf-view-scale-reset)
+    ("H" pdf-view-fit-height-to-window)
+    ("W" pdf-view-fit-width-to-window)
+    ("P" pdf-view-fit-page-to-window)
+    ("n" pdf-view-next-page-command :color red)
+    ("p" pdf-view-previous-page-command :color red)
+    ("d" pdf-view-dark-minor-mode)
+    ("b" pdf-view-set-slice-from-bounding-box)
+    ("r" pdf-view-reset-slice)
+    ("g" pdf-view-first-page)
+    ("G" pdf-view-last-page)
+    ("e" pdf-view-goto-page)
+    ("o" pdf-outline)
+    ("s" pdf-occur)
+    ("i" pdf-misc-display-metadata)
+    ("u" pdf-view-revert-buffer)
+    ("F" pdf-links-action-perfom)
+    ("f" pdf-links-isearch-link)
+    ("B" pdf-history-backward :color red)
+    ("N" pdf-history-forward :color red)
+    ("l" image-forward-hscroll :color red)
+    ("h" image-backward-hscroll :color red)))
 #+end_src
 
 ** COMMENT org-pdftools
@@ -10520,6 +11245,10 @@ https://github.com/justbur/emacs-vdiff
   ;;   :after org-noter))
 #+end_src
 
+*** org-ref
+
+*** ebib
+
 ** COMMENT pdf 导出设置
 这里的内容是采用 Emacs+orgmode+LaTeX 导出 pdf 相关的。
 需要系统安装 xelatex 用于导出带有中文的 pdf。
@@ -10529,8 +11258,8 @@ https://github.com/justbur/emacs-vdiff
 (require 'ox-beamer)
 (require 'ox-latex)
 
-(setenv "PATH" (concat (getenv "PATH") ":/usr/local/texlive/2019/bin/x86_64-darwin/"))
-(setq exec-path (append exec-path '("/usr/local/texlive/2019/bin/x86_64-darwin/")))
+(setenv "PATH" (concat (getenv "PATH") ":/usr/local/texlive/2020/bin/x86_64-darwin/"))
+(setq exec-path (append exec-path '("/usr/local/texlive/2020/bin/x86_64-darwin/")))
 #+end_src
 
 配置使用 xelate 输出中文 pdf
@@ -10635,116 +11364,6 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
                         ;; ("\\.pdf\\'" . "kde-open %s")
                         ;; ("\\.jpg\\'" . "kde-open %s")
                         )))
-#+end_src
-
-** COMMENT 在 Emacs 中查看 pdf
-参考：https://irreal.org/blog/?p=7000
-
-在 org 上打开 pdf 例子
-#+begin_example
-[[pdfview:~/Desktop/Ansible 介绍.pdf]]
-#+end_example
-
-*About:* 
-#+begin_src emacs-lisp :tangle yes
-(use-package pdf-tools
-  :config
-  (pdf-tools-install)
-  (setq-default pdf-view-display-size 'fit-page
-                pdf-view-use-imagemagick t
-                pdf-view-midnight-colors '("white smoke" . "gray5"))
-  :general
-  (pdf-view-mode-map
-   "\\" 'hydra-pdftools/body
-   "<s-spc>" 'pdf-view-scroll-down-or-next-page
-   "g"  'pdf-view-first-page
-   "G"  'pdf-view-last-page
-   "l"  'image-forward-hscroll
-   "h"  'image-backward-hscroll
-   "j"  'pdf-view-next-page
-   "k"  'pdf-view-previous-page
-   "e"  'pdf-view-goto-page
-   "u"  'pdf-view-revert-buffer
-   "al" 'pdf-annot-list-annotations
-   "ad" 'pdf-annot-delete
-   "aa" 'pdf-annot-attachment-dired
-   "am" 'pdf-annot-add-markup-annotation
-   "at" 'pdf-annot-add-text-annotation
-   "y"  'pdf-view-kill-ring-save
-   "i"  'pdf-misc-display-metadata
-   "s"  'pdf-occur
-   "b"  'pdf-view-set-slice-from-bounding-box
-   "r"  'pdf-view-reset-slice))
-
-(use-package pdf-view
-  :ensure nil
-  :after pdf-tools
-  :custom
-  (pdf-view-display-size 'fit-page)
-  (pdf-view-resize-factor 1.1)
-  (pdf-view-use-unicode-ligther nil))
-
-(use-package org-pdfview
-  :after org)
-
-;; Emacs has the built-in DocView mode which lets you view PDFs. The
-;; below setting allows continue scrolling
-(setq doc-view-continuous t)
-#+end_src
-
-*** keybindings
-#+begin_src emacs-lisp :tangle yes
-(when (package-installed-p 'hydra)
-  ;; (bind-keys :map pdf-view-mode-map
-  ;;            ("\\" . hydra-pdftools/body))
-  (defhydra hydra-pdftools (:color red :hint nil)
-    "
-                                                                          ╭───────────┐
-           Move  History   Scale/Fit     Annotations  Search/Link    Do   │ PDF Tools │
-       ╭──────────────────────────────────────────────────────────────────┴───────────╯
-             ^^_g_^^      _B_    ^↧^    _+_    ^ ^     [_al_] list    [_s_] search    [_u_] revert buffer
-             ^^^↑^^^      ^↑^    _H_    ^↑^  ↦ _W_ ↤   [_am_] markup  [_o_] outline   [_i_] info
-             ^^_p_^^      ^ ^    ^↥^    _0_    ^ ^     [_at_] text    [_F_] link      [_d_] dark mode
-             ^^^↑^^^      ^↓^  ╭─^─^─┐  ^↓^  ╭─^ ^─┐   [_ad_] delete  [_f_] search link
-        _h_ ←pag_e_→ _l_  _N_  │ _P_ │  _-_    _b_     [_aa_] dired
-             ^^^↓^^^      ^ ^  ╰─^─^─╯  ^ ^  ╰─^ ^─╯   [_y_]  yank
-             ^^_n_^^      ^ ^  _r_eset slice box
-             ^^^↓^^^
-             ^^_G_^^
-       --------------------------------------------------------------------------------
-            "
-    ("\\" hydra-master/body "back")
-    ("<ESC>" nil "quit")
-    ("al" pdf-annot-list-annotations)
-    ("ad" pdf-annot-delete)
-    ("aa" pdf-annot-attachment-dired)
-    ("am" pdf-annot-add-markup-annotation)
-    ("at" pdf-annot-add-text-annotation)
-    ("y"  pdf-view-kill-ring-save)
-    ("+" pdf-view-enlarge :color red)
-    ("-" pdf-view-shrink :color red)
-    ("0" pdf-view-scale-reset)
-    ("H" pdf-view-fit-height-to-window)
-    ("W" pdf-view-fit-width-to-window)
-    ("P" pdf-view-fit-page-to-window)
-    ("n" pdf-view-next-page-command :color red)
-    ("p" pdf-view-previous-page-command :color red)
-    ("d" pdf-view-dark-minor-mode)
-    ("b" pdf-view-set-slice-from-bounding-box)
-    ("r" pdf-view-reset-slice)
-    ("g" pdf-view-first-page)
-    ("G" pdf-view-last-page)
-    ("e" pdf-view-goto-page)
-    ("o" pdf-outline)
-    ("s" pdf-occur)
-    ("i" pdf-misc-display-metadata)
-    ("u" pdf-view-revert-buffer)
-    ("F" pdf-links-action-perfom)
-    ("f" pdf-links-isearch-link)
-    ("B" pdf-history-backward :color red)
-    ("N" pdf-history-forward :color red)
-    ("l" image-forward-hscroll :color red)
-    ("h" image-backward-hscroll :color red)))
 #+end_src
 
 ** COMMENT Nov epub
@@ -10898,6 +11517,116 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 (use-package dokuwiki
   :init
   (use-package xml-rpc))
+#+end_src
+
+** elfeed
+阅读 RSS
+- newsticker
+#+begin_src emacs-lisp :tangle yes
+(use-package elfeed
+  :ensure t
+  :commands elfeed
+  :custom
+  (elfeed-use-curl t)
+  (elfeed-curl-max-connections 10)
+  (elfeed-db-directory "~/.emacs.d/elfeed")
+  (elfeed-enclosure-default-dir "~/Downloads")
+  (elfeed-search-clipboard-type 'CLIPBOARD)
+  (elfeed-show-entry-switch #'pop-to-buffer)
+  (elfeed-show-entry-delete #'delete-window)
+  (elfeed-search-title-max-width (current-fill-column))
+  (elfeed-search-title-max-width 100)
+  (elfeed-search-title-min-width 30)
+  (elfeed-search-trailing-width 16)
+  (elfeed-show-truncate-long-urls t)
+  (elfeed-show-unique-buffers t)
+  :hook
+  (elfeed-update . evil-emacs-state)
+  :config
+  (setq elfeed-curl-extra-arguments '("--proxy" "socks5://127.0.0.1:1080"
+                                      "--retry" "3"
+                                      "--insecure"))
+  (setq elfeed-feeds '(
+                       ("http://www.masteringemacs.org/feed/" mastering emacs)
+                       ("https://www.reddit.com/r/emacs.rss" reddit emacs)
+                       ("http://sachachua.com/blog/category/emacs-news/feed" emacs)
+                       ("https://planet.emacslife.com/atom.xml" emacslife emacs)
+                       ;; ("https://oremacs.com/atom.xml" oremacs)
+                       ;; ("http://pragmaticemacs.com/feed/" pragmaticemacs)
+                       ;; ("https://pinecast.com/feed/emacscast" emacscast)
+                       ;; ("https://tech.meituan.com/feed" tech)
+                       ;; ("http://www.howardism.org/index.xml")     ;; My Blog
+                       ;; ("http://planet.emacsen.org/atom.xml")     ;; Emacs RSS
+                       ;; ("http://endlessparentheses.com/atom.xml") ;; Emacs Blog
+                       ;; ("http://emacs-fu.blogspot.com/feeds/posts/default")
+                       ;; ("http://emacsredux.com/atom.xml")         ;; Emacs Blog
+                       ;; ("http://www.lunaryorn.com/feed.atom")     ;; Emacs Blog
+                       ;; ("http://emacshorrors.com/feed.atom")
+                       ;; ("http://swannodette.github.com/atom.xml") ;; David Nolen, duh.
+                       ;; ("http://batsov.com/atom.xml")             ;; Bozhidar Batsov
+                       ;; ("https://apod.nasa.gov/apod.rss")         ;; Nasa's Picture of the Day
+                       ;; ("http://twogreenleaves.org/index.php?feed=rss")
+                       ;; ("https://medium.com/feed/@hlship/")       ;; Programming
+                       ;; ("http://gigasquidsoftware.com/atom.xml")  ;; Clojure
+                       ;; ("http://blog.fogus.me/feed/")      ;; Programming
+                       ;; ("http://steve-yegge.blogspot.com/atom.xml")
+                       ;; ("http://www.rkn.io/feed.xml")
+                       ;; ("http://nullprogram.com/feed/")
+                       ;; ("https://coldnew.github.io/rss")
+                       ;; ("http://emacsninja.com/emacs.atom" emacs)
+                       ;; ("http://emacshorrors.com/feed.atom" emacs)
+                       ;; ("http://planet.emacsen.org/atom.xml" emacs)
+                       ;; ("https://emacs-china.org/latest.rss" emacs)
+                       ;; ("http://ubuntupodcast.org/feed/" ubuntu)
+                       ;; ("https://sspai.com/feed")
+                       ;; ("http://feeds2.feedburner.com/stevelosh")
+                       ;; ("http://feed.williamlong.info/")
+                       ;; ("http://matt.might.net/articles/feed.rss")
+                       ;; ("https://olivierpieters.be/feed.xml")
+                       ;; ("https://two-wrongs.com/feed.xml")
+                       ;; ("http://alex-charlton.com/rss.xml")
+                       ;; ("https://jameshfisher.com/feed.xml")
+                       ;; ("https://open.nytimes.com/feed")
+                       ;; ("http://bluxte.net/rss.xml")
+                       ;; ("https://increment.com/feed.xml")
+                       ))
+  :pretty-hydra
+  ((:title (pretty-hydra-title "Elfeed" 'faicon "rss-square")
+           :color amaranth :quit-key "q")
+   ("Search"
+    (("c" elfeed-db-compact "compact db")
+     ("g" elfeed-search-update--force "refresh")
+     ("G" elfeed-search-fetch "update")
+     ("y" elfeed-search-yank "copy URL")
+     ("+" elfeed-search-tag-all "tag all")
+     ("-" elfeed-search-untag-all "untag all"))
+    "Filter"
+    (("s" elfeed-search-live-filter "live filter")
+     ("S" elfeed-search-set-filter "set filter")
+     ("*" (elfeed-search-set-filter "@6-months-ago +star") "starred")
+     ("A" (elfeed-search-set-filter "@6-months-ago" "all"))
+     ("T" (elfeed-search-set-filter "@1-day-ago" "today")))
+    "Article"
+    (("b" elfeed-search-browse-url "browse")
+     ("n" next-line "next")
+     ("p" previous-line "previous")
+     ("u" elfeed-search-tag-all-unread "mark unread")
+     ("r" elfeed-search-untag-all-unread "mark read")
+     ("RET" elfeed-search-show-entry "show"))))
+  :bind (:map elfeed-search-mode-map
+              ("?" . elfeed-hydra/body)
+              ("w" . elfeed-search-yank)
+              ("g" . elfeed-update)
+              ("G" . elfeed-search-update--force)
+              :map elfeed-show-mode-map
+              ("w" . elfeed-show-yank)))
+
+;; (use-package elfeed-link)
+
+(use-package elfeed-goodies
+  :disabled
+  :ensure t
+  :config (elfeed-goodies/setup))
 #+end_src
 
 ** COMMENT IRC
@@ -11093,6 +11822,22 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 ;;                   (setq erc-insert-this nil)))))
 #+end_src
 
+** COMMENT reddit client
+- https://github.com/ahungry/md4rd
+- read this thread: https://www.reddit.com/r/emacs/comments/eaf2r0/how_i_use_reddit_from_inside_emacs/
+#+begin_src emacs-lisp :tangle yes
+(use-package md4rd
+  :hook
+  (md4rd-mode . md4rd-indent-all-the-lines)
+  :config
+  (setq md4rd-subs-active '(emacs lisp+Common_Lisp prolog clojure))
+  (setq md4rd--oauth-access-token
+        "your-access-token-here")
+  (setq md4rd--oauth-refresh-token
+        "your-refresh-token-here")
+  (run-with-timer 0 3540 'md4rd-refresh-login))
+#+end_src
+
 ** Tramp
 *About:* 
 - [[http://www.kohn.com.cn/wordpress/?p=257][Emacs通过ssh远程编辑文件时指定端口号 | 藏经阁]]
@@ -11155,19 +11900,18 @@ brew install gnupg
 (epa-file-enable)
 #+end_src
 
-** COMMENT reddit client
-- https://github.com/ahungry/md4rd
-- read this thread: https://www.reddit.com/r/emacs/comments/eaf2r0/how_i_use_reddit_from_inside_emacs/
+** COMMENT diff
+https://github.com/justbur/emacs-vdiff
+
+同时，它也可以应用在 ediff 上，恢复由 ediff 导致的窗体变动。
 #+begin_src emacs-lisp :tangle yes
-(use-package md4rd :ensure t
+(use-package ediff
+  :ensure nil
+  :hook (ediff-quit . winner-undo)
   :config
-  (add-hook 'md4rd-mode-hook 'md4rd-indent-all-the-lines)
-  (setq md4rd-subs-active '(emacs lisp+Common_Lisp prolog clojure))
-  (setq md4rd--oauth-access-token
-        "your-access-token-here")
-  (setq md4rd--oauth-refresh-token
-        "your-refresh-token-here")
-  (run-with-timer 0 3540 'md4rd-refresh-login))
+  (setq ediff-diff-options "-w"
+        ediff-split-window-function 'split-window-horizontally
+        ediff-window-setup-function 'ediff-setup-windows-plain))
 #+end_src
 
 ** View Large Files
@@ -11213,14 +11957,14 @@ brew install gnupg
 markdown preview
 - [[https://github.com/seagle0128/grip-mode][GitHub - seagle0128/grip-mode]]
 #+begin_src sh
-pip3 install grip -g
+pip3 install grip
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
 (use-package grip-mode
   :commands (grip-mode)
   :quelpa (grip-mode :fetcher github :repo "seagle0128/grip-mode")
-  :ensure-system-package (grip . "pip3 install grip -g")
+  :ensure-system-package (grip . "pip3 install grip")
   :bind (:map markdown-mode-command-map
               ("g" . grip-mode))
   :config
