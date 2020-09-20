@@ -39,6 +39,7 @@ forge-database.sqlite
 rime/
 rime_bak/
 nox-eclipse-jdt-cache/
+eglot-eclipse-jdt-cache/
 request/
 .org-id-locations
 anaconda-mode/
