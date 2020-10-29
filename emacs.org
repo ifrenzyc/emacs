@@ -8,7 +8,13 @@
 
 整个配置采用了 Org-babel 和 use-package。
 - 关于 org-babel 的使用：[[http://orgmode.org/worg/org-contrib/babel/intro.html][Babel: Introduction]]
-- 关于 use-package 的使用：[[https://github.com/jwiegley/use-package][je should be here like with Spacemacs")
+- 关于 use-package 的使用：[[https://github.com/jwiegley/use-package][jwiegley/use-package - GitHub]]
+
+* Bootstrap
+** Constants
+#+begin_src emacs-lisp :tangle yes
+(defconst yc/cache-dir (expand-file-name ".cache" user-emacs-directory)
+  "Every cached or moving file should be here like with Spacemacs")
 (make-directory yc/cache-dir t)
 #+end_src
 
@@ -155,8 +161,8 @@ macOS switch meta key.
 (global-visual-line-mode t)
 (setq word-wrap t)
 (setq truncate-lines nil)
-;; (set-fill-column 89)
-;; (auto-fill-mode t)    ; 自动将内容换行
+(set-fill-column 89)
+(auto-fill-mode t)    ; 自动将内容换行
 
 ;; respect ansi colors
 ;; (ansi-color-for-comint-mode-on)
@@ -257,13 +263,22 @@ Maximized Window when startup
 - [[https://archive.casouri.co.uk/note/2019/emacs-%E5%AD%97%E4%BD%93%E4%B8%8E%E5%AD%97%E4%BD%93%E9%9B%86/index.html][Emacs，字体与字符集]]
 #+begin_src emacs-lisp :tangle yes
 ;; JetBrains Mono
+;; (defvar user/cjk-font "Sarasa Mono SC"
+;;   "Default font for CJK characters.")
+
+;; (defvar user/latin-font "JetBrains Mono"
+;;   "Default font for Latin characters.")
+
+;; (defvar user/unicode-font "JetBrains Mono"
+;;   "Default font for Unicode characters, including emojis.")
+
 (defvar user/cjk-font "Sarasa Mono SC"
   "Default font for CJK characters.")
 
-(defvar user/latin-font "JetBrains Mono"
+(defvar user/latin-font "Roboto Mono"
   "Default font for Latin characters.")
 
-(defvar user/unicode-font "JetBrains Mono"
+(defvar user/unicode-font "Roboto Mono"
   "Default font for Unicode characters, including emojis.")
 
 (defvar user/font-size 13
@@ -406,7 +421,7 @@ Unicode is an required aesthetic
 (use-package whitespace
   :hook 
   (prog-mode . whitespace-mode)
-  (org-mode . whitespace-mode)
+  ;; (org-mode . whitespace-mode)
   :custom
   (whitespace-line-column 119)
   (whitespace-style '(face lines-tail)))
@@ -425,7 +440,7 @@ Unicode is an required aesthetic
   :delight (vi-tilde-fringe-mode))
 #+end_src
 
-** COMMENT smooth scrolling
+** smooth scrolling
 *About:* 
 This makes scrolling gradual rather than by half page. I find that the half page scroll really makes me lose where I am in the file so here I make sure to scroll one line at a time. In addition I want to keep what I'm working on centered so I start scrolling when the cursor is 10 lines away from the margin.
 
@@ -641,7 +656,7 @@ Dashboard 的加载需要在 theme 和 modeline 前面，不然 modeline 加载�
 #+end_src
 
 ** themes
-*** solaire
+*** COMMENT solaire
 like dimmer-mode
 [[https://github.com/hlissner/emacs-solaire-mode][GitHub - hlissner/emacs-solaire-mode: If only certain buffers could be so gro...]]
 
@@ -676,7 +691,7 @@ like dimmer-mode
   ;; (load-theme 'doom-nord-light t)
   ;; (load-theme 'doom-spacegrey t)
   ;; (load-theme 'doom-wilmersdorf t)
-  (load-theme 'modus-vivendi t)
+  ;; (load-theme 'modus-vivendi t)
   :config
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -690,6 +705,19 @@ like dimmer-mode
   ;; Corrects (and improves) org-mode's native fontification.
   ;; (doom-themes-org-config)
 )
+#+end_src
+
+*** modus-theme
+#+begin_src emacs-lisp :tangle yes
+(use-package modus-operandi-theme
+  :demand t
+  :config
+  (load-theme 'modus-operandi t))
+
+;; (use-package modus-vivendi-theme
+;;   :demand t
+;;   :config
+;;   (load-theme 'modus-vivendi t))
 #+end_src
 
 *** COMMENT zenburn-theme
@@ -1639,7 +1667,7 @@ This allows me to easily start a * or # search from a visual selection.
   "ai"   '(:ignore t :which-key "irc")
   "as"   '(:ignore t :which-key "shells")
   "asa"  'shell-pop
-  "asp"  'multi-vterm-projectile
+  "asp"  'multi-vterm-project
   "asP"  'projectile-run-vterm
   "aR"   '(ranger :which-key "call ranger")
   "b"    '(:ignore t :which-key "buffers")
@@ -6209,6 +6237,7 @@ add view mode keybindings
   :delight org-mode "Org"
   :hook
   (org-mode . visual-line-mode) 
+  (org-mode . olivetti-mode) 
   ;; (org-mode . (lambda ()
   ;;               ;; (auto-fill-mode t)
   ;;               ;; (set-fill-column 89)
@@ -7364,6 +7393,17 @@ Headline^^            Visit entry^^               Filter^^                    Da
 (yc/leader-keys "jo"  'org-journal-new-entry)
 #+end_src
 
+** gkroam
+#+begin_src emacs-lisp :tangle yes
+(use-package gkroam
+  :init
+  (setq gkroam-root-dir "~/notes/org/"
+        gkroam-pub-dir "~/notes/0x00_GTD/")
+  :config
+  ;; when this minor mode is on, show and hide brackets dynamically.
+  (gkroam-dynamic-brackets-mode -1))
+#+end_src
+
 ** COMMENT org-roam
 #+begin_src emacs-lisp :tangle yes
 (use-package org-roam
@@ -8323,7 +8363,7 @@ file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
     "C-x g" 'magit-status)
   :hook
   (magit-log-edit-mode . (lambda ()
-                           (set-fill-column 82)
+                           (set-fill-column 89)
                            (auto-fill-mode 1)))
   :config 
   (setq magit-log-arguments '("-n256" "--graph" "--decorate" "--color")
@@ -8501,7 +8541,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   :config
   (setq lsp-headerline-breadcrumb-enable t)
   (setq exec-path (append exec-path '("~/.nvm/versions/node/v14.11.0/bin/")))
-  (setq lsp-sqls-server "/usr/local/Cellar/go/1.15.2/libexec/bin/sqls")
+  (setq lsp-sqls-server "/usr/local/Cellar/go/1.15.3/libexec/bin/sqls")
 
   ;; lsp-xml 依赖 eclipse/lemminx 项目，工程： ~/src/opensource/lemminx
   ;; 需要将 jar 包拷贝 emacs 下，并指定路径
@@ -10241,11 +10281,14 @@ kubernetes
   (add-to-list 'company-backends 'company-shell))
 #+end_src
 
-** COMMENT eshell
+** eshell
 *About:* 
 - [[http://www.howardism.org/Technical/Emacs/eshell-present.html][Presenting the Eshell]]
 #+begin_src emacs-lisp :tangle yes
 (use-package eshell
+  :ensure nil
+  :hook
+  (eshell-mode . evil-emacs-state)
   :config
   (defun yc/eshell-prompt-function ()
     "My eshell prompt function."
@@ -10262,12 +10305,10 @@ kubernetes
 #+begin_src emacs-lisp :tangle yes
 (use-package aweshell
   :after eshell
-  ;; :load-path "lisp/aweshell"
   :quelpa (aweshell
            :fetcher github
            :repo "manateelazycat/aweshell"
            :files ("aweshell.el" "eshell-do-you-mean.el" "eshell-prompt-extras.el" "eshell-up.el" "exec-path-from-shell.el"))
-  ;; :quelpa (aweshell :fetcher github :repo "manateelazycat/aweshell")
   :commands (aweshell-new aweshell-next aweshell-prev aweshell-toggle)
   :config
   (setq eshell-highlight-prompt nil
@@ -10295,6 +10336,7 @@ kubernetes
   :hook
   (shell-mode . ansi-color-for-comint-mode-on)
   (term-mode . ansi-term-handle-close)
+  (term-mode . evil-emacs-state)
   (term-mode . (lambda () (linum-mode -1) (yas-minor-mode -1)))
   :init
   (setq shell-pop-window-position "bottom"
@@ -10375,7 +10417,7 @@ brew install libvterm
            :fetcher github
            :repo "suonlight/multi-libvterm"
            :files ("multi-vterm.el"))
-  :commands (vterm-toggle vterm-toggle-cd vterm multi-vterm multi-vterm-projectile)
+  :commands (vterm-toggle vterm-toggle-cd vterm multi-vterm multi-vterm-project)
   :config 
   ;; Switch to next vterm buffer
   (define-key vterm-mode-map (kbd "s-n")   'multi-vterm-next)
@@ -11972,6 +12014,12 @@ pip3 install grip
   :config
   ;; Path to the grip binary
   (setq grip-mode-binary-path (executable-find "grip")))
+#+end_src
+
+** improve orgmode image scrolling 
+#+begin_src emacs-lisp :tangle yes
+(require 'iscroll)
+(add-hook 'org-mode-hook 'iscroll-mode)
 #+end_src
 
 ** COMMENT Images
