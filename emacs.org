@@ -1633,7 +1633,8 @@ This allows me to easily start a * or # search from a visual selection.
   "<"    '(counsel-projectile-find-file :which-key "Find file in project")
   ":"    '(counsel-M-x :which-key "M-x")
   ;; ";"    '(evil-ex :which-key "Ex command")
-  "'"    '(shell-pop :which-key "Open shell")
+  "'"   '(multi-vterm-project :which-key "Open project shell")
+  "\""    '(shell-pop :which-key "Open shell")
   "0"    '(treemacs-select-window :which-key "Treemacs")
   ;; "`"    'winum-select-window-0-or-10
   ;; "²"    'winum-select-window-by-number
