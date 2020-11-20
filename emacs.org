@@ -263,15 +263,7 @@ Maximized Window when startup
 - [[https://archive.casouri.co.uk/note/2019/emacs-%E5%AD%97%E4%BD%93%E4%B8%8E%E5%AD%97%E4%BD%93%E9%9B%86/index.html][Emacs，字体与字符集]]
 #+begin_src emacs-lisp :tangle yes
 ;; JetBrains Mono
-;; (defvar user/cjk-font "Sarasa Mono SC"
-;;   "Default font for CJK characters.")
-
-;; (defvar user/latin-font "JetBrains Mono"
-;;   "Default font for Latin characters.")
-
-;; (defvar user/unicode-font "JetBrains Mono"
-;;   "Default font for Unicode characters, including emojis.")
-
+;; Roboto Mono
 (defvar user/cjk-font "Sarasa Mono SC"
   "Default font for CJK characters.")
 
@@ -283,9 +275,6 @@ Maximized Window when startup
 
 (defvar user/font-size 13
   "Default font size in px.")
-  
-(defvar user/cjk-font-size 13
-  "Default cjk font size in px.")
 
 (defvar user/standard-fontset
   (create-fontset-from-fontset-spec standard-fontset-spec)
@@ -313,7 +302,7 @@ Maximized Window when startup
   ;; CJK font.
   (dolist (charset '(kana han cjk-misc hangul kanbun bopomofo))
     (set-fontset-font user/standard-fontset charset
-                      (font-spec :family user/cjk-font :size user/cjk-font-size)
+                      (font-spec :family user/cjk-font :size user/font-size)
                       nil 'prepend))
   ;; Special settings for certain CJK puncuation marks.
   ;; These are full-width characters but by default uses half-width glyphs.
@@ -321,7 +310,7 @@ Maximized Window when startup
                      (#xFF08 . #xFF09)    ;; Curly "（）"
                      (#x201c . #x201d)))  ;; Curly double quotes "“”"
     (set-fontset-font user/standard-fontset charset
-                      (font-spec :family user/cjk-font :size user/cjk-font-size)
+                      (font-spec :family user/cjk-font :size user/font-size)
                       nil 'prepend)))
 
 ;; Apply changes.
