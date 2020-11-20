@@ -734,12 +734,15 @@ like dimmer-mode
   (minions-mode))
 #+end_src
 
+*** winum
+#+begin_src emacs-lisp :tangle yes
+(require 'winum)
+#+end_src
+
 *** doom-modeline
 *About:* 
 - [[https://github.com/seagle0128/doom-modeline][GitHub - seagle0128/doom-modeline]]
 #+begin_src emacs-lisp :tangle yes
-(require 'winum)
-
 (use-package doom-modeline
   :demand t
   :hook
@@ -824,6 +827,7 @@ like dimmer-mode
 #+end_src
 
 *** COMMENT awesome-tray
+- https://github.com/manateelazycat/awesome-tray
 #+begin_src emacs-lisp :tangle yes
 (use-package awesome-tray
   :quelpa (awesome-tray :fetcher github :repo "manateelazycat/awesome-tray")
@@ -845,7 +849,7 @@ Use fixed pitch where it's sensible
   (mini-modeline-mode t))
 #+end_src
 
-*** hide-mode-line
+*** COMMENT hide-mode-line
 *About:* 隐藏 modeline
 - [[https://github.com/hlissner/emacs-hide-mode-line][GitHub - hlissner/emacs-hide-mode-line]]
 #+begin_src emacs-lisp :tangle no
@@ -855,9 +859,7 @@ Use fixed pitch where it's sensible
   ;; ((completion-list-mode
   ;;   magit-status-mode
   ;;   neotree-mode) . hide-mode-line-mode)
-  :config
-  (with-current-buffer "*command-log*"
-    (hide-mode-line-mode)))
+  )
 #+end_src
 
 *** nyan-mode
@@ -883,7 +885,8 @@ Use fixed pitch where it's sensible
 #+end_src
 
 ** COMMENT centaur-tabs 
-[[https://github.com/ema2159/centaur-tabs][GitHub - ema2159/centaur-tabs: Emacs plugin aiming to become an aesthetic, mo...]]
+- [[https://github.com/ema2159/centaur-tabs][GitHub - ema2159/centaur-tabs: Emacs plugin aiming to become an aesthetic, mo...]]
+- [[https://github.com/manateelazycat/awesome-tab][GitHub - manateelazycat/awesome-tab: Emacs package to provide out-of-the-box ...]]
 #+begin_src emacs-lisp :tangle yes
 (use-package centaur-tabs
   :commands (centaur-tabs-mode)
@@ -8649,7 +8652,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   )
 #+end_src
 
-*** eglot
+*** COMMENT eglot
 #+begin_src emacs-lisp :tangle yes
 (use-package eglot
   :pin melpa
@@ -8915,7 +8918,7 @@ see https://github.com/google/styleguide/blob/gh-pages/google-c-style.el
 ;;  :init (add-hook 'java-mode-hook 'dtrt-indent-mode))           
 #+end_src
 
-*** COMMENT Java LSP
+*** Java LSP
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-java
   ;; :after lsp
@@ -10270,6 +10273,16 @@ kubernetes
   (add-to-list 'company-backends 'company-shell))
 #+end_src
 
+** COMMENT better-shell
+*About:* 
+#+begin_src emacs-lisp :tangle yes
+(use-package better-shell
+  :general 
+  (yc/nonprefix-keys 
+    "C-'" 'better-shell-shell
+    "C-;" 'better-shell-remote-open))
+#+end_src
+
 ** eshell
 *About:* 
 - [[http://www.howardism.org/Technical/Emacs/eshell-present.html][Presenting the Eshell]]
@@ -10304,18 +10317,8 @@ kubernetes
         eshell-prompt-function 'epe-theme-dakrone))
 #+end_src
 
-*** eshell-syntax-highlighting
+*** COMMENT eshell-syntax-highlighting
 - [[https://github.com/akreisher/eshell-syntax-highlighting/][GitHub - akreisher/eshell-syntax-highlighting: Syntax highlighting for Eshell]]
-
-** COMMENT better-shell
-*About:* 
-#+begin_src emacs-lisp :tangle yes
-(use-package better-shell
-  :general 
-  (yc/nonprefix-keys 
-    "C-'" 'better-shell-shell
-    "C-;" 'better-shell-remote-open))
-#+end_src
 
 ** shell-pop
 *About:* 
@@ -10416,7 +10419,7 @@ brew install libvterm
   (define-key vterm-mode-map (kbd "<f9>")   'shell-pop))
 #+end_src
 
-* Mail
+* COMMENT Mail
 - mu4e
 - notmuch
   
@@ -12005,7 +12008,7 @@ pip3 install grip
   (setq grip-mode-binary-path (executable-find "grip")))
 #+end_src
 
-** improve orgmode image scrolling 
+** COMMENT improve orgmode image scrolling 
 #+begin_src emacs-lisp :tangle yes
 (require 'iscroll)
 (add-hook 'org-mode-hook 'iscroll-mode)
