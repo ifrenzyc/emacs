@@ -6230,7 +6230,7 @@ add view mode keybindings
   :delight org-mode "Org"
   :hook
   (org-mode . visual-line-mode) 
-  (org-mode . olivetti-mode) 
+  ;; (org-mode . olivetti-mode) 
   ;; (org-mode . (lambda ()
   ;;               ;; (auto-fill-mode t)
   ;;               ;; (set-fill-column 89)
@@ -10311,7 +10311,6 @@ kubernetes
 *** aweshell
 #+begin_src emacs-lisp :tangle yes
 (use-package aweshell
-  :after eshell
   :quelpa (aweshell
            :fetcher github
            :repo "manateelazycat/aweshell"
