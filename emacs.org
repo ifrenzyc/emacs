@@ -9591,7 +9591,11 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 #+begin_src emacs-lisp :tangle yes
 (use-package sql-mode
   :ensure nil
-  :mode ("\\.sql\\'" . sql-mode))
+  :mode ("\\.sql\\'" . sql-mode)
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((sql . t))))
 
 (use-package sqlformat
   :ensure-system-package (sqlformat . "pip install sqlparse")
