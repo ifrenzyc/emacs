@@ -10376,7 +10376,9 @@ brew install libvterm
   :hook
   ((vterm-mode . ansi-term-handle-close)
    (vterm-mode . evil-emacs-state))
-)
+  :custom ((vterm-buffer-name-string "vterm %s")
+           (vterm-max-scrollback 100000))
+  )
 #+end_src
 
 *** vterm-toggle
