@@ -1,15 +1,6 @@
 [submodule "lisp/angularjs-mode"]
 	path = lisp/angularjs-mode
 	url = git@github.com:rudolfolah/angularjs-mode.git
-[submodule "lisp/manage-minor-mode"]
-	path = lisp/manage-minor-mode
-	url = git@github.com:ShingoFukuyama/manage-minor-mode.git
-[submodule "lisp/emacs-libvterm"]
-	path = lisp/emacs-libvterm
-	url = git@github.com:akermu/emacs-libvterm.git
-[submodule "lisp/multi-libvterm"]
-	path = lisp/multi-libvterm
-	url = git@github.com:suonlight/multi-libvterm.git
 [submodule "lisp/snails"]
 	path = lisp/snails
 	url = git@github.com:manateelazycat/snails.git
