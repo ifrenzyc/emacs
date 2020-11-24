@@ -1488,7 +1488,7 @@ let there be a <leader>
    "5" 'delete-frame
    "f" 'project-find-file
    "F" 'find-file
-   "t" 'multi-vterm
+   "t" 'multi-vterm-project
    "r" 'counsel-recentf
    "b" 'switch-to-buffer))
 #+end_src
