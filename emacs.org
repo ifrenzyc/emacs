@@ -6529,12 +6529,14 @@ e.g. =<s=
   )
 #+end_src
 
-** COMMENT valign
+** valign
 - https://github.com/casouri/valign
+- [[https://github.com/Fuco1/org-pretty-table][GitHub - Fuco1/org-pretty-table: Replace org-table characters with box-drawin...]]
 #+begin_src emacs-lisp :tangle yes
 (use-package valign
   :quelpa (valign :fetcher github :repo "casouri/valign")
   :after org
+  :hook (org-mode . valign-mode)
   )
 #+end_src
 
