@@ -7399,7 +7399,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
 #+begin_src emacs-lisp :tangle yes
 (use-package gkroam
   :init
-  (setq gkroam-root-dir "~/notes/org/"
+  (setq gkroam-root-dir "~/notes/"
         gkroam-pub-dir "~/notes/0x00_GTD/")
   :config
   ;; when this minor mode is on, show and hide brackets dynamically.
