@@ -11893,6 +11893,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 *About:* 
 - [[http://www.kohn.com.cn/wordpress/?p=257][Emacs通过ssh远程编辑文件时指定端口号 | 藏经阁]]
 - [[https://emacs-china.org/t/emacs-terminal/3140/14][Emacs terminal 远程编辑文件方案 - Emacs-general - Emacs China]]
+- [[http://gleek.github.io/blog/2017/04/11/editing-remote-code-with-emacs/][Editing remote code with Emacs - Umar Ahmad]]
 
 *** config
 #+begin_src emacs-lisp :tangle yes
@@ -11903,9 +11904,10 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
   (setq password-cache-expiry nil)
   :config
-  (setq tramp-auto-save-directory "~/.emacs.d/tramp-autosave-dir"
+  (setq tramp-auto-save-directory "~/.emacs.d/.cache/tramp-autosave-dir"
         tramp-backup-directory-alist `(("." . "~/.emacs.d/.cache/.saves_tramp"))
         tramp-inline-compress-start-size 10000000
+        tramp-chunksize 2000
         ;; Make SSH work faster by reusing connections
         tramp-ssh-controlmaster-options
         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
