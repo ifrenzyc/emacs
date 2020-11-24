@@ -10974,6 +10974,9 @@ provide counsel integrate.
 (set browse-url-browser-function 'xwidget-webkit-browse-url)
 #+end_src
 
+** emacs-webkit
+https://github.com/akirakyle/emacs-webkit
+
 ** xwwp
 xwidget-webkit enhancement suite
 - [[https://github.com/BlueFlo0d/xwwp][GitHub - BlueFlo0d/xwwp: Enhance the Emacs xwidget-webkit browser]]
