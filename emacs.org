@@ -2400,6 +2400,9 @@ https://github.com/casouri/ivy-filthy-rich
 #+begin_src emacs-lisp :tangle yes
 (use-package ivy-rich
   :demand t
+  :custom
+  (ivy-rich-parse-remote-buffer nil)
+  (ivy-rich-parse-remote-file-path nil)
   :init
   (setq ivy-rich-path-style 'abbreviate)
   (setq ivy-rich-display-transformers-list
