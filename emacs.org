@@ -6539,7 +6539,10 @@ e.g. =<s=
 (use-package valign
   :quelpa (valign :fetcher github :repo "casouri/valign")
   :after org
-  :hook (org-mode . valign-mode)
+  :hook ((org-mode . valign-mode)
+         (markdown-mode . valign-mode))
+  :custom
+  (valign-fancy-bar t)
   )
 #+end_src
 
