@@ -4024,6 +4024,16 @@ Highlight matching and auto insert parenthesis.
    "M-D" 'sp-kill-sexp))
 #+end_src
 
+*** COMMENT highlight-parentheses
+#+begin_src emacs-lisp :tangle yes
+(use-package highlight-parentheses
+  :diminish highlight-parentheses-mode
+  :config (global-highlight-parentheses-mode))
+
+(defvar show-paren-delay 0)
+(show-paren-mode t)
+#+end_src
+
 *** COMMENT evil-smartparens
 - [[https://github.com/expez/evil-smartparens][GitHub - expez/evil-smartparens]]
 #+begin_src emacs-lisp :tangle yes
@@ -6027,7 +6037,10 @@ add view mode keybindings
   ;;                 :files (:defaults (:exclude "helm-bufler.el")))
   :hook
   (bufler-list-mode . evil-emacs-state)
-)
+  :config
+  (bufler-mode)
+  (bufler-workspace-mode)
+  (bufler-tabs-mode))
 #+end_src
 
 ** autorevert
@@ -6434,6 +6447,7 @@ e.g. =<s=
 
 ** valign
 - https://github.com/casouri/valign
+- [[https://github.com/casouri/ftable][GitHub - casouri/ftable: Fill tables (i.e., auto layout)]]
 - [[https://github.com/Fuco1/org-pretty-table][GitHub - Fuco1/org-pretty-table: Replace org-table characters with box-drawin...]]
 #+begin_src emacs-lisp :tangle yes
 (use-package valign
@@ -6444,6 +6458,10 @@ e.g. =<s=
   :custom
   (valign-fancy-bar t)
   )
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+;; (use-package ftable)
 #+end_src
 
 ** COMMENT prettify-symbols
