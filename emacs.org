@@ -7301,53 +7301,6 @@ Headline^^            Visit entry^^               Filter^^                    Da
 (yc/leader-keys "jo"  'org-journal-new-entry)
 #+end_src
 
-** gkroam
-#+begin_src emacs-lisp :tangle yes
-(use-package gkroam
-  :init
-  (setq gkroam-root-dir "~/notes/"
-        gkroam-pub-dir "~/notes/0x00_GTD/")
-  :config
-  ;; when this minor mode is on, show and hide brackets dynamically.
-  (gkroam-dynamic-brackets-mode -1))
-#+end_src
-
-** COMMENT org-roam
-#+begin_src emacs-lisp :tangle yes
-(use-package org-roam
-  :hook 
-  (after-init . org-roam-mode)
-  :quelpa (org-roam :fetcher github :repo "jethrokuan/org-roam")
-  :custom
-  (org-roam-directory org-directory)
-  :config
-  (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/2.44.1/bin/dot")
-  (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
-  (setq org-roam-completion-system 'ivy)
-  :general
-  (yc/leader-keys
-    "ar"  '(:ignore t :which-key "org-roam")
-    "arl" 'org-roam
-    "art" 'org-roam-dailies-today
-    "arf" 'org-roam-find-file
-    "arg" 'org-roam-show-graph)
-  (yc/leader-keys-major-mode
-    :keymaps 'org-mode-map
-    "r"  '(:ignore t :which-key "org-roam")
-    "rl" 'org-roam
-    "rt" 'org-roam-dailies-today
-    "rb" 'org-roam-switch-to-buffer
-    "rf" 'org-roam-find-file
-    "ri" 'org-roam-insert
-    "rg" 'org-roam-show-graph))
-#+end_src
-
-** COMMENT org-roam-server
-- https://github.com/org-roam/org-roam-server
-#+begin_src emacs-lisp :tangle yes
-(use-package org-roam-server)
-#+end_src
-
 ** COMMENT org-noter
 #+begin_src emacs-lisp :tangle yes
 (use-package org-noter
@@ -8047,7 +8000,7 @@ Visually summarize progress
   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
 #+end_src
 
-* COMMENT Deft
+* COMMENT Deft & Roam
 - [[https://jblevins.org/projects/deft/][Deft for Emacs]]
 - [[https://www.reddit.com/r/emacs/comments/agw3o5/3500_note_files_40_mb_of_plain_text_100s_of_tags/][3,500 note files, 40 MB of plain text, 100s of tags. Will Org mode work for m...]]
 - [[https://github.com/EFLS/zetteldeft][GitHub - EFLS/zetteldeft: A Zettelkasten system! Or rather, some functions on...]]
@@ -8098,6 +8051,53 @@ Visually summarize progress
 #+end_src
 
 ** org-notdeft
+
+** COMMENT gkroam
+#+begin_src emacs-lisp :tangle yes
+(use-package gkroam
+  :init
+  (setq gkroam-root-dir "~/notes/"
+        gkroam-pub-dir "~/notes/0x00_GTD/")
+  :config
+  ;; when this minor mode is on, show and hide brackets dynamically.
+  (gkroam-dynamic-brackets-mode -1))
+#+end_src
+
+** COMMENT org-roam
+#+begin_src emacs-lisp :tangle yes
+(use-package org-roam
+  :hook 
+  (after-init . org-roam-mode)
+  :quelpa (org-roam :fetcher github :repo "jethrokuan/org-roam")
+  :custom
+  (org-roam-directory org-directory)
+  :config
+  (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/2.44.1/bin/dot")
+  (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
+  (setq org-roam-completion-system 'ivy)
+  :general
+  (yc/leader-keys
+    "ar"  '(:ignore t :which-key "org-roam")
+    "arl" 'org-roam
+    "art" 'org-roam-dailies-today
+    "arf" 'org-roam-find-file
+    "arg" 'org-roam-show-graph)
+  (yc/leader-keys-major-mode
+    :keymaps 'org-mode-map
+    "r"  '(:ignore t :which-key "org-roam")
+    "rl" 'org-roam
+    "rt" 'org-roam-dailies-today
+    "rb" 'org-roam-switch-to-buffer
+    "rf" 'org-roam-find-file
+    "ri" 'org-roam-insert
+    "rg" 'org-roam-show-graph))
+#+end_src
+
+** COMMENT org-roam-server
+- https://github.com/org-roam/org-roam-server
+#+begin_src emacs-lisp :tangle yes
+(use-package org-roam-server)
+#+end_src
 
 * BACKUP & Version
 ** Control BACKUP
