@@ -268,10 +268,10 @@ Maximized Window when startup
 (defvar user/cjk-font "Sarasa Mono SC"
   "Default font for CJK characters.")
 
-(defvar user/latin-font "Roboto Mono"
+(defvar user/latin-font "JetBrains Mono"
   "Default font for Latin characters.")
 
-(defvar user/unicode-font "Roboto Mono"
+(defvar user/unicode-font "JetBrains Mono"
   "Default font for Unicode characters, including emojis.")
 
 (defvar user/font-size 13
@@ -318,6 +318,7 @@ Maximized Window when startup
 (user/set-font)
 ;; For emacsclient.
 (add-hook 'before-make-frame-hook #'user/set-font)
+(setq line-spacing .2)
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -581,7 +582,7 @@ M-x all-the-icons-install-fonts
 )
 #+end_src
 
-*** COMMENT all-the-icons-ivy
+*** all-the-icons-ivy
 #+begin_src emacs-lisp :tangle yes
 (use-package all-the-icons-ivy
   :after (all-the-icons projectile ivy counsel counsel-projectile)
@@ -596,13 +597,13 @@ M-x all-the-icons-install-fonts
   (all-the-icons-ivy-setup))
 #+end_src
 
-*** COMMENT all-the-icons-ivy-rich
+*** all-the-icons-ivy-rich
 #+begin_src emacs-lisp :tangle yes
 (use-package all-the-icons-ivy-rich
   :init (all-the-icons-ivy-rich-mode 1))
 #+end_src
 
-*** COMMENT all-the-icons-ibuffer
+*** all-the-icons-ibuffer
 #+begin_src emacs-lisp :tangle yes
 (use-package all-the-icons-ibuffer
   :ensure t
@@ -657,6 +658,7 @@ like dimmer-mode
   ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
   (minibuffer-setup . solaire-mode-in-minibuffer)
   :config
+  (setq solaire-mode-remap-fringe t)
   (solaire-global-mode +1)
   (solaire-mode-swap-bg))
 #+end_src
@@ -690,7 +692,9 @@ like dimmer-mode
   (doom-themes-neotree-config)    ; all-the-icons fonts must be installed!
 
   (setq doom-themes-treemacs-theme "doom-colors")
-  (doom-themes-treemacs-config)    ; all-the-icons fonts must be installed!
+  (with-eval-after-load 'lsp-treemacs
+    (doom-themes-treemacs-config)    ; all-the-icons fonts must be installed!
+  )
 
   ;; Corrects (and improves) org-mode's native fontification.
   ;; (doom-themes-org-config)
@@ -699,16 +703,12 @@ like dimmer-mode
 
 *** modus-theme
 #+begin_src emacs-lisp :tangle yes
-(use-package modus-operandi-theme
+(use-package modus-themes
   :demand t
   :config
+  ;; (load-theme 'modus-vivendi t)
   (load-theme 'modus-operandi t)
 )
-
-;; (use-package modus-vivendi-theme
-;;   :demand t
-;;   :config
-;;   (load-theme 'modus-vivendi t))
 #+end_src
 
 *** COMMENT zenburn-theme
@@ -881,7 +881,7 @@ Use fixed pitch where it's sensible
   :config (nyan-start-animation))
 #+end_src
 
-*** COMMENT battery
+*** battery
 - [[https://github.com/lunaryorn/fancy-battery.el][GitHub - lunaryorn/fancy-battery.el: UNMAINTAINED! Display battery in Emacs M...]]
 #+begin_src emacs-lisp :tangle yes
 (use-package fancy-battery
@@ -891,7 +891,7 @@ Use fixed pitch where it's sensible
   (setq fancy-battery-show-percentage t))
 #+end_src
 
-** COMMENT centaur-tabs 
+** centaur-tabs 
 - [[https://github.com/ema2159/centaur-tabs][GitHub - ema2159/centaur-tabs: Emacs plugin aiming to become an aesthetic, mo...]]
 - [[https://github.com/manateelazycat/awesome-tab][GitHub - manateelazycat/awesome-tab: Emacs package to provide out-of-the-box ...]]
 #+begin_src emacs-lisp :tangle yes
@@ -961,14 +961,14 @@ Use fixed pitch where it's sensible
   (org-agenda-mode . centaur-tabs-local-mode)
   (helpful-mode . centaur-tabs-local-mode)
   :bind
-  ("C-<prior>" . centaur-tabs-backward)
-  ("C-<next>" . centaur-tabs-forward)
+  ("C-c t b" . centaur-tabs-backward)
+  ("C-c t f" . centaur-tabs-forward)
   ("C-c t s" . centaur-tabs-counsel-switch-group)
   ("C-c t p" . centaur-tabs-group-by-projectile-project)
   ("C-c t g" . centaur-tabs-group-buffer-groups)
-  ;; (:map evil-normal-state-map
-  ;;       ("g t" . centaur-tabs-forward)
-  ;;       ("g T" . centaur-tabs-backward))
+  (:map evil-normal-state-map
+        ("g t" . centaur-tabs-forward)
+        ("g T" . centaur-tabs-backward))
 )
 #+end_src
 
@@ -991,7 +991,7 @@ Emojis in Emacs! :cat:
   (when (memq window-system '(mac ns))
     (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)))
 
-(defun --set-emoji-font (frame)
+(defun yc/set-emoji-font (frame)
   "Adjust the font settings of FRAME so Emacs can display emoji properly."
   (if (eq system-type 'darwin)
       ;; For NS/Cocoa
@@ -1000,10 +1000,10 @@ Emojis in Emacs! :cat:
     (set-fontset-font t 'symbol (font-spec :family "Symbola") frame 'prepend)))
 
 ;; For when Emacs is started in GUI mode:
-(--set-emoji-font nil)
+(yc/set-emoji-font nil)
 ;; Hook for when a frame is created with emacsclient
 ;; see https://www.gnu.org/software/emacs/manual/html_node/elisp/Creating-Frames.html
-(add-hook 'after-make-frame-functions '--set-emoji-font)
+(add-hook 'after-make-frame-functions 'yc/set-emoji-font)
 #+end_src
 
 *** COMMENT company-emoji
@@ -1173,6 +1173,13 @@ makes sure you don’t lose track of your cursor when jumping around a buffer.
   ;;                    (pangu-spacing-mode 1)
   ;;                    (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
   )
+#+end_src
+
+** COMMENT page-break-lines
+#+begin_src emacs-lisp :tangle yes
+(use-package page-break-lines
+  :hook
+  (help-mode . page-break-lines-mode))
 #+end_src
 
 ** COMMENT electric-operator
@@ -1371,6 +1378,13 @@ https://github.com/tarsius/keycast
   ;; For the vim-like motions of ">>" and "<<".
   ;; (setq-default evil-shift-width 4)
 
+  ;; (setq evil-emacs-state-cursor '("orange" box)
+  ;;       evil-normal-state-cursor '("white" box)
+  ;;       evil-visual-state-cursor '("white" (hbar . 2))
+  ;;       evil-insert-state-cursor '("white" (bar . 2))
+  ;;       evil-replace-state-cursor '("white" (hbar . 2))
+  ;;       evil-operator-state-cursor '("white" hollow))
+
   ;; @see - https://github.com/rime/squirrel/wiki/vim 用户与 emacs-evil-mode 用户-输入法自动切换成英文状态的实现
   (defadvice keyboard-quit (before evil-insert-to-nornal-state activate)
     "C-g back to normal state"
@@ -1517,7 +1531,7 @@ https://github.com/laishulu/evil-pinyin
   (evilnc-default-hotkeys)
   :general
   ;; Emacs key bindings
-  ("M-/"   'evilnc-comment-or-uncomment-lines
+  ("M-;"   'evilnc-comment-or-uncomment-lines
    "C-c l" 'evilnc-quick-comment-or-uncomment-to-the-line
    ;; "C-c c" 'evilnc-copy-and-comment-lines   ; 这个与 org-capture 按键冲突
    ;; "C-c p" 'evilnc-comment-or-uncomment-paragraphs
@@ -1587,6 +1601,10 @@ https://github.com/laishulu/evil-pinyin
 *** COMMENT evil-better-visual-line
 
 *** COMMENT evil-easymotion
+#+begin_src emacs-lisp :tangle yes
+(use-package evil-easymotion
+  :after evil)
+#+end_src
 
 *** COMMENT evil-visualstar
 *About:* 通过 =*= ， =#= 快速查找选中的代码
@@ -1609,7 +1627,7 @@ This allows me to easily start a * or # search from a visual selection.
   (global-evil-surround-mode 1))
 #+end_src
 
-*** COMMENT evil-anzu
+*** evil-anzu
 *About:* anzu 的 evil 扩展，用于快速替换文本
 @see - https://github.com/syohex/emacs-anzu
 @see - https://github.com/syohex/emacs-evil-anzu
@@ -2362,6 +2380,7 @@ https://github.com/dustinlacewell/hera
 - helm
 - ivy
 - snails
+- selectrum + prescient
 #+begin_src emacs-lisp :tangle yes
 (use-package ivy
   :demand t
@@ -2455,7 +2474,7 @@ https://github.com/casouri/ivy-filthy-rich
 (use-package prescient
   :config
   (setq prescient-history-length 200)
-  (setq prescient-save-file "~/.emacs.d/prescient-items")
+  (setq prescient-save-file "~/.emacs.d/.cache/prescient-items")
   (setq prescient-filter-method '(literal regexp))
   (prescient-persist-mode 1))
 
@@ -2563,6 +2582,8 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
   :init (icomplete-mode) ; optional but recommended!
   :custom (completion-styles '(orderless)))
 #+end_src
+
+** selectrum + prescient
 
 ** COMMENT icomplete-vertical
 - [[https://github.com/oantolin/icomplete-vertical][GitHub - oantolin/icomplete-vertical: Global Emacs minor mode to display icom...]]
@@ -2996,6 +3017,12 @@ repository, then the corresponding root is used instead."
      ("g" my-ivy-switch-to-counsel-git "git")
      ("G" prot/counsel-rg-dir "use ripgrep in root directory")
      ("z" my-ivy-switch-to-counsel-fzf "fzf")))
+
+(ivy-add-actions
+   'counsel-org-goto
+   '(("s" my-ivy-switch-to-swiper-isearch "swiper isearch")
+     ("S" my-ivy-switch-to-swiper "swiper")
+     ("a" my-ivy-switch-to-swiper-all "swiper all")))
   :general
   ("C-x C-f" 'counsel-find-file
    "C-x d"   'counsel-dired
@@ -3028,11 +3055,11 @@ repository, then the corresponding root is used instead."
   :general ("C-x C-p" 'counsel-projectile-switch-project))
 #+end_src
 
-*** COMMENT counsel-osx-app
+*** counsel-osx-app
 #+begin_src emacs-lisp :tangle yes
 (use-package counsel-osx-app
   :after counsel
-  ;; :general ("s-o" 'counsel-osx-app))
+  ;; :general (("s-o" 'counsel-osx-app))
 )
 #+end_src
 
@@ -3351,18 +3378,14 @@ Version 2015-05-16"
   :hook (after-init . delete-selection-mode))
 #+end_src
 
-** COMMENT beginend
+** beginend
 #+begin_src emacs-lisp :tangle yes
 (use-package beginend
-    :diminish (beginend-mode beginend-global-mode)
-    :hook (after-init . beginend-global-mode)
-    :config
-    (mapc (lambda (pair)
-            (add-hook (car pair) (lambda () (diminish (cdr pair)))))
-          beginend-modes))
+  :diminish (beginend-mode beginend-global-mode)
+  :hook (after-init . beginend-global-mode))
 #+end_src
 
-** COMMENT multiple-cursors
+** multiple-cursors
 参考：[[http://www.cauchy.me/2015/08/20/emacs-multi-cursors/][My Favourite Emacs Modes - multiple-cursors · Thinking Aloud]]
 #+begin_src emacs-lisp :tangle yes
 (use-package multiple-cursors
@@ -3427,7 +3450,7 @@ Version 2015-05-16"
 ;;   ("q" nil))
 #+end_src
 
-** COMMENT avy
+** avy
 *About:* 快速在当前 buffer 中跳转光标
 @see - https://github.com/abo-abo/avy
 #+begin_src emacs-lisp :tangle yes
@@ -3560,6 +3583,18 @@ Version 2015-05-16"
 ** fzf
 #+begin_src emacs-lisp :tangle yes
 (use-package fzf)
+#+end_src
+
+** flplr
+fuzzy file finder
+#+begin_src emacs-lisp :tangle yes
+(use-package fiplr
+  :general
+  ("C-c p p" 'fiplr-find-file)
+  :config
+  (setq fiplr-root-markers '(".git" ".svn"))
+  (setq fiplr-ignored-globs '((directories (".git" ".svn"))
+                              (files ("*.jpg" "*.png" "*.zip" "*~")))))
 #+end_src
 
 ** ag
@@ -4219,6 +4254,32 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 
 *** TODO 参考这个优化按键及显示方式
 https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace-related.el
+
+** COMMENT highlight-thing
+;; Highlight thing
+#+begin_src emacs-lisp :tangle yes
+(use-package highlight-thing
+  :config
+  (add-hook 'iedit-mode-hook (lambda()
+			       (highlight-thing-mode -1)))
+
+  (add-hook 'iedit-mode-end-hook (lambda()
+				   (highlight-thing-mode 1)))
+  (add-hook 'evil-visual-state-entry-hook (lambda()
+					    (highlight-thing-mode -1)))
+  (add-hook 'evil-visual-state-exit-hook (lambda()
+					   (highlight-thing-mode 1)))
+  :init
+  (setq highlight-thing-what-thing 'symbol
+	highlight-thing-delay-seconds 0.5
+	highlight-thing-all-visible-buffers-p nil
+	highlight-thing-limit-to-region-in-large-buffers-p t
+	highlight-thing-narrow-region-lines 30)
+  :hook
+  (csv-mode . (lambda()
+		(highlight-thing-mode 0)))
+  (prog-mode . highlight-thing-mode))
+#+end_src
 
 ** neotree
 *About:* A emacs tree plugin like NerdTree for Vim.
@@ -5525,6 +5586,14 @@ eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工�
     (workgroups-mode 1))
 #+end_src
 
+** burly
+https://github.com/alphapapa/burly.el
+#+begin_src emacs-lisp :tangle yes
+(use-package burly
+  ;; :quelpa (burly :fetcher github :repo "alphapapa/burly.el")
+)
+#+end_src
+
 ** ELScreen & window-zoom
 *About:* 类似于 tmux 的最大化当前窗口功能，保持和我在 tmux 下的习惯一致。
 https://github.com/syohex/emacs-zoom-window
@@ -5573,6 +5642,8 @@ https://github.com/syohex/emacs-zoom-window
   :functions org-switch-to-buffer-other-window
   :commands shackle-display-buffer
   :hook (after-init . shackle-mode)
+  :general 
+  ("C-c z" 'shackle-last-popup-buffer)
   :config
   (eval-and-compile
     (defun shackle-last-popup-buffer ()
@@ -5580,7 +5651,6 @@ https://github.com/syohex/emacs-zoom-window
       (interactive)
       (ignore-errors
         (display-buffer shackle-last-buffer)))
-    (bind-key "C-h z" #'shackle-last-popup-buffer)
 
     ;; Add keyword: `autoclose'
     (defun shackle-display-buffer-hack (fn buffer alist plist)
@@ -5635,9 +5705,12 @@ https://github.com/syohex/emacs-zoom-window
           ("*Backtrace*" :select t :size 15 :align 'below)
           (("*Warnings*" "*Messages*") :size 0.3 :align 'below :autoclose t)
           ("^\\*.*Shell Command.*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
-          ("^\\*vterminal-.*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
-          ("^\\*vterminal<.+>\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
-          ("^\\*vterm - .*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
+          ;; ("^\\*vterminal-.*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
+          ;; ("^\\*vterminal -.*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
+          ;; ("^\\*vterminal<.+>\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
+          ;; ("^\\*vterm - .*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
+          ;; ("^\\*vterm .*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
+          (vterm-mode :select t :size 0.4 :align 'below :autoclose t)
           ("\\*[Wo]*Man.*\\*" :regexp t :select t :align 'below :autoclose t)
           ("*Calendar*" :select t :size 0.3 :align 'below)
           (("*shell*" "*eshell*" "*ielm*") :popup t :size 0.3 :align 'below)
@@ -5693,7 +5766,7 @@ https://github.com/syohex/emacs-zoom-window
   (transwin-toggle-transparent-frame))
 #+end_src
 
-** COMMENT writeroom-mode
+** writeroom-mode
 - Darkroom vs Olivetti vs Writeroom-mode
 - [[https://github.com/joostkremers/writeroom-mode][GitHub - joostkremers/writeroom-mode]]
 #+begin_src emacs-lisp :tangle yes
@@ -5710,7 +5783,7 @@ https://github.com/syohex/emacs-zoom-window
         writeroom-width 119))
 #+end_src
 
-** COMMENT olivetti-mode
+** olivetti-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package olivetti
   :commands olivetti-mode
@@ -6030,7 +6103,7 @@ add view mode keybindings
                  (ibuffer-do-sort-by-project-name)))))
 #+end_src
 
-*** COMMENT bufler
+*** bufler
 #+begin_src emacs-lisp :tangle yes
 (use-package bufler
   ;; :quelpa (bufler :fetcher github :repo "alphapapa/bufler.el"
@@ -6237,11 +6310,11 @@ add view mode keybindings
 ;;     (error nil)))
 #+end_src
 
-** COMMENT custom face
+** custom face
 参考：
 - https://github.com/howardabrams/dot-files/blob/master/emacs-client.org
 - [[https://zzamboni.org/post/beautifying-org-mode-in-emacs/][Beautifying Org Mode in Emacs]]
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 ;; 将列标记符号替换成 ► ◇ 表示 
 ;; @see - http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
 (font-lock-add-keywords 'org-mode
@@ -6254,7 +6327,7 @@ add view mode keybindings
 #+end_src
 
 todo keywords 的背景色设置可以参考这个： [[/Users/yangc/src/emacs.d/emacs-leuven/docs/index.org::*Extended use of TODO keywords][emacs-leuven]]
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (defun custom-org-faces ()
   "Custom org face"
   (interactive)
@@ -6285,6 +6358,13 @@ todo keywords 的背景色设置可以参考这个： [[/Users/yangc/src/emacs.d
   )
 
 (add-hook 'org-mode-hook #'custom-org-faces)
+#+end_src
+
+单独给 org-table 设一个等宽字体
+#+begin_src emacs-lisp :tangle yes
+;; Org table font
+(custom-set-faces
+ '(org-table ((t (:family "Sarasa Mono SC" :size user/font-size)))))
 #+end_src
 
 ** 重新定义不同状态的 todoList 的排版
@@ -6426,6 +6506,9 @@ e.g. =<s=
    (org-pretty-tags-global-mode))
 #+end_src
 
+** COMMENT org-tag-beautify
+- https://github.com/stardiviner/org-tag-beautify
+
 ** COMMENT org-fancy-priorities
 #+begin_src emacs-lisp :tangle yes
 (use-package org-fancy-priorities
@@ -6445,7 +6528,7 @@ e.g. =<s=
   )
 #+end_src
 
-** valign
+** COMMENT valign
 - https://github.com/casouri/valign
 - [[https://github.com/casouri/ftable][GitHub - casouri/ftable: Fill tables (i.e., auto layout)]]
 - [[https://github.com/Fuco1/org-pretty-table][GitHub - Fuco1/org-pretty-table: Replace org-table characters with box-drawin...]]
@@ -6461,7 +6544,11 @@ e.g. =<s=
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-;; (use-package ftable)
+;; (use-package ftable
+;;   :quelpa (rime :fetcher github
+;;                 :repo "casouri/ftable"
+;;                 :files ("*.el"))
+;; )
 #+end_src
 
 ** COMMENT prettify-symbols
@@ -6593,11 +6680,11 @@ Builtin mode
          "* TODO %? :work:\n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t)
         ("a" "Appointment" entry (file+headline org-default-notes-file "Appointments")
          "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
-        ("l" "Link" entry (file+headline org-agenda-file-reading "Reading List")
+        ("l" "Link" entry (file+headline org-agenda-file-gtd "Reading List")
          "* READ %^{Description}\n%u\n\n%c\n\n%i" :prepend t :empty-lines 1)
-        ("L" "A link, for reading later." entry (file+headline org-agenda-file-reading "Reading List")
+        ("L" "A link, for reading later." entry (file+headline org-agenda-file-gtd "Reading List")
          "* READ %?%^L %^g \n%T" :prepend t :empty-lines 1)
-        ("K" "Cliplink capture task" entry (file+headline org-agenda-file-reading "Reading List")
+        ("K" "Cliplink capture task" entry (file+headline org-agenda-file-gtd "Reading List")
          "* READ %(org-cliplink-capture) \n" :prepend t :empty-lines 1)
         ("n" "Note" entry (file+headline org-agenda-file-notes "Notes")
          "* Note %?\n%T")
@@ -6607,10 +6694,10 @@ Builtin mode
          "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
         ("b" "Blog idea" entry (file+headline org-default-notes-file "Blog Topics:")
          "* %?\n%T" :prepend t)
-        ;; ("j" "Journal" entry (file+datetree org-agenda-file-journal)
+        ;; ("j" "Journal" entry (file+olp+datetree org-agenda-file-journal)
         ;;  "* %?\nEntered on %U\n  %i\n  %a")
         ("j" "Journal")
-        ("jd" "Diary" entry (file+datetree "diary.org")
+        ("jd" "Diary" entry (file+olp+datetree "diary.org")
          "* %?\n%U\n" :clock-in t :clock-resume t)
         ("jj" "Journal entry" entry (function org-journal-find-location)
          "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")
@@ -6716,8 +6803,8 @@ Builtin mode
 (define-key org-mode-map (kbd "C-c C-t") 'yc/org-todo-force-notes)
 #+end_src
 
-//TODO: 参考这篇 [[https://blog.jethro.dev/posts/processing_inbox/][文章]]([[file:~/src/emacs.d/jethrokuan-dots/.doom.d/config.el][GitHub]]、[[/Users/yangc/src/emacs.d/Kinneyzhang-emacs.d/elisp/init-org.el::jethro/org-process-inbox][GitHub]])，设置 refile 的流程步骤
-//这里的思路：类似于其他的 GTD 软件，在整理 Inbox 的 todo 项时，要设置比如 tags、预计时间、项目等模板化信息，在 orgmode 中的思路则是通过调用一个组合的 function，依次调用相应的命令。
+TODO: 参考这篇 [[https://blog.jethro.dev/posts/processing_inbox/][文章]]([[file:~/src/emacs.d/jethrokuan-dots/.doom.d/config.el][GitHub]]、[[/Users/yangc/src/emacs.d/Kinneyzhang-emacs.d/elisp/init-org.el::jethro/org-process-inbox][GitHub]])，设置 refile 的流程步骤
+这里的思路：类似于其他的 GTD 软件，在整理 Inbox 的 todo 项时，要设置比如 tags、预计时间、项目等模板化信息，在 orgmode 中的思路则是通过调用一个组合的 function，依次调用相应的命令。
 
 Agenda Files
 #+begin_src emacs-lisp :tangle yes
@@ -6734,7 +6821,7 @@ Agenda Files
 (setq org-agenda-file-done (expand-file-name "done.org_archive" org-directory))
 (setq org-agenda-file-journal (expand-file-name "journal.org" org-directory))
 (setq org-agenda-file-thoughts (expand-file-name "thoughts.org" org-directory))
-(setq org-agenda-file-reading (expand-file-name "0x00_GTD/05_reading.org" org-directory))
+;; (setq org-agenda-file-reading (expand-file-name "0x00_GTD/05_reading.org" org-directory))
 (setq org-agenda-file-notes (expand-file-name "notes.org" org-directory))
 (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
 (setq org-agenda-diary-file (expand-file-name "diary.org" org-directory))
@@ -6750,7 +6837,7 @@ Agenda Files
 
 (setq org-refile-targets '((org-agenda-file-inbox   :maxlevel . 1)
                            (org-agenda-file-gtd     :maxlevel . 2)
-                           (org-agenda-file-reading :maxlevel . 1)
+                           ;;  (org-agenda-file-reading :maxlevel . 1)
                            (org-agenda-file-someday :level .    1)
                            (org-agenda-file-tickler :maxlevel . 2)))
 
@@ -7311,10 +7398,11 @@ Headline^^            Visit entry^^               Filter^^                    Da
   (yc/nonprefix-keys 
     "C-c j" 'org-journal-new-entry)
   :custom
-  (org-journal-file-type "monthly")
+  (org-journal-file-type 'monthly)
   (org-journal-dir "~/notes/07_Journal/")
   (org-journal-date-format "%A, %d/%m/%Y")
-  (org-journal-file-format "%Y-%m.org"))
+  (org-journal-file-format "%Y-%m.org")
+  (org-journal-carryover-items ""))
 
 (yc/leader-keys "jo"  'org-journal-new-entry)
 #+end_src
@@ -7467,6 +7555,8 @@ https://github.com/abo-abo/org-download
 ** org-screenshot
 Paste an image on clipboard to Emacs Org mode file.
 @see - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
+
+另外一个 screenshot 扩展 https://github.com/tecosaur/screenshot
 #+begin_src emacs-lisp :tangle yes
 (defun yc/org-screenshot ()
   "Take a screenshot into a time stamped unique-named file in the
@@ -7679,7 +7769,7 @@ Visually summarize progress
 (use-package org-dashboard)
 #+end_src
 
-** COMMENT org-analyzer
+** org-analyzer
 @see - [[https://github.com/rksm/clj-org-analyzer][GitHub - rksm/clj-org-analyzer: Fun with org data]]
 #+begin_src emacs-lisp :tangle yes
 (use-package org-analyzer
@@ -8018,7 +8108,7 @@ Visually summarize progress
   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
 #+end_src
 
-* COMMENT Deft & Roam
+* Deft & Roam
 - [[https://jblevins.org/projects/deft/][Deft for Emacs]]
 - [[https://www.reddit.com/r/emacs/comments/agw3o5/3500_note_files_40_mb_of_plain_text_100s_of_tags/][3,500 note files, 40 MB of plain text, 100s of tags. Will Org mode work for m...]]
 - [[https://github.com/EFLS/zetteldeft][GitHub - EFLS/zetteldeft: A Zettelkasten system! Or rather, some functions on...]]
@@ -8030,7 +8120,7 @@ Visually summarize progress
   "dd" '(deft :which-key "deft"))
   :commands (deft deft-open-file deft-new-file-named)
   :config
-  (setq deft-directory "~/notes/"
+  (setq deft-directory "~/notes/09_Zettelkästen"
         deft-recursive t
         deft-default-extension "org"
         deft-extensions '("md" "txt" "org" "tex")
@@ -8081,14 +8171,14 @@ Visually summarize progress
   (gkroam-dynamic-brackets-mode -1))
 #+end_src
 
-** COMMENT org-roam
+** org-roam
 #+begin_src emacs-lisp :tangle yes
 (use-package org-roam
   :hook 
   (after-init . org-roam-mode)
   :quelpa (org-roam :fetcher github :repo "jethrokuan/org-roam")
   :custom
-  (org-roam-directory org-directory)
+  (org-roam-directory "~/notes/09_Zettelkästen")
   :config
   (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/2.44.1/bin/dot")
   (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
@@ -8100,22 +8190,26 @@ Visually summarize progress
     "art" 'org-roam-dailies-today
     "arf" 'org-roam-find-file
     "arg" 'org-roam-show-graph)
-  (yc/leader-keys-major-mode
-    :keymaps 'org-mode-map
-    "r"  '(:ignore t :which-key "org-roam")
-    "rl" 'org-roam
-    "rt" 'org-roam-dailies-today
-    "rb" 'org-roam-switch-to-buffer
-    "rf" 'org-roam-find-file
-    "ri" 'org-roam-insert
-    "rg" 'org-roam-show-graph))
+  ;; (yc/leader-keys-major-mode
+  ;;   :keymaps 'org-mode-map
+  ;;   "r"  '(:ignore t :which-key "org-roam")
+  ;;   "rl" 'org-roam
+  ;;   "rt" 'org-roam-dailies-today
+  ;;   "rb" 'org-roam-switch-to-buffer
+  ;;   "rf" 'org-roam-find-file
+  ;;   "ri" 'org-roam-insert
+  ;;   "rg" 'org-roam-show-graph)
+  )
 #+end_src
 
-** COMMENT org-roam-server
+** org-roam-server
 - https://github.com/org-roam/org-roam-server
 #+begin_src emacs-lisp :tangle yes
 (use-package org-roam-server)
 #+end_src
+
+** org-marginalia
+https://github.com/nobiot/org-marginalia
 
 * BACKUP & Version
 ** Control BACKUP
@@ -8355,6 +8449,21 @@ file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
   ("q" nil "quit"))
 #+end_src
 
+*** COMMENT gerrit
+- https://github.com/thisch/gerrit.el
+#+begin_src emacs-lisp :tangle yes
+(use-package gerrit
+  :custom
+  (gerrit-host "review.opendev.org")  ;; is needed for REST API calls
+  (gerrit-use-gitreview-interface nil)
+  :config
+  (progn
+    (add-hook 'magit-status-sections-hook #'gerrit-magit-insert-status t)
+    ;; (global-set-key (kbd "C-x i") 'gerrit-upload-transient)
+    ;; (global-set-key (kbd "C-x o") 'gerrit-download)
+    ))
+#+end_src
+
 * Project Management
 ** projectile
 *About:* 
@@ -8433,6 +8542,35 @@ file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
 
 * Languages
 ** General Programming
+*** custom program language font
+#+begin_src emacs-lisp :tangle yes
+(setq yc/programming-modes '(js-mode
+                             python-mode
+                             html-mode
+                             java-mode
+                             c-mode
+                             css-mode
+                             ruby-mode
+                             sh-mode
+                             json-mode
+                             nxml-mode
+                             kotlin-mode
+                             racket-mode
+                             conf-mode
+                             fundamental-mode
+                             emacs-lisp-mode
+                             lisp-interaction-mode))
+
+(defun yc/apply-monofont ()
+  (interactive)
+  (setq buffer-face-mode-face '(:family "Hack" :height 130))
+  (buffer-face-mode t))
+
+(require 'derived)
+(dolist (yc/mode yc/programming-modes)
+  (add-hook (derived-mode-hook-name yc/mode) 'yc/apply-monofont))
+#+end_src
+
 *** lsp-mode
 - LSP :: Language Server Protocol
 *About:* 
@@ -8451,23 +8589,48 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :hook
-  ((prog-mode . lsp-deferred)
-   (lsp . lsp-lens-mode)
+  ((lsp . lsp-lens-mode)
+   ;; (prog-mode . lsp-deferred)
    (lsp-mode . lsp-enable-which-key-integration))
    ;; (lsp-after-open . lsp-enable-imenu)
   :bind (:map lsp-mode-map
               ("C-c C-d" . lsp-describe-thing-at-point))
-  ;; :init 
-  ;; (setq lsp-auto-guess-root t       ; Detect project root
-  ;;       lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
-  ;;       flymake-fringe-indicator-position 'right-fringe)
+  :custom-face
+  (lsp-headerline-breadcrumb-path-error-face
+   ((t :underline (:style wave :color ,(face-foreground 'error))
+       :inherit lsp-headerline-breadcrumb-path-face)))
+  (lsp-headerline-breadcrumb-path-warning-face
+   ((t :underline (:style wave :color ,(face-foreground 'warning))
+       :inherit lsp-headerline-breadcrumb-path-face)))
+  (lsp-headerline-breadcrumb-path-info-face
+   ((t :underline (:style wave :color ,(face-foreground 'success))
+       :inherit lsp-headerline-breadcrumb-path-face)))
+  (lsp-headerline-breadcrumb-path-hint-face
+   ((t :underline (:style wave :color ,(face-foreground 'success))
+       :inherit lsp-headerline-breadcrumb-path-face)))
+  (lsp-headerline-breadcrumb-symbols-error-face
+   ((t :inherit lsp-headerline-breadcrumb-symbols-face
+       :underline (:style wave :color ,(face-foreground 'error)))))
+  (lsp-headerline-breadcrumb-symbols-warning-face
+   ((t :inherit lsp-headerline-breadcrumb-symbols-face
+       :underline (:style wave :color ,(face-foreground 'warning)))))
+  (lsp-headerline-breadcrumb-symbols-info-face
+   ((t :inherit lsp-headerline-breadcrumb-symbols-face
+       :underline (:style wave :color ,(face-foreground 'success)))))
+  (lsp-headerline-breadcrumb-symbols-hint-face
+   ((t :inherit lsp-headerline-breadcrumb-symbols-face
+       :underline (:style wave :color ,(face-foreground 'success)))))
+  :init 
+  (setq lsp-auto-guess-root t       ; Detect project root
+        lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
+        flymake-fringe-indicator-position 'right-fringe)
   ;; (setq lsp-eldoc-enable-hover nil
   ;;       lsp-signature-auto-activate nil
   ;;       lsp-signature-render-documentation nil)
   :config
   (setq lsp-headerline-breadcrumb-enable t)
   (setq exec-path (append exec-path '("~/.nvm/versions/node/v14.11.0/bin/")))
-  (setq lsp-sqls-server "/usr/local/Cellar/go/1.15.3/libexec/bin/sqls")
+  (setq lsp-sqls-server "/usr/local/Cellar/go/1.15.8/libexec/bin/sqls")
 
   ;; lsp-xml 依赖 eclipse/lemminx 项目，工程： ~/src/opensource/lemminx
   ;; 需要将 jar 包拷贝 emacs 下，并指定路径
@@ -8570,6 +8733,18 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   :after lsp-mode
   :bind (:map lsp-mode-map
               ([remap xref-find-apropos] . lsp-ivy-workspace-symbol)))
+#+end_src
+
+*** COMMENT lsp-sonarlint
+https://github.com/emacs-lsp/lsp-sonarlint
+#+begin_src emacs-lisp :tangle yes
+(use-package lsp-sonarlint
+  :config
+  (setq lsp-sonarlint-html-enabled t)
+  (setq lsp-sonarlint-java-enabled t)
+  (setq lsp-sonarlint-xml-enabled t)
+  (setq lsp-sonarlint-python-enabled t)
+  (setq lsp-sonarlint-javascript-enabled t)) 
 #+end_src
 
 *** company-lsp
@@ -8816,7 +8991,7 @@ This is a package to perform text folding like in Vim. It has the following feat
 
 *** origami-predef
 
-*** COMMENT lsp-origami
+*** lsp-origami
 lsp =textDocument/foldingRange=
 - [[https://github.com/emacs-lsp/lsp-origami][GitHub - emacs-lsp/lsp-origami: lsp-mode origami.el]]
 #+begin_src emacs-lisp :tangle yes
@@ -8852,17 +9027,17 @@ see https://github.com/google/styleguide/blob/gh-pages/google-c-style.el
 ;;  :init (add-hook 'java-mode-hook 'dtrt-indent-mode))           
 #+end_src
 
-*** Java LSP
+*** COMMENT LSP Java 
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-java
   ;; :after lsp
   ;; :mode ("\\.java\\'" . java-mode)
   :init
-  (use-package request)
+  ;; (use-package request)
   (setq lsp-java-vmargs
         (list
          "-noverify"
-         "-Xmx1G"
+         "-Xmx2G"
          "-XX:+UseG1GC"
          "-XX:+UseStringDeduplication"
          "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.8/lombok-1.18.8.jar"
@@ -8874,25 +9049,23 @@ see https://github.com/google/styleguide/blob/gh-pages/google-c-style.el
 
         ;; Currently (2019-04-24), dap-mode works best with Oracle
         ;; JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
-        lsp-java-java-path "/usr/local/opt/openjdk/bin/java"
-        ;; lsp-java-java-path "/usr/bin/java"
+        ;; lsp-java-java-path "/usr/local/opt/openjdk/bin/java"
+        lsp-java-java-path "/usr/bin/java"
+        ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin/java"
         )
   :bind
   (:map java-mode-map
    ("C-c C-f" . lsp-format-buffer))
+  :hook ((java-mode . lsp)
+         (java-mode . lsp-java-boot-lens-mode)
+         (java-mode . lsp-java-lens-mode))
   :config
   (require 'lsp-java-boot)
-  
-  (setq c-basic-offset 4)
-
-  ;; to enable the lenses
-  (add-hook 'java-mode-hook #'lsp)
-  (add-hook 'lsp-mode-hook #'lsp-java-lens-mode)
-  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
-
   (setq lsp-prefer-capf t)
-  (setq lsp-java-server-install-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/server/")
-        lsp-java-workspace-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/workspace/")))
+  (setq lsp-java-progress-reports-enabled nil)
+  ;; (setq lsp-java-server-install-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/server/")
+  ;;       lsp-java-workspace-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/workspace/"))
+)
 
 (yc/leader-keys-major-mode
   :keymaps 'java-mode-map
@@ -10136,7 +10309,7 @@ brew install multimarkdown
   (add-to-list 'auto-mode-alist '("docker-compose[^/]*\\.yml\\'" . docker-compose-mode)))
 #+end_src
 
-** COMMENT k8s
+** k8s
 kubernetes
 - [[https://www.reddit.com/r/emacs/comments/ci7s53/conquering_kubernetes_with_emacs/][Conquering Kubernetes with Emacs]]
 #+begin_src emacs-lisp :tangle yes
@@ -10311,7 +10484,10 @@ brew install libvterm
 (use-package vterm
   :hook
   ((vterm-mode . ansi-term-handle-close)
-   (vterm-mode . evil-emacs-state))
+   (vterm-mode . evil-emacs-state)
+   ;; 为 vterm 单独设置字体，https://emacs-china.org/t/mode/15512
+   (vterm-mode . (lambda () (setq buffer-face-mode-face '((:family "Cascadia Code" :height 130)))
+                   (buffer-face-mode t))))
   :custom ((vterm-buffer-name-string "vterm %s")
            (vterm-max-scrollback 100000))
   )
@@ -10913,6 +11089,30 @@ xwidget-webkit enhancement suite
               ("v" . xwwp-follow-link)))
 #+end_src
 
+* Anki
+** COMMENT anki.el
+- https://github.com/chenyanming/anki.el
+#+begin_src emacs-lisp :tangle yes
+(use-package anki
+  :defer t
+  :load-path "~/.emacs.d/lisp/anki/"
+  :init
+  (add-hook 'anki-mode-hook #'shrface-mode)
+  (add-hook 'anki-card-mode-hook #'shrface-mode)
+  (autoload 'anki "anki")
+  (autoload 'anki-browser "anki")
+  (autoload 'anki-list-decks "anki")
+  :config
+  ;; (require 'shrface) ; If you use shrface, require it here
+  (setq anki-shr-rendering-functions (append anki-shr-rendering-functions shr-external-rendering-functions))
+  (setq sql-sqlite-program "/usr/bin/sqlite3")
+  ;; Set up the collection directory, which should contain a file - collection.anki2 and a folder - collection.media
+  (setq anki-collection-dir "/Users/yangc/Library/Application Support/Anki2/User 1")) 
+#+end_src
+
+** COMMENT anki-editor
+- https://github.com/louietan/anki-editor
+
 * Utility
 ** Scratch
 *About:* 
@@ -11111,6 +11311,7 @@ Exports Org-mode contents to Reveal.js HTML presentation.
   (pdf-tools-install)
   (setq-default pdf-view-display-size 'fit-page
                 pdf-view-use-imagemagick t
+                pdf-view-use-scaling t
                 pdf-view-midnight-colors '("white smoke" . "gray5"))
   :general
   (pdf-view-mode-map
@@ -11952,13 +12153,7 @@ pip3 install grip
   (setq grip-mode-binary-path (executable-find "grip")))
 #+end_src
 
-** COMMENT improve orgmode image scrolling 
-#+begin_src emacs-lisp :tangle yes
-(require 'iscroll)
-(add-hook 'org-mode-hook 'iscroll-mode)
-#+end_src
-
-** COMMENT Images
+** Images
 *About:* 
 *TODO:* 这个感觉 image-mode 和 imagex-mode 都没加载到，导致 hydra 按键无法绑定
 相关快捷键参考官方文档：https://github.com/mhayashi1120/Emacs-imagex
@@ -11981,6 +12176,16 @@ pip3 install grip
 ;; ("+" . imagex-sticky-maximize)
 ;; ("=" . imagex-sticky-zoom-in)
 ;; ("-" . imagex-sticky-zoom-out)))
+#+end_src
+
+*** COMMENT improve orgmode image scrolling 
+#+begin_src emacs-lisp :tangle yes
+(use-package iscroll
+  :load-path "lisp/iscroll.el"
+  :hook (org-mode . iscroll-mode)
+  :config
+  (setq iscroll-preserve-screen-position t)
+)
 #+end_src
 
 *** keybindings
@@ -12076,6 +12281,7 @@ https://github.com/alf/ob-restclient.el
 *** COMMENT esup
 
 ** COMMENT Daemon
+*** Emacs Server
 *About:* 使用服务模式启动 Emacs，这样子在其他地方可以快速启动一个 Emacs 窗口用于类似编辑文件操作等。
 #+begin_src emacs-lisp :tangle yes
 (use-package server
