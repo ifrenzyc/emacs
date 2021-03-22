@@ -126,7 +126,10 @@
  'org-babel-load-languages
  '((emacs-lisp . t)
    (org . t)
-   (shell . t)))
+   (shell . t)
+   (sql . t)
+   (plantuml . t)
+   (restclient . t)))
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/emacs.org"))
 

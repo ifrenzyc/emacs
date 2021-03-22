@@ -692,6 +692,7 @@ like dimmer-mode
   (doom-themes-neotree-config)    ; all-the-icons fonts must be installed!
 
   (setq doom-themes-treemacs-theme "doom-colors")
+  (doom-themes-treemacs-config)
   (with-eval-after-load 'lsp-treemacs
     (doom-themes-treemacs-config)    ; all-the-icons fonts must be installed!
   )
@@ -706,8 +707,8 @@ like dimmer-mode
 (use-package modus-themes
   :demand t
   :config
-  ;; (load-theme 'modus-vivendi t)
   (load-theme 'modus-operandi t)
+  ;; (load-theme 'modus-vivendi t)
 )
 #+end_src
 
@@ -6364,7 +6365,8 @@ todo keywords 的背景色设置可以参考这个： [[/Users/yangc/src/emacs.d
 #+begin_src emacs-lisp :tangle yes
 ;; Org table font
 (custom-set-faces
- '(org-table ((t (:family "Sarasa Mono SC" :size user/font-size)))))
+ '(org-table ((t (:family "Sarasa Mono SC" :size user/font-size))))
+ '(markdown-table-face ((t (:family "Sarasa Mono SC" :size user/font-size)))))
 #+end_src
 
 ** 重新定义不同状态的 todoList 的排版
@@ -6389,7 +6391,7 @@ todo keywords 的背景色设置可以参考这个： [[/Users/yangc/src/emacs.d
 (eval-after-load "org" (add-hook 'org-add-hook 'modify-org-done-face))
 #+end_src
 
-** COMMENT custom code block
+** custom code block
 #+begin_src emacs-lisp :tangle yes
 ;; (defun org-insert-src-block (src-code-type)
 ;;   "Insert a `SRC-CODE-TYPE' type source code block in org-mode."
@@ -6470,6 +6472,13 @@ e.g. =<s=
 ;;  '(org-block-background
 ;;    ((t (:background "#F2E4BE"))))
 ;;  )
+
+(custom-set-faces
+ '(org-block
+   ((t (:foreground "#184034" :background "#F0F0F0"))))
+ '(org-block-background
+   ((t (:foreground "#184034" :background "#F0F0F0"))))
+ )
 #+end_src
 
 ** org-bullets
@@ -6551,20 +6560,14 @@ e.g. =<s=
 ;; )
 #+end_src
 
-** COMMENT prettify-symbols
+** prettify-symbols
 Builtin mode
 #+begin_src emacs-lisp :tangle yes
 (setq-default prettify-symbols-alist '(
                                        ;; ("#+begin_src" . "†")
                                        ;; ("#+end_src" . "†")
-                                       ;; ("#+begin_src" . "†")
-                                       ;; ("#+end_src" . "†")
                                        ("#+begin_src" . "ƛ")
                                        ("#+end_src" . "ƛ")
-                                       ("#+begin_src" . "ƛ")
-                                       ("#+end_src" . "ƛ")
-                                       ("#+begin_quote" . "†")
-                                       ("#+end_quote" . "†")
                                        ("#+begin_quote" . "†")
                                        ("#+end_quote" . "†")                                     
                                        (">=" . "≥")
@@ -6572,12 +6575,12 @@ Builtin mode
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
 
-(add-hook 'org-mode-hook (lambda ()
-   "Beautify Org Checkbox Symbol"
-   (push '("[ ]" . "☐") prettify-symbols-alist)
-   (push '("[X]" . "☑" ) prettify-symbols-alist)
-   (push '("[-]" . "❍" ) prettify-symbols-alist)
-   (prettify-symbols-mode)))
+;; (add-hook 'org-mode-hook (lambda ()
+;;                            "Beautify Org Checkbox Symbol"
+;;                            (push '("[ ]" . "☐") prettify-symbols-alist)
+;;                            (push '("[X]" . "☑" ) prettify-symbols-alist)
+;;                            (push '("[-]" . "❍" ) prettify-symbols-alist)
+;;                            (prettify-symbols-mode)))
 #+end_src
 
 ** COMMENT pretty-symbol
@@ -8554,6 +8557,8 @@ file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
                              sh-mode
                              json-mode
                              nxml-mode
+                             yaml-mode
+                             sql-mode
                              kotlin-mode
                              racket-mode
                              conf-mode
@@ -8591,6 +8596,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   :hook
   ((lsp . lsp-lens-mode)
    ;; (prog-mode . lsp-deferred)
+   (typescript-mode . lsp-deferred)
    (lsp-mode . lsp-enable-which-key-integration))
    ;; (lsp-after-open . lsp-enable-imenu)
   :bind (:map lsp-mode-map
@@ -8623,6 +8629,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   :init 
   (setq lsp-auto-guess-root t       ; Detect project root
         lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
+        lsp-log-io t
         flymake-fringe-indicator-position 'right-fringe)
   ;; (setq lsp-eldoc-enable-hover nil
   ;;       lsp-signature-auto-activate nil
@@ -8647,6 +8654,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   ;;       lsp-diagnostics-modeline-scope :project    ;; :project/:workspace/:file
   ;;       read-process-output-max (* 1024 1024)) ;; 1mb
   ;; (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
+  (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
   )
 
 ;; (use-package lsp-clients
@@ -8655,7 +8663,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
 ;;   (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/")))
 #+end_src
 
-*** COMMENT lsp-ui
+*** lsp-ui
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-ui
   :after lsp-mode
@@ -9027,45 +9035,51 @@ see https://github.com/google/styleguide/blob/gh-pages/google-c-style.el
 ;;  :init (add-hook 'java-mode-hook 'dtrt-indent-mode))           
 #+end_src
 
-*** COMMENT LSP Java 
+*** LSP Java 
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-java
   ;; :after lsp
   ;; :mode ("\\.java\\'" . java-mode)
   :init
   ;; (use-package request)
-  (setq lsp-java-vmargs
+  ;; (require 'lsp-java-boot)
+  (setq lsp-java-inhibit-message t
+        ;; Currently (2019-04-24), dap-mode works best with Oracle
+        ;; JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
+        ;; 这里为什么指定 java, 参考这个 issues(https://github.com/eclipse/eclipse.jdt.ls/pull/1509), 需要 java 11 以上
+        ;; lsp-java-java-path "/usr/local/opt/java/bin/java"
+        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-12.0.1.jdk/Contents/Home/bin/java"
+        ;; lsp-java-java-path "/usr/bin/java"
+        ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/adoptopenjdk-15.jdk/Contents/Home/bin/java"
+        ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin/java"
+
+
+        ;; lsp-java-server-install-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/server/")
+        ;; lsp-java-workspace-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/workspace/")
+
+        ;; Don't organise imports on save
+        lsp-java-save-actions-organize-imports nil
+
+        lsp-prefer-capf t 
+        lsp-java-progress-reports-enabled nil
+
+        lsp-java-vmargs
         (list
-         "-noverify"
-         "-Xmx2G"
+         "-Xmx4G"
          "-XX:+UseG1GC"
          "-XX:+UseStringDeduplication"
          "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.8/lombok-1.18.8.jar"
-         "-Xbootclasspath/a:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.8/lombok-1.18.8.jar"
+         ;; "-Xbootclasspath/a:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.8/lombok-1.18.8.jar"
          )
-
-        ;; Don't organise imports on save
-        lsp-java-save-action-organize-imports nil
-
-        ;; Currently (2019-04-24), dap-mode works best with Oracle
-        ;; JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
-        ;; lsp-java-java-path "/usr/local/opt/openjdk/bin/java"
-        lsp-java-java-path "/usr/bin/java"
-        ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin/java"
         )
   :bind
   (:map java-mode-map
-   ("C-c C-f" . lsp-format-buffer))
-  :hook ((java-mode . lsp)
-         (java-mode . lsp-java-boot-lens-mode)
-         (java-mode . lsp-java-lens-mode))
-  :config
-  (require 'lsp-java-boot)
-  (setq lsp-prefer-capf t)
-  (setq lsp-java-progress-reports-enabled nil)
-  ;; (setq lsp-java-server-install-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/server/")
-  ;;       lsp-java-workspace-dir (expand-file-name "~/.emacs.d/eclipse.jdt.ls/workspace/"))
-)
+        ("C-c C-f" . lsp-format-buffer))
+  :hook (;; (java-mode . lsp)
+         (java-mode . lsp-deferred)
+         (java-mode . lsp-java-lens-mode)
+         ;; (java-mode . lsp-java-boot-lens-mode)
+  ))
 
 (yc/leader-keys-major-mode
   :keymaps 'java-mode-map
@@ -9698,10 +9712,8 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 (use-package sql-mode
   :ensure nil
   :mode ("\\.sql\\'" . sql-mode)
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((sql . t))))
+  :hook (sql-mode . lsp-deferred)
+  )
 
 (use-package sqlformat
   :ensure-system-package (sqlformat . "pip install sqlparse")
@@ -9730,9 +9742,11 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
   (sql-mode . ejc-sql-mode)
   :config
   (setq ejc-org-mode-show-results nil)
+  (require 'ejc-company)
+  (push 'ejc-company-backend company-backends)
   (add-hook 'ejc-sql-minor-mode-hook
             (lambda ()
-              (auto-complete-mode t)
+              (company-mode t)
               (ejc-ac-setup)
               (ejc-eldoc-setup))))
 #+end_src
@@ -10102,7 +10116,9 @@ GitHub: https://github.com/smihica/emmet-mode
 *About:* 
 #+begin_src emacs-lisp :tangle yes
 (use-package yaml-mode
-  :mode ("\\.\\(yml\\|yaml\\|yml.j2\\|yaml.j2\\|yml.template\\|yaml.template\\)$" . yaml-mode))
+  :mode ("\\.\\(yml\\|yaml\\|yml.j2\\|yaml.j2\\|yml.template\\|yaml.template\\)$" . yaml-mode)
+  :hook (yaml-mode . lsp-deferred)
+        (yaml-mode . highlight-indent-guides-mode))
 #+end_src
 
 ** COMMENT systemd
@@ -10302,7 +10318,10 @@ brew install multimarkdown
 ** dockerfile
 #+begin_src emacs-lisp :tangle yes
 (use-package dockerfile-mode
-  :mode ("Dockerfile\\'" . dockerfile-mode))
+  :mode ("Dockerfile\\'" . dockerfile-mode)
+  :hook
+   (dockerfile-mode . lsp-deferred)
+)
 
 (use-package docker-compose-mode
   :config
@@ -11634,12 +11653,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 
   ;; Use fundamental mode when editing plantuml blocks with C-c '
   (add-to-list 'org-src-lang-modes (quote ("plantuml" . fundamental)))
-
-  ;; active Org-babel languages
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '(;; other Babel languages
-     (plantuml . t))))
+)
 #+end_src
 
 ** COMMENT blog
@@ -12247,11 +12261,7 @@ pip3 install grip
 https://github.com/alf/ob-restclient.el
 #+begin_src emacs-lisp :tangle yes
 (use-package ob-restclient
-  :after (org restclient)
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((restclient . t))))
+  :after (org restclient))
 #+end_src
 
 *** company-restclient
