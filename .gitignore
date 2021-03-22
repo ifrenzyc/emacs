@@ -51,3 +51,4 @@ ac-comphist.dat
 .mc-lists.el
 async-bytecomp.log
 elfeed/
+eln-cache/
