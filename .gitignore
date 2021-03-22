@@ -52,3 +52,8 @@ ac-comphist.dat
 async-bytecomp.log
 elfeed/
 eln-cache/
+.extension/
+bm-repository
+abbrev_defs
+org-roam.db
+cnfonts/
