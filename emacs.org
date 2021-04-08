@@ -1510,6 +1510,14 @@ https://github.com/tarsius/keycast
         (setq deactivate-mark  t)
       (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
       (abort-recursive-edit)))
+
+  (dolist (p '((dired-mode . emacs)
+               (rg-mode . emacs)
+               (ivy-occur-mode . emacs)
+               (treemacs-mode . emacs)
+               (org-agenda-mode . emacs)
+               (org-brain-visualize-mode . emacs)))
+    (evil-set-initial-state (car p) (cdr p)))
   )
 #+end_src
 
@@ -3807,24 +3815,22 @@ anzu 依赖这个 mdi
   ;; (setq dired-listing-switches "-AFhlv --dired-listing-switches")
   (setq dired-listing-switches "-alh")
   :config
-  
- 
-  ;; init treemacs in emacs keys;
-  (add-hook 'dired-mode-hook 'evil-normalize-keymaps)
-  (evil-set-initial-state 'dired-mode 'emacs)
+  ;; init dired in emacs keys;
+  ;; (add-hook 'dired-mode-hook 'evil-normalize-keymaps)
+  ;; (evil-set-initial-state 'dired-mode 'emacs)
 
-  ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
-  (setq dired-dwim-target t                      ;; https://emacs.stackexchange.com/a/5604
-        dired-recursive-copies (quote always)    ;; Recursive Copying and Deleting
-        dired-recursive-deletes (quote top))
+  ;; (eval-after-load 'evil
+  ;;   '(progn
+  ;;      (evil-set-initial-state 'dired-mode 'emacs)))
 
   ;; (when (featurep 'evil)
   ;;   (add-to-list 'evil-emacs-state-modes 'dired-mode)
   ;;   (setq evil-emacs-state-modes (delq 'dired-mode evil-emacs-state-modes)))
   
-  ;; (eval-after-load 'evil
-  ;;   '(progn
-  ;;      (evil-set-initial-state 'dired-mode 'emacs)))
+  ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
+  (setq dired-dwim-target t                      ;; https://emacs.stackexchange.com/a/5604
+        dired-recursive-copies (quote always)    ;; Recursive Copying and Deleting
+        dired-recursive-deletes (quote top))
   )
 #+end_src
 
@@ -5464,6 +5470,8 @@ https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#using-a-gr
 ** helpful
 #+begin_src emacs-lisp :tangle yes
 (use-package helpful
+  :hook
+  ((help-mode . evil-emacs-state))
   :config (progn
             (bind-key "C-h f" #'helpful-callable)
             (bind-key "C-h v" #'helpful-variable)
@@ -5537,8 +5545,8 @@ _v_ariable
   (setq eldoc-idle-delay 0.1
         eldoc-echo-area-use-multiline-p nil)
   (eldoc-mode 1)
-  :config
-  (add-hook 'prog-mode-hook 'turn-on-eldoc-mode))
+  :hook
+  (prog-mode . turn-on-eldoc-mode))
 #+end_src
 
 *** eldoc-box
@@ -5553,8 +5561,8 @@ _v_ariable
 ** Hungry delete
 #+begin_src emacs-lisp :tangle yes
 (use-package hungry-delete
-  :config
-  (add-hook 'prog-mode-hook 'hungry-delete-mode))
+  :hook
+  (prog-mode . hungry-delete-mode))
 #+end_src
 
 * Windows and Frames
@@ -6225,7 +6233,7 @@ add view mode keybindings
   ;; :quelpa (bufler :fetcher github :repo "alphapapa/bufler.el"
   ;;                 :files (:defaults (:exclude "helm-bufler.el")))
   :hook
-  (bufler-list-mode . evil-emacs-state)
+  ((bufler-list-mode . evil-emacs-state))
   :config
   (bufler-mode)
   (bufler-workspace-mode)
@@ -6323,19 +6331,22 @@ add view mode keybindings
 | Registers   |                       |                                                                      |
 | C-x r j     | M-x jump-to-register  | Prompts for register letter. Jumpts to point saved in that register. |
 | C-x r SPC   | M-x point-to-register | Prompts for register letter. Saves point in register.                |
+
 #+begin_src emacs-lisp :tangle yes
 (use-package org
   :ensure org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
   :delight org-mode "Org"
   :hook
-  (org-mode . visual-line-mode) 
+  ;; (org-mode . visual-line-mode) 
   ;; (org-mode . olivetti-mode) 
-  ;; (org-mode . (lambda ()
-  ;;               ;; (auto-fill-mode t)
-  ;;               ;; (set-fill-column 89)
-  ;;               (setq truncate-lines nil
-  ;;                     word-wrap t)))
+  (org-mode . (lambda ()
+                ;; (auto-fill-mode t)
+                ;; (set-fill-column 89)
+                (setq-local line-spacing 0.2)
+                (setq-local truncate-lines t)
+                (setq-local word-wrap nil)
+                ))
   :bind
   (;; NOTE: keymaps specified with :keymaps must be quoted
    :map org-mode-map

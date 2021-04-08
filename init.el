@@ -49,6 +49,11 @@
 ;;    (load user-init-file nil 'nomessage)
 ;;    (message "Reloading init.el... done.")))
 
+;; Should be placed inside init.el before anything loading org-mode 
+;; https://github.com/yantar92/org
+;; (straight-use-package '(org :host github :repo "yantar92/org" :branch "feature/org-fold-universal-core"
+;; 			    :files (:defaults "contrib/lisp/*.el")))
+
 ;; Added by package.el. This must come before configurations of
 ;; installed packages. Don't delete this line. If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
@@ -142,4 +147,3 @@
 (load custom-file)
 
 ;;; init.el ends here
-(put 'upcase-region 'disabled nil)
