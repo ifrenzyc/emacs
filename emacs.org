@@ -1953,14 +1953,21 @@ This allows me to easily start a * or # search from a visual selection.
 
 ;; Split and move the cursor to the new split
 (defun yc/split-window-vertically ()
+  "Split the window vertically and display the previous buffer."
   (interactive)
   (split-window-vertically)
-  (other-window 1))
+  (other-window 1)
+  (switch-to-next-buffer))
 
 (defun yc/split-window-horizontally ()
+  "Split the window horizontally and display the previous buffer."
   (interactive)
   (split-window-horizontally)
-  (other-window 1))
+  (other-window 1)
+  (switch-to-next-buffer))
+
+(global-set-key (kbd "C-x 2") 'yc/split-window-vertically)
+(global-set-key (kbd "C-x 3") 'yc/split-window-horizontally)
 #+end_src
 
 ** hydra-extends
@@ -2127,14 +2134,8 @@ https://github.com/dustinlacewell/hera
              ("B" split-window-horizontally-instead "horizontally instead")
              ("v" split-window-below "vertically")
              ("V" split-window-vertically-instead "vertically instead")
-             ("-" (lambda ()
-                    (interactive)
-                    (split-window-right)
-                    (windmove-right)) "horizontally")
-             ("|" (lambda ()
-                    (interactive)
-                    (split-window-below)
-                    (windmove-down)) "vertically")
+             ("-" yc/split-window-horizontally "horizontally")
+             ("|" yc/split-window-vertically "vertically")
              ("u" (progn
                     (winner-undo)
                     (setq this-command 'winner-undo)) "undo")
@@ -5597,13 +5598,13 @@ winner-mode 是一个全局的 minor mode，它的主要功能是记录窗体的
    "M-9" 'winum-select-window-9))
 #+end_src
 
-** COMMENT ace-window
+** ace-window
 *About:* 
 或许试试这个 Package： [[https://github.com/dimitri/switch-window][dimitri/switch-window - GitHub]]
 #+begin_src emacs-lisp :tangle yes
 (use-package ace-window
   :init
-  (setq ;; aw-keys '(?h ?j ?k ?l ?y ?u ?i ?o ?p)
+  (setq aw-keys '(?h ?j ?k ?l ?y ?u ?i ?o ?p)
         aw-background nil
         aw-scope 'frame
         aw-dispatch-alist
@@ -5612,26 +5613,10 @@ winner-mode 是一个全局的 minor mode，它的主要功能是记录窗体的
           (?3 aw-split-window-horz "split window horizontally")
           (?x aw-delete-window "delete window")
           (?? aw-show-dispatch-help)))
+  :general
+  ("M-o" 'ace-window)
   :config
-  ;; (global-set-key (kbd "C-x o") 'ace-window)
   (ace-window-display-mode 1))
-
-(defun bk/vsplit-last-buffer ()
-  "Split the window vertically and display the previous buffer."
-  (interactive)
-  (split-window-vertically)
-  (other-window 1 nil)
-  (switch-to-next-buffer))
-
-(defun bk/hsplit-last-buffer ()
-  "Split the window horizontally and display the previous buffer."
-  (interactive)
-  (split-window-horizontally)
-  (other-window 1 nil)
-  (switch-to-next-buffer))
-
-(global-set-key (kbd "C-x 2") 'bk/vsplit-last-buffer)
-(global-set-key (kbd "C-x 3") 'bk/hsplit-last-buffer)
 #+end_src
 
 ** Tiling window in Emacs
