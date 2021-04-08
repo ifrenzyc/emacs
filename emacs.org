@@ -318,7 +318,7 @@ Maximized Window when startup
 (user/set-font)
 ;; For emacsclient.
 (add-hook 'before-make-frame-hook #'user/set-font)
-(setq line-spacing .2)
+;; (setq-default line-spacing 0.2)
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -8569,6 +8569,7 @@ file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
 (defun yc/apply-monofont ()
   (interactive)
   (setq buffer-face-mode-face '(:family "Hack" :height 130))
+  (setq-local line-spacing 0.2)
   (buffer-face-mode t))
 
 (require 'derived)
@@ -8707,7 +8708,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   ;;                 (right-fringe . 8)
   ;;                 (menu-bar-lines . 0)
   ;;                 (tool-bar-lines . 0)
-  ;;                 (line-spacing . 0.1)
+  ;;                 (line-spacing . 0.2)
   ;;                 (unsplittable . t)
   ;;                 (undecorated . t)
   ;;                 (minibuffer . nil)
