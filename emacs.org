@@ -2463,7 +2463,7 @@ https://github.com/dustinlacewell/hera
   (key-chord-define evil-normal-state-map "jk" 'avy-goto-char))
 #+end_src
 
-* Navigation
+* Completion framework
 ** ivy
 *About:* ivy 是一个 Emacs 的补全框架，类似的有 ido 和 helm。
 - [[https://github.com/abo-abo/swiper][GitHub - abo-abo/swiper]]
@@ -2475,11 +2475,19 @@ https://github.com/dustinlacewell/hera
 - snails
 - selectrum + prescient
 #+begin_src emacs-lisp :tangle yes
+(use-package flx  ;; Improves sorting for fuzzy-matched results
+  :after ivy
+  :defer t
+  :init
+  (setq ivy-flx-limit 10000))
+
 (use-package ivy
   :demand t
   :general
   ("C-x b" 'ivy-switch-buffer
    "C-x B" 'ivy-switch-buffer-other-window)
+  :hook
+  ((ivy-occur-mode . evil-emacs-state))
   :custom
   (ivy-count-format "(%d/%d) ")
   (ivy-use-selectable-prompt t)
@@ -2897,6 +2905,9 @@ Version 2015-04-09"
   :config
   (setq counsel-yank-pop-preselect-last t)
   (setq counsel-yank-pop-separator "\n—————————\n")
+  (setq counsel-grep-base-command
+          (concat (executable-find "rg")
+                  " -n -M 512 --no-heading --color never -i \"%s\" %s"))
   (setq counsel-rg-base-command
         "rg -SHn --no-heading --color never --no-follow --hidden %s")
   (setq counsel-find-file-occur-cmd; TODO Simplify this
@@ -3372,7 +3383,11 @@ repository, then the corresponding root is used instead."
 
 (use-package ido-vertical-mode :after ido)
 
-(use-package flx)
+(use-package flx  ;; Improves sorting for fuzzy-matched results
+  :after ido
+  :defer t
+  :init
+  (setq ivy-flx-limit 10000))
 
 (use-package flx-ido
   :after ido
@@ -3703,7 +3718,10 @@ fuzzy file finder
 (use-package rg
   :config
   (setq rg-group-result t)
-  (setq rg-show-header t))
+  (setq rg-show-header t)
+
+  ;; (evil-set-initial-state 'rg-mode 'emacs)
+)
 #+end_src
 
 ** COMMENT color-rg
@@ -5661,6 +5679,22 @@ eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工�
         wg-mode-line-decor-right-brace "]"  ; how to surround it
         wg-mode-line-decor-divider ":")
     (workgroups-mode 1))
+#+end_src
+
+** perspective
+#+begin_src emacs-lisp :tangle yes
+(use-package perspective
+  :demand t
+  :bind (("C-M-j" . persp-counsel-switch-buffer)
+         ("C-M-k" . persp-switch)
+         ("C-M-n" . persp-next)
+         ("C-x k" . persp-kill-buffer*))
+  :custom
+  (persp-initial-frame-name "Main")
+  :config
+  ;; Running `persp-mode' multiple times resets the perspective list...
+  (unless (equal persp-mode t)
+    (persp-mode)))
 #+end_src
 
 ** burly
