@@ -436,6 +436,7 @@ Unicode is an required aesthetic
 This makes scrolling gradual rather than by half page. I find that the half page scroll really makes me lose where I am in the file so here I make sure to scroll one line at a time. In addition I want to keep what I'm working on centered so I start scrolling when the cursor is 10 lines away from the margin.
 
 This behaviour in general emulates the scrolloff option in vim.
+*** build-in scrolling
 #+begin_src emacs-lisp :tangle yes
 ;; faster scrolling (see https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746)
 ;; https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#defaults
@@ -450,6 +451,13 @@ This behaviour in general emulates the scrolloff option in vim.
        scroll-conservatively 100000
        scroll-margin 0
        scroll-preserve-screen-position t)
+#+end_src
+
+*** COMMENT good-scroll
+#+begin_src emacs-lisp :tangle yes
+(use-package good-scroll
+  :config
+  (good-scroll-mode t))  
 #+end_src
 
 *** COMMENT yascroll
