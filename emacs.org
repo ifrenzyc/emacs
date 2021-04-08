@@ -12143,14 +12143,16 @@ brew install gnupg
 (epa-file-enable)
 #+end_src
 
-** COMMENT diff
+** diff
 https://github.com/justbur/emacs-vdiff
 
 同时，它也可以应用在 ediff 上，恢复由 ediff 导致的窗体变动。
 #+begin_src emacs-lisp :tangle yes
 (use-package ediff
   :ensure nil
-  :hook (ediff-quit . winner-undo)
+  :hook
+  ((diff-mode . evil-emacs-state)
+   (ediff-quit . winner-undo))
   :config
   (setq ediff-diff-options "-w"
         ediff-split-window-function 'split-window-horizontally
