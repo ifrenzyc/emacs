@@ -771,6 +771,14 @@ like dimmer-mode
 )
 #+end_src
 
+*** COMMENT vscode-dark-plus-theme
+#+begin_src emacs-lisp :tangle yes
+(use-package vscode-dark-plus-theme
+  ;; :after solaire-mode
+  :config
+  (load-theme 'vscode-dark-plus t))
+#+end_src
+
 *** COMMENT zenburn-theme
 *About:* 
 #+begin_src emacs-lisp :tangle yes
