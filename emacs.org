@@ -940,13 +940,16 @@ Use fixed pitch where it's sensible
 *** nyan-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package nyan-mode
+  ;; :demand t
+  :after doom-modeline
   :init
   (setq nyan-animate-nyancat t
         nyan-wavy-trail t
         ;; nyan-bar-length 40
         )
+  :config
   (nyan-mode)
-  :config (nyan-start-animation))
+  (nyan-start-animation))
 #+end_src
 
 *** battery
@@ -964,7 +967,7 @@ Use fixed pitch where it's sensible
 - [[https://github.com/manateelazycat/awesome-tab][GitHub - manateelazycat/awesome-tab: Emacs package to provide out-of-the-box ...]]
 #+begin_src emacs-lisp :tangle yes
 (use-package centaur-tabs
-  :commands (centaur-tabs-mode)
+  ;; :commands (centaur-tabs-mode)
   :config
   (setq centaur-tabs-style "bar"
         centaur-tabs-height 32
@@ -1231,7 +1234,7 @@ makes sure you don’t lose track of your cursor when jumping around a buffer.
 #+begin_src emacs-lisp :tangle yes
 (use-package pangu-spacing
   :config
-  (global-pangu-spacing-mode 1)
+  (global-pangu-spacing-mode t)
   ;; :hook
   ;; ;; 针对 org-mode 和 markdown-mode，插入真正的空格字符
   ;; (org-mode . (lambda ()
@@ -1466,6 +1469,8 @@ https://github.com/tarsius/keycast
   ;; (evil-visual-state-map "\C-y" 'yank)
   ;; (evil-insert-state-map "\C-e" 'end-of-line)
   :config
+  (global-evil-leader-mode +1)
+  (evil-mode)
   ;; (OPTIONAL) Shift width for evil-mode users
   ;; For the vim-like motions of ">>" and "<<".
   ;; (setq-default evil-shift-width 4)
@@ -4783,7 +4788,7 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
   :after treemacs magit)
 #+end_src
 
-*** COMMENT lsp-treemacs
+*** lsp-treemacs
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-treemacs
   :after treemacs lsp
@@ -6583,7 +6588,7 @@ e.g. =<s=
 *About:* UTF-8 bullets for org-mode.
 - [[https://github.com/sabof/org-bullets][GitHub - sabof/org-bullets]]
 - [[https://github.com/integral-dw/org-superstar-mode][GitHub - integral-dw/org-superstar-mode: Make org-mode stars a little more super]]
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 ;; Prettify UI
 (use-package org-bullets
   :if (char-displayable-p ?⚫)
@@ -6594,8 +6599,41 @@ e.g. =<s=
   (setq org-bullets-bullet-list '("⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫")))
 #+end_src
 
+#+begin_src emacs-lisp :tangle yes
+(use-package org-superstar
+  :hook (org-mode . org-superstar-mode)
+  :custom
+  ;; Make leading stars truly invisible, by rendering them as spaces!
+  (org-superstar-leading-bullet ?\s)
+  (org-superstar-leading-fallback ?\s)
+  (org-superstar-special-todo-items nil)
+  (org-superstar-headline-bullets-list
+   '("⚫"
+     "⚫"
+     "⚫"
+     "⚫"
+     "⚫"
+     "⚫"
+     "⚫"
+     "⚫"))
+  (org-superstar-item-bullet-alist
+   '((?* . ?☯)
+     (?+ . ?✚)
+     (?- . ?▶)))
+  )
+#+end_src
+
 ** org-link-beautify
 - https://github.com/stardiviner/org-link-beautify
+
+** Auto-show Markup Symbols
+This package makes it much easier to edit Org documents when org-hide-emphasis-markers is turned on.
+It temporarily shows the emphasis markers around certain markup elements when you place your cursor
+inside of them. No more fumbling around with = and * characters!
+#+begin_src emacs-lisp :tangle yes
+(use-package org-appear
+  :hook (org-mode . org-appear-mode))
+#+end_src
 
 ** COMMENT org-pretty-tags
 #+begin_src emacs-lisp :tangle yes
@@ -9886,6 +9924,22 @@ Automatic chmod +x
 #+end_src
 
 ** COMMENT Common Lisp
+Here are packages that are useful across different Lisp and Scheme implementations.
+#+begin_src emacs-lisp :tangle yes
+(use-package lispy
+  :hook ((emacs-lisp-mode . lispy-mode)
+         (scheme-mode . lispy-mode)))
+
+;; (use-package evil-lispy
+;;   :hook ((lispy-mode . evil-lispy-mode)))
+
+(use-package lispyville
+  :hook ((lispy-mode . lispyville-mode))
+  :config
+  (lispyville-set-key-theme '(operators c-w additional
+                              additional-movement slurp/barf-cp
+                              prettify))) 
+#+end_src
 
 ** COMMENT Emacs Lisp
 #+begin_src emacs-lisp :tangle yes
@@ -10425,6 +10479,14 @@ brew install multimarkdown
 (use-package docker-compose-mode
   :config
   (add-to-list 'auto-mode-alist '("docker-compose[^/]*\\.yml\\'" . docker-compose-mode)))
+#+end_src
+
+** vimrc-mode
+#+begin_src emacs-lisp :tangle yes
+(use-package vimrc-mode
+  :mode (".vimrc\\'" . vimrc-mode)
+  :config
+  (add-to-list 'org-src-lang-modes '("viml" . vimrc)))
 #+end_src
 
 ** k8s
