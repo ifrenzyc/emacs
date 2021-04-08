@@ -4762,8 +4762,10 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
   (:map treemacs-mode-map
         ("j" . treemacs-next-line)
         ("k" . treemacs-previous-line)
+        ("SPC" . (lambda () (interactive) (treemacs-visit-node-no-split t)))  ;; similar to neotree-quick-look
         ("H" . hydra-move-splitter-left-2x)
         ("L" . hydra-move-splitter-right-2x))
+
   ;; (:map treemacs-mode-map
   ;;       ([mouse-1]   . treemacs-single-click-expand-action))
   )
