@@ -1271,20 +1271,21 @@ https://github.com/davidshepherd7/electric-operator
         which-key-idle-delay 0.2))
 #+end_src
 
-** COMMENT keycast
-NOT WORK!!!
+** keycast
 https://github.com/tarsius/keycast
 #+begin_src emacs-lisp :tangle yes
 (use-package keycast
   :config
-  (turn-on-keycast)
-  (defun turn-on-keycast ()
-    (add-to-list 'global-mode-string '("" mode-line-keycast " "))
-    )
+  ;; This works with doom-modeline, inspired by this comment:
+  ;; https://github.com/tarsius/keycast/issues/7#issuecomment-627604064
+  (define-minor-mode keycast-mode
+    "Show current command and its key binding in the mode line."
+    :global t
+    (if keycast-mode
+        (add-hook 'pre-command-hook 'keycast--update t)
+        (remove-hook 'pre-command-hook 'keycast--update)))
 
-  (defun turn-off-keycast ()
-    (setq global-mode-string (delete '("" mode-line-keycast " ") global-mode-string))
-    ))
+  (add-to-list 'global-mode-string '("" mode-line-keycast " ")))
 #+end_src
 
 ** general
