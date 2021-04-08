@@ -5637,7 +5637,7 @@ winner-mode 是一个全局的 minor mode，它的主要功能是记录窗体的
 #+begin_src emacs-lisp :tangle yes
 (use-package ace-window
   :init
-  (setq aw-keys '(?h ?j ?k ?l ?y ?u ?i ?o ?p)
+  (setq ;; aw-keys '(?h ?j ?k ?l ?y ?u ?i ?o ?p)
         aw-background nil
         aw-scope 'frame
         aw-dispatch-alist
@@ -5646,7 +5646,7 @@ winner-mode 是一个全局的 minor mode，它的主要功能是记录窗体的
           (?3 aw-split-window-horz "split window horizontally")
           (?x aw-delete-window "delete window")
           (?? aw-show-dispatch-help)))
-  :general
+  :general 
   ("M-o" 'ace-window)
   :config
   (ace-window-display-mode 1))
@@ -6362,7 +6362,7 @@ add view mode keybindings
         ;; org-edit-src-content-indentation 2  ; 设置 org-src 里面的代码自动缩进 2 列
         org-enforce-todo-dependencies t
         org-enforce-todo-checkbox-dependencies t
-        ;; org-hide-emphasis-markers t    ; 隐藏 org-mode 语法中的标记字符
+        org-hide-emphasis-markers t    ; 隐藏 org-mode 语法中的标记字符
         org-image-actual-width (/ (display-pixel-width) 3))
   ;; org-image-actual-width '(400))
 
