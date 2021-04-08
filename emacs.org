@@ -1393,6 +1393,30 @@ https://github.com/tarsius/keycast
    '("SPC" . eval-defun)))
 #+end_src
 
+** undo-tree
+*About:* 
+设置 =evil-undo-system= 参数为 =undo-tree= 时，需要先启用 undo-tree
+#+begin_src emacs-lisp :tangle yes
+(use-package undo-tree
+  :hook
+  ((undo-tree-visualizer-mode . evil-emacs-state))
+  :init
+  (setq undo-tree-auto-save-history t
+        undo-tree-visualizer-diff t
+        undo-tree-visualizer-timestamps t
+        undo-tree-history-directory-alist '(("." . "~/.emacs.d/.cache/undo")))
+  (global-undo-tree-mode t))
+#+end_src
+
+** COMMENT undo-fu
+#+begin_src emacs-lisp :tangle yes
+(use-package undo-fu
+  :config
+  (global-undo-tree-mode -1)
+  (define-key evil-normal-state-map "u" 'undo-fu-only-undo)
+  (define-key evil-normal-state-map "\C-r" 'undo-fu-only-redo))
+#+end_src
+
 ** Evil
 *** evil-collection
 *About:* evil 按键扩展集合
@@ -1416,19 +1440,18 @@ https://github.com/tarsius/keycast
   (setq evil-want-keybinding nil
         evil-want-integration nil
         evil-want-C-u-scroll t
+        evil-want-C-i-jump t
         evil-visual-state-cursor '(hbar . 2) 
         evil-insert-state-cursor '(bar . 2)
-        evil-want-C-i-jump t)
+        evil-respect-visual-line-mode t
+        evil-undo-system 'undo-tree)  ;; undo-fu
   (setq-default evil-want-Y-yank-to-eol t)
-
-  (global-evil-leader-mode +1)
-  (evil-mode)
-  ;; :hook
+  :hook
+  ((evil-local-mode . turn-on-undo-tree-mode))
   ;; ;; 指定哪些 mode 才启用 evil-mode https://github.com/louisch/dotemacs/blob/a354bbf1f9b9854a32353dd65b34557f0e594a1a/personal/package-config.el
   ;; (prog-mode . evil-local-mode)
   ;; (fundamental-mode . evil-local-mode)
   ;; (text-mode . evil-local-mode)
-;; (evil-set-initial-state 'dired-mode 'emacs)
   :general
   ((evil-normal-state-map [escape] 'keyboard-quit)
    (evil-visual-state-map [escape] 'keyboard-quit)
@@ -6192,18 +6215,6 @@ add view mode keybindings
   :hook (dired-mode . auto-revert-mode)
   :config
   (global-auto-revert-mode +1))
-#+end_src
-
-** undo-tree
-*About:* 
-#+begin_src emacs-lisp :tangle yes
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode)
-  (setq undo-tree-auto-save-history t
-        undo-tree-visualizer-diff t
-        undo-tree-visualizer-timestamps t
-        undo-tree-history-directory-alist '(("." . "~/.emacs.d/.cache/undo"))))
 #+end_src
 
 ** Crux
