@@ -1401,8 +1401,6 @@ https://github.com/tarsius/keycast
 设置 =evil-undo-system= 参数为 =undo-tree= 时，需要先启用 undo-tree
 #+begin_src emacs-lisp :tangle yes
 (use-package undo-tree
-  :hook
-  ((undo-tree-visualizer-mode . evil-emacs-state))
   :init
   (setq undo-tree-auto-save-history t
         undo-tree-visualizer-diff t
@@ -1513,8 +1511,15 @@ https://github.com/tarsius/keycast
 
   (dolist (p '((dired-mode . emacs)
                (rg-mode . emacs)
+               (undo-tree-visualizer-mode . emacs)
                (ivy-occur-mode . emacs)
+               (help-mode . emacs)
+               (diff-mode . emacs)
                (treemacs-mode . emacs)
+               (vterm-mode . emacs)
+               (eshell-mode . emacs)
+               (term-mode . emacs)
+               (bufler-list-mode . emacs)
                (org-agenda-mode . emacs)
                (org-brain-visualize-mode . emacs)))
     (evil-set-initial-state (car p) (cdr p)))
@@ -2499,8 +2504,6 @@ https://github.com/dustinlacewell/hera
   :general
   ("C-x b" 'ivy-switch-buffer
    "C-x B" 'ivy-switch-buffer-other-window)
-  :hook
-  ((ivy-occur-mode . evil-emacs-state))
   :custom
   (ivy-count-format "(%d/%d) ")
   (ivy-use-selectable-prompt t)
@@ -6234,8 +6237,6 @@ add view mode keybindings
 (use-package bufler
   ;; :quelpa (bufler :fetcher github :repo "alphapapa/bufler.el"
   ;;                 :files (:defaults (:exclude "helm-bufler.el")))
-  :hook
-  ((bufler-list-mode . evil-emacs-state))
   :config
   (bufler-mode)
   (bufler-workspace-mode)
@@ -9771,6 +9772,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
   ("c" cider-connect "connect")
   ("R" cider-restart "restart")
   ("Q" cider-quit "quit"))
+
 (major-mode-hydra-bind clojure-mode "Load"
   ("k" cider-load-buffer "buffer")
   ("l" cider-load-file "file")
@@ -10593,8 +10595,6 @@ kubernetes
 #+begin_src emacs-lisp :tangle yes
 (use-package eshell
   :ensure nil
-  :hook
-  (eshell-mode . evil-emacs-state)
   :config
   (defun yc/eshell-prompt-function ()
     "My eshell prompt function."
@@ -10631,7 +10631,6 @@ kubernetes
   :hook
   (shell-mode . ansi-color-for-comint-mode-on)
   (term-mode . ansi-term-handle-close)
-  (term-mode . evil-emacs-state)
   (term-mode . (lambda () (linum-mode -1) (yas-minor-mode -1)))
   :init
   (setq shell-pop-window-position "bottom"
@@ -10677,7 +10676,6 @@ brew install libvterm
 (use-package vterm
   :hook
   ((vterm-mode . ansi-term-handle-close)
-   (vterm-mode . evil-emacs-state)
    ;; 为 vterm 单独设置字体，https://emacs-china.org/t/mode/15512
    (vterm-mode . (lambda () (setq buffer-face-mode-face '((:family "Cascadia Code" :height 130)))
                    (buffer-face-mode t))))
@@ -12226,8 +12224,7 @@ https://github.com/justbur/emacs-vdiff
 (use-package ediff
   :ensure nil
   :hook
-  ((diff-mode . evil-emacs-state)
-   (ediff-quit . winner-undo))
+  ((ediff-quit . winner-undo))
   :config
   (setq ediff-diff-options "-w"
         ediff-split-window-function 'split-window-horizontally
