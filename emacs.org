@@ -5475,13 +5475,15 @@ https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#using-a-gr
 ** helpful
 #+begin_src emacs-lisp :tangle yes
 (use-package helpful
-  :hook
-  ((help-mode . evil-emacs-state))
-  :config (progn
-            (bind-key "C-h f" #'helpful-callable)
-            (bind-key "C-h v" #'helpful-variable)
-            (bind-key "C-h k" #'helpful-key)
-            (bind-key "C-h ," #'helpful-at-point)))
+  :pretty-hydra
+  ((:color teal :quit-key "q")
+   ("Helpful"
+    (("f" helpful-callable "callable")
+     ("v" helpful-variable "variable")
+     ("k" helpful-key "key")
+     ("c" helpful-command "command")
+     ("d" helpful-at-point "thing at point"))))
+  :bind ("C-h" . helpful-hydra/body))
 #+end_src
 
 ** COMMENT Help
@@ -5745,8 +5747,10 @@ https://github.com/syohex/emacs-zoom-window
     ("SPC" rotate-layout "rotate")
     ("w"   rotate-window "swap")
     ("1"   delete-other-windows "maximize" :exit t)  ; 暂时不加这个，因为旋转窗口就是因为有多窗口的需要
+    ("j"   (progn (evil-scroll-up 1)) "↓")
+    ("k"   (progn (evil-scroll-down 1)) "↑")
     ("C-g" nil "quit")
-    ("q" nil "quit"))
+    ("q"   nil "quit"))
   (evil-leader/set-key
     "SPC" 'hydra-rotate-window/body)
   )
@@ -8174,15 +8178,12 @@ Visually summarize progress
 ;;   ("h" worf-left "worf-left")
 ;;   ("q" nil))
 
-(major-mode-hydra-bind org-mode "Quit"
-  ("q" nil))
-
 (major-mode-hydra-bind org-mode "Move"
-  ("n" outline-next-visible-heading "next heading")
-  ("p" outline-previous-visible-heading "prev heading")
-  ("N" org-forward-heading-same-level "next heading at same level")
-  ("P" org-backward-heading-same-level "prev heading at same level")
-  ("u" outline-up-heading "up heading")
+  ("n" outline-next-visible-heading "next heading" :color pink)
+  ("p" outline-previous-visible-heading "prev heading" :color pink)
+  ("N" org-forward-heading-same-level "next heading at same level" :color pink)
+  ("P" org-backward-heading-same-level "prev heading at same level" :color pink)
+  ("u" outline-up-heading "up heading" :color pink)
   ("g" org-goto "goto" :exit t))
 
 (major-mode-hydra-bind org-mode "Zoom"
@@ -8193,16 +8194,16 @@ Visually summarize progress
   ("h" worf-left "worf-left"))
 
 (major-mode-hydra-bind org-mode "Shift"
-  ("K" org-move-subtree-up "up")
-  ("J" org-move-subtree-down "down")
-  ("h" org-promote-subtree "promote")
-  ("l" org-demote-subtree "demote"))
+  ("K" org-move-subtree-up "up" :color pink)
+  ("J" org-move-subtree-down "down" :color pink)
+  ("h" org-promote-subtree "promote" :color pink)
+  ("l" org-demote-subtree "demote" :color pink))
 
 (major-mode-hydra-bind org-mode "Travel"
-  ("p" org-backward-heading-same-level "backward")
-  ("n" org-forward-heading-same-level "forward")
-  ("j" hydra-org-child-level "to child")
-  ("k" hydra-org-parent-level "to parent")
+  ("p" org-backward-heading-same-level "backward" :color pink)
+  ("n" org-forward-heading-same-level "forward" :color pink)
+  ("j" hydra-org-child-level "to child" :color pink)
+  ("k" hydra-org-parent-level "to parent" :color pink)
   ("a" hydra-org-goto-first-sibling "first sibling")
   ("e" hydra-org-goto-last-sibling "last sibling"))
 
@@ -8216,6 +8217,10 @@ Visually summarize progress
 (major-mode-hydra-bind org-mode "Toggles"
   ("C-l" yc/org-toggle-link-display "link")
   ("C-i" org-toggle-inline-images "image"))
+
+(major-mode-hydra-bind org-mode "Quit"
+  ("C-g" nil "quit")
+  ("q" nil "quit"))
 
 (defhydra hydra-org (:color red :columns 3)
   "Org Mode Movements"
@@ -9311,6 +9316,13 @@ Go 语言开发环境设置。
    "M-["        'pop-tag-mark
    "C-S-F"      'gofmt
    "M-<return>" 'godef-describe)
+  :mode-hydra
+  ((:title "Go Commands")
+   ("Doc"
+    (("d" godoc-at-point "doc at point"))
+    "Imports"
+    (("ia" go-import-add "add")
+     ("ir" go-remove-unused-imports "cleanup"))))
   :config
   ;;                (setq go-mode-map
   ;; (let ((m (make-sparse-keymap)))
@@ -9973,7 +9985,24 @@ Here are packages that are useful across different Lisp and Scheme implementatio
       ;; Fix `use-pacakge' indentation.
       (use-package . 1)))
   (pcase-dolist (`(,sym . ,spec) cm/correct-indentation-list)
-    (put sym 'common-lisp-indent-function-for-elisp spec)))
+    (put sym 'common-lisp-indent-function-for-elisp spec))
+
+  (major-mode-hydra-define emacs-lisp-mode nil
+    ("Eval"
+     (("b" eval-buffer "buffer")
+      ("e" eval-defun "defun")
+      ("r" eval-region "region"))
+     "REPL"
+     (("I" ielm "ielm"))
+     "Test"
+     (("t" ert "prompt")
+      ("T" (ert t) "all")
+      ("F" (ert :failed) "failed"))
+     "Doc"
+     (("d" helpful-at-point "thing-at-point")
+      ("f" describe-function "function")
+      ("v" describe-variable "variable")
+      ("i" info-lookup-symbol "info lookup")))))
 #+end_src
 
 ** COMMENT Javascript
@@ -10477,10 +10506,15 @@ brew install multimarkdown
   ("D" pandoc-docx "docx")
   ("H" pandoc-html "html")
   ("P" pandoc-pdf "pdf")
-  ("t" pandoc-clean "trash non-md"))
+  ("T" pandoc-clean "trash non-md"))
+
+(major-mode-hydra-bind markdown-mode "Preview"
+  ("p" markdown-preview-mode "toggle preview")
+  ("o" markdown-preview-open-browser "open in browser"))
 
 (major-mode-hydra-bind markdown-mode "Quit"
-  ("q" nil))
+  ("q" nil "quit")
+  ("C-g" nil "quit"))
 #+end_src
 
 ** dockerfile
