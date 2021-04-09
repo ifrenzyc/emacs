@@ -10402,6 +10402,18 @@ brew install multimarkdown
   (markdown-mode-map "C-c C-f" 'markdownfmt-format-buffer))
 #+end_src
 
+*** markdown-preview-mode
+#+begin_src emacs-lisp :tangle yes
+(use-package markdown-preview-mode
+  :after markdown-mode
+  :config
+  (add-to-list 'markdown-preview-javascript "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
+
+  (setq markdown-preview-stylesheets
+        (list (concat "https://github.com/dmarcotte/github-markdown-preview/"
+                      "blob/master/data/css/github.css"))))
+#+end_src
+
 *** edit-indirect
 #+begin_src emacs-lisp :tangle yes
 (use-package edit-indirect
@@ -12308,14 +12320,14 @@ https://github.com/justbur/emacs-vdiff
 markdown preview
 - [[https://github.com/seagle0128/grip-mode][GitHub - seagle0128/grip-mode]]
 #+begin_src sh
-pip3 install grip
+pip install grip
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
 (use-package grip-mode
   :commands (grip-mode)
   :quelpa (grip-mode :fetcher github :repo "seagle0128/grip-mode")
-  :ensure-system-package (grip . "pip3 install grip")
+  :ensure-system-package (grip . "pip install grip")
   :bind (:map markdown-mode-command-map
               ("g" . grip-mode))
   :config
