@@ -614,7 +614,6 @@ M-x all-the-icons-install-fonts
 *** all-the-icons-ibuffer
 #+begin_src emacs-lisp :tangle yes
 (use-package all-the-icons-ibuffer
-  :ensure t
   :init (all-the-icons-ibuffer-mode 1))
 #+end_src
 
@@ -742,7 +741,6 @@ like dimmer-mode
   ;; (load-theme 'doom-nord-light t)
   ;; (load-theme 'doom-spacegrey t)
   ;; (load-theme 'doom-wilmersdorf t)
-  ;; (load-theme 'modus-vivendi t)
   :config
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -761,7 +759,7 @@ like dimmer-mode
 )
 #+end_src
 
-*** modus-theme
+*** COMMENT modus-theme
 #+begin_src emacs-lisp :tangle yes
 (use-package modus-themes
   :demand t
@@ -771,12 +769,25 @@ like dimmer-mode
 )
 #+end_src
 
-*** COMMENT vscode-dark-plus-theme
+*** vscode-dark-plus-theme
 #+begin_src emacs-lisp :tangle yes
 (use-package vscode-dark-plus-theme
   ;; :after solaire-mode
+  :demand t
+  :custom
+  (vscode-dark-plus-box-org-todo nil)
   :config
   (load-theme 'vscode-dark-plus t))
+#+end_src
+
+*** COMMENT tron-legacy-theme
+#+begin_src emacs-lisp :tangle yes
+(use-package tron-legacy-theme
+  :custom
+  (tron-legacy-theme-vivid-cursor t)
+  (tron-legacy-theme-softer-bg t)
+  :config
+  (load-theme 'tron-legacy t))
 #+end_src
 
 *** COMMENT zenburn-theme
@@ -962,12 +973,21 @@ Use fixed pitch where it's sensible
   (setq fancy-battery-show-percentage t))
 #+end_src
 
-** centaur-tabs 
+** COMMENT centaur-tabs 
 - [[https://github.com/ema2159/centaur-tabs][GitHub - ema2159/centaur-tabs: Emacs plugin aiming to become an aesthetic, mo...]]
 - [[https://github.com/manateelazycat/awesome-tab][GitHub - manateelazycat/awesome-tab: Emacs package to provide out-of-the-box ...]]
 #+begin_src emacs-lisp :tangle yes
 (use-package centaur-tabs
   ;; :commands (centaur-tabs-mode)
+  ;; :hook
+  ;; (after-init . centaur-tabs-mode)
+  :custom
+  (centaur-tabs-projectile-buffer-group-calc t)
+  ;; (centaur-tabs-enable-buffer-reordering)
+  ;; (setq centaur-tabs-adjust-buffer-order t)
+  ;; (centaur-tabs-change-fonts "arial" 160)
+  (uniquify-separator "/")
+  (uniquify-buffer-name-style 'forward)
   :config
   (setq centaur-tabs-style "bar"
         centaur-tabs-height 32
@@ -978,12 +998,6 @@ Use fixed pitch where it's sensible
         centaur-tabs-set-bar 'under
         x-underline-at-descent-line t)
   (centaur-tabs-headline-match)
-  ;; (centaur-tabs-enable-buffer-reordering)
-  ;; (setq centaur-tabs-adjust-buffer-order t)
-  (centaur-tabs-mode t)
-  (setq uniquify-separator "/")
-  ;; (centaur-tabs-change-fonts "arial" 160)
-  (setq uniquify-buffer-name-style 'forward)
   (defun centaur-tabs-buffer-groups ()
     "`centaur-tabs-buffer-groups' control buffers' group rules.
 
@@ -1313,6 +1327,7 @@ https://github.com/tarsius/keycast
 (general-create-definer yc/leader-keys
   ;; :states '(normal motion visual)
   :states '(normal motion visual insert emacs)
+  :keymaps 'override
   :prefix "SPC"
   :non-normal-prefix "s-SPC")
 ;; :prefix "C-c C-g")
@@ -1320,7 +1335,7 @@ https://github.com/tarsius/keycast
 ;; :prefix "<SPC>")
 (general-create-definer yc/leader-keys-major-mode
   :states '(normal motion visual insert emacs)
-  ;; :keymaps 'override
+  :keymaps 'override
   :prefix "SPC m"
   :non-normal-prefix "s-SPC m"
   ;; :prefix "C-c C-g m")
@@ -1427,7 +1442,17 @@ https://github.com/tarsius/keycast
   :init
   (setq evil-want-keybinding nil
         evil-collection-company-use-tng nil
-        evil-want-integration nil))
+        evil-want-integration nil)
+  :config
+  (evil-collection-init 'compile)
+  (evil-collection-init 'info)
+  (evil-collection-init 'custom)
+  (evil-collection-init 'dired)
+  (evil-collection-init 'minibuffer)
+  (evil-collection-init 'flycheck)
+  (evil-collection-init 'xref)
+  (evil-collection-init 'magit)
+  (evil-collection-init 'which-key))
 #+end_src
 
 *** config
@@ -1514,11 +1539,15 @@ https://github.com/tarsius/keycast
                (undo-tree-visualizer-mode . emacs)
                (ivy-occur-mode . emacs)
                (help-mode . emacs)
+               (helpful-mode . emacs)
+               (profiler-report-mode . emacs)
                (diff-mode . emacs)
+               (xref-mode . emacs)
                (treemacs-mode . emacs)
                (vterm-mode . emacs)
                (eshell-mode . emacs)
                (term-mode . emacs)
+               (lsp-ui-imenu . emacs)
                (bufler-list-mode . emacs)
                (org-agenda-mode . emacs)
                (org-brain-visualize-mode . emacs)))
@@ -1683,32 +1712,72 @@ https://github.com/laishulu/evil-pinyin
   )
 #+end_src
 
-*** COMMENT evil-indent-plus
+*** evil-indent-plus
 *About:* 代码缩进按键绑定
+evil-indent-plus defines text objects for block of code that has same/higher indentation.
 - [[https://github.com/TheBB/evil-indent-plus][GitHub - TheBB/evil-indent-plus]]
 #+begin_src emacs-lisp :tangle yes
 (use-package evil-indent-plus
   :after evil
-  :config
+  ;; :config
   ;; bind evil-indent-plus text objects
-  (evil-indent-plus-default-bindings))
+  ;; (evil-indent-plus-default-bindings)
+  :general
+  (evil-inner-text-objects-map "i" 'evil-indent-plus-i-indent)
+  (evil-outer-text-objects-map "i" 'evil-indent-plus-a-indent)
+  (evil-inner-text-objects-map "I" 'evil-indent-plus-i-indent-up)
+  (evil-outer-text-objects-map "I" 'evil-indent-plus-a-indent-up)
+  (evil-inner-text-objects-map "J" 'evil-indent-plus-i-indent-up-down)
+  (evil-outer-text-objects-map "J" 'evil-indent-plus-a-indent-up-down)
+)
 #+end_src
 
-*** COMMENT evil-lion
+*** evil-lion
 *About:* 
 @see - https://github.com/edkolev/evil-lion
-
-*** COMMENT evil-matchit
-*About:* 快速在匹配的代码块分隔符跳转，按键 =%= ，比如 html 里面同级的 ~<div>~ ~</div>~ 。
-- [[https://github.com/redguardtoo/evil-matchit][GitHub - redguardtoo/evil-matchit]]
+evil-lion defines an alignment operator.
 #+begin_src emacs-lisp :tangle yes
-(use-package evil-matchit
-  :after evil
-  :config
-  (global-evil-matchit-mode 1))
+(use-package evil-lion
+  :general
+  (general-nvmap "ga" 'evil-lion-left)
+  (general-nvmap "gA" 'evil-lion-right))
 #+end_src
 
 *** COMMENT evil-better-visual-line
+
+*** evil-textobj-line
+evil-textobj-line defines text objects for a single line.
+#+begin_src emacs-lisp :tangle yes
+(use-package evil-textobj-line
+  :after evil)
+#+end_src
+
+*** evil-quickscope
+This package emulates [[https://github.com/unblevable/quick-scope][quick_scope.vim by Brian Le]]. It highlights targets for evil-mode’s f,F,t,T keys, allowing for quick navigation within a line with no additional mappings.
+
+GitHub: https://github.com/blorbx/evil-quickscope
+
+[[file:./screenshots/evil-quickscope.gif]]
+
+#+begin_src emacs-lisp :tangle yes
+(use-package evil-quickscope
+  :after evil
+  ;; :hook
+  ;; (prog-mode . turn-on-evil-quickscope-always-mode)
+  :general
+  (general-nvmap "gz" 'evil-quickscope-find-char)
+  (general-nvmap "gZ" 'evil-quickscope-find-char-backward)
+)
+#+end_src
+
+*** evil-traces
+#+begin_src emacs-lisp :tangle yes
+(use-package evil-traces
+  :hook
+  (after-init . evil-traces-mode)
+  :config
+  (evil-traces-use-diff-faces))
+#+end_src
 
 *** COMMENT evil-easymotion
 #+begin_src emacs-lisp :tangle yes
@@ -1716,7 +1785,18 @@ https://github.com/laishulu/evil-pinyin
   :after evil)
 #+end_src
 
-*** COMMENT evil-visualstar
+*** evil-matchit
+*About:* 快速在匹配的代码块分隔符跳转，按键 =%= ，比如 html 里面同级的 ~<div>~ ~</div>~ 。
+evil-matchit is the port of, well, matchit. It also provides two text objects, namely a% and i%.
+- [[https://github.com/redguardtoo/evil-matchit][GitHub - redguardtoo/evil-matchit]]
+#+begin_src emacs-lisp :tangle yes
+(use-package evil-matchit
+  :after evil
+  :config
+  (global-evil-matchit-mode t))
+#+end_src
+
+*** evil-visualstar
 *About:* 通过 =*= ， =#= 快速查找选中的代码
 This allows me to easily start a * or # search from a visual selection.
 #+begin_src emacs-lisp :tangle yes
@@ -1726,7 +1806,22 @@ This allows me to easily start a * or # search from a visual selection.
   (global-evil-visualstar-mode t))
 #+end_src
 
-*** COMMENT evil-surround
+*** evil-args
+evil-args defines a new textobj for function arguments, and some other helpful functions.
+#+begin_src emacs-lisp :tangle yes
+(use-package evil-args
+  :after evil
+  :general
+  (evil-inner-text-objects-map "," 'evil-inner-arg)
+  (evil-outer-text-objects-map "," 'evil-outer-arg)
+  (general-nmap "]," 'evil-forward-arg)
+  (general-nmap "[," 'evil-backward-arg)
+  (general-mmap "]," 'evil-forward-arg)
+  (general-mmap "[," 'evil-backward-arg)
+  (general-nmap "go" 'evil-jump-out-args))
+#+end_src
+
+*** evil-surround
 *About:* 快速给选中的代码块加上引号或者括号，这个与 smartparens 有一些重复。
 @see - https://github.com/emacs-evil/evil-surround
 - [[https://github.com/casouri/isolate][GitHub - casouri/isolate: Surrounding magics, extensible]]
@@ -1734,7 +1829,7 @@ This allows me to easily start a * or # search from a visual selection.
 (use-package evil-surround
   :after evil
   :init
-  (global-evil-surround-mode 1))
+  (global-evil-surround-mode t))
 #+end_src
 
 *** evil-anzu
@@ -1750,8 +1845,18 @@ This allows me to easily start a * or # search from a visual selection.
 
 *** COMMENT evil-mc & evil-mc-extras
 
-*** COMMENT evil-number
-*About:* 
+*** evil-numbers
+evil-numbers takes c-a back (and can be mapped to different states!).
+
+#+begin_src emacs-lisp :tangle yes
+(use-package evil-numbers
+  :after evil
+  :general
+  (general-nvmap "C-a" 'evil-numbers/inc-at-pt)
+  (general-nvmap "C-S-a" 'evil-numbers/dec-at-pt))
+  #+end_src
+
+*** evil-fringe-mark
 
 *** COMMENT evil-vimish-fold
 
@@ -1846,12 +1951,14 @@ This allows me to easily start a * or # search from a visual selection.
   "jk"   'avy-goto-char
   "jl"   'avy-goto-line
   "jb"   'counsel-bookmark
-  "jx"   '(:ignore t :which-key "lsp") 
-  "jxd"  'lsp-find-definition
-  "jxr"  'lsp-find-references
-  "jxh"  'lsp-ui-doc-show
-  "jxi"  'lsp-goto-implementation
-  "jxt"  'lsp-goto-type-definition
+  "l"    '(:ignore t :which-key "lsp") 
+  "ld"   'lsp-find-definition
+  "lr"   'lsp-find-references
+  "lh"   'lsp-ui-doc-show
+  "li"   'lsp-goto-implementation
+  "lt"   'lsp-goto-type-definition
+  "ls"   'lsp-ivy-workspace-symbol
+  "lS"   'lsp-ivy-global-workspace-symbol
   "u"    '(:ignore t :which-key "Undo/Redo")
   "uu"   'undo-tree-visualize
   "k"    '(:ignore t :which-key "lisp")
@@ -2495,7 +2602,6 @@ https://github.com/dustinlacewell/hera
 #+begin_src emacs-lisp :tangle yes
 (use-package flx  ;; Improves sorting for fuzzy-matched results
   :after ivy
-  :defer t
   :init
   (setq ivy-flx-limit 10000))
 
@@ -2504,6 +2610,12 @@ https://github.com/dustinlacewell/hera
   :general
   ("C-x b" 'ivy-switch-buffer
    "C-x B" 'ivy-switch-buffer-other-window)
+  :bind
+  (([remap switch-to-buffer] . ivy-switch-buffer)
+   ([remap switch-to-bufer-other-window] . ivy-switch-buffer-other-window))
+  :hook
+  (minibuffer-setup . yc--minibuffer-setup-hook)
+  (minibuffer-exit . yc--minibuffer-exit-hook)
   :custom
   (ivy-count-format "(%d/%d) ")
   (ivy-use-selectable-prompt t)
@@ -2513,15 +2625,11 @@ https://github.com/dustinlacewell/hera
   (ivy-mode 1)
 
   ;; @see - [[http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/][Why are you changing gc-cons-threshold?]]
-  (defun my-minibuffer-setup-hook ()
+  (defun yc--minibuffer-setup-hook ()
     (setq gc-cons-threshold most-positive-fixnum))
 
-  (defun my-minibuffer-exit-hook ()
-    (setq gc-cons-threshold 16777216))
-
-  (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
-  (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
-  )
+  (defun yc--minibuffer-exit-hook ()
+    (setq gc-cons-threshold 16777216)))
 #+end_src
 
 *** ivy-rich
@@ -2543,6 +2651,16 @@ https://github.com/casouri/ivy-filthy-rich
   (setq ivy-rich-path-style 'abbreviate)
   (setq ivy-rich-display-transformers-list
         '(ivy-switch-buffer
+          (:columns
+           ((ivy-rich-candidate (:width 30)) ; return the candidate itself
+            (ivy-rich-switch-buffer-size (:width 7)) ; return the buffer size
+            (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right)); return the buffer indicators
+            (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))          ; return the major mode info
+            (ivy-rich-switch-buffer-project (:width 30 :face success))             ; return project name using `projectile'
+            (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))  ; return file path relative to project root or `default-directory' if project is nil
+           :predicate
+           (lambda (cand) (get-buffer cand)))
+          ivy-switch-buffer-other-window
           (:columns
            ((ivy-rich-candidate (:width 30)) ; return the candidate itself
             (ivy-rich-switch-buffer-size (:width 7)) ; return the buffer size
@@ -2582,6 +2700,7 @@ https://github.com/casouri/ivy-filthy-rich
 
   :config
   (ivy-rich-mode t)
+  (ivy-rich-project-root-cache-mode t)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
   )
 #+end_src
@@ -4661,11 +4780,14 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
              treemacs-filewatch-mode
              treemacs-fringe-indicator-mode
              treemacs-git-mode)
-  :config
+  :hook
   ;; init treemacs in emacs keys;
-  (add-hook 'treemacs-mode-hook 'evil-normalize-keymaps)
-  (evil-set-initial-state 'treemacs-mode 'emacs)
-
+  (treemacs-mode . evil-normalize-keymaps)
+  (treemacs-mode . (lambda ()
+                (setq-local truncate-lines nil)
+                (setq-local word-wrap nil)
+                ))
+  :config
   (setq treemacs-collapse-dirs                 (if (treemacs--find-python3) 3 0)
         treemacs-deferred-git-apply-delay      0.5
         treemacs-display-in-side-window        t
@@ -4805,6 +4927,8 @@ https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace
   :after treemacs lsp
   :bind (:map lsp-mode-map
               ("M-9" . lsp-treemacs-errors-list))
+  :init
+  (lsp-treemacs-sync-mode t)
   :config
   (with-no-warnings
          (when (require 'all-the-icons nil t)
@@ -5103,7 +5227,8 @@ company-backends 的设置逻辑：[[https://emacs.stackexchange.com/questions/1
 *About:* 
 在 MacOS 下使用 posframe 时，Emacs 全屏状态下的问题：https://emacs-china.org/t/topic/4662/132
 #+begin_src emacs-lisp :tangle yes
-(use-package posframe)
+(use-package posframe
+  :demand t)
 
 (use-package company-posframe
   :after (company posframe)
@@ -5231,6 +5356,9 @@ M-x company-tabnine-install-binary
         yas-prompt-functions '(yas-ido-prompt)
         yas-snippet-dir (expand-file-name "snippets" user-emacs-directory))
   (yas-global-mode t))
+
+(use-package yasnippet-snippets
+  :after yasnippet)
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -5481,6 +5609,7 @@ https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#using-a-gr
     (("f" helpful-callable "callable")
      ("v" helpful-variable "variable")
      ("k" helpful-key "key")
+     ("m" describe-mode "mode")
      ("c" helpful-command "command")
      ("d" helpful-at-point "thing at point"))))
   :bind ("C-h" . helpful-hydra/body))
@@ -5543,20 +5672,78 @@ _v_ariable
 
 ** COMMENT eldoc
 *About:* 
-
 #+begin_src emacs-lisp :tangle yes
 (use-package eldoc
   :ensure nil
+  :diminish
   :delight eldoc-mode
   :init
   (setq eldoc-idle-delay 0.1
         eldoc-echo-area-use-multiline-p nil)
-  (eldoc-mode 1)
-  :hook
-  (prog-mode . turn-on-eldoc-mode))
+  :config
+  ;; Display `eldoc' in child frame
+  (with-no-warnings
+    (defvar eldoc-posframe-buffer "*eldoc-posframe-buffer*"
+      "The posframe buffer name use by eldoc-posframe.")
+
+    (defvar eldoc-posframe-hide-posframe-hooks
+      '(pre-command-hook post-command-hook focus-out-hook)
+      "The hooks which should trigger automatic removal of the posframe.")
+
+    (defvar eldoc-posframe-delay 0.2
+      "Delay seconds to display `eldoc'.")
+
+    (defvar-local eldoc-posframe--timer nil)
+
+    (defun eldoc-posframe-hide-posframe ()
+      "Hide messages currently being shown if any."
+      (when eldoc-posframe--timer
+        (cancel-timer eldoc-posframe--timer))
+
+      (posframe-hide eldoc-posframe-buffer)
+      (dolist (hook eldoc-posframe-hide-posframe-hooks)
+        (remove-hook hook #'eldoc-posframe-hide-posframe t)))
+
+    (defun eldoc-posframe-show-posframe (str &rest args)
+      "Display STR with ARGS."
+      (when eldoc-posframe--timer
+        (cancel-timer eldoc-posframe--timer))
+
+      (posframe-hide eldoc-posframe-buffer)
+      (dolist (hook eldoc-posframe-hide-posframe-hooks)
+        (add-hook hook #'eldoc-posframe-hide-posframe nil t))
+
+      (setq eldoc-posframe--timer
+            (run-with-idle-timer
+             eldoc-posframe-delay nil
+             (lambda ()
+               (when str
+                 (posframe-show
+                  eldoc-posframe-buffer
+                  :string (apply #'format str args)
+                  :postion (point)
+                  :poshandler #'posframe-poshandler-point-bottom-left-corner-upward
+                  :left-fringe 8
+                  :right-fringe 8
+                  :internal-border-width 1
+                  :internal-border-color (face-attribute 'font-lock-comment-face :foreground)
+                  :background-color (face-background 'tooltip)))))))
+
+    (add-hook 'emacs-lisp-mode-hook
+              (lambda ()
+                (setq-local eldoc-message-function #'eldoc-posframe-show-posframe)))))
 #+end_src
 
-*** eldoc-box
+*** COMMENT eldoc-box
+#+begin_src emacs-lisp :tangle yes
+(use-package eldoc-box
+  :after eldoc
+  :custom
+  (eldoc-box-clear-with-C-g t)
+  :hook
+  ((eldoc-mode . eldoc-box-hover-mode)
+   (eldoc-mode . eldoc-box-hover-at-point-mode)))
+#+end_src
 
 ** subword
 #+begin_src emacs-lisp :tangle yes
@@ -5701,7 +5888,7 @@ eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工�
     (workgroups-mode 1))
 #+end_src
 
-** perspective
+** COMMENT perspective
 #+begin_src emacs-lisp :tangle yes
 (use-package perspective
   :demand t
@@ -5747,10 +5934,13 @@ https://github.com/syohex/emacs-zoom-window
     ("SPC" rotate-layout "rotate")
     ("w"   rotate-window "swap")
     ("1"   delete-other-windows "maximize" :exit t)  ; 暂时不加这个，因为旋转窗口就是因为有多窗口的需要
-    ("j"   (progn (evil-scroll-up 1)) "↓")
-    ("k"   (progn (evil-scroll-down 1)) "↑")
+    ("j"   (progn (evil-scroll-down 1)) "↓")
+    ("k"   (progn (evil-scroll-up 1)) "↑")
     ("C-g" nil "quit")
     ("q"   nil "quit"))
+  :general
+  (general-nmap "C-w ." 'hydra-rotate-window/body)
+  :config
   (evil-leader/set-key
     "SPC" 'hydra-rotate-window/body)
   )
@@ -5911,7 +6101,7 @@ https://github.com/syohex/emacs-zoom-window
    "C-M->" 'writeroom-increase-width
    "C-M-=" 'writeroom-adjust-width)
   :config
-  (add-to-list 'writeroom-global-effects 'xah-fly-keysvisual-line-mode)
+  ;; (add-to-list 'writeroom-global-effects 'xah-fly-keysvisual-line-mode)
   (setq writeroom-restore-window-config t
         writeroom-width 119))
 #+end_src
@@ -6244,7 +6434,8 @@ add view mode keybindings
   :config
   (bufler-mode)
   (bufler-workspace-mode)
-  (bufler-tabs-mode))
+  ;; (bufler-tabs-mode)
+)
 #+end_src
 
 ** autorevert
@@ -6594,12 +6785,12 @@ e.g. =<s=
 ;;    ((t (:background "#F2E4BE"))))
 ;;  )
 
-(custom-set-faces
- '(org-block
-   ((t (:foreground "#184034" :background "#F0F0F0"))))
- '(org-block-background
-   ((t (:foreground "#184034" :background "#F0F0F0"))))
- )
+;; (custom-set-faces
+;;  '(org-block
+;;    ((t (:foreground "#184034" :background "#F0F0F0"))))
+;;  '(org-block-background
+;;    ((t (:foreground "#184034" :background "#F0F0F0"))))
+;;  )
 #+end_src
 
 ** org-bullets
@@ -7592,7 +7783,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
 
 ** COMMENT org-brain
 #+begin_src emacs-lisp :tangle yes
-(use-package org-brain :ensure t
+(use-package org-brain
   :init
   (setq org-brain-path org-directory)
   ;; For Evil users
@@ -8557,6 +8748,51 @@ file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
   )
 #+end_src
 
+*** COMMENT transient-posframe
+Display transient in child frame
+#+begin_src emacs-lisp :tangle yes
+(use-package transient-posframe
+  :diminish
+  :custom-face
+  (transient-posframe-border ((t (:background ,(face-foreground 'font-lock-comment-face)))))
+  :hook (after-init . transient-posframe-mode)
+  :init
+  (setq transient-posframe-border-width 3
+        transient-posframe-min-height 21
+        transient-posframe-min-width nil
+        transient-posframe-parameters
+        `((background-color . ,(face-background 'tooltip))))
+  :config
+  (add-hook 'after-load-theme-hook
+            (lambda ()
+              (posframe-delete-all)
+              (custom-set-faces
+               `(transient-posframe-border
+                 ((t (:background ,(face-foreground 'font-lock-comment-face))))))
+              (setf (alist-get 'background-color transient-posframe-parameters)
+                    (face-background 'tooltip))))
+
+  (with-no-warnings
+    (defun my-transient-posframe--show-buffer (buffer _alist)
+      "Show BUFFER in posframe and we do not use _ALIST at this period."
+      (when (posframe-workable-p)
+        (let ((posframe (posframe-show
+                         buffer
+			             :font transient-posframe-font
+			             :position (point)
+			             :poshandler transient-posframe-poshandler
+			             :background-color (face-attribute 'transient-posframe :background nil t)
+			             :foreground-color (face-attribute 'transient-posframe :foreground nil t)
+			             :min-width (or transient-posframe-min-width (round (* (frame-width) 0.62)))
+			             :min-height transient-posframe-min-height
+                         :lines-truncate t
+			             :internal-border-width transient-posframe-border-width
+			             :internal-border-color (face-attribute 'transient-posframe-border :background nil t)
+			             :override-parameters transient-posframe-parameters)))
+          (frame-selected-window posframe))))
+    (advice-add #'transient-posframe--show-buffer :override #'my-transient-posframe--show-buffer)))
+#+end_src
+
 *** magit-todo
 #+begin_src emacs-lisp :tangle yes
 (use-package magit-todos
@@ -8752,11 +8988,38 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   :hook
   ((lsp . lsp-lens-mode)
    ;; (prog-mode . lsp-deferred)
-   (typescript-mode . lsp-deferred)
    (lsp-mode . lsp-enable-which-key-integration))
    ;; (lsp-after-open . lsp-enable-imenu)
   :bind (:map lsp-mode-map
               ("C-c C-d" . lsp-describe-thing-at-point))
+  :custom
+  (lsp-auto-guess-root t)       ; Detect project root
+  (lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
+  (lsp-log-io t)
+  (flymake-fringe-indicator-position 'right-fringe)
+  ;; (setq lsp-eldoc-enable-hover nil
+  ;;       lsp-signature-auto-activate nil
+  ;;       lsp-signature-render-documentation nil)
+  (lsp-headerline-breadcrumb-enable t)
+  (exec-path (append exec-path '("~/.nvm/versions/node/v14.11.0/bin/")))
+  (lsp-sqls-server "/usr/local/Cellar/go/1.15.8/libexec/bin/sqls")
+
+  ;; lsp-xml 依赖 eclipse/lemminx 项目，工程： ~/src/opensource/lemminx
+  ;; 需要将 jar 包拷贝 emacs 下，并指定路径
+  ;; 参考 https://emacs-lsp.github.io/lsp-mode/page/lsp-xml/
+  (lsp-xml-jar-file "/Users/yangc/.emacs.d/bin/org.eclipse.lemminx-uber.jar")
+
+  ;; @see https://emacs-lsp.github.io/lsp-mode/page/performance
+  (read-process-output-max (* 1024 1024)) ;; 1mb
+  ;; ;; Performance tweaks, see
+  ;; ;; https://github.com/emacs-lsp/lsp-mode#performance
+  ;; (setq gc-cons-threshold 100000000
+  ;;       ;; lsp-file-watch-threshold 1000
+  ;;       lsp-enable-semantic-highlighting t
+  ;;       lsp-idle-delay 0.500
+  ;;       lsp-prefer-capf t
+  ;;       lsp-diagnostics-modeline-scope :project    ;; :project/:workspace/:file
+  ;; (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
   :custom-face
   (lsp-headerline-breadcrumb-path-error-face
    ((t :underline (:style wave :color ,(face-foreground 'error))
@@ -8783,33 +9046,6 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
    ((t :inherit lsp-headerline-breadcrumb-symbols-face
        :underline (:style wave :color ,(face-foreground 'success)))))
   :init 
-  (setq lsp-auto-guess-root t       ; Detect project root
-        lsp-prefer-flymake nil      ; Use lsp-ui and flycheck
-        lsp-log-io t
-        flymake-fringe-indicator-position 'right-fringe)
-  ;; (setq lsp-eldoc-enable-hover nil
-  ;;       lsp-signature-auto-activate nil
-  ;;       lsp-signature-render-documentation nil)
-  :config
-  (setq lsp-headerline-breadcrumb-enable t)
-  (setq exec-path (append exec-path '("~/.nvm/versions/node/v14.11.0/bin/")))
-  (setq lsp-sqls-server "/usr/local/Cellar/go/1.15.8/libexec/bin/sqls")
-
-  ;; lsp-xml 依赖 eclipse/lemminx 项目，工程： ~/src/opensource/lemminx
-  ;; 需要将 jar 包拷贝 emacs 下，并指定路径
-  ;; 参考 https://emacs-lsp.github.io/lsp-mode/page/lsp-xml/
-  (setq lsp-xml-jar-file "/Users/yangc/.emacs.d/bin/org.eclipse.lemminx-uber.jar")
-  ;; ;; Performance tweaks, see
-  ;; ;; https://github.com/emacs-lsp/lsp-mode#performance
-  ;; (setq gc-cons-threshold 100000000
-  ;;       read-process-output-max (* 1024 1024) ;; 1mb
-  ;;       ;; lsp-file-watch-threshold 1000
-  ;;       lsp-enable-semantic-highlighting t
-  ;;       lsp-idle-delay 0.500
-  ;;       lsp-prefer-capf t
-  ;;       lsp-diagnostics-modeline-scope :project    ;; :project/:workspace/:file
-  ;;       read-process-output-max (* 1024 1024)) ;; 1mb
-  ;; (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
   (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
   )
 
@@ -8891,24 +9127,69 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   )
 #+end_src
 
-*** COMMENT lsp-ivy
+*** lsp-ivy
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-ivy
   :after lsp-mode
   :bind (:map lsp-mode-map
-              ([remap xref-find-apropos] . lsp-ivy-workspace-symbol)))
+              ([remap xref-find-apropos] . lsp-ivy-workspace-symbol))
+  :config
+  (with-no-warnings
+    (defvar lsp-ivy-symbol-kind-icons
+      `(,(all-the-icons-material "find_in_page" :height 0.9 :v-adjust -0.15) ; Unknown - 0
+        ,(all-the-icons-faicon "file-o" :height 0.9 :v-adjust -0.02) ; File - 1
+        ,(all-the-icons-material "view_module" :height 0.9 :v-adjust -0.15 :face 'all-the-icons-lblue) ; Module - 2
+        ,(all-the-icons-material "view_module" :height 0.95 :v-adjust -0.15 :face 'all-the-icons-lblue) ; Namespace - 3
+        ,(all-the-icons-octicon "package" :height 0.9 :v-adjust -0.15) ; Package - 4
+        ,(all-the-icons-material "settings_input_component" :height 0.9 :v-adjust -0.15 :face 'all-the-icons-orange) ; Class - 5
+        ,(all-the-icons-faicon "cube" :height 0.9 :v-adjust -0.02 :face 'all-the-icons-purple) ; Method - 6
+        ,(all-the-icons-faicon "wrench" :height 0.8 :v-adjust -0.02) ; Property - 7
+        ,(all-the-icons-octicon "tag" :height 0.95 :v-adjust 0 :face 'all-the-icons-lblue) ; Field - 8
+        ,(all-the-icons-faicon "cube" :height 0.9 :v-adjust -0.02 :face 'all-the-icons-lpurple) ; Constructor - 9
+        ,(all-the-icons-material "storage" :height 0.9 :v-adjust -0.15 :face 'all-the-icons-orange) ; Enum - 10
+        ,(all-the-icons-material "share" :height 0.9 :v-adjust -0.15 :face 'all-the-icons-lblue) ; Interface - 11
+        ,(all-the-icons-faicon "cube" :height 0.9 :v-adjust -0.02 :face 'all-the-icons-purple) ; Function - 12
+        ,(all-the-icons-octicon "tag" :height 0.95 :v-adjust 0 :face 'all-the-icons-lblue) ; Variable - 13
+        ,(all-the-icons-faicon "cube" :height 0.9 :v-adjust -0.02 :face 'all-the-icons-purple) ; Constant - 14
+        ,(all-the-icons-faicon "text-width" :height 0.9 :v-adjust -0.02) ; String - 15
+        ,(all-the-icons-material "format_list_numbered" :height 0.95 :v-adjust -0.15) ; Number - 16
+        ,(all-the-icons-octicon "tag" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-lblue) ; Boolean - 17
+        ,(all-the-icons-material "view_array" :height 0.95 :v-adjust -0.15) ; Array - 18
+        ,(all-the-icons-octicon "tag" :height 0.9 :v-adjust 0.0 :face 'all-the-icons-blue) ; Object - 19
+        ,(all-the-icons-faicon "key" :height 0.9 :v-adjust -0.02) ; Key - 20
+        ,(all-the-icons-octicon "tag" :height 0.9 :v-adjust 0.0) ; Null - 21
+        ,(all-the-icons-material "format_align_right" :height 0.95 :v-adjust -0.15 :face 'all-the-icons-lblue) ; EnumMember - 22
+        ,(all-the-icons-material "settings_input_component" :height 0.9 :v-adjust -0.15 :face 'all-the-icons-orange) ; Struct - 23
+        ,(all-the-icons-octicon "zap" :height 0.9 :v-adjust 0 :face 'all-the-icons-orange) ; Event - 24
+        ,(all-the-icons-material "control_point" :height 0.9 :v-adjust -0.15) ; Operator - 25
+        ,(all-the-icons-faicon "arrows" :height 0.9 :v-adjust -0.02) ; TypeParameter - 26
+        ))
+
+    (lsp-defun my-lsp-ivy--format-symbol-match
+      ((sym &as &SymbolInformation :kind :location (&Location :uri))
+       project-root)
+      "Convert the match returned by `lsp-mode` into a candidate string."
+      (let* ((sanitized-kind (if (< kind (length lsp-ivy-symbol-kind-icons)) kind 0))
+             (type (elt lsp-ivy-symbol-kind-icons sanitized-kind))
+             (typestr (if lsp-ivy-show-symbol-kind (format "%s " type) ""))
+             (pathstr (if lsp-ivy-show-symbol-filename
+                          (propertize (format " · %s" (file-relative-name (lsp--uri-to-path uri) project-root))
+                                      'face font-lock-comment-face)
+                        "")))
+        (concat typestr (lsp-render-symbol-information sym ".") pathstr)))
+    (advice-add #'lsp-ivy--format-symbol-match :override #'my-lsp-ivy--format-symbol-match)))
 #+end_src
 
-*** COMMENT lsp-sonarlint
+*** lsp-sonarlint
 https://github.com/emacs-lsp/lsp-sonarlint
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-sonarlint
-  :config
-  (setq lsp-sonarlint-html-enabled t)
-  (setq lsp-sonarlint-java-enabled t)
-  (setq lsp-sonarlint-xml-enabled t)
-  (setq lsp-sonarlint-python-enabled t)
-  (setq lsp-sonarlint-javascript-enabled t)) 
+  :custom
+  (lsp-sonarlint-html-enabled t)
+  (lsp-sonarlint-java-enabled t)
+  (lsp-sonarlint-xml-enabled t)
+  (lsp-sonarlint-python-enabled t)
+  (lsp-sonarlint-javascript-enabled t)) 
 #+end_src
 
 *** company-lsp
@@ -8917,11 +9198,16 @@ https://github.com/emacs-lsp/lsp-sonarlint
 #+begin_src emacs-lisp :tangle yes
 (use-package company-lsp
   :after (lsp company-mode)
-  :init
-  (add-to-list 'company-backends 'company-lsp)
+  :custom
+  (company-lsp-enable-snippet t)    ; 开启 yasnippet 支持
+  ;; Disable client-side cache because the LSP server does a better job.
+  (company-transformers nil)
+  (company-lsp-async t)
+  (company-lsp-cache-candidates nil)
+  ;; :init
+  ;; (add-to-list 'company-backends 'company-lsp)
   :config
-  ;; 开启 yasnippet 支持
-  (setq company-lsp-enable-snippet t)
+  (push 'company-lsp company-backends)
   )
 #+end_src
 
@@ -8988,8 +9274,9 @@ https://github.com/emacs-lsp/lsp-sonarlint
          ("M-g i" . dumb-jump-go-prompt)
          ("M-g x" . dumb-jump-go-prefer-external)
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
-  :ensure)
+  :config
+  (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
+  )
 
 (defhydra hydra-dumb-jump (:color blue :columns 3)
   "Dumb Jump"
@@ -9485,7 +9772,7 @@ https://github.com/grafov/go-playground
      "C-c C-j" 'go-direx-pop-to-buffer))
 #+end_src
 
-*** go-eldoc
+*** COMMENT go-eldoc
 #+begin_src emacs-lisp :tangle yes
   (use-package go-eldoc
     :after go-mode
@@ -9871,6 +10158,22 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 
 *** COMMENT keybindings
 
+** Groovy
+#+begin_html
+brew install groovy
+#+end_html
+
+#+begin_src emacs-lisp :tangle yes
+(use-package groovy-mode
+  :custom
+  (groovy-indent-offset 2)
+  (lsp-groovy-server-file "/Users/yangc/src/opensource/groovy-language-server/build/libs/groovy-language-server-all.jar")
+  (lsp-groovy-classpath "/usr/local/opt/groovy/libexec/lib")
+  :hook (groovy-mode . lsp-deferred)
+  :mode (("\\.groovy$" . groovy-mode)
+         ("\\.gradle$" . groovy-mode)))
+#+end_src
+
 ** SQL
 #+begin_src emacs-lisp :tangle yes
 (use-package sql-mode
@@ -10005,45 +10308,14 @@ Here are packages that are useful across different Lisp and Scheme implementatio
       ("i" info-lookup-symbol "info lookup")))))
 #+end_src
 
-** COMMENT Javascript
-*About:* 
-#+begin_src emacs-lisp :tangle yes
-(use-package js2-mode
-  :mode ("\\.js\\'" . js2-mode)
-  :hook
-  (js-mode . js2-minor-mode)
-  :config 
-  (setq js-indent-level 4
-        typescript-indent-level 4))
-#+end_src
-
-*** tern
-#+begin_src emacs-lisp :tangle yes
-(use-package tern
-  :commands tern-mode
-  :hook (js2-mode . tern-mode)
-  :general
-  (tern-mode-keymap
-   "M-."        'tern-find-definition
-   "C-M-."      'tern-find-definition-by-name
-   "M-,"        'tern-pop-find-definition
-   "C-c C-r"    'tern-rename-variable
-   "C-c C-c"    'tern-get-type
-   "C-c C-d"    'tern-get-docs
-   "M-<return>" 'tern-get-docs))
-
-(use-package company-tern
-  :after (tern company)
-  :config (add-to-list 'company-backends 'company-tern))
-#+end_src
-
-** COMMENT Typesciprt & AngularJS 2/4 & Vue.js
+** Typesciprt & AngularJS 2/4 & Vue.js
 *About:* 
 #+begin_src emacs-lisp :tangle yes
 (use-package ng2-mode)
 
 (use-package tide
   :hook
+  (typescript-mode . lsp-deferred)
   (typescript-mode . setup-tide-mode)
   ;; formats the buffer before saving
   (typescript-mode . (lambda ()   ; 保存文件的时候对该源文件做一下 gofmt
@@ -10064,6 +10336,87 @@ Here are packages that are useful across different Lisp and Scheme implementatio
   ;; aligns annotation to the right hand side
   (setq company-tooltip-align-annotations t)
   (setq tide-format-options '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions nil)))
+#+end_src
+
+*** web & html
+*About:* 
+#+begin_src emacs-lisp :tangle yes
+(use-package web-mode
+  :commands web-mode
+  :mode
+  (("\\.phtml\\'" . web-mode)
+   ("\\.tpl\\.php\\'" . web-mode)
+   ("\\.[agj]sp\\'" . web-mode)
+   ("\\.as[cp]x\\'" . web-mode)
+   ("\\.jsx\\'" . web-mode)
+   ("\\.js\\'" . web-mode)
+   ("\\.erb\\'" . web-mode)
+   ("\\.mustache\\'" . web-mode)
+   ("\\.djhtml\\'" . web-mode)
+   ("\\.html?\\'" . web-mode)
+   ("\\.css?\\'" . web-mode))
+  :config ;; Autocomplete end tag when finished writing opening tag
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-enable-css-colorization t
+        web-mode-code-indent-offset 2
+        web-mode-auto-close-style 2
+        web-mode-indent-style 2)
+  :hook
+  (js2-mode . lsp)
+  (web-mode . lsp)
+  (web-mode . company-mode)
+  (web-mode . (lambda ()
+                (when (string-equal "jsx" (file-name-extension buffer-file-name))
+                  (setup-tide-mode))))
+  ;; configure jsx-tide checker to run after your default jsx checker
+  ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+  )
+#+end_src
+
+*About:* 
+GitHub: https://github.com/smihica/emmet-mode
+#+begin_src emacs-lisp :tangle yes
+(use-package emmet-mode
+  :hook
+  ((web-mode . emmet-mode)
+  (vue-mode . emmet-mode)
+  (sgml-mode . emmet-mode)    ; Auto-start on any markup modes
+  (css-mode . emmet-mode))    ; enable Emmet's css abbreviation.
+  :config
+  (setq emmet-expand-jsx-className? t))
+#+end_src
+
+*** COMMENT Javascript
+*About:* 
+#+begin_src emacs-lisp :tangle yes
+(use-package js2-mode
+  :mode ("\\.js\\'" . js2-mode)
+  :hook
+  (js-mode . js2-minor-mode)
+  :config 
+  (setq js-indent-level 4
+        typescript-indent-level 4))
+#+end_src
+
+**** tern
+#+begin_src emacs-lisp :tangle yes
+(use-package tern
+  :commands tern-mode
+  :hook (js2-mode . tern-mode)
+  :general
+  (tern-mode-keymap
+   "M-."        'tern-find-definition
+   "C-M-."      'tern-find-definition-by-name
+   "M-,"        'tern-pop-find-definition
+   "C-c C-r"    'tern-rename-variable
+   "C-c C-c"    'tern-get-type
+   "C-c C-d"    'tern-get-docs
+   "M-<return>" 'tern-get-docs))
+
+(use-package company-tern
+  :after (tern company)
+  :config (add-to-list 'company-backends 'company-tern))
 #+end_src
 
 *** AngluarJS
@@ -10160,30 +10513,6 @@ Here are packages that are useful across different Lisp and Scheme implementatio
   (add-hook 'comint-output-filter-functions 'node-repl-comint-preoutput-filter))
 #+end_src
 
-*** Vue.js
-*About:* 
-#+begin_src emacs-lisp :tangle yes
-(use-package web-mode
-  :mode
-  ("\\.js\\'" . web-mode)
-  ("\\.vue\\'" . web-mode)
-  :hook
-  (js2-mode . lsp)
-  (web-mode . lsp)
-  (web-mode . company-mode))
-
-;; (use-package lsp-javascript-typescript
-;;   :init
-;;   (require 'lsp)
-;;   (require 'lsp-clients)
-;;   :hook
-;;   (js2-mode . lsp)
-;;   (js-mode . lsp-javascript-typescript-enable)
-;;   (js2-mode . lsp-javascript-typescript-enable)
-;;   (rjsx-mode . lsp-javascript-typescript-enable)
-;;   )
-#+end_src
-
 *** vue-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package vue-mode
@@ -10191,7 +10520,7 @@ Here are packages that are useful across different Lisp and Scheme implementatio
   :mode ("\\.vue\\'" . vue-mode)
   :config
   ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
-  (setq mmm-submode-decoration-level 0
+  (setq mmm-submode-decoration-level 2
         vue-html-extra-indent 2
         css-indent-offset 2
         ;; lsp-ui-flycheck-enable nil
@@ -10199,6 +10528,10 @@ Here are packages that are useful across different Lisp and Scheme implementatio
 #+end_src
 
 *** lsp-vue
+#+begin_example
+npm install -g vls
+#+end_example
+
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-vue 
   :after (vue-mode lsp-mode)
@@ -10212,51 +10545,6 @@ Here are packages that are useful across different Lisp and Scheme implementatio
 *** vue-html-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package vue-html-mode)
-#+end_src
-
-** COMMENT web & html
-*About:* 
-#+begin_src emacs-lisp :tangle yes
-(use-package web-mode
-  :commands web-mode
-  :mode
-  (("\\.phtml\\'" . web-mode))
-  (("\\.tpl\\.php\\'" . web-mode))
-  (("\\.[agj]sp\\'" . web-mode))
-  (("\\.as[cp]x\\'" . web-mode))
-  (("\\.jsx\\'" . web-mode))
-  (("\\.erb\\'" . web-mode))
-  (("\\.mustache\\'" . web-mode))
-  (("\\.djhtml\\'" . web-mode))
-  (("\\.html?\\'" . web-mode))
-  (("\\.css?\\'" . web-mode))
-  :config ;; Autocomplete end tag when finished writing opening tag
-  (setq web-mode-markup-indent-offset 2
-        web-mode-css-indent-offset 2
-        web-mode-enable-css-colorization t
-        web-mode-code-indent-offset 2
-        web-mode-auto-close-style 2
-        web-mode-indent-style 2)
-  :hook
-  (web-mode . (lambda ()
-                (when (string-equal "jsx" (file-name-extension buffer-file-name))
-                  (setup-tide-mode))))
-  ;; configure jsx-tide checker to run after your default jsx checker
-  ;;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
-  )
-#+end_src
-
-*About:* 
-GitHub: https://github.com/smihica/emmet-mode
-#+begin_src emacs-lisp :tangle yes
-(use-package emmet-mode
-  :hook
-  ((web-mode . emmet-mode)
-  (vue-mode . emmet-mode)
-  (sgml-mode . emmet-mode)    ; Auto-start on any markup modes
-  (css-mode . emmet-mode))    ; enable Emmet's css abbreviation.
-  :config
-  (setq emmet-expand-jsx-className? t))
 #+end_src
 
 ** JSON
@@ -10540,6 +10828,12 @@ brew install multimarkdown
 (use-package docker-compose-mode
   :config
   (add-to-list 'auto-mode-alist '("docker-compose[^/]*\\.yml\\'" . docker-compose-mode)))
+#+end_src
+
+** jenkinsfile
+jenkins pipeline code
+#+begin_src emacs-lisp :tangle yes
+(use-package jenkinsfile-mode) 
 #+end_src
 
 ** vimrc-mode
@@ -11884,7 +12178,6 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 - newsticker
 #+begin_src emacs-lisp :tangle yes
 (use-package elfeed
-  :ensure t
   :commands elfeed
   :custom
   (elfeed-use-curl t)
@@ -11985,7 +12278,6 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 
 (use-package elfeed-goodies
   :disabled
-  :ensure t
   :config (elfeed-goodies/setup))
 #+end_src
 
@@ -12275,6 +12567,10 @@ https://github.com/justbur/emacs-vdiff
   (setq ediff-diff-options "-w"
         ediff-split-window-function 'split-window-horizontally
         ediff-window-setup-function 'ediff-setup-windows-plain))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;; (use-package evil-ediff) 
 #+end_src
 
 ** View Large Files
