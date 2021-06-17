@@ -11247,7 +11247,7 @@ brew install groovy
   :config
   (setq ejc-org-mode-show-results nil)
   (require 'ejc-company)
-  (push 'ejc-company-backend company-backends)
+  (add-to-list 'company-backends 'ejc-company-backend)
   (add-hook 'ejc-sql-minor-mode-hook
             (lambda ()
               (company-mode t)
