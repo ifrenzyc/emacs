@@ -9738,23 +9738,26 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   (lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
   (lsp-log-io nil)
   ;; 以下这些设置都是考虑性能问题，默认不开启
+  ;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
   (lsp-keep-workspace-alive nil)
-  (lsp-signature-auto-activate nil)
-  (lsp-modeline-code-actions-enable nil)
-  (lsp-modeline-diagnostics-enable nil)
-  (lsp-modeline-workspace-status-enable nil)
   (lsp-enable-file-watchers nil)
   (lsp-enable-folding nil)
   (lsp-enable-symbol-highlighting nil)
   (lsp-enable-text-document-color nil)
   (lsp-enable-indentation nil)
   (lsp-enable-on-type-formatting nil)
+  (lsp-signature-auto-activate nil)
+  (lsp-signature-render-documentation nil)
+  (lsp-modeline-code-actions-enable nil)
+  (lsp-modeline-diagnostics-enable nil)
+  (lsp-modeline-workspace-status-enable nil)
   (lsp-headerline-breadcrumb-enable nil)
   (lsp-headerline-breadcrumb-enable-diagnostics nil)
   (flymake-fringe-indicator-position 'right-fringe)
-  ;; (setq lsp-eldoc-enable-hover nil
-  ;;       lsp-signature-auto-activate nil
-  ;;       lsp-signature-render-documentation nil)
+  (lsp-eldoc-enable-hover nil)
+
+  ;; (lsp-completion-provider nil)
+
   (exec-path (append exec-path '("~/.nvm/versions/node/v14.11.0/bin/")))
   (lsp-sqls-server "/usr/local/opt/go/libexec/bin/sqls")
 
@@ -9960,27 +9963,29 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   (lsp-mode . lsp-ui-mode)
   (lsp-mode . lsp-ui-sideline-mode)
   :init
-  (setq lsp-ui-sideline-show-diagnostics nil
-        lsp-ui-sideline-ignore-duplicate t
-        lsp-ui-doc-position 'top
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-doc-header t
+        lsp-ui-doc-position 'top  ;; at-point
         lsp-ui-doc-delay 0.2   ;; 延迟 2s 再打开 doc 窗口
-        lsp-ui-doc-border (face-foreground 'font-lock-comment-face nil t)
+        ;; lsp-ui-doc-border (face-foreground 'default)
+        lsp-ui-doc-border "orange"  ;; (face-foreground 'font-lock-comment-face nil t)
+        lsp-ui-doc-include-signature t
+        lsp-ui-doc-show-with-cursor nil  ;; disable cursor hover
+        lsp-ui-doc-show-with-mouse nil   ;; disable mouse hover
+
+        lsp-ui-sideline-enable nil
+        lsp-ui-sideline-show-diagnostics nil
+        lsp-ui-sideline-ignore-duplicate t
+        lsp-ui-sideline-show-code-actions nil
+
+        lsp-lens-enable nil
+
         lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
                               ,(face-foreground 'font-lock-string-face)
                               ,(face-foreground 'font-lock-constant-face)
                               ,(face-foreground 'font-lock-variable-name-face)))
   ;; (if (featurep 'xwidget-internal)
   ;;     (setq lsp-ui-doc-use-webkit t))
-  ;; (setq lsp-ui-doc-enable t
-  ;;       lsp-ui-doc-header t
-  ;;       lsp-ui-doc-include-signature t
-  ;;       ;; lsp-ui-doc-border (face-foreground 'default)
-  ;;       lsp-ui-doc-border "orange"
-  ;;       lsp-ui-doc-position 'top
-  ;;       ;; lsp-ui-doc-position 'at-point
-  ;;       lsp-ui-sideline-enable nil
-  ;;       lsp-ui-sideline-ignore-duplicate t
-  ;;       lsp-ui-sideline-show-code-actions t)
   ;; (setq-default lsp-ui-doc-frame-parameters
   ;;               '((left . -1)
   ;;                 (top . -1)
@@ -10508,7 +10513,6 @@ see https://github.com/google/styleguide/blob/gh-pages/google-c-style.el
         ;; lsp-java-references-code-lens-enabled t
         ;; lsp-java-implementations-code-lens-enabled t
 
-        lsp-completion-provider nil
         lsp-java-progress-reports-enabled t
 
         lsp-java-vmargs
