@@ -20,8 +20,9 @@
 
 ;;; Code:
 ;; native-comp
-(setenv "LIBRARY_PATH" "/usr/local/opt/gcc/lib/gcc/10:/usr/local/opt/gcc/lib/gcc/10/gcc/x86_64-apple-darwin20/10.2.0")
+(setenv "LIBRARY_PATH" "/usr/local/opt/gcc/lib/gcc/11:/usr/local/opt/gcc/lib/gcc/11/gcc/x86_64-apple-darwin20/11.1.0")
 (setq comp-async-report-warnings-errors nil)
+(add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache" user-emacs-directory))
 ;; -native-comp
 
 ;; DeferGC
@@ -30,8 +31,18 @@
       inhibit-compacting-font-caches t)
 ;; -DeferGC
 
+;; Increase max-lisp-eval-depth
+(setq max-lisp-eval-depth 3200)
+(setq max-specpdl-size 5000)
+;; -Increase max-lisp-eval-depth
+
 ;; UnsetPES
+;; In Emacs 27+, package initialization occurs before `user-init-file' is
+;; loaded, but after `early-init-file'. Doom handles package initialization, so
+;; we must prevent Emacs from doing it early!
 (setq package-enable-at-startup nil)
+;; Do not allow loading from the package cache (same reason).
+(setq package-quickstart nil)
 ;; -UnsetPES
 
 ;; UnsetFNHA
@@ -46,6 +57,11 @@
 (setq site-run-file nil)
 ;; -UnsetSRF
 
+;; Inhibit resizing frame
+(setq frame-inhibit-implied-resize t
+      frame-resize-pixelwise t)
+;; -Inhibit resizing frame
+
 ;; DisableUnnecessaryInterface
 (menu-bar-mode -1)
 (unless (and (display-graphic-p) (eq system-type 'darwin))
@@ -53,6 +69,9 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(scroll-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
+
+(when (featurep 'ns)
+  (push '(ns-transparent-titlebar . t) default-frame-alist))
 ;; -DisableUnnecessaryInterface
 
 ;;; early-init.el ends here

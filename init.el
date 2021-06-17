@@ -79,7 +79,7 @@
 ;; it's better a lower startup than load an outdated and maybe bugged package
 (eval-and-compile
   (setq load-prefer-newer t
-        package-user-dir "~/.emacs.d/elpa"
+        package-user-dir (expand-file-name "elpa" user-emacs-directory)
         package--init-file-ensured t
         ))
 
@@ -136,7 +136,7 @@
    (plantuml . t)
    (restclient . t)))
 
-(org-babel-load-file (expand-file-name "~/.emacs.d/emacs.org"))
+(org-babel-load-file (expand-file-name "emacs.org" user-emacs-directory))
 
 ;; Keep emacs Custom-settings in separate file
 ;; This keeps your init.el neater and you have the option
