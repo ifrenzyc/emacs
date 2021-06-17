@@ -10229,14 +10229,6 @@ Debug
   ;; automatically trigger the hydra when the program hits a breakpoint
   (add-hook 'dap-stopped-hook
             (lambda (arg) (call-interactively #'dap-hydra)))
-  (dap-register-debug-template "ScheduleApplication"
-                               (list :type "java"
-                                     :request "launch"
-                                     :args ""
-                                     :vmArgs "export JAVA_HOME=$(/usr/libexec/java_home -v 1.8) && mvn -pl onecloud-cd-src-schedule -pl onecloud-cd-src-common -pl onecloud-cd-src-api -pl onecloud-cd-src-controller -pl onecloud-cd-src-data -pl onecloud-cd-src-data -pl onecloud-cd-src-service -am spring-boot:run -Dspring-boot.run.main-class=com.eshore.ScheduleApplication -Dspring-boot.run.jvmArguments=\"-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005\""
-                                     :projectName "khala-cd-src-schedule"
-                                     :mainClass "com.eshore.ScheduleApplication"
-                                     :env '(("dev" . "1"))))
   )
 #+end_src
 
