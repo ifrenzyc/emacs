@@ -9734,7 +9734,8 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
    (lsp-mode . lsp-enable-which-key-integration))
   ;; (lsp-after-open . lsp-enable-imenu)
   :bind (:map lsp-mode-map
-              ("C-c C-d" . lsp-describe-thing-at-point))
+              ("C-c C-d" . lsp-describe-thing-at-point)
+              ("C-c l" . hydra-lsp-map/body))
   :custom
   (lsp-auto-guess-root t)       ; Detect project root
   (lsp-prefer-flymake nil)      ; Use lsp-ui and flycheck
@@ -9883,7 +9884,62 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
       ("w s" lsp-workspace-folders-switch "switch folder"))
      "quit"
      (("q" nil "Quit"))))
+  (pretty-hydra-define hydra-lsp-map
+    (:title (pretty-hydra-title "LSP UI" 'faicon "rocket" :face 'all-the-icons-green)
+            :hint nil :color blue :quit-key "q")
+    ("Formatting"
+     (("= =" lsp-format-buffer "format buffer")
+      ("= r" lsp-format-region "format region"))
+     "Actions"
+     (("a a" lsp-execute-code-action "code actions")
+      ("a h" lsp-document-highlight "highlight symbol")
+      ("a l" lsp-avy-lens "lens"))
+     "Folders"
+     (("F a" lsp-workspace-folders-add "add folder")
+      ("F b" lsp-workspace-blacklist-remove "un-blacklist folder")
+      ("F r" lsp-workspace-folders-remove "remove folder"))
+     "Peeks"
+     (("G g" lsp-ui-peek-find-definitions "peek definitions")
+      ("G i" lsp-ui-peek-find-implementation "peek implementations")
+      ("G r" lsp-ui-peek-find-references "peek references")
+      ("G s" lsp-ui-peek-find-workspace-symbol "peek workspace symbol"))
+     "Goto"
+     (("g a" xref-find-apropos "find symbol in workspace")
+      ("g d" lsp-find-declaration "find declarations") 
+      ("g e" lsp-treemacs-errors-list "show errors")
+      ("g g" lsp-find-definition "find definitions")
+      ("g h" lsp-treemacs-call-hierarchy "call hierarchy")
+      ("g i" lsp-find-implementation "find implementations")
+      ("g r" lsp-find-references "find references")
+      ("g t" lsp-find-type-definition "find type definition"))
+     "Help"
+     (("h g" lsp-ui-doc-glance "glance symbol")
+      ("h h" lsp-describe-thing-at-point "describe symbol at point")
+      ("h s" lsp-signature-activate "signature help"))
+     "Refactoring"
+     (("r o" lsp-organize-imports "organize imports")
+      ("r r" lsp-rename "rename"))
+     "Toggles"
+     (("T D" lsp-modeline-diagnostics-mode "toggle modeline diagnostics")
+      ("T L" lsp-toggle-trace-io "toggle log io")
+      ("T S" lsp-ui-sideline-mode "toggle sideline")
+      ("T T" lsp-treemacs-sync-mode "toggle treemacs integration")
+      ("T a" lsp-modeline-code-actions-mode "toggle modeline code actions")
+      ("T b" lsp-headerline-breadcrumb-mode "toggle breadcrumb")
+      ("T d" lsp-ui-doc-mode "toggle documentation popup")
+      ("T f" lsp-toggle-on-type-formatting "toggle on type formatting")
+      ("T h" lsp-toggle-symbol-highlight "toggle highlighting")
+      ("T l" lsp-lens-mode "toggle lenses")
+      ("T s" lsp-toggle-signature-auto-activate "toggle signature"))
+     "Workspaces"
+     (("w D" lsp-disconnect "disconnect")
+      ("w d" lsp-describe-session)
+      ("w q" lsp-workspace-shutdown "shutdown server")
+      ("w r" lsp-workspace-restart "restart server")
+      ("w s" lsp "start server"))
+     ))
   )
+
 
 ;; (use-package lsp-clients
 ;;   :ensure nil
@@ -9935,6 +9991,9 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
       "code actions" :toggle lsp-ui-sideline-show-code-actions)
      ("s i" (setq lsp-ui-sideline-ignore-duplicate (not lsp-ui-sideline-ignore-duplicate))
       "ignore duplicate" :toggle lsp-ui-sideline-ignore-duplicate))
+    "Breadcrumb"
+    (("b b" (setq lsp-headerline-breadcrumb-enable (not lsp-headerline-breadcrumb-enable))
+      "breadcrumb" :toggle lsp-headerline-breadcrumb-enable))
     "Action"
     (("h" backward-char "←")
      ("j" next-line "↓")
@@ -10032,7 +10091,8 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
 (use-package lsp-ivy
   :after lsp-mode
   :bind (:map lsp-mode-map
-              ([remap xref-find-apropos] . lsp-ivy-workspace-symbol))
+              ([remap xref-find-apropos] . lsp-ivy-workspace-symbol)
+              ("s-l g A" . lsp-ivy-global-workspace-symbol))
   :config
   (with-no-warnings
     (defvar lsp-ivy-symbol-kind-icons
@@ -10082,21 +10142,26 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
 
 *** helm-lsp
 #+begin_src emacs-lisp :tangle yes
-(use-package helm-lsp)
 (use-package helm
   :config (helm-mode))
+(use-package helm-lsp
+  :after lsp-mode
+  :bind (:map lsp-mode-map
+              ("s-l g s" . helm-lsp-workspace-symbol)
+              ("s-l g S" . helm-lsp-global-workspace-symbol))
+)
 #+end_src
 
 *** lsp-sonarlint
 https://github.com/emacs-lsp/lsp-sonarlint
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-sonarlint
-  :custom
-  (lsp-sonarlint-html-enabled t)
-  (lsp-sonarlint-java-enabled t)
-  (lsp-sonarlint-xml-enabled t)
-  (lsp-sonarlint-python-enabled t)
-  (lsp-sonarlint-javascript-enabled t)) 
+  :init
+  (setq lsp-sonarlint-html-enabled t)
+  (setq lsp-sonarlint-java-enabled t)
+  (setq lsp-sonarlint-xml-enabled t)
+  (setq lsp-sonarlint-python-enabled t)
+  (setq lsp-sonarlint-javascript-enabled t)) 
 #+end_src
 
 *** company-lsp
