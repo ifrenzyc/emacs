@@ -1641,6 +1641,7 @@ https://github.com/tarsius/keycast
                (helpful-mode . emacs)
                (profiler-report-mode . emacs)
                (diff-mode . emacs)
+               (color-rg-mode . emacs)
                (xref--xref-buffer-mode . emacs)
                (treemacs-mode . emacs)
                (flycheck-errors-mode . emacs)
