@@ -620,6 +620,8 @@ M-x all-the-icons-install-fonts
 #+begin_src emacs-lisp :tangle yes
 (use-package all-the-icons-ivy
   :after (all-the-icons projectile ivy counsel counsel-projectile)
+  ;; :demand t
+  :hook (after-init . all-the-icons-ivy-setup)
   :config
   (setq all-the-icons-ivy-file-commands
         '(counsel-find-file
@@ -627,25 +629,24 @@ M-x all-the-icons-install-fonts
           counsel-recentf
           counsel-projectile-find-file
           counsel-projectile-find-dir
-          counsel-projectile))
-  (all-the-icons-ivy-setup))
+          counsel-projectile)))
 #+end_src
 
 *** all-the-icons-ivy-rich
 #+begin_src emacs-lisp :tangle yes
 (use-package all-the-icons-ivy-rich
   :demand t
-  :init (all-the-icons-ivy-rich-mode t))
+  :hook (after-init . all-the-icons-ivy-rich-mode))
 #+end_src
 
 *** all-the-icons-ibuffer
 #+begin_src emacs-lisp :tangle yes
 (use-package all-the-icons-ibuffer
   :demand t
-  :init (all-the-icons-ibuffer-mode t)
-  :config
+  :hook (after-init . all-the-icons-ibuffer-mode)
+  :init
   ;; Use human readable file size in ibuffer.
-  (setq  all-the-icons-ibuffer-human-readable-size t))
+  (setq all-the-icons-ibuffer-human-readable-size t))
 #+end_src
 
 ** Dashboard
@@ -1641,7 +1642,6 @@ https://github.com/tarsius/keycast
                (helpful-mode . emacs)
                (profiler-report-mode . emacs)
                (diff-mode . emacs)
-               (color-rg-mode . emacs)
                (xref--xref-buffer-mode . emacs)
                (treemacs-mode . emacs)
                (flycheck-errors-mode . emacs)
@@ -2906,7 +2906,8 @@ https://github.com/casouri/ivy-filthy-rich
 #+begin_src emacs-lisp :tangle yes
 (use-package ivy-rich
   :demand t
-  :hook ((counsel-projectile-mode . ivy-rich-mode) ; MUST after `counsel-projectile'
+  :hook ((after-init . ivy-rich-mode)
+         (counsel-projectile-mode . ivy-rich-mode) ; MUST after `counsel-projectile'
          (ivy-rich-mode . (lambda ()
                             "Use abbreviate in `ivy-rich-mode'."
                             (setq ivy-virtual-abbreviate
@@ -2966,7 +2967,6 @@ https://github.com/casouri/ivy-filthy-rich
         )
 
   :config
-  (ivy-rich-mode t)
   (ivy-rich-project-root-cache-mode t)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
   )
