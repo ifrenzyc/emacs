@@ -7,6 +7,7 @@ auto-save-list
 bookmarks
 company-statistics-cache.el
 custom.el
+persp-confs/
 elpa/
 emacs.el
 emojis/
