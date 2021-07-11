@@ -5612,8 +5612,8 @@ company-backends 的设置逻辑：[[https://emacs.stackexchange.com/questions/1
   :hook (after-init . global-company-mode)
   :bind
   (("C-." . company-complete)
-   :map company-mode-map
-   ("<backtab>" . company-yasnippet)
+   ;; :map company-mode-map
+   ;; ("<backtab>" . company-yasnippet)
    :map company-active-map
    ("<tab>" . company-complete-selection)
    ("C-n" . company-select-next)
@@ -7384,6 +7384,15 @@ Kill & Mark things easily
                                 (?T string-up-to-char-backward ""))))
 #+end_src
 
+** bookmark
+#+begin_src emacs-lisp :tangle yes
+(use-package bookmark
+  :ensure nil
+  :config
+  ;; disable bookmark face after org-capture
+  (setq bookmark-fontify nil))
+#+end_src
+
 ** Crux
 *About:* A Collection of Ridiculously Useful eXtensions for Emacs.
 [[https://github.com/bbatsov/crux][GitHub - bbatsov/crux]]
@@ -7486,6 +7495,7 @@ Kill & Mark things easily
   (;; NOTE: keymaps specified with :keymaps must be quoted
    :map org-mode-map
    ("C-c C-j" . counsel-org-goto)
+   ("<backtab>" . org-shifttab)
    )
   :config
   (setq org-pretty-entities t
