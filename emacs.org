@@ -10062,7 +10062,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
   ;; lsp-xml 依赖 eclipse/lemminx 项目，工程： ~/src/opensource/lemminx
   ;; 需要将 jar 包拷贝 emacs 下，并指定路径
   ;; 参考 https://emacs-lsp.github.io/lsp-mode/page/lsp-xml/
-  (lsp-xml-jar-file "/Users/yangc/.emacs.d/bin/org.eclipse.lemminx-uber.jar")
+  (lsp-xml-jar-file (expand-file-name "bin/org.eclipse.lemminx-uber.jar" user-emacs-directory))
   
   ;; @see https://emacs-lsp.github.io/lsp-mode/page/performance
   (read-process-output-max (* 1024 1024)) ;; 1mb
