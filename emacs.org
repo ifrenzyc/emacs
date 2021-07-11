@@ -12446,7 +12446,7 @@ kubernetes
     (when (ignore-errors (get-buffer-process (current-buffer)))
       (set-process-sentinel (get-buffer-process (current-buffer))
                             (lambda (proc change)
-                              (when (string-match "\\(finished\\|exited\\)"
+                              (when (string-match "\\(finished\\|exited\\|exit\\)"
                                                   change)
                                 (kill-buffer (process-buffer proc))
                                 (when (> (count-windows) 1)
@@ -12474,12 +12474,27 @@ brew install libvterm
 #+begin_src emacs-lisp :tangle yes
 (use-package vterm
   :hook
-  ((vterm-mode . ansi-term-handle-close)
-   ;; 为 vterm 单独设置字体，https://emacs-china.org/t/mode/15512
+  (;; 为 vterm 单独设置字体，https://emacs-china.org/t/mode/15512
    (vterm-mode . (lambda () (setq buffer-face-mode-face '((:family "Cascadia Code" :height 130)))
-                   (buffer-face-mode t))))
+                   (buffer-face-mode t)))
+   ;; (vterm-mode . ansi-term-handle-close)
+   ;; (vterm-exit . delete-window)
+   ;; (vterm-exit . (lambda ()
+   ;;                 (let* ((buffer (current-buffer))
+   ;;                        (window (get-buffer-window buffer)))
+   ;;                   (when window
+   ;;                     (delete-window window))
+   ;;                   (kill-buffer buffer))))
+   )
   :custom ((vterm-buffer-name-string "vterminal %s")
+           (vterm-kill-buffer-on-exit t)
            (vterm-max-scrollback 100000))
+  :init
+  ;; kill vterm buffers when exiting with C-d
+  (defun my/vterm-exit-kill-buffer (buffer event)
+    (kill-buffer buffer)
+    (delete-window))
+  (setq vterm-exit-functions '(my/vterm-exit-kill-buffer))
   )
 #+end_src
 
