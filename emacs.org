@@ -1474,6 +1474,8 @@ https://github.com/tarsius/keycast
   )
 #+end_src
 
+** objed: https://github.com/clemera/objed
+
 ** COMMENT meow
 - [[https://github.com/DogLooksGood/meow][GitHub - DogLooksGood/meow: Modal Editing On Wheel]]
 #+begin_src emacs-lisp :tangle yes
@@ -14060,7 +14062,8 @@ https://github.com/justbur/emacs-vdiff
 *About:* 列出 Emacs 触发的函数或按键历史操作列表
 - [ ] *TODO* 看把 command-log-mode 的字体单独调小
 
-@see - https://github.com/lewang/command-log-mode
+- https://github.com/lewang/command-log-mode
+- https://github.com/michael-heerdegen/interaction-log.el
 
 *keybindings:*
 | keybindings | function                      | 描述                           |
