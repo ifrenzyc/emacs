@@ -15,10 +15,7 @@
 
 ;;; Code:
 
-;; Garbage collection
-;; Set garbage collect high to speed up startup
-(let ((gc-cons-threshold most-positive-fixnum)
-      (ad-redefinition-action 'accept)))     ; Ignore advice warnings
+(let ((ad-redefinition-action 'accept)))     ; Ignore advice warnings
 
 ;;;;;;;;;;;;;;
 ;; Straight ;;

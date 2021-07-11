@@ -26,6 +26,8 @@
 ;; -native-comp
 
 ;; DeferGC
+;; Garbage collection
+;; Set garbage collect high to speed up startup
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6
       inhibit-compacting-font-caches t)

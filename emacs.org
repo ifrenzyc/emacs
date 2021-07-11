@@ -14068,7 +14068,30 @@ Start server
   :config (emacs-restore-frames t))
 #+end_src
 
-** Reset GC
+** Garbage Collection
+Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
+- https://gitlab.com/koral/gcmh
+- https://emacs-china.org/t/emacs-10/17716
+#+begin_src emacs-lisp :tangle yes
+(use-package gcmh
+  :demand t
+  ;; :init
+  ;; (setq gcmh-verbose             t
+  ;;       gcmh-lows-cons-threshold #x800000
+  ;;       gcmh-high-cons-threshold most-positive-fixnum
+  ;;       gcmh-idle-delay          3600)
+  :config
+  (gcmh-mode t))
+#+end_src
+
+** COMMENT Benchmark
+#+begin_src emacs-lisp :tangle yes
+(use-package benchmark-init
+  :demand t
+  :hook ((after-init . benchmark-init/deactivate)))
+#+end_src
+
+** COMMENT Reset GC
 *About:* 参考 doom-emacs 调整 GC：[[https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast][How is Doom’s startup so fast?]]
 @see - [[http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/][Why are you changing gc-cons-threshold?]]
 #+begin_src emacs-lisp :tangle yes
