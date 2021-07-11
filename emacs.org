@@ -828,6 +828,7 @@ like dimmer-mode
 *** COMMENT cyberpunk-theme
 #+begin_src emacs-lisp :tangle yes
 (use-package cyberpunk-theme
+  :demand t
   :config
   (load-theme 'cyberpunk t))
 #+end_src
@@ -972,9 +973,9 @@ like dimmer-mode
 - https://github.com/manateelazycat/awesome-tray
 #+begin_src emacs-lisp :tangle yes
 (use-package awesome-tray
-  :quelpa (awesome-tray :fetcher github :repo "manateelazycat/awesome-tray")
-  :config
-  (awesome-tray-mode 1))
+  :demand t
+  :hook (after-init . awesome-tray-mode)
+  :quelpa (awesome-tray :fetcher github :repo "manateelazycat/awesome-tray"))
 #+end_src
 
 *** COMMENT mixed-pitch
