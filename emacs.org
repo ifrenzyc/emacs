@@ -68,34 +68,10 @@ macOS switch meta key.
         ns-function-modifier 'hyper))
 #+end_src
 
-** COMMENT straight use-package
-- [[https://github.com/raxod502/straight.el][GitHub - raxod502/straight.el]]
-#+begin_src emacs-lisp :tangle yes
-(use-package straight)
-#+end_src
-
 ** use-package-ensure-system-package
 #+begin_src emacs-lisp :tangle yes
 (use-package use-package-ensure-system-package
   :demand t)
-#+end_src
-
-** quelpa-use-package
-- [[https://github.com/quelpa/quelpa-use-package][GitHub - quelpa/quelpa-use-package: repo moved to framagit.org, please report...]]
-#+begin_src emacs-lisp :tangle yes
-(use-package quelpa
-  :demand t
-  :init
-  (setq quelpa-checkout-melpa-p nil
-        quelpa-update-melpa-p nil
-        quelpa-self-upgrade-p nil))
-
-(use-package quelpa-use-package
-  :demand t
-  :config
-  ;; Handle the `use-package-always-ensure` setting
-  (quelpa-use-package-activate-advice)
-)
 #+end_src
 
 ** COMMENT async
@@ -584,7 +560,7 @@ This behaviour in general emulates the scrolloff option in vim.
 #+begin_src emacs-lisp :tangle yes
 (if (fboundp 'display-line-numbers-mode)
     (use-package display-line-numbers
-      :ensure nil
+      :straight nil
       :hook (prog-mode . display-line-numbers-mode))
   (use-package linum-off
     :demand
@@ -775,6 +751,7 @@ like dimmer-mode
   ;; (load-theme 'doom-spacegrey t)
   ;; (load-theme 'doom-wilmersdorf t)
   (load-theme 'doom-monokai-octagon t)
+  ;; (load-theme 'doom-zenburn t)
   :config
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -879,7 +856,7 @@ like dimmer-mode
 
 *** winum
 #+begin_src emacs-lisp :tangle yes
-(require 'winum)
+(use-package winum)
 #+end_src
 
 *** doom-modeline
@@ -975,7 +952,7 @@ like dimmer-mode
 (use-package awesome-tray
   :demand t
   :hook (after-init . awesome-tray-mode)
-  :quelpa (awesome-tray :fetcher github :repo "manateelazycat/awesome-tray"))
+  :straight (:host github :repo "manateelazycat/awesome-tray"))
 #+end_src
 
 *** COMMENT mixed-pitch
@@ -987,7 +964,7 @@ Use fixed pitch where it's sensible
 *** COMMENT emacs-mini-modeline
 #+begin_src emacs-lisp :tangle yes
 (use-package mini-modeline
-  :quelpa (mini-modeline :fetcher github :repo "kiennq/emacs-mini-modeline")
+  :straight (:host github :repo "kiennq/emacs-mini-modeline")
   :config
   (mini-modeline-mode t))
 #+end_src
@@ -1005,7 +982,7 @@ Use fixed pitch where it's sensible
   )
 #+end_src
 
-*** COMMENT nyan-mode
+*** nyan-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package nyan-mode
   :demand t
@@ -1289,7 +1266,7 @@ makes sure you don’t lose track of your cursor when jumping around a buffer.
 #+begin_src emacs-lisp :tangle yes
 ;; Pulse current line
 (use-package pulse
-  :ensure nil
+  :straight nil
   :custom-face
   (pulse-highlight-start-face ((t (:inherit region))))
   (pulse-highlight-face ((t (:inherit region))))
@@ -1594,7 +1571,6 @@ https://github.com/tarsius/keycast
   ;; (evil-visual-state-map "\C-y" 'yank)
   ;; (evil-insert-state-map "\C-e" 'end-of-line)
   :config
-  (global-evil-leader-mode +1)
   (evil-mode)
   ;; (OPTIONAL) Shift width for evil-mode users
   ;; For the vim-like motions of ">>" and "<<".
@@ -1866,7 +1842,7 @@ Bound to "h"
 
 #+begin_src emacs-lisp :tangle yes
   (use-package evil-textobj-syntax
-    :quelpa (evil-textobj-syntax :fetcher github :repo "laishulu/evil-textobj-syntax" :files ("*.el"))
+    :straight (:host github :repo "laishulu/evil-textobj-syntax" :files ("*.el"))
     :after evil)
 #+end_src
 
@@ -1889,7 +1865,7 @@ evil-args defines a new textobj for function arguments, and some other helpful f
 #+begin_src emacs-lisp :tangle yes
 (use-package evil-textobj-column
   :after evil
-  :quelpa (evil-textobj-column :fetcher github :repo "noctuid/evil-textobj-column" :files ("*.el"))
+  :straight (:host github :repo "noctuid/evil-textobj-column" :files ("*.el"))
   :general
   (evil-outer-text-objects-map
    "k" 'evil-textobj-column-word
@@ -1901,7 +1877,7 @@ evil motion through CamelCase words
 #+begin_src emacs-lisp :tangle yes
 (use-package evil-plugins
   :after evil
-  :quelpa (evil-plugins :fetcher github :repo "tarao/evil-plugins" :files ("evil-little-word.el" "evil-textobj-between.el"))
+  :straight (:host github :repo "tarao/evil-plugins" :files ("evil-little-word.el" "evil-textobj-between.el"))
   :config
   (require 'evil-little-world)
   (require 'evil-textobj-between)
@@ -1965,7 +1941,7 @@ https://github.com/laishulu/evil-pinyin
 
 #+begin_src emacs-lisp :tangle yes
 (use-package evil-pinyin
-  :quelpa (evil-pinyin :fetcher github :repo "laishulu/evil-pinyin")
+  :straight (:host github :repo "laishulu/evil-pinyin")
   :init
   (setq evil-pinyin-with-search-rule 'exclam)  ; 'exclam 感叹号开启，即: /!hy 可以匹配“汉语”
   :config
@@ -2428,7 +2404,7 @@ evil-numbers takes c-a back (and can be mapped to different states!).
 
 #+begin_src emacs-lisp :tangle yes
 (use-package hydra-posframe
-  :quelpa (hydra-posframe :fetcher github :repo "Ladicle/hydra-posframe")
+  :straight (:host github :repo "Ladicle/hydra-posframe")
   :after (hydra posframe)
   :hook (after-init . hydra-posframe-enable)
   :custom-face (hydra-posframe-face ((t (:background "DarkSlateBlue"))))
@@ -2444,7 +2420,7 @@ https://github.com/jerrypnz/major-mode-hydra.el
 #+begin_src emacs-lisp :tangle yes
 ;; Major mode keys managed by a pretty hydra
 (use-package major-mode-hydra
-  :quelpa (major-mode-hydra :fetcher github :repo "jerrypnz/major-mode-hydra.el")
+  :straight (:host github :repo "jerrypnz/major-mode-hydra.el")
   :init
   (progn
     (autoload 'pretty-hydra-define "pretty-hydra" nil nil 'macro)
@@ -3145,7 +3121,7 @@ https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 ** isearch
 #+begin_src emacs-lisp :tangle yes
 (use-package isearch
-  :ensure nil
+  :straight nil
   :no-require t
   :commands swiper-from-isearch
   :bind (("M-s ." . isearch-forward-symbol-at-point)
@@ -3629,8 +3605,8 @@ https://github.com/ericdanan/counsel-projectile
 #+begin_src emacs-lisp :tangle yes
 (use-package snails
   :load-path "lisp/snails"
-  ;; :quelpa (snails
-  ;;          :fetcher github
+  ;; :straight (
+  ;;          :host github
   ;;          :repo "manateelazycat/snails"
   ;;          :files ("snails.el" "snails-*.el" "fzf-search.sh" "google-suggestion.sh"))
   :commands snails
@@ -3800,7 +3776,7 @@ https://github.com/ericdanan/counsel-projectile
 - fido-mode: https://www.reddit.com/r/emacs/comments/iaqlpk/fidomode_in_emacs_27/
 #+begin_src emacs-lisp :tangle yes
 (use-package ido
-  :ensure nil
+  :straight nil
   :demand t
   :init
   (setq ido-use-virtual-buffers t
@@ -3827,7 +3803,6 @@ https://github.com/ericdanan/counsel-projectile
 
 (use-package flx  ;; Improves sorting for fuzzy-matched results
   :after ido
-  :defer t
   :init
   (setq ivy-flx-limit 10000))
 
@@ -3924,7 +3899,7 @@ Version 2015-05-16"
 选中文本后，直接输入就可以，省去了删除操作。这在其他文本编辑器里都是标配，建议打开。
 #+begin_src emacs-lisp :tangle yes
 (use-package delsel
-  :ensure nil
+  :straight nil
   :hook (after-init . delete-selection-mode))
 #+end_src
 
@@ -3933,7 +3908,8 @@ buffer's Imenu
 - https://github.com/rnkn/side-hustle
 - https://github.com/bmag/imenu-list
 #+begin_src emacs-lisp :tangle yes
-(use-package side-hustle)
+  (use-package side-hustle
+    :straight (:host github :repo "rnkn/side-hustle"))
 #+end_src
 
 ** beginend
@@ -4131,7 +4107,7 @@ Edit multiple regions in the same way simultaneously
 ** Hippie Expand
 #+begin_src emacs-lisp :tangle yes
 (use-package hippie-expand
-  :ensure nil
+  :straight nil
   :init
   (setq hippie-expand-try-functions-list
 	  '(
@@ -4213,8 +4189,7 @@ https://github.com/manateelazycat/color-rg
 #+begin_src emacs-lisp :tangle yes
 (use-package color-rg
   :ensure-system-package (rg . "brew install ripgrep")
-  :quelpa (color-rg
-           :fetcher github
+  :straight (:host github
            :repo "manateelazycat/color-rg"
            :files ("color-rg.el"))
   ;; :commands (color-rg-search-input
@@ -4280,7 +4255,7 @@ anzu 依赖这个 mdi
 @see - [[https://stackoverflow.com/questions/23798021/disabling-evil-mode-for-nav-in-emacs-or-any-read-only-buffers][Disabling evil-mode for Nav in Emacs? Or any read-only buffers? - Stack Overflow]]
 #+begin_src emacs-lisp :tangle yes
 (use-package dired
-  :ensure nil
+  :straight nil
   ;; :after evil
   :hook (dired-mode . dired-hide-details-mode)
   :init
@@ -4583,14 +4558,14 @@ Restore cursor to file position in previous editing session.
 参考文档：[[https://www.emacswiki.org/emacs/SavePlace#toc1][SavePlace]]
 #+begin_src emacs-lisp :tangle yes
 (use-package saveplace
-  :ensure nil
+  :straight nil
   :hook (after-init . save-place-mode))
 #+end_src
 
 ** savehist
 #+begin_src emacs-lisp :tangle yes
 (use-package savehist
-  :ensure nil
+  :straight nil
   :hook (after-init . savehist-mode)
   :init (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
               history-length 1000
@@ -4624,7 +4599,7 @@ https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
 Highlight matching parens
 #+begin_src emacs-lisp :tangle yes
 (use-package paren
-  :ensure nil
+  :straight nil
   :hook (after-init . show-paren-mode)
   :init (setq show-paren-when-point-inside-paren t
               show-paren-when-point-in-periphery t)
@@ -4814,7 +4789,7 @@ https://github.com/abo-abo/hydra/wiki/Smartparens
 - https://emacs-china.org/t/awesome-pair-el/7558/39
 #+begin_src emacs-lisp :tangle yes
 (use-package awesome-pair
-  :quelpa (awesome-pair :fetcher github :repo "manateelazycat/awesome-pair")
+  :straight (:host github :repo "manateelazycat/awesome-pair")
   :config
   (dolist (hook (list
                  'c-mode-common-hook
@@ -5943,7 +5918,7 @@ company-backends 的设置逻辑：[[https://emacs.stackexchange.com/questions/1
 - [[https://emacs-china.org/t/company/6322/186][基于 Company 编写了一个带中文注释的英文补全助手 - Emacs-general - Emacs China]]
 #+begin_src emacs-lisp :tangle yes
 (use-package company-english-helper
-  :quelpa (company-english-helper :fetcher github :repo "manateelazycat/company-english-helper")
+  :straight (:host github :repo "manateelazycat/company-english-helper")
   :config
   (require 'company-english-helper)
   (setq company-english-helper-fuzz-search-p t))
@@ -6175,7 +6150,7 @@ https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#using-a-gr
 *** COMMENT flycheck-posframe
 #+begin_src emacs-lisp :tangle yes
 (use-package flycheck-posframe
-  :quelpa (flycheck-posframe :fetcher github :repo "alexmurray/flycheck-posframe")
+  :straight (:host github :repo "alexmurray/flycheck-posframe")
   :hook (flycheck-mode . flycheck-posframe-mode)
   :custom-face (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
   :custom-face (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
@@ -6353,7 +6328,7 @@ _v_ariable
 *About:*
 #+begin_src emacs-lisp :tangle yes
 (use-package eldoc
-  :ensure nil
+  :straight nil
   :diminish
   :delight eldoc-mode
   :init
@@ -6427,7 +6402,7 @@ _v_ariable
 ** subword
 #+begin_src emacs-lisp :tangle yes
 (use-package subword
-  :ensure nil
+  :straight nil
   :delight subword-mode)
 #+end_src
 
@@ -6435,7 +6410,9 @@ _v_ariable
 Hungry deletion
 #+begin_src emacs-lisp :tangle yes
 (use-package hungry-delete
-  :hook (after-init . global-hungry-delete-mode)
+  :hook
+  (after-init . global-hungry-delete-mode)
+  (minibuffer-setup . (lambda () (hungry-delete-mode -1)))
   :config (setq-default hungry-delete-chars-to-skip " \t\f\v"))
 #+end_src
 
@@ -6443,7 +6420,7 @@ Hungry deletion
 ** window
 #+begin_src emacs-lisp :tangle yes
 (use-package window
-	:ensure nil
+	:straight nil
 	:general
 	(yc/leader-keys
 	 "w"   '(:ignore t :which-key "windows")
@@ -6515,7 +6492,7 @@ winner-mode 是一个全局的 minor mode，它的主要功能是记录窗体的
 
 #+begin_src emacs-lisp :tangle yes
 (use-package winner-mode
-  :ensure nil
+  :straight nil
   :hook (after-init . winner-mode))
 #+end_src
 
@@ -6794,22 +6771,23 @@ _p_: previous     _L_: predefined   _r_: rename
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(use-package persp-mode-project-bridge
-  :hook
-  (persp-mode-project-bridge-mode . (lambda ()
-                                      (if persp-mode-project-bridge-mode
-                                          (persp-mode-project-bridge-find-perspectives-for-all-buffers)
-                                        (persp-mode-project-bridge-kill-perspectives))))
-  (after-init . (lambda ()
-                  (persp-mode-project-bridge-mode t))))
+  (use-package persp-mode-project-bridge
+    :straight (:host github :repo "CIAvash/persp-mode-project-bridge")
+    :hook
+    (persp-mode-project-bridge-mode . (lambda ()
+                                        (if persp-mode-project-bridge-mode
+                                            (persp-mode-project-bridge-find-perspectives-for-all-buffers)
+                                          (persp-mode-project-bridge-kill-perspectives))))
+    (after-init . (lambda ()
+                    (persp-mode-project-bridge-mode t))))
 #+end_src
 
 ** burly
 https://github.com/alphapapa/burly.el
 #+begin_src emacs-lisp :tangle yes
-(use-package burly
-  ;; :quelpa (burly :fetcher github :repo "alphapapa/burly.el")
-)
+  (use-package burly
+    :straight (:host github :repo "alphapapa/burly.el")
+  )
 #+end_src
 
 ** ELScreen & window-zoom
@@ -6986,9 +6964,10 @@ https://github.com/syohex/emacs-zoom-window
 ** transwin
 透明化窗口设置
 #+begin_src emacs-lisp :tangle yes
-(use-package transwin
-  :config
-  (transwin-toggle-transparent-frame))
+  (use-package transwin
+    :straight (:host github :repo "jcs-elpa/transwin")
+    :config
+    (transwin-toggle-transparent-frame))
 #+end_src
 
 ** writeroom-mode
@@ -7024,7 +7003,7 @@ add view mode keybindings
 - https://gist.github.com/ivan-krukov/63a586f2121519ca51b201c634402a84
 #+begin_src emacs-lisp :tangle yes
 (use-package view
-  :ensure nil
+  :straight nil
   :bind (("<f18>" . view-mode)  ;; remap R-Shift to F 13
          :map view-mode-map
          ("n" . next-line)
@@ -7069,9 +7048,9 @@ add view mode keybindings
 - [[https://github.com/merrickluo/liberime][GitHub - merrickluo/liberime: A emacs dynamic module provide librime bindings...]]
 #+begin_src emacs-lisp :tangle yes
 ;; (use-package liberime-config
-;;   :quelpa (liberime-config
-;;            :fetcher git
-;;            :url "https://gitlab.com/liberime/liberime"
+;;   :straight (
+;;            :host git
+;;            :repo "https://gitlab.com/liberime/liberime"
 ;;            :files ("CMakeLists.txt" "Makefile" "src" "liberime-config.el"))
 ;;   :init
 ;;   (add-hook 'after-liberime-load-hook
@@ -7079,8 +7058,7 @@ add view mode keybindings
 ;;               (liberime-select-schema "luna_pinyin_simp"))))
 
 (use-package liberime-config
-  :quelpa (liberime-config
-           :fetcher github
+  :straight (:host github
            :repo "merrickluo/liberime"
            :files ("CMakeLists.txt" "*.el" "README.org" "Makefile" "src"))
   :init
@@ -7168,9 +7146,9 @@ add view mode keybindings
 - [[https://github.com/DogLooksGood/emacs-rime][GitHub - DogLooksGood/emacs-rime: RIME ㄓ in Emacs]]
 #+begin_src emacs-lisp :tangle yes
 (use-package rime
-  :quelpa (rime :fetcher github
-                :repo "DogLooksGood/emacs-rime"
-                :files ("*.el" "Makefile" "lib.c"))
+  :straight (:host github
+                   :repo "DogLooksGood/emacs-rime"
+                   :files ("*.el" "Makefile" "lib.c"))
   :custom
   (rime-librime-root (expand-file-name "librime/dist" user-emacs-directory))
   (rime-user-data-dir (expand-file-name "rime" user-emacs-directory))
@@ -7207,25 +7185,6 @@ add view mode keybindings
 ** COMMENT smart-input-source
 在 Emacs 中使用原生的输入法，[[https://emacs-china.org/t/smart-input-source-evil/12592/37][原生输入法切换：smart-input-source ，配合evil使用更佳。 - Emacs-general - Emacs China]]
 #+begin_src emacs-lisp :tangle yes
-;; (use-package smart-input-source
-;;   :hook
-;;   ;; enable the /follow context/ and /inline region/ mode for specific buffers
-;;   ((text-mode prog-mode) . smart-input-source-follow-context-mode)
-;;   ;;  ((text-mode prog-mode) . smart-input-source-inline-mode))
-;;   :config
-;;   (smart-input-source-ism-lazyman-config
-;;    "com.apple.keylayout.US"
-;;    "im.rime.inputmethod.Squirrel.Rime")
-
-;;   ;; enable the /cursor color/ mode
-;;   (smart-input-source-global-cursor-color-mode t)
-;;   ;; enable the /respect/ mode
-;;   (smart-input-source-global-respect-mode t)
-;;   ;; enable the /follow context/ mode for all buffers
-;;   (smart-input-source-global-follow-context-mode t)
-;;   ;; enable the /inline english/ mode for all buffers
-;;   (smart-input-source-global-inline-mode t))
-
 (use-package sis
   :init
   ;; `C-s/r' 默认优先使用英文 必须在 sis-global-respect-mode 前配置
@@ -7330,7 +7289,7 @@ add view mode keybindings
 *** bufler
 #+begin_src emacs-lisp :tangle yes
 (use-package bufler
-  ;; :quelpa (bufler :fetcher github :repo "alphapapa/bufler.el"
+  ;; :straight (:host github :repo "alphapapa/bufler.el"
   ;;                 :files (:defaults (:exclude "helm-bufler.el")))
   :config
   (bufler-mode)
@@ -7388,7 +7347,7 @@ Kill & Mark things easily
 ** bookmark
 #+begin_src emacs-lisp :tangle yes
 (use-package bookmark
-  :ensure nil
+  :straight nil
   :config
   ;; disable bookmark face after org-capture
   (setq bookmark-fontify nil))
@@ -7479,7 +7438,7 @@ Kill & Mark things easily
 
 #+begin_src emacs-lisp :tangle yes
 (use-package org
-  :ensure org-plus-contrib
+  :straight org-plus-contrib
   :mode ("\\.org\\'" . org-mode)
   :delight org-mode "Org"
   :hook
@@ -7542,6 +7501,14 @@ Kill & Mark things easily
   ;; 所有标题按 4 个字符缩进
   (setq org-startup-indented t)                ; turn on header line 'org-indent-mode' by default
   (setq org-indent-indentation-per-level 3)    ; indent, default value: '2'
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (org . t)
+     (shell . t)
+     (sql . t)
+     (plantuml . t)))
 
   (defun add-pcomplete-to-capf ()
     (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
@@ -7789,6 +7756,7 @@ It temporarily shows the emphasis markers around certain markup elements when yo
 inside of them. No more fumbling around with = and * characters!
 #+begin_src emacs-lisp :tangle yes
 (use-package org-appear
+  :straight (:host github :repo "awth13/org-appear")
   :hook (org-mode . org-appear-mode))
 #+end_src
 
@@ -7824,7 +7792,7 @@ inside of them. No more fumbling around with = and * characters!
 ** COMMENT org-num
 #+begin_src emacs-lisp :tangle yes
 (use-package org-num
-  :ensure org-plus-contrib
+  :straight org-plus-contrib
   :after org
   ;; :hook (org-mode . org-num-mode)
   )
@@ -7836,7 +7804,7 @@ inside of them. No more fumbling around with = and * characters!
 - [[https://github.com/Fuco1/org-pretty-table][GitHub - Fuco1/org-pretty-table: Replace org-table characters with box-drawin...]]
 #+begin_src emacs-lisp :tangle yes
 (use-package valign
-  :quelpa (valign :fetcher github :repo "casouri/valign")
+  :stragiht (:host github :repo "casouri/valign")
   :after org
   :hook ((org-mode . valign-mode)
          (markdown-mode . valign-mode))
@@ -7847,7 +7815,7 @@ inside of them. No more fumbling around with = and * characters!
 
 #+begin_src emacs-lisp :tangle yes
 ;; (use-package ftable
-;;   :quelpa (rime :fetcher github
+;;   :straight (:host github
 ;;                 :repo "casouri/ftable"
 ;;                 :files ("*.el"))
 ;; )
@@ -8039,7 +8007,7 @@ Builtin mode
 #+begin_src emacs-lisp :tangle yes
 (use-package org-spacer
   :commands (org-spacer-enforce)
-  :quelpa (org-spacer :fetcher github :repo "dustinlacewell/org-spacer.el")
+  :straight (:host github :repo "dustinlacewell/org-spacer.el")
   :config
   (setq org-spacer-element-blanks
         '((0 headline)
@@ -8352,7 +8320,7 @@ Archive subtrees under the same hierarchy as original in the archive files
 
 #+begin_src emacs-lisp :tangle yes
 (use-package org-agenda
-  :ensure nil
+  :straight nil
   :commands org-agenda
   :general
   (yc/leader-keys-major-mode
@@ -8764,7 +8732,7 @@ vi-like bindings for org-mode
 参考这篇内容：[[http://orgmode.org/worg/org-contrib/org-mac-link.html][org-mac-link.el – Grab links from open Mac applications]]，完成配置 org-mac-link
 #+begin_src emacs-lisp :tangle yes
 (use-package org
-  :ensure org-plus-contrib
+  :straight org-plus-contrib
   :init
   (require 'org-mac-link)
   :bind
@@ -8957,7 +8925,7 @@ $ brew install pngpaste
 #+begin_src emacs-lisp :tangle yes
 (use-package org-sidebar
   :commands (org-sidebar org-sidebar-tree)
-  :quelpa (org-sidebar :fetcher github :repo "alphapapa/org-sidebar"))
+  :straight (:host github :repo "alphapapa/org-sidebar"))
 #+end_src
 
 ** export
@@ -9473,7 +9441,7 @@ Visually summarize progress
 (use-package org-roam
   :hook
   (after-init . org-roam-mode)
-  :quelpa (org-roam :fetcher github :repo "jethrokuan/org-roam")
+  :straight (:host github :repo "jethrokuan/org-roam")
   :custom
   (org-roam-directory "~/notes/09_Zettelkästen")
   :config
@@ -9713,7 +9681,7 @@ file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
 Resolve diff3 conflicts
 #+begin_src emacs-lisp :tangle yes
 (use-package smerge-mode
-  :ensure nil
+  :straight nil
   :diminish
   :pretty-hydra
   ((:title (pretty-hydra-title "Smerge" 'octicon "diff")
@@ -10238,7 +10206,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
 
 
 ;; (use-package lsp-clients
-;;   :ensure nil
+;;   :straight nil
 ;;   :init
 ;;   (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/")))
 #+end_src
@@ -10452,6 +10420,7 @@ ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
 https://github.com/emacs-lsp/lsp-sonarlint
 #+begin_src emacs-lisp :tangle yes
 (use-package lsp-sonarlint
+  :straight (:host github :repo "emacs-lsp/lsp-sonarlint")
   :init
   (setq lsp-sonarlint-html-enabled t)
   (setq lsp-sonarlint-java-enabled t)
@@ -10507,8 +10476,7 @@ https://github.com/emacs-lsp/lsp-sonarlint
 #+begin_src emacs-lisp :tangle yes
 (use-package nox
   ;; :load-path "lisp/nox"
-  :quelpa (nox
-           :fetcher github
+  :straight (:host github
            :repo "manateelazycat/nox"
            :files ("jsonrpc.el" "nox.el"))
   ;; :init
@@ -10938,7 +10906,7 @@ see https://github.com/google/styleguide/blob/gh-pages/google-c-style.el
 *** debug
 #+begin_src emacs-lisp :tangle yes
 (use-package dap-java
-  :ensure nil
+  :straight nil
   :after (lsp-java dap)
   ;; :config
   ;; (global-set-key (kbd "<f7>") 'dap-step-in)
@@ -11553,7 +11521,7 @@ Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 #+begin_src emacs-lisp :tangle yes
 ;; `lsp-mode' client using the Rust Language Server
 (use-package lsp-rust
-  :ensure nil
+  :straight nil
   :after (lsp-mode rust-mode)
   :hook
   (rust-mode . lsp-mode)
@@ -11581,10 +11549,9 @@ brew install groovy
 ** SQL
 #+begin_src emacs-lisp :tangle yes
 (use-package sql-mode
-  :ensure nil
+  :straight nil
   :mode ("\\.sql\\'" . sql-mode)
-  :hook (sql-mode . lsp-deferred)
-  )
+  :hook (sql-mode . lsp-deferred))
 
 (use-package sqlformat
   :ensure-system-package (sqlformat . "pip install sqlparse")
@@ -11974,7 +11941,7 @@ npm install -g vls
 ** COMMENT Makefile
 #+begin_src emacs-lisp :tangle yes
 (use-package make-mode
-  :ensure nil
+  :straight nil
   :mode (("Makefile" . makefile-gmake-mode)))
 #+end_src
 
@@ -11982,7 +11949,7 @@ npm install -g vls
 *About:*
 #+begin_src emacs-lisp :tangle yes
 (use-package nxml-mode
-  :ensure nil
+  :straight nil
   :mode ("\\.\\(xml\\|gapp\\|plist\\|pom\\|xsd\\|xslt\\)$" . nxml-mode)
   :hook
   (nxml-mode . lsp)
@@ -12305,7 +12272,8 @@ mermaid.initialize({
 ** jenkinsfile
 jenkins pipeline code
 #+begin_src emacs-lisp :tangle yes
-(use-package jenkinsfile-mode)
+(use-package jenkinsfile-mode
+  :straight (:host github :repo "john2x/jenkinsfile-mode"))
 #+end_src
 
 ** vimrc-mode
@@ -12406,7 +12374,7 @@ kubernetes
 - [[http://www.howardism.org/Technical/Emacs/eshell-present.html][Presenting the Eshell]]
 #+begin_src emacs-lisp :tangle yes
 (use-package eshell
-  :ensure nil
+  :straight nil
   :config
   (defun yc/eshell-prompt-function ()
     "My eshell prompt function."
@@ -12422,8 +12390,7 @@ kubernetes
 *** aweshell
 #+begin_src emacs-lisp :tangle yes
 (use-package aweshell
-  :quelpa (aweshell
-           :fetcher github
+  :straight (:host github
            :repo "manateelazycat/aweshell"
            :files ("aweshell.el" "eshell-do-you-mean.el" "eshell-prompt-extras.el" "eshell-up.el" "exec-path-from-shell.el"))
   :commands (aweshell-new aweshell-next aweshell-prev aweshell-toggle)
@@ -12513,7 +12480,7 @@ brew install libvterm
 #+begin_src emacs-lisp :tangle yes
 (use-package vterm-toggle
   :after vterm
-  :quelpa (vterm-toggle :fetcher github :repo "jixiuf/vterm-toggle")
+  :straight (:host github :repo "jixiuf/vterm-toggle")
   :commands (vterm-toggle vterm-toggle-cd vterm)
   :config
   ;; show vterm buffer in bottom side
@@ -12535,8 +12502,7 @@ brew install libvterm
 #+begin_src emacs-lisp :tangle yes
 (use-package multi-vterm
   :after vterm
-  ;; :quelpa (multi-vterm
-  ;;          :fetcher github
+  ;; :straight (:host github
   ;;          :repo "suonlight/multi-libvterm"
   ;;          :files ("multi-vterm.el"))
   :commands (vterm-toggle vterm-toggle-cd vterm multi-vterm multi-vterm-project)
@@ -13097,6 +13063,7 @@ xwidget-webkit enhancement suite
 - [[https://github.com/BlueFlo0d/xwwp][GitHub - BlueFlo0d/xwwp: Enhance the Emacs xwidget-webkit browser]]
 #+begin_src emacs-lisp :tangle yes
 (use-package xwwp-follow-link
+  :straight nil
   :load-path "lisp/xwwp"
   :custom
   (xwwp-follow-link-completion-system 'ivy)
@@ -13109,7 +13076,6 @@ xwidget-webkit enhancement suite
 - https://github.com/chenyanming/anki.el
 #+begin_src emacs-lisp :tangle yes
 (use-package anki
-  :defer t
   :load-path (expand-file-name "lisp/anki/" user-emacs-directory)
   :init
   (add-hook 'anki-mode-hook #'shrface-mode)
@@ -13208,7 +13174,7 @@ macOS 系统自身的包管理系统： ~brew~
 Exports Org-mode contents to Reveal.js HTML presentation.
 #+begin_src emacs-lisp :tangle yes
 (use-package ox-reveal
-  :quelpa (ox-reveal :fetcher github :repo "yjwen/org-reveal")
+  :straight (:host github :repo "yjwen/org-reveal")
   :after org
   :init
   (setq org-reveal-mathjax t)
@@ -13235,7 +13201,7 @@ Exports Org-mode contents to Reveal.js HTML presentation.
 
 #+begin_src emacs-lisp :tangle yes
 (use-package ox-beamer
-  :ensure nil
+  :straight nil
   :config
   (progn
     ;; Allow for export=>beamer by placing
@@ -13301,7 +13267,7 @@ Exports Org-mode contents to Reveal.js HTML presentation.
    "r"  'pdf-view-reset-slice))
 
 (use-package pdf-view
-  :ensure nil
+  :straight nil
   :after pdf-tools
   :custom
   (pdf-view-resize-factor 1.1)
@@ -13317,7 +13283,6 @@ Exports Org-mode contents to Reveal.js HTML presentation.
 
 *** keybindings
 #+begin_src emacs-lisp :tangle yes
-(when (package-installed-p 'hydra)
   ;; (bind-keys :map pdf-view-mode-map
   ;;            ("\\" . hydra-pdftools/body))
   (defhydra hydra-pdftools (:color red :hint nil)
@@ -13367,7 +13332,7 @@ Exports Org-mode contents to Reveal.js HTML presentation.
     ("B" pdf-history-backward :color red)
     ("N" pdf-history-forward :color red)
     ("l" image-forward-hscroll :color red)
-    ("h" image-backward-hscroll :color red)))
+    ("h" image-backward-hscroll :color red))
 #+end_src
 
 ** COMMENT org-pdftools
@@ -13594,11 +13559,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
   (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))
 
   ;; Enable plantuml-mode within an org-mode document
-  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
-
-  ;; Use fundamental mode when editing plantuml blocks with C-c '
-  (add-to-list 'org-src-lang-modes (quote ("plantuml" . fundamental)))
-)
+  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))
 #+end_src
 
 ** COMMENT blog
@@ -13983,7 +13944,7 @@ org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xe
 *** config
 #+begin_src emacs-lisp :tangle yes
 (use-package tramp
-  :ensure nil
+  :straight nil
   :init
   (setq tramp-default-method "ssh")
   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
@@ -14044,7 +14005,7 @@ https://github.com/justbur/emacs-vdiff
 同时，它也可以应用在 ediff 上，恢复由 ediff 导致的窗体变动。
 #+begin_src emacs-lisp :tangle yes
 (use-package ediff
-  :ensure nil
+  :straight nil
   :hook (;; show org ediffs unfolded
         (ediff-prepare-buffer . outline-show-all)
         ;; restore window layout when done
@@ -14076,7 +14037,7 @@ https://github.com/justbur/emacs-vdiff
 当打开一个具有长行的文件时，它会自动检测并将一些可能导致严重性能的 mode 关闭， 如 font-lock (syntax highlight)。
 #+begin_src emacs-lisp :tangle yes
 (use-package so-long
-  :ensure nil
+  :straight nil
   ;; very long lines
   ;; https://www.reddit.com/r/emacs/comments/ccoksw/solong_mitigating_slowness_due_to_extremely_long/
   :hook (after-init . global-so-long-mode)
@@ -14112,7 +14073,7 @@ pip install grip
 #+begin_src emacs-lisp :tangle yes
 (use-package grip-mode
   :commands (grip-mode)
-  :quelpa (grip-mode :fetcher github :repo "seagle0128/grip-mode")
+  :straight (:host github :repo "seagle0128/grip-mode")
   :ensure-system-package (grip . "pip install grip")
   :bind (:map markdown-mode-command-map
               ("g" . grip-mode))
@@ -14159,7 +14120,6 @@ pip install grip
 *** keybindings
 #+begin_src emacs-lisp :tangle yes
 ;; (eval-after-load 'image+
-(when (package-installed-p 'hydra)
   ;;      (bind-keys :map image-mode-map
   ;;                 ("\\" . hydra-image-sticky/body))
   ;;      ))
@@ -14199,7 +14159,6 @@ pip install grip
 
      "Save"  (("S" imagex-sticky-save-image "save image"))
      ))
-  )
 #+end_src
 
 ** COMMENT restful api client
@@ -14215,7 +14174,10 @@ pip install grip
 https://github.com/alf/ob-restclient.el
 #+begin_src emacs-lisp :tangle yes
 (use-package ob-restclient
-  :after (org restclient))
+  :straight (:host github :repo "alf/ob-restclient.el")
+  :after (org restclient)
+  :config
+  (add-to-list 'org-babel-load-languages '(restclient . t)))
 #+end_src
 
 *** company-restclient
@@ -14232,7 +14194,7 @@ https://github.com/alf/ob-restclient.el
 @see - https://github.com/ShingoFukuyama/manage-minor-mode
 #+begin_src emacs-lisp :tangle yes
 (use-package manage-minor-mode
-  :quelpa (manage-minor-mode :fetcher github :repo "ShingoFukuyama/manage-minor-mode")
+  :straight (:host github :repo "ShingoFukuyama/manage-minor-mode")
   :commands manage-minor-mode)
 #+end_src
 
@@ -14250,7 +14212,7 @@ Start server
 *About:* 使用服务模式启动 Emacs，这样子在其他地方可以快速启动一个 Emacs 窗口用于类似编辑文件操作等。
 #+begin_src emacs-lisp :tangle yes
 (use-package server
-  :ensure nil
+  :straight nil
   :hook
   (after-init . server-mode))
 #+end_src
@@ -14262,6 +14224,13 @@ Start server
 (use-package restart-emacs
   :commands (restart-emacs)
   :config (emacs-restore-frames t))
+#+end_src
+
+** COMMENT Benchmark
+#+begin_src emacs-lisp :tangle yes
+(use-package benchmark-init
+  :demand t
+  :hook ((after-init . benchmark-init/deactivate)))
 #+end_src
 
 ** Garbage Collection
@@ -14278,13 +14247,6 @@ Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
   ;;       gcmh-idle-delay          3600)
   :config
   (gcmh-mode t))
-#+end_src
-
-** COMMENT Benchmark
-#+begin_src emacs-lisp :tangle yes
-(use-package benchmark-init
-  :demand t
-  :hook ((after-init . benchmark-init/deactivate)))
 #+end_src
 
 ** COMMENT Reset GC
