@@ -52,7 +52,7 @@
       file-name-handler-alist nil)
 
 (add-hook 'emacs-startup-hook
-  '(lambda() (setq file-name-handler-alist file-name-handler-alist-original)))
+          (lambda() (setq file-name-handler-alist file-name-handler-alist-original)))
 ;; -UnsetFNHA
 
 ;; UnsetSRF

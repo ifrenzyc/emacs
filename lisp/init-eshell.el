@@ -1,0 +1,33 @@
+;; init-eshell.el --- Initialize eshell configurations.	-*- lexical-binding: t -*-
+
+;;; Commentary:
+;; - http://www.howardism.org/Technical/Emacs/eshell-present.html
+;; 
+
+;;; Code
+
+(use-package eshell
+  :straight (:type built-in)
+  :config
+  (defun yc/eshell-prompt-function ()
+    "My eshell prompt function."
+    (concat " λ "))
+
+  (setq eshell-highlight-prompt nil
+        eshell-hist-ignoredups t
+        eshell-directory-name (expand-file-name "eshell" yc/cache-dir)
+        eshell-prefer-lisp-functions t
+        eshell-prompt-function #'yc/eshell-prompt-function))
+
+(use-package aweshell
+  :straight (:host github
+                   :repo "manateelazycat/aweshell"
+                   :files ("*.el"))
+  :commands (aweshell-new aweshell-next aweshell-prev aweshell-toggle)
+  :config
+  (setq eshell-highlight-prompt nil
+        eshell-prompt-function 'epe-theme-dakrone))
+
+;; https://github.com/akreisher/eshell-syntax-highlighting/
+
+(provide 'init-eshell)

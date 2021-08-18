@@ -1,27 +1,27 @@
-[submodule "lisp/angularjs-mode"]
-	path = lisp/angularjs-mode
+[submodule "localelpa/angularjs-mode"]
+	path = localelpa/angularjs-mode
 	url = git@github.com:rudolfolah/angularjs-mode.git
-[submodule "lisp/snails"]
-	path = lisp/snails
+[submodule "localelpa/snails"]
+	path = localelpa/snails
 	url = git@github.com:manateelazycat/snails.git
-[submodule "lisp/fuz.el"]
-	path = lisp/fuz.el
+[submodule "localelpa/fuz.el"]
+	path = localelpa/fuz.el
 	url = git@github.com:cireu/fuz.el.git
-[submodule "lisp/aweshell"]
-	path = lisp/aweshell
+[submodule "localelpa/aweshell"]
+	path = localelpa/aweshell
 	url = git@github.com:manateelazycat/aweshell.git
-[submodule "lisp/nox"]
-	path = lisp/nox
+[submodule "localelpa/nox"]
+	path = localelpa/nox
 	url = git@github.com:manateelazycat/nox.git
-[submodule "lisp/counsel-mu"]
-	path = lisp/counsel-mu
+[submodule "localelpa/counsel-mu"]
+	path = localelpa/counsel-mu
 	url = git@github.com:seanfarley/counsel-mu.git
-[submodule "lisp/mu4e-patch"]
-	path = lisp/mu4e-patch
+[submodule "localelpa/mu4e-patch"]
+	path = localelpa/mu4e-patch
 	url = git@github.com:seanfarley/mu4e-patch.git
-[submodule "lisp/mu4e"]
-	path = lisp/mu4e
+[submodule "localelpa/mu4e"]
+	path = localelpa/mu4e
 	url = git@github.com:emacsmirror/mu4e.git
-[submodule "lisp/xwwp"]
-	path = lisp/xwwp
+[submodule "localelpa/xwwp"]
+	path = localelpa/xwwp
 	url = git@github.com:BlueFlo0d/xwwp.git

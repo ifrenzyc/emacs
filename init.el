@@ -12,6 +12,9 @@
 ;; This file is not part of GNU Emacs.
 ;;
 ;; License: GPLv3
+;;
+;; - 关于 use-package 的使用：https://github.com/jwiegley/use-package
+;;
 
 ;;; Code:
 
@@ -60,19 +63,19 @@
 ;; (require 'package)
 ;; (unless package--initialized (package-initialize))
 
-;; (when (>= emacs-major-version 26)
-;;   (require 'package)
+(when (>= emacs-major-version 26)
+  (require 'package)
 
-  ;; (setq package-archives
-  ;;       '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
-  ;;         ("gnu"          . "https://elpa.gnu.org/packages/")
-  ;;         ;; ("gnu"          . "https://elpa.emacs-china.org/gnu/")
-  ;;         ("melpa"        . "https://melpa.org/packages/")
-  ;;         ;; ("melpa"        . "https://elpa.emacs-china.org/melpa/")
-  ;;         ("org"          . "https://orgmode.org/elpa/")
-  ;;         ;; ("org"          . "https://elpa.emacs-china.org/org/")
-  ;;         ))
-;;   )
+  (setq package-archives
+        '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
+          ("gnu"          . "https://elpa.gnu.org/packages/")
+          ;; ("gnu"          . "https://elpa.emacs-china.org/gnu/")
+          ("melpa"        . "https://melpa.org/packages/")
+          ;; ("melpa"        . "https://elpa.emacs-china.org/melpa/")
+          ("org"          . "https://orgmode.org/elpa/")
+          ;; ("org"          . "https://elpa.emacs-china.org/org/")
+          ))
+  )
 
 ;; ;; avoid problems with files newer than their byte-compiled counterparts
 ;; ;; it's better a lower startup than load an outdated and maybe bugged package
@@ -104,7 +107,9 @@
 ;;   (package-install 'use-package))
 
 ;; Call straight-use-package to bootstrap use-package so we can use it.
-(straight-use-package 'bind-key)
+(setq straight-allow-recipe-inheritance nil)
+
+(straight-use-package 'bind-key)                ;; if you use any :bind variant
 (straight-use-package 'diminish)
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
@@ -119,24 +124,150 @@
    use-package-verbose t)
   (require 'use-package))
 
-;; (use-package bind-key :demand t)                ;; if you use any :bind variant
-;; (use-package diminish
-;;   :demand t
-;;   :config
-;;   (diminish 'visual-line-mode "↩️ "))
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-;; Use latest org before calling babel
-;; (use-package-pin-package 'org "org")
-(use-package org :straight org-plus-contrib)
-(require 'org)
-(require 'ob-tangle)
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (org . t)
-   (shell . t)))
+(require 'init-const)
+(require 'init-basic)
+(require 'init-font)
+;; (require 'init-cnfonts)
+(require 'init-funcs)
+;; (require 'init-package)
 
-(org-babel-load-file (expand-file-name "emacs.org" user-emacs-directory))
+(require 'init-macos)   ;; macOS
+
+(require 'init-ui)
+(require 'init-theme)
+(require 'init-modeline)
+;; (require 'init-mini-modeline)
+
+(require 'init-undo-redo)
+
+(require 'init-bookmark)
+(require 'init-dashboard)
+(require 'init-scratch)
+
+(require 'init-highlight)
+
+(require 'init-which-key)
+(require 'init-general)
+(require 'init-evil)
+(require 'init-hydra)
+;; (require 'init-xah-fly-keys)
+;; (require 'init-meow)
+
+(require 'init-kill-ring)
+(require 'init-edit)
+(require 'init-diff)
+
+(require 'init-ivy)
+;; (require 'init-ido)
+;; (require 'init-icomplete)
+;; (require 'init-helm) ;; I don't use helm
+(require 'init-buffer)
+(require 'init-company)
+(require 'init-yasnippet)
+(require 'init-tabnine)
+(require 'init-flycheck)
+;; (require 'init-snails)
+(require 'init-folding)
+
+(require 'init-search)
+
+(require 'init-dired)
+(require 'init-smex)
+(require 'init-utils)
+
+(require 'init-org)
+(require 'init-org-agenda)
+(require 'init-org-journal)
+(require 'init-org-roam)
+(require 'init-deft)
+(require 'init-markdown)
+(require 'init-reader)
+
+(require 'init-window)
+(require 'init-projectile)
+(require 'init-persp)
+(require 'init-tab-bar)
+
+(require 'init-vcs)
+
+(require 'init-treemacs)
+(require 'init-neotree)
+(require 'init-helpful)
+
+(require 'init-term)
+(require 'init-vterm)
+;; (require 'init-eshell)  ;; I don't use eshell
+(require 'init-rime)    ;; Chinese input method
+;; (require 'init-pyim)
+(require 'init-tramp)
+
+;; Tools
+;; (require 'init-encrypt)
+;; (require 'init-anki)
+;; (require 'init-mail)
+(require 'init-browser)
+;; (require 'init-elfeed)
+;; (require 'init-irc)
+;; (require 'init-reddit-client)
+;; (require 'init-pdf)
+;; (require 'init-nov)
+(require 'init-image)
+;; (require 'init-emojis)
+(require 'init-plantuml)
+(require 'init-pandoc)
+;; (require 'init-spell)
+(require 'init-youdao-dictionary)
+;; (require 'init-blog)
+;; (require 'init-dokuwiki)
+
+;; Lang
+(require 'lang-basic)
+(require 'init-lsp)
+;; (require 'init-eglot)
+;; (require 'init-nox)
+(require 'lang-java)
+(require 'lang-golang)
+(require 'lang-python)
+;; (require 'lang-rust)
+;; (require 'lang-clojure)
+(require 'lang-web)
+(require 'lang-vue)
+(require 'lang-groovy)
+(require 'lang-elisp)
+(require 'lang-sql)
+(require 'lang-json)
+(require 'lang-xml)
+(require 'lang-yaml)
+(require 'lang-bash)
+(require 'lang-dockerfile)
+(require 'lang-k8s)
+
+(require 'lang-ansible)
+(require 'lang-systemd)
+(require 'lang-logstash)
+(require 'lang-makefile)
+(require 'lang-jenkinsfile)
+(require 'lang-vimrc)
+(require 'lang-restclient)
+
+;; ;; Use latest org before calling babel
+;; ;; (use-package-pin-package 'org "org")
+;; ;; (use-package org :straight org-plus-contrib)
+;; (straight-use-package 'org)
+;; ;; (require 'org)
+;; (require 'ob-tangle)
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages
+;;  '((emacs-lisp . t)
+;;    (org . t)
+;;    (shell . t)))
+
+;; (org-babel-load-file (expand-file-name "emacs.org" user-emacs-directory))
+
+(require 'init-custom)
+(require 'init-gc)
 
 ;; Keep emacs Custom-settings in separate file
 ;; This keeps your init.el neater and you have the option
@@ -145,5 +276,11 @@
 (unless (file-exists-p custom-file)
   (write-region "" nil custom-file))
 (load custom-file)
+
+;; Start server
+(use-package server
+  :straight (:type built-in)
+  :hook
+  (after-init . server-mode))
 
 ;;; init.el ends here
