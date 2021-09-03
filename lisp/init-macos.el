@@ -20,7 +20,7 @@
   :config
   (setq exec-path-from-shell-check-startup-files nil
         exec-path-from-shell-arguments '("-l")
-        exec-path-from-shell-variables '("PATH" "MANPATH" "CLASSPATH" "RIME_PATH" "PKG_CONFIG_PATH"))
+        exec-path-from-shell-variables '("PATH" "GOROOT" "GOPATH" "MANPATH" "CLASSPATH" "RIME_PATH" "PKG_CONFIG_PATH"))
   (exec-path-from-shell-initialize)
 
   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
@@ -67,5 +67,11 @@
 ;; integrate use-package with =:ensure-system-package=
 (use-package use-package-ensure-system-package
   :demand t)
+
+;; delete files by moving to trash in macOS
+;; https://github.com/lunaryorn/osx-trash.el
+(use-package osx-trash
+  :if IS-MAC
+  :config (osx-trash-setup))
 
 (provide 'init-macos)

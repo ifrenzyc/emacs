@@ -374,11 +374,12 @@ Headline^^            Visit entry^^               Filter^^                    Da
 (use-package org-super-agenda
   ;; :after (org)
   :commands (org-agenda)
-  :hook ((org-agenda-mode . org-super-agenda-mode)
+  :hook (;; (org-agenda-mode . org-super-agenda-mode)
          ;; Easily fold groups via TAB.
          (org-super-agenda-mode . origami-mode))
   :bind (:map org-super-agenda-header-map ("<tab>" . origami-toggle-node))
   :init
+  (org-super-agenda-mode t)
   (setq org-super-agenda-groups
         '((:log t)                      ; Automatically named "Log"
           (:name "Schedule"

@@ -26,6 +26,9 @@
   ;; :after lsp
   ;; :mode ("\\.java\\'" . java-mode)
   :init
+  (setq-local lsp-ui-doc-enable t
+              lsp-headerline-breadcrumb-enable t
+              lsp-signature-auto-activate t)
   ;; (use-package request)
   ;; (require 'lsp-java-boot)
   (setq lsp-java-inhibit-message t
@@ -81,7 +84,7 @@
         ("C-c C-f" . lsp-format-buffer))
   :general
   (yc/leader-keys-major-mode
-    :keymaps 'java-mode-map
+      :keymaps 'java-mode-map
     "r"   'ggtags-find-tag-dwim
     "c"   '(:ignore t :which-key "Run/Compile")
     "cd"  'dap-java-debug
@@ -140,5 +143,11 @@
 ;; Gradle
 (use-package gradle-mode
   :mode ("\\.gradle\\'". gradle-mode))
+
+;; https://writequit.org/articles/working-with-logs-in-emacs.html
+(use-package log4j-mode
+  :hook
+  (log4j-mode . view-mode)
+  (log4j-mode . read-only-mode))
 
 (provide 'lang-java)

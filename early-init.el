@@ -20,8 +20,8 @@
 
 ;;; Code:
 ;; native-comp
-(setenv "LIBRARY_PATH" "/usr/local/opt/gcc/lib/gcc/11:/usr/local/opt/gcc/lib/gcc/11/gcc/x86_64-apple-darwin20/11.1.0")
-(setq comp-async-report-warnings-errors nil)
+;; (setenv "LIBRARY_PATH" "/usr/local/opt/gcc/lib/gcc/11:/usr/local/opt/gcc/lib/gcc/11/gcc/x86_64-apple-darwin20/11.2.0")
+;; (setq comp-async-report-warnings-errors nil)
 ;; (add-to-list 'native-comp-eln-load-path (expand-file-name "eln-cache" user-emacs-directory))
 ;; -native-comp
 

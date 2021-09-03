@@ -814,7 +814,8 @@
   (setq org-sticky-header-outline-path-separator " > "))
 
 (use-package org-ol-tree
-  :commands org-ol-tree)
+  :commands org-ol-tree
+  :straight (:host github :repo "Townk/org-ol-tree"))
 
 ;; - https://github.com/takaxp/org-tree-slide
 (use-package org-tree-slide
