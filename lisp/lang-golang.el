@@ -11,7 +11,7 @@
   :mode ("\\.go\\'" . go-mode)
   :hook
   (go-mode . flycheck-mode)
-  (go-mode . lsp)
+  (go-mode . lsp-deferred)
   :general
   (yc/leader-keys-major-mode
       :keymaps 'go-mode-map

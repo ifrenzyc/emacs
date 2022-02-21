@@ -74,7 +74,7 @@
   :after python
   :hook (python-mode . (lambda ()
                          (require 'lsp-python-ms)
-                         (lsp))))  ; or lsp-deferred
+                         (lsp-deferred))))  ; or lsp-deferred
 
 (use-package anaconda-mode
   :after python

@@ -26,7 +26,7 @@
 (use-package lsp-vue
   :after (vue-mode lsp-mode)
   :hook
-  ((vue-mode . lsp)
+  ((vue-mode . lsp-deferred)
    ;; (vue-mode . lsp-vue-mmm-enable)
    )
   ;; :config

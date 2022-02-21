@@ -10,7 +10,7 @@
   :mode ("\\.\\(json\\|json.j2\\|json.template\\|jsonld\\|tern-project\\|jshintrc\\)$" . json-mode)
   :hook
   (json-mode . flycheck-mode)
-  (json-mode . lsp)
+  (json-mode . lsp-deferred)
   :general
   (json-mode-map
    "C-c C-f" 'json-mode-beautify))

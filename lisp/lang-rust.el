@@ -59,7 +59,6 @@
   :straight (:type built-in)
   :after (lsp-mode rust-mode)
   :hook
-  (rust-mode . lsp-mode)
-  (rust-mode . lsp))
+  (rust-mode . lsp-deferred))
 
 (provide 'lang-rust)

@@ -10,8 +10,8 @@
   :straight (:type built-in)
   :mode ("\\.\\(xml\\|gapp\\|plist\\|pom\\|xsd\\|xslt\\)$" . nxml-mode)
   :hook
-  (nxml-mode . lsp)
-  (nxml-mode . highlight-indent-guides-mode)
+  (nxml-mode . lsp-deferred)
+  ;; (nxml-mode . highlight-indent-guides-mode)
   :config
   (setq-default nxml-child-indent 4
                 nxml-attribute-indent 4)
