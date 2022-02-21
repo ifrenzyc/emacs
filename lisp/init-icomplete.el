@@ -9,10 +9,6 @@
 
 ;;; Code
 
-(use-package orderless
-  :init (icomplete-mode) ; optional but recommended!
-  :custom (completion-styles '(orderless)))
-
 ;; - https://github.com/oantolin/icomplete-vertical
 (use-package icomplete-vertical
   :demand t

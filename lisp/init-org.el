@@ -19,12 +19,12 @@
 ;;; Code
 (use-package org
   ;; :straight org-plus-contrib
-  :mode ("\\.org\\'" . org-mode)
+  :mode ("\\.\\(org\\|txt\\)$" . org-mode)
   :delight org-mode "Org"
   :custom-face
   ;; 单独给 org-table 设一个等宽字体
   ;; Org table font
-  (org-table ((t (:family user/cjk-font :size user/font-size))))
+  (org-table ((t (:family "Sarasa Mono SC" :size user/font-size))))
   (org-done ((t (:strike-through t))))
   (org-headline-done ((t (:strike-through t))))
   :hook
@@ -108,7 +108,7 @@
         org-fontify-quote-and-verse-blocks t)
 
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "INBO(i)" "DELEGATED(l)" "|" "DONE(d)" "DEFERRED(f)" "CANCELLED(c)")
+        '((sequence "INBO(i)" "TODO(t)" "NEXT(n)" "DELEGATED(l)" "|" "DONE(d)" "DEFERRED(f)" "CANCELLED(c)")
           (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "DELEGATED(l)" "REPEAT(r)" "MABE(m)" "|" "DONE(d!/!)")
           (sequence "MEETING" "|" "MEETING_DONE")
           (sequence "PROJ(p)" "READ(r)" "FIXME(f)" "|" "DONE(d!/!)" "READ_DONE(R)" "CANCELLED(c@/!)")
@@ -118,7 +118,8 @@
   (setq org-todo-state-tags-triggers
         '(("CANCELLED" ("CANCELLED" . t))
           ("WAITING" ("WAITING" . t))
-          ("MAYBE" ("WAITING" . t))
+          ("DELEGATED" ("delegated" . t))
+          ("MABE" ("WAITING" . t))
           ("HOLD" ("WAITING") ("HOLD" . t))
           (done ("WAITING") ("HOLD"))
           ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
@@ -540,22 +541,27 @@
 ;; It temporarily shows the emphasis markers around certain markup elements when you place your cursor
 ;; inside of them. No more fumbling around with = and * characters!
 (use-package org-appear
-  :straight (:host github :repo "awth13/org-appear")
+  ;; :straight (:host github :repo "awth13/org-appear")
   :hook (org-mode . org-appear-mode))
 
+;; visual indent
+;; (use-package org-bars
+;;   :straight (:host github :repo "tonyaldon/org-bars")
+;;   :hook (org-mode . org-bars-mode))
+
 ;; or https://github.com/stardiviner/org-tag-beautify
-(use-package org-pretty-tags
-  :demand t
-  :config
-  (setq org-pretty-tags-surrogate-strings
-        (quote
-         (("TOPIC" . "☆")
-          ("PROJEKT" . "💡")
-          ("SERVICE" . "✍")
-          ("Blog" . "✍")
-          ("music" . "♬")
-          ("security" . "🔥"))))
-  (org-pretty-tags-global-mode))
+;; (use-package org-pretty-tags
+;;   :demand t
+;;   :config
+;;   (setq org-pretty-tags-surrogate-strings
+;;         (quote
+;;          (("TOPIC" . "☆")
+;;           ("PROJEKT" . "💡")
+;;           ("SERVICE" . "✍")
+;;           ("Blog" . "✍")
+;;           ("music" . "♬")
+;;           ("security" . "🔥"))))
+;;   (org-pretty-tags-global-mode))
 
 (use-package org-fancy-priorities
   :defines org-fancy-priorities-list
@@ -587,6 +593,7 @@
 
 ;; Emacs Doom E15: Fancy Task Priorities in Org Mode
 ;; 代码来源：https://www.reddit.com/r/emacs/comments/ctfxbg/emacs_doom_e15_fancy_task_priorities_in_org_mode/
+;; pretty-symbols 参考配置 file:~/src/emacs.d/yantar92-emacs-config
 (use-package pretty-symbols
   :hook (org-mode . pretty-symbols-mode)
   :config
@@ -622,6 +629,7 @@
                   ((yant/str-to-glyph "✘") org-specific "\\(?:^*+ +\\)\\(\\<CANCELLED\\>\\)" (org-mode) 1)
                   ((yant/str-to-glyph "▶") org-specific "\\(?:^*+ +\\)\\(\\<NEXT\\>\\)" (org-mode) 1)
                   ((yant/str-to-glyph "☇") org-specific "\\(?:^*+ +\\)\\(\\<MERGED\\>\\)" (org-mode) 1)
+                  ((yant/str-to-glyph "✍") org-specific "\\(?:^*+ +\\)\\(\\<INBO\\>\\)" (org-mode) 1)
                   ((yant/str-to-glyph "⚑") org-specific "\\(?:^*+ +\\)\\(\\<WAITING\\>\\)" (org-mode) 1)
                   ((yant/str-to-glyph "♲") org-specific "\\(?:^*+ +\\)\\(\\<HOLD\\>\\)" (org-mode) 1)
                   ((yant/str-to-glyph "☠D") org-specific "\\<DEADLINE:" (org-mode))
@@ -649,7 +657,7 @@
 (use-package org-treescope
   :commands (org-treescope)
   :custom
-  (org-treescope-query-userbuffer "~/path/to/projects.org")
+  (org-treescope-query-userbuffer "~/path/to/projects.txt")
   (org-treescope-cyclestates-todo '(nil ("TODO") ("WAITING" "DONE")))
   (org-treescope-cyclestates-priority '(nil ("A" "B" "C") ("D"))))
 
@@ -660,6 +668,17 @@
   (setq org-spacer-element-blanks
         '((0 headline)
           (1 paragraph src-block table property-drawer))))
+
+;; 解决在中文环境下，样式字符需要前后添加空格才能正确格式化的问题
+;; 解决思路是自动插入一个不可见的空格字符
+;; 详细讨论参考文章：https://emacs-china.org/t/org-mode/597/61
+(use-package separate-inline
+  :straight (:host github :repo "ingtshan/separate-inline.el")
+  :hook ((org-mode-hook . separate-inline-mode)
+         (org-mode-hook . (lambda ()
+                            (add-hook 'separate-inline-mode-hook
+                                      'separate-inline-use-default-rules-for-org-local
+                                      nil 'make-it-local)))))
 
 ;; vi-like bindings for org-mode
 ;; - https://oremacs.com/worf/README.html
@@ -724,7 +743,7 @@
 ;; lets you insert a link from your clipboard with a title that is fetched from the page’s metadata by curl.
 ;; https://github.com/rexim/org-cliplink
 (use-package org-cliplink
-  :commands (org-cliplink-clipboard-content)
+  :commands (org-cliplink org-cliplink-clipboard-content)
   :bind (:map org-mode-map
               ("C-c s-l" . org-store-link)
               ("C-c s-i" . org-cliplink))
@@ -877,7 +896,10 @@
 
 ;; - https://github.com/jakebox/preview-org-html-mode
 (use-package preview-org-html-mode
-  :straight (:host github :repo "jakebox/preview-org-html-mode" :branch "main"))
+  :straight (:host github :repo "jakebox/preview-org-html-mode" :branch "main")
+  :init (setq preview-org-html-viewer 'xwidget)
+  :general
+  ("<f12>" 'preview-org-html-mode))
 
 ;; MobileOrg
 ;; documentation: https://mobileorg.github.io/documentation/
@@ -1043,7 +1065,7 @@
 
 ;; Exports Org-mode contents to Reveal.js HTML presentation.
 (use-package ox-reveal
-  :straight (:host github :repo "yjwen/org-reveal")
+  ;; :straight (:host github :repo "yjwen/org-reveal")
   :after org
   :init
   (setq org-reveal-mathjax t)

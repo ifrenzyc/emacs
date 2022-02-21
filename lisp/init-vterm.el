@@ -18,6 +18,8 @@
            (vterm-kill-buffer-on-exit t)
            (vterm-max-scrollback 100000))
   :init
+  (setq vterm-always-compile-module t)
+
   ;; kill vterm buffers when exiting with C-d
   (defun my/vterm-exit-kill-buffer (buffer event)
     (kill-buffer buffer)

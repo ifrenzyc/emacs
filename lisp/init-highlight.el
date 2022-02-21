@@ -103,7 +103,9 @@ FACE defaults to inheriting from default and highlight."
          ("M-N" . symbol-overlay-switch-forward)
          ("M-P" . symbol-overlay-switch-backward)
          ("M-C" . symbol-overlay-remove-all)
+         ("s-." . symbol-overlay-transient)
          ([M-f3] . symbol-overlay-remove-all))
+
   :hook ((prog-mode . symbol-overlay-mode)
          (iedit-mode . turn-off-symbol-overlay)
          (iedit-mode-end . turn-on-symbol-overlay))
@@ -131,7 +133,24 @@ FACE defaults to inheriting from default and highlight."
     (interactive)
     (when (derived-mode-p 'prog-mode)
       (symbol-overlay-mode 1)))
-  (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay))
+  (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay)
+  ;; (define-transient-command symbol-overlay-transient ()
+  ;;   "Symbol Overlay transient"
+  ;;   ["Symbol Overlay"
+  ;;    ["Overlays"
+  ;;     ("." "Add/Remove at point" symbol-overlay-put)
+  ;;     ("k" "Remove All" symbol-overlay-remove-all)
+  ;;     ]
+  ;;    ["Move to Symbol"
+  ;;     ("n" "Next" symbol-overlay-switch-forward)
+  ;;     ("p" "Previous" symbol-overlay-switch-backward)
+  ;;     ]
+  ;;    ["Other"
+  ;;     ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
+  ;;     ]
+  ;;    ]
+  ;;   )
+  )
 
 ;; (use-package highlight-thing
 ;;   :config
@@ -202,6 +221,7 @@ FACE defaults to inheriting from default and highlight."
   )
 
 (use-package highlight-indent-guides
+  :disabled t
   ;; :hook (prog-mode . highlight-indent-guides-mode)  ; 默认不启动这个，非常影响性能
   :functions (macrostep-expand macrostep-collapse)
   :init
@@ -359,7 +379,8 @@ FACE defaults to inheriting from default and highlight."
   :hook
   (prog-mode . display-fill-column-indicator-mode)
   :custom
-  (display-fill-column-indicator-character ?▏)
+  ;; (display-fill-column-indicator-character ?▏)
+  (display-fill-column-indicator-character ?¦)
   (display-fill-column-indicator-column 119)
   :init
   (setq-default fill-column  119)

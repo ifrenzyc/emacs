@@ -16,6 +16,7 @@
   ;; theme may have their own settings.
   ;; (load-theme 'doom-one t)
   ;; (load-theme 'doom-one-light t)
+  ;; (load-theme 'doom-opera-light t)
   ;; (load-theme 'doom-solarized-light t)
   ;; (load-theme 'doom-nord t)
   ;; (load-theme 'doom-nord-light t)
@@ -42,35 +43,41 @@
 
 (use-package vscode-dark-plus-theme
   ;; :after solaire-mode
+  :disabled t
   :demand t
-  :straight (:host github :repo "ianyepan/vscode-dark-plus-emacs-theme")
+  ;; :straight (:host github :repo "ianyepan/vscode-dark-plus-emacs-theme")
   :custom
   (vscode-dark-plus-scale-org-faces nil)
   (vscode-dark-plus-box-org-todo nil)
   :config
   (load-theme 'vscode-dark-plus t))
 
-;; (use-package modus-themes
-;;   :demand t
-;;   :straight (:type built-in)
-;;   ;; :config
-;;   ;; (load-theme 'modus-operandi t)
-;;   ;; (load-theme 'modus-vivendi t)
-;;   )
-
-(use-package tron-legacy-theme
-  :custom
-  (tron-legacy-theme-vivid-cursor t)
-  (tron-legacy-theme-softer-bg t)
-  :config
-  ;; (load-theme 'tron-legacy t)
-  )
-
-(use-package cyberpunk-theme
+(use-package modus-themes
   :demand t
+  :straight (:host github :repo "protesilaos/modus-themes")
+  :init
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs nil
+        modus-themes-org-blocks 'gray-background
+        modus-themes-region '(bg-only no-extend))
+
+  ;; Load the theme files before enabling a theme
+  (modus-themes-load-themes)
   :config
-  ;; (load-theme 'cyberpunk t)
-  )
+  (modus-themes-load-operandi))
+
+;; (use-package tron-legacy-theme
+;;   :custom
+;;   (tron-legacy-theme-vivid-cursor t)
+;;   (tron-legacy-theme-softer-bg t)
+;;   :config
+;;   (load-theme 'tron-legacy t))
+
+;; (use-package cyberpunk-theme
+;;   :demand t
+;;   :config
+;;   (load-theme 'cyberpunk t))
 
 ;; (use-package ample-theme
 ;;   :init (progn (load-theme 'ample t t)

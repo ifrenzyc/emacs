@@ -19,6 +19,10 @@
         eshell-prefer-lisp-functions t
         eshell-prompt-function #'yc/eshell-prompt-function))
 
+(use-package eshell-info-banner
+  :straight (:host github :repo "Phundrak/eshell-info-banner.el" :branch main)
+  :hook (eshell-banner-load . eshell-info-banner-update-banner))
+
 (use-package aweshell
   :straight (:host github
                    :repo "manateelazycat/aweshell"

@@ -42,14 +42,14 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; (defun straight-reload-init ()
-;;   "Reload init.el."
-;;   (interactive)
-;;   (straight-transaction
-;;    (straight-mark-transaction-as-init)
-;;    (message "Reloading init.el...")
-;;    (load user-init-file nil 'nomessage)
-;;    (message "Reloading init.el... done.")))
+(defun straight-reload-init ()
+  "Reload init.el."
+  (interactive)
+  (straight-transaction
+   (straight-mark-transaction-as-init)
+   (message "Reloading init.el...")
+   (load user-init-file nil 'nomessage)
+   (message "Reloading init.el... done.")))
 
 ;; Should be placed inside init.el before anything loading org-mode 
 ;; https://github.com/yantar92/org
@@ -68,12 +68,12 @@
 
   (setq package-archives
         '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
-          ("gnu"          . "https://elpa.gnu.org/packages/")
-          ;; ("gnu"          . "https://elpa.emacs-china.org/gnu/")
-          ("melpa"        . "https://melpa.org/packages/")
-          ;; ("melpa"        . "https://elpa.emacs-china.org/melpa/")
-          ("org"          . "https://orgmode.org/elpa/")
-          ;; ("org"          . "https://elpa.emacs-china.org/org/")
+          ;; ("gnu"          . "https://elpa.gnu.org/packages/")
+          ("gnu"          . "https://elpa.emacs-china.org/gnu/")
+          ;; ("melpa"        . "https://melpa.org/packages/")
+          ("melpa"        . "https://elpa.emacs-china.org/melpa/")
+          ;; ("org"          . "https://orgmode.org/elpa/")
+          ("org"          . "https://elpa.emacs-china.org/org/")
           ))
   )
 
@@ -88,9 +88,9 @@
 ;; (unless (file-directory-p package-user-dir)
 ;;   (make-directory package-user-dir t))
 
-;; initialize the packages and create the packages list if not exists
+;; ;; initialize the packages and create the packages list if not exists
 ;; (when (not package-archive-contents)
-;;  (package-refresh-contents))
+;;   (package-refresh-contents))
 
 ;; install use-package if not exists
 ;; Bootstrap `use-package'
@@ -138,6 +138,7 @@
 (require 'init-ui)
 (require 'init-theme)
 (require 'init-modeline)
+;; (require 'init-nano-modeline)
 ;; (require 'init-mini-modeline)
 
 (require 'init-undo-redo)
@@ -162,9 +163,11 @@
 (require 'init-ivy)
 ;; (require 'init-ido)
 ;; (require 'init-icomplete)
+;; (require 'init-vertico)
 ;; (require 'init-helm) ;; I don't use helm
 (require 'init-buffer)
 (require 'init-company)
+;; (require 'init-corfu)
 (require 'init-yasnippet)
 (require 'init-tabnine)
 (require 'init-flycheck)
@@ -181,6 +184,7 @@
 (require 'init-org-agenda)
 (require 'init-org-journal)
 (require 'init-org-roam)
+;; (require 'init-svg-tag)
 (require 'init-deft)
 (require 'init-markdown)
 (require 'init-reader)
@@ -242,6 +246,7 @@
 (require 'lang-yaml)
 (require 'lang-bash)
 (require 'lang-dockerfile)
+(require 'lang-docker)
 (require 'lang-k8s)
 
 (require 'lang-ansible)

@@ -25,7 +25,7 @@
   (org-journal-file-type 'monthly)
   (org-journal-dir "~/notes/07_Journal/")
   (org-journal-date-format "%A, %d/%m/%Y")
-  (org-journal-file-format "%Y-%m.org")
+  (org-journal-file-format "%Y-%m.txt")
   (org-journal-carryover-items ""))
 
 ;; (use-package org-noter

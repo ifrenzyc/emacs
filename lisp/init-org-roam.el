@@ -25,7 +25,7 @@
   (org-roam-setup)
   :general
   (yc/leader-keys
-    "ar" '(:ignore t :which-key "org-roam")
+      "ar" '(:ignore t :which-key "org-roam")
     "arl" 'org-roam-buffer-toggle
     "art" 'org-roam-dailies-today
     "arf" 'org-roam-node-find

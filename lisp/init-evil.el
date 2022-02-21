@@ -238,7 +238,7 @@
 
 ;; Bound to "h"
 (use-package evil-textobj-syntax
-  :straight (:host github :repo "laishulu/evil-textobj-syntax" :files ("*.el"))
+  ;; :straight (:host github :repo "laishulu/evil-textobj-syntax" :files ("*.el"))
   :after evil)
 
 ;; evil-args defines a new textobj for function arguments, and some other helpful functions.
@@ -255,7 +255,7 @@
 
 (use-package evil-textobj-column
   :after evil
-  :straight (:host github :repo "noctuid/evil-textobj-column" :files ("*.el"))
+  ;; :straight (:host github :repo "noctuid/evil-textobj-column" :files ("*.el"))
   :general
   (evil-outer-text-objects-map
    "k" 'evil-textobj-column-word
@@ -264,7 +264,7 @@
 ;; evil motion through CamelCase words
 (use-package evil-plugins
   :after evil
-  :straight (:host github :repo "tarao/evil-plugins" :files ("evil-little-word.el" "evil-textobj-between.el"))
+  ;; :straight (:host github :repo "tarao/evil-plugins" :files ("evil-little-word.el" "evil-textobj-between.el"))
   :config
   (require 'evil-little-world)
   (require 'evil-textobj-between)

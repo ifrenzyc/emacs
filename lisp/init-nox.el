@@ -8,9 +8,9 @@
 
 (use-package nox
   ;; :load-path "localelpa/nox"
-  :straight (:host github
-                   :repo "manateelazycat/nox"
-                   :files ("jsonrpc.el" "nox.el"))
+  ;; :straight (:host github
+  ;;                  :repo "manateelazycat/nox"
+  ;;                  :files ("jsonrpc.el" "nox.el"))
   ;; :init
   ;; (setq lsp-java-server-install-dir (expand-file-name "eclipse.jdt.ls/server/" user-emacs-directory)
   ;;       lsp-java-workspace-dir (expand-file-name "eclipse.jdt.ls/workspace/" user-emacs-directory))

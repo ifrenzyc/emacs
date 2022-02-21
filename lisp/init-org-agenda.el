@@ -57,27 +57,27 @@
 
   ;; http://cachestocaches.com/2016/9/my-workflow-org-agenda/#capture--refile
   (setq org-directory "~/notes")
-  (setq org-agenda-file-inbox (expand-file-name "0x00_GTD/00_inbox.org" org-directory))
-  (setq org-agenda-file-gtd (expand-file-name "0x00_GTD/01_gtd.org" org-directory))
-  (setq org-agenda-file-tickler (expand-file-name "0x00_GTD/02_tickler.org" org-directory))
-  (setq org-agenda-file-someday (expand-file-name "0x00_GTD/03_someday.org" org-directory))
-  (setq org-agenda-file-beorg (expand-file-name "0x00_GTD/04_beorg-refile.org" org-directory))
-  (setq org-agenda-file-agenda (expand-file-name "0x00_GTD/99_agenda.org" org-directory))
+  (setq org-agenda-file-inbox (expand-file-name "0x00_GTD/00_inbox.txt" org-directory))
+  (setq org-agenda-file-gtd (expand-file-name "0x00_GTD/01_gtd.txt" org-directory))
+  (setq org-agenda-file-tickler (expand-file-name "0x00_GTD/02_tickler.txt" org-directory))
+  (setq org-agenda-file-someday (expand-file-name "0x00_GTD/03_someday.txt" org-directory))
+  (setq org-agenda-file-beorg (expand-file-name "0x00_GTD/04_beorg-refile.txt" org-directory))
+  (setq org-agenda-file-agenda (expand-file-name "0x00_GTD/99_agenda.txt" org-directory))
   (setq org-agenda-file-done (expand-file-name "0x00_GTD/done.org_archive" org-directory))
-  (setq org-agenda-file-journal (expand-file-name "journal.org" org-directory))
-  (setq org-agenda-file-thoughts (expand-file-name "thoughts.org" org-directory))
+  (setq org-agenda-file-journal (expand-file-name "journal.txt" org-directory))
+  (setq org-agenda-file-thoughts (expand-file-name "thoughts.txt" org-directory))
   ;; (setq org-agenda-file-reading (expand-file-name "0x00_GTD/05_reading.org" org-directory))
-  (setq org-agenda-file-notes (expand-file-name "notes.org" org-directory))
-  (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-directory))
-  (setq org-agenda-diary-file (expand-file-name "diary.org" org-directory))
-  (setq org-default-notes-file (expand-file-name "0x00_GTD/00_inbox.org" org-directory))
+  (setq org-agenda-file-notes (expand-file-name "notes.txt" org-directory))
+  (setq org-agenda-file-code-snippet (expand-file-name "snippet.txt" org-directory))
+  (setq org-agenda-diary-file (expand-file-name "diary.txt" org-directory))
+  (setq org-default-notes-file (expand-file-name "0x00_GTD/00_inbox.txt" org-directory))
   ;; (setq org-agenda-files (list (concat org-directory "/0x00_GTD")))
 
   (setq org-agenda-files (apply 'append
                                 (mapcar
                                  (lambda (directory)
                                    (directory-files-recursively
-                                    directory org-agenda-file-regexp))
+                                    directory "\\.org$\\|\\.txt$"))
                                  '("~/notes/0x00_GTD/"))))
 
   (setq org-refile-targets '((org-agenda-file-inbox   :maxlevel . 1)
@@ -387,11 +387,13 @@ Headline^^            Visit entry^^               Filter^^                    Da
           (:name "Delegated items"
            :todo "DELEGATED"
            :order 100)
+          (:name "Today's items"
+           :todo ("NEXT"))
           (:name "Due today"
            :deadline today)
-          (:name "Today"
-           :and (:scheduled today
-                 :not (:todo "DELEGATED")))
+          ;; (:name "Today"
+          ;;  :and (:scheduled today
+          ;;        :not (:todo "DELEGATED")))
           (:habit t)
           (:name "Overdue"
            :deadline past)
@@ -399,6 +401,8 @@ Headline^^            Visit entry^^               Filter^^                    Da
            :deadline future)
           (:name "Scheduled earlier"
            :scheduled past)
+          (:name "Current Week"
+           :todo ("TODO"))
           ;; (:name "Unimportant"
           ;;        :todo ("SOMEDAY" "MABE" "CHECK" "TO-READ" "TO-WATCH"))
           ))
@@ -435,11 +439,17 @@ Headline^^            Visit entry^^               Filter^^                    Da
                  (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline))))))
          nil
          nil)
-        ;; ("d" "Daily Tasks"
-        ;;  todo "" ((org-super-agenda-groups
-        ;;            '((:name "Today's Tasks"
-        ;;                     :todo "NEXT")
-        ;;              (:discard (:anything))))))
+        ("d" "Daily Tasks"
+         alltodo "" ((org-super-agenda-groups
+                      '((:log t)
+                        (:name "Delegated items"
+                         :todo "DELEGATED"
+                         :order 100)
+                        (:name "Today's Tasks"
+                         :and (:scheduled today
+                               :not (:todo "DELEGATED")))
+                        (:discard (:anything t)))
+                      )))
 
         ;; ("w" "WORK"
         ;;  ((agenda "" ((org-agenda-ndays 14)
@@ -630,7 +640,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
         ;; ("t" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
         ;;  "* TODO %i%? %^g\nSCHEDULED: %t\n%T\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
         ("d" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
-         "** TODO %? %^g \n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
+         "** INBO %? %^g \n:PROPERTIES:\n:CREATED: %U\n:END:" :clock-in t :clock-resume t :prepend t :empty-lines 1)
         ("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")
          "* MEETING MEETING with %? :MEETING:\n:SUBJECT:\n%T\n\n*会议内容*\n\n*重点结论*\n\n*遗留问题*\n" :clock-in t :clock-resume t :empty-lines 1)
         ("w" "Work TODO" entry (file+olp org-default-notes-file "Work" "Tasks")
@@ -654,23 +664,23 @@ Headline^^            Visit entry^^               Filter^^                    Da
         ;; ("j" "Journal" entry (file+olp+datetree org-agenda-file-journal)
         ;;  "* %?\nEntered on %U\n  %i\n  %a")
         ("j" "Journal")
-        ("jd" "Diary" entry (file+olp+datetree "diary.org")
+        ("jd" "Diary" entry (file+olp+datetree "diary.txt")
          "* %?\n%U\n" :clock-in t :clock-resume t)
         ("jj" "Journal entry" entry (function org-journal-find-location)
          "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")
-        ("jo" "Journal" entry  (file (concat org-directory "/refile.org"))
+        ("jo" "Journal" entry  (file (concat org-directory "/refile.txt"))
          "* %?\n%U\n" :clock-in t :clock-resume t)
         ("s" "Screencast" entry (file org-default-notes-file)
          "* %?\n%i\n")
-        ("r" "RESPONED" entry  (file (concat org-directory "/refile.org"))
+        ("r" "RESPONED" entry  (file (concat org-directory "/refile.txt"))
          "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-        ("W" "org-protocol" entry  (file (concat org-directory "/refile.org"))
+        ("W" "org-protocol" entry  (file (concat org-directory "/refile.txt"))
          "* TODO Review %c\n%U\n" :immediate-finish t)
-        ("p" "Phone call" entry  (file (concat org-directory "/refile.org"))
+        ("p" "Phone call" entry  (file (concat org-directory "/refile.txt"))
          "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
         ("T" "Tickler" entry (file+headline org-agenda-file-tickler "Tickler")
          "* %i%? \n %U")
-        ("h" "Habit" entry  (file (concat org-directory "/refile.org"))
+        ("h" "Habit" entry  (file (concat org-directory "/refile.txt"))
          "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
         ))
 
@@ -687,5 +697,85 @@ Headline^^            Visit entry^^               Filter^^                    Da
 ;; Add graphical view of agenda
 ;; (use-package org-timeline
 ;;   :hook (org-agenda-finalize . org-timeline-insert-timeline))
+
+;; Eisenhower Matrix
+(setq org-lowest-priority ?E)
+(setq org-default-priority ?E)
+(setq org-agenda-sticky t)  ;generate differens agendas buffers in separated windows
+
+(add-to-list 'org-agenda-custom-commands
+             '("1" "Eisenhower matrix"
+               ((tags-todo
+                 "+PRIORITY=\"A\""
+                 ((org-agenda-overriding-header "Urgent and important （紧急且重要 DO）"))))
+               nil))
+
+(add-to-list 'org-agenda-custom-commands
+             '("2" "Eisenhower matrix"
+               ((tags-todo
+                 "+PRIORITY=\"B\""
+                 ((org-agenda-overriding-header "Important but not urgent （重要但不紧急 PLAN）"))))
+               nil))
+
+(add-to-list 'org-agenda-custom-commands
+             '("3" "Eisenhower matrix"
+               ((tags-todo
+                 "+PRIORITY=\"C\""
+                 ((org-agenda-overriding-header "Urgent but not important （紧急但不重要 DELEGATE）"))))
+               nil))
+
+(add-to-list 'org-agenda-custom-commands
+             '("4" "Eisenhower matrix"
+               ((tags-todo
+                 "+PRIORITY=0-PRIORITY=\"A\"-PRIORITY=\"B\"-PRIORITY=\"C\""
+                 ((org-agenda-overriding-header "Neither important nor urgent （即不重要且不紧急 ELIMINATE）"))))
+               nil))
+
+(defun myAgenda1 ()
+  (interactive)
+  (org-agenda nil "1"))
+
+(defun myAgenda2 ()
+  (interactive)
+  (org-agenda nil "2"))
+
+(defun myAgenda3 ()
+  (interactive)
+  (org-agenda nil "3"))
+
+(defun myAgenda4 ()
+  (interactive)
+  (org-agenda nil "4"))
+
+(defun split-4-ways ()
+  (interactive)
+  (delete-other-windows)
+  (split-window-right)
+  (split-window-below)
+  (windmove-right)
+  (split-window-below)
+  (windmove-left))
+
+(defun makeAgendas ()
+  (interactive)
+  (myAgenda1)
+  (myAgenda2)
+  (myAgenda3)
+  (myAgenda4))
+
+(defun makeMatrix ()
+  (interactive)
+  (makeAgendas) ;it opens: *Org Agenda(1)*, *Org Agenda(2)*, *Org Agenda(3)*, *Org Agenda(4)*
+  (split-4-ways)  ;make the 4 quadrant windows
+  (switch-to-buffer  "*Org Agenda(1)*")  ;put the Agenda(1) in the left, up quadrant
+  (windmove-right)
+  (switch-to-buffer  "*Org Agenda(2)*")  ;put the Agenda(2) in the right, up quadrant
+  (windmove-down)
+  (switch-to-buffer  "*Org Agenda(4)*")  ;put the Agenda(3) in the left, down quadrant
+  (windmove-left)
+  (switch-to-buffer  "*Org Agenda(3)*")  ;put the Agenda(4) in the right, down quadrant
+  )
+
+(global-set-key (kbd "<f5>") 'makeMatrix) 
 
 (provide 'init-org-agenda)

@@ -28,7 +28,8 @@
 ;; ("-" . imagex-sticky-zoom-out)))
 
 (use-package iscroll
-  :straight (:host github :repo "casouri/iscroll")
+  :disabled t
+  ;; :straight (:host github :repo "casouri/iscroll")
   :hook (org-mode . iscroll-mode)
   :config
   (setq iscroll-preserve-screen-position t))

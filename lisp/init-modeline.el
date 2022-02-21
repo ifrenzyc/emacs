@@ -24,7 +24,7 @@
         doom-modeline-lsp t
         doom-modeline-modal-icon t
 
-        doom-modeline-height 20
+        doom-modeline-height 30
         doom-modeline-bar-width 3
 
         ;; Whether display minor modes in mode-line or not.
@@ -61,6 +61,10 @@
         doom-modeline-env-load-string "..."
 
         doom-modeline-checker-simple-format t)
+  ;; (with-eval-after-load 'doom-modeline
+  ;;   (set-face-attribute 'mode-line nil :font "Hack-12")
+  ;;   (set-face-attribute 'mode-line-active nil :font "Hack-12")
+  ;;   (set-face-attribute 'mode-line-inactive nil :font "Hack-12"))
   (doom-modeline-mode t))
 
 ;; Use fixed pitch where it's sensible

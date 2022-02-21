@@ -71,7 +71,7 @@
   :hook (flycheck-mode . flycheck-inline-mode))
 
 (use-package flycheck-posframe
-  :straight (:host github :repo "alexmurray/flycheck-posframe")
+  ;; :straight (:host github :repo "alexmurray/flycheck-posframe")
   :hook (flycheck-mode . flycheck-posframe-mode)
   :custom-face (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
   :custom-face (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))

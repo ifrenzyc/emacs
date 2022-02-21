@@ -24,14 +24,14 @@
   (default-input-method "rime")
   (rime-title "ㄓ")
   (rime-show-candidate 'posframe)
-  ;; (rime-posframe-properties
-  ;;     (list :background-color "#333333"
-  ;;           :foreground-color "#dcdccc"
-  ;;           :font "WenQuanYi Micro Hei Mono-14"
-  ;;           :internal-border-width 10))
+  (rime-posframe-properties
+   (list :background-color "#333333"
+         :foreground-color "#dcdccc"
+         :font "LXGW WenKai Mono-14"
+         :internal-border-width 1))
   :general
   (yc/nonprefix-keys
-    :keymaps 'rime-mode-map
+      :keymaps 'rime-mode-map
     "C-`" 'rime-send-keybinding
     "M-j" 'rime-force-enable)
   :config

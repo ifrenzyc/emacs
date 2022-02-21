@@ -13,6 +13,8 @@
 ;; - https://leanpub.com/markdown-mode/read#leanpub-auto-quick-reference
 
 ;;; Code
+(require 'init-font)
+
 (use-package markdown-mode
   :mode
   (("README\\.md\\'" . gfm-mode)
@@ -22,7 +24,7 @@
   (markdown-mode gfm-mode)
   :ensure-system-package (multimarkdown . "brew install multimarkdown")
   :custom-face
-  (markdown-table-face ((t (:family user/cjk-font :size user/font-size))))
+  (markdown-table-face ((t (:family "Sarasa Mono SC" :size user/font-size))))
   :init
   (setq markdown-enable-wiki-links t
         markdown-italic-underscore t
@@ -83,7 +85,15 @@ mermaid.initialize({
                      (setq-local line-spacing 0.2)
                      (setq-local truncate-lines t)
                      (setq-local word-wrap nil)
-                     )))
+                     ))
+  :config
+  (defun yc/markdown-live-preview-window-xwidget-webkit (file)
+    "Preview FILE with xwidget-webkit.
+To be used with `markdown-live-preview-window-function'."
+    (let ((uri (format "file://%s" file)))
+      (xwidget-webkit-browse-url uri)
+      xwidget-webkit-last-session-buffer))
+  (setq markdown-live-preview-window-function 'yc/markdown-live-preview-window-xwidget-webkit))
 ;; :preface
 ;; (defun yc/markdown-set-ongoing-hydra-body ()
 ;;   (setq yc/ongoing-hydra-body #'hydra-markdown/body))
@@ -143,7 +153,7 @@ mermaid.initialize({
 ;; pip install grip
 (use-package grip-mode
   :commands (grip-mode)
-  :straight (:host github :repo "seagle0128/grip-mode")
+  ;; :straight (:host github :repo "seagle0128/grip-mode")
   :ensure-system-package (grip . "pip install grip")
   :bind (:map markdown-mode-command-map
               ("g" . grip-mode))

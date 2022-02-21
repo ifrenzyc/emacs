@@ -3151,9 +3151,11 @@ Version 2015-04-09"
                 " -n -M 512 --no-heading --color never -i \"%s\" %s"))
   (setq counsel-rg-base-command
         "rg -SHn --no-heading --color never --no-follow --hidden %s")
+  (setq counsel-fzf-cmd
+        "fd --type f --hidden --follow --exclude .git --color never || git ls-tree -r --name-only HEAD || rg --files --hidden --follow --glob '!.git' --color never || find .")
   (setq counsel-find-file-occur-use-find nil)
   (setq counsel-find-file-occur-cmd; TODO Simplify this
-        "gls -a | grep -i -E '%s' | tr '\\n' '\\0' | xargs -0 ls -d --dired-listing-switches")
+        "gls -a | grep -i -E '%s' | tr '\\n' '\\0' | xargs -0 gls -d --group-directories-first")
   
   (defun prot/counsel-fzf-rg-files (&optional input dir)
     "Run `fzf' in tandem with `ripgrep' to find files in the

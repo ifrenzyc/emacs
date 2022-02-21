@@ -340,6 +340,7 @@
       ;; if rg is installed, use rg for `counsel-grep-or-swiper' and `counsel-rg'
       (setq counsel-grep-base-command "rg -n -M 512 --line-number --smart-case --with-filename --color never --no-heading -i \"%s\" %s"
             ;; add `--follow' option to allow search through symbolic links
+            ;; ripgrep 的文档说明中文版：https://github.com/chinanf-boy/ripgrep-zh
             counsel-rg-base-command "rg -SHn -M 512 --line-number --smart-case --with-filename --color never --no-follow --no-heading %s"
             ;; Use ripgrep for counsel-git
             counsel-git-cmd "rg --files")
@@ -605,6 +606,20 @@
   :after counsel
   ;; :general (("s-o" 'counsel-osx-app))
   )
+
+(use-package counsel-at-point
+  :straight (:host gitlab :repo "ideasman42/emacs-counsel-at-point")
+  :commands
+  (counsel-at-point-file-jump
+   counsel-at-point-git-grep
+   counsel-at-point-imenu)
+  ;; :general
+  ;; Example key bindings.
+  ;; (("M-n" 'counsel-at-point-git-grep)
+  ;; ("M-p" 'counsel-at-point-file-jump)
+  ;; ("C-c i" 'counsel-at-point-imenu)
+  ;; )
+)
 
 ;; - https://github.com/redguardtoo/counsel-etags
 ;; (use-package counsel-etags

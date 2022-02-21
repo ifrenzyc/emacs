@@ -9,7 +9,7 @@
 (use-package groovy-mode
   :ensure-system-package (groovy . "brew install groovy")
   :custom
-  (groovy-indent-offset 2)
+  (groovy-indent-offset 4)
   (lsp-groovy-server-file "/Users/yangc/src/opensource/groovy-language-server/build/libs/groovy-language-server-all.jar")
   (lsp-groovy-classpath "/usr/local/opt/groovy/libexec/lib")
   :hook (groovy-mode . lsp-deferred)

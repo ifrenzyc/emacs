@@ -11,13 +11,17 @@
 
 ;; JetBrains Mono
 ;; Roboto Mono
-(defvar user/cjk-font "Sarasa Mono SC"
+;; IBM Plex Mono
+;; Hack
+;; LXGW WenKai Mono
+;; 中文的字体
+(defvar user/cjk-font "LXGW WenKai Mono"
   "Default font for CJK characters.")
 
-(defvar user/latin-font "Hack"
+(defvar user/latin-font "LXGW WenKai Mono"
   "Default font for Latin characters.")
 
-(defvar user/unicode-font "JetBrains Mono"
+(defvar user/unicode-font "Hack"
   "Default font for Unicode characters, including emojis.")
 
 (defvar user/font-size 13
@@ -75,5 +79,8 @@
 ;; (use-package unicode-fonts
 ;;   :config
 ;;   (unicode-fonts-setup))
+
+(use-package fixed-pitch
+  :straight (:host github :repo "cstby/fixed-pitch-mode"))
 
 (provide 'init-font)

@@ -178,6 +178,21 @@
    "C-c C-f" 'dired-narrow-fuzzy
    "C-c C-N" 'dired-narrow-regexp))
 
+;; A package for viewing any list of files as a tree.
+;; - https://github.com/knpatel401/filetree
+(use-package filetree
+  :straight (:host github :repo "knpatel401/filetree")
+  :init (setq ;; filetree-notes-file "/home/david/Dropbox/Org/filtree-notes.org"
+         filetree-info-window t
+         filetree-use-all-the-icons t
+         filetree-show-remote-file-info t)
+  ;; :bind (("C-c f r" . filetree-show-recentf-files)
+  ;;        ("C-c f f" . filetree-select-file-list)
+  ;;        ("C-c f d" . filetree-show-cur-dir)
+  ;;        ("C-c f D" . filetree-show-cur-dir-recursively)
+  ;;        ("C-c f n" . filetree-show-files-with-notes))
+  )
+
 ;; Multi-stage copy/pasting of files and bookmarks
 (use-package dired-ranger
   :after (dired))

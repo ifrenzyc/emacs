@@ -28,7 +28,7 @@
   :commands (command-log-mode))
 
 (use-package manage-minor-mode
-  :straight (:host github :repo "ShingoFukuyama/manage-minor-mode")
+  ;; :straight (:host github :repo "ShingoFukuyama/manage-minor-mode")
   :commands manage-minor-mode)
 
 ;; 参考 doom-emacs 调整 GC：https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast
@@ -38,17 +38,20 @@
                                       gc-cons-percentage 0.1)))
 (run-with-idle-timer 3 t (lambda () (garbage-collect)))
 
+;;; GC optimization
 ;; Use GCMH --  the Garbage Collector Magic Hack -- to adjust garbage collection.
 ;; - https://gitlab.com/koral/gcmh
 ;; - https://emacs-china.org/t/emacs-10/17716
 ;; (use-package gcmh
 ;;   :demand t
-;;   ;; :init
+;;   :init
+;;   (add-hook 'after-init-hook 'gcmh-mode)
 ;;   ;; (setq gcmh-verbose             t
 ;;   ;;       gcmh-lows-cons-threshold #x800000
 ;;   ;;       gcmh-high-cons-threshold most-positive-fixnum
 ;;   ;;       gcmh-idle-delay          3600)
-;;   :config
-;;   (gcmh-mode t))
+;;   :custom
+;;   (gcmh-idle-delay 10)
+;;   (gcmh-high-cons-threshold #x6400000))
 
 (provide 'init-gc)

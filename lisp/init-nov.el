@@ -12,10 +12,9 @@
   (add-hook 'nov-mode-hook 'visual-line-mode)
   (add-hook 'nov-mode-hook 'visual-fill-column-mode)
   (add-hook 'nov-mode-hook (lambda ()
-			                 (setq visual-fill-column-center-text t)
 			                 (display-line-numbers-mode -1)))
   :config
-  (setq visual-fill-column-center-text t)
+  (setq-local visual-fill-column-center-text t)
   (yc/nonprefix-keys
       :keymaps 'nov-mode-map
     "H" 'nov-previous-document

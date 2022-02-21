@@ -438,7 +438,8 @@
 
 ;; https://github.com/emacs-lsp/lsp-sonarlint
 (use-package lsp-sonarlint
-  :straight (:host github :repo "emacs-lsp/lsp-sonarlint")
+  :disabled t
+  ;; :straight (:host github :repo "emacs-lsp/lsp-sonarlint")
   :init
   (setq lsp-sonarlint-html-enabled t)
   (setq lsp-sonarlint-java-enabled t)

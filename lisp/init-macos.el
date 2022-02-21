@@ -29,6 +29,10 @@
   (setenv "LD_LIBRARY_PATH" (concat (getenv "LD_LIBRARY_PATH") ":/usr/local/lib"))
   (setq exec-path (append exec-path '("/usr/local/lib"))))
 
+;; A patch to enhance exec-path-from-shell
+(use-package cache-path-from-shell
+  :straight (:host github :repo "manateelazycat/cache-path-from-shell"))
+
 ;; Display dividers between windows
 (setq window-divider-default-places t
       window-divider-default-bottom-width 1

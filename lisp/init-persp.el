@@ -162,7 +162,7 @@ _p_: previous     _L_: predefined   _r_: rename
 ;;   :config (treemacs-set-scope-type 'Perspectives))
 
 (use-package persp-mode-project-bridge
-  :straight (:host github :repo "CIAvash/persp-mode-project-bridge")
+  ;; :straight (:host github :repo "CIAvash/persp-mode-project-bridge")
   :hook
   (persp-mode-project-bridge-mode . (lambda ()
                                       (if persp-mode-project-bridge-mode

@@ -15,19 +15,21 @@
 
 (setq backup-by-copying nil)
 
-(use-package gitconfig-mode
-  :after (magit))
-(use-package gitignore-mode
-  :after (magit))
-(use-package gitattributes-mode
-  :after (magit))
+(use-package git-modes
+  ;; :straight (:host github :repo "magit/git-modes")
+  :after (magit)
+  :config
+  (use-package gitignore-mode
+    :after (magit))
+  (use-package gitattributes-mode
+    :after (magit)))
 
 ;; - https://emacsair.me/2017/09/01/magit-walk-through/
 (use-package magit
   :commands (magit-status)
   :general
   (yc/nonprefix-keys
-    "C-x g" 'magit-status)
+      "C-x g" 'magit-status)
   :hook
   (magit-log-edit-mode . (lambda ()
                            (set-fill-column 89)
@@ -43,7 +45,7 @@
   (when (fboundp 'transient-append-suffix)
     ;; Add switch: --tags
     (transient-append-suffix 'magit-fetch
-      "-p" '("-t" "Fetch all tags" ("-t" "--tags"))))
+        "-p" '("-t" "Fetch all tags" ("-t" "--tags"))))
 
   (diminish 'magit-auto-revert-mode "")
   ;; (when (featurep 'evil)
@@ -68,6 +70,20 @@
 
 ;; (use-package git-gutter+
 ;;   :after (git-gutter))
+
+;; A git blame plugin for emacs inspired by VS Code’s GitLens plugin and Vim plugin
+;; (use-package blamer
+;;   :straight (:host github :repo "artawower/blamer.el")
+;;   :init
+;;   (setq blamer-idle-time 0.3)
+;;   (setq blamer-min-offset 70)
+;;   :custom-face
+;;   (blamer-face ((t :foreground "#7a88cf"
+;;                    :background nil
+;;                    :height 140
+;;                    :italic t)))
+;;   :config
+;;   (global-blamer-mode 1))
 
 ;; Pop up last commit information of current line
 ;; https://github.com/syohex/emacs-git-messenger
@@ -144,14 +160,14 @@
                                 :internal-border-color (face-foreground 'font-lock-comment-face nil t)
                                 :background-color (face-background 'tooltip nil t))
                  (unwind-protect
-                     (push (read-event) unread-command-events)
+                      (push (read-event) unread-command-events)
                    (posframe-delete buffer-name))))
               ((and (fboundp 'pos-tip-show) (display-graphic-p))
                (pos-tip-show popuped-message))
               ((fboundp 'lv-message)
                (lv-message popuped-message)
                (unwind-protect
-                   (push (read-event) unread-command-events)
+                    (push (read-event) unread-command-events)
                  (lv-delete-window)))
               (t (message "%s" popuped-message)))
         (run-hook-with-args 'git-messenger:after-popup-hook popuped-message)))
