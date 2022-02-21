@@ -815,7 +815,8 @@
 
 (use-package org-ol-tree
   :commands org-ol-tree
-  :straight (:host github :repo "Townk/org-ol-tree"))
+  :straight (:host github :repo "Townk/org-ol-tree")
+  )
 
 ;; - https://github.com/takaxp/org-tree-slide
 (use-package org-tree-slide
@@ -834,7 +835,8 @@
 ;; - https://github.com/alphapapa/org-sidebar
 (use-package org-sidebar
   :commands (org-sidebar org-sidebar-tree)
-  :straight (:host github :repo "alphapapa/org-sidebar"))
+  ;; :straight (:host github :repo "alphapapa/org-sidebar")
+  )
 
 ;; Table-of-contents sidebar for Emacs.
 ;; 暂时还没在 mpla 里

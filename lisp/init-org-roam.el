@@ -8,13 +8,14 @@
 ;;; Code:
 
 (use-package org-roam
-  :straight (:host github :repo "org-roam/org-roam")
+  ;; :straight (:host github :repo "org-roam/org-roam")
   :init
   ;; disable v1 migrate to v2 warning
   (setq org-roam-v2-ack t)
   :custom
   (org-roam-directory "~/notes/09_Zettelkästen")
   :config
+  (setq org-roam-file-extensions '("txt"))
   (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/2.44.1/bin/dot")
   (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
   (setq org-roam-completion-system 'ivy)

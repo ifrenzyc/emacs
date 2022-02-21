@@ -265,7 +265,8 @@
 ;; config ~/.gitconfig file
 ;; - https://github.com/dandavison/delta/
 (use-package magit-delta
-  :straight (:host github :repo "dandavison/magit-delta")
+  :disabled t
+  ;; :straight (:host github :repo "dandavison/magit-delta")
   :hook (magit-mode . magit-delta-mode))
 
 (provide 'init-vcs)

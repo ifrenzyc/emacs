@@ -30,9 +30,15 @@
 ;;        scroll-preserve-screen-position t)
 ;; (setq auto-window-vscroll nil)
 
-;; (use-package good-scroll
-;;   :config
-;;   (good-scroll-mode t))
+(use-package good-scroll
+  :disabled t
+  :config
+  (good-scroll-mode t))
+
+(use-package pixel-scroll-precision
+  :straight (:type built-in)
+  :init
+  (pixel-scroll-precision-mode))
 
 ;; (use-package yascroll
 ;;   :init
@@ -208,7 +214,8 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 
 ;; - https://github.com/alphapapa/burly.el
 (use-package burly
-  :straight (:host github :repo "alphapapa/burly.el"))
+  ;; :straight (:host github :repo "alphapapa/burly.el")
+  )
 
 ;; 类似于 tmux 的最大化当前窗口功能，保持和我在 tmux 下的习惯一致。
 ;; https://github.com/syohex/emacs-zoom-window
@@ -372,7 +379,8 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 
 ;; 透明化窗口设置
 (use-package transwin
-  :straight (:host github :repo "jcs-elpa/transwin")
+  :disabled t
+  ;; :straight (:host github :repo "jcs-elpa/transwin")
   :config
   (transwin-toggle-transparent-frame))
 

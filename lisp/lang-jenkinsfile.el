@@ -7,6 +7,7 @@
 ;;; Code
 
 (use-package jenkinsfile-mode
-  :straight (:host github :repo "john2x/jenkinsfile-mode"))
+  ;; :straight (:host github :repo "john2x/jenkinsfile-mode")
+  )
 
 (provide 'lang-jenkinsfile)

@@ -25,7 +25,7 @@
   (setq vterm-exit-functions '(my/vterm-exit-kill-buffer)))
 
 (use-package vterm-toggle
-  :straight (:host github :repo "jixiuf/vterm-toggle")
+  ;; :straight (:host github :repo "jixiuf/vterm-toggle")
   :after vterm
   :commands (vterm-toggle vterm-toggle-cd vterm)
   :config
