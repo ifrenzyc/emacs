@@ -57,11 +57,12 @@
 ;; 参考这篇文章重新定义自己的 key bindings：https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/
 ;; 参考在 Mac 下的一些配置：https://www.emacswiki.org/emacs/EmacsForMacOS
 (yc/leader-keys
-  "TAB"  'mode-line-other-buffer
+    "TAB"  'mode-line-other-buffer
   "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
   "C-g"  'keyboard-quit
   "?"    'which-key-show-top-level
-  "<"    '(counsel-projectile-find-file-dwim :which-key "Find file in project")
+  ;; "<"    '(counsel-projectile-find-file-dwim :which-key "Find file in project")
+  "<"    '(counsel-fd-file-jump :which-key "Find file in project")
   ":"    '(counsel-M-x :which-key "M-x")
   ;; ";"    '(evil-ex :which-key "Ex command")
   "'"   '(multi-vterm-project :which-key "Open project shell")
@@ -146,8 +147,7 @@
   "jk"   'avy-goto-char
   "jl"   'avy-goto-line
   "jb"   'counsel-bookmark
-  "u"    '(:ignore t :which-key "Undo/Redo")
-  "uu"   'undo-tree-visualize
+  "u"    'universal-argument
   "k"    '(:ignore t :which-key "lisp")
   "kd"   '(:ignore t :which-key "delete")
   "kD"   '(:ignore t :which-key "delete-backward")
@@ -158,7 +158,8 @@
   "qq"   'delete-window
   "qr"   'restart-emacs
   "qQ"   'kill-emacs
-  "r"    '(:ignore t :which-key "registers/rings/resume")
+  "r"    '(:ignore t :which-key "Undo/Redo/registers/rings/resume")
+  "ru"   'undo-tree-visualize
   "m"    '(:ignore t :which-key "major-mode-cmd")
   "m."   'major-mode-hydra
   "Re"   '(:ignore t :which-key "elisp")

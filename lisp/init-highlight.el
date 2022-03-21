@@ -19,6 +19,7 @@
 ;; | =<F3>=   | highlight-symbol-next     | 查找下一个匹配的词     |
 ;; | =S-<F3>= | highlight-symbol-prev     | 查找上一个匹配的词     |
 (use-package highlight-symbol
+  :disabled t
   :hook
   ((prog-mode . highlight-symbol-mode)
    (highlight-symbol-mode . highlight-symbol-nav-mode)
@@ -105,7 +106,6 @@ FACE defaults to inheriting from default and highlight."
          ("M-C" . symbol-overlay-remove-all)
          ("s-." . symbol-overlay-transient)
          ([M-f3] . symbol-overlay-remove-all))
-
   :hook ((prog-mode . symbol-overlay-mode)
          (iedit-mode . turn-off-symbol-overlay)
          (iedit-mode-end . turn-on-symbol-overlay))
@@ -135,21 +135,151 @@ FACE defaults to inheriting from default and highlight."
       (symbol-overlay-mode 1)))
   (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay)
   ;; (define-transient-command symbol-overlay-transient ()
-  ;;   "Symbol Overlay transient"
-  ;;   ["Symbol Overlay"
-  ;;    ["Overlays"
-  ;;     ("." "Add/Remove at point" symbol-overlay-put)
-  ;;     ("k" "Remove All" symbol-overlay-remove-all)
-  ;;     ]
-  ;;    ["Move to Symbol"
-  ;;     ("n" "Next" symbol-overlay-switch-forward)
-  ;;     ("p" "Previous" symbol-overlay-switch-backward)
-  ;;     ]
-  ;;    ["Other"
-  ;;     ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
-  ;;     ]
+  ;;  "Symbol Overlay transient"
+  ;;  ["Symbol Overlay"
+  ;;   ["Overlays"
+  ;;    ("." "Add/Remove at point" symbol-overlay-put)
+  ;;    ("k" "Remove All" symbol-overlay-remove-all)
   ;;    ]
-  ;;   )
+  ;;   ["Move to Symbol"
+  ;;    ("n" "Next" symbol-overlay-switch-forward)
+  ;;    ("p" "Previous" symbol-overlay-switch-backward)
+  ;;    ]
+  ;;   ["Other"
+  ;;    ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
+  ;;    ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)
+  ;;    ]
+  ;;   ]
+  ;; )
+  (defun symbol-overlay-switch-first ()
+    (interactive)
+    (let* ((symbol (symbol-overlay-get-symbol))
+           (keyword (symbol-overlay-assoc symbol))
+           (a-symbol (car keyword))
+           (before (symbol-overlay-get-list a-symbol 'car))
+           (count (length before)))
+      (symbol-overlay-jump-call 'symbol-overlay-basic-jump (- count))))
+
+  (defun symbol-overlay-switch-last ()
+    (interactive)
+    (let* ((symbol (symbol-overlay-get-symbol))
+           (keyword (symbol-overlay-assoc symbol))
+           (a-symbol (car keyword))
+           (after (symbol-overlay-get-list a-symbol 'cdr))
+           (count (length after)))
+      (symbol-overlay-jump-call 'symbol-overlay-basic-jump (- count 1))))
+
+  (setq symbol-overlay-map (make-sparse-keymap))
+  (setq my/symbol-overlay-keymap (make-sparse-keymap))
+  (define-key my/symbol-overlay-keymap (kbd "h") 'symbol-overlay-put)
+  (define-key my/symbol-overlay-keymap (kbd "n") 'symbol-overlay-jump-next)
+  (define-key my/symbol-overlay-keymap (kbd "p") 'symbol-overlay-jump-prev)
+  (define-key my/symbol-overlay-keymap (kbd "w") 'symbol-overlay-save-symbol)
+  (define-key my/symbol-overlay-keymap (kbd "t") 'symbol-overlay-toggle-in-scope)
+  (define-key my/symbol-overlay-keymap (kbd "e") 'symbol-overlay-echo-mark)
+  (define-key my/symbol-overlay-keymap (kbd "d") 'symbol-overlay-jump-to-definition)
+  (define-key my/symbol-overlay-keymap (kbd "s") 'symbol-overlay-isearch-literally)
+  (define-key my/symbol-overlay-keymap (kbd "q") 'symbol-overlay-query-replace)
+  (define-key my/symbol-overlay-keymap (kbd "r") 'symbol-overlay-rename)
+  (define-key my/symbol-overlay-keymap (kbd "<") 'symbol-overlay-switch-first)
+  (define-key my/symbol-overlay-keymap (kbd ">") 'symbol-overlay-switch-last)
+  ;; (global-set-key (kbd "C-c h") my/symbol-overlay-keymap)
+
+  ;; 以下内容参考：https://gist.github.com/twlz0ne/2c743846bc73dd83c3f3e6a5cc85383e
+  (define-advice symbol-overlay-put-one (:override (symbol &optional face) without-keymap)
+    "Put overlay on current occurrence of SYMBOL after a match.
+If FACE is non-nil, use it as the overlay’s face.
+Otherwise apply `symbol-overlay-default-face'."
+    (let ((ov (make-overlay (match-beginning 0) (match-end 0))))
+      (if face (progn (overlay-put ov 'face face)
+		              ;; (overlay-put ov 'keymap symbol-overlay-map) ;; ---
+		              (overlay-put ov 'evaporate t)
+		              (overlay-put ov 'symbol symbol))
+        (overlay-put ov 'face 'symbol-overlay-default-face)
+        (overlay-put ov 'symbol ""))))
+
+  (defun hilight--newest-overlay-symbol-at-point (pos)
+    "Return symbol of newest overlay.
+If there are multiple overlays at point, return the newest region overlay, skip the symbol overlay.
+If there is only one overlay at point, just return it, no matter region or symbol."
+    (interactive)
+    (let ((symbols (--map (overlay-get it 'symbol)
+                          (overlays-at pos))))
+      (car (if (cdr symbols)
+               (reverse
+                (--filter (not (or (string-prefix-p "\\_<" it)
+                                   (string-suffix-p "\\_>" it)))
+                          symbols))
+             symbols))))
+
+  (defun hilight--jump (&optional backward)
+    (interactive)
+    (let* ((pos (point))
+           (sym (hilight--newest-overlay-symbol-at-point pos))
+           (testfn (if backward '< '>))
+           (pointfn (if backward 'overlay-end 'overlay-start)))
+      (catch 'break
+        (--map
+         (when (string= sym (overlay-get it 'symbol))
+           (let ((dst (funcall pointfn it)))
+             (when (funcall testfn dst pos)
+               (goto-char (- dst (if backward 1 0)))
+               (throw 'break nil))))
+         (symbol-overlay-get-list)))))
+
+  (defun hilight-toggle (&optional beg end)
+    "Toggle all overlays of symbol or region at point."
+    (interactive "r")
+    (unless (minibufferp)
+      (let* ((symbol (if (region-active-p)
+                         (prog1 (buffer-substring-no-properties beg end)
+                           (deactivate-mark))
+                       (symbol-overlay-get-symbol)))
+             (keyword (symbol-overlay-assoc symbol)))
+        (if keyword
+            (if (symbol-overlay-maybe-reput symbol keyword)
+                (symbol-overlay-maybe-count keyword)
+              (symbol-overlay-maybe-remove keyword)
+              (symbol-overlay-maybe-put-temp))
+          (and (looking-at-p "\\_>") (backward-char))
+          (symbol-overlay-maybe-count
+           (symbol-overlay-put-all symbol symbol-overlay-scope)
+           t)))))
+
+  (defun hilight-jump-next ()
+    (interactive)
+    (hilight--jump))
+
+  (defun hilight-jump-prev ()
+    (interactive)
+    (hilight--jump t))
+
+  (defhydra hydra-hilight-jump (:hint nil)
+    "\n <-- _p_rev _n_ext -->\n"
+    ("n" hilight-jump-next)
+    ("p" hilight-jump-prev))
+
+  (defun hilight-jump-next+hydra ()
+    (interactive)
+    (hilight-jump-next)
+    (hydra-hilight-jump/body))
+
+  (defun hilight-jump-prev+hydra ()
+    (interactive)
+    (hilight-jump-prev)
+    (hydra-hilight-jump/body))
+
+  (evil-leader/set-key
+      "hh" 'hilight-toggle          ;; instead of `symbol-overlay-put'
+    "hn" 'hilight-jump-next+hydra ;; instead of `symbol-overlay-jump-next'
+    "hp" 'hilight-jump-prev+hydra ;; instead of `symbol-overlay-jump-prev'
+    "ht" 'symbol-overlay-toggle-in-scope
+    "ha" 'symbol-overlay-remove-all
+    "he" 'symbol-overlay-echo-mark
+    "hd" 'symbol-overlay-jump-to-definition
+    "hs" 'symbol-overlay-isearch-literally
+    "hq" 'symbol-overlay-query-replace
+    "hr" 'symbol-overlay-rename)
   )
 
 ;; (use-package highlight-thing

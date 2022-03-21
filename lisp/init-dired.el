@@ -158,6 +158,9 @@
 ;;   :config
 ;;   (setq dired-k-padding 1))
 
+(use-package dired-hacks
+  :straight (:host github :repo "Fuco1/dired-hacks"))
+
 ;; Show subtree when pressing =i=
 (use-package dired-subtree
   :after (dired)
@@ -193,9 +196,21 @@
   ;;        ("C-c f n" . filetree-show-files-with-notes))
   )
 
-;; Multi-stage copy/pasting of files and bookmarks
-(use-package dired-ranger
-  :after (dired))
+;; Peep file in dired
+;; https://github.com/asok/peep-dired
+(use-package peep-dired
+  :straight (:host github :repo "asok/peep-dired")
+  :custom
+  (peep-dired-cleanup-on-disable t)
+  (peep-dired-enable-on-directories t)
+  (peep-dired-ignored-extensions '("mkv" "iso" "mp4"))
+  :config
+  (evil-define-key 'normal peep-dired-mode-map (kbd "<SPC>") 'peep-dired-scroll-page-down
+                   (kbd "C-<SPC>") 'peep-dired-scroll-page-up
+                   (kbd "<backspace>") 'peep-dired-scroll-page-up
+                   (kbd "j") 'peep-dired-next-file
+                   (kbd "k") 'peep-dired-prev-file)
+  (add-hook 'peep-dired-hook 'evil-normalize-keymaps))
 
 ;; Colourful columns.
 (use-package diredfl
@@ -212,5 +227,21 @@
 (use-package all-the-icons-dired
   :after (dired all-the-icons)
   :hook (dired-mode . all-the-icons-dired-mode))
+
+;; 类似 package
+;; - dired-sidebar
+;; ranger.el
+(use-package dirvish
+  :disabled t
+  :straight (:host github :repo "alexluigit/dirvish"))
+
+(use-package ranger
+  :disabled t
+  :straight (:host github :repo "ralesi/ranger.el"))
+
+;; Multi-stage copy/pasting of files and bookmarks
+(use-package dired-ranger
+  :disabled t
+  :after (dired))
 
 (provide 'init-dired)

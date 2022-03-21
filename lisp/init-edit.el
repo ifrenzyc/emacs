@@ -36,6 +36,7 @@
 ;; (use-package mdi
 ;;   :load-path "localelpa/mdi/")
 
+;; 另外一个与 anzu 替代： https://github.com/benma/visual-regexp.el 
 (use-package anzu
   :bind (([remap query-replace] . anzu-query-replace)
          ([remap query-replace-regexp] . anzu-query-replace-regexp)
@@ -201,16 +202,64 @@
 ;; - https://github.com/Kungsgeten/selected.el
 (use-package selected
   :commands (selected-minor-mode)
+  :custom
+  (selected-minor-mode-override t)
+  :hook
+  (after-init . selected-global-mode)
   :init
   (setq selected-org-mode-map (make-sparse-keymap))
-  :general (selected-keymap
-            "q" 'selected-off
-            "u" 'upcase-region
-            "d" 'downcase-region
-            "w" 'count-words-region
-            "m" 'apply-macro-to-region-lines)
+  :config
+  (defvar-local me/pretty-print-function nil)
+
+  (defun me/pretty-print (beg end)
+    (interactive "r")
+    (if me/pretty-print-function
+        (progn (funcall me/pretty-print-function beg end)
+               (setq deactivate-mark t))
+      (user-error "me/pretty-print: me/pretty-print-function is not set")))
+  :general
+  ;; (selected-keymap
+  ;;  "q"           'selected-off
+  ;;  "u"           'upcase-region
+  ;;  "d"           'downcase-region
+  ;;  "w"           'count-words-region
+  ;;  "m"           'apply-macro-to-region-lines
+  ;;  "<"           'mc/mark-previous-like-this
+  ;;  ">"           'mc/mark-next-like-this
+  ;;  "C-<"         'mc/unmark-previous-like-this
+  ;;  "C->"         'mc/unmark-next-like-this
+  ;;  "M-<"         'mc/skip-to-previous-like-this
+  ;;  "M->"         'mc/skip-to-next-like-this
+  ;;  "C-c >"       'mc/edit-lines
+  ;;  "C-c c"       'capitalize-region
+  ;;  "C-c k"       'barrinalo-kebab
+  ;;  "C-c l"       'downcase-region
+  ;;  "C-c u"       'upcase-region
+  ;;  "C-f"         'fill-region
+  ;;  "C-h h"       'hlt-highlight-region
+  ;;  "C-h H"       'hlt-unhighlight-region
+  ;;  "C-p"         'webpaste-paste-region
+  ;;  "C-q"         'selected-off
+  ;;  "C-s r"       'barrinalo-reverse
+  ;;  "C-s s"       'sort-lines
+  ;;  "C-s w"       'barrinalo-sort-words
+  ;;  "C-<tab>"     'me/pretty-print
+  ;;  "M-<left>"    'barrinalo-indent-leftward
+  ;;  "M-<right>"   'barrinalo-indent-rightward
+  ;;  "M-S-<left>"  'barrinalo-indent-leftward-tab
+  ;;  "M-S-<right>" 'barrinalo-indent-rightward-tab)
   (selected-org-mode-map
    "t" 'org-table-convert-region))
+
+(use-package barrinalo
+  :disabled t
+  :load-path "localelpa/barrinalo"
+  :straight nil
+  :bind
+  ("M-p" . barrinalo-swap-up)
+  ("M-n" . barrinalo-swap-down)
+  ("M-P" . barrinalo-duplicate-backward)
+  ("M-N" . barrinalo-duplicate-forward))
 
 ;; 选中文本后，直接输入就可以，省去了删除操作。这在其他文本编辑器里都是标配，建议打开。
 (use-package delsel

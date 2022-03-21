@@ -21,6 +21,7 @@
 ;; Restart Emacs inside Emacs.
 ;; https://github.com/iqbalansari/restart-emacs
 (use-package restart-emacs
+  :disabled t
   :commands (restart-emacs)
   :config (emacs-restore-frames t))
 

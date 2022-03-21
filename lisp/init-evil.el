@@ -28,7 +28,7 @@
   (evil-collection-init 'which-key))
 
 (use-package evil
-  :demand t
+  ;; :demand t
   :init
   (setq evil-want-keybinding nil
         evil-want-integration nil
@@ -42,7 +42,8 @@
         evil-undo-system 'undo-tree) ;; undo-fu
   (setq-default evil-want-Y-yank-to-eol t)
   :hook
-  ((evil-local-mode . turn-on-undo-tree-mode))
+  ((after-init . evil-mode)
+   (evil-local-mode . turn-on-undo-tree-mode))
   ;; ;; 指定哪些 mode 才启用 evil-mode https://github.com/louisch/dotemacs/blob/a354bbf1f9b9854a32353dd65b34557f0e594a1a/personal/package-config.el
   ;; (prog-mode . evil-local-mode)
   ;; (fundamental-mode . evil-local-mode)
@@ -61,7 +62,6 @@
   ;; (evil-visual-state-map "\C-y" 'yank)
   ;; (evil-insert-state-map "\C-e" 'end-of-line)
   :config
-  (evil-mode)
   ;; (OPTIONAL) Shift width for evil-mode users
   ;; For the vim-like motions of ">>" and "<<".
   ;; (setq-default evil-shift-width 4)

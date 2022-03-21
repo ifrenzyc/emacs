@@ -77,8 +77,8 @@ mermaid.initialize({
   (advice-add #'markdown--style-map-prompt   :override #'ignore)
   :hook
   ;; Turn on flyspell mode when editing markdown files
-  (markdown-mode . flyspell-mode)
-  (gfm-mode . flyspell-mode)
+  ;; (markdown-mode . flyspell-mode)
+  ;; (gfm-mode . flyspell-mode)
   (markdown-mode . (lambda ()
                      ;; (auto-fill-mode t)
                      ;; (set-fill-column 89)

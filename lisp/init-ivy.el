@@ -62,6 +62,8 @@
                             "Use abbreviate in `ivy-rich-mode'."
                             (setq ivy-virtual-abbreviate
                                   (or (and ivy-rich-mode 'abbreviate) 'name)))))
+  :custom-face
+  (ivy-current-match ((t (:extend t :background "gray98" :underline t))))
   :custom
   (ivy-rich-parse-remote-buffer nil)
   (ivy-rich-parse-remote-file-path nil)
@@ -607,6 +609,12 @@
   ;; :general (("s-o" 'counsel-osx-app))
   )
 
+(use-package counsel-fd
+  :straight (:host github :repo "CsBigDataHub/counsel-fd")
+  :after counsel
+  :config
+  (defalias 'fd 'counsel-fd-file-jump))
+
 (use-package counsel-at-point
   :straight (:host gitlab :repo "ideasman42/emacs-counsel-at-point")
   :commands
@@ -619,7 +627,7 @@
   ;; ("M-p" 'counsel-at-point-file-jump)
   ;; ("C-c i" 'counsel-at-point-imenu)
   ;; )
-)
+  )
 
 ;; - https://github.com/redguardtoo/counsel-etags
 ;; (use-package counsel-etags

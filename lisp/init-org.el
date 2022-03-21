@@ -18,6 +18,7 @@
 
 ;;; Code
 (use-package org
+  :straight (:type built-in)
   ;; :straight org-plus-contrib
   :mode ("\\.\\(org\\|txt\\)$" . org-mode)
   :delight org-mode "Org"
@@ -53,7 +54,7 @@
         org-enforce-todo-dependencies t
         org-enforce-todo-checkbox-dependencies t
         org-hide-emphasis-markers t     ; 隐藏 org-mode 语法中的标记字符
-        org-image-actual-width (/ (display-pixel-width) 3))
+        org-image-actual-width (/ (frame-pixel-width) 2))
   ;; org-image-actual-width '(400))
 
   (setq org-log-done 'time                      ; 记录时间
@@ -108,11 +109,17 @@
         org-fontify-quote-and-verse-blocks t)
 
   (setq org-todo-keywords
-        '((sequence "INBO(i)" "TODO(t)" "NEXT(n)" "DELEGATED(l)" "|" "DONE(d)" "DEFERRED(f)" "CANCELLED(c)")
-          (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "DELEGATED(l)" "REPEAT(r)" "MABE(m)" "|" "DONE(d!/!)")
+        '((sequence "INBO(i!/!)" "TODO(t!/!)" "NEXT(n!/!)" "DELEGATED(l!/!)" "|" "DONE(d!/!)" "DEFERRED(f!/!)" "CANCELLED(c@/!)")
           (sequence "MEETING" "|" "MEETING_DONE")
-          (sequence "PROJ(p)" "READ(r)" "FIXME(f)" "|" "DONE(d!/!)" "READ_DONE(R)" "CANCELLED(c@/!)")
-          (sequence "WAITING(w@/!)" "HOLD(h)" "|" "CANCELLED(c@/!)")))
+          (sequence "PROJ(p!/!)" "READ(r!/!)" "FIXME(f!/!)" "|" "READ_DONE(R!/!)")
+          (sequence "WAITING(w@/!)" "REPEAT(r!/!)" "MABE(m!/!)" "HOLD(h!/!)")))
+
+  ;; (setq org-todo-keywords 
+  ;;       (quote ((sequence "TODO(t!/!)" "NEXT(n!/!)" 
+  ;;                         "STARTED(s!)" "|" "DONE(d!/!)")
+  ;;               (type "PROJECT(p!/!)" "|" "DONE_PROJECT(D!/!)")
+  ;;               (sequence "WAITING(w@/!)" "SOMEDAY(S!)"  "|"
+  ;;                         "CANCELLED(c@/!)"))))
 
   (setq org-use-fast-todo-selection t)
   (setq org-todo-state-tags-triggers
@@ -513,6 +520,12 @@
 ;;   :init
 ;;   (setq org-bullets-bullet-list '("⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫")))
 
+;; https://github.com/minad/org-modern
+(use-package org-modern
+  :disabled t
+  :straight (:host github :repo "minad/org-modern")
+  :hook (org-mode . org-modern-mode))
+
 (use-package org-superstar
   :hook (org-mode . org-superstar-mode)
   :custom
@@ -564,6 +577,7 @@
 ;;   (org-pretty-tags-global-mode))
 
 (use-package org-fancy-priorities
+  :disabled t
   :defines org-fancy-priorities-list
   :hook (org-mode . org-fancy-priorities-mode)
   :config
@@ -595,7 +609,8 @@
 ;; 代码来源：https://www.reddit.com/r/emacs/comments/ctfxbg/emacs_doom_e15_fancy_task_priorities_in_org_mode/
 ;; pretty-symbols 参考配置 file:~/src/emacs.d/yantar92-emacs-config
 (use-package pretty-symbols
-  :hook (org-mode . pretty-symbols-mode)
+  :hook
+  (org-mode . pretty-symbols-mode)
   :config
   (setq pretty-symbol-categories '(relational logical lambda org-specific nil cpp general))
 

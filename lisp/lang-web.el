@@ -52,6 +52,9 @@
         web-mode-code-indent-offset 2
         web-mode-auto-close-style 2
         web-mode-indent-style 2)
+  ;; fix javascript indent
+  ;; http://mbork.pl/2022-03-14_Proper_indentation_after_a_const_in_Emacs
+  (setq js--declaration-keyword-re "\\<\\(let\\|var\\)\\>")
   :hook
   (js2-mode . lsp)
   (web-mode . lsp)

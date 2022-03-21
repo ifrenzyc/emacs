@@ -11,7 +11,7 @@
   :commands (projectile-project-root)
   :general
   (yc/leader-keys
-    :states 'normal
+      :states 'normal
     ;; "p"     '(:ignore t :wk "projects")
     ;; "p$"    '(:ignore t :which-key "projects/shell")
     ;; "p"     '(:keymap projectile-command-map :which-key "projects")
@@ -30,7 +30,7 @@
   (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
   (setq projectile-enable-caching t
         projectile-completion-system 'ivy
-        projectile-indexing-method 'alien)
+        projectile-indexing-method 'native)
 
   ;; add to the globally ignored files
   (dolist (file-name '("*~" "*.elc" "*.class" "node_modules"))

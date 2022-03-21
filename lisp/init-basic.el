@@ -86,7 +86,7 @@
   (setq-default kill-whole-line t)
 
   (global-hl-line-mode 0)
-  (global-prettify-symbols-mode t)
+  ;; (global-prettify-symbols-mode t)
 
   ;; ignore byte-compile warnings
   ;; (setq byte-compile-warnings (set-difference byte-compile-warning-types

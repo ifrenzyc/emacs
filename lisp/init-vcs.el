@@ -72,6 +72,7 @@
 ;;   :after (git-gutter))
 
 ;; A git blame plugin for emacs inspired by VS Code’s GitLens plugin and Vim plugin
+;; https://codeberg.org/akib/emacs-why-this
 ;; (use-package blamer
 ;;   :straight (:host github :repo "artawower/blamer.el")
 ;;   :init

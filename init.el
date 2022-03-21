@@ -63,19 +63,19 @@
 ;; (require 'package)
 ;; (unless package--initialized (package-initialize))
 
-(when (>= emacs-major-version 26)
-  (require 'package)
+;; (when (>= emacs-major-version 26)
+;;   (require 'package)
 
-  (setq package-archives
-        '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
-          ;; ("gnu"          . "https://elpa.gnu.org/packages/")
-          ("gnu"          . "https://elpa.emacs-china.org/gnu/")
-          ;; ("melpa"        . "https://melpa.org/packages/")
-          ("melpa"        . "https://elpa.emacs-china.org/melpa/")
-          ;; ("org"          . "https://orgmode.org/elpa/")
-          ("org"          . "https://elpa.emacs-china.org/org/")
-          ))
-  )
+;;   (setq package-archives
+;;         '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
+;;           ;; ("gnu"          . "https://elpa.gnu.org/packages/")
+;;           ("gnu"          . "https://elpa.emacs-china.org/gnu/")
+;;           ;; ("melpa"        . "https://melpa.org/packages/")
+;;           ("melpa"        . "https://elpa.emacs-china.org/melpa/")
+;;           ;; ("org"          . "https://orgmode.org/elpa/")
+;;           ("org"          . "https://elpa.emacs-china.org/org/")
+;;           ))
+;;   )
 
 ;; ;; avoid problems with files newer than their byte-compiled counterparts
 ;; ;; it's better a lower startup than load an outdated and maybe bugged package
@@ -108,6 +108,7 @@
 
 ;; Call straight-use-package to bootstrap use-package so we can use it.
 (setq straight-allow-recipe-inheritance nil)
+(setq straight-check-for-modifications nil)
 
 (straight-use-package 'bind-key)                ;; if you use any :bind variant
 (straight-use-package 'diminish)
@@ -164,6 +165,7 @@
 ;; (require 'init-ido)
 ;; (require 'init-icomplete)
 ;; (require 'init-vertico)
+(require 'init-embark)
 ;; (require 'init-helm) ;; I don't use helm
 (require 'init-buffer)
 (require 'init-company)
@@ -192,7 +194,7 @@
 (require 'init-window)
 (require 'init-projectile)
 ;; (require 'init-persp)
-(require 'init-tab-bar)
+;; (require 'init-tab-bar)
 
 (require 'init-vcs)
 

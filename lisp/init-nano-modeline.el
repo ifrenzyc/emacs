@@ -2,6 +2,8 @@
 
 ;;; Commentary:
 ;; 
+;; - 基于 nano-modeline 的 bespoke-modeline
+;; - https://github.com/mclear-tools/bespoke-modeline
 ;; 
 
 ;;; Code

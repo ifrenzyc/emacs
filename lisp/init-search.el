@@ -76,10 +76,10 @@ Version 2015-04-09"
   :hook (after-init . avy-setup-default)
   :general
   ("C-;"   'avy-goto-char-timer
-           "C-:"   'avy-goto-char-2
+           "C-:"   'avy-goto-line
            "M-g A" 'ace-jump-two-chars-mode
            "M-g a" 'avy-goto-char
-           "M-g l" 'avy-goto-line)
+           "M-g l" 'avy-goto-char-2)
   :config
   (defhydra hydra-avy (:color red)
     "avy-goto"
@@ -220,9 +220,6 @@ argument, query for word to search."
 
   (setf (alist-get ?H avy-dispatch-alist) 'avy-action-helpful)
 
-  ;; Embark
-  ;; (package-install 'embark)
-
   (defun avy-action-embark (pt)
     (unwind-protect
          (save-excursion
@@ -314,9 +311,9 @@ active region use it instead."
 ;; https://github.com/winterTTr/ace-jump-mode
 (use-package ace-jump-mode
   :demand t
-  :bind
-  (("C-x j" . ace-jump-mode)
-   ("M-g f" . ace-jump-mode))
+  :general
+  ("C-x j" 'ace-jump-mode
+           "M-g f" 'ace-jump-mode)
   :config
   ;; Thanks to: https://github.com/winterTTr/ace-jump-mode/issues/23
   (defun ace-jump-two-chars-mode (&optional query-char query-char-2)
@@ -338,9 +335,9 @@ active region use it instead."
 
 ;; Goto last change
 (use-package goto-chg
-  :config
-  (global-set-key (kbd "C-c b ,") 'goto-last-change)
-  (global-set-key (kbd "C-c b .") 'goto-last-change-reverse))
+  :general
+  ("C-c b ," 'goto-last-change
+             "C-c b ." 'goto-last-change-reverse))
 
 (use-package fzf)
 
@@ -373,8 +370,8 @@ active region use it instead."
   ;; :commands (color-rg-search-input
   ;;            color-rg-search-symbol
   ;;            color-rg-search-project)
-  :bind
-  (("M-s M-s" . color-rg-search-project)))
+  :general
+  ("M-s M-s" 'color-rg-search-project))
 
 ;; *About:* 多文件查找替换
 ;; - https://github.com/mhayashi1120/Emacs-wgrep

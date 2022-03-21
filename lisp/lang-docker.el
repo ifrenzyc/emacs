@@ -7,6 +7,7 @@
 ;;; Code
 
 (use-package docker
+  :disabled t
   :bind ("C-c d" . docker))
 
 (provide 'lang-docker)
