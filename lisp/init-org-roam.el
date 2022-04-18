@@ -10,7 +10,7 @@
 
 ;; org-roam-capture 主要参考： /Users/yangc/src/emacs.d/ody55eus-doom-emacs.d/doom/Emacs.org
 (use-package org-roam
-  :straight (:host github :repo "org-roam/org-roam" :files (:defaults "extensions/*"))
+  :straight (:host github :repo "org-roam/org-roam" :files (:defaults "*.el" "extensions/*.el"))
   :delight " 𝕫"
   :init
   ;; disable v1 migrate to v2 warning
@@ -82,11 +82,26 @@
                "#+title: ${title}\n#+roam_key: ${ref}\n#+created: %u\n#+last_modified: %U\n\n")
       :unnarrowed t
       :empty-lines-before 1)))
+  (org-roam-dailies-directory "daily/")
   (org-roam-dailies-capture-templates
    '(("d" "daily" entry
       "* %i%?"
-      :target (file+head "daily-%<%Y-%m-%d>.org"
+      :target (file+head "daily-%<%Y-%m-%d>.txt"
                "#+TITLE: %<%A, %d %b %Y>\n#+filetags: :daily-notes:\n\n"))
+     ("l" "log entry" plain 
+      "**** %<%I:%M %p> - %?"
+      :if-new (file+datetree "%<%Y>.txt" :day)
+      :prepend t
+      :clock-in t :clock-resume t
+      :immediate-finish t
+      :empty-lines 1)
+     ("m" "meeting" entry
+      "**** %<%I:%M %p> - %^{Meeting Title}  :meetings:\n\n%?\n\n"
+      :if-new (file+datetree "%<%Y>.txt" :day)
+      :prepend t
+      :clock-in t :clock-resume t
+      :immediate-finish t
+      :empty-lines 1)
      ))
   :config
   (setq org-roam-graph-extra-config '(("overlap" . "prism")
@@ -116,6 +131,8 @@
 
   (org-roam-setup)
   :general
+  (yc/nonprefix-keys
+      "<f4>" 'org-roam-dailies-capture-today)
   (yc/leader-keys
       "ar" '(:ignore t :which-key "org-roam")
     "arl" 'org-roam-buffer-toggle

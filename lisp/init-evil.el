@@ -28,7 +28,6 @@
   (evil-collection-init 'which-key))
 
 (use-package evil
-  ;; :demand t
   :init
   (setq evil-want-keybinding nil
         evil-want-integration nil
@@ -39,7 +38,11 @@
         evil-respect-visual-line-mode t
         evil-vsplit-window-right t
         evil-split-window-below t
+        evil-magic 'very-magic
+        evil-search-module 'evil-search
+        evil-ex-search-vim-style-regexp t
         evil-undo-system 'undo-tree) ;; undo-fu
+
   (setq-default evil-want-Y-yank-to-eol t)
   :hook
   ((after-init . evil-mode)
@@ -138,8 +141,9 @@
       "SPC" 'hydra-rotate-window/body
     "1" 'delete-other-windows
     "0" 'delete-window
+    "x" 'counsel-M-x
     "5" 'delete-frame
-    "f" 'project-find-file
+    "f" 'projectile-find-file
     "F" 'find-file
     "t" 'multi-vterm-project
     "r" 'counsel-recentf
@@ -178,8 +182,8 @@
   :general
   ;; single letter keybindings for operator/visual
   (general-def '(normal motion operator visual)
-    "s" #'evil-snipe-s
-    "S" #'evil-snipe-S)
+      "s" #'evil-snipe-s
+      "S" #'evil-snipe-S)
   ;; :general
   ;; (evil-leader/set-key
   ;;   "s" 'evil-snipe-s
@@ -188,6 +192,7 @@
   ;; (define-key evil-snipe-parent-transient-map (kbd "C-;"))
   )
 
+;; easymotion 的功能与 avy 有重复？
 (use-package evil-easymotion
   :demand t
   :after evil

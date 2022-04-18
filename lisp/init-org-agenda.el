@@ -384,8 +384,8 @@ Headline^^            Visit entry^^               Filter^^                    Da
         '((:log t)                      ; Automatically named "Log"
           (:name "Schedule"
            :time-grid t)
-          (:name "Delegated items"
-           :todo "DELEGATED"
+          (:name "Waiting items"
+           :todo "WAITING"
            :order 100)
           (:name "Today's items"
            :todo ("NEXT"))
@@ -442,12 +442,12 @@ Headline^^            Visit entry^^               Filter^^                    Da
         ("d" "Daily Tasks"
          alltodo "" ((org-super-agenda-groups
                       '((:log t)
-                        (:name "Delegated items"
-                         :todo "DELEGATED"
+                        (:name "Waiting items"
+                         :todo "WAITING"
                          :order 100)
                         (:name "Today's Tasks"
                          :and (:scheduled today
-                               :not (:todo "DELEGATED")))
+                               :not (:todo "WAITING")))
                         (:discard (:anything t)))
                       )))
 
@@ -776,6 +776,6 @@ Headline^^            Visit entry^^               Filter^^                    Da
   (switch-to-buffer  "*Org Agenda(3)*")  ;put the Agenda(4) in the right, down quadrant
   )
 
-(global-set-key (kbd "<f5>") 'makeMatrix) 
+;; (global-set-key (kbd "<f5>") 'makeMatrix) 
 
 (provide 'init-org-agenda)

@@ -17,6 +17,8 @@
   (snails-content-buffer-face ((t (:background "#111111" :height 120))))
   (snails-input-buffer-face ((t (:background "#999999" :foreground "gold" :height 120))))
   (snails-header-line-face ((t (:inherit font-lock-function-name-face :underline t :height 1.1))))
+  :custom
+  (snails-show-with-frame nil)
   ;; :hook
   ;; (snails-mode . (lambda () (evil-emacs-state)))
   :config

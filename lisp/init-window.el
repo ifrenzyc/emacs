@@ -134,7 +134,8 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 
 ;; 在 Hydra 模式下， =u= 按键快速回退上一个窗口； =r= 按键快速向前恢复一个窗口。
 
-;; winner-mode 是一个全局的 minor mode，它的主要功能是记录窗体的变动。例如当前有 2 个窗口，然后你关了一个，这时可以通过 winner-undo 来恢复。还可以再 winner-redo 来撤销刚才的 undo。
+;; winner-mode 是一个全局的 minor mode，它的主要功能是记录窗体的变动。例如当前有 2 个窗口，然后你关了一个，这时可以通过
+;; winner-undo 来恢复。还可以再 winner-redo 来撤销刚才的 undo。
 (use-package winner-mode
   :straight (:type built-in)
   :hook (after-init . winner-mode))
@@ -160,6 +161,7 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
    "M-9" 'winum-select-window-9))
 
 ;; 或许试试这个 Package： https://github.com/dimitri/switch-window
+;; https://sachachua.com/blog/2015/01/emacs-microhabit-switching-windows-windmove-ace-window-ace-jump/
 (use-package ace-window
   :init
   (setq ;; aw-keys '(?h ?j ?k ?l ?y ?u ?i ?o ?p)

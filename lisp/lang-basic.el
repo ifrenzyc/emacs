@@ -16,9 +16,11 @@
                              ruby-mode
                              sh-mode
                              json-mode
+                             jenkinsfile-mode
                              nxml-mode
                              yaml-mode
                              sql-mode
+                             groovy-mode
                              kotlin-mode
                              racket-mode
                              conf-mode

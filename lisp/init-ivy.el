@@ -643,4 +643,14 @@
 ;;   (setq counsel-etags-update-interval 60)
 ;;   (push "build" counsel-etags-ignore-directories))
 
+(use-package ivy-fuz
+  :disabled t
+  :demand t
+  :after ivy
+  :custom
+  (ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
+  (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy)))
+  :config
+  (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
+
 (provide 'init-ivy)

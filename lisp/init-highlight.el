@@ -18,21 +18,6 @@
 ;; | =M-<F3>= | highlight-symbol-at-point | 高亮光标当前所在的词   |
 ;; | =<F3>=   | highlight-symbol-next     | 查找下一个匹配的词     |
 ;; | =S-<F3>= | highlight-symbol-prev     | 查找上一个匹配的词     |
-(use-package highlight-symbol
-  :disabled t
-  :hook
-  ((prog-mode . highlight-symbol-mode)
-   (highlight-symbol-mode . highlight-symbol-nav-mode)
-   ;; (org-mode . highlight-symbol-mode)
-   )
-  ;; :general
-  ;; (yc/nonprefix-keys
-  ;;   "M-<f3>" 'highlight-symbol-at-point
-  ;;   "<f3>" 'highlight-symbol-next
-  ;;   "s-<f3>" 'highlight-symbol-prev)
-  :config
-  (setq highlight-symbol-idle-delay 0.5)
-  (highlight-symbol-mode t))
 
 ;; TODO 参考这个优化按键及显示方式
 ;; https://github.com/kaz-yos/emacs/blob/master/init.d/500_highlight-search-replace-related.el
@@ -93,6 +78,22 @@ FACE defaults to inheriting from default and highlight."
   :diminish highlight-parentheses-mode
   :config (global-highlight-parentheses-mode))
 
+(use-package highlight-symbol
+  :disabled t
+  :hook
+  ((prog-mode . highlight-symbol-mode)
+   (highlight-symbol-mode . highlight-symbol-nav-mode)
+   ;; (org-mode . highlight-symbol-mode)
+   )
+  ;; :general
+  ;; (yc/nonprefix-keys
+  ;;   "M-<f3>" 'highlight-symbol-at-point
+  ;;   "<f3>" 'highlight-symbol-next
+  ;;   "s-<f3>" 'highlight-symbol-prev)
+  :config
+  (setq highlight-symbol-idle-delay 0.5)
+  (highlight-symbol-mode t))
+
 ;; Highlight symbols
 (use-package symbol-overlay
   :diminish
@@ -134,23 +135,27 @@ FACE defaults to inheriting from default and highlight."
     (when (derived-mode-p 'prog-mode)
       (symbol-overlay-mode 1)))
   (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay)
-  ;; (define-transient-command symbol-overlay-transient ()
-  ;;  "Symbol Overlay transient"
-  ;;  ["Symbol Overlay"
-  ;;   ["Overlays"
-  ;;    ("." "Add/Remove at point" symbol-overlay-put)
-  ;;    ("k" "Remove All" symbol-overlay-remove-all)
-  ;;    ]
-  ;;   ["Move to Symbol"
-  ;;    ("n" "Next" symbol-overlay-switch-forward)
-  ;;    ("p" "Previous" symbol-overlay-switch-backward)
-  ;;    ]
-  ;;   ["Other"
-  ;;    ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
-  ;;    ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)
-  ;;    ]
-  ;;   ]
-  ;; )
+
+  (use-package transient
+    :config
+    (transient-define-prefix symbol-overlay-transient ()
+      "Symbol Overlay transient"
+      ["Symbol Overlay"
+       ["Overlays"
+        ("." "Add/Remove at point" symbol-overlay-put)
+        ("k" "Remove All" symbol-overlay-remove-all)
+        ]
+       ["Move to Symbol"
+        ("n" "Next" symbol-overlay-switch-forward)
+        ("p" "Previous" symbol-overlay-switch-backward)
+        ]
+       ["Other"
+        ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
+        ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)
+        ]
+       ]
+      )
+    )
   (defun symbol-overlay-switch-first ()
     (interactive)
     (let* ((symbol (symbol-overlay-get-symbol))
@@ -269,17 +274,18 @@ If there is only one overlay at point, just return it, no matter region or symbo
     (hilight-jump-prev)
     (hydra-hilight-jump/body))
 
-  (evil-leader/set-key
-      "hh" 'hilight-toggle          ;; instead of `symbol-overlay-put'
-    "hn" 'hilight-jump-next+hydra ;; instead of `symbol-overlay-jump-next'
-    "hp" 'hilight-jump-prev+hydra ;; instead of `symbol-overlay-jump-prev'
-    "ht" 'symbol-overlay-toggle-in-scope
-    "ha" 'symbol-overlay-remove-all
-    "he" 'symbol-overlay-echo-mark
-    "hd" 'symbol-overlay-jump-to-definition
-    "hs" 'symbol-overlay-isearch-literally
-    "hq" 'symbol-overlay-query-replace
-    "hr" 'symbol-overlay-rename)
+  (with-eval-after-load 'evil
+    (evil-leader/set-key
+        "hh" 'hilight-toggle          ;; instead of `symbol-overlay-put'
+      "hn" 'hilight-jump-next+hydra ;; instead of `symbol-overlay-jump-next'
+      "hp" 'hilight-jump-prev+hydra ;; instead of `symbol-overlay-jump-prev'
+      "ht" 'symbol-overlay-toggle-in-scope
+      "ha" 'symbol-overlay-remove-all
+      "he" 'symbol-overlay-echo-mark
+      "hd" 'symbol-overlay-jump-to-definition
+      "hs" 'symbol-overlay-isearch-literally
+      "hq" 'symbol-overlay-query-replace
+      "hr" 'symbol-overlay-rename))
   )
 
 ;; (use-package highlight-thing

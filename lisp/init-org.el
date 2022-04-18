@@ -608,7 +608,9 @@
 ;; Emacs Doom E15: Fancy Task Priorities in Org Mode
 ;; 代码来源：https://www.reddit.com/r/emacs/comments/ctfxbg/emacs_doom_e15_fancy_task_priorities_in_org_mode/
 ;; pretty-symbols 参考配置 file:~/src/emacs.d/yantar92-emacs-config
+;; 看了下 pretty-symbols 的文档，这个作者已经不维护了，建议是采用 prettify-symbols 替换
 (use-package pretty-symbols
+  :disabled t
   :hook
   (org-mode . pretty-symbols-mode)
   :config
@@ -649,7 +651,10 @@
                   ((yant/str-to-glyph "♲") org-specific "\\(?:^*+ +\\)\\(\\<HOLD\\>\\)" (org-mode) 1)
                   ((yant/str-to-glyph "☠D") org-specific "\\<DEADLINE:" (org-mode))
                   ((yant/str-to-glyph "◴S") org-specific "\\<SCHEDULED:" (org-mode)))))
-
+  )
+(use-package prettify-symbols
+  :disabled t
+  :config
   ;; (add-hook 'org-mode-hook (lambda ()
   ;;                            "Beautify Org Checkbox Symbol"
   ;;                            (push '("[ ]" . "☐") prettify-symbols-alist)
@@ -667,7 +672,9 @@
                                          (">=" . "≥")
                                          ("=>" . "⇨")))
   (setq prettify-symbols-unprettify-at-point 'right-edge)
-  (add-hook 'org-mode-hook 'prettify-symbols-mode))
+  (add-hook 'org-mode-hook 'prettify-symbols-mode)
+  ;; (global-prettify-symbols-mode t)
+  )
 
 (use-package org-treescope
   :commands (org-treescope)

@@ -60,6 +60,9 @@ Version 2015-04-09"
 (global-set-key (kbd "M-s o") 'occur-dwim)
 
 ;; 快速在当前 buffer 中跳转光标
+;; - avy
+;; - ace-jump-mode
+;; - evil-easymotion
 ;; - https://github.com/abo-abo/avy
 ;; - http://ergoemacs.org/misc/ace_jump_avy_vs_isearch.html
 ;; - 配置来源于： https://gist.github.com/karthink/af013ffd77fe09e67360f040b57b4c7b （https://karthinks.com/software/avy-can-do-anything/）
@@ -310,6 +313,7 @@ active region use it instead."
 
 ;; https://github.com/winterTTr/ace-jump-mode
 (use-package ace-jump-mode
+  :disabled t
   :demand t
   :general
   ("C-x j" 'ace-jump-mode
@@ -341,6 +345,12 @@ active region use it instead."
 
 (use-package fzf)
 
+(use-package fuz
+  :load-path "localelpa/fuz.el"
+  :config
+  (unless (require 'fuz-core nil t)
+    (fuz-build-and-load-dymod)))
+
 ;; fuzzy file finder
 (use-package fiplr
   :general
@@ -367,9 +377,10 @@ active region use it instead."
   :straight (:host github
                    :repo "manateelazycat/color-rg"
                    :files ("color-rg.el"))
-  ;; :commands (color-rg-search-input
-  ;;            color-rg-search-symbol
-  ;;            color-rg-search-project)
+  :commands (color-rg-mode
+             color-rg-search-input
+             color-rg-search-symbol
+             color-rg-search-project)
   :general
   ("M-s M-s" 'color-rg-search-project))
 

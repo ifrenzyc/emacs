@@ -286,6 +286,7 @@
 
 ;; Start server
 (use-package server
+  :disabled t
   :straight (:type built-in)
   :hook
   (after-init . server-mode))
