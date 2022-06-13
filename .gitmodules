@@ -25,3 +25,40 @@
 [submodule "localelpa/xwwp"]
 	path = localelpa/xwwp
 	url = git@github.com:BlueFlo0d/xwwp.git
+[submodule "localelpa/awesome-tray"]
+	path = localelpa/awesome-tray
+	url = git@github.com:manateelazycat/awesome-tray.git
+[submodule "localelpa/company-lsp"]
+	path = localelpa/company-lsp
+	url = git@github.com:tigersoldier/company-lsp.git
+[submodule "localelpa/company-tern"]
+	path = localelpa/company-tern
+	url = git@github.com:kevinushey/company-tern.git	
+[submodule "localelpa/cache-path-from-shell"]
+	path = localelpa/cache-path-from-shell
+	url = git@github.com:manateelazycat/cache-path-from-shell.git
+[submodule "localelpa/color-rg"]
+	path = localelpa/color-rg
+	url = git@github.com:manateelazycat/color-rg.git
+[submodule "localelpa/markdown-mode-plus"]
+	path = localelpa/markdown-mode-plus
+	url = git@github.com:milkypostman/markdown-mode-plus.git
+[submodule "localelpa/org-spacer.el"]
+	path = localelpa/org-spacer.el
+	url = git@github.com:dustinlacewell/org-spacer.el.git
+[submodule "localelpa/org-ol-tree"]
+	path = localelpa/org-ol-tree
+	url = git@github.com:Townk/org-ol-tree.git	
+[submodule "localelpa/separate-inline.el"]
+	path = localelpa/separate-inline.el
+	url = git@github.com:ingtshan/separate-inline.el.git
+[submodule "localelpa/fixed-pitch-mode"]
+	path = localelpa/fixed-pitch-mode
+	url = git@github.com:cstby/fixed-pitch-mode.git
+[submodule "localelpa/dired-hacks"]
+	path = localelpa/dired-hacks
+	url = git@github.com:Fuco1/dired-hacks.git
+[submodule "localelpa/preview-org-html-mode"]
+	path = localelpa/preview-org-html-mode
+	url = git@github.com:jakebox/preview-org-html-mode.git
+	branch = main
