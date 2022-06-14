@@ -185,6 +185,7 @@
 ;; Lang
 (require 'lang-basic)
 (require 'init-lsp)
+;; (require 'init-lsp-bridge)
 ;; (require 'init-eglot)
 ;; (require 'init-nox)
 (require 'lang-java)
