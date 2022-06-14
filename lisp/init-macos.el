@@ -23,15 +23,15 @@
         exec-path-from-shell-variables '("PATH" "GOROOT" "GOPATH" "MANPATH" "CLASSPATH" "RIME_PATH" "PKG_CONFIG_PATH"))
   (exec-path-from-shell-initialize)
 
-  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-  (setq exec-path (append exec-path '("/usr/local/bin")))
+  ;; (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+  ;; (setq exec-path (append exec-path '("/usr/local/bin")))
 
   (setenv "LD_LIBRARY_PATH" (concat (getenv "LD_LIBRARY_PATH") ":/usr/local/lib"))
   (setq exec-path (append exec-path '("/usr/local/lib"))))
 
 ;; A patch to enhance exec-path-from-shell
 (use-package cache-path-from-shell
-  :straight (:host github :repo "manateelazycat/cache-path-from-shell"))
+  :load-path "localelpa/cache-path-from-shell")
 
 ;; Display dividers between windows
 (setq window-divider-default-places t

@@ -16,7 +16,7 @@
              treemacs-git-mode)
   :hook
   ;; init treemacs in emacs keys;
-  (treemacs-mode . evil-normalize-keymaps)
+  ;; (treemacs-mode . evil-normalize-keymaps)
   (treemacs-mode . (lambda ()
                      (setq-local truncate-lines nil)
                      (setq-local word-wrap nil)
@@ -78,9 +78,9 @@
   (pcase (cons (not (null (executable-find "git")))
                (not (null (treemacs--find-python3))))
     (`(t . t)
-     (treemacs-git-mode 'deferred))
+      (treemacs-git-mode 'deferred))
     (`(t . _)
-     (treemacs-git-mode 'simple)))
+      (treemacs-git-mode 'simple)))
 
   ;; ;; Improve treemacs icons
   ;; (with-eval-after-load 'treemacs
@@ -144,6 +144,7 @@
   )
 
 (use-package treemacs-evil
+  :after evil
   :bind
   (:map evil-treemacs-state-map
         ("H" . hydra-move-splitter-left-2x)

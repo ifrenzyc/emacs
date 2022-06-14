@@ -38,6 +38,7 @@
 
 (use-package company-emoji
   :config
-  (add-to-list 'company-backends 'company-emoji))
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-emoji)))
 
 (provide 'init-emojis)

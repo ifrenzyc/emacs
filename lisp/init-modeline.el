@@ -89,7 +89,7 @@
 
 ;; TODO try https://github.com/lunaryorn/fancy-battery.el
 (use-package battery
-  :straight (:type built-in)
+  :ensure nil
   :hook
   (after-init . display-battery-mode))
 
@@ -98,7 +98,7 @@
   :commands hide-mode-line-mode
   :hook
   ((completion-list-mode
-    vterm-mode
+    ;; vterm-mode
     neotree-mode) . hide-mode-line-mode)
   )
 

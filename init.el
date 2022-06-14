@@ -106,7 +106,7 @@
 
 (require 'init-which-key)
 (require 'init-general)
-(require 'init-evil)
+;; (require 'init-evil)
 (require 'init-hydra)
 ;; (require 'init-xah-fly-keys)
 ;; (require 'init-meow)
@@ -118,12 +118,12 @@
 (require 'init-ivy)
 ;; (require 'init-ido)
 ;; (require 'init-icomplete)
-;; (require 'init-vertico)
+(require 'init-vertico)
 (require 'init-embark)
 ;; (require 'init-helm) ;; I don't use helm
 (require 'init-buffer)
-(require 'init-company)
-;; (require 'init-corfu)
+;; (require 'init-company)
+(require 'init-corfu)
 (require 'init-yasnippet)
 (require 'init-tabnine)
 (require 'init-flycheck)
@@ -213,20 +213,6 @@
 (require 'lang-jenkinsfile)
 (require 'lang-vimrc)
 (require 'lang-restclient)
-
-;; ;; Use latest org before calling babel
-;; ;; (use-package-pin-package 'org "org")
-;; ;; (use-package org :straight org-plus-contrib)
-;; (straight-use-package 'org)
-;; ;; (require 'org)
-;; (require 'ob-tangle)
-;; (org-babel-do-load-languages
-;;  'org-babel-load-languages
-;;  '((emacs-lisp . t)
-;;    (org . t)
-;;    (shell . t)))
-
-;; (org-babel-load-file (expand-file-name "emacs.org" user-emacs-directory))
 
 (require 'init-custom)
 (require 'init-gc)

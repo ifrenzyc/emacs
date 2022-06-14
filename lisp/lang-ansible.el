@@ -16,7 +16,8 @@
 ;;   :init (add-hook 'yaml-mode-hook 'ansible-vault-mode))
 (use-package company-ansible
   :config
-  (add-to-list 'company-backends 'company-ansible))
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-ansible)))
 
 (use-package poly-ansible)
 

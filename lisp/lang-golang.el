@@ -206,7 +206,8 @@
   :after (go-mode company-mode)
   :config
   ;; 加了这段代码，输入 fmt. 会自动显示这个模块相关的函数
-  (add-to-list 'company-backends 'company-go))
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-go)))
 
 (use-package go-direx
   :after go-mode

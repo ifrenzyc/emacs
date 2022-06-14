@@ -22,6 +22,7 @@
 (use-package company-restclient
   :after (company restclient)
   :config
-  (add-to-list 'company-backends 'company-restclient))
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-restclient)))
 
 (provide 'lang-restclient)

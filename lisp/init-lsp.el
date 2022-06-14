@@ -18,7 +18,9 @@
   :hook
   ((lsp . lsp-lens-mode)
    ;; (prog-mode . lsp-deferred)
-   (lsp-managed-mode . (lambda () (setq-local company-backends '((company-capf :with company-yasnippet)))))
+   (lsp-managed-mode . (lambda ()
+                         (with-eval-after-load 'company
+                           (setq-local company-backends '((company-capf :with company-yasnippet))))))
    (lsp-mode . lsp-enable-which-key-integration))
   ;; (lsp-after-open . lsp-enable-imenu)
   :general
@@ -59,7 +61,7 @@
   (lsp-signature-function 'lsp-signature-posframe)
   (lsp-eldoc-enable-hover nil)
 
-  ;; (lsp-completion-provider nil)
+  (lsp-completion-provider :none) ;; we use Corfu!
 
   (exec-path (append exec-path '("~/.nvm/versions/node/v14.11.0/bin/")))
   (lsp-sqls-server "/usr/local/opt/go/libexec/bin/sqls")
@@ -456,9 +458,8 @@
   (company-transformers nil)
   (company-lsp-async t)
   (company-lsp-cache-candidates nil)
-  ;; :init
-  ;; (add-to-list 'company-backends 'company-lsp)
   :config
-  (push 'company-lsp company-backends))
+  (with-eval-after-load 'company
+    (push 'company-lsp company-backends)))
 
 (provide 'init-lsp)

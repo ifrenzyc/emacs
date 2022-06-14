@@ -7,15 +7,13 @@
 
 ;;; Code:
 
+(use-package emacsql-sqlite-builtin)
 
 ;; org-roam-capture 主要参考： /Users/yangc/src/emacs.d/ody55eus-doom-emacs.d/doom/Emacs.org
 (use-package org-roam
-  :straight (:host github :repo "org-roam/org-roam" :files (:defaults "*.el" "extensions/*.el"))
   :delight " 𝕫"
-  :init
-  ;; disable v1 migrate to v2 warning
-  (setq org-roam-v2-ack t)
   :custom
+  (org-roam-database-connector 'sqlite-builtin)
   (org-roam-directory "~/notes/09_Zettelkästen")
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
@@ -23,27 +21,31 @@
                "#+TITLE: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
       :unnarrowed t)
      ("p" "personal" plain "%?" :target
-      (file+head "Personal/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n") :unnarrowed t)
+      (file+head "Personal/%<%Y%m%d%H%M%S>-${slug}.txt"
+       "#+title: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
+      :unnarrowed t)
      ("w" "work" plain "%?" :target
-      (file+head "Work/%<%Y%m%d%H%M%S>-${slug}.org"  "#+title: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n") :unnarrowed t)
+      (file+head "Work/%<%Y%m%d%H%M%S>-${slug}.txt"
+       "#+title: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
+      :unnarrowed t)
      ("c" "default" plain
       "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.txt"
                "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n")
       :unnarrowed t)
      ("r" "ref" plain
       "%?"
-      :target (file+head "References/${citekey}.org"
+      :target (file+head "References/${citekey}.txt"
                "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n")
       :unnarrowed t)
      ("p" "ref + physical" plain
       "%?"
-      :target (file+head "References/${citekey}.org"
+      :target (file+head "References/${citekey}.txt"
                "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n* Notes :physical:")
       :unnarrowed t)
      ("n" "ref + noter" plain
       "%?"
-      :target (file+head "References/${citekey}.org"
+      :target (file+head "References/${citekey}.txt"
                ,(s-join "\n" (list "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n"
                                    "* Notes :noter:"
                                    ":PROPERTIES:"
@@ -54,34 +56,35 @@
   (org-roam-capture-ref-templates
    '(("r" "ref" plain
       "%?"
-      :target (file+head "web/${slug}.org"
-               "#+title: ${title}\n#+roam_key: ${ref}\n#+created: %u\n#+last_modified: %U\n\n%(zp/org-protocol-insert-selection-dwim \"%i\")")
-      :unnarrowed t)
-     ("R" "Reference" plain
-      "%?\n\n* Citations\n#+begin_quote\n${body}\n#+end_quote"
-      :if-new (file+head
-               "Literature/%<%Y%m%d%H%M%S>-${slug}.org"
-               "#+title: ${title}\n#+date: %U\n")
-      :unnarrowed t
-      )
-     ("l" "Literature References" plain
-      "%?\n\n* Abstract\n#+begin_quote\n${body}\n#+end_quote"
-      :if-new (file+head
-               "References/%<%Y%m%d%H%M%S>-${slug}.org"
-               "#+title: ${title}\n#+date: %U\n#+ROAM_REF: ${ref}")
-      :unnarrowed t
-      :empty-lines 1)
-     ("w" "Web site" entry
-      :target (file+head
-               "Literature/%<%Y%m%d%H%M%S>-${slug}.org"
-               "#+title: ${title}\n#+date: %U\n")
-      "* %a :website:\n\n%U %?\n\n#+begin_quote\n%:initial\n#+end_quote")
-     ("i" "incremental" plain
-      "* %?\n%(zp/org-protocol-insert-selection-dwim \"%i\")"
-      :target (file+head "web/${slug}.org"
-               "#+title: ${title}\n#+roam_key: ${ref}\n#+created: %u\n#+last_modified: %U\n\n")
-      :unnarrowed t
-      :empty-lines-before 1)))
+      :target (file+head "web/${slug}.txt"
+               
+               :unnarrowed t)
+      ("R" "Reference" plain
+       "%?\n\n* Citations\n#+begin_quote\n${body}\n#+end_quote"
+       :if-new (file+head
+                "Literature/%<%Y%m%d%H%M%S>-${slug}.txt"
+                "#+title: ${title}\n#+date: %U\n")
+       :unnarrowed t
+       )
+      ("l" "Literature References" plain
+       "%?\n\n* Abstract\n#+begin_quote\n${body}\n#+end_quote"
+       :if-new (file+head
+                "References/%<%Y%m%d%H%M%S>-${slug}.txt"
+                "#+title: ${title}\n#+date: %U\n#+ROAM_REF: ${ref}")
+       :unnarrowed t
+       :empty-lines 1)
+      ("w" "Web site" entry
+       :target (file+head
+                "Literature/%<%Y%m%d%H%M%S>-${slug}.txt"
+                "#+title: ${title}\n#+date: %U\n")
+       "* %a :website:\n\n%U %?\n\n#+begin_quote\n%:initial\n#+end_quote")
+      ("i" "incremental" plain
+       "* %?\n%(zp/org-protocol-insert-selection-dwim \"%i\")"
+       :target (file+head "web/${slug}.txt"
+                          "#+title: ${title}\n#+roam_key: ${ref}\n#+created: %u\n#+last_modified: %U\n\n")
+       :unnarrowed t
+       :empty-lines-before 1))))
+  
   (org-roam-dailies-directory "daily/")
   (org-roam-dailies-capture-templates
    '(("d" "daily" entry
@@ -93,14 +96,12 @@
       :if-new (file+datetree "%<%Y>.txt" :day)
       :prepend t
       :clock-in t :clock-resume t
-      :immediate-finish t
       :empty-lines 1)
      ("m" "meeting" entry
       "**** %<%I:%M %p> - %^{Meeting Title}  :meetings:\n\n%?\n\n"
       :if-new (file+datetree "%<%Y>.txt" :day)
       :prepend t
       :clock-in t :clock-resume t
-      :immediate-finish t
       :empty-lines 1)
      ))
   :config
@@ -119,7 +120,8 @@
   (setq org-roam-db-location
         (concat org-roam-directory "/.database/org-roam.db"))
 
-  (setq org-refile-targets '((org-roam-list-files . (:maxlevel . 1))))
+  ;; 这里和默认的 org-mode refile 重复设置了
+  ;; (setq org-refile-targets '((org-roam-list-files . (:maxlevel . 1))))
 
   ;; display org-roam buffer to the right
   (add-to-list 'display-buffer-alist
@@ -128,6 +130,36 @@
                  (direction . right)
                  (window-width . 0.33)
                  (window-height . fit-window-to-buffer)))
+
+  ;; ;; Codes blow are used to general a hierachy for title nodes that under a file
+  ;; (cl-defmethod org-roam-node-doom-filetitle ((node org-roam-node))
+  ;;     "Return the value of \"#+title:\" (if any) from file that NODE resides in.
+  ;;     If there's no file-level title in the file, return empty string."
+  ;;   (or (if (= (org-roam-node-level node) 0)
+  ;;           (org-roam-node-title node)
+  ;;         (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
+  ;;       ""))
+  
+  ;; (cl-defmethod org-roam-node-doom-hierarchy ((node org-roam-node))
+  ;;     "Return hierarchy for NODE, constructed of its file title, OLP and direct title.
+  ;;       If some elements are missing, they will be stripped out."
+  ;;   (let ((title     (org-roam-node-title node))
+  ;;         (olp       (org-roam-node-olp   node))
+  ;;         (level     (org-roam-node-level node))
+  ;;         (filetitle (org-roam-node-doom-filetitle node))
+  ;;         (separator (propertize " > " 'face 'shadow)))
+  ;;     (cl-case level
+  ;;       ;; node is a top-level file
+  ;;       (0 filetitle)
+  ;;       ;; node is a level 1 heading
+  ;;       (1 (concat (propertize filetitle 'face '(shadow italic))
+  ;;                  separator title))
+  ;;       ;; node is a heading with an arbitrary outline path
+  ;;       (t (concat (propertize filetitle 'face '(shadow italic))
+  ;;                  separator (propertize (string-join olp " > ") 'face '(shadow italic))
+  ;;                  separator title)))))
+
+  ;; (setq org-roam-node-display-template (concat "${type:15} ${doom-hierarchy:80} " (propertize "${tags:*}" 'face 'org-tag)))
 
   (org-roam-setup)
   :general
@@ -157,11 +189,6 @@
   ;;   "rg" 'org-roam-show-graph)
   )
 
-(use-package company-org-roam
-  :after org-roam
-  :config
-  (add-to-list 'company-backends 'company-org-roam))
-
 (use-package org-roam-bibtex
   :after org-roam
   :config
@@ -169,11 +196,8 @@
   (setq orb-file-field-extensions '("pdf" "epub"))
   (org-roam-bibtex-mode 1))
 
-;; https://github.com/org-roam/org-roam-server
-(use-package org-roam-server)
-
 (use-package org-roam-protocol
-  :straight nil
+  :ensure nil
   :after org-roam
   :config
   (require 'org-roam-protocol))
@@ -183,7 +207,6 @@
   :after org-roam)
 
 (use-package org-roam-ui
-  :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
   :after org-roam
   :init
   (when (featurep 'xwidget-internal)
