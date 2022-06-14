@@ -9,7 +9,7 @@
 
 ;;; Code
 (use-package tramp
-  :straight (:type built-in)
+  :ensure nil
   :init
   (setq tramp-default-method "ssh")
   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
@@ -25,11 +25,11 @@
 
   ;; https://github.com/masasam/emacs-counsel-tramp#if-you-want-to-speed-up-tramp
   (add-hook 'counsel-tramp-pre-command-hook '(lambda ()
-                                               (projectile-mode 0)
-                                               ))
+                                              (projectile-mode 0)
+                                              ))
   (add-hook 'counsel-tramp-quit-hook '(lambda ()
-                                        (projectile-mode 1)
-                                        )))
+                                       (projectile-mode 1)
+                                       )))
 
 (use-package counsel-tramp
   :after (tramp counsel)

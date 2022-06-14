@@ -8,7 +8,7 @@
 ;;; Code
 
 (use-package ido
-  :straight (:type built-in)
+  :ensure nil
   :demand t
   :init
   (setq ido-use-virtual-buffers t

@@ -7,7 +7,7 @@
 ;;; Code
 
 (use-package nxml-mode
-  :straight (:type built-in)
+  :ensure nil
   :mode ("\\.\\(xml\\|gapp\\|plist\\|pom\\|xsd\\|xslt\\)$" . nxml-mode)
   :hook
   (nxml-mode . lsp-deferred)

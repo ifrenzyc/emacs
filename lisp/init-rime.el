@@ -15,9 +15,9 @@
 ;;; Code:
 
 (use-package rime
-  :straight (:host github
-                   :repo "DogLooksGood/emacs-rime"
-                   :files ("*.el" "Makefile" "lib.c"))
+  ;; :straight (:host github
+  ;;                  :repo "DogLooksGood/emacs-rime"
+  ;;                  :files ("*.el" "Makefile" "lib.c"))
   :custom
   (rime-librime-root (expand-file-name "librime/dist" user-emacs-directory))
   (rime-user-data-dir (expand-file-name "rime" user-emacs-directory))

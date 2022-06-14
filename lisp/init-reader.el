@@ -31,7 +31,7 @@
 ;; - https://gist.github.com/ivan-krukov/63a586f2121519ca51b201c634402a84
 (use-package view
   :disabled t
-  :straight (:type built-in)
+  :ensure nil
   :bind (("<f18>" . view-mode)  ;; remap R-Shift to F 13
          :map view-mode-map
          ("n" . next-line)

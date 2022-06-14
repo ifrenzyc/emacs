@@ -97,8 +97,11 @@
    "M-<return>" 'tern-get-docs))
 
 (use-package company-tern
+  :load-path "localelpa/company-tern"
   :after (tern company)
-  :config (add-to-list 'company-backends 'company-tern))
+  :config
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-tern)))
 
 (use-package angular-snippets
   :config

@@ -24,6 +24,7 @@
         ))
 
 (use-package lsp-vue
+  :ensure nil
   :after (vue-mode lsp-mode)
   :hook
   ((vue-mode . lsp-deferred)

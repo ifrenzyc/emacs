@@ -17,7 +17,7 @@
 ;;; Code
 
 (use-package svg-tag-mode
-  :straight (:host github :repo "rougier/svg-tag-mode" :branch "main")
+  ;; :straight (:host github :repo "rougier/svg-tag-mode" :branch "main")
   :hook (org-mode . svg-tag-mode)
   :config
   (defface svg-tag-todo-face

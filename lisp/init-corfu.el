@@ -46,7 +46,7 @@
   ;; Other
   (lsp-completion-provider :none)       ; Use corfu instead for lsp completions
   :init
-  (corfu-global-mode)
+  (global-corfu-mode)
   :config
   ;; Setup lsp to use corfu for lsp completion
   (defun kb/corfu-setup-lsp ()
@@ -83,7 +83,7 @@ default lsp-passthrough."
 
 (use-package corfu-doc
   ;; NOTE 2022-02-05: At the time of writing, `corfu-doc' is not yet on melpa
-  :straight (corfu-doc :type git :host github :repo "galeo/corfu-doc")
+  ;; :straight (corfu-doc :type git :host github :repo "galeo/corfu-doc")
   :after corfu
   :general (:keymaps 'corfu-map
                      ;; This is a manual toggle for the documentation window.

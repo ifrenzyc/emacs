@@ -15,6 +15,7 @@
 (setq-default shell-file-name "/bin/zsh")
 
 (use-package multi-term
+  :disabled t
   :init
   (setq multi-term-program-switches "--login"
         system-uses-terminfo nil     ; Use Emacs terminfo, not system terminfo, mac系统出现了4m
@@ -53,7 +54,8 @@
   :hook
   (sh-mode . company-mode)
   :config
-  (add-to-list 'company-backends 'company-shell))
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-shell)))
 
 ;; (use-package better-shell
 ;;   :general
@@ -62,20 +64,27 @@
 ;;     "C-;" 'better-shell-remote-open))
 
 (use-package shell-pop
+  :disabled t
   :init
   (setq shell-pop-window-position "bottom"
         shell-pop-autocd-to-working-dir nil
         shell-pop-window-size     30
         ;; shell-pop-term-shell      "eshell"
         shell-pop-term-shell      "/bin/zsh"
-        multi-term-program        "/bin/zsh"
+        ;; multi-term-program        "/bin/zsh"
         shell-pop-shell-type '("term" "*vterminal*" (lambda () (multi-vterm)))
         ;; shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
         ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/fish" "*ansi-terminal*")))
         ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
         ;; shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
         shell-pop-full-span       t)
-  (defun ansi-term-handle-close ()
+  
+  :hook
+  ((shell-mode . ansi-color-for-comint-mode-on)
+   (term-mode . yc/ansi-term-handle-close)
+   (term-mode . (lambda () (linum-mode -1) (yas-minor-mode -1))))
+  :config
+  (defun yc/ansi-term-handle-close ()
     "Close current term buffer when `exit' from term buffer."
     (when (ignore-errors (get-buffer-process (current-buffer)))
       (set-process-sentinel (get-buffer-process (current-buffer))
@@ -85,14 +94,9 @@
                                 (kill-buffer (process-buffer proc))
                                 (when (> (count-windows) 1)
                                   (delete-window)))))))
-  :hook
-  ((shell-mode . ansi-color-for-comint-mode-on)
-   (term-mode . ansi-term-handle-close)
-   (term-mode . (lambda () (linum-mode -1) (yas-minor-mode -1))))
-  :config
   ;; need to do this manually or not picked up by `shell-pop'
   (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)
-  :bind
-  ([f9] . shell-pop))
+  :general
+  ("<f9>" 'shell-pop))
 
 (provide 'init-term)

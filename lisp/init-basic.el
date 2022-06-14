@@ -25,7 +25,7 @@
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
 (use-package emacs
-  :straight (:type built-in)
+  :ensure nil
   :config
   ;; 改变 Emacs 要你回答 yes 的行为。按 y 或空格键表示 yes，n 表示 no。
   (fset 'yes-or-no-p 'y-or-n-p)

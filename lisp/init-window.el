@@ -36,7 +36,7 @@
   (good-scroll-mode t))
 
 (use-package pixel-scroll-precision
-  :straight (:type built-in)
+  :ensure nil
   :init
   (pixel-scroll-precision-mode))
 
@@ -71,7 +71,7 @@
 ;;   (setq sublimity-attractive-hide-modelines t))
 
 (use-package window
-  :straight (:type built-in)
+  :ensure nil
   :general
   (yc/leader-keys
       "w" '(:ignore t :which-key "windows")
@@ -137,7 +137,7 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 ;; winner-mode 是一个全局的 minor mode，它的主要功能是记录窗体的变动。例如当前有 2 个窗口，然后你关了一个，这时可以通过
 ;; winner-undo 来恢复。还可以再 winner-redo 来撤销刚才的 undo。
 (use-package winner-mode
-  :straight (:type built-in)
+  :ensure nil
   :hook (after-init . winner-mode))
 
 (use-package winum

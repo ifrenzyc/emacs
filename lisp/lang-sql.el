@@ -7,7 +7,7 @@
 ;;; Code
 
 (use-package sql-mode
-  :straight (:type built-in)
+  :ensure nil
   :mode ("\\.sql\\'" . sql-mode)
   :hook (sql-mode . lsp-deferred))
 

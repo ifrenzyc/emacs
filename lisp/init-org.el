@@ -18,8 +18,7 @@
 
 ;;; Code
 (use-package org
-  :straight (:type built-in)
-  ;; :straight org-plus-contrib
+  :ensure nil
   :mode ("\\.\\(org\\|txt\\)$" . org-mode)
   :delight org-mode "Org"
   :custom-face
@@ -523,7 +522,7 @@
 ;; https://github.com/minad/org-modern
 (use-package org-modern
   :disabled t
-  :straight (:host github :repo "minad/org-modern")
+  ;; :straight (:host github :repo "minad/org-modern")
   :hook (org-mode . org-modern-mode))
 
 (use-package org-superstar
@@ -685,7 +684,7 @@
 
 (use-package org-spacer
   :commands (org-spacer-enforce)
-  :straight (:host github :repo "dustinlacewell/org-spacer.el")
+  :load-path "localelpa/org-spacer"
   :config
   (setq org-spacer-element-blanks
         '((0 headline)
@@ -695,7 +694,7 @@
 ;; 解决思路是自动插入一个不可见的空格字符
 ;; 详细讨论参考文章：https://emacs-china.org/t/org-mode/597/61
 (use-package separate-inline
-  :straight (:host github :repo "ingtshan/separate-inline.el")
+  :load-path "localelpa/separate-inline.el"
   :hook ((org-mode-hook . separate-inline-mode)
          (org-mode-hook . (lambda ()
                             (add-hook 'separate-inline-mode-hook
@@ -856,8 +855,7 @@
 
 (use-package org-ol-tree
   :commands org-ol-tree
-  :straight (:host github :repo "Townk/org-ol-tree")
-  )
+  :load-path "localelpa/org-ol-tree")
 
 ;; - https://github.com/takaxp/org-tree-slide
 (use-package org-tree-slide
@@ -918,7 +916,7 @@
 
 ;; - https://github.com/jakebox/preview-org-html-mode
 (use-package preview-org-html-mode
-  :straight (:host github :repo "jakebox/preview-org-html-mode" :branch "main")
+  :load-path "localelpa/preview-org-html-mode"
   :init (setq preview-org-html-viewer 'xwidget)
   :general
   ("<f12>" 'preview-org-html-mode))
@@ -1073,7 +1071,7 @@
   (setq org-pandoc-options-for-latex-pdf '((pdf-engine . "pdflatex"))))
 
 (use-package ox-beamer
-  :straight (:type built-in)
+  :ensure nil
   :config
   (progn
     ;; Allow for export=>beamer by placing

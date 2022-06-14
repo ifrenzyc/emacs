@@ -326,7 +326,7 @@
 ;; 基于 Company 编写了一个带中文注释的英文补全助手 - Emacs-general - Emacs China
 ;; - https://emacs-china.org/t/company/6322/186
 (use-package company-english-helper
-  :straight (:host github :repo "manateelazycat/company-english-helper")
+  :load-path "localelpa/company-english-helper"
   :config
   (require 'company-english-helper)
   (setq company-english-helper-fuzz-search-p t))

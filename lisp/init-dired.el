@@ -8,7 +8,7 @@
 ;; - https://jonathanabennett.github.io/blog/2019/06/05/file-management-in-emacs-with-dired-mode/
 ;; - https://stackoverflow.com/questions/23798021/disabling-evil-mode-for-nav-in-emacs-or-any-read-only-buffers
 (use-package dired
-  :straight (:type built-in)
+  :ensure nil
   :hook
   (dired-mode . hl-line-mode)
   (dired-mode . dired-hide-details-mode)
@@ -159,7 +159,7 @@
 ;;   (setq dired-k-padding 1))
 
 (use-package dired-hacks
-  :straight (:host github :repo "Fuco1/dired-hacks"))
+  :load-path "localelpa/dired-hacks")
 
 ;; Show subtree when pressing =i=
 (use-package dired-subtree
@@ -184,7 +184,6 @@
 ;; A package for viewing any list of files as a tree.
 ;; - https://github.com/knpatel401/filetree
 (use-package filetree
-  :straight (:host github :repo "knpatel401/filetree")
   :init (setq ;; filetree-notes-file "/home/david/Dropbox/Org/filtree-notes.org"
          filetree-info-window t
          filetree-use-all-the-icons t
@@ -199,7 +198,6 @@
 ;; Peep file in dired
 ;; https://github.com/asok/peep-dired
 (use-package peep-dired
-  :straight (:host github :repo "asok/peep-dired")
   :custom
   (peep-dired-cleanup-on-disable t)
   (peep-dired-enable-on-directories t)
@@ -233,11 +231,13 @@
 ;; ranger.el
 (use-package dirvish
   :disabled t
-  :straight (:host github :repo "alexluigit/dirvish"))
+  ;; :straight (:host github :repo "alexluigit/dirvish")
+  )
 
 (use-package ranger
   :disabled t
-  :straight (:host github :repo "ralesi/ranger.el"))
+  ;; :straight (:host github :repo "ralesi/ranger.el")
+  )
 
 ;; Multi-stage copy/pasting of files and bookmarks
 (use-package dired-ranger

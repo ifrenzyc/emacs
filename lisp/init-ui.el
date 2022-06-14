@@ -65,7 +65,7 @@
 ;; Show native line numbers if possible, otherwise use `linum'
 (if (fboundp 'display-line-numbers-mode)
     (use-package display-line-numbers
-      :straight (:type built-in)
+      :ensure nil
       :hook (prog-mode . display-line-numbers-mode))
   (use-package linum-off
     :demand
@@ -217,7 +217,7 @@
 ;; 有时候会打开一些文件，这些文件里的某一行特别长，而 Emacs 没有针对这种情况做特殊 处理，会导致整个界面卡死。现在它来了！
 ;; 当打开一个具有长行的文件时，它会自动检测并将一些可能导致严重性能的 mode 关闭， 如 font-lock (syntax highlight)。
 (use-package so-long
-  :straight (:type built-in)
+  :ensure nil
   :hook
   (after-init . global-so-long-mode)
   :config

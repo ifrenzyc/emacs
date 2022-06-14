@@ -33,20 +33,6 @@
 
 ;; Vertico 和 Orderless 主要配置来源： https://kristofferbalintona.me/posts/vertico-marginalia-all-the-icons-completion-and-orderless/#marginalia
 (use-package vertico
-  ;; Special recipe to load extensions conveniently
-  :straight (vertico :files (:defaults "extensions/*")
-                     :includes (vertico-indexed
-                                vertico-flat
-                                vertico-grid
-                                vertico-mouse
-                                vertico-quick
-                                vertico-buffer
-                                vertico-repeat
-                                vertico-reverse
-                                vertico-directory
-                                vertico-multiform
-                                vertico-unobtrusive
-                                ))
   :general
   (:keymaps 'vertico-map
             "<tab>" #'vertico-insert    ; Choose selected candidate

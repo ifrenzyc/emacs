@@ -81,6 +81,6 @@
 ;;   (unicode-fonts-setup))
 
 (use-package fixed-pitch
-  :straight (:host github :repo "cstby/fixed-pitch-mode"))
+  :load-path "localelpa/fixed-pitch-mode")
 
 (provide 'init-font)

@@ -35,8 +35,8 @@
 
 (use-package awesome-tray
   :disabled t
+  :load-path "localelpa/awesome-tray"
   :demand t
-  :hook (after-init . awesome-tray-mode)
-  :straight (:host github :repo "manateelazycat/awesome-tray"))
+  :hook (after-init . awesome-tray-mode))
 
 (provide 'init-mini-modeline)

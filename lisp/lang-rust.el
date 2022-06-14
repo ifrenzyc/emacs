@@ -56,7 +56,7 @@
 
 ;; `lsp-mode' client using the Rust Language Server
 (use-package lsp-rust
-  :straight (:type built-in)
+  :ensure nil
   :after (lsp-mode rust-mode)
   :hook
   (rust-mode . lsp-deferred))

@@ -40,7 +40,7 @@
    "r"  'pdf-view-reset-slice))
 
 (use-package pdf-view
-  :straight (:type built-in)
+  :ensure nil
   :after pdf-tools
   :custom
   (pdf-view-resize-factor 1.1)

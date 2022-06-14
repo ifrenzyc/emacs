@@ -12,7 +12,7 @@
 ;; xwidget-webkit enhancement suite
 ;; - https://github.com/BlueFlo0d/xwwp
 (use-package xwwp-follow-link
-  :straight (:type built-in)
+  :ensure nil
   :load-path "localelpa/xwwp"
   :custom
   (xwwp-follow-link-completion-system 'ivy)

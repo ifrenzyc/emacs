@@ -99,7 +99,9 @@ To be used with `markdown-live-preview-window-function'."
 ;;   (setq yc/ongoing-hydra-body #'hydra-markdown/body))
 ;; :hook (markdown-mode . yc/markdown-set-ongoing-hydra-body))
 
-(use-package markdown-mode+ :after markdown-mode)
+(use-package markdown-mode+
+  :load-path "localelpa/markdown-mode-plus"
+  :after markdown-mode)
 (use-package markdown-toc :after markdown-mode)
 
 (use-package markdownfmt

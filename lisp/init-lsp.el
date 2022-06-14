@@ -239,7 +239,7 @@
       ("w s" lsp "start server")))))
 
 ;; (use-package lsp-clients
-;;   :straight (:type built-in)
+;;   :ensure nil
 ;;   :init
 ;;   (setq lsp-clients-python-library-directories '("/usr/local/" "/usr/")))
 
@@ -439,7 +439,6 @@
 ;; https://github.com/emacs-lsp/lsp-sonarlint
 (use-package lsp-sonarlint
   :disabled t
-  ;; :straight (:host github :repo "emacs-lsp/lsp-sonarlint")
   :init
   (setq lsp-sonarlint-html-enabled t)
   (setq lsp-sonarlint-java-enabled t)
@@ -449,6 +448,7 @@
 
 ;; - https://github.com/tigersoldier/company-lsp
 (use-package company-lsp
+  :load-path "localelpa/company-lsp"
   :after (lsp company-mode)
   :custom
   (company-lsp-enable-snippet t)        ; 开启 yasnippet 支持

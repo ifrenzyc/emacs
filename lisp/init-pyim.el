@@ -16,9 +16,9 @@
 ;;               (liberime-select-schema "luna_pinyin_simp"))))
 
 (use-package liberime-config
-  :straight (:host github
-                   :repo "merrickluo/liberime"
-                   :files ("CMakeLists.txt" "*.el" "README.org" "Makefile" "src"))
+  ;; :straight (:host github
+  ;;                  :repo "merrickluo/liberime"
+  ;;                  :files ("CMakeLists.txt" "*.el" "README.org" "Makefile" "src"))
   :init
   (add-hook 'liberime-after-start-hook
             (lambda ()

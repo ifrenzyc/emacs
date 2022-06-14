@@ -54,8 +54,11 @@
 
 (use-package modus-themes
   :demand t
-  :straight (:host github :repo "protesilaos/modus-themes")
+  :ensure nil
+  :load-path "localelpa/modus-themes"
+  ;; :straight (:host github :repo "protesilaos/modus-themes")
   :init
+  (require 'modus-themes)
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs nil

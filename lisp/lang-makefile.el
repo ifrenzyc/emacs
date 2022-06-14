@@ -7,7 +7,7 @@
 ;;; Code
 
 (use-package make-mode
-  :straight (:type built-in)
+  :ensure nil
   :mode (("Makefile" . makefile-gmake-mode)))
 
 (provide 'lang-makefile)

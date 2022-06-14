@@ -24,7 +24,7 @@
 
 ;; Highlight matching parens
 (use-package paren
-  :straight (:type built-in)
+  :ensure nil
   :hook (after-init . show-paren-mode)
   :init (setq show-paren-when-point-inside-paren t
               show-paren-when-point-in-periphery t)
@@ -464,7 +464,7 @@ If there is only one overlay at point, just return it, no matter region or symbo
 
 ;; Pulse current line
 (use-package pulse
-  :straight (:type built-in)
+  :ensure nil
   :custom-face
   (pulse-highlight-start-face ((t (:inherit region))))
   (pulse-highlight-face ((t (:inherit region))))
@@ -511,7 +511,7 @@ If there is only one overlay at point, just return it, no matter region or symbo
 ;; 作用是类似于 vim 里面，超过多少列时显示一个线
 ;; - [[file:screenshots/20210720_151451_VwrUcU.png]]
 (use-package display-fill-column-indicator
-  :straight (:type built-in)
+  :ensure nil
   :hook
   (prog-mode . display-fill-column-indicator-mode)
   :custom

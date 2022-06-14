@@ -7,7 +7,7 @@
 ;;; Code
 
 (use-package bookmark
-  :straight (:type built-in)
+  :ensure nil
   :config
   ;; disable bookmark face after org-capture
   (setq bookmark-fontify nil))

@@ -33,13 +33,19 @@
 	url = git@github.com:tigersoldier/company-lsp.git
 [submodule "localelpa/company-tern"]
 	path = localelpa/company-tern
-	url = git@github.com:kevinushey/company-tern.git	
+	url = git@github.com:kevinushey/company-tern.git
 [submodule "localelpa/cache-path-from-shell"]
 	path = localelpa/cache-path-from-shell
 	url = git@github.com:manateelazycat/cache-path-from-shell.git
 [submodule "localelpa/color-rg"]
 	path = localelpa/color-rg
 	url = git@github.com:manateelazycat/color-rg.git
+[submodule "localelpa/company-english-helper"]
+	path = localelpa/company-english-helper
+	url = git@github.com:manateelazycat/company-english-helper.git
+[submodule "localelpa/lsp-bridge"]
+	path = localelpa/lsp-bridge
+	url = git@github.com:manateelazycat/lsp-bridge.git
 [submodule "localelpa/markdown-mode-plus"]
 	path = localelpa/markdown-mode-plus
 	url = git@github.com:milkypostman/markdown-mode-plus.git
@@ -48,7 +54,7 @@
 	url = git@github.com:dustinlacewell/org-spacer.el.git
 [submodule "localelpa/org-ol-tree"]
 	path = localelpa/org-ol-tree
-	url = git@github.com:Townk/org-ol-tree.git	
+	url = git@github.com:Townk/org-ol-tree.git
 [submodule "localelpa/separate-inline.el"]
 	path = localelpa/separate-inline.el
 	url = git@github.com:ingtshan/separate-inline.el.git
@@ -61,4 +67,6 @@
 [submodule "localelpa/preview-org-html-mode"]
 	path = localelpa/preview-org-html-mode
 	url = git@github.com:jakebox/preview-org-html-mode.git
-	branch = main
+[submodule "localelpa/modus-themes"]
+	path = localelpa/modus-themes
+	url = git@github.com:protesilaos/modus-themes.git

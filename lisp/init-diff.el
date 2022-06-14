@@ -9,7 +9,7 @@
 ;; 同时，它也可以应用在 ediff 上，恢复由 ediff 导致的窗体变动。
 ;; https://github.com/justbur/emacs-vdiff
 (use-package ediff
-  :straight (:type built-in)
+  :ensure nil
   :hook (;; show org ediffs unfolded
          (ediff-prepare-buffer . outline-show-all)
          ;; restore window layout when done
@@ -24,7 +24,7 @@
 
 ;; Resolve diff3 conflicts
 (use-package smerge-mode
-  :straight (:type built-in)
+  :ensure nil
   :diminish
   :pretty-hydra
   ((:title (pretty-hydra-title "Smerge" 'octicon "diff")
@@ -53,7 +53,7 @@
              (interactive)
              (save-buffer)
              (bury-buffer))
-      "Save and bury buffer" :exit t))))
+           "Save and bury buffer" :exit t))))
   :bind (:map smerge-mode-map
               ("C-c m" . smerge-mode-hydra/body))
   :hook ((find-file . (lambda ()

@@ -12,7 +12,7 @@
 (require 'init-org)
 
 (use-package org-agenda
-  :straight (:type built-in)
+  :ensure nil
   :commands org-agenda
   ;; :general
   ;; (org-agenda-mode-map

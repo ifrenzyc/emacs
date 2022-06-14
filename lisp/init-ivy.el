@@ -610,13 +610,11 @@
   )
 
 (use-package counsel-fd
-  :straight (:host github :repo "CsBigDataHub/counsel-fd")
   :after counsel
   :config
   (defalias 'fd 'counsel-fd-file-jump))
 
 (use-package counsel-at-point
-  :straight (:host gitlab :repo "ideasman42/emacs-counsel-at-point")
   :commands
   (counsel-at-point-file-jump
    counsel-at-point-git-grep

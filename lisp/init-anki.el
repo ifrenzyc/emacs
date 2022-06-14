@@ -9,7 +9,7 @@
 ;;; Code
 
 (use-package anki
-  :load-path (expand-file-name "localelpa/anki/" user-emacs-directory)
+  :load-path "localelpa/anki/"
   :init
   (add-hook 'anki-mode-hook #'shrface-mode)
   (add-hook 'anki-card-mode-hook #'shrface-mode)

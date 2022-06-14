@@ -7,7 +7,7 @@
 ;;; Code:
 
 (use-package isearch
-  :straight (:type built-in)
+  :ensure nil
   :no-require t
   :commands swiper-from-isearch
   :bind (("M-s ." . isearch-forward-symbol-at-point)
@@ -374,9 +374,7 @@ active region use it instead."
 ;; https://github.com/manateelazycat/color-rg
 (use-package color-rg
   :ensure-system-package (rg . "brew install ripgrep")
-  :straight (:host github
-                   :repo "manateelazycat/color-rg"
-                   :files ("color-rg.el"))
+  :load-path "localelpa/color-rg"
   :commands (color-rg-mode
              color-rg-search-input
              color-rg-search-symbol

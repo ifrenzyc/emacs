@@ -15,11 +15,11 @@
 ;; Restore cursor to file position in previous editing session.
 ;; 参考文档：https://www.emacswiki.org/emacs/SavePlace#toc1
 (use-package saveplace
-  :straight (:type built-in)
+  :ensure nil
   :hook (after-init . save-place-mode))
 
 (use-package savehist
-  :straight (:type built-in)
+  :ensure nil
   :hook (after-init . savehist-mode)
   :init (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
               history-length 1000
@@ -254,7 +254,6 @@
 (use-package barrinalo
   :disabled t
   :load-path "localelpa/barrinalo"
-  :straight nil
   :bind
   ("M-p" . barrinalo-swap-up)
   ("M-n" . barrinalo-swap-down)
@@ -263,7 +262,7 @@
 
 ;; 选中文本后，直接输入就可以，省去了删除操作。这在其他文本编辑器里都是标配，建议打开。
 (use-package delsel
-  :straight (:type built-in)
+  :ensure nil
   :hook (after-init . delete-selection-mode))
 
 ;; Hungry deletion
@@ -275,7 +274,7 @@
   (setq-default hungry-delete-chars-to-skip " \t\f\v"))
 
 (use-package subword
-  :straight (:type built-in)
+  :ensure nil
   :delight subword-mode)
 
 (use-package beginend
@@ -505,7 +504,7 @@
   :commands (cycle-quotes))
 
 (use-package hippie-expand
-  :straight (:type built-in)
+  :ensure nil
   :init
   (setq hippie-expand-try-functions-list
 	    '(

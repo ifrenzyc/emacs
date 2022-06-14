@@ -6,7 +6,7 @@
 
 ;;; Code
 (use-package eldoc
-  :straight (:type built-in)
+  :ensure nil
   :diminish
   :delight eldoc-mode
   :init
@@ -73,7 +73,7 @@
    (eldoc-mode . eldoc-box-hover-at-point-mode)))
 
 (use-package cl-indent
-  :straight (:type built-in)
+  :ensure nil
   :demand t
   :config
   (setq lisp-indent-function #'common-lisp-indent-function)

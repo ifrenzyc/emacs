@@ -136,7 +136,7 @@
 ;;   :hook (prog-mode . topsy-mode))
 
 ;; (use-package which-func
-;;   :straight (:type built-in)
+;;   :ensure nil
 ;;   :config
 ;;   (setq which-func-unknown "n/a")
 ;;   ;; ;; Show the current function name in the header line

@@ -9,7 +9,7 @@
 ;;; Code
 
 (use-package java-mode
-  :straight (:type built-in)
+  :ensure nil
   :mode ("\\.java\\'" . java-mode)
   :config
   (add-to-list 'load-path (expand-file-name "localelpa/google-c-style" user-emacs-directory))
@@ -112,7 +112,7 @@
     "lu"  'lsp-java-generate-equals-and-hash-code))
 
 (use-package dap-java
-  :straight (:type built-in)
+  :ensure nil
   :after (lsp-java dap)
   ;; :config
   ;; (global-set-key (kbd "<f7>") 'dap-step-in)

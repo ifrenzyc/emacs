@@ -70,7 +70,6 @@
   (bufler-workspace-mode))
 
 (use-package unmodified-buffer
-  :straight (:host github :repo "arthurcgusmao/unmodified-buffer")
   :hook (after-init . unmodified-buffer-mode))
 
 (provide 'init-buffer)

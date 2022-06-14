@@ -7,7 +7,7 @@
 ;;; Code
 
 (use-package eshell
-  :straight (:type built-in)
+  :ensure nil
   :config
   (defun yc/eshell-prompt-function ()
     "My eshell prompt function."
@@ -20,13 +20,11 @@
         eshell-prompt-function #'yc/eshell-prompt-function))
 
 (use-package eshell-info-banner
-  :straight (:host github :repo "Phundrak/eshell-info-banner.el" :branch main)
+  ;; :straight (:host github :repo "Phundrak/eshell-info-banner.el" :branch main)
   :hook (eshell-banner-load . eshell-info-banner-update-banner))
 
 (use-package aweshell
-  :straight (:host github
-                   :repo "manateelazycat/aweshell"
-                   :files ("*.el"))
+  :load-path "localelpa/aweshell"
   :commands (aweshell-new aweshell-next aweshell-prev aweshell-toggle)
   :config
   (setq eshell-highlight-prompt nil
