@@ -70,3 +70,6 @@
 [submodule "localelpa/modus-themes"]
 	path = localelpa/modus-themes
 	url = git@github.com:protesilaos/modus-themes.git
+[submodule "localelpa/org-modern-indent"]
+	path = localelpa/org-modern-indent
+	url = https://github.com/jdtsmith/org-modern-indent.git
