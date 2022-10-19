@@ -74,7 +74,7 @@
 
 (use-package cl-indent
   :ensure nil
-  :demand t
+  ;; :demand t
   :config
   (setq lisp-indent-function #'common-lisp-indent-function)
   (defvar cm/correct-indentation-list

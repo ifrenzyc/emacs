@@ -350,6 +350,7 @@ If there is only one overlay at point, just return it, no matter region or symbo
 ;; - https://github.com/antonj/Highlight-Indentation-for-Emacs
 ;; - https://github.com/DarthFennec/highlight-indent-guides
 (use-package highlight-indentation
+  :disabled t
   ;; :hook (prog-mode . highlight-indentation-mode)
   ;; :config
   ;; (set-face-background 'highlight-indentation-face "#e3e3d3")
@@ -401,12 +402,7 @@ If there is only one overlay at point, just return it, no matter region or symbo
             (setq pos (text-property-any next limit prop nil str))
             (ignore-errors
               (remove-text-properties next pos '(display nil face nil) str))))))
-    (advice-add #'ivy-cleanup-string :after #'my-ivy-cleanup-indentation))
-  )
-;; (eval-after-load 'highlight-indent-guides
-;;   (custom-set-faces
-;;    '(highlight-indent-guides-top-character-face ((t (:foreground "turquoise1")))))
-;;   )
+    (advice-add #'ivy-cleanup-string :after #'my-ivy-cleanup-indentation)))
 
 ;; *About:* 不同层级的代码块分隔符显示不同颜色
 ;; Highlight brackets according to their depth
@@ -498,6 +494,18 @@ If there is only one overlay at point, just return it, no matter region or symbo
     (dolist (cmd '(recenter-top-bottom
                    other-window windmove-do-window-select
                    ace-window aw--select-window
+                   winum-select-window-0
+                   winum-select-window-1
+                   winum-select-window-2
+                   winum-select-window-3
+                   winum-select-window-4
+                   winum-select-window-5
+                   winum-select-window-6
+                   winum-select-window-7
+                   winum-select-window-8
+                   winum-select-window-9
+                   winum-select-window-0-or-10
+                   winum-select-window-by-number
                    pager-page-down pager-page-up
                    treemacs-select-window
                    symbol-overlay-basic-jump))

@@ -7,6 +7,7 @@
 ;;; Code:
 
 (use-package easy-kill-extras
+  :disabled t
   :bind (([remap kill-ring-save] . easy-kill)
          ([remap mark-sexp] . easy-mark-sexp)
          ([remap mark-word] . easy-mark-word)

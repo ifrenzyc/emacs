@@ -29,8 +29,9 @@
   :commands (magit-status)
   :general
   (yc/nonprefix-keys
-      "C-x g" 'magit-status)
+    "C-x g" 'magit-status)
   :hook
+  (magit-mode . selected-off)
   (magit-log-edit-mode . (lambda ()
                            (set-fill-column 89)
                            (auto-fill-mode 1)))
@@ -45,7 +46,7 @@
   (when (fboundp 'transient-append-suffix)
     ;; Add switch: --tags
     (transient-append-suffix 'magit-fetch
-        "-p" '("-t" "Fetch all tags" ("-t" "--tags"))))
+      "-p" '("-t" "Fetch all tags" ("-t" "--tags"))))
 
   (diminish 'magit-auto-revert-mode "")
   ;; (when (featurep 'evil)
@@ -235,6 +236,7 @@
 ;; forge: Access Git forges for Magit
 ;; https://github.com/magit/forge
 (use-package forge
+  :disabled t
   :after magit
   :bind ((:map forge-issue-section-map
                ("C-c C-v" . forge-browse-topic))

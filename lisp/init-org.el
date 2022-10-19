@@ -16,17 +16,43 @@
 ;; - https://mstempl.netlify.com/post/beautify-org-mode/
 ;; 
 
-;;; Code
+;;; Code:
+(require 'init-font)
+
 (use-package org
   :ensure nil
   :mode ("\\.\\(org\\|txt\\)$" . org-mode)
   :delight org-mode "Org"
   :custom-face
   ;; 单独给 org-table 设一个等宽字体
+  ;; 目前使用是有问题的，英文字符是按照设置的 Sarasa 字体，但是中文不是，导致还是不能正确对齐
   ;; Org table font
-  (org-table ((t (:family "Sarasa Mono SC" :size user/font-size))))
+  (org-table ((t (:family "Sarasa Mono SC" :size 13))))
   (org-done ((t (:strike-through t))))
   (org-headline-done ((t (:strike-through t))))
+  :custom
+  ;; "#0098dd"
+  ;; "#0fbf5c"
+  ;; "#2c3e50"
+  ;; "#2ecc71"
+  ;; "#3498db"
+  ;; "#50a14f"
+  ;; "#7c7c75"
+  ;; "#8abeb7"
+  ;; "#9f7efe"
+  ;; "#b294bb"
+  ;; "#b5bd68"
+  ;; "#de935f"
+  ;; "#e74c3c"
+  ;; "#f0c674"
+  ;; "#f1c40f"
+  ;; "#feb24c"
+  ;; "#ff6480"
+  (org-todo-keyword-faces '(("DELEGATED" . (:foreground "#feb24c" :slant italic :weight bold))
+                            ("MABE" . (:foreground "#6e90c8" :slant italic :weight bold))
+                            ("PROJ" . (:foreground "#b294bb" :slant italic :weight bold))
+                            ("READ" . (:foreground "#9f7efe" :slant italic :weight bold))
+                            ("WAITING" . (:foreground "coral" :slant italic :weight bold))))
   :hook
   ;; (org-mode . visual-line-mode)
   ;; (org-mode . olivetti-mode)
@@ -54,10 +80,16 @@
         org-enforce-todo-checkbox-dependencies t
         org-hide-emphasis-markers t     ; 隐藏 org-mode 语法中的标记字符
         org-image-actual-width (/ (frame-pixel-width) 2))
+
+  (setq org-id-link-to-org-use-id 'use-existing)
   ;; org-image-actual-width '(400))
 
+  ;; Save Org buffers after refiling!
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
   (setq org-log-done 'time                      ; 记录时间
-        org-log-done 'note                      ; 记录提示信息
+        org-log-reschedule t
+        org-log-redeadline t
         org-log-into-drawer t                   ; hide org todo state changes in drawer or properties
         org-drawers '("PROPERTIES" "LOGBOOK")   ; separate drawers for clocking and logs
         org-clock-into-drawer t                 ; save clock data and state changes and notes in the LOGBOOK drawer
@@ -95,6 +127,7 @@
      (org . t)
      (shell . t)
      (sql . t)
+     (go . t)
      (plantuml . t)))
 
   (defun add-pcomplete-to-capf ()
@@ -108,9 +141,10 @@
         org-fontify-quote-and-verse-blocks t)
 
   (setq org-todo-keywords
-        '((sequence "INBO(i!/!)" "TODO(t!/!)" "NEXT(n!/!)" "DELEGATED(l!/!)" "|" "DONE(d!/!)" "DEFERRED(f!/!)" "CANCELLED(c@/!)")
+        '((sequence "TODO(t!/!)" "NEXT(n!/!)" "DELEGATED(l!/!)" "|" "DONE(d!/!)" "DEFERRED(f!/!)" "CANCELLED(c@/!)")
           (sequence "MEETING" "|" "MEETING_DONE")
-          (sequence "PROJ(p!/!)" "READ(r!/!)" "FIXME(f!/!)" "|" "READ_DONE(R!/!)")
+          (sequence "PROJ(p!/!)" "|" "PROJ_DONE(P!/!)")
+          (sequence "READ(r!/!)" "|" "READ_DONE(R!/!)")
           (sequence "WAITING(w@/!)" "REPEAT(r!/!)" "MABE(m!/!)" "HOLD(h!/!)")))
 
   ;; (setq org-todo-keywords 
@@ -131,6 +165,154 @@
           ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
           ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
           ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
+
+  (major-mode-hydra-bind org-mode "Move"
+    ("n" outline-next-visible-heading "next heading" :color pink)
+    ("p" outline-previous-visible-heading "prev heading" :color pink)
+    ("N" org-forward-heading-same-level "next heading at same level" :color pink)
+    ("P" org-backward-heading-same-level "prev heading at same level" :color pink)
+    ("u" outline-up-heading "up heading" :color pink)
+    ("g" org-goto "goto" :exit t))
+
+  (major-mode-hydra-bind org-mode "Zoom"
+    ("<" worf-back-to-heading "worf-back-to-heading")
+    ("l" worf-right "worf-right")
+    ("j" worf-down "worf-down")
+    ("k" worf-up "worf-up")
+    ("h" worf-left "worf-left"))
+
+  (major-mode-hydra-bind org-mode "Shift"
+    ("K" org-move-subtree-up "up" :color pink)
+    ("J" org-move-subtree-down "down" :color pink)
+    ("h" org-promote-subtree "promote" :color pink)
+    ("l" org-demote-subtree "demote" :color pink))
+
+  (major-mode-hydra-bind org-mode "Travel"
+    ("p" org-backward-heading-same-level "backward" :color pink)
+    ("n" org-forward-heading-same-level "forward" :color pink)
+    ("j" hydra-org-child-level "to child" :color pink)
+    ("k" hydra-org-parent-level "to parent" :color pink)
+    ("a" hydra-org-goto-first-sibling "first sibling")
+    ("e" hydra-org-goto-last-sibling "last sibling"))
+
+  (major-mode-hydra-bind org-mode "Perform"
+    ("r" (lambda () (interactive)
+           ;; (helm-org-rifle-current-buffer)
+           (call-interactively 'org-cycle)
+           (call-interactively 'org-cycle)) "rifle")
+    ("v" avy-org-goto-heading-timer "avy"))
+
+  (major-mode-hydra-bind org-mode "Toggles"
+    ("C-l" yc/org-toggle-link-display "link")
+    ("C-i" org-toggle-inline-images "image"))
+
+  (major-mode-hydra-bind org-mode "Quit"
+    ("C-g" nil "quit")
+    ("q" nil "quit"))
+
+  (defhydra hydra-org (:color red :columns 3)
+    "Org Mode Movements"
+    ("n" outline-next-visible-heading "next heading")
+    ("p" outline-previous-visible-heading "prev heading")
+    ("N" org-forward-heading-same-level "next heading at same level")
+    ("P" org-backward-heading-same-level "prev heading at same level")
+    ("u" outline-up-heading "up heading")
+    ("C-l" yc/org-toggle-link-display "link")
+    ("C-i" org-toggle-inline-images "image")
+    ("g" org-goto "goto" :exit t))
+
+  (defun yc/org-toggle-link-display ()
+    "Toggle the literal or descriptive display of links."
+    (interactive)
+    (if org-descriptive-links
+        (progn (org-remove-from-invisibility-spec '(org-link))
+               (org-restart-font-lock)
+               (setq org-descriptive-links nil))
+      (progn (add-to-invisibility-spec '(org-link))
+             (org-restart-font-lock)
+             (setq org-descriptive-links t))))
+
+  ;; Paste an image on clipboard to Emacs Org mode file.
+  ;; - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
+  ;; $ brew install pngpaste
+  ;; 另外一个 screenshot 扩展 https://github.com/tecosaur/screenshot
+  ;; - http://bianle.blog/2016/10/26/emacs-paste-image-from-clipboard/
+  ;; - https://emacs-china.org/t/topic/6601/4
+  ;; - https://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
+  (defun yc/org-screenshot ()
+    "Take a screenshot into a time stamped unique-named file in the
+      same directory as the org-buffer and insert a link to this file."
+    (interactive)
+    (setq filename
+          (concat
+           (make-temp-name
+            (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name))
+                    "_imgs/"
+                    (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
+    (unless (file-exists-p (file-name-directory filename))
+      (make-directory (file-name-directory filename)))
+    ;; take screenshot
+    (if IS-MAC
+        (call-process "screencapture" nil nil nil "-i" filename))
+    (if IS-LINUX
+        (call-process "import" nil nil nil filename))
+    ;; insert into file if correctly taken
+    (if (file-exists-p filename)
+        (insert (concat "[[file:" filename "]]")))
+    (org-display-inline-images))
+
+  (defun yc/org-insert-clipboard-image-localdir ()
+    (interactive)
+    (setq filename
+          (concat
+           (make-temp-name
+            (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name))
+                    "_imgs/"
+                    (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
+    (unless (file-exists-p (file-name-directory filename))
+      (make-directory (file-name-directory filename)))
+
+    (message (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
+    (call-process-shell-command (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
+
+    (insert (concat "[[file:" filename "]]")))
+
+  (defun yc/copy-idlink-to-clipboard ()
+    "Copy an ID link with the headline to killring, if no ID is there then create a new unique
+ID.  This function works only in org-mode or org-agenda buffers. 
+
+The purpose of this function is to easily construct id:-links to 
+org-mode items. If its assigned to a key it saves you marking the
+text and copying to the killring."
+    (interactive)
+    (when (eq major-mode 'org-agenda-mode) ;switch to orgmode
+      (org-agenda-show)
+      (org-agenda-goto))
+    (when (eq major-mode 'org-mode) ; do this only in org-mode buffers
+      (setq mytmphead (nth 4 (org-heading-components)))
+      (setq mytmpid (funcall 'org-id-get-create))
+      (setq mytmplink (format "[[id:%s][%s]]" mytmpid mytmphead))
+      (kill-new mytmplink)
+      (save-buffer)
+      (message "Copied %s to killring (clipboard)" mytmplink)
+      ))
+  
+  (global-set-key (kbd "<f5>") 'yc/copy-idlink-to-clipboard)
+  
+  (defun yc/org-insert-clipboard-image ()
+    "paste image from clipboard"
+    (interactive)
+    (setq filename
+          (concat
+           (make-temp-name
+            (concat "/Users/yangc/notes/images/"
+                    (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
+    ;;  (unless (file-exists-p (file-name-directory filename))
+    ;;    (make-directory (file-name-directory filename)))
+    (message (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
+    (call-process-shell-command (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
+
+    (insert (concat "[[file:" filename "]]")))
   :general
   ;; Great evil org mode keyboard shortcuts cribbed from cofi
   ;; (evil-define-key 'normal org-mode-map
@@ -190,7 +372,7 @@
   ;;   (kbd "M-L") 'org-metaright)
 
   (yc/leader-keys-major-mode
-      :keymaps 'org-mode-map
+    :keymaps 'org-mode-map
     ;; "" '(:ignore t :which-key "major-mode-cmd")
     ;; "ma" '(:ignore t :which-key "help")
     "." 'major-mode-hydra
@@ -260,84 +442,13 @@
     "tto" 'org-table-toggle-coordinate-overlays
     "tw" 'org-table-wrap-region)
 
-  ;; (yc/leader-keys-major-mode-copy
-  ;;   :keymaps 'org-mode-map
-  ;;   "" '(:ignore t :which-key "major-mode-cmd")
-  ;;   ;; "ma" '(:ignore t :which-key "help")
-  ;;   "." 'major-mode-hydra
-  ;;   "'" 'org-edit-special
-  ;;   "SPC" 'worf-back-to-heading
-  ;;   "a" 'org-agenda
-  ;;   "c" 'org-capture
-  ;;   "b" '(:ignore t :which-key "babel")
-  ;;   "C" '(:ignore t :which-key "clocks")
-  ;;   "s" 'org-schedule
-  ;;   "d" 'org-deadline
-  ;;   "r" 'org-refile
-  ;;   "l" 'worf-right
-  ;;   "j" 'worf-down
-  ;;   "k" 'worf-up
-  ;;   "h" 'worf-left
-  ;;   "g" 'counsel-org-goto
-  ;;   "/" 'org-toggle-comment
-  ;;   "CI" 'org-clock-in
-  ;;   "Cn" 'org-narrow-to-subtree
-  ;;   "CN" 'widen
-  ;;   "CO" 'org-clock-out
-  ;;   "Cq" 'org-clock-cancel
-  ;;   "CR" 'org-refile
-  ;;   ;; "md" '(:ignore t :which-key "dates")
-  ;;   "e" '(:ignore t :which-key "export")
-  ;;   "f" '(:ignore t :which-key "feeds")
-  ;;   "H" 'org-shiftleft
-  ;;   "J" 'org-shiftdown
-  ;;   "K" 'org-shiftup
-  ;;   "L" 'org-shiftright
-  ;;   "T" '(:ignore t :which-key "Toggles")
-  ;;   ;; "x" '(:ignore t :which-key "text")
-  ;;   "x" 'org-archive-subtree-default-with-confirmation
-  ;;   ;; "C-S-l" 'org-shiftcontrolright
-  ;;   ;; "C-S-h" 'org-shiftcontrolleft
-  ;;   ;; "C-S-j" 'org-shiftcontroldown
-  ;;   ;; "C-S-k" 'org-shiftcontrolup
-  ;;   "t" '(:ignore t :which-key "tables")
-  ;;   "ta" 'org-table-align
-  ;;   "tb" 'org-table-blank-field
-  ;;   "tc" 'org-table-convert
-  ;;   "td" '(:ignore t :which-key "delete")
-  ;;   "tdc" 'org-table-delete-column
-  ;;   "tdr" 'org-table-kill-row
-  ;;   "te" 'org-table-eval-formula
-  ;;   "tE" 'org-table-export
-  ;;   "th" 'org-table-previous-field
-  ;;   "tH" 'org-table-move-column-left
-  ;;   "ti" '(:ignore t :which-key "insert")
-  ;;   "tic" 'org-table-insert-column
-  ;;   "tih" 'org-table-insert-hline
-  ;;   "tiH" 'org-table-hline-and-move
-  ;;   "tir" 'org-table-insert-row
-  ;;   "tI" 'org-table-import
-  ;;   "tj" 'org-table-next-row
-  ;;   "tJ" 'org-table-move-row-down
-  ;;   "tK" 'org-table-move-row-up
-  ;;   "tl" 'org-table-next-field
-  ;;   "tL" 'org-table-move-column-right
-  ;;   "tn" 'org-table-create
-  ;;   "tN" 'org-table-create-with-table.el
-  ;;   "tr" 'org-table-recalculate
-  ;;   "ts" 'org-table-sort-lines
-  ;;   "tt" '(:ignore t :which-key "toggle")
-  ;;   "ttf" 'org-table-toggle-formula-debugger
-  ;;   "tto" 'org-table-toggle-coordinate-overlays
-  ;;   "tw" 'org-table-wrap-region)
-
   ;; @see - https://github.com/noctuid/evil-guide
   ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
   (yc/leader-keys-major-mode
-      :keymaps 'org-src-mode-map
+    :keymaps 'org-src-mode-map
     "'" 'org-edit-src-exit)
   (yc/nonprefix-keys
-      :keymaps 'org-src-mode-map
+    :keymaps 'org-src-mode-map
     :states '(normal)
     "RET" 'org-edit-src-exit)
   ;; (yc/leader-keys-major-mode-copy
@@ -379,6 +490,7 @@
 ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "━"))))))
 
 ;; todo keywords 的背景色设置可以参考这个： /Users/yangc/src/emacs.d/emacs-leuven/docs/index.org::*Extended use of TODO keywords
+;; 参考2 - file:~/src/emacs.d/emagicians-starter-kit/Org-Grimoire.org::*Faces
 ;; (defun custom-org-faces ()
 ;;   "Custom org face"
 ;;   (interactive)
@@ -409,6 +521,35 @@
 ;;   )
 
 ;; (add-hook 'org-mode-hook #'custom-org-faces)
+
+;; (custom-set-faces
+;;  '(org-block-begin-line
+;;    ((t (:underline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block-end-line
+;;    ((t (:overline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block
+;;    ((t (:background "#333333"))))
+;;  '(org-block-background
+;;    ((t (:background "#333333"))))
+;;  )
+
+;; (custom-set-faces
+;;  '(org-block-begin-line
+;;    ((t (:underline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block-end-line
+;;    ((t (:overline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
+;;  '(org-block
+;;    ((t (:background "#F2E4BE"))))
+;;  '(org-block-background
+;;    ((t (:background "#F2E4BE"))))
+;;  )
+
+;; (custom-set-faces
+;;  '(org-block
+;;    ((t (:foreground "#184034" :background "#F0F0F0"))))
+;;  '(org-block-background
+;;    ((t (:foreground "#184034" :background "#F0F0F0"))))
+;;  )
 
 ;; (custom-set-faces
 ;;  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
@@ -479,35 +620,6 @@
 ;;         ("i" "#+index: ?" "#+index: ?")
 ;;         ("I" "#+include %file ?" "<include file=%file markup=\"?\">")))
 
-;; (custom-set-faces
-;;  '(org-block-begin-line
-;;    ((t (:underline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
-;;  '(org-block-end-line
-;;    ((t (:overline "#A7A6AA" :foreground "#333333" :background "#444444" :height 0.9 :slant italic :weight semi-bold))))
-;;  '(org-block
-;;    ((t (:background "#333333"))))
-;;  '(org-block-background
-;;    ((t (:background "#333333"))))
-;;  )
-
-;; (custom-set-faces
-;;  '(org-block-begin-line
-;;    ((t (:underline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
-;;  '(org-block-end-line
-;;    ((t (:overline "#A7A6AA" :foreground "#666666" :background "#EBDAB4" :height 0.9 :slant italic :weight semi-bold))))
-;;  '(org-block
-;;    ((t (:background "#F2E4BE"))))
-;;  '(org-block-background
-;;    ((t (:background "#F2E4BE"))))
-;;  )
-
-;; (custom-set-faces
-;;  '(org-block
-;;    ((t (:foreground "#184034" :background "#F0F0F0"))))
-;;  '(org-block-background
-;;    ((t (:foreground "#184034" :background "#F0F0F0"))))
-;;  )
-
 ;; UTF-8 bullets for org-mode.
 ;; - https://github.com/sabof/org-bullets
 ;; - https://github.com/integral-dw/org-superstar-mode
@@ -525,6 +637,12 @@
   ;; :straight (:host github :repo "minad/org-modern")
   :hook (org-mode . org-modern-mode))
 
+(use-package org-modern-indent
+  :load-path "localelpa/org-modern-indent"
+  :disabled t
+  :hook
+  (org-mode . org-modern-indent-mode))
+
 (use-package org-superstar
   :hook (org-mode . org-superstar-mode)
   :custom
@@ -533,33 +651,25 @@
   (org-superstar-leading-fallback ?\s)
   (org-superstar-special-todo-items nil)
   (org-superstar-headline-bullets-list
-   '("⚫"
-     "⚫"
-     "⚫"
-     "⚫"
-     "⚫"
-     "⚫"
-     "⚫"
-     "⚫"))
+   '("⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫"))
   (org-superstar-item-bullet-alist
    '((?* . ?☯)
      (?+ . ?✚)
      (?- . ?▶))))
 
-;; - https://github.com/stardiviner/org-link-beautify
-
-;; Auto-show Markup Symbols
+;; Auto-show Markup Symbols/
 ;; This package makes it much easier to edit Org documents when org-hide-emphasis-markers is turned on.
 ;; It temporarily shows the emphasis markers around certain markup elements when you place your cursor
 ;; inside of them. No more fumbling around with = and * characters!
 (use-package org-appear
-  ;; :straight (:host github :repo "awth13/org-appear")
   :hook (org-mode . org-appear-mode))
 
 ;; visual indent
 ;; (use-package org-bars
 ;;   :straight (:host github :repo "tonyaldon/org-bars")
 ;;   :hook (org-mode . org-bars-mode))
+
+;; - https://github.com/stardiviner/org-link-beautify
 
 ;; or https://github.com/stardiviner/org-tag-beautify
 ;; (use-package org-pretty-tags
@@ -589,14 +699,14 @@
 ;; - https://github.com/casouri/valign
 ;; - https://github.com/casouri/ftable
 ;; - https://github.com/Fuco1/org-pretty-table
-;; (use-package valign
-;;   :stragiht (:host github :repo "casouri/valign")
-;;   :after org
-;;   :hook ((org-mode . valign-mode)
-;;          (markdown-mode . valign-mode))
-;;   :custom
-;;   (valign-fancy-bar t)
-;;   )
+(use-package valign
+  :disabled t
+  :load-path "localelpa/valign"
+  :after org
+  :hook ((org-mode . valign-mode)
+         (markdown-mode . valign-mode))
+  :custom
+  (valign-fancy-bar nil))
 
 ;; (use-package ftable
 ;;   :straight (:host github
@@ -633,7 +743,7 @@
                   (?☕ org-specific "\\[#C\\]" (org-mode))
                   (?⁂ org-specific "\\(^\\*\\)[^*]" (org-mode) 1)
                   (?• org-specific "^\\(?:\\*\\{1\\}\\)\\(\\*\\)[^*]" (org-mode) 1)
-                  (?⊢ org-specific "^\\(?:\\*\\{2\\}\\)\\(\\*\\)[^*]" (org-mode) 1)
+                  
                   (?⋮ org-specific "^\\(?:\\*\\{3\\}\\)\\(\\*\\)[^*]" (org-mode) 1)
                   (?⋱ org-specific "^\\(?:\\*\\{4,\\}\\)\\(\\*\\)[^*]" (org-mode) 1)
                   ((yant/str-to-glyph "☐") org-specific "\\(?:^*+ +\\)\\(\\<TODO\\>\\)" (org-mode) 1)
@@ -651,6 +761,7 @@
                   ((yant/str-to-glyph "☠D") org-specific "\\<DEADLINE:" (org-mode))
                   ((yant/str-to-glyph "◴S") org-specific "\\<SCHEDULED:" (org-mode)))))
   )
+
 (use-package prettify-symbols
   :disabled t
   :config
@@ -676,6 +787,7 @@
   )
 
 (use-package org-treescope
+  :disabled t
   :commands (org-treescope)
   :custom
   (org-treescope-query-userbuffer "~/path/to/projects.txt")
@@ -684,7 +796,7 @@
 
 (use-package org-spacer
   :commands (org-spacer-enforce)
-  :load-path "localelpa/org-spacer"
+  :load-path "localelpa/org-spacer.el"
   :config
   (setq org-spacer-element-blanks
         '((0 headline)
@@ -767,86 +879,13 @@
   :commands (org-cliplink org-cliplink-clipboard-content)
   :bind (:map org-mode-map
               ("C-c s-l" . org-store-link)
-              ("C-c s-i" . org-cliplink))
-  ;; :bind ("C-x p i" . org-cliplink)
-  )
-
-(defun yc/org-toggle-link-display ()
-  "Toggle the literal or descriptive display of links."
-  (interactive)
-  (if org-descriptive-links
-      (progn (org-remove-from-invisibility-spec '(org-link))
-             (org-restart-font-lock)
-             (setq org-descriptive-links nil))
-    (progn (add-to-invisibility-spec '(org-link))
-           (org-restart-font-lock)
-           (setq org-descriptive-links t))))
-
-;; Paste an image on clipboard to Emacs Org mode file.
-;; - http://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
-;; $ brew install pngpaste
-;; 另外一个 screenshot 扩展 https://github.com/tecosaur/screenshot
-;; - http://bianle.blog/2016/10/26/emacs-paste-image-from-clipboard/
-;; - https://emacs-china.org/t/topic/6601/4
-;; - https://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
-(defun yc/org-screenshot ()
-  "Take a screenshot into a time stamped unique-named file in the
-      same directory as the org-buffer and insert a link to this file."
-  (interactive)
-  (setq filename
-        (concat
-         (make-temp-name
-          (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name))
-                  "_imgs/"
-                  (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
-  (unless (file-exists-p (file-name-directory filename))
-    (make-directory (file-name-directory filename)))
-  ;; take screenshot
-  (if IS-MAC
-      (call-process "screencapture" nil nil nil "-i" filename))
-  (if IS-LINUX
-      (call-process "import" nil nil nil filename))
-  ;; insert into file if correctly taken
-  (if (file-exists-p filename)
-      (insert (concat "[[file:" filename "]]")))
-  (org-display-inline-images))
-
-(defun yc/org-insert-clipboard-image-localdir ()
-  "paste image from clipboard"
-  (interactive)
-  (setq filename
-        (concat
-         (make-temp-name
-          (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name))
-                  "_imgs/"
-                  (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
-  (unless (file-exists-p (file-name-directory filename))
-    (make-directory (file-name-directory filename)))
-
-  (message (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
-  (call-process-shell-command (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
-
-  (insert (concat "[[file:" filename "]]")))
-
-(defun yc/org-insert-clipboard-image ()
-  "paste image from clipboard"
-  (interactive)
-  (setq filename
-        (concat
-         (make-temp-name
-          (concat "/Users/yangc/notes/images/"
-                  (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
-  ;;  (unless (file-exists-p (file-name-directory filename))
-  ;;    (make-directory (file-name-directory filename)))
-  (message (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
-  (call-process-shell-command (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
-
-  (insert (concat "[[file:" filename "]]")))
+              ("C-c s-i" . org-cliplink)))
 
 ;; TODO electric-quote-mode
 
 (use-package org-sticky-header
   ;; :hook (org-mode . org-sticky-header-mode)
+  :disabled t
   :config
   ;; Show full path in header
   (setq org-sticky-header-full-path 'full)
@@ -856,6 +895,13 @@
 (use-package org-ol-tree
   :commands org-ol-tree
   :load-path "localelpa/org-ol-tree")
+
+;; - https://github.com/alphapapa/org-sidebar
+(use-package org-sidebar
+  :disabled t
+  :commands (org-sidebar org-sidebar-tree)
+  ;; :straight (:host github :repo "alphapapa/org-sidebar")
+  )
 
 ;; - https://github.com/takaxp/org-tree-slide
 (use-package org-tree-slide
@@ -871,15 +917,10 @@
   ;; (define-key org-tree-slide-mode-map (kbd "<f11>") 'org-tree-slide-content)
   (org-tree-slide-narrowing-control-profile))
 
-;; - https://github.com/alphapapa/org-sidebar
-(use-package org-sidebar
-  :commands (org-sidebar org-sidebar-tree)
-  ;; :straight (:host github :repo "alphapapa/org-sidebar")
-  )
-
 ;; Table-of-contents sidebar for Emacs.
 ;; 暂时还没在 mpla 里
-(use-package outline-toc)
+(use-package outline-toc
+  :disabled t)
 
 (use-package htmlize)
 
@@ -935,6 +976,7 @@
 ;; https://github.com/astahlman/ob-async
 ;; 如果要加这个，是不是要在 begin_src 上加上关键字，还是默认全部都执行，对 emacs dotfile 的加载有没有影响，这些都要验证。
 (use-package ob-async
+  :disabled t
   :after org
   :commands (ob-async-org-babel-execute-src-block)
   ;; :init
@@ -947,6 +989,7 @@
 
 ;; - https://github.com/rksm/clj-org-analyzer
 (use-package org-analyzer
+  :disabled t
   :commands (org-analyzer-start))
 
 ;; (defhydra hydra-org (:color red)
@@ -975,61 +1018,6 @@
 ;;   ("k" worf-up "worf-up")
 ;;   ("h" worf-left "worf-left")
 ;;   ("q" nil))
-
-(major-mode-hydra-bind org-mode "Move"
-  ("n" outline-next-visible-heading "next heading" :color pink)
-  ("p" outline-previous-visible-heading "prev heading" :color pink)
-  ("N" org-forward-heading-same-level "next heading at same level" :color pink)
-  ("P" org-backward-heading-same-level "prev heading at same level" :color pink)
-  ("u" outline-up-heading "up heading" :color pink)
-  ("g" org-goto "goto" :exit t))
-
-(major-mode-hydra-bind org-mode "Zoom"
-  ("<" worf-back-to-heading "worf-back-to-heading")
-  ("l" worf-right "worf-right")
-  ("j" worf-down "worf-down")
-  ("k" worf-up "worf-up")
-  ("h" worf-left "worf-left"))
-
-(major-mode-hydra-bind org-mode "Shift"
-  ("K" org-move-subtree-up "up" :color pink)
-  ("J" org-move-subtree-down "down" :color pink)
-  ("h" org-promote-subtree "promote" :color pink)
-  ("l" org-demote-subtree "demote" :color pink))
-
-(major-mode-hydra-bind org-mode "Travel"
-  ("p" org-backward-heading-same-level "backward" :color pink)
-  ("n" org-forward-heading-same-level "forward" :color pink)
-  ("j" hydra-org-child-level "to child" :color pink)
-  ("k" hydra-org-parent-level "to parent" :color pink)
-  ("a" hydra-org-goto-first-sibling "first sibling")
-  ("e" hydra-org-goto-last-sibling "last sibling"))
-
-(major-mode-hydra-bind org-mode "Perform"
-  ("r" (lambda () (interactive)
-         ;; (helm-org-rifle-current-buffer)
-         (call-interactively 'org-cycle)
-         (call-interactively 'org-cycle)) "rifle")
-  ("v" avy-org-goto-heading-timer "avy"))
-
-(major-mode-hydra-bind org-mode "Toggles"
-  ("C-l" yc/org-toggle-link-display "link")
-  ("C-i" org-toggle-inline-images "image"))
-
-(major-mode-hydra-bind org-mode "Quit"
-  ("C-g" nil "quit")
-  ("q" nil "quit"))
-
-(defhydra hydra-org (:color red :columns 3)
-  "Org Mode Movements"
-  ("n" outline-next-visible-heading "next heading")
-  ("p" outline-previous-visible-heading "prev heading")
-  ("N" org-forward-heading-same-level "next heading at same level")
-  ("P" org-backward-heading-same-level "prev heading at same level")
-  ("u" outline-up-heading "up heading")
-  ("C-l" yc/org-toggle-link-display "link")
-  ("C-i" org-toggle-inline-images "image")
-  ("g" org-goto "goto" :exit t))
 
 ;; org-mode 的 evil 按键扩展
 ;; - https://github.com/Somelauw/evil-org-mode
@@ -1085,6 +1073,7 @@
 
 ;; Exports Org-mode contents to Reveal.js HTML presentation.
 (use-package ox-reveal
+  :disabled t
   ;; :straight (:host github :repo "yjwen/org-reveal")
   :after org
   :init

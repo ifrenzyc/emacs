@@ -10,7 +10,7 @@
   :commands clojure-mode
   :init (add-to-list 'auto-mode-alist '("\\.\\(clj[sx]?\\|dtm\\|edn\\)\\'" . clojure-mode))
   :hook
-  (clojure-mode . (lambda () (setq buffer-save-without-query t)))
+  (clojure-mode . (lambda () (setq-local buffer-save-without-query t)))
   (clojure-mode . 'subword-mode)
   :config
   ;; Fancy docstrings for schema/defn when in the form:
@@ -29,7 +29,20 @@
    "M-RET" 'cider-doc)
   :config
   (setq cider-annotate-completion-candidates t
-        cider-mode-line " cider"))
+        cider-mode-line " cider")
+  
+  (major-mode-hydra-bind clojure-mode "Connect"
+    ("j" cider-jack-in "jack-in")
+    ("J" cider-jack-in-clojurescript "jack-in-cljs")
+    ("c" cider-connect "connect")
+    ("R" cider-restart "restart")
+    ("Q" cider-quit "quit"))
+
+  (major-mode-hydra-bind clojure-mode "Load"
+    ("k" cider-load-buffer "buffer")
+    ("l" cider-load-file "file")
+    ("L" cider-load-all-project-ns "all-ns")
+    ("r" cider-refresh "reload")))
 
 (use-package clj-refactor
   :after (clojure)
@@ -40,18 +53,5 @@
   :general
   (clojure-mode-map "C-:" 'clojure-toggle-keyword-string
                     "C->" 'cljr-cycle-coll))
-
-(major-mode-hydra-bind clojure-mode "Connect"
-  ("j" cider-jack-in "jack-in")
-  ("J" cider-jack-in-clojurescript "jack-in-cljs")
-  ("c" cider-connect "connect")
-  ("R" cider-restart "restart")
-  ("Q" cider-quit "quit"))
-
-(major-mode-hydra-bind clojure-mode "Load"
-  ("k" cider-load-buffer "buffer")
-  ("l" cider-load-file "file")
-  ("L" cider-load-all-project-ns "all-ns")
-  ("r" cider-refresh "reload"))
 
 (provide 'lang-clojure)

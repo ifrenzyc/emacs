@@ -188,6 +188,7 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 ;; https://github.com/wasamasa/eyebrowse
 ;; - TODO: 把这个 eyebrowse 的按键配置到 Hydra 上面。
 (use-package eyebrowse
+  :disabled t
   :init
   (eyebrowse-mode 1)
   :config
@@ -195,6 +196,7 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 
 ;; - https://github.com/pashinin/workgroups2
 (use-package workgroups2
+  :disabled t
   :config
   ;; Change prefix key (before activating WG)
   ;; (setq wg-prefix-key (kbd "C-c z"))

@@ -15,8 +15,7 @@
 ;; - https://github.com/rnkn/side-hustle
 ;; - https://github.com/bmag/imenu-list
 (use-package side-hustle
-  ;; :straight (:host github :repo "rnkn/side-hustle")
-  )
+  :disabled t)
 
 ;; Restart Emacs inside Emacs.
 ;; https://github.com/iqbalansari/restart-emacs

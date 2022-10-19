@@ -16,9 +16,13 @@
   (setq-default nxml-child-indent 4
                 nxml-attribute-indent 4)
   (setq nxml-slash-auto-complete-flag t
-        nxml-auto-insert-xml-declaration-flag t))
+        nxml-auto-insert-xml-declaration-flag t)
+  :general
+  (nxml-mode-map
+   "C-c C-f" 'lsp-format-buffer))
 
 (use-package xml-format
+  :disabled t
   :after nxml-mode
   :ensure-system-package (xmllint . "brew install libxml2")
   :general

@@ -15,7 +15,7 @@
 ;; - https://www.reddit.com/r/emacs/comments/c29edh/does_anybody_have_any_more_real_cool_hydras_to
 ;; 
 
-;;; Code
+;;; Code:
 (require 'init-funcs)
 
 (use-package hydra

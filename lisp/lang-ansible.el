@@ -4,16 +4,19 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
-(use-package ansible)
+(use-package ansible
+  :hook
+  (yaml-mode . ansible-mode))
+
 (use-package ansible-doc
-  :config
-  (add-hook 'yaml-mode-hook #'ansible-mode)
-  (add-hook 'yaml-mode-hook #'ansible-doc-mode)
-  )
+  :hook
+  (yaml-mode . ansible-doc-mode))
+
 ;; (use-package ansible-vault
 ;;   :init (add-hook 'yaml-mode-hook 'ansible-vault-mode))
+
 (use-package company-ansible
   :config
   (with-eval-after-load 'company

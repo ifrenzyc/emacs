@@ -48,4 +48,21 @@
   ;; Enable Chinese word segmentation support (支持中文分词)
   (setq youdao-dictionary-use-chinese-word-segmentation t))
 
+;; @see - https://github.com/lorniu/go-translate
+(use-package go-translate
+  :load-path "localelpa/go-translate"
+  :commands (gts-do-translate)
+  :general
+  ("M-E" 'gts-do-translate)
+  :config
+  (setq gts-translate-list '(("en" "zh") ("zh" "en") ("jp" "zh")))
+
+  (setq gts-default-translator
+        (gts-translator
+         :picker (gts-prompt-picker)
+         :engines (list (gts-bing-engine) (gts-google-engine))
+         :render (gts-buffer-render)
+         ;; :render (gts-posframe-pop-render)
+         )))
+
 (provide 'init-youdao-dictionary)

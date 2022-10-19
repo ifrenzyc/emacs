@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (defconst yc/cache-dir (expand-file-name ".cache" user-emacs-directory)
   "Every cached or moving file should be here like with Spacemacs")

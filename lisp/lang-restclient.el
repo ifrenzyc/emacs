@@ -11,7 +11,6 @@
   :mode ("\\.\\(http\\|rest\\)$" . restclient-mode))
 
 (use-package ob-restclient
-  ;; :straight (:host github :repo "alf/ob-restclient.el")
   :after (org restclient)
   :config
   (add-to-list 'org-babel-load-languages '(restclient . t)))
@@ -20,7 +19,7 @@
   :commands org-babel-execute:http)
 
 (use-package company-restclient
-  :after (company restclient)
+  :after (restclient)
   :config
   (with-eval-after-load 'company
     (add-to-list 'company-backends 'company-restclient)))

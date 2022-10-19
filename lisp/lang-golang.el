@@ -5,7 +5,7 @@
 ;; - https://arenzana.org/2019/01/emacs-go-mode/
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package go-mode
   :mode ("\\.go\\'" . go-mode)
@@ -14,7 +14,7 @@
   (go-mode . lsp-deferred)
   :general
   (yc/leader-keys-major-mode
-      :keymaps 'go-mode-map
+    :keymaps 'go-mode-map
     ;; "" '(:ignore t :which-key "major-mode-cmd")
     "h" '(:ignore t :which-key "help")
     "hh" 'godoc-at-point
@@ -128,20 +128,14 @@
           (message "Gocheck is needed to test the current suite"))
       (message "Must be in a _test.go file to run go-test-current-suite")))
 
-  (defun yc/go-run-main ()
-    (interactive)
-    (shell-command
-     (format "go run %s"
-             (shell-quote-argument (buffer-file-name))))))
+  ;; *问题* ：这里需要设置为 ="/usr/local/bin/go"= ，可能应为某些环境变量没有设置成功，暂时还不知道具体哪里没设置，先配置成这样。
+  ;; 用上面的 =exec-path-from-shell= 包暂时解决了这个问题
 
-;; *问题* ：这里需要设置为 ="/usr/local/bin/go"= ，可能应为某些环境变量没有设置成功，暂时还不知道具体哪里没设置，先配置成这样。
-;; 用上面的 =exec-path-from-shell= 包暂时解决了这个问题
-
-;; Run Current File
-;; - http://ergoemacs.org/emacs/elisp_run_current_file.html
-;; - https://github.com/grafov/go-playground
-(defun yc/run-current-file ()
-  "Execute the current file.
+  ;; Run Current File
+  ;; - http://ergoemacs.org/emacs/elisp_run_current_file.html
+  ;; - https://github.com/grafov/go-playground
+  (defun yc/run-current-file ()
+    "Execute the current file.
   For example, if the current buffer is x.py, then it'll call「python x.py」in a shell. Output is printed to message buffer.
 
   The file can be Emacs Lisp, PHP, Perl, Python, Ruby, JavaScript, TypeScript, golang, Bash, Ocaml, Visual Basic, TeX, Java, Clojure.
@@ -151,56 +145,62 @@
 
   URL `http://ergoemacs.org/emacs/elisp_run_current_file.html'
   Version 2017-07-31"
-  (interactive)
-  (let (
-        ($suffix-map
-         ;; (‹extension› . ‹shell program name›)
-         `(
-           ("php" . "php")
-           ("pl" . "perl")
-           ("py" . "python")
-           ("py3" . ,(if (string-equal system-type "windows-nt") "c:/Python32/python.exe" "python3"))
-           ("rb" . "ruby")
-           ("go" . "/usr/local/bin/go run")
-           ("hs" . "runhaskell")
-           ("js" . "node") ; node.js
-           ("ts" . "tsc --alwaysStrict --lib DOM,ES2015,DOM.Iterable,ScriptHost --target ES5") ; TypeScript
-           ("sh" . "bash")
-           ("clj" . "java -cp /home/xah/apps/clojure-1.6.0/clojure-1.6.0.jar clojure.main")
-           ("rkt" . "racket")
-           ("ml" . "ocaml")
-           ("vbs" . "cscript")
-           ("tex" . "pdflatex")
-           ("latex" . "pdflatex")
-           ("java" . "javac")
-           ;; ("pov" . "/usr/local/bin/povray +R2 +A0.1 +J1.2 +Am2 +Q9 +H480 +W640")
-           ))
-        $fname
-        $fSuffix
-        $prog-name
-        $cmd-str)
-    (when (not (buffer-file-name)) (save-buffer))
-    (when (buffer-modified-p) (save-buffer))
-    (setq $fname (buffer-file-name))
-    (setq $fSuffix (file-name-extension $fname))
-    (setq $prog-name (cdr (assoc $fSuffix $suffix-map)))
-    (setq $cmd-str (concat $prog-name " \""   $fname "\""))
-    (cond
-      ((string-equal $fSuffix "el") (load $fname))
-      ((string-equal $fSuffix "go")
-       (when (fboundp 'gofmt)
-         (gofmt)
-         (shell-command $cmd-str "*xah-run-current-file output*" )))
-      ((string-equal $fSuffix "java")
-       (progn
-         (shell-command $cmd-str "*xah-run-current-file output*" )
-         (shell-command
-          (format "java %s" (file-name-sans-extension (file-name-nondirectory $fname))))))
-      (t (if $prog-name
-             (progn
-               (message "Running…")
-               (shell-command $cmd-str "*xah-run-current-file output*" ))
-           (message "No recognized program file suffix for this file."))))))
+    (interactive)
+    (let (
+          ($suffix-map
+           ;; (‹extension› . ‹shell program name›)
+           `(
+             ("php" . "php")
+             ("pl" . "perl")
+             ("py" . "python")
+             ("py3" . ,(if (string-equal system-type "windows-nt") "c:/Python32/python.exe" "python3"))
+             ("rb" . "ruby")
+             ("go" . "/usr/local/bin/go run")
+             ("hs" . "runhaskell")
+             ("js" . "node") ; node.js
+             ("ts" . "tsc --alwaysStrict --lib DOM,ES2015,DOM.Iterable,ScriptHost --target ES5") ; TypeScript
+             ("sh" . "bash")
+             ("clj" . "java -cp /home/xah/apps/clojure-1.6.0/clojure-1.6.0.jar clojure.main")
+             ("rkt" . "racket")
+             ("ml" . "ocaml")
+             ("vbs" . "cscript")
+             ("tex" . "pdflatex")
+             ("latex" . "pdflatex")
+             ("java" . "javac")
+             ;; ("pov" . "/usr/local/bin/povray +R2 +A0.1 +J1.2 +Am2 +Q9 +H480 +W640")
+             ))
+          $fname
+          $fSuffix
+          $prog-name
+          $cmd-str)
+      (when (not (buffer-file-name)) (save-buffer))
+      (when (buffer-modified-p) (save-buffer))
+      (setq $fname (buffer-file-name))
+      (setq $fSuffix (file-name-extension $fname))
+      (setq $prog-name (cdr (assoc $fSuffix $suffix-map)))
+      (setq $cmd-str (concat $prog-name " \""   $fname "\""))
+      (cond
+       ((string-equal $fSuffix "el") (load $fname))
+       ((string-equal $fSuffix "go")
+        (when (fboundp 'gofmt)
+          (gofmt)
+          (shell-command $cmd-str "*xah-run-current-file output*" )))
+       ((string-equal $fSuffix "java")
+        (progn
+          (shell-command $cmd-str "*xah-run-current-file output*" )
+          (shell-command
+           (format "java %s" (file-name-sans-extension (file-name-nondirectory $fname))))))
+       (t (if $prog-name
+              (progn
+                (message "Running…")
+                (shell-command $cmd-str "*xah-run-current-file output*" ))
+            (message "No recognized program file suffix for this file."))))))
+
+  (defun yc/go-run-main ()
+    (interactive)
+    (shell-command
+     (format "go run %s"
+             (shell-quote-argument (buffer-file-name))))))
 
 (use-package company-go
   :after (go-mode company-mode)

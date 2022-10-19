@@ -20,6 +20,8 @@
   (("README\\.md\\'" . gfm-mode)
    ("\\.md\\'" . markdown-mode)
    ("\\.markdown\\'" . markdown-mode))
+  :hook
+  ((markdown-mode . lsp-deferred))
   :commands
   (markdown-mode gfm-mode)
   :ensure-system-package (multimarkdown . "brew install multimarkdown")

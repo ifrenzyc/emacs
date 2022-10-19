@@ -55,8 +55,14 @@
         (message "Flycheck mode enabled in current buffer"))))
 
   (progn (use-package popup)
-         (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)
-         ))
+         (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc))
+
+  (defhydra hydra-flycheck ()
+    "errors"
+    ("n" flycheck-next-error "next")
+    ("p" flycheck-previous-error "previous")
+    ;; ("h" helm-flycheck "helm" :color blue)
+    ("q" nil "quit")))
 
 ;; - https://github.com/gexplorer/flycheck-indicator
 (use-package flycheck-indicator
@@ -79,12 +85,5 @@
   :config
   (setq flycheck-posframe-border-width 1)
   (flycheck-posframe-configure-pretty-defaults))
-
-(defhydra hydra-flycheck ()
-  "errors"
-  ("n" flycheck-next-error "next")
-  ("p" flycheck-previous-error "previous")
-  ;; ("h" helm-flycheck "helm" :color blue)
-  ("q" nil "quit"))
 
 (provide 'init-flycheck)

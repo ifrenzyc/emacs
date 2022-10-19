@@ -26,7 +26,7 @@
   (:map vimish-fold-folded-keymap ("<tab>" . vimish-fold-unfold)
         :map vimish-fold-unfolded-keymap ("<tab>" . vimish-fold-refold))
   :init
-  (setq-default vimish-fold-dir (expand-file-name ".vimish-fold/" user-emacs-directory))
+  (setq-default vimish-fold-dir (expand-file-name ".vimish-fold/" yc/cache-dir))
   (vimish-fold-global-mode)
   :config
   (setq-default vimish-fold-header-width 119)
@@ -63,7 +63,7 @@
     (">" vimish-fold-next-fold))))
 
 (use-package origami
-  :hook (prog-mode . origami-mode)
+  ;;:hook (prog-mode . origami-mode)
   :pretty-hydra
   ((:title (pretty-hydra-title "Origami" 'octicon "fold" :height 1.1 :v-adjust -0.05)
            :color amaranth :quit-key "q")
@@ -80,6 +80,7 @@
               ("C-`" . origami-hydra/body))
   :init (setq origami-show-fold-header t)
   :config
+  (global-origami-mode t)
   (face-spec-reset-face 'origami-fold-header-face)
   (defhydra hydra-origami (:color red)
     "

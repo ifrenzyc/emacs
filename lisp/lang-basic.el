@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 ;; custom program language font
 (setq yc/programming-modes '(js-mode
@@ -15,7 +15,9 @@
                              css-mode
                              ruby-mode
                              sh-mode
+                             go-mode
                              json-mode
+                             makefile-mode
                              jenkinsfile-mode
                              nxml-mode
                              yaml-mode
@@ -47,17 +49,16 @@
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config
   (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
-  )
 
-(defhydra hydra-dumb-jump (:color blue :columns 3)
-  "Dumb Jump"
-  ("j" dumb-jump-go "Go")
-  ("o" dumb-jump-go-other-window "Other window")
-  ("e" dumb-jump-go-prefer-external "Go external")
-  ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
-  ("i" dumb-jump-go-prompt "Prompt")
-  ("l" dumb-jump-quick-look "Quick look")
-  ("b" dumb-jump-back "Back"))
+  (defhydra hydra-dumb-jump (:color blue :columns 3)
+    "Dumb Jump"
+    ("j" dumb-jump-go "Go")
+    ("o" dumb-jump-go-other-window "Other window")
+    ("e" dumb-jump-go-prefer-external "Go external")
+    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+    ("i" dumb-jump-go-prompt "Prompt")
+    ("l" dumb-jump-quick-look "Quick look")
+    ("b" dumb-jump-back "Back")))
 
 (use-package dap-mode
   :after lsp
@@ -78,6 +79,7 @@
          ((js-mode js2-mode) . (lambda () (require 'dap-chrome))))
   :config
   (setq dap-java-test-runner (concat lsp-java-server-install-dir "test-runner/junit-platform-console-standalone.jar"))
+  (setq dap-breakpoints-file (concat yc/cache-dir ".dap-breakpoints"))
   (dap-auto-configure-mode t)
   (dap-mode 1)
 
@@ -126,9 +128,14 @@
   ;; Be slightly less aggressive in C/C++/C#/Java/Go/Swift
   (add-to-list 'aggressive-indent-dont-indent-if
                '(and (derived-mode-p 'c-mode 'c++-mode 'csharp-mode
-                      'java-mode 'go-mode 'swift-mode)
-                 (null (string-match "\\([;{}]\\|\\b\\(if\\|for\\|while\\)\\b\\)"
-                        (thing-at-point 'line))))))
+                                     'java-mode 'go-mode 'swift-mode)
+                     (null (string-match "\\([;{}]\\|\\b\\(if\\|for\\|while\\)\\b\\)"
+                                         (thing-at-point 'line))))))
+
+;; @see - https://github.com/VernonGrant/sidekick.el
+(use-package sidekick
+  :load-path "localelpa/sidekick"
+  :commands (sidekick-at-point sidekick-focus-toggle sidekick-search-for-literal))
 
 ;; shows a sticky header at the top of the window
 ;; (use-package topsy

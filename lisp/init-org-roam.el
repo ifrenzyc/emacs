@@ -18,47 +18,47 @@
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
       :if-new (file+head "${slug}.txt"
-               "#+TITLE: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
+                         "#+TITLE: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
       :unnarrowed t)
      ("p" "personal" plain "%?" :target
       (file+head "Personal/%<%Y%m%d%H%M%S>-${slug}.txt"
-       "#+title: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
+                 "#+title: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
       :unnarrowed t)
      ("w" "work" plain "%?" :target
       (file+head "Work/%<%Y%m%d%H%M%S>-${slug}.txt"
-       "#+title: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
+                 "#+title: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
       :unnarrowed t)
      ("c" "default" plain
       "%?"
       :target (file+head "%<%Y%m%d%H%M%S>-${slug}.txt"
-               "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n")
+                         "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n")
       :unnarrowed t)
      ("r" "ref" plain
       "%?"
       :target (file+head "References/${citekey}.txt"
-               "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n")
+                         "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n")
       :unnarrowed t)
      ("p" "ref + physical" plain
       "%?"
       :target (file+head "References/${citekey}.txt"
-               "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n* Notes :physical:")
+                         "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n* Notes :physical:")
       :unnarrowed t)
      ("n" "ref + noter" plain
       "%?"
       :target (file+head "References/${citekey}.txt"
-               ,(s-join "\n" (list "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n"
-                                   "* Notes :noter:"
-                                   ":PROPERTIES:"
-                                   ":NOTER_DOCUMENT: %(orb-get-attached-file \"${citekey}\")"
-                                   ":NOTER_PAGE:"
-                                   ":END:")))
+                         ,(s-join "\n" (list "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n"
+                                             "* Notes :noter:"
+                                             ":PROPERTIES:"
+                                             ":NOTER_DOCUMENT: %(orb-get-attached-file \"${citekey}\")"
+                                             ":NOTER_PAGE:"
+                                             ":END:")))
       :unnarrowed t)))
   (org-roam-capture-ref-templates
    '(("r" "ref" plain
       "%?"
       :target (file+head "web/${slug}.txt"
-               
-               :unnarrowed t)
+                         
+                         :unnarrowed t)
       ("R" "Reference" plain
        "%?\n\n* Citations\n#+begin_quote\n${body}\n#+end_quote"
        :if-new (file+head
@@ -90,7 +90,7 @@
    '(("d" "daily" entry
       "* %i%?"
       :target (file+head "daily-%<%Y-%m-%d>.txt"
-               "#+TITLE: %<%A, %d %b %Y>\n#+filetags: :daily-notes:\n\n"))
+                         "#+TITLE: %<%A, %d %b %Y>\n#+filetags: :daily-notes:\n\n"))
      ("l" "log entry" plain 
       "**** %<%I:%M %p> - %?"
       :if-new (file+datetree "%<%Y>.txt" :day)
@@ -164,9 +164,9 @@
   (org-roam-setup)
   :general
   (yc/nonprefix-keys
-      "<f4>" 'org-roam-dailies-capture-today)
+    "<f4>" 'org-roam-dailies-capture-today)
   (yc/leader-keys
-      "ar" '(:ignore t :which-key "org-roam")
+    "ar" '(:ignore t :which-key "org-roam")
     "arl" 'org-roam-buffer-toggle
     "art" 'org-roam-dailies-today
     "arf" 'org-roam-node-find
@@ -193,7 +193,7 @@
   :after org-roam
   :config
   (use-package org-ref)
-  (setq orb-file-field-extensions '("pdf" "epub"))
+  (setq orb-attached-file-extensions '("pdf" "epub"))
   (org-roam-bibtex-mode 1))
 
 (use-package org-roam-protocol

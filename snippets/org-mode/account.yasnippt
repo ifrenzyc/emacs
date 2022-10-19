@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: OrgMode quote code block
+# key: =
+# --
+=@$0`(yc/turn-on-rime-input-method)`= 

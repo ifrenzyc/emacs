@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package consult
   :bind (([remap imenu]              . consult-imenu)

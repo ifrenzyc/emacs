@@ -12,11 +12,11 @@
 ;; company-backends 的设置逻辑：https://emacs.stackexchange.com/questions/17537/best-company-backends-lists
 ;; 
 
-;;; Code
+;;; Code:
+
+(require 'init-const)
 
 (use-package company
-  :demand t
-  :after evil
   :hook (after-init . global-company-mode)
   :bind
   (("C-." . company-complete)
@@ -73,15 +73,6 @@
                            (company-dabbrev-code company-keywords company-files)
                            company-dabbrev))
 
-  ;; (add-to-list 'company-backends '(company-capf company-dabbrev))
-  ;; (add-to-list 'company-backends '(company-lsp company-dabbrev))
-  ;; (add-to-list 'company-backends '(company-css company-dabbrev))
-  ;; (add-to-list 'company-backends '(company-elisp company-dabbrev))
-  ;; (add-to-list 'company-backends '(company-nxml company-dabbrev))
-  ;; (add-to-list 'company-backends '(company-files company-dabbrev))
-
-  ;; (add-to-list 'company-backends '(company-capf company-dabbrev company-files company-yasnippet))
-  ;; (setq company-backends '(company-dabbrev (company-keywords company-dabbrev-code) company-files))
   (setq company-begin-commands '(self-insert-command org-self-insert-command c-electric-lt-gt c-electric-colon)) ; start autocompletion only after typing
   ;; `yasnippet' integration
   (with-no-warnings
@@ -282,8 +273,7 @@
     (advice-add #'company-box--display :override #'my-company-box--display)))
 
 ;; 在 MacOS 下使用 posframe 时，Emacs 全屏状态下的问题：https://emacs-china.org/t/topic/4662/132
-(use-package posframe
-  :demand t)
+(use-package posframe)
 
 (use-package company-posframe
   :after (company posframe)

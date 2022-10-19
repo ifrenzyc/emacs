@@ -12,7 +12,9 @@
 ;;   :hook
 ;;   (after-init . benchmark-init/deactivate))
 
-(use-package esup)
+(use-package esup
+  :disabled t
+  )
 
 ;; Hunt down errors by bisecting elisp files
 ;; (use-package bug-hunter)

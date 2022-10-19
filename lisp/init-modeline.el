@@ -61,29 +61,21 @@
         doom-modeline-env-load-string "..."
 
         doom-modeline-checker-simple-format t)
-  ;; (with-eval-after-load 'doom-modeline
-  ;;   (set-face-attribute 'mode-line nil :font "Hack-12")
-  ;;   (set-face-attribute 'mode-line-active nil :font "Hack-12")
-  ;;   (set-face-attribute 'mode-line-inactive nil :font "Hack-12"))
   (doom-modeline-mode t))
 
 ;; Use fixed pitch where it's sensible
 (use-package mixed-pitch)
 
 (use-package minions
-  :demand t
-  :config
+  :init
   (minions-mode))
 
 (use-package nyan-mode
-  :demand t
+  ;; :demand t
   :after doom-modeline
   :init
   (setq nyan-animate-nyancat t
-        nyan-wavy-trail t
-        ;; nyan-bar-length 40
-        )
-  :config
+        nyan-wavy-trail t)
   (nyan-mode)
   (nyan-start-animation))
 

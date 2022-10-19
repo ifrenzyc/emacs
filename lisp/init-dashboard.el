@@ -12,44 +12,4 @@
 ;; No Dashbaord
 (setq inhibit-startup-screen t)
 
-;; (use-package dashboard
-;;   :config
-;;   ;; Set the banner
-;;   (setq dashboard-startup-banner 2)
-;;   ;; Value can be
-;;   ;; 'official which displays the official emacs logo
-;;   ;; 'logo which displays an alternative emacs logo
-;;   ;; 1, 2 or 3 which displays one of the text banners
-;;   ;; "path/to/your/image.png" which displays whatever image you would prefer
-
-;;   (setq dashboard-items '((recents  . 5)
-;;                           (projects . 5)
-;;                           (bookmarks . 5)))
-;;   ;; Set the title
-;;   (setq dashboard-banner-logo-title "[ E M A C S ]")
-;;   ;; (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
-;;   ;; Content is not centered by default. To center, set
-;;   (setq dashboard-center-content t)
-
-;;   ;; To disable shortcut "jump" indicators for each section, set
-;;   (setq dashboard-show-shortcuts nil)
-;;   (dashboard-setup-startup-hook)
-;;   (add-to-list 'dashboard-items '(agenda) t)
-;;   (setq show-week-agenda-p t))
-
-;; Save and restore Emacs status, including buffers, point and window configurations.
-;; - https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#dotemacs
-;; (use-package desktop
-;;   :config
-;;   (desktop-save-mode 1)
-;;   (add-to-list 'desktop-globals-to-save 'golden-ratio-adjust-factor)
-;;   (push '(company-posframe-mode . nil)
-;;         desktop-minor-mode-table)
-;;   (defhydra hydra-desktop (:color blue)
-;;     "Desktop"
-;;     ("c" desktop-clear "clear")
-;;     ("s" desktop-save "save")
-;;     ("r" desktop-revert "revert")
-;;     ("d" desktop-change-dir "dir")))
-
 (provide 'init-dashboard)

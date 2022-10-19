@@ -2,9 +2,11 @@
 
 ;;; Commentary:
 ;; 
-;; 
+;;
 
-;;; Code
+;;; Code:
+(require 'init-funcs)
+
 (use-package yasnippet
   :hook
   (prog-mode . yas-minor-mode)

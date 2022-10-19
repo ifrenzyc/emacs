@@ -3,17 +3,19 @@
 ;;; Commentary:
 ;;
 ;; 设置 =evil-undo-system= 参数为 =undo-tree= 时，需要先启用 undo-tree
-;; 
+;; - https://github.com/casouri/vundo
+;;
 
 ;;; Code
 
 (require 'init-const)
 
 (use-package undo-tree
+  :disabled t
   :demand t
   :hook (after-init . global-undo-tree-mode)
   :init
-  (setq undo-tree-auto-save-history t
+  (setq undo-tree-auto-save-history nil
         undo-tree-visualizer-diff t
         undo-tree-enable-undo-in-region nil
         undo-tree-visualizer-timestamps t

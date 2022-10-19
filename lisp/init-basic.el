@@ -30,10 +30,6 @@
   ;; 改变 Emacs 要你回答 yes 的行为。按 y 或空格键表示 yes，n 表示 no。
   (fset 'yes-or-no-p 'y-or-n-p)
 
-  ;; 不显示行号
-  (setq linum-mode nil
-        global-linum-mode nil)
-
   ;; 打开括号匹配显示模式
   (show-paren-mode t)
 
@@ -55,7 +51,6 @@
   (column-number-mode 1)
   (line-number-mode 1)
   (size-indication-mode t)
-  ;; (set-fringe-style '(4 . 4))
 
   ;; make cursor the width of the character it is under
   ;; i.e. full width of a TAB
@@ -64,6 +59,7 @@
   (setq-default cursor-in-non-selected-windows nil)
 
   (global-visual-line-mode t)
+  (global-hl-line-mode 0)
   (setq word-wrap t)
   (setq truncate-lines nil)
   (set-fill-column 89)
@@ -72,31 +68,8 @@
   (setq line-move-visual nil)
   (setq track-eol t)                    ; Keep cursor at end of lines. Require line-move-visual is nil.
 
-  ;; respect ansi colors
-  ;; (ansi-color-for-comint-mode-on)
-
-  ;; ansi colors in compilation mode
-  ;; (ignore-errors
-  ;;   (defun yc/colorize-compilation-buffer ()
-  ;;     (when (eq major-mode 'compilation-mode)
-  ;;       (ansi-color-apply-on-region compilation-filter-start (point-max))))
-  ;;   (add-hook 'compilation-filter-hook yc/colorize-compilation-buffer))
-
   ;; 在行首 C-k 时，同时删除该行
   (setq-default kill-whole-line t)
-
-  (global-hl-line-mode 0)
-
-  ;; ignore byte-compile warnings
-  ;; (setq byte-compile-warnings (set-difference byte-compile-warning-types
-  ;;                                             '(free-vars
-  ;;                                               unresolved
-  ;;                                               callargs
-  ;;                                               redefine
-  ;;                                               obsolete
-  ;;                                               noruntime
-  ;;                                               cl-functions
-  ;;                                               interactive-only)))
   (setq warning-minimum-level :error))
 
 ;; - https://dougie.io/coding/tabs-in-emacs/

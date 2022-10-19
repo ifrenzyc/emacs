@@ -2,7 +2,7 @@
 
 ;;; Commentary:
 
-;; Copyright (c) 2016-2018 Yang Chuang
+;; Copyright (c) 2016-2022 Yang Chuang
 ;;
 ;; Author: Yang Chuang <ifrenzyc@gmail.com>
 ;; URL: https://github.com/ifrenzyc

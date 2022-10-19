@@ -73,18 +73,19 @@
          "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar"
          )
         )
-  :hook ((java-mode . lsp-deferred)
-         ;; (java-mode . lsp)
-         ;; (java-mode . lsp-java-lens-mode)
-         ;; (java-mode . lsp-java-boot-lens-mode)
-         ;; (java-mode . lsp-java-boot-lens-mode)
-         )
+  :hook
+  ((java-mode . lsp-deferred)
+   ;; (java-mode . lsp)
+   ;; (java-mode . lsp-java-lens-mode)
+   ;; (java-mode . lsp-java-boot-lens-mode)
+   ;; (java-mode . lsp-java-boot-lens-mode)
+   )
   :bind
   (:map java-mode-map
         ("C-c C-f" . lsp-format-buffer))
   :general
   (yc/leader-keys-major-mode
-      :keymaps 'java-mode-map
+    :keymaps 'java-mode-map
     "r"   'ggtags-find-tag-dwim
     "c"   '(:ignore t :which-key "Run/Compile")
     "cd"  'dap-java-debug
@@ -121,6 +122,7 @@
   )
 
 (use-package meghanada
+  :disabled t
   :init (setq meghanada-server-install-dir (concat yc/cache-dir "meghanada"))
   :config
   (add-hook 'java-mode-hook

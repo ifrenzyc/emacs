@@ -8,10 +8,6 @@
 
 (use-package snails
   :load-path "localelpa/snails"
-  ;; :straight (
-  ;;          :host github
-  ;;          :repo "manateelazycat/snails"
-  ;;          :files ("snails.el" "snails-*.el" "fzf-search.sh" "google-suggestion.sh"))
   :commands snails
   :custom-face
   (snails-content-buffer-face ((t (:background "#111111" :height 120))))

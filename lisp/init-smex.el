@@ -7,6 +7,7 @@
 ;;; Code:
 
 (use-package smex
+  :disabled t
   :demand t
   :commands smex
   :config

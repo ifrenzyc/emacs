@@ -37,6 +37,7 @@
 ;; M-x keyfreq-show
 ;; - https://github.com/dacap/keyfreq
 (use-package keyfreq
+  :disabled t
   :commands (keyfreq-show)
   :init
   (keyfreq-mode 1)

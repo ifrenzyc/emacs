@@ -36,8 +36,9 @@
   :general
   ("C-c s" 'counsel-tramp))
 
-(use-package docker-tramp
-  :after tramp
-  :custom (docker-tramp-use-names t))
+;; OBSOLETED
+;; (use-package docker-tramp
+;;   :after tramp
+;;   :custom (docker-tramp-use-names t))
 
 (provide 'init-tramp)

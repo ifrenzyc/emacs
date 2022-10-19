@@ -38,49 +38,49 @@
   :hook
   (help-mode . page-break-lines-mode))
 
-;; 在编辑器左边显示行号，要先看看内建的 display-line-numbers-mode
-;; (display-line-numbers-width-start t)
-
-;; (use-package hlinum
-;;   :hook (prog-mode . hlinum-activate))
-
-;; (use-package linum
-;;   :hook (prog-mode . linum-mode)
-;;   :config
-;;   (setq linum-format " %3d ")
-;;   (global-linum-mode nil))
-
-;; (use-package linum-relative
-;;   ;; :init
-;;   ;; https://github.com/coldnew/linum-relative/issues/7
-;;   ;; (setq linum-relative-format "%3s ")
-;;   ;; display current line instead of 0
-;;   ;; (setq linum-relative-current-symbol "")
-;;   :hook
-;;   (prog-mode . linum-relative-mode)
-;;   :config
-;;   (setq linum-relative-current-symbol ">>")
-;;   (linum-relative-global-mode nil))
-
 ;; Show native line numbers if possible, otherwise use `linum'
 (if (fboundp 'display-line-numbers-mode)
     (use-package display-line-numbers
       :ensure nil
-      :hook (prog-mode . display-line-numbers-mode))
-  (use-package linum-off
-    :demand
-    :defines linum-format
-    :hook (after-init . global-linum-mode)
-    :custom
-    (linum-format "%4d ")
-    (display-line-numbers-width-start t)
-    :config
-    ;; Highlight current line number
-    (use-package hlinum
-      :defines linum-highlight-in-all-buffersp
-      :custom-face (linum-highlight-face ((t (:inherit default :background nil :foreground nil))))
-      :hook (global-linum-mode . hlinum-activate)
-      :init (setq linum-highlight-in-all-buffersp t))))
+      :hook (prog-mode . display-line-numbers-mode)
+      :config
+      (setq display-line-numbers-width-start t))
+  
+  ;; (use-package hlinum
+  ;;   :hook (prog-mode . hlinum-activate))
+
+  ;; (use-package linum
+  ;;   :hook (prog-mode .  display-line-numbers-mode)
+  ;;   :config
+  ;;   (setq linum-format " %3d ")
+  ;;   (global-display-line-numbers-mode nil))
+
+  ;; (use-package linum-relative
+  ;;   ;; :init
+  ;;   ;; https://github.com/coldnew/linum-relative/issues/7
+  ;;   ;; (setq linum-relative-format "%3s ")
+  ;;   ;; display current line instead of 0
+  ;;   ;; (setq linum-relative-current-symbol "")
+  ;;   :hook
+  ;;   (prog-mode . linum-relative-mode)
+  ;;   :config
+  ;;   (setq linum-relative-current-symbol ">>")
+  ;;   (linum-relative-global-mode nil))
+
+  ;; (use-package linum-off
+  ;;   :defines linum-format
+  ;;   :hook (after-init . global-linum-mode)
+  ;;   :custom
+  ;;   (linum-format "%4d ")
+  ;;   (display-line-numbers-width-start t)
+  ;;   :config
+  ;;   ;; Highlight current line number
+  ;;   (use-package hlinum
+  ;;     :defines linum-highlight-in-all-buffersp
+  ;;     :custom-face (linum-highlight-face ((t (:inherit default :background nil :foreground nil))))
+  ;;     :hook (global-linum-mode . hlinum-activate)
+  ;;     :init (setq linum-highlight-in-all-buffersp t)))
+  )
 
 (use-package all-the-icons
   :demand t
@@ -178,7 +178,6 @@
 
 (use-package all-the-icons-ivy
   :after (all-the-icons projectile ivy counsel counsel-projectile)
-  ;; :demand t
   :hook (after-init . all-the-icons-ivy-setup)
   :config
   (setq all-the-icons-ivy-file-commands
@@ -190,11 +189,9 @@
           counsel-projectile)))
 
 (use-package all-the-icons-ivy-rich
-  :demand t
   :hook (after-init . all-the-icons-ivy-rich-mode))
 
 (use-package all-the-icons-ibuffer
-  :demand t
   :hook (after-init . all-the-icons-ibuffer-mode)
   :init
   ;; Use human readable file size in ibuffer.
@@ -203,7 +200,6 @@
 ;; Make certain buffers grossly incandescent
 ;; https://github.com/hlissner/emacs-solaire-mode
 (use-package solaire-mode
-  :demand t
   :hook
   ((after-init . solaire-global-mode)
    ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
@@ -217,6 +213,7 @@
 ;; 有时候会打开一些文件，这些文件里的某一行特别长，而 Emacs 没有针对这种情况做特殊 处理，会导致整个界面卡死。现在它来了！
 ;; 当打开一个具有长行的文件时，它会自动检测并将一些可能导致严重性能的 mode 关闭， 如 font-lock (syntax highlight)。
 (use-package so-long
+  :disabled t
   :ensure nil
   :hook
   (after-init . global-so-long-mode)

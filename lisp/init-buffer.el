@@ -20,17 +20,7 @@
           "^/tmp/" "^/var/folders/.+$" "^/ssh:" "/persp-confs/"
           (lambda (file) (file-in-directory-p file package-user-dir))))
   :config
-  (push (expand-file-name recentf-save-file) recentf-exclude)
-  ;; :config
-  ;; (defun ido-recentf-open ()
-  ;;   "Use `ido-completing-read' to \\[find-file] a recent file"
-  ;;   (interactive)
-  ;;   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-  ;;       (message "Opening file...")
-  ;;     (message "Aborting")))
-  ;; :general
-  ;; ("C-c f" 'ido-recentf-open)
-  )
+  (push (expand-file-name recentf-save-file) recentf-exclude))
 
 (use-package ibuffer
   :bind (([remap list-buffers] . ibuffer))

@@ -144,7 +144,8 @@
   )
 
 (use-package treemacs-evil
-  :after evil
+  :disabled t
+  :after (evil treemacs)
   :bind
   (:map evil-treemacs-state-map
         ("H" . hydra-move-splitter-left-2x)

@@ -82,7 +82,7 @@
   :hook
   ((shell-mode . ansi-color-for-comint-mode-on)
    (term-mode . yc/ansi-term-handle-close)
-   (term-mode . (lambda () (linum-mode -1) (yas-minor-mode -1))))
+   (term-mode . (lambda () (display-line-numbers-mode -1) (yas-minor-mode -1))))
   :config
   (defun yc/ansi-term-handle-close ()
     "Close current term buffer when `exit' from term buffer."

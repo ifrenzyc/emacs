@@ -30,10 +30,24 @@
          :font "LXGW WenKai Mono-14"
          :internal-border-width 1))
   :general
+  ("C-\\"   'yc/turn-off-input-method
+   "C-|"    'yc/turn-on-rime-input-method
+   "C-s-\\" 'yc/turn-on-rime-input-method)
   (yc/nonprefix-keys
-      :keymaps 'rime-mode-map
+    :keymaps 'rime-mode-map
     "C-`" 'rime-send-keybinding
     "M-j" 'rime-force-enable)
+  :init
+  (defun yc/turn-on-rime-input-method ()
+    (interactive)
+    (deactivate-input-method)
+    (setq-local default-input-method "rime")
+    (toggle-input-method)
+    (rime-force-enable))
+
+  (defun yc/turn-off-input-method ()
+    (interactive)
+    (deactivate-input-method))
   :config
   ;; 增加断言列表，当其中有任何一个断言的值不是 nil 时，会自动使用英文。
   (setq rime-disable-predicates
@@ -48,14 +62,13 @@
   (setq rime-cursor "˰")
   ;; 默认值
   (setq rime-translate-keybindings
-        '("C-f" "C-b" "C-n" "C-p" "C-g")))
+        '("C-f" "C-b" "C-n" "C-p" "C-g"))
 
-;; change cursor color
-(add-to-list 'load-path (expand-file-name "localelpa/im-cursor-chg" user-emacs-directory))
-(with-eval-after-load 'rime
-  (require 'im-cursor-chg)
-  (cursor-chg-mode 1))
-
+  ;; change cursor color
+  (add-to-list 'load-path (expand-file-name "localelpa/im-cursor-chg" user-emacs-directory))
+  (with-eval-after-load 'rime
+    (require 'im-cursor-chg)
+    (cursor-chg-mode 1)))
 
 ;; 在 Emacs 中使用原生的输入法
 ;; - https://emacs-china.org/t/smart-input-source-evil/12592/37

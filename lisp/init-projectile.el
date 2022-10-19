@@ -7,11 +7,10 @@
 ;;; Code
 
 (use-package projectile
-  :demand t
   :commands (projectile-project-root)
   :general
   (yc/leader-keys
-      :states 'normal
+    :states 'normal
     ;; "p"     '(:ignore t :wk "projects")
     ;; "p$"    '(:ignore t :which-key "projects/shell")
     ;; "p"     '(:keymap projectile-command-map :which-key "projects")
@@ -33,7 +32,7 @@
         projectile-indexing-method 'native)
 
   ;; add to the globally ignored files
-  (dolist (file-name '("*~" "*.elc" "*.class" "node_modules"))
+  (dolist (file-name '("*~" "*.elc" "*.class" "node_modules" "elpa" "localelpa"))
     (add-to-list 'projectile-globally-ignored-files file-name))
   (projectile-mode t))
 

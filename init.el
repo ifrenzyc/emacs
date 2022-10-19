@@ -4,7 +4,7 @@
 
 ;;; Commentary:
 
-;; Copyright (c) 2016-2018 Yang Chuang
+;; Copyright (c) 2016-2022 Yang Chuang
 ;;
 ;; Author: Yang Chuang <ifrenzyc@gmail.com>
 ;; URL: https://github.com/ifrenzyc
@@ -31,21 +31,15 @@
   (setq package-archives
         '(("elpy"         . "https://jorgenschaefer.github.io/packages/")
           ("gnu"          . "https://elpa.gnu.org/packages/")
-          ;; ("gnu"          . "https://elpa.emacs-china.org/gnu/")
           ("melpa"        . "https://melpa.org/packages/")
-          ;; ("melpa"        . "https://elpa.emacs-china.org/melpa/")
-          ("org"          . "https://orgmode.org/elpa/")
-          ;; ("org"          . "https://elpa.emacs-china.org/org/")
-          ))
-  )
+          ("org"          . "https://orgmode.org/elpa/"))))
 
 ;; avoid problems with files newer than their byte-compiled counterparts
 ;; it's better a lower startup than load an outdated and maybe bugged package
 (eval-and-compile
   (setq load-prefer-newer t
         package-user-dir (expand-file-name "elpa" user-emacs-directory)
-        package--init-file-ensured t
-        ))
+        package--init-file-ensured t))
 
 (unless (file-directory-p package-user-dir)
   (make-directory package-user-dir t))
@@ -68,13 +62,13 @@
 
 ;; Should set before loading `use-package'
 (eval-when-compile
+  (require 'use-package)
   (setq use-package-always-ensure t
         use-package-always-defer t
         use-package-compute-statistics t
         use-package-expand-minimally t
         use-package-enable-imenu-support t
-        use-package-verbose t)
-  (require 'use-package))
+        use-package-verbose t))
 
 (use-package bind-key)
 (use-package diminish)
@@ -83,6 +77,7 @@
 
 (require 'init-const)
 (require 'init-basic)
+(require 'init-custom)
 (require 'init-font)
 ;; (require 'init-cnfonts)
 (require 'init-funcs)
@@ -96,7 +91,7 @@
 ;; (require 'init-nano-modeline)
 ;; (require 'init-mini-modeline)
 
-(require 'init-undo-redo)
+;; (require 'init-undo-redo)
 
 (require 'init-bookmark)
 (require 'init-dashboard)
@@ -107,9 +102,9 @@
 (require 'init-which-key)
 (require 'init-general)
 ;; (require 'init-evil)
-(require 'init-hydra)
 ;; (require 'init-xah-fly-keys)
 ;; (require 'init-meow)
+(require 'init-hydra)
 
 (require 'init-kill-ring)
 (require 'init-edit)
@@ -118,22 +113,22 @@
 (require 'init-ivy)
 ;; (require 'init-ido)
 ;; (require 'init-icomplete)
-(require 'init-vertico)
-(require 'init-embark)
+;; (require 'init-vertico)
+;; (require 'init-embark)
 ;; (require 'init-helm) ;; I don't use helm
 (require 'init-buffer)
-;; (require 'init-company)
-(require 'init-corfu)
+(require 'init-company)
+;; (require 'init-corfu)
 (require 'init-yasnippet)
-(require 'init-tabnine)
+;; (require 'init-tabnine)
 (require 'init-flycheck)
-;; (require 'init-snails)
 (require 'init-folding)
 
+;; (require 'init-snails)
 (require 'init-search)
 
 (require 'init-dired)
-(require 'init-smex)
+;; (require 'init-smex)
 (require 'init-utils)
 
 (require 'init-org)
@@ -153,7 +148,7 @@
 (require 'init-vcs)
 
 (require 'init-treemacs)
-(require 'init-neotree)
+;; (require 'init-neotree)
 (require 'init-helpful)
 
 (require 'init-term)
@@ -214,7 +209,6 @@
 (require 'lang-vimrc)
 (require 'lang-restclient)
 
-(require 'init-custom)
 (require 'init-gc)
 
 ;; Keep emacs Custom-settings in separate file
@@ -227,7 +221,6 @@
 
 ;; Start server
 (use-package server
-  :disabled t
   :ensure nil
   :hook
   (after-init . server-mode))

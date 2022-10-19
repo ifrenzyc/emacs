@@ -147,16 +147,16 @@
 ;; https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 (use-package ivy-hydra)
 
-;; ;; (use-package ivy-posframe
-;; ;;   :after (ivy swiper counsel)
-;; ;;   :init
-;; ;;   (progn
-;; ;;     (push '(counsel-M-x . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
-;; ;;     (push '(ivy-switch-buffer . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
-;; ;;     (ivy-posframe-enable)
-;; ;;     (set-face-attribute 'internal-border nil :background "gray50")
-;; ;;     (setq ivy-posframe-hide-minibuffer nil)
-;; ;;     (setq ivy-posframe-border-width 1)))
+;; (use-package ivy-posframe
+;;   :after (ivy swiper counsel)
+;;   :init
+;;   (progn
+;;     (push '(counsel-M-x . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
+;;     (push '(ivy-switch-buffer . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
+;;     (ivy-posframe-enable)
+;;     (set-face-attribute 'internal-border nil :background "gray50")
+;;     (setq ivy-posframe-hide-minibuffer nil)
+;;     (setq ivy-posframe-border-width 1)))
 
 ;; (use-package ivy-posframe
 ;;   :delight
@@ -309,26 +309,6 @@
           (lambda ()
             (remove-hook 'pre-command-hook 'my-ivy-fly-back-to-present t)))
 
-;; (defun maple/mac-switch-input-source ()
-;;   "docstring..."
-;;   (interactive)
-;;   (shell-command
-;;    "osascript -e 'tell application \"System Events\" to tell process \"SystemUIServer\"
-;;     set currentLayout to get the value of the first menu bar item of menu bar 1 whose description is \"text input\"
-;;     if currentLayout is not \"U.S.\" then
-;;       tell (1st menu bar item of menu bar 1 whose description is \"text input\") to {click, click (menu 1'\"'\"'s menu item \"U.S.\")}
-;;     end if
-;;   end tell' &>/dev/null"))
-
-;; ;; (add-hook 'focus-in-hook 'maple/mac-switch-input-source)
-
-;; (defun yc/custom-M-x ()
-;;   ""
-;;   (interactive)
-;;   (let
-;;     (maple/mac-switch-input-source)
-;;     (counsel-M-x)))
-
 (use-package counsel
   :demand t
   :ensure-system-package
@@ -338,16 +318,21 @@
   (setq counsel-yank-pop-preselect-last t)
   (setq counsel-find-file-at-point t)
   (setq counsel-yank-pop-separator "\n—————————\n")
-  (if (executable-find "rg")
-      ;; if rg is installed, use rg for `counsel-grep-or-swiper' and `counsel-rg'
-      (setq counsel-grep-base-command "rg -n -M 512 --line-number --smart-case --with-filename --color never --no-heading -i \"%s\" %s"
-            ;; add `--follow' option to allow search through symbolic links
-            ;; ripgrep 的文档说明中文版：https://github.com/chinanf-boy/ripgrep-zh
-            counsel-rg-base-command "rg -SHn -M 512 --line-number --smart-case --with-filename --color never --no-follow --no-heading %s"
-            ;; Use ripgrep for counsel-git
-            counsel-git-cmd "rg --files")
-    ;; ignore case sensitivity for counsel grep
-    (setq counsel-grep-base-command "grep -nEi \"%s\" %s"))
+  (cond
+   ((executable-find "ugrep")
+    (setq counsel-grep-base-command "ugrep --color=never -n -e '%s' '%s'"))
+   ((executable-find "rg")
+    (setq counsel-grep-base-command "rg -S --no-heading --line-number --color never '%s' '%s'")))
+  ;; (if (executable-find "rg")
+  ;;     ;; if rg is installed, use rg for `counsel-grep-or-swiper' and `counsel-rg'
+  ;;     (setq counsel-grep-base-command "rg -n -M 512 --line-number --smart-case --with-filename --color never --no-heading -i \"%s\" %s"
+  ;;           ;; add `--follow' option to allow search through symbolic links
+  ;;           ;; ripgrep 的文档说明中文版：https://github.com/chinanf-boy/ripgrep-zh
+  ;;           counsel-rg-base-command "rg -SHn -M 512 --line-number --smart-case --with-filename --color never --no-follow --no-heading %s"
+  ;;           ;; Use ripgrep for counsel-git
+  ;;           counsel-git-cmd "rg --files")
+  ;;   ;; ignore case sensitivity for counsel grep
+  ;;   (setq counsel-grep-base-command "grep -nEi \"%s\" %s"))
   ;; (setq counsel-grep-base-command
   ;;       (concat (executable-find "rg")
   ;;               " -n -M 512 --no-heading --color never -i \"%s\" %s"))
@@ -573,24 +558,24 @@
      ("a" my-ivy-switch-to-swiper-all "swiper all")))
   :general
   ("C-x C-f" 'counsel-find-file
-             "C-x d"   'counsel-dired
-             "M-x"     'counsel-M-x
-             "M-y"     'counsel-yank-pop
-             "M-s M-r" 'counsel-rg
-             "M-s r"   'rg
-             "M-s R"   'rg-project
-             "M-s a"   'counsel-ag
-             "M-s g"   'counsel-git-grep
-             "M-s f"   'counsel-fzf
-             "M-s F"   'fiplr-find-file
-             "C-c C-r" 'ivy-resume
-             "C-c i"   'counsel-imenu
-             "C-x k"   'kill-buffer
-             "C-x l"   'counsel-locate
-             "C-h f"   'counsel-describe-function
-             "C-h v"   'counsel-describe-variable
-             ;; "C-c j"   'counsel-git    ; 与 org-journal 冲突
-             "C-c f"   'counsel-recentf)
+   "C-x d"   'counsel-dired
+   "M-x"     'counsel-M-x
+   "M-y"     'counsel-yank-pop
+   "M-s M-r" 'counsel-rg
+   "M-s r"   'rg
+   "M-s R"   'rg-project
+   "M-s a"   'counsel-ag
+   "M-s g"   'counsel-git-grep
+   "M-s f"   'counsel-fzf
+   "M-s F"   'fiplr-find-file
+   "C-c C-r" 'ivy-resume
+   "C-c i"   'counsel-imenu
+   "C-x k"   'kill-buffer
+   "C-x l"   'counsel-locate
+   "C-h f"   'counsel-describe-function
+   "C-h v"   'counsel-describe-variable
+   ;; "C-c j"   'counsel-git    ; 与 org-journal 冲突
+   "C-c f"   'counsel-recentf)
   (help-map
    "f" 'counsel-describe-function
    "v" 'counsel-describe-variable
@@ -600,7 +585,10 @@
 (use-package counsel-projectile
   :after counsel
   :hook (counsel-mode . counsel-projectile-mode)
-  :init (setq counsel-projectile-grep-initial-input '(ivy-thing-at-point))
+  :init
+  (setq counsel-projectile-grep-initial-input '(ivy-thing-at-point))
+  (when (executable-find "ugrep")
+    (setq counsel-projectile-grep-base-command "ugrep --color=never -rnEI %s"))
   :general ("C-x C-p" 'counsel-projectile-switch-project
             "C-x p B" 'counsel-projectile-switch-to-buffer))
 

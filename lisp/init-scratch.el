@@ -43,10 +43,6 @@
   (make-local-variable 'kill-buffer-query-functions)
   (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer))
 
-;; (use-package scratch-ext
-;;   :config
-;;   (setq scratch-ext-log-directory (expand-file-name ".scratch" yc/cache-dir)))
-
 ;; Persistent the scratch buffer
 (use-package persistent-scratch
   :hook ((after-init . persistent-scratch-autosave-mode)

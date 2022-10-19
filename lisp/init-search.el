@@ -357,7 +357,7 @@ active region use it instead."
   ("C-c p p" 'fiplr-find-file)
   :config
   (setq fiplr-root-markers '(".git" ".svn"))
-  (setq fiplr-ignored-globs '((directories (".git" ".svn" "node_modules" "elpa"))
+  (setq fiplr-ignored-globs '((directories (".git" ".svn" "node_modules" "elpa" "localelpa"))
                               (files ("*.jpg" "*.png" "*.zip" "*~")))))
 
 ;; 基于 Silver Searcher 的多文件内容查找

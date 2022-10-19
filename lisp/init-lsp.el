@@ -13,7 +13,7 @@
 
 ;;; Code
 (use-package lsp-mode
-  :demand t
+  ;; :demand t
   :commands (lsp lsp-deferred)
   :hook
   ((lsp . lsp-lens-mode)
@@ -25,7 +25,7 @@
   ;; (lsp-after-open . lsp-enable-imenu)
   :general
   (yc/leader-keys
-      "l" '(:keymap lsp-command-map :package lsp-mode :wk "lsp"))
+    "l" '(:keymap lsp-command-map :package lsp-mode :wk "lsp"))
   (lsp-command-map
    "d" 'lsp-find-definition
    "f" 'lsp-find-references
@@ -107,6 +107,8 @@
    ((t :inherit lsp-headerline-breadcrumb-symbols-face
        :underline (:style wave :color ,(face-foreground 'success)))))
   :init
+  (setq lsp-semantic-tokens-enable t
+        lsp-progress-spinner-type 'horizontal-breathing)
   (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
   :config
   (defhydra hydra-lsp (:exit t :hint nil)
@@ -135,7 +137,7 @@
     ("S" lsp-shutdown-workspace))
 
   (pretty-hydra-define hydra-lsp-new-2
-      (:hint nil :color blue :foreign-keys warn :quit-key "q")
+    (:hint nil :color blue :foreign-keys warn :quit-key "q")
     ("Xref"
      (("d" xref-find-definitions "Definitions")
       ("D" xref-find-definitions-other-window "-> other win")
@@ -161,7 +163,7 @@
      (("q" nil "Quit"))))
 
   (pretty-hydra-define hydra-lsp-new
-      (:hint nil :color blue :foreign-keys warn :quit-key "q")
+    (:hint nil :color blue :foreign-keys warn :quit-key "q")
     ("definitions"
      (("d" lsp-ui-peek-find-definitions "peek definition")
       ("D" xref-find-definitions "xref definitions"))
@@ -187,8 +189,8 @@
      "quit"
      (("q" nil "Quit"))))
   (pretty-hydra-define hydra-lsp-map
-      (:title (pretty-hydra-title "LSP UI" 'faicon "rocket" :face 'all-the-icons-green)
-       :hint nil :color blue :quit-key "q")
+    (:title (pretty-hydra-title "LSP UI" 'faicon "rocket" :face 'all-the-icons-green)
+            :hint nil :color blue :quit-key "q")
     ("Formatting"
      (("= =" lsp-format-buffer "format buffer")
       ("= r" lsp-format-region "format region"))

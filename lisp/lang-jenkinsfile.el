@@ -4,10 +4,8 @@
 ;; 
 ;; edit jenkins pipeline code
 
-;;; Code
+;;; Code:
 
-(use-package jenkinsfile-mode
-  ;; :straight (:host github :repo "john2x/jenkinsfile-mode")
-  )
+(use-package jenkinsfile-mode)
 
 (provide 'lang-jenkinsfile)

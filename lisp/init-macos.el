@@ -5,7 +5,10 @@
 ;; for macOS System Settings
 ;; 
 
-;;; Code
+;;; Code:
+
+(require 'init-const)
+
 ;; macOS switch meta key.
 (when IS-MAC
   (setq mac-command-modifier 'meta
@@ -18,16 +21,16 @@
   :if IS-MAC
   :demand t
   :config
-  (setq exec-path-from-shell-check-startup-files nil
-        exec-path-from-shell-arguments '("-l")
+  (setq exec-path-from-shell-arguments '("-l")
         exec-path-from-shell-variables '("PATH" "GOROOT" "GOPATH" "MANPATH" "CLASSPATH" "RIME_PATH" "PKG_CONFIG_PATH"))
-  (exec-path-from-shell-initialize)
 
   ;; (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
   ;; (setq exec-path (append exec-path '("/usr/local/bin")))
 
   (setenv "LD_LIBRARY_PATH" (concat (getenv "LD_LIBRARY_PATH") ":/usr/local/lib"))
-  (setq exec-path (append exec-path '("/usr/local/lib"))))
+  (setq exec-path (append exec-path '("/usr/local/lib")))
+  
+  (exec-path-from-shell-initialize))
 
 ;; A patch to enhance exec-path-from-shell
 (use-package cache-path-from-shell
@@ -69,8 +72,7 @@
                                          'fullboth 'maximized))
 
 ;; integrate use-package with =:ensure-system-package=
-(use-package use-package-ensure-system-package
-  :demand t)
+(use-package use-package-ensure-system-package)
 
 ;; delete files by moving to trash in macOS
 ;; https://github.com/lunaryorn/osx-trash.el

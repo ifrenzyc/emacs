@@ -16,6 +16,7 @@
 ;;; Code
 
 (use-package org-journal
+  :disabled t
   :general
   (yc/nonprefix-keys
     "C-c j" 'org-journal-new-entry)

@@ -10,6 +10,7 @@
   :ensure nil
   :config
   ;; disable bookmark face after org-capture
+  (setq bookmark-set-fringe-mark nil)
   (setq bookmark-fontify nil))
 
 (provide 'init-bookmark)

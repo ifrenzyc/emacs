@@ -184,6 +184,7 @@
 ;; A package for viewing any list of files as a tree.
 ;; - https://github.com/knpatel401/filetree
 (use-package filetree
+  :disabled t
   :init (setq ;; filetree-notes-file "/home/david/Dropbox/Org/filtree-notes.org"
          filetree-info-window t
          filetree-use-all-the-icons t
@@ -203,12 +204,13 @@
   (peep-dired-enable-on-directories t)
   (peep-dired-ignored-extensions '("mkv" "iso" "mp4"))
   :config
-  (evil-define-key 'normal peep-dired-mode-map (kbd "<SPC>") 'peep-dired-scroll-page-down
-                   (kbd "C-<SPC>") 'peep-dired-scroll-page-up
-                   (kbd "<backspace>") 'peep-dired-scroll-page-up
-                   (kbd "j") 'peep-dired-next-file
-                   (kbd "k") 'peep-dired-prev-file)
-  (add-hook 'peep-dired-hook 'evil-normalize-keymaps))
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal peep-dired-mode-map (kbd "<SPC>") 'peep-dired-scroll-page-down
+                     (kbd "C-<SPC>") 'peep-dired-scroll-page-up
+                     (kbd "<backspace>") 'peep-dired-scroll-page-up
+                     (kbd "j") 'peep-dired-next-file
+                     (kbd "k") 'peep-dired-prev-file)
+    (add-hook 'peep-dired-hook 'evil-normalize-keymaps)))
 
 ;; Colourful columns.
 (use-package diredfl
@@ -231,8 +233,9 @@
 ;; ranger.el
 (use-package dirvish
   :disabled t
-  ;; :straight (:host github :repo "alexluigit/dirvish")
-  )
+  :init
+  ;; Let Dirvish take over Dired globally
+  (dirvish-override-dired-mode))
 
 (use-package ranger
   :disabled t

@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package make-mode
   :ensure nil

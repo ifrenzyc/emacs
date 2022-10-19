@@ -5,7 +5,9 @@
 ;; - Python 开发环境设置：http://wikemacs.org/wiki/Python#other_ELPA_packages
 ;; 
 
-;;; Code
+;;; Code:
+
+(require 'init-const)
 
 (use-package python
   :mode ("\\.py\\'" . python-mode)
@@ -26,11 +28,12 @@
   ;; try to automagically figure out indentation
   (setq py-smart-indentation t)
 
-  (major-mode-hydra-bind python-mode "Python"
-    ("i" elpy-importmagic-fixup "Importmagic fixup")
-    ("d" elpy-goto-definition   "Goto definition")
-    ("r" elpy-multiedit-python-symbol-at-point   "Rename symbol")
-    ("f" elpy-format-code   "Format code"))
+  (major-mode-hydra-define+ python-mode nil
+    ("Python"
+     (("i" elpy-importmagic-fixup "Importmagic fixup")
+      ("d" elpy-goto-definition   "Goto definition")
+      ("r" elpy-multiedit-python-symbol-at-point   "Rename symbol")
+      ("f" elpy-format-code   "Format code"))))
   :general
   (yc/leader-keys-major-mode
     :keymaps 'python-mode-map
@@ -78,12 +81,15 @@
 
 (use-package anaconda-mode
   :after python
+  :init
+  (setq anaconda-mode-installation-directory
+        (concat yc/cache-dir "/anaconda-mode"))
   :hook
   (python-mode . anaconda-mode)
   (python-mode . anaconda-eldoc-mode))
 
 (use-package company-anaconda
-  :after (anaconda python company)
+  :after (anaconda python)
   :config
   (with-eval-after-load 'company
     (add-to-list 'company-backends '(company-anaconda :with company-capf))))

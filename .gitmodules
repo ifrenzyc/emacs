@@ -1,18 +1,24 @@
-[submodule "localelpa/angularjs-mode"]
-	path = localelpa/angularjs-mode
-	url = git@github.com:rudolfolah/angularjs-mode.git
-[submodule "localelpa/snails"]
-	path = localelpa/snails
-	url = git@github.com:manateelazycat/snails.git
 [submodule "localelpa/fuz.el"]
 	path = localelpa/fuz.el
 	url = git@github.com:cireu/fuz.el.git
-[submodule "localelpa/aweshell"]
-	path = localelpa/aweshell
-	url = git@github.com:manateelazycat/aweshell.git
-[submodule "localelpa/nox"]
-	path = localelpa/nox
-	url = git@github.com:manateelazycat/nox.git
+[submodule "localelpa/snails"]
+	path = localelpa/snails
+	url = git@github.com:manateelazycat/snails.git
+[submodule "localelpa/awesome-tray"]
+	path = localelpa/awesome-tray
+	url = git@github.com:manateelazycat/awesome-tray.git
+[submodule "localelpa/color-rg"]
+	path = localelpa/color-rg
+	url = git@github.com:manateelazycat/color-rg.git
+[submodule "localelpa/company-english-helper"]
+	path = localelpa/company-english-helper
+	url = git@github.com:manateelazycat/company-english-helper.git
+[submodule "localelpa/cache-path-from-shell"]
+	path = localelpa/cache-path-from-shell
+	url = git@github.com:manateelazycat/cache-path-from-shell.git
+[submodule "localelpa/lsp-bridge"]
+	path = localelpa/lsp-bridge
+	url = git@github.com:manateelazycat/lsp-bridge.git	
 [submodule "localelpa/counsel-mu"]
 	path = localelpa/counsel-mu
 	url = git@github.com:seanfarley/counsel-mu.git
@@ -25,27 +31,12 @@
 [submodule "localelpa/xwwp"]
 	path = localelpa/xwwp
 	url = git@github.com:BlueFlo0d/xwwp.git
-[submodule "localelpa/awesome-tray"]
-	path = localelpa/awesome-tray
-	url = git@github.com:manateelazycat/awesome-tray.git
 [submodule "localelpa/company-lsp"]
 	path = localelpa/company-lsp
 	url = git@github.com:tigersoldier/company-lsp.git
 [submodule "localelpa/company-tern"]
 	path = localelpa/company-tern
 	url = git@github.com:kevinushey/company-tern.git
-[submodule "localelpa/cache-path-from-shell"]
-	path = localelpa/cache-path-from-shell
-	url = git@github.com:manateelazycat/cache-path-from-shell.git
-[submodule "localelpa/color-rg"]
-	path = localelpa/color-rg
-	url = git@github.com:manateelazycat/color-rg.git
-[submodule "localelpa/company-english-helper"]
-	path = localelpa/company-english-helper
-	url = git@github.com:manateelazycat/company-english-helper.git
-[submodule "localelpa/lsp-bridge"]
-	path = localelpa/lsp-bridge
-	url = git@github.com:manateelazycat/lsp-bridge.git
 [submodule "localelpa/markdown-mode-plus"]
 	path = localelpa/markdown-mode-plus
 	url = git@github.com:milkypostman/markdown-mode-plus.git
@@ -73,3 +64,12 @@
 [submodule "localelpa/org-modern-indent"]
 	path = localelpa/org-modern-indent
 	url = https://github.com/jdtsmith/org-modern-indent.git
+[submodule "localelpa/sidekick"]
+	path = localelpa/sidekick
+	url = https://github.com/VernonGrant/sidekick.el.git
+[submodule "localelpa/go-translate"]
+	path = localelpa/go-translate
+	url = https://github.com/lorniu/go-translate.git
+[submodule "localelpa/valign"]
+	path = localelpa/valign
+	url = https://github.com/casouri/valign.git

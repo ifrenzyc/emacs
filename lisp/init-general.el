@@ -10,15 +10,14 @@
 
 (require 'init-funcs)
 
-;; (general-define-key "<f16>" nil)
-;;(general-define-key "<SPC>" nil)
 (use-package general
   :demand t
   :init
   (general-def :states '(normal motion visual) "<SPC>" nil)
   :config
   ;; Vim-like definitions
-  (general-evil-setup t))
+  (with-eval-after-load 'evil
+    (general-evil-setup t)))
 
 (general-create-definer yc/nonprefix-keys
   :keymaps 'override)

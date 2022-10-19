@@ -56,6 +56,7 @@
 ;; Edit multiple regions in the same way simultaneously
 ;; 参考：https://github.com/andreyorst/dotfiles/tree/master/.config/emacs
 (use-package iedit
+  :disabled t
   :bind (("M-n" . aorst/iedit-current-or-expand))
   :custom
   (iedit-toggle-key-default nil)
@@ -103,6 +104,7 @@
 
 ;; 参考：http://www.cauchy.me/2015/08/20/emacs-multi-cursors/
 (use-package multiple-cursors
+  :disabled t
   :bind
   (("C->" . mc/mark-next-like-this)
    ("C-<" . mc/mark-previous-like-this)
@@ -133,10 +135,7 @@
     ("#" mc/insert-numbers)
     ("q" mc/remove-duplicated-cursors :exit t)
     ("g" mc/remove-duplicated-cursors :exit t)
-    ("G" mc/keyboard-quit :exit t)))
-
-(use-package mc-extras
-  :after multiple-cursors)
+    ("G" mc/keyboard-quit :exit t))
 
 ;; (defhydra hydra-multiple-cursors (:hint nil)
 ;;   "
@@ -162,6 +161,11 @@
 ;;   ("<down-mouse-1>" ignore)
 ;;   ("<drag-mouse-1>" ignore)
 ;;   ("q" nil))
+  )
+
+(use-package mc-extras
+  :disabled t
+  :after multiple-cursors)
 
 ;; Emacs extension to increase selected region by semantic units.
 ;; - https://github.com/magnars/expand-region.el
@@ -172,8 +176,8 @@
   :general
   ("C-=" 'er/expand-region)
   ("C-c =" 'bk/expand-region/body)
-  (evil-visual-state-map
-   "v" 'er/expand-region)
+  ;; (evil-visual-state-map
+  ;;  "v" 'er/expand-region)
   :config
   (defhydra bk/expand-region (:color pink :hint nil)
     "
@@ -217,37 +221,54 @@
         (progn (funcall me/pretty-print-function beg end)
                (setq deactivate-mark t))
       (user-error "me/pretty-print: me/pretty-print-function is not set")))
+
+  ;; https://rejeep.github.io/emacs/elisp/2010/03/11/duplicate-current-line-or-region-in-emacs.html
+  (defun duplicate-current-line-or-region (arg)
+    "Duplicates the current line or region ARG times.
+If there's no region, the current line will be duplicated. However, if
+there's a region, all lines that region covers will be duplicated."
+    (interactive "p")
+    (let (beg end (origin (point)))
+      (if (and mark-active (> (point) (mark)))
+          (exchange-point-and-mark))
+      (setq beg (line-beginning-position))
+      (if mark-active
+          (exchange-point-and-mark))
+      (setq end (line-end-position))
+      (let ((region (buffer-substring-no-properties beg end)))
+        (dotimes (i arg)
+          (goto-char end)
+          (newline)
+          (insert region)
+          (setq end (point)))
+        (goto-char (+ origin (* (length region) arg) arg)))))
+
+  (defun align-code (beg end &optional arg)
+    (interactive "rP")
+    (if (null arg)
+        (align beg end)
+      (let ((end-mark (copy-marker end)))
+        (indent-region beg end-mark nil)
+        (align beg end-mark))))
+
+  (defun yc/show-selected-mode-keymap ()
+    (interactive)
+    (which-key-show-keymap 'selected-keymap))
   :general
-  ;; (selected-keymap
-  ;;  "q"           'selected-off
-  ;;  "u"           'upcase-region
-  ;;  "d"           'downcase-region
-  ;;  "w"           'count-words-region
-  ;;  "m"           'apply-macro-to-region-lines
-  ;;  "<"           'mc/mark-previous-like-this
-  ;;  ">"           'mc/mark-next-like-this
-  ;;  "C-<"         'mc/unmark-previous-like-this
-  ;;  "C->"         'mc/unmark-next-like-this
-  ;;  "M-<"         'mc/skip-to-previous-like-this
-  ;;  "M->"         'mc/skip-to-next-like-this
-  ;;  "C-c >"       'mc/edit-lines
-  ;;  "C-c c"       'capitalize-region
-  ;;  "C-c k"       'barrinalo-kebab
-  ;;  "C-c l"       'downcase-region
-  ;;  "C-c u"       'upcase-region
-  ;;  "C-f"         'fill-region
-  ;;  "C-h h"       'hlt-highlight-region
-  ;;  "C-h H"       'hlt-unhighlight-region
-  ;;  "C-p"         'webpaste-paste-region
-  ;;  "C-q"         'selected-off
-  ;;  "C-s r"       'barrinalo-reverse
-  ;;  "C-s s"       'sort-lines
-  ;;  "C-s w"       'barrinalo-sort-words
-  ;;  "C-<tab>"     'me/pretty-print
-  ;;  "M-<left>"    'barrinalo-indent-leftward
-  ;;  "M-<right>"   'barrinalo-indent-rightward
-  ;;  "M-S-<left>"  'barrinalo-indent-leftward-tab
-  ;;  "M-S-<right>" 'barrinalo-indent-rightward-tab)
+  (selected-keymap
+   "M-l" 'yc/show-selected-mode-keymap
+   "q" 'selected-off
+   "s" 'sort-lines
+   "f" 'fill-region
+   "r" 'reverse-region
+   "w" 'count-words-region
+   "u" 'upcase-region
+   "l" 'downcase-region
+   "m" 'apply-macro-to-region-lines
+   "[" 'align-code
+   "a" 'align-regexp
+   "C-d" 'duplicate-current-line-or-region
+   "C-c c" 'capitalize-region)
   (selected-org-mode-map
    "t" 'org-table-convert-region))
 
@@ -489,6 +510,7 @@
 
 ;; - https://github.com/nivekuil/corral
 (use-package corral
+  :disabled t
   :config
   (defhydra hydra-corral (:columns 4)
     "Corral"
@@ -547,7 +569,6 @@
   (setq fancy-dabbrev-expansion-on-preview-only t)
   (setq fancy-dabbrev-indent-command 'tab-to-tab-stop)
 
-  (define-key evil-insert-state-map (kbd "<tab>") 'fancy-dabbrev-expand-or-indent)
   ;; Only while in insert mode.
   (with-eval-after-load 'evil
     (add-hook 'evil-insert-state-entry-hook (lambda () (fancy-dabbrev-mode 1)))
