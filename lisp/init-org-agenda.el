@@ -11,6 +11,47 @@
 
 (require 'init-org)
 
+;; TODO: 具体配置参考这个：
+;; - https://github.com/alphapapa/org-super-agenda
+;; - https://github.com/alphapapa/org-super-agenda/blob/master/examples.org
+(use-package org-super-agenda
+  :commands (org-agenda)
+  ;;:hook ((org-agenda-mode . org-super-agenda-mode)
+  ;; Easily fold groups via TAB.
+  ;;       (org-super-agenda-mode . origami-mode))
+  :bind (:map org-super-agenda-header-map ("<tab>" . origami-toggle-node))
+  :init
+  (org-super-agenda-mode t)
+  (setq org-super-agenda-groups
+        '((:log t)                      ; Automatically named "Log"
+          (:name "Schedule"
+                 :time-grid t)
+          (:name "Delegated items"
+                 :todo "DELEGATED"
+                 :order 100)
+          (:name "Today's items"
+                 :todo ("NEXT"))
+          (:name "Due today"
+                 :deadline today)
+          ;; (:name "Today"
+          ;;  :and (:scheduled today
+          ;;        :not (:todo "DELEGATED")))
+          (:habit t)
+          (:name "Overdue"
+                 :deadline past)
+          (:name "Due soon"
+                 :deadline future)
+          (:name "Scheduled earlier"
+                 :scheduled past)
+          (:name "Current Week"
+                 :todo ("TODO"))
+          ;; (:name "Unimportant"
+          ;;        :todo ("SOMEDAY" "MABE" "CHECK" "TO-READ" "TO-WATCH"))
+          ))
+  ;; :config
+  ;; (org-super-agenda-mode t)
+  )
+
 (use-package org-agenda
   :ensure nil
   :commands org-agenda
@@ -20,7 +61,7 @@
   :config
   (require 'org-habit)
   (setq org-agenda-show-future-repeats nil
-        org-agenda-start-on-weekday nil
+        org-agenda-start-on-weekday 1
         ;; org-agenda-inhibit-startup t ;; faster with no hidden headings (agenda performance)
         org-reverse-note-order t
         org-log-note-state 'note
@@ -753,47 +794,6 @@ Headline^^            Visit entry^^               Filter^^                    Da
     (switch-to-buffer  "*Org Agenda(3)*")  ;put the Agenda(4) in the right, down quadrant
     )
   ;; (global-set-key (kbd "<f5>") 'makeMatrix)
-  )
-
-;; TODO: 具体配置参考这个：
-;; - https://github.com/alphapapa/org-super-agenda
-;; - https://github.com/alphapapa/org-super-agenda/blob/master/examples.org
-(use-package org-super-agenda
-  :commands (org-agenda)
-  ;;:hook ((org-agenda-mode . org-super-agenda-mode)
-         ;; Easily fold groups via TAB.
-  ;;       (org-super-agenda-mode . origami-mode))
-  :bind (:map org-super-agenda-header-map ("<tab>" . origami-toggle-node))
-  :init
-  (org-super-agenda-mode t)
-  (setq org-super-agenda-groups
-        '((:log t)                      ; Automatically named "Log"
-          (:name "Schedule"
-                 :time-grid t)
-          (:name "Delegated items"
-                 :todo "DELEGATED"
-                 :order 100)
-          (:name "Today's items"
-                 :todo ("NEXT"))
-          (:name "Due today"
-                 :deadline today)
-          ;; (:name "Today"
-          ;;  :and (:scheduled today
-          ;;        :not (:todo "DELEGATED")))
-          (:habit t)
-          (:name "Overdue"
-                 :deadline past)
-          (:name "Due soon"
-                 :deadline future)
-          (:name "Scheduled earlier"
-                 :scheduled past)
-          (:name "Current Week"
-                 :todo ("TODO"))
-          ;; (:name "Unimportant"
-          ;;        :todo ("SOMEDAY" "MABE" "CHECK" "TO-READ" "TO-WATCH"))
-          ))
-  ;; :config
-  ;; (org-super-agenda-mode t)
   )
 
 ;; - https://github.com/alphapapa/org-ql
