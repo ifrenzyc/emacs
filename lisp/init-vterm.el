@@ -3,6 +3,7 @@
 ;;; Commentary:
 ;;
 ;; Need to have libvterm installed in your system.
+;; - https://github.com/akermu/emacs-libvterm
 ;; 
 ;; On macOS:
 ;; brew install libvterm

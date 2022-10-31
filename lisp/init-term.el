@@ -12,7 +12,7 @@
 
 ;;; Code:
 
-(setq-default shell-file-name "/bin/zsh")
+(setq-default shell-file-name "/usr/local/bin/zsh")
 
 (use-package multi-term
   :disabled t
@@ -20,7 +20,7 @@
   (setq multi-term-program-switches "--login"
         system-uses-terminfo nil     ; Use Emacs terminfo, not system terminfo, mac系统出现了4m
         term-buffer-maximum-size 0)  ; 设置multi-term buffer的长度无限
-  (setq multi-term-program "/bin/zsh")
+  (setq multi-term-program "/usr/local/bin/zsh")
   (when (require 'multi-term nil t)
     (global-set-key (kbd "<C-next>") 'multi-term-next)
     (global-set-key (kbd "<C-prior>") 'multi-term-prev)
@@ -70,12 +70,12 @@
         shell-pop-autocd-to-working-dir nil
         shell-pop-window-size     30
         ;; shell-pop-term-shell      "eshell"
-        shell-pop-term-shell      "/bin/zsh"
-        ;; multi-term-program        "/bin/zsh"
+        shell-pop-term-shell      "/usr/local/bin/zsh"
+        ;; multi-term-program        "/usr/local/bin/zsh"
         shell-pop-shell-type '("term" "*vterminal*" (lambda () (multi-vterm)))
         ;; shell-pop-shell-type '("eshell" "*eshell*" (lambda () (eshell)))
-        ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/fish" "*ansi-terminal*")))
-        ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/bin/zsh" "*ansi-terminal*")))
+        ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/zsh" "*ansi-terminal*")))
+        ;; shell-pop-shell-type '("term" "*terminal*" (lambda () (ansi-term "/usr/local/bin/zsh" "*ansi-terminal*")))
         ;; shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
         shell-pop-full-span       t)
   
