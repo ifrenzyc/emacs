@@ -15,7 +15,7 @@
     "d" '(:ignore t :which-key "deft")
     "dd" '(deft :which-key "deft"))
   :config
-  (setq deft-directory "~/notes/09_Zettelkästen"
+  (setq deft-directory "~/notes/Zettelkästen"
         deft-recursive t
         deft-text-mode 'org-mode
         deft-default-extension "org"

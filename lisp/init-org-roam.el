@@ -7,14 +7,14 @@
 
 ;;; Code:
 
-(use-package emacsql-sqlite-builtin)
+;; (use-package emacsql-sqlite-builtin)
 
 ;; org-roam-capture 主要参考： /Users/yangc/src/emacs.d/ody55eus-doom-emacs.d/doom/Emacs.org
 (use-package org-roam
   :delight " 𝕫"
   :custom
-  (org-roam-database-connector 'sqlite-builtin)
-  (org-roam-directory "~/notes/09_Zettelkästen")
+  ;; (org-roam-database-connector 'sqlite-builtin)
+  (org-roam-directory "~/notes/Zettelkästen")
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
       :if-new (file+head "${slug}.txt"

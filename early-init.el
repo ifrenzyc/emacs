@@ -39,7 +39,6 @@
 
 ;; Increase max-lisp-eval-depth
 (setq max-lisp-eval-depth 3200)
-(setq max-specpdl-size 5000)
 ;; -Increase max-lisp-eval-depth
 
 ;; UnsetPES

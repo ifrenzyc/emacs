@@ -259,10 +259,10 @@ If there is only one overlay at point, just return it, no matter region or symbo
     (interactive)
     (hilight--jump t))
 
-  (defhydra hydra-hilight-jump (:hint nil)
-    "\n <-- _p_rev _n_ext -->\n"
-    ("n" hilight-jump-next)
-    ("p" hilight-jump-prev))
+  ;; (defhydra hydra-hilight-jump (:hint nil)
+  ;;   "\n <-- _p_rev _n_ext -->\n"
+  ;;   ("n" hilight-jump-next)
+  ;;   ("p" hilight-jump-prev))
 
   (defun hilight-jump-next+hydra ()
     (interactive)

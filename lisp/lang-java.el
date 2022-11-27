@@ -36,7 +36,7 @@
         ;; JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
         ;; 这里为什么指定 java, 参考这个 issues(https://github.com/eclipse/eclipse.jdt.ls/pull/1509), 需要 java 11 以上
         ;; lsp-java-java-path "/usr/local/opt/java/bin/java"
-        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-12.0.1.jdk/Contents/Home/bin/java"
+        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home/bin/java"
         ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-16.0.1.jdk/Contents/Home/bin/java"
         ;; lsp-java-java-path "/usr/bin/java"
         ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/adoptopenjdk-15.jdk/Contents/Home/bin/java"
@@ -65,12 +65,13 @@
          ;; "-XX:GCTimeRatio=4"
          ;; "-XX:AdaptiveSizePolicyWeight=90"
          ;; "-Dsun.zip.disableMemoryMapping=true"
-         "-XX:+UseG1GC"
+         ;; "-XX:+UseG1GC"
+         "-XX:+UseZGC"
          "-Xmx4G"
          "-Dlog.level=ERROR"
          ;; "--illegal-access=permit"
          "-XX:+UseStringDeduplication"
-         "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar"
+         "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar"
          )
         )
   :hook

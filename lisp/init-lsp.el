@@ -81,31 +81,31 @@
   ;;       lsp-idle-delay 0.500
   ;;       lsp-diagnostics-modeline-scope :project    ;; :project/:workspace/:file
   ;; (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
-  :custom-face
-  (lsp-headerline-breadcrumb-path-error-face
-   ((t :underline (:style wave :color ,(face-foreground 'error))
-       :inherit lsp-headerline-breadcrumb-path-face)))
-  (lsp-headerline-breadcrumb-path-warning-face
-   ((t :underline (:style wave :color ,(face-foreground 'warning))
-       :inherit lsp-headerline-breadcrumb-path-face)))
-  (lsp-headerline-breadcrumb-path-info-face
-   ((t :underline (:style wave :color ,(face-foreground 'success))
-       :inherit lsp-headerline-breadcrumb-path-face)))
-  (lsp-headerline-breadcrumb-path-hint-face
-   ((t :underline (:style wave :color ,(face-foreground 'success))
-       :inherit lsp-headerline-breadcrumb-path-face)))
-  (lsp-headerline-breadcrumb-symbols-error-face
-   ((t :inherit lsp-headerline-breadcrumb-symbols-face
-       :underline (:style wave :color ,(face-foreground 'error)))))
-  (lsp-headerline-breadcrumb-symbols-warning-face
-   ((t :inherit lsp-headerline-breadcrumb-symbols-face
-       :underline (:style wave :color ,(face-foreground 'warning)))))
-  (lsp-headerline-breadcrumb-symbols-info-face
-   ((t :inherit lsp-headerline-breadcrumb-symbols-face
-       :underline (:style wave :color ,(face-foreground 'success)))))
-  (lsp-headerline-breadcrumb-symbols-hint-face
-   ((t :inherit lsp-headerline-breadcrumb-symbols-face
-       :underline (:style wave :color ,(face-foreground 'success)))))
+  ;; :custom-face
+  ;; (lsp-headerline-breadcrumb-path-error-face
+  ;;  ((t :underline (:style wave :color ,(face-foreground 'error))
+  ;;      :inherit lsp-headerline-breadcrumb-path-face)))
+  ;; (lsp-headerline-breadcrumb-path-warning-face
+  ;;  ((t :underline (:style wave :color ,(face-foreground 'warning))
+  ;;      :inherit lsp-headerline-breadcrumb-path-face)))
+  ;; (lsp-headerline-breadcrumb-path-info-face
+  ;;  ((t :underline (:style wave :color ,(face-foreground 'success))
+  ;;      :inherit lsp-headerline-breadcrumb-path-face)))
+  ;; (lsp-headerline-breadcrumb-path-hint-face
+  ;;  ((t :underline (:style wave :color ,(face-foreground 'success))
+  ;;      :inherit lsp-headerline-breadcrumb-path-face)))
+  ;; (lsp-headerline-breadcrumb-symbols-error-face
+  ;;  ((t :inherit lsp-headerline-breadcrumb-symbols-face
+  ;;      :underline (:style wave :color ,(face-foreground 'error)))))
+  ;; (lsp-headerline-breadcrumb-symbols-warning-face
+  ;;  ((t :inherit lsp-headerline-breadcrumb-symbols-face
+  ;;      :underline (:style wave :color ,(face-foreground 'warning)))))
+  ;; (lsp-headerline-breadcrumb-symbols-info-face
+  ;;  ((t :inherit lsp-headerline-breadcrumb-symbols-face
+  ;;      :underline (:style wave :color ,(face-foreground 'success)))))
+  ;; (lsp-headerline-breadcrumb-symbols-hint-face
+  ;;  ((t :inherit lsp-headerline-breadcrumb-symbols-face
+  ;;      :underline (:style wave :color ,(face-foreground 'success)))))
   :init
   (setq lsp-semantic-tokens-enable t
         lsp-progress-spinner-type 'horizontal-breathing)

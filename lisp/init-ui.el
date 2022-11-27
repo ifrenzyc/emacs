@@ -10,16 +10,15 @@
 
 ;;; Code
 (use-package whitespace
+  :disabled t
   :hook
   (prog-mode . whitespace-mode)
-  ;; (org-mode . whitespace-mode)
   :custom
   (whitespace-line-column 119)
   (whitespace-style '(face lines-tail)))
 
 ;; TODO: automatically add spacing around operators
 ;; - https://github.com/davidshepherd7/electric-operator
-
 (use-package ws-butler
   :delight ws-butler-mode)
 
@@ -39,48 +38,46 @@
   (help-mode . page-break-lines-mode))
 
 ;; Show native line numbers if possible, otherwise use `linum'
-(if (fboundp 'display-line-numbers-mode)
-    (use-package display-line-numbers
-      :ensure nil
-      :hook (prog-mode . display-line-numbers-mode)
-      :config
-      (setq display-line-numbers-width-start t))
-  
-  ;; (use-package hlinum
-  ;;   :hook (prog-mode . hlinum-activate))
+(use-package display-line-numbers
+  :ensure nil
+  :hook (prog-mode . display-line-numbers-mode)
+  :config
+  (setq display-line-numbers-width-start t))
 
-  ;; (use-package linum
-  ;;   :hook (prog-mode .  display-line-numbers-mode)
-  ;;   :config
-  ;;   (setq linum-format " %3d ")
-  ;;   (global-display-line-numbers-mode nil))
+;; (use-package hlinum
+;;   :hook (prog-mode . hlinum-activate))
 
-  ;; (use-package linum-relative
-  ;;   ;; :init
-  ;;   ;; https://github.com/coldnew/linum-relative/issues/7
-  ;;   ;; (setq linum-relative-format "%3s ")
-  ;;   ;; display current line instead of 0
-  ;;   ;; (setq linum-relative-current-symbol "")
-  ;;   :hook
-  ;;   (prog-mode . linum-relative-mode)
-  ;;   :config
-  ;;   (setq linum-relative-current-symbol ">>")
-  ;;   (linum-relative-global-mode nil))
+;; (use-package linum
+;;   :hook (prog-mode .  display-line-numbers-mode)
+;;   :config
+;;   (setq linum-format " %3d ")
+;;   (global-display-line-numbers-mode nil))
 
-  ;; (use-package linum-off
-  ;;   :defines linum-format
-  ;;   :hook (after-init . global-linum-mode)
-  ;;   :custom
-  ;;   (linum-format "%4d ")
-  ;;   (display-line-numbers-width-start t)
-  ;;   :config
-  ;;   ;; Highlight current line number
-  ;;   (use-package hlinum
-  ;;     :defines linum-highlight-in-all-buffersp
-  ;;     :custom-face (linum-highlight-face ((t (:inherit default :background nil :foreground nil))))
-  ;;     :hook (global-linum-mode . hlinum-activate)
-  ;;     :init (setq linum-highlight-in-all-buffersp t)))
-  )
+;; (use-package linum-relative
+;;   ;; :init
+;;   ;; https://github.com/coldnew/linum-relative/issues/7
+;;   ;; (setq linum-relative-format "%3s ")
+;;   ;; display current line instead of 0
+;;   ;; (setq linum-relative-current-symbol "")
+;;   :hook
+;;   (prog-mode . linum-relative-mode)
+;;   :config
+;;   (setq linum-relative-current-symbol ">>")
+;;   (linum-relative-global-mode nil))
+
+;; (use-package linum-off
+;;   :defines linum-format
+;;   :hook (after-init . global-linum-mode)
+;;   :custom
+;;   (linum-format "%4d ")
+;;   (display-line-numbers-width-start t)
+;;   :config
+;;   ;; Highlight current line number
+;;   (use-package hlinum
+;;     :defines linum-highlight-in-all-buffersp
+;;     :custom-face (linum-highlight-face ((t (:inherit default :background nil :foreground nil))))
+;;     :hook (global-linum-mode . hlinum-activate)
+;;     :init (setq linum-highlight-in-all-buffersp t)))
 
 (use-package all-the-icons
   :demand t
@@ -200,6 +197,7 @@
 ;; Make certain buffers grossly incandescent
 ;; https://github.com/hlissner/emacs-solaire-mode
 (use-package solaire-mode
+  :disabled t
   :hook
   ((after-init . solaire-global-mode)
    ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
@@ -221,4 +219,3 @@
   (setq so-long-threshold 400))
 
 (provide 'init-ui)
-
