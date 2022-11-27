@@ -27,6 +27,7 @@ transient/
 tutorial/
 url/
 var/
+emms/
 quelpa/
 .lsp-session-v1
 history
@@ -37,6 +38,7 @@ eclipse.jdt.ls/
 workspace/
 org-journal.cache
 forge-database.sqlite
+forge-database-v7-20220731-2220.sql
 rime/
 rime_bak/
 nox-eclipse-jdt-cache/
