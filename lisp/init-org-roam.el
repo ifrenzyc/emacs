@@ -93,7 +93,7 @@
                          "#+TITLE: %<%A, %d %b %Y>\n#+filetags: :daily-notes:\n\n"))
      ("l" "log entry" plain 
       "**** %<%I:%M %p> - %?"
-      :if-new (file+datetree "%<%Y>.txt" :day)
+      :if-new (file+datetree "current.txt" :day)
       :prepend t
       :clock-in t :clock-resume t
       :empty-lines 1)
@@ -113,7 +113,7 @@
                                       ("fillcolor" . "#EFEFFF")
                                       ("fontcolor" . "#111111")))
   (setq org-roam-file-extensions '("txt"))
-  (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/2.44.1/bin/dot")
+  (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/7.0.2/bin/dot")
   (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
   (setq org-roam-completion-system 'ivy)
   (setq org-roam-verbose t)
