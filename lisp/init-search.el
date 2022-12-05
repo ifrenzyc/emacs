@@ -13,51 +13,68 @@
   :bind (("M-s ." . isearch-forward-symbol-at-point)
          ;; ("C-s" . isearch-forward-regexp)
          ("C-r" . isearch-backward-regexp)
+         ("M-s SPC" . xah-search-current-word)
          :map isearch-mode-map
          ("C-;" . swiper-from-isearch)
          ("C-'" . avy-isearch)
-         ("C-l" . counsel-git-grep-from-isearch)))
-
-(defun xah-search-current-word ()
-  "Call `isearch' on current word or text selection.
+         ("C-l" . counsel-git-grep-from-isearch))
+  :config
+  (defun xah-search-current-word ()
+    "Call `isearch' on current word or text selection.
 “word” here is A to Z, a to z, and hyphen 「-」 and underline 「_」, independent of syntax table.
 URL `http://ergoemacs.org/emacs/modernization_isearch.html'
 Version 2015-04-09"
-  (interactive)
-  (let ( $p1 $p2 )
-    (if (use-region-p)
-        (progn
-          (setq $p1 (region-beginning))
-          (setq $p2 (region-end)))
-      (save-excursion
-        (skip-chars-backward "-_A-Za-z0-9")
-        (setq $p1 (point))
-        (right-char)
-        (skip-chars-forward "-_A-Za-z0-9")
-        (setq $p2 (point))))
-    (setq mark-active nil)
-    (when (< $p1 (point))
-      (goto-char $p1))
-    (isearch-mode t)
-    (isearch-yank-string (buffer-substring-no-properties $p1 $p2))))
+    (interactive)
+    (let ( $p1 $p2 )
+      (if (use-region-p)
+          (progn
+            (setq $p1 (region-beginning))
+            (setq $p2 (region-end)))
+        (save-excursion
+          (skip-chars-backward "-_A-Za-z0-9")
+          (setq $p1 (point))
+          (right-char)
+          (skip-chars-forward "-_A-Za-z0-9")
+          (setq $p2 (point))))
+      (setq mark-active nil)
+      (when (< $p1 (point))
+        (goto-char $p1))
+      (isearch-mode t)
+      (isearch-yank-string (buffer-substring-no-properties $p1 $p2)))))
 
-(general-define-key "M-s SPC" 'xah-search-current-word)
+(use-package loccur
+  :commands (loccur-isearch loccur-current loccur))
 
-;; - https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#occur
-(defun occur-dwim ()
-  "Call `occur' with a sane default."
-  (interactive)
-  (push (if (region-active-p)
-		    (buffer-substring-no-properties
-		     (region-beginning)
-		     (region-end))
-	      (let ((sym (thing-at-point 'symbol)))
-		    (when (stringp sym)
-		      (regexp-quote sym))))
-	    regexp-history)
-  (call-interactively 'occur))
+(use-package occur
+  :ensure nil
+  :general
+  ("M-s o" 'occur-dwim)
+  :config
+  ;; - https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#occur
+  (defun occur-dwim ()
+    "Call `occur' with a sane default."
+    (interactive)
+    (push (if (region-active-p)
+		      (buffer-substring-no-properties
+		       (region-beginning)
+		       (region-end))
+	        (let ((sym (thing-at-point 'symbol)))
+		      (when (stringp sym)
+		        (regexp-quote sym))))
+	      regexp-history)
+    (call-interactively 'occur)))
 
-(global-set-key (kbd "M-s o") 'occur-dwim)
+;; To refine your occur buffer, removing or keeping lines that match any regular expression of your choice, press "k" ([K]eep) or "f" ([F]lush). Press "u" to undo the last filter in the stack.
+;; "k" occur-x-filter-out
+;; "f" occur-x-filter
+;; "u" occur-x-undo-filter
+(use-package occur-x
+  :hook
+  (occur-mode . turn-on-occur-x-mode))
+
+(use-package occur-context-resize
+  :hook
+  (occur-mode . occur-context-resize-mode))
 
 ;; 快速在当前 buffer 中跳转光标
 ;; - avy
@@ -73,16 +90,16 @@ Version 2015-04-09"
            (avy-background t)
            (avy-style 'pre)
            (avy-keys '(?q ?e ?r ?y ?u ?o ?p
-                       ?a ?s ?d ?f ?g ?h ?j
-                       ?k ?l ?' ?x ?c ?v ?b
-                       ?n ?, ?/)))
+                          ?a ?s ?d ?f ?g ?h ?j
+                          ?k ?l ?' ?x ?c ?v ?b
+                          ?n ?, ?/)))
   :hook (after-init . avy-setup-default)
   :general
   ("C-;"   'avy-goto-char-timer
-           "C-:"   'avy-goto-line
-           "M-g A" 'ace-jump-two-chars-mode
-           "M-g a" 'avy-goto-char
-           "M-g l" 'avy-goto-char-2)
+   "C-:"   'avy-goto-line
+   "M-g A" 'ace-jump-two-chars-mode
+   "M-g a" 'avy-goto-char
+   "M-g l" 'avy-goto-char-2)
   :config
   (defhydra hydra-avy (:color red)
     "avy-goto"
@@ -110,9 +127,9 @@ Version 2015-04-09"
            (per-row (floor fw max-len))
            display-strings)
       (cl-loop for string in raw-strings
-            for N from 1 to strings-len do
-            (push (concat string " ") display-strings)
-            (when (= (mod N per-row) 0) (push "\n" display-strings)))
+               for N from 1 to strings-len do
+               (push (concat string " ") display-strings)
+               (when (= (mod N per-row) 0) (push "\n" display-strings)))
       (message "%s" (apply #'concat (nreverse display-strings)))))
 
   ;; Kill text
@@ -225,9 +242,9 @@ argument, query for word to search."
 
   (defun avy-action-embark (pt)
     (unwind-protect
-         (save-excursion
-           (goto-char pt)
-           (embark-act))
+        (save-excursion
+          (goto-char pt)
+          (embark-act))
       (select-window
        (cdr (ring-ref avy-ring 0))))
     t)

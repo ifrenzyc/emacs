@@ -49,14 +49,6 @@
 ;; (use-package helm-mt
 ;;   :bind ("C-x t" . helm-mt))
 
-(use-package company-shell
-  :after (company shell-mode)
-  :hook
-  (sh-mode . company-mode)
-  :config
-  (with-eval-after-load 'company
-    (add-to-list 'company-backends 'company-shell)))
-
 ;; (use-package better-shell
 ;;   :general
 ;;   (yc/nonprefix-keys

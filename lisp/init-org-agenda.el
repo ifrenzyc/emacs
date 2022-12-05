@@ -16,12 +16,11 @@
 ;; - https://github.com/alphapapa/org-super-agenda/blob/master/examples.org
 (use-package org-super-agenda
   :commands (org-agenda)
-  ;;:hook ((org-agenda-mode . org-super-agenda-mode)
-  ;; Easily fold groups via TAB.
-  ;;       (org-super-agenda-mode . origami-mode))
+  :hook ((org-agenda-mode . org-super-agenda-mode)
+         ;; Easily fold groups via TAB.
+         (org-super-agenda-mode . origami-mode))
   :bind (:map org-super-agenda-header-map ("<tab>" . origami-toggle-node))
   :init
-  (org-super-agenda-mode t)
   (setq org-super-agenda-groups
         '((:log t)                      ; Automatically named "Log"
           (:name "Schedule"
@@ -47,10 +46,7 @@
                  :todo ("TODO"))
           ;; (:name "Unimportant"
           ;;        :todo ("SOMEDAY" "MABE" "CHECK" "TO-READ" "TO-WATCH"))
-          ))
-  ;; :config
-  ;; (org-super-agenda-mode t)
-  )
+          )))
 
 (use-package org-agenda
   :ensure nil

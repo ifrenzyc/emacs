@@ -12,6 +12,11 @@
   :hook
   (nxml-mode . lsp-deferred)
   ;; (nxml-mode . highlight-indent-guides-mode)
+  :custom
+  ;; lsp-xml 依赖 eclipse/lemminx 项目，工程： ~/src/opensource/lemminx
+  ;; 需要将 jar 包拷贝 emacs 下，并指定路径
+  ;; 参考 https://emacs-lsp.github.io/lsp-mode/page/lsp-xml/
+  (lsp-xml-jar-file (expand-file-name "bin/org.eclipse.lemminx-uber.jar" user-emacs-directory))
   :config
   (setq-default nxml-child-indent 4
                 nxml-attribute-indent 4)

@@ -37,13 +37,6 @@
   :hook
   (help-mode . page-break-lines-mode))
 
-;; Show native line numbers if possible, otherwise use `linum'
-(use-package display-line-numbers
-  :ensure nil
-  :hook (prog-mode . display-line-numbers-mode)
-  :config
-  (setq display-line-numbers-width-start t))
-
 ;; (use-package hlinum
 ;;   :hook (prog-mode . hlinum-activate))
 

@@ -20,6 +20,7 @@
 
 ;; https://github.com/tarsius/keycast
 (use-package keycast
+  :disabled t
   :commands keycast-mode
   :config
   ;; This works with doom-modeline, inspired by this comment:

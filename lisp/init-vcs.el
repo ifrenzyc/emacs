@@ -253,18 +253,19 @@
                             (when (bound-and-true-p git-timemachine-mode)
                               (user-error "Cannot revert the timemachine buffer")))))
   (git-timemachine-mode . hydra-git-timemachine/body)
-  )
-;; (eval-after-load 'git-timemachine
-;;   '(progn
-;;      (evil-make-overriding-map git-timemachine-mode-map 'normal)
-;;      ;; force update evil keymaps after git-timemachine-mode loaded
-;;      (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
+  :config
+  ;; (eval-after-load 'git-timemachine
+  ;;   '(progn
+  ;;      (evil-make-overriding-map git-timemachine-mode-map 'normal)
+  ;;      ;; force update evil keymaps after git-timemachine-mode loaded
+  ;;      (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
 
-(defhydra hydra-git-timemachine ()
-  "Git timemachine"
-  ("p" git-timemachine-show-previous-revision "previous revision")
-  ("n" git-timemachine-show-next-revision "next revision")
-  ("q" nil "quit"))
+  (defhydra hydra-git-timemachine ()
+    "Git timemachine"
+    ("p" git-timemachine-show-previous-revision "previous revision")
+    ("n" git-timemachine-show-next-revision "next revision")
+    ("q" nil "quit"))
+  )
 
 ;; - https://github.com/thisch/gerrit.el
 ;; (use-package gerrit

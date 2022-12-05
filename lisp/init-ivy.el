@@ -16,7 +16,8 @@
 ;;; Code
 (require 'init-funcs)
 
-(use-package flx  ;; Improves sorting for fuzzy-matched results
+;; Improves sorting for fuzzy-matched results
+(use-package flx
   :after ivy
   :init
   (setq ivy-flx-limit 10000))
@@ -126,11 +127,11 @@
   (setq prescient-history-length 200)
   (setq prescient-save-file  (expand-file-name ".cache/prescient-items" user-emacs-directory))
   (setq prescient-filter-method '(literal regexp))
-  (prescient-persist-mode 1))
+  (prescient-persist-mode t))
 
 (use-package ivy-prescient
   :after (prescient ivy)
-  :hook (ivy-mode-hook . ivy-prescient-mode)
+  :hook (ivy-mode . ivy-prescient-mode)
   :config
   (setq ivy-prescient-sort-commands
         '(:not counsel-grep
@@ -141,8 +142,7 @@
                swiper-multi))
   (setq ivy-prescient-retain-classic-highlighting t)
   (setq ivy-prescient-enable-filtering nil)
-  (setq ivy-prescient-enable-sorting t)
-  (ivy-prescient-mode t))
+  (setq ivy-prescient-enable-sorting t))
 
 ;; https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 (use-package ivy-hydra)
@@ -341,7 +341,7 @@
   (setq counsel-find-file-occur-use-find nil)
   (setq counsel-find-file-occur-cmd; TODO Simplify this
         "gls -a | grep -i -E '%s' | tr '\\n' '\\0' | xargs -0 ls -d --dired-listing-switches")
-  
+
   (defun prot/counsel-fzf-rg-files (&optional input dir)
     "Run `fzf' in tandem with `ripgrep' to find files in the
   present directory.  If invoked from inside a version-controlled
@@ -356,19 +356,19 @@
         (if (eq vc nil)
             (counsel-fzf input default-directory)
           (counsel-fzf input vc)))))
-  
+
   (defun prot/counsel-fzf-dir (arg)
     "Specify root directory for `counsel-fzf'."
     (prot/counsel-fzf-rg-files ivy-text
                                (read-directory-name
                                 (concat (car (split-string counsel-fzf-cmd))
                                         " in directory: "))))
-  
+
   (defun prot/counsel-rg-dir (arg)
     "Specify root directory for `counsel-rg'."
     (let ((current-prefix-arg '(4)))
       (counsel-rg ivy-text nil "")))
-  
+
   ;; TODO generalise for all relevant file/buffer counsel-*?
   (defun prot/counsel-fzf-ace-window (arg)
     "Use `ace-window' on `prot/counsel-fzf-rg-files' candidate."
@@ -380,46 +380,46 @@
           (find-file arg)
         (find-file-other-window arg))
       (balance-windows (current-buffer))))
-  
+
   ;;
   ;; Improve search experience of `swiper' and `counsel'
   ;;
   (defun my-ivy-switch-to-swiper (&rest _)
     "Switch to `swiper' with the current input."
     (swiper ivy-text))
-  
+
   (defun my-ivy-switch-to-swiper-isearch (&rest _)
     "Switch to `swiper-isearch' with the current input."
     (swiper-isearch ivy-text))
-  
+
   (defun my-ivy-switch-to-swiper-all (&rest _)
     "Switch to `swiper-all' with the current input."
     (swiper-all ivy-text))
-  
+
   (defun my-ivy-switch-to-rg-dwim (&rest _)
     "Switch to `rg-dwim' with the current input."
     (rg-dwim default-directory))
-  
+
   (defun my-ivy-switch-to-counsel-rg (&rest _)
     "Switch to `counsel-rg' with the current input."
     (counsel-rg ivy-text default-directory))
-  
+
   (defun my-ivy-switch-to-counsel-git-grep (&rest _)
     "Switch to `counsel-git-grep' with the current input."
     (counsel-git-grep ivy-text default-directory))
-  
+
   (defun my-ivy-switch-to-counsel-find-file (&rest _)
     "Switch to `counsel-find-file' with the current input."
     (counsel-find-file ivy-text))
-  
+
   (defun my-ivy-switch-to-counsel-fzf (&rest _)
     "Switch to `counsel-fzf' with the current input."
     (counsel-fzf ivy-text default-directory))
-  
+
   (defun my-ivy-switch-to-counsel-git (&rest _)
     "Switch to `counsel-git' with the current input."
     (counsel-git ivy-text))
-  
+
   ;; @see https://emacs-china.org/t/swiper-swiper-isearch/9007/12
   (defun my-swiper-toggle-counsel-rg ()
     "Toggle `counsel-rg' and `swiper'/`swiper-isearch' with the current input."
@@ -430,7 +430,7 @@
         (my-ivy-switch-to-swiper-isearch))))
   (bind-key "<C-return>" #'my-swiper-toggle-counsel-rg swiper-map)
   (bind-key "<C-return>" #'my-swiper-toggle-counsel-rg counsel-ag-map)
-  
+
   (with-eval-after-load 'rg
     (defun my-swiper-toggle-rg-dwim ()
       "Toggle `rg-dwim' with the current input."
@@ -439,7 +439,7 @@
         (rg-dwim default-directory)))
     (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
     (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim counsel-ag-map))
-  
+
   (defun my-swiper-toggle-swiper-isearch ()
     "Toggle `swiper' and `swiper-isearch' with the current input."
     (interactive)
@@ -448,21 +448,21 @@
           (swiper ivy-text)
         (swiper-isearch ivy-text))))
   (bind-key "<s-return>" #'my-swiper-toggle-swiper-isearch swiper-map)
-  
+
   (defun my-counsel-find-file-toggle-fzf ()
     "Toggle `counsel-fzf' with the current `counsel-find-file' input."
     (interactive)
     (ivy-quit-and-run
       (counsel-fzf (or ivy-text "") default-directory)))
   (bind-key "<C-return>" #'my-counsel-find-file-toggle-fzf counsel-find-file-map)
-  
+
   (defun my-swiper-toggle-rg-dwim ()
     "Toggle `rg-dwim' with the current input."
     (interactive)
     (ivy-quit-and-run (my-ivy-switch-to-rg-dwim)))
   (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim swiper-map)
   (bind-key "<M-return>" #'my-swiper-toggle-rg-dwim counsel-ag-map)
-  
+
   (defun my-swiper-toggle-swiper-isearch ()
     "Toggle `swiper' and `swiper-isearch' with the current input."
     (interactive)
@@ -471,7 +471,7 @@
           (my-ivy-switch-to-swiper)
         (my-ivy-switch-to-swiper-isearch))))
   (bind-key "<s-return>" #'my-swiper-toggle-swiper-isearch swiper-map)
-  
+
   (ivy-add-actions
    'ivy-switch-buffer
    '(("r" my-ivy-switch-to-counsel-rg "rg")
@@ -488,14 +488,14 @@
      ("d" my-ivy-switch-to-rg-dwim "rg dwim")
      ("s" my-ivy-switch-to-swiper "swiper")
      ("a" my-ivy-switch-to-swiper-all "swiper all")))
-  
+
   (ivy-add-actions
    'swiper
    '(("r" my-ivy-switch-to-counsel-rg "rg")
      ("d" my-ivy-switch-to-rg-dwim "rg dwim")
      ("s" my-ivy-switch-to-swiper-isearch "swiper isearch")
      ("a" my-ivy-switch-to-swiper-all "swiper all")))
-  
+
   (ivy-add-actions
    'swiper-all
    '(("g" my-ivy-switch-to-counsel-git-grep "git grep")
@@ -503,7 +503,7 @@
      ("d" my-ivy-switch-to-rg-dwim "rg dwim")
      ("s" my-swiper-toggle-swiper-isearch "swiper isearch")
      ("S" my-ivy-switch-to-swiper "swiper")))
-  
+
   (ivy-add-actions
    'counsel-git-grep
    '(("s" my-ivy-switch-to-swiper-isearch "swiper isearch")
@@ -511,7 +511,7 @@
      ("r" my-ivy-switch-to-rg-dwim "rg")
      ("d" my-ivy-switch-to-rg-dwim "rg dwim")
      ("a" my-ivy-switch-to-swiper-all "swiper all")))
-  
+
   (ivy-add-actions
    'counsel-find-file
    '(("g" my-ivy-switch-to-counsel-git "git")
@@ -519,7 +519,7 @@
      ("G" prot/counsel-rg-dir "use ripgrep in root directory")
      ("Z" prot/counsel-fzf-dir "find file with fzf in root directory")
      ("l" vlf "view large file (vlf)")))
-  
+
   (ivy-add-actions
    'counsel-fzf
    '(("r" prot/counsel-fzf-dir "change root directory")
@@ -527,7 +527,7 @@
      ("g" my-ivy-switch-to-counsel-git "git")
      ("G" prot/counsel-rg-dir "use ripgrep in root directory")
      ("a" prot/counsel-fzf-ace-window "ace-window switch")))
-  
+
   (ivy-add-actions
    'counsel-rg
    '(("s" my-ivy-switch-to-swiper-isearch "swiper isearch")
@@ -536,12 +536,12 @@
      ("d" my-ivy-switch-to-rg-dwim "rg dwim")
      ("r" prot/counsel-rg-dir "change root directory")
      ("z" prot/counsel-fzf-dir "find file with fzf in root directory")))
-  
+
   (ivy-add-actions
    'counsel-git
    '(("f" my-ivy-switch-to-counsel-find-file "find file")
      ("z" my-ivy-switch-to-counsel-fzf "fzf")))
-  
+
   (ivy-add-actions
    'counsel-projectile-find-file
    '(("f" my-ivy-switch-to-counsel-find-file "find file")
@@ -550,7 +550,7 @@
      ("g" my-ivy-switch-to-counsel-git "git")
      ("G" prot/counsel-rg-dir "use ripgrep in root directory")
      ("z" my-ivy-switch-to-counsel-fzf "fzf")))
-  
+
   (ivy-add-actions
    'counsel-org-goto
    '(("s" my-ivy-switch-to-swiper-isearch "swiper isearch")

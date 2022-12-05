@@ -37,8 +37,6 @@
 
         ;; Whether display perspective name or not. Non-nil to display in mode-line.
         doom-modeline-persp-name t
-        ;; Whether display icon for persp name. Nil to display a # sign. It respects `doom-modeline-icon'
-        doom-modeline-persp-name-icon t
         ;; Whether display environment version or not
         doom-modeline-env-version t
         ;; Or for individual languages
@@ -60,8 +58,7 @@
         ;; What to dispaly as the version while a new one is being loaded
         doom-modeline-env-load-string "..."
 
-        doom-modeline-checker-simple-format t)
-  (doom-modeline-mode t))
+        doom-modeline-checker-simple-format t))
 
 ;; Use fixed pitch where it's sensible
 (use-package mixed-pitch)

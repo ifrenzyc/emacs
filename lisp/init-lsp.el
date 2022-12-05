@@ -63,13 +63,8 @@
 
   (lsp-completion-provider :none) ;; we use Corfu!
 
-  (exec-path (append exec-path '("~/.nvm/versions/node/v14.11.0/bin/")))
+  (exec-path (append exec-path '("~/.nvm/versions/node/v18.12.1/bin/")))
   (lsp-sqls-server "/usr/local/opt/go/libexec/bin/sqls")
-
-  ;; lsp-xml 依赖 eclipse/lemminx 项目，工程： ~/src/opensource/lemminx
-  ;; 需要将 jar 包拷贝 emacs 下，并指定路径
-  ;; 参考 https://emacs-lsp.github.io/lsp-mode/page/lsp-xml/
-  (lsp-xml-jar-file (expand-file-name "bin/org.eclipse.lemminx-uber.jar" user-emacs-directory))
 
   ;; @see https://emacs-lsp.github.io/lsp-mode/page/performance
   (read-process-output-max (* 1024 1024)) ;; 1mb
@@ -249,7 +244,6 @@
 
 (use-package lsp-ui
   :after lsp-mode
-  :commands (lsp-ui-mode lsp-ui-doc-hide lsp-ui-doc-show)
   :custom-face
   (lsp-ui-sideline-code-action ((t (:inherit warning))))
   :pretty-hydra
@@ -259,39 +253,39 @@
     (("d e" (progn
               (lsp-ui-doc-enable (not lsp-ui-doc-mode))
               (setq lsp-ui-doc-enable (not lsp-ui-doc-enable)))
-            "enable" :toggle lsp-ui-doc-mode)
+      "enable" :toggle lsp-ui-doc-mode)
      ("d s" (setq lsp-ui-doc-include-signature (not lsp-ui-doc-include-signature))
-            "signature" :toggle lsp-ui-doc-include-signature)
+      "signature" :toggle lsp-ui-doc-include-signature)
      ("d t" (setq lsp-ui-doc-position 'top)
-            "top" :toggle (eq lsp-ui-doc-position 'top))
+      "top" :toggle (eq lsp-ui-doc-position 'top))
      ("d b" (setq lsp-ui-doc-position 'bottom)
-            "bottom" :toggle (eq lsp-ui-doc-position 'bottom))
+      "bottom" :toggle (eq lsp-ui-doc-position 'bottom))
      ("d p" (setq lsp-ui-doc-position 'at-point)
-            "at point" :toggle (eq lsp-ui-doc-position 'at-point))
+      "at point" :toggle (eq lsp-ui-doc-position 'at-point))
      ("d h" (setq lsp-ui-doc-header (not lsp-ui-doc-header))
-            "header" :toggle lsp-ui-doc-header)
+      "header" :toggle lsp-ui-doc-header)
      ("d f" (setq lsp-ui-doc-alignment 'frame)
-            "align frame" :toggle (eq lsp-ui-doc-alignment 'frame))
+      "align frame" :toggle (eq lsp-ui-doc-alignment 'frame))
      ("d w" (setq lsp-ui-doc-alignment 'window)
-            "align window" :toggle (eq lsp-ui-doc-alignment 'window)))
+      "align window" :toggle (eq lsp-ui-doc-alignment 'window)))
     "Sideline"
     (("s e" (progn
               (lsp-ui-sideline-enable (not lsp-ui-sideline-mode))
               (setq lsp-ui-sideline-enable (not lsp-ui-sideline-enable)))
-            "enable" :toggle lsp-ui-sideline-mode)
+      "enable" :toggle lsp-ui-sideline-mode)
      ("s h" (setq lsp-ui-sideline-show-hover (not lsp-ui-sideline-show-hover))
-            "hover" :toggle lsp-ui-sideline-show-hover)
+      "hover" :toggle lsp-ui-sideline-show-hover)
      ("s d" (setq lsp-ui-sideline-show-diagnostics (not lsp-ui-sideline-show-diagnostics))
-            "diagnostics" :toggle lsp-ui-sideline-show-diagnostics)
+      "diagnostics" :toggle lsp-ui-sideline-show-diagnostics)
      ("s s" (setq lsp-ui-sideline-show-symbol (not lsp-ui-sideline-show-symbol))
-            "symbol" :toggle lsp-ui-sideline-show-symbol)
+      "symbol" :toggle lsp-ui-sideline-show-symbol)
      ("s c" (setq lsp-ui-sideline-show-code-actions (not lsp-ui-sideline-show-code-actions))
-            "code actions" :toggle lsp-ui-sideline-show-code-actions)
+      "code actions" :toggle lsp-ui-sideline-show-code-actions)
      ("s i" (setq lsp-ui-sideline-ignore-duplicate (not lsp-ui-sideline-ignore-duplicate))
-            "ignore duplicate" :toggle lsp-ui-sideline-ignore-duplicate))
+      "ignore duplicate" :toggle lsp-ui-sideline-ignore-duplicate))
     "Breadcrumb"
     (("b b" (setq lsp-headerline-breadcrumb-enable (not lsp-headerline-breadcrumb-enable))
-            "breadcrumb" :toggle lsp-headerline-breadcrumb-enable))
+      "breadcrumb" :toggle lsp-headerline-breadcrumb-enable))
     "Action"
     (("h" backward-char "←")
      ("j" next-line "↓")
@@ -312,12 +306,12 @@
          ([remap xref-find-references] . lsp-ui-peek-find-references)   ; [M-?]
          ("M-<f6>" . lsp-ui-hydra/body)
          ("M-RET" . lsp-ui-sideline-apply-code-actions))
-  :general
-  (yc/leader-keys
-      :keymaps 'lsp-ui-mode-map
-    "jp" '(:ignore t :wk "peek")
-    "jpd" 'lsp-ui-peek-find-definitions
-    "jpr" 'lsp-ui-peek-find-references)
+  ;; :general
+  ;; (yc/leader-keys
+  ;;   :keymaps 'lsp-ui-mode-map
+  ;;   "jp" '(:ignore t :wk "peek")
+  ;;   "jpd" 'lsp-ui-peek-find-definitions
+  ;;   "jpr" 'lsp-ui-peek-find-references)
   :hook
   (lsp-mode . lsp-ui-mode)
   (lsp-mode . lsp-ui-sideline-mode)
@@ -340,9 +334,9 @@
         lsp-lens-enable nil
 
         lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
-                               ,(face-foreground 'font-lock-string-face)
-                               ,(face-foreground 'font-lock-constant-face)
-                               ,(face-foreground 'font-lock-variable-name-face)))
+                              ,(face-foreground 'font-lock-string-face)
+                              ,(face-foreground 'font-lock-constant-face)
+                              ,(face-foreground 'font-lock-variable-name-face)))
   ;; (if (featurep 'xwidget-internal)
   ;;     (setq lsp-ui-doc-use-webkit t))
   ;; (setq-default lsp-ui-doc-frame-parameters
@@ -363,7 +357,7 @@
   ;;                 (line-spacing . 0.2)
   ;;                 (unsplittable . t)
   ;;                 (undecorated . t)
-  ;;                 (minibuffer . nil)
+  
   ;;                 (visibility . nil)
   ;;                 (mouse-wheel-frame . nil)
   ;;                 (no-other-frame . t)
@@ -374,6 +368,34 @@
   ;;                     :background "#f9f")
   ;; for "Jimx-/lsp-ui" fork has xwebkit support.
   :config
+  (setq ;; scroll-margin 0
+   lsp-ui-doc-use-webkit (featurep 'xwidget-internal))
+  
+  ;; https://github.com/emacs-lsp/lsp-ui/issues/441
+  (defun lsp-ui-peek--peek-display (src1 src2)
+    (-let* ((win-width (frame-width))
+            (lsp-ui-peek-list-width (/ (frame-width) 2))
+            (string (-some--> (-zip-fill "" src1 src2)
+                      (--map (lsp-ui-peek--adjust win-width it) it)
+                      (-map-indexed 'lsp-ui-peek--make-line it)
+                      (-concat it (lsp-ui-peek--make-footer))))
+            )
+      (setq lsp-ui-peek--buffer (get-buffer-create " *lsp-peek--buffer*"))
+      (posframe-show lsp-ui-peek--buffer
+                     :string (mapconcat 'identity string "")
+                     :min-width (frame-width)
+                     :poshandler #'posframe-poshandler-frame-center)))
+
+  (defun lsp-ui-peek--peek-destroy ()
+    (when (bufferp lsp-ui-peek--buffer)
+      (posframe-delete lsp-ui-peek--buffer))
+    (setq lsp-ui-peek--buffer nil
+          lsp-ui-peek--last-xref nil)
+    (set-window-start (get-buffer-window) lsp-ui-peek--win-start))
+
+  (advice-add #'lsp-ui-peek--peek-new :override #'lsp-ui-peek--peek-display)
+  (advice-add #'lsp-ui-peek--peek-hide :override #'lsp-ui-peek--peek-destroy)
+  
   ;; `C-g'to close doc
   (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
 

@@ -8,6 +8,14 @@
 
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
+(use-package company-shell
+  :after (company shell-mode)
+  :hook
+  (sh-mode . company-mode)
+  :config
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-shell)))
+
 (use-package fish-mode
   :mode ("\\.fish\\'" . fish-mode))
 

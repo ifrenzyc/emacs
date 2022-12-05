@@ -100,7 +100,7 @@
   (completion-category-defaults nil)    ; I want to be in control!
   (completion-category-overrides
    '((file (styles basic-remote ; For `tramp' hostname completion with `vertico'
-            orderless))))
+                   orderless))))
   (orderless-component-separator 'orderless-escapable-split-on-space)
   (orderless-matching-styles
    '(orderless-literal
@@ -166,6 +166,5 @@ parses its input."
     (when (string-suffix-p "." pattern)
       `(orderless-flex . ,(substring pattern 0 -1))))
   )
-
 
 (provide 'init-vertico)

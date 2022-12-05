@@ -36,8 +36,8 @@
 ;; 参考 doom-emacs 调整 GC：https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast
 ;; - http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 ;; Then reset it as late as possible; these are the reasonable defaults I use.
-(add-hook 'emacs-startup-hook '(lambda () (setq gc-cons-threshold 16777216
-                                      gc-cons-percentage 0.1)))
+(add-hook 'emacs-startup-hook #'(lambda () (setq gc-cons-threshold 16777216
+                                                 gc-cons-percentage 0.1)))
 (run-with-idle-timer 3 t (lambda () (garbage-collect)))
 
 ;;; GC optimization

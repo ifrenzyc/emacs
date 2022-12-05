@@ -24,12 +24,12 @@
         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
   ;; https://github.com/masasam/emacs-counsel-tramp#if-you-want-to-speed-up-tramp
-  (add-hook 'counsel-tramp-pre-command-hook '(lambda ()
-                                              (projectile-mode 0)
-                                              ))
-  (add-hook 'counsel-tramp-quit-hook '(lambda ()
-                                       (projectile-mode 1)
-                                       )))
+  (add-hook 'counsel-tramp-pre-command-hook #'(lambda ()
+                                                (projectile-mode 0)
+                                                ))
+  (add-hook 'counsel-tramp-quit-hook #'(lambda ()
+                                         (projectile-mode 1)
+                                         )))
 
 (use-package counsel-tramp
   :after (tramp counsel)

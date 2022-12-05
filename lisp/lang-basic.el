@@ -6,6 +6,13 @@
 
 ;;; Code:
 
+;; Show native line numbers if possible, otherwise use `linum'
+(use-package display-line-numbers
+  :ensure nil
+  :hook (prog-mode . display-line-numbers-mode)
+  :config
+  (setq display-line-numbers-width-start t))
+
 ;; custom program language font
 (setq yc/programming-modes '(js-mode
                              python-mode
@@ -15,6 +22,7 @@
                              css-mode
                              ruby-mode
                              sh-mode
+                             fish-mode
                              go-mode
                              json-mode
                              makefile-mode

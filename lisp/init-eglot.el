@@ -16,7 +16,7 @@
   (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   (progn
     (setenv "CLASSPATH"
-            (concat (getenv "CLASSPATH") ":" (expand-file-name ".cache/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.6.0.v20200915-1508.jar" user-emacs-directory)))
+            (concat (getenv "CLASSPATH") ":" (expand-file-name ".cache/lsp/eclipse.jdt.ls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar" user-emacs-directory)))
     (mapc (lambda (pair)
             (add-to-list 'eglot-server-programs pair))
           '((clojure-mode . ("bash" "-c" "clojure-lsp"))

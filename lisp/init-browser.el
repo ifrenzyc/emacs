@@ -7,7 +7,7 @@
 
 ;;; Code
 
-(set browse-url-browser-function 'xwidget-webkit-browse-url)
+;; (set browse-url-browser-function 'xwidget-webkit-browse-url)
 
 ;; xwidget-webkit enhancement suite
 ;; - https://github.com/BlueFlo0d/xwwp

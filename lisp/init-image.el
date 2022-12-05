@@ -8,7 +8,7 @@
 
 ;;; Code
 
-(add-hook 'image-mode-hook '(lambda () (require 'image+)))
+(add-hook 'image-mode-hook #'(lambda () (require 'image+)))
 (use-package image+
   ;; :after image-mode
   :init (eval-after-load 'image '(require 'image+))

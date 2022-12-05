@@ -29,14 +29,20 @@
   (setq-local lsp-ui-doc-enable t
               lsp-headerline-breadcrumb-enable t
               lsp-signature-auto-activate t)
-  ;; (use-package request)
+
+  ;; (defvar java-home "/usr/local/opt/java/current")
+  ;; (defvar m2-home "/usr/local/opt/maven/current")
+  ;; (setenv "JAVA_HOME" java-home)
+  ;; (setenv "M2_HOME" m2-home)
+  ;; (setenv "PATH" (concat (getenv "PATH") (format ":%s/bin:%s/bin" java-home m2-home)))
+  
   ;; (require 'lsp-java-boot)
   (setq lsp-java-inhibit-message t
         ;; Currently (2019-04-24), dap-mode works best with Oracle
         ;; JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
         ;; 这里为什么指定 java, 参考这个 issues(https://github.com/eclipse/eclipse.jdt.ls/pull/1509), 需要 java 11 以上
         ;; lsp-java-java-path "/usr/local/opt/java/bin/java"
-        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home/bin/java"
+        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-19.jdk/Contents/Home/bin/java"
         ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-16.0.1.jdk/Contents/Home/bin/java"
         ;; lsp-java-java-path "/usr/bin/java"
         ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/adoptopenjdk-15.jdk/Contents/Home/bin/java"
@@ -59,6 +65,15 @@
 
         lsp-java-progress-reports-enabled t
 
+        ;; lsp-java-autobuild-enabled nil
+        ;; lsp-java-import-maven-enabled nil
+        ;; lsp-java-import-gradle-enabled nil
+        ;; lsp-java-max-concurrent-builds 1
+        ;; lsp-java-format-on-type-enabled nil
+        ;; lsp-java-completion-guess-arguments t
+        ;; lsp-java-completion-overwrite nil
+
+        ;; (setq lsp-java-vmargs '("-XX:+UseAdaptiveSizePolicy" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Xmx8G" "-Xms2G" "-Xverify:none" "-jar"))
         lsp-java-vmargs
         (list
          ;; "-XX:+UseParallelGC"
@@ -68,7 +83,7 @@
          ;; "-XX:+UseG1GC"
          "-XX:+UseZGC"
          "-Xmx4G"
-         "-Dlog.level=ERROR"
+         "-Dlog.level=INFO"
          ;; "--illegal-access=permit"
          "-XX:+UseStringDeduplication"
          "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar"
@@ -84,34 +99,35 @@
   :bind
   (:map java-mode-map
         ("C-c C-f" . lsp-format-buffer))
-  :general
-  (yc/leader-keys-major-mode
-    :keymaps 'java-mode-map
-    "r"   'ggtags-find-tag-dwim
-    "c"   '(:ignore t :which-key "Run/Compile")
-    "cd"  'dap-java-debug
-    "l"   '(:ignore t :which-key "lsp")
-    "lm"  'lsp-ui-imenu
-    "la"  'lsp-find-definition
-    "lb"  'lsp-find-references
-    "lh"  'lsp-ui-doc-show
-    "le"  'lsp-goto-implementation
-    "lr"  'lsp-goto-type-definition
-    "li"  'lsp-java-organize-imports
-    "ld"  'lsp-describe-thing-at-point
-    "lf"  'lsp-format-buffer
-    "lr"  'lsp-format-region
-    "la"  'lsp-java-add-import
-    "lt"  'lsp-java-add-throws
-    "lc"  'lsp-java-create-field
-    "ll"  'lsp-java-create-local
-    "lp"  'lsp-java-create-parameter
-    "ls"  'lsp-java-spring-initializr
-    "lx"  'lsp-java-extract-to-constant
-    "lu"  'lsp-java-add-unimplemented-methods
-    "lv"  'lsp-java-extract-to-local-variable
-    "lg"  'lsp-java-generate-getters-and-setters
-    "lu"  'lsp-java-generate-equals-and-hash-code))
+  ;; :general
+  ;; (yc/leader-keys-major-mode
+  ;;   :keymaps 'java-mode-map
+  ;;   "r"   'ggtags-find-tag-dwim
+  ;;   "c"   '(:ignore t :which-key "Run/Compile")
+  ;;   "cd"  'dap-java-debug
+  ;;   "l"   '(:ignore t :which-key "lsp")
+  ;;   "lm"  'lsp-ui-imenu
+  ;;   "la"  'lsp-find-definition
+  ;;   "lb"  'lsp-find-references
+  ;;   "lh"  'lsp-ui-doc-show
+  ;;   "le"  'lsp-goto-implementation
+  ;;   "lr"  'lsp-goto-type-definition
+  ;;   "li"  'lsp-java-organize-imports
+  ;;   "ld"  'lsp-describe-thing-at-point
+  ;;   "lf"  'lsp-format-buffer
+  ;;   "lr"  'lsp-format-region
+  ;;   "la"  'lsp-java-add-import
+  ;;   "lt"  'lsp-java-add-throws
+  ;;   "lc"  'lsp-java-create-field
+  ;;   "ll"  'lsp-java-create-local
+  ;;   "lp"  'lsp-java-create-parameter
+  ;;   "ls"  'lsp-java-spring-initializr
+  ;;   "lx"  'lsp-java-extract-to-constant
+  ;;   "lu"  'lsp-java-add-unimplemented-methods
+  ;;   "lv"  'lsp-java-extract-to-local-variable
+  ;;   "lg"  'lsp-java-generate-getters-and-setters
+  ;;   "lu"  'lsp-java-generate-equals-and-hash-code)
+  )
 
 (use-package dap-java
   :ensure nil
@@ -142,6 +158,10 @@
 ;; A nice collection of stealable Java snippets:
 (use-package java-snippets
   :after yasnippet)
+
+;; decompile class file
+(use-package autodisass-java-bytecode
+  :disabled t)
 
 ;; Gradle
 (use-package gradle-mode
