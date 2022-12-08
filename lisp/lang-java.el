@@ -71,7 +71,7 @@
         ;; lsp-java-max-concurrent-builds 1
         ;; lsp-java-format-on-type-enabled nil
         ;; lsp-java-completion-guess-arguments t
-        ;; lsp-java-completion-overwrite nil
+        
 
         ;; (setq lsp-java-vmargs '("-XX:+UseAdaptiveSizePolicy" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Xmx8G" "-Xms2G" "-Xverify:none" "-jar"))
         lsp-java-vmargs
@@ -96,10 +96,9 @@
    ;; (java-mode . lsp-java-boot-lens-mode)
    ;; (java-mode . lsp-java-boot-lens-mode)
    )
-  :bind
-  (:map java-mode-map
-        ("C-c C-f" . lsp-format-buffer))
-  ;; :general
+  :general
+  (java-mode-map
+   "C-c C-f" 'lsp-format-buffer)
   ;; (yc/leader-keys-major-mode
   ;;   :keymaps 'java-mode-map
   ;;   "r"   'ggtags-find-tag-dwim
