@@ -11,12 +11,13 @@
 (use-package which-key
   :hook
   (after-init . which-key-mode)
+  :custom
+  (which-key-sort-order 'which-key-key-order-alpha)
+  (which-key-use-C-h-commands t)
+  (which-key-idle-delay 0.8)
   :config
   (which-key-setup-minibuffer)
-  (which-key-setup-side-window-bottom)
-  (setq which-key-sort-order 'which-key-key-order-alpha
-        which-key-use-C-h-commands t
-        which-key-idle-delay 0.2))
+  (which-key-setup-side-window-bottom))
 
 ;; https://github.com/tarsius/keycast
 (use-package keycast

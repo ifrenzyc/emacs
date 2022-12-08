@@ -5,6 +5,7 @@
 ;; 
 
 ;;; Code:
+(require 'init-embark)
 
 (use-package isearch
   :ensure nil
@@ -13,12 +14,35 @@
   :bind (("M-s ." . isearch-forward-symbol-at-point)
          ;; ("C-s" . isearch-forward-regexp)
          ("C-r" . isearch-backward-regexp)
+         ("C-M-s" . isearch-forward-other-window)
+         ("C-M-r" . isearch-backward-other-window)
          ("M-s SPC" . xah-search-current-word)
          :map isearch-mode-map
          ("C-;" . swiper-from-isearch)
          ("C-'" . avy-isearch)
          ("C-l" . counsel-git-grep-from-isearch))
   :config
+  ;; Isearch in other windows
+  (defun isearch-forward-other-window (prefix)
+    "Function to isearch-forward in other-window."
+    (interactive "P")
+    (unless (one-window-p)
+      (save-excursion
+        (let ((next (if prefix -1 1)))
+          (other-window next)
+          (isearch-forward)
+          (other-window (- next))))))
+
+  (defun isearch-backward-other-window (prefix)
+    "Function to isearch-backward in other-window."
+    (interactive "P")
+    (unless (one-window-p)
+      (save-excursion
+        (let ((next (if prefix 1 -1)))
+          (other-window next)
+          (isearch-backward)
+          (other-window (- next))))))
+
   (defun xah-search-current-word ()
     "Call `isearch' on current word or text selection.
 “word” here is A to Z, a to z, and hyphen 「-」 and underline 「_」, independent of syntax table.
@@ -100,6 +124,10 @@ Version 2015-04-09"
    "M-g A" 'ace-jump-two-chars-mode
    "M-g a" 'avy-goto-char
    "M-g l" 'avy-goto-char-2)
+  (isearch-mode-map
+   "M-j" 'avy-isearch)
+  ;; (swiper-map
+  ;;   "M-j" 'swiper-avy)
   :config
   (defhydra hydra-avy (:color red)
     "avy-goto"
@@ -111,7 +139,7 @@ Version 2015-04-09"
     ("u" link-hint-open-link "open-URI")
     ("U" link-hint-copy-link "copy-URI"))
 
-  (defun avy-show-dispatch-help ()  
+  (defun avy-show-dispatch-help ()
     (let* ((len (length "avy-action-"))
            (fw (frame-width))
            (raw-strings (mapcar
@@ -199,7 +227,7 @@ Version 2015-04-09"
 
   ;; Dictionary: define words
   ;; Replace your package manager or preferred dict package
-  ;; (package-install 'dictionary)           
+  ;; (package-install 'dictionary)
 
   (defun dictionary-search-dwim (&optional arg)
     "Search for definition of word at point. If region is active,
@@ -250,34 +278,6 @@ argument, query for word to search."
     t)
 
   (setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark)
-
-  ;; Avy + Isearch
-  (define-key isearch-mode-map (kbd "M-j") 'avy-isearch)
-  (define-key swiper-map (kbd "M-j") 'swiper-avy)
-
-  ;; Isearch in other windows
-  (defun isearch-forward-other-window (prefix)
-    "Function to isearch-forward in other-window."
-    (interactive "P")
-    (unless (one-window-p)
-      (save-excursion
-        (let ((next (if prefix -1 1)))
-          (other-window next)
-          (isearch-forward)
-          (other-window (- next))))))
-
-  (defun isearch-backward-other-window (prefix)
-    "Function to isearch-backward in other-window."
-    (interactive "P")
-    (unless (one-window-p)
-      (save-excursion
-        (let ((next (if prefix 1 -1)))
-          (other-window next)
-          (isearch-backward)
-          (other-window (- next))))))
-
-  (define-key global-map (kbd "C-M-s") 'isearch-forward-other-window)
-  (define-key global-map (kbd "C-M-r") 'isearch-backward-other-window)
 
   ;; Google search: requires executable Tuxi
   (defvar google-search-history nil
@@ -330,18 +330,17 @@ active region use it instead."
 
 ;; https://github.com/winterTTr/ace-jump-mode
 (use-package ace-jump-mode
-  :disabled t
   :demand t
   :general
   ("C-x j" 'ace-jump-mode
-           "M-g f" 'ace-jump-mode)
+   "M-g f" 'ace-jump-mode)
   :config
   ;; Thanks to: https://github.com/winterTTr/ace-jump-mode/issues/23
   (defun ace-jump-two-chars-mode (&optional query-char query-char-2)
     "AceJump two chars mode"
     (interactive)
 
-    (evil-half-cursor)
+    ;; (evil-half-cursor)
     (setq query-char (or query-char (read-char ">")))
     (setq query-char-2 (or query-char-2 (read-char (concat ">" (string query-char)))))
 

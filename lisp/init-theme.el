@@ -24,6 +24,8 @@
   ;; (load-theme 'doom-wilmersdorf t)
   ;; (load-theme 'doom-monokai-octagon t)
   ;; (load-theme 'doom-zenburn t)
+  :custom
+  (doom-themes-treemacs-theme "doom-colors")
   :config
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -31,7 +33,6 @@
   ;; Enable custom neotree theme
   (doom-themes-neotree-config)    ; all-the-icons fonts must be installed!
 
-  (setq doom-themes-treemacs-theme "doom-colors")
   (doom-themes-treemacs-config)
   (with-eval-after-load 'lsp-treemacs
     (doom-themes-treemacs-config)    ; all-the-icons fonts must be installed!

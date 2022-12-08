@@ -111,10 +111,10 @@
 (require 'init-diff)
 
 (require 'init-ivy)
+;; (require 'init-vertico)
+(require 'init-embark)
 ;; (require 'init-ido)
 ;; (require 'init-icomplete)
-;; (require 'init-vertico)
-;; (require 'init-embark)
 ;; (require 'init-helm) ;; I don't use helm
 (require 'init-buffer)
 (require 'init-company)

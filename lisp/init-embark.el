@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package embark
   :config
@@ -36,15 +36,14 @@ targets."
 
   ;; Embark indicators
   (setq embark-indicators '(embark-which-key-indicator
-                            ;; embark-minimal-indicator
                             embark-highlight-indicator
                             embark-isearch-highlight-indicator))
 
   (setq embark-verbose-indicator-display-action
         '(display-buffer-at-bottom
           (window-height . (lambda (win) (fit-window-to-buffer
-                                     win (floor (frame-height) 
-                                                3))))))
+                                          win (floor (frame-height) 
+                                                     3))))))
 
   ;; Hide the mode line of the Embark live/completions buffers
   (add-to-list 'display-buffer-alist
@@ -55,3 +54,4 @@ targets."
   ("s-o" 'embark-act))
 
 (provide 'init-embark)
+;;; init-embark.el ends here

@@ -179,6 +179,7 @@
           counsel-projectile)))
 
 (use-package all-the-icons-ivy-rich
+  :disabled t
   :hook (after-init . all-the-icons-ivy-rich-mode))
 
 (use-package all-the-icons-ibuffer
