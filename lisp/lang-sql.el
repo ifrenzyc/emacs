@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package sql-mode
   :ensure nil
@@ -28,20 +28,20 @@
   :hook
   (sql-mode . sqlind-minor-mode))
 
-
 ;; - https://github.com/kostafey/ejc-sql#use-with-org-mode
 ;; - https://gist.githubusercontent.com/stardiviner/7243e6c4a6ad4843304e796149f32c04/raw/d1eeda552b7a344a78d2e06330c78a357c32ecc6/ejc-sql%2520reproduce.org
 (use-package ejc-sql
   :hook
   (sql-mode . ejc-sql-mode)
+  (ejc-sql-minor-mode . (lambda ()
+                          (company-mode t)
+                          ;; (ejc-ac-setup)
+                          (ejc-eldoc-setup)))
+  :custom
+  (ejc-org-mode-show-results nil)
   :config
-  (setq ejc-org-mode-show-results nil)
   (require 'ejc-company)
   ;; (add-to-list 'company-backends 'ejc-company-backend)
-  (add-hook 'ejc-sql-minor-mode-hook
-            (lambda ()
-              (company-mode t)
-              (ejc-ac-setup)
-              (ejc-eldoc-setup))))
+  )
 
 (provide 'lang-sql)
