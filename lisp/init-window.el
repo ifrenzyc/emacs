@@ -73,23 +73,24 @@
 (use-package window
   :ensure nil
   :general
-  (yc/leader-keys
-      "w" '(:ignore t :which-key "windows")
-    "w SPC" 'hydra-rotate-window/body
-    "w." 'hydra-window/body
-    "wp" '(:ignore t :which-key "popup")
-    "w1" 'delete-other-windows
-    "w0" 'delete-window
-    "wh" 'windmove-left
-    "wl" 'windmove-right
-    "wk" 'windmove-up
-    "wj" 'windmove-down
-    "w-" 'yc/split-window-vertically
-    "w|" 'yc/split-window-horizontally
-    "wd" 'delete-frame
-    "wo" '(doom/window-enlargen :wk "doom/enlargen")
-    "wu" 'winner-undo
-    "wr" 'winner-redo)
+  ("C-x w o" 'doom/window-enlargen)
+  ;; (yc/leader-keys
+  ;;     "w" '(:ignore t :which-key "windows")
+  ;;   "w SPC" 'hydra-rotate-window/body
+  ;;   "w." 'hydra-window/body
+  ;;   "wp" '(:ignore t :which-key "popup")
+  ;;   "w1" 'delete-other-windows
+  ;;   "w0" 'delete-window
+  ;;   "wh" 'windmove-left
+  ;;   "wl" 'windmove-right
+  ;;   "wk" 'windmove-up
+  ;;   "wj" 'windmove-down
+  ;;   "w-" 'yc/split-window-vertically
+  ;;   "w|" 'yc/split-window-horizontally
+  ;;   "wd" 'delete-frame
+  ;;   "wo" '(doom/window-enlargen :wk "doom/enlargen")
+  ;;   "wu" 'winner-undo
+  ;;   "wr" 'winner-redo)
   :init
   (defun doom/window-enlargen (&optional arg)
     "Enlargen the current window to focus on this one. Does not close other
@@ -117,12 +118,12 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
                     (window-resize-pixelwise nil)
                     (frame-resize-pixelwise nil))
                (unwind-protect
-                    (progn
-                      (when dedicated-p
-                        (set-window-dedicated-p window nil))
-                      (when preserved-p
-                        (set-window-parameter window 'window-preserved-size nil))
-                      (maximize-window window))
+                   (progn
+                     (when dedicated-p
+                       (set-window-dedicated-p window nil))
+                     (when preserved-p
+                       (set-window-parameter window 'window-preserved-size nil))
+                     (maximize-window window))
                  (set-window-dedicated-p window dedicated-p)
                  (when preserved-p
                    (set-window-parameter window 'window-preserved-size preserved-p))
@@ -218,8 +219,7 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 
 ;; - https://github.com/alphapapa/burly.el
 (use-package burly
-  ;; :straight (:host github :repo "alphapapa/burly.el")
-  )
+  :disabled t)
 
 ;; 类似于 tmux 的最大化当前窗口功能，保持和我在 tmux 下的习惯一致。
 ;; https://github.com/syohex/emacs-zoom-window
@@ -238,14 +238,14 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
     ("SPC" rotate-layout "rotate")
     ("w" rotate-window "swap")
     ("1" delete-other-windows "maximize" :exit t) ; 暂时不加这个，因为旋转窗口就是因为有多窗口的需要
-    ("j" (progn (evil-scroll-down 1)) "↓")
-    ("J" (progn (evil-scroll-down 4)) "4x ↓")
-    ("k" (progn (evil-scroll-up 1)) "↑")
-    ("K" (progn (evil-scroll-up 4)) "4x ↑")
+    ("j" (progn (scroll-down-line 1)) "↓")
+    ("J" (progn (scroll-down-line 4)) "4x ↓")
+    ("k" (progn (scroll-up-line 1)) "↑")
+    ("K" (progn (scroll-up-line 4)) "4x ↑")
     ("C-g" nil "quit")
     ("q" nil "quit"))
   :general
-  (general-nmap "C-w ." 'hydra-rotate-window/body)
+  ("C-x w ." 'hydra-rotate-window/body)
   ;; :config
   ;; (evil-leader/set-key
   ;;   "SPC" 'hydra-rotate-window/body)
