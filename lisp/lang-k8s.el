@@ -16,6 +16,12 @@
 (use-package kubernetes
   :commands (kubernetes-overview))
 
+;; https://github.com/abrochard/kubel
+;; Emacs extension for controlling Kubernetes with limited permissions.
+(use-package kubel
+  :after (vterm)
+  :config (kubel-vterm-setup))
+
 ;; If you want to pull in the Evil compatibility package.
 ;; (use-package kubernetes-evil
 ;;   :after kubernetes)
