@@ -10,19 +10,19 @@
 (use-package dired
   :ensure nil
   :hook
-  (dired-mode . hl-line-mode)
-  (dired-mode . dired-hide-details-mode)
-  :init
+  ((dired-mode . hl-line-mode)
+   (dired-mode . dired-hide-details-mode))
+  :custom
   ;; show human readable file sizes in dired
   ;; http://pragmaticemacs.com/emacs/dired-human-readable-sizes-and-sort-by-size/
   ;; (setq dired-listing-switches "-aBhl --group-directories-first -v")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
   ;; (setq dired-listing-switches "-AFhlv --dired-listing-switches")
-  (setq dired-listing-switches "-alh")
+  (dired-listing-switches "-alh")
 
   ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
-  (setq dired-dwim-target t     ;; https://emacs.stackexchange.com/a/5604
-        dired-recursive-copies 'always ;; Recursive Copying and Deleting
-        dired-recursive-deletes 'always)
+  (dired-dwim-target t)     ;; https://emacs.stackexchange.com/a/5604
+  (dired-recursive-copies 'always) ;; Recursive Copying and Deleting
+  (dired-recursive-deletes 'always)
   :config
   (defun yc/dired-up-directory ()
     "Take dired up one directory, but behave like dired-find-alternative-file (leave no orphan buffer)"
@@ -95,7 +95,7 @@
                       "\\" 'hydra-dired/body)
   :general
   (yc/leader-keys-major-mode
-      :keymaps 'dired-mode-map
+    :keymaps 'dired-mode-map
     "DEL" 'my/dired-up-directory
     "RET" 'dired-find-alternate-file
     "TAB" 'dired-subtree-toggle
@@ -118,8 +118,9 @@
   :commands wdired-change-to-wdired-mode
   :custom
   (wdired-allow-to-change-permissions t)
-  :bind (:map dired-mode-map
-              ("C-c C-c" . wdired-change-to-wdired-mode)))
+  :general
+  (dired-mode-map
+   "C-c C-c" 'wdired-change-to-wdired-mode))
 
 ;; dired 模式扩展
 ;; - https://github.com/Fuco1/dired-hacks

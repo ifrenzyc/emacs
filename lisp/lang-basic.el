@@ -32,6 +32,7 @@
                              sql-mode
                              groovy-mode
                              kotlin-mode
+                             objc-mode
                              racket-mode
                              conf-mode
                              fundamental-mode

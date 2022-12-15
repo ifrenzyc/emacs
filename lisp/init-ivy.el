@@ -11,9 +11,9 @@
 ;; - ivy
 ;; - snails
 ;; - selectrum + prescient
-;; 
 
-;;; Code
+;;; Code:
+
 (require 'init-funcs)
 
 ;; Improves sorting for fuzzy-matched results
@@ -132,18 +132,14 @@
   (defun yc--minibuffer-exit-hook ()
     (setq gc-cons-threshold 16777216)))
 
-;; https://github.com/Yevgnen/ivy-rich
-;; https://github.com/casouri/ivy-filthy-rich
-
 ;; - https://gist.github.com/tam17aki/695995d23166683e7b4f04774e0eeda9
 ;; - https://github.com/walseb/QualityEmacsConfig
 ;; - https://github.com/11182711114/emacs-config/blob/master/emacsconfig.org
 ;; - https://github.com/mpereira/.emacs.d/blob/master/configuration.org
 (use-package ivy-rich
-  :disabled t
   :demand t
   :hook ((after-init . ivy-rich-mode)
-         (counsel-projectile-mode . ivy-rich-mode) ; MUST after `counsel-projectile'
+         ;; (counsel-projectile-mode . ivy-rich-mode) ; MUST after `counsel-projectile'
          (ivy-rich-mode . (lambda ()
                             "Use abbreviate in `ivy-rich-mode'."
                             (setq ivy-virtual-abbreviate
@@ -204,6 +200,12 @@
             (ivy-rich-file-last-modified-time (:face font-lock-comment-face))))) ; return the last modified time of the file
         )
   :config
+  ;; https://github.com/Yevgnen/ivy-rich/issues/115
+  ;; (defun ivy-rich--switch-buffer-directory! (orig-fun &rest args)
+  ;;   (cl-letf (((symbol-function 'directory-file-name) #'file-name-directory))
+  ;;     (apply orig-fun args)))
+  ;; (advice-add 'ivy-rich--switch-buffer-directory :around #'ivy-rich--switch-buffer-directory!)
+  
   (ivy-rich-project-root-cache-mode t)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
@@ -569,7 +571,7 @@
 
 ;; https://github.com/ericdanan/counsel-projectile
 (use-package counsel-projectile
-  :after counsel
+  :after (counsel projectile)
   :hook (counsel-mode . counsel-projectile-mode)
   :init
   (setq counsel-projectile-grep-initial-input '(ivy-thing-at-point))

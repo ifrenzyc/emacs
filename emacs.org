@@ -9502,7 +9502,7 @@ Visually summarize progress
   "dd" '(deft :which-key "deft"))
   :commands (deft deft-open-file deft-new-file-named)
   :config
-  (setq deft-directory "~/notes/09_Zettelkästen"
+  (setq deft-directory "~/notes/Zettelkästen"
         deft-recursive t
         deft-default-extension "org"
         deft-extensions '("md" "txt" "org" "tex")
@@ -9560,7 +9560,7 @@ Visually summarize progress
   (after-init . org-roam-mode)
   :straight (:host github :repo "org-roam/org-roam")
   :custom
-  (org-roam-directory "~/notes/09_Zettelkästen")
+  (org-roam-directory "~/notes/Zettelkästen")
   :config
   (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/2.44.1/bin/dot")
   (setq org-roam-graphviz-extra-options '(("overlap" . "false")))

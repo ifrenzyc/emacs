@@ -91,7 +91,7 @@
   ;;   "wo" '(doom/window-enlargen :wk "doom/enlargen")
   ;;   "wu" 'winner-undo
   ;;   "wr" 'winner-redo)
-  :init
+  :config
   (defun doom/window-enlargen (&optional arg)
     "Enlargen the current window to focus on this one. Does not close other
 windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
@@ -226,7 +226,7 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 (use-package zoom-window
   :commands zoom-window-zoom
   :general
-  ("C-x C-z" 'zoom-window-zoom)
+  ("C-x w z" 'zoom-window-zoom)
   :config
   (setq zoom-window-mode-line-color "DarkGreen"))
 
@@ -334,7 +334,7 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
           ;; ("^\\*vterminal<.+>\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
           ;; ("^\\*vterm - .*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
           ;; ("^\\*vterm .*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
-          (vterm-mode :select t :size 0.4 :align 'below :autoclose t)
+          ;; (vterm-mode :select t :size 0.4 :align 'below :autoclose t)
           ("\\*[Wo]*Man.*\\*" :regexp t :select t :align 'below :autoclose t)
           ("*Calendar*" :select t :size 0.3 :align 'below)
           (("*shell*" "*eshell*" "*ielm*") :popup t :size 0.3 :align 'below)

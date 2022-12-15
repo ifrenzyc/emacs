@@ -8,7 +8,8 @@
 ;; M-x all-the-icons-install-fonts
 ;; 
 
-;;; Code
+;;; Code:
+
 (use-package whitespace
   :disabled t
   :hook
@@ -179,11 +180,11 @@
           counsel-projectile)))
 
 (use-package all-the-icons-ivy-rich
-  :disabled t
+  :after (all-the-icons ivy-rich)
   :hook (after-init . all-the-icons-ivy-rich-mode))
 
 (use-package all-the-icons-ibuffer
-  :hook (after-init . all-the-icons-ibuffer-mode)
+  :hook (ibuffer-mode . all-the-icons-ibuffer-mode)
   :init
   ;; Use human readable file size in ibuffer.
   (setq all-the-icons-ibuffer-human-readable-size t))

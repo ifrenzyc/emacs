@@ -73,3 +73,6 @@
 [submodule "localelpa/valign"]
 	path = localelpa/valign
 	url = https://github.com/casouri/valign.git
+[submodule "localelpa/ivy-rich"]
+	path = localelpa/ivy-rich
+	url = git@github.com:Yevgnen/ivy-rich.git
