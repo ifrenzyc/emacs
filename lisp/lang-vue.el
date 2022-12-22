@@ -20,7 +20,6 @@
   (setq mmm-submode-decoration-level 3
         vue-html-extra-indent 2
         css-indent-offset 2
-        ;; lsp-ui-flycheck-enable nil
         ))
 
 (use-package lsp-vue

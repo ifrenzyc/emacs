@@ -27,14 +27,14 @@
   (setq flyspell-issue-message-flag nil
         ispell-program-name "aspell"
         ispell-extra-args '("--sug-mode=ultra" "--lang=en_US" "--run-together"))
-  :general
-  (yc/leader-keys
-    "t M-s" 'my/toggle-flyspell
-    "M-s"   '(:ignore t :which-key "Spell Check")
-    "M-s b" 'flyspell-buffer
-    "M-s n" 'flyspell-goto-next-error
-    "M-s p" 'flyspell-correct-at-point
-    "M-s ." 'hydra-spelling/body)
+  ;; :general
+  ;; (yc/leader-keys
+  ;;   "t M-s" 'my/toggle-flyspell
+  ;;   "M-s"   '(:ignore t :which-key "Spell Check")
+  ;;   "M-s b" 'flyspell-buffer
+  ;;   "M-s n" 'flyspell-goto-next-error
+  ;;   "M-s p" 'flyspell-correct-at-point
+  ;;   "M-s ." 'hydra-spelling/body)
   :config
   (defhydra hydra-spelling ()
     ("b" flyspell-buffer "check buffer")

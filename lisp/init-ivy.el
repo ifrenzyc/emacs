@@ -580,6 +580,12 @@
   :general ("C-x C-p" 'counsel-projectile-switch-project
             "C-x p B" 'counsel-projectile-switch-to-buffer))
 
+(use-package counsel-popup
+  :load-path "localelpa/counsel-popup"
+  :after counsel
+  ;; :bind ("C-c s" . counsel-popup-rg)
+  )
+
 (use-package counsel-osx-app
   :after counsel
   ;; :general (("s-o" 'counsel-osx-app))

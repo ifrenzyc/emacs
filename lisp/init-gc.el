@@ -30,7 +30,6 @@
   :commands (command-log-mode))
 
 (use-package manage-minor-mode
-  ;; :straight (:host github :repo "ShingoFukuyama/manage-minor-mode")
   :commands manage-minor-mode)
 
 ;; 参考 doom-emacs 调整 GC：https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast

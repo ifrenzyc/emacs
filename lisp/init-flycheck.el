@@ -10,7 +10,7 @@
   :hook (after-init . global-flycheck-mode)
   :init (setq flycheck-global-modes
               '(not text-mode outline-mode fundamental-mode lisp-interaction-mode
-                org-mode diff-mode shell-mode eshell-mode term-mode vterm-mode)
+                    org-mode diff-mode shell-mode eshell-mode term-mode vterm-mode)
               flycheck-emacs-lisp-load-path 'inherit
               flycheck-display-errors-function 'flycheck-pos-tip-error-messages
               flycheck-indication-mode (if (display-graphic-p)
@@ -22,23 +22,23 @@
   :custom
   (flyspell-abbrev-p t)
   :general
-  (yc/leader-keys
-      "ts" 'my/toggle-syntax-checking
-    "eb" 'flycheck-buffer
-    "ec" 'flycheck-clear
-    "eh" 'flycheck-describe-checker
-    "es" 'flycheck-select-checker
-    "eS" 'flycheck-set-checker-executable
-    "ev" 'flycheck-verify-setup
-    "ey" 'flycheck-copy-errors-as-kill
-    "ex" 'flycheck-explain-error-at-point
-    ;; navigation
-    "en" 'flycheck-next-error
-    "ep" 'flycheck-previous-error
-    "el" 'flycheck-list-errors
-    "e." 'hydra-flycheck/body)
+  ;; (yc/leader-keys
+  ;;     "ts" 'my/toggle-syntax-checking
+  ;;   "eb" 'flycheck-buffer
+  ;;   "ec" 'flycheck-clear
+  ;;   "eh" 'flycheck-describe-checker
+  ;;   "es" 'flycheck-select-checker
+  ;;   "eS" 'flycheck-set-checker-executable
+  ;;   "ev" 'flycheck-verify-setup
+  ;;   "ey" 'flycheck-copy-errors-as-kill
+  ;;   "ex" 'flycheck-explain-error-at-point
+  ;;   ;; navigation
+  ;;   "en" 'flycheck-next-error
+  ;;   "ep" 'flycheck-previous-error
+  ;;   "el" 'flycheck-list-errors
+  ;;   "e." 'hydra-flycheck/body)
   (yc/nonprefix-keys
-      :keymaps 'flycheck-error-list-mode-map
+    :keymaps 'flycheck-error-list-mode-map
     "RET" 'flycheck-error-list-goto-error
     "j" 'flycheck-error-list-next-error
     "k" 'flycheck-error-list-previous-error

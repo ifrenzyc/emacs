@@ -24,8 +24,8 @@
    (lsp-mode . lsp-enable-which-key-integration))
   ;; (lsp-after-open . lsp-enable-imenu)
   :general
-  (yc/leader-keys
-    "l" '(:keymap lsp-command-map :package lsp-mode :wk "lsp"))
+  ;; (yc/leader-keys
+  ;;   "l" '(:keymap lsp-command-map :package lsp-mode :wk "lsp"))
   (lsp-command-map
    "d" 'lsp-find-definition
    "f" 'lsp-find-references

@@ -357,7 +357,7 @@ active region use it instead."
 (use-package goto-chg
   :general
   ("C-c b ," 'goto-last-change
-             "C-c b ." 'goto-last-change-reverse))
+   "C-c b ." 'goto-last-change-reverse))
 
 (use-package fzf)
 
@@ -380,6 +380,8 @@ active region use it instead."
 ;; - https://github.com/Wilfred/ag.el
 (use-package ag
   :ensure-system-package (ag . "brew install the_silver_searcher"))
+
+(use-package counsel-ag-popup)
 
 (use-package rg
   :config

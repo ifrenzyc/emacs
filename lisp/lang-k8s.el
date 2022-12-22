@@ -22,8 +22,4 @@
   :after (vterm)
   :config (kubel-vterm-setup))
 
-;; If you want to pull in the Evil compatibility package.
-;; (use-package kubernetes-evil
-;;   :after kubernetes)
-
 (provide 'lang-k8s)

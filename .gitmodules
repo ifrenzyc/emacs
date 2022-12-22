@@ -76,3 +76,6 @@
 [submodule "localelpa/ivy-rich"]
 	path = localelpa/ivy-rich
 	url = git@github.com:Yevgnen/ivy-rich.git
+[submodule "localelpa/localelpa/counsel-popup"]
+	path = localelpa/localelpa/counsel-popup
+	url = git@github.com:gexplorer/counsel-popup.git

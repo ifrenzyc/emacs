@@ -20,8 +20,8 @@
   :general
   (yc/nonprefix-keys
     "C-c j" 'org-journal-new-entry)
-  (yc/leader-keys
-    "jo" 'org-journal-new-entry)
+  ;; (yc/leader-keys
+  ;;   "jo" 'org-journal-new-entry)
   :custom
   (org-journal-file-type 'monthly)
   (org-journal-dir "~/notes/07_Journal/")

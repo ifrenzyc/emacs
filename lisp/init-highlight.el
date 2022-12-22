@@ -116,10 +116,12 @@ FACE defaults to inheriting from default and highlight."
          ("M-C" . symbol-overlay-remove-all)
          ("s-." . symbol-overlay-transient)
          ([M-f3] . symbol-overlay-remove-all))
-  :hook ((prog-mode . symbol-overlay-mode)
-         (iedit-mode . turn-off-symbol-overlay)
-         (iedit-mode-end . turn-on-symbol-overlay))
-  :init (setq symbol-overlay-idle-time 0.1)
+  :hook
+  ((prog-mode . symbol-overlay-mode)
+   (iedit-mode . turn-off-symbol-overlay)
+   (iedit-mode-end . turn-on-symbol-overlay))
+  :init
+  (setq symbol-overlay-idle-time 0.1)
   (with-eval-after-load 'all-the-icons
     (setq symbol-overlay-faces
           '((:inherit (all-the-icons-blue bold) :inverse-video t)
@@ -321,12 +323,14 @@ If there is only one overlay at point, just return it, no matter region or symbo
 
 ;; Highlight TODO and similar keywords in comments and strings
 (use-package hl-todo
-  :bind (:map hl-todo-mode-map
-              ([C-f3] . hl-todo-occur)
-              ("C-c t p" . hl-todo-previous)
-              ("C-c t n" . hl-todo-next)
-              ("C-c t o" . hl-todo-occur))
-  :hook (after-init . global-hl-todo-mode)
+  :bind
+  (:map hl-todo-mode-map
+        ([C-f3] . hl-todo-occur)
+        ("C-c t p" . hl-todo-previous)
+        ("C-c t n" . hl-todo-next)
+        ("C-c t o" . hl-todo-occur))
+  :hook
+  (after-init . global-hl-todo-mode)
   :config
   (dolist (keyword '("BUG" "DEFECT" "ISSUE"))
     (cl-pushnew `(,keyword . ,(face-foreground 'error)) hl-todo-keyword-faces))

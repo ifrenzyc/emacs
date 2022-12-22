@@ -74,6 +74,12 @@
                            company-dabbrev))
 
   (setq company-begin-commands '(self-insert-command org-self-insert-command c-electric-lt-gt c-electric-colon)) ; start autocompletion only after typing
+  ;; Enable downcase only when completing the completion.
+  (defun jcs--company-complete-selection--advice-around (fn)
+    "Advice execute around `company-complete-selection' command."
+    (let ((company-dabbrev-downcase t))
+      (call-interactively fn)))
+  (advice-add 'company-complete-selection :around #'jcs--company-complete-selection--advice-around)
   ;; `yasnippet' integration
   (with-no-warnings
     (with-eval-after-load 'yasnippet
@@ -271,6 +277,13 @@
       (with-current-buffer (company-box--get-buffer)
         (company-box--maybe-move-number (or company-box--last-start 1))))
     (advice-add #'company-box--display :override #'my-company-box--display)))
+
+(use-package company-fuzzy
+  :hook (company-mode . company-fuzzy-mode)
+  :init
+  (setq company-fuzzy-sorting-backend 'flx
+        company-fuzzy-prefix-on-top nil
+        company-fuzzy-trigger-symbols '("." "->" "<" "\"" "'" "@")))
 
 ;; 在 MacOS 下使用 posframe 时，Emacs 全屏状态下的问题：https://emacs-china.org/t/topic/4662/132
 (use-package posframe)

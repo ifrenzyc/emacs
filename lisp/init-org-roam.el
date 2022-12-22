@@ -113,7 +113,7 @@
                                       ("fillcolor" . "#EFEFFF")
                                       ("fontcolor" . "#111111")))
   (setq org-roam-file-extensions '("txt"))
-  (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/7.0.2/bin/dot")
+  (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/7.0.4/bin/dot")
   (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
   (setq org-roam-completion-system 'ivy)
   (setq org-roam-verbose t)
@@ -165,12 +165,12 @@
   :general
   (yc/nonprefix-keys
     "<f4>" 'org-roam-dailies-capture-today)
-  (yc/leader-keys
-    "ar" '(:ignore t :which-key "org-roam")
-    "arl" 'org-roam-buffer-toggle
-    "art" 'org-roam-dailies-today
-    "arf" 'org-roam-node-find
-    "arg" 'org-roam-show-graph)
+  ;; (yc/leader-keys
+  ;;   "ar" '(:ignore t :which-key "org-roam")
+  ;;   "arl" 'org-roam-buffer-toggle
+  ;;   "art" 'org-roam-dailies-today
+  ;;   "arf" 'org-roam-node-find
+  ;;   "arg" 'org-roam-show-graph)
   (org-roam-mode-map
    "C-c n l" 'org-roam-buffer-toggle
    "C-c n f" 'org-roam-node-find

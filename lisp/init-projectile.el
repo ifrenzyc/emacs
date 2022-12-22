@@ -9,12 +9,12 @@
 (use-package projectile
   :commands (projectile-project-root)
   :general
-  (yc/leader-keys
-    :states 'normal
-    ;; "p"     '(:ignore t :wk "projects")
-    ;; "p$"    '(:ignore t :which-key "projects/shell")
-    ;; "p"     '(:keymap projectile-command-map :which-key "projects")
-    "p"        '(:keymap projectile-command-map :package projectile :wk "projects"))
+  ;; (yc/leader-keys
+  ;;   :states 'normal
+  ;;   ;; "p"     '(:ignore t :wk "projects")
+  ;;   ;; "p$"    '(:ignore t :which-key "projects/shell")
+  ;;   ;; "p"     '(:keymap projectile-command-map :which-key "projects")
+  ;;   "p"        '(:keymap projectile-command-map :package projectile :wk "projects"))
   (projectile-command-map
    "."   'hydra-projectile/body
    "f"   'counsel-projectile-find-file

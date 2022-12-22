@@ -37,30 +37,30 @@
   "
     ("f" vimish-fold)
     ("u" vimish-fold-unfold)
+    ("U" vimish-fold-unfold)
     ("r" vimish-fold-refold)
     ("t" vimish-fold-toggle)
     ("d" vimish-fold-delete)
-    ("U" vimish-fold-unfold-all)
+    
     ("R" vimish-fold-refold-all)
     ("T" vimish-fold-toggle-all)
     ("D" vimish-fold-delete-all)
     ("n" vimish-fold-next-fold)
     ("p" vimish-fold-previous-fold)
-    ("q" nil :color blue)))
-
-(pretty-hydra-define hydra-fold
-  (:hint nil :foreign-keys warn :quit-key "q")
-  ("Fold"
-   (("q" nil "Quit"))
-   "Do" (("f" vimish-fold)
-         ("k" vimish-fold-delete)
-         ("K" vimish-fold-delete-all))
-   "Jump"
-   (("<tab>" vimish-fold-toggle)
-    ("S-<tab>" vimish-fold-toggle-all))
-   "Toggle"
-   (("<" vimish-fold-previous-fold)
-    (">" vimish-fold-next-fold))))
+    ("q" nil :color blue))
+  (pretty-hydra-define hydra-fold
+    (:hint nil :foreign-keys warn :quit-key "q")
+    ("Fold"
+     (("q" nil "Quit"))
+     "Do" (("f" vimish-fold)
+           ("k" vimish-fold-delete)
+           ("K" vimish-fold-delete-all))
+     "Jump"
+     (("<tab>" vimish-fold-toggle)
+      ("S-<tab>" vimish-fold-toggle-all))
+     "Toggle"
+     (("<" vimish-fold-previous-fold)
+      (">" vimish-fold-next-fold)))))
 
 (use-package origami
   ;;:hook (prog-mode . origami-mode)

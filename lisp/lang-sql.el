@@ -35,7 +35,6 @@
   (sql-mode . ejc-sql-mode)
   (ejc-sql-minor-mode . (lambda ()
                           (company-mode t)
-                          ;; (ejc-ac-setup)
                           (ejc-eldoc-setup)))
   :custom
   (ejc-org-mode-show-results nil)
