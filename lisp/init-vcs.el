@@ -233,16 +233,6 @@
 
 ;; - https://github.com/emacs-evil/evil-magit
 
-;; forge: Access Git forges for Magit
-;; https://github.com/magit/forge
-(use-package forge
-  :disabled t
-  :after magit
-  :bind ((:map forge-issue-section-map
-               ("C-c C-v" . forge-browse-topic))
-         (:map forge-pullreq-section-map
-               ("C-c C-v" . forge-browse-topic))))
-
 (use-package git-timemachine
   :custom-face
   (git-timemachine-minibuffer-author-face ((t (:inherit success))))
@@ -278,6 +268,16 @@
 ;;     ;; (global-set-key (kbd "C-x i") 'gerrit-upload-transient)
 ;;     ;; (global-set-key (kbd "C-x o") 'gerrit-download)
 ;;     ))
+
+;; forge: Access Git forges for Magit
+;; https://github.com/magit/forge
+(use-package forge
+  :disabled t
+  :after magit
+  :bind ((:map forge-issue-section-map
+               ("C-c C-v" . forge-browse-topic))
+         (:map forge-pullreq-section-map
+               ("C-c C-v" . forge-browse-topic))))
 
 ;; highcontrast git diff style
 ;; macOS:
