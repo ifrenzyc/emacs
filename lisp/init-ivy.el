@@ -343,7 +343,7 @@
   ;;       "rg -SHn --no-heading --color never --no-follow --hidden %s")
   (setq counsel-find-file-occur-use-find nil)
   (setq counsel-find-file-occur-cmd; TODO Simplify this
-        "gls -a | grep -i -E '%s' | tr '\\n' '\\0' | xargs -0 ls -d --dired-listing-switches")
+        "gls -a | grep -i -E '%s' | tr '\\n' '\\0' | xargs -0 ls -d")
 
   (defun prot/counsel-fzf-rg-files (&optional input dir)
     "Run `fzf' in tandem with `ripgrep' to find files in the

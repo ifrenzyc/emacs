@@ -11,6 +11,8 @@
 
 (use-package python
   :mode ("\\.py\\'" . python-mode)
+  :hook
+  (python-ts-mode . diff-hl-mode)
   :custom
   ;; use the wx backend, for both mayavi and matplotlib
   (py-python-command-args
@@ -66,9 +68,9 @@
   )
 
 (use-package lsp-pyright
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp-deferred))))
+  :hook (python-ts-mode . (lambda ()
+                            (require 'lsp-pyright)
+                            (lsp-deferred))))
 
 (use-package anaconda-mode
   :after python
@@ -110,7 +112,8 @@
 (use-package yapfify
   :ensure-system-package (yapf . "brew install yapf")
   :after python
-  :hook (python-mode . yapf-mode))
+  ;; :hook (python-mode . yapf-mode)
+  )
 
 (use-package live-py-mode
   :after python)

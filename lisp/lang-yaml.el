@@ -7,11 +7,11 @@
 ;;; Code
 
 (use-package yaml-mode
-  :mode ("\\.\\(yml\\|yaml\\|yml.j2\\|yaml.j2\\|yml.template\\|yaml.template\\)$" . yaml-mode)
+  :mode ("\\.\\(yml\\|yaml\\|yml.j2\\|yaml.j2\\|yml.template\\|yaml.template\\)$" . yaml-ts-mode)
   :hook
-  (yaml-mode . lsp-deferred)
+  (yaml-ts-mode . lsp-deferred)
   :general
-  (yaml-mode-map
+  (yaml-ts-mode-map
    "C-c C-f" 'lsp-format-buffer))
 
 (provide 'lang-yaml)

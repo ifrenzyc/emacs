@@ -7,11 +7,12 @@
 ;;; Code
 
 (use-package dockerfile-mode
-  :mode ("Dockerfile\\'" . dockerfile-mode)
+  :mode ("Dockerfile\\'" . dockerfile-ts-mode)
   :hook
-  (dockerfile-mode . lsp-deferred)
+  ((dockerfile-mode . lsp-deferred)
+   (dockerfile-ts-mode . lsp-deferred))
   :general
-  (dockerfile-mode-map
+  (dockerfile-ts-mode-map
    "C-c C-f" 'lsp-format-buffer))
 
 (use-package docker-compose-mode

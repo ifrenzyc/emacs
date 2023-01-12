@@ -79,3 +79,6 @@
 [submodule "localelpa/localelpa/counsel-popup"]
 	path = localelpa/localelpa/counsel-popup
 	url = git@github.com:gexplorer/counsel-popup.git
+[submodule "localelpa/ts-fold"]
+	path = localelpa/ts-fold
+	url = git@github.com:emacs-tree-sitter/ts-fold.git

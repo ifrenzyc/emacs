@@ -125,7 +125,6 @@
   :init (setq company-box-enable-icon t
               company-box-backends-colors nil
               company-box-show-single-candidate t
-              company-box-max-candidates 50
               company-box-doc-delay 0.3)
   :config
   (declare-function all-the-icons-faicon 'all-the-icons)
@@ -279,6 +278,7 @@
     (advice-add #'company-box--display :override #'my-company-box--display)))
 
 (use-package company-fuzzy
+  :disabled t
   :hook (company-mode . company-fuzzy-mode)
   :init
   (setq company-fuzzy-sorting-backend 'flx

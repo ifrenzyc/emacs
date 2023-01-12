@@ -7,12 +7,12 @@
 ;;; Code
 
 (use-package json-mode
-  :mode ("\\.\\(json\\|json.j2\\|json.template\\|jsonld\\|tern-project\\|jshintrc\\)$" . json-mode)
+  :mode ("\\.\\(json\\|json.j2\\|json.template\\|jsonld\\|tern-project\\|jshintrc\\)$" . json-ts-mode)
   :hook
-  (json-mode . flycheck-mode)
-  (json-mode . lsp-deferred)
+  (json-ts-mode . flycheck-mode)
+  (json-ts-mode . lsp-deferred)
   :general
-  (json-mode-map
+  (json-ts-mode-map
    "C-c C-f" 'json-mode-beautify))
 
 (provide 'lang-json)

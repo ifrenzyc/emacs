@@ -15,7 +15,7 @@
   ;; formats the buffer before saving
   ;; (typescript-mode . (lambda ()   ; 保存文件的时候对该源文件做一下 gofmt
   ;;                      (add-hook 'before-save-hook 'tide-format-before-save)))
-  ;; :config
+  :config
   ;; (defun setup-tide-mode ()
   ;;   (interactive)
   ;;   (tide-setup)

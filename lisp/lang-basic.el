@@ -37,7 +37,27 @@
                              conf-mode
                              fundamental-mode
                              emacs-lisp-mode
-                             lisp-interaction-mode))
+                             lisp-interaction-mode
+                             bash-ts-mode
+                             c++-ts-mode
+                             c-ts-mode
+                             cmake-ts-mode
+                             csharp-ts-mode
+                             css-ts-mode
+                             dockerfile-ts-mode
+                             go-mod-ts-mode
+                             go-ts-mode
+                             java-ts-mode
+                             js-ts-mode
+                             json-ts-mode
+                             ng2-ts-mode
+                             python-ts-mode
+                             ruby-ts-mode
+                             rust-ts-mode
+                             toml-ts-mode
+                             tsx-ts-mode
+                             typescript-ts-mode
+                             yaml-ts-mode))
 
 (defun yc/apply-monofont ()
   (interactive)
@@ -78,14 +98,14 @@
          (dap-mode . dap-ui-mode)
          (dap-session-created . (lambda (&_rest) (dap-hydra)))
          (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
-         (python-mode . (lambda () (require 'dap-python)))
-         (ruby-mode . (lambda () (require 'dap-ruby)))
-         (go-mode . (lambda () (require 'dap-go)))
-         (java-mode . (lambda () (require 'dap-java)))
-         ((c-mode c++-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
+         (python-ts-mode . (lambda () (require 'dap-python)))
+         (ruby-ts-mode . (lambda () (require 'dap-ruby)))
+         (go-ts-mode . (lambda () (require 'dap-go)))
+         (java-ts-mode . (lambda () (require 'dap-java)))
+         ((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
          (php-mode . (lambda () (require 'dap-php)))
          (elixir-mode . (lambda () (require 'dap-elixir)))
-         ((js-mode js2-mode) . (lambda () (require 'dap-chrome))))
+         ((js-mode js-ts-mode js2-mode) . (lambda () (require 'dap-chrome))))
   :config
   (setq dap-java-test-runner (concat lsp-java-server-install-dir "test-runner/junit-platform-console-standalone.jar"))
   (setq dap-breakpoints-file (concat yc/cache-dir ".dap-breakpoints"))
@@ -128,7 +148,7 @@
                             (aggressive-indent-mode -1)))))
   :config
   ;; Disable in some modes
-  (dolist (mode '(asm-mode web-mode html-mode css-mode java-mode go-mode scala-mode prolog-inferior-mode))
+  (dolist (mode '(asm-mode web-mode html-mode css-mode java-mode java-ts-mode go-mode go-ts-mode scala-mode prolog-inferior-mode))
     (push mode aggressive-indent-excluded-modes))
 
   ;; Disable in some commands
@@ -136,8 +156,8 @@
 
   ;; Be slightly less aggressive in C/C++/C#/Java/Go/Swift
   (add-to-list 'aggressive-indent-dont-indent-if
-               '(and (derived-mode-p 'c-mode 'c++-mode 'csharp-mode
-                                     'java-mode 'go-mode 'swift-mode)
+               '(and (derived-mode-p 'c-mode 'c-ts-mode 'c++-mode 'c++-ts-mode 'csharp-mode 'csharp-ts-mode
+                                     'java-mode 'java-ts-mode 'go-mode 'go-ts-mode 'swift-mode)
                      (null (string-match "\\([;{}]\\|\\b\\(if\\|for\\|while\\)\\b\\)"
                                          (thing-at-point 'line))))))
 

@@ -876,6 +876,7 @@ text and copying to the killring."
 ;; lets you insert a link from your clipboard with a title that is fetched from the page’s metadata by curl.
 ;; https://github.com/rexim/org-cliplink
 (use-package org-cliplink
+  :after org-mode
   :commands (org-cliplink org-cliplink-clipboard-content)
   :bind (:map org-mode-map
               ("C-c s-l" . org-store-link)

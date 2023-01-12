@@ -18,7 +18,7 @@
   ;; (setq dired-listing-switches "-aBhl --group-directories-first -v")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
   ;; (setq dired-listing-switches "-AFhlv --dired-listing-switches")
   (dired-listing-switches "-alh")
-
+  (dired-use-ls-dired 'unspecified)
   ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
   (dired-dwim-target t)     ;; https://emacs.stackexchange.com/a/5604
   (dired-recursive-copies 'always) ;; Recursive Copying and Deleting

@@ -10,20 +10,23 @@
 
 (use-package java-mode
   :ensure nil
-  :mode ("\\.java\\'" . java-mode)
-  :config
-  (add-to-list 'load-path (expand-file-name "localelpa/google-c-style" user-emacs-directory))
-  (require 'google-c-style)
-  (add-hook 'java-mode-hook (lambda()
-                              (subword-mode)
-                              (google-set-c-style)
-                              (google-make-newline-indent)
-                              (setq c-basic-offset 4))))
+  :mode ("\\.java\\'" . java-ts-mode)
+  :hook
+  (java-ts-mode . (lambda()
+                    (setq-local c-basic-offset 4)
+                    (subword-mode)
+                    ;; (google-set-c-style)
+                    ;; (google-make-newline-indent)
+                    ))
+  ;; :init
+  ;; (add-to-list 'load-path (expand-file-name "localelpa/google-c-style" user-emacs-directory))
+  ;; (require 'google-c-style)
+  )
 
 ;; - https://xpressrazor.wordpress.com/2020/11/04/java-programming-in-emacs/
 ;; - https://github.com/emacs-lsp/lsp-java
 (use-package lsp-java
-  ;; :after lsp
+  :after java-ts-mode
   ;; :mode ("\\.java\\'" . java-mode)
   :init
   (setq-local lsp-ui-doc-enable t
@@ -43,10 +46,7 @@
         ;; 这里为什么指定 java, 参考这个 issues(https://github.com/eclipse/eclipse.jdt.ls/pull/1509), 需要 java 11 以上
         ;; lsp-java-java-path "/usr/local/opt/java/bin/java"
         lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-19.jdk/Contents/Home/bin/java"
-        ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-16.0.1.jdk/Contents/Home/bin/java"
         ;; lsp-java-java-path "/usr/bin/java"
-        ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/adoptopenjdk-15.jdk/Contents/Home/bin/java"
-        ;; lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/bin/java"
         ;; Use Google style formatting by default
         lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
         lsp-java-format-settings-profile "GoogleStyle"
@@ -72,7 +72,6 @@
         ;; lsp-java-format-on-type-enabled nil
         ;; lsp-java-completion-guess-arguments t
         
-
         ;; (setq lsp-java-vmargs '("-XX:+UseAdaptiveSizePolicy" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Xmx8G" "-Xms2G" "-Xverify:none" "-jar"))
         lsp-java-vmargs
         (list
@@ -91,13 +90,14 @@
         )
   :hook
   ((java-mode . lsp-deferred)
+   (java-ts-mode . lsp-deferred)
    ;; (java-mode . lsp)
    ;; (java-mode . lsp-java-lens-mode)
    ;; (java-mode . lsp-java-boot-lens-mode)
    ;; (java-mode . lsp-java-boot-lens-mode)
    )
   :general
-  (java-mode-map
+  (java-ts-mode-map
    "C-c C-f" 'lsp-format-buffer)
   ;; (yc/leader-keys-major-mode
   ;;   :keymaps 'java-mode-map
@@ -140,15 +140,15 @@
 (use-package meghanada
   :disabled t
   :init (setq meghanada-server-install-dir (concat yc/cache-dir "meghanada"))
+  :hook
+  (java-ts-mode . (lambda ()
+                    ;; meghanada-mode on
+                    (meghanada-mode t)
+                    (flycheck-mode +1)
+                    ;; use code format
+                    ;; (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)
+                    ))
   :config
-  (add-hook 'java-mode-hook
-            (lambda ()
-              ;; meghanada-mode on
-              (meghanada-mode t)
-              (flycheck-mode +1)
-              ;; use code format
-              ;; (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)
-              ))
   (setq meghanada-use-eldoc t
         meghanada-use-auto-start t
         meghanada-java-path "java"

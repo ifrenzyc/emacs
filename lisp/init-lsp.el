@@ -337,6 +337,8 @@
                               ,(face-foreground 'font-lock-string-face)
                               ,(face-foreground 'font-lock-constant-face)
                               ,(face-foreground 'font-lock-variable-name-face)))
+  
+  (setq lsp-ui-doc-use-webkit nil) ;; (featurep 'xwidget-internal)
   ;; (if (featurep 'xwidget-internal)
   ;;     (setq lsp-ui-doc-use-webkit t))
   ;; (setq-default lsp-ui-doc-frame-parameters
@@ -368,9 +370,6 @@
   ;;                     :background "#f9f")
   ;; for "Jimx-/lsp-ui" fork has xwebkit support.
   :config
-  (setq ;; scroll-margin 0
-   lsp-ui-doc-use-webkit (featurep 'xwidget-internal))
-  
   ;; https://github.com/emacs-lsp/lsp-ui/issues/441
   (defun lsp-ui-peek--peek-display (src1 src2)
     (-let* ((win-width (frame-width))
