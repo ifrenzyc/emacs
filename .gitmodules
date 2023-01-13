@@ -76,9 +76,12 @@
 [submodule "localelpa/ivy-rich"]
 	path = localelpa/ivy-rich
 	url = git@github.com:Yevgnen/ivy-rich.git
-[submodule "localelpa/localelpa/counsel-popup"]
-	path = localelpa/localelpa/counsel-popup
+[submodule "localelpa/counsel-popup"]
+	path = localelpa/counsel-popup
 	url = git@github.com:gexplorer/counsel-popup.git
 [submodule "localelpa/ts-fold"]
 	path = localelpa/ts-fold
 	url = git@github.com:emacs-tree-sitter/ts-fold.git
+[submodule "localelpa/sort-tab"]
+	path = localelpa/sort-tab
+	url = git@github.com:manateelazycat/sort-tab.git
