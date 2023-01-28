@@ -13,7 +13,6 @@
 
 (use-package sqlformat
   :ensure-system-package (sqlformat . "pip install sqlparse")
-  :after sql-mode
   :general
   (sql-mode-map
    "C-c C-f" 'sqlformat))

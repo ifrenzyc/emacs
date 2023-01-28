@@ -8,13 +8,13 @@
 ;;; Code:
 
 (use-package go-mode
-  :mode ("\\.go\\'" . go-mode)
+  :mode ("\\.go\\'" . go-ts-mode)
   :hook
-  (go-mode . flycheck-mode)
-  (go-mode . lsp-deferred)
+  (go-ts-mode . flycheck-mode)
+  (go-ts-mode . lsp-deferred)
   :general
   (yc/leader-keys-major-mode
-    :keymaps 'go-mode-map
+    :keymaps 'go-ts-mode-map
     ;; "" '(:ignore t :which-key "major-mode-cmd")
     "h" '(:ignore t :which-key "help")
     "hh" 'godoc-at-point
@@ -51,7 +51,7 @@
     "fo" 'go-guru-set-scope
     "r" '(:ignore t :which-key "rename")
     "rn" 'go-rename)
-  (go-mode-map
+  (go-ts-mode-map
    "M-]"        'godef-jump
    "M-["        'pop-tag-mark
    "C-S-F"      'gofmt
@@ -203,43 +203,43 @@
              (shell-quote-argument (buffer-file-name))))))
 
 (use-package company-go
-  :after (go-mode company-mode)
+  :after (go-ts-mode company-mode)
   :config
   ;; 加了这段代码，输入 fmt. 会自动显示这个模块相关的函数
   (with-eval-after-load 'company
     (add-to-list 'company-backends 'company-go)))
 
 (use-package go-direx
-  :after go-mode
+  :after go-ts-mode
   :general
   (go-mode-map
    "C-c C-j" 'go-direx-pop-to-buffer))
 
 (use-package go-eldoc
-  :after go-mode
+  :after go-ts-mode
   :if (executable-find "gocode")
   :commands (go-eldoc-setup)
-  :hook (go-mode . go-eldoc-setup))
+  :hook (go-ts-mode . go-eldoc-setup))
 
 ;;  (use-package go-complete
 ;;    :after go-mode)
 
 (use-package go-errcheck
-  :after go-mode)
+  :after go-ts-mode)
 
 (use-package go-gopath
-  :after go-mode)
+  :after go-ts-mode)
 
 (use-package go-impl)
 
 (use-package go-projectile
-  :after go-mode projectile)
+  :after go-ts-mode projectile)
 
 (use-package go-snippets
-  :after (go-mode)
+  :after (go-ts-mode)
   :init (go-snippets-initialize))
 
 (use-package go-rename
-  :after go-mode)
+  :after go-ts-mode)
 
 (provide 'lang-golang)

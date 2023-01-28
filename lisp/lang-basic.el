@@ -17,6 +17,7 @@
 (setq yc/programming-modes '(js-mode
                              python-mode
                              html-mode
+                             vue-html-mode
                              java-mode
                              c-mode
                              css-mode
@@ -24,6 +25,8 @@
                              sh-mode
                              fish-mode
                              go-mode
+                             js-mode
+                             stylus-mode
                              json-mode
                              makefile-mode
                              jenkinsfile-mode
@@ -77,7 +80,7 @@
          ("M-g x" . dumb-jump-go-prefer-external)
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config
-  (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
+  (setq dumb-jump-selector 'ivy)  ;; 'helm
 
   (defhydra hydra-dumb-jump (:color blue :columns 3)
     "Dumb Jump"
@@ -168,23 +171,25 @@
 
 ;; shows a sticky header at the top of the window
 ;; (use-package topsy
-;;   :straight (:host github :repo "alphapapa/topsy.el")
 ;;   :hook (prog-mode . topsy-mode))
 
-;; (use-package which-func
-;;   :ensure nil
-;;   :config
-;;   (setq which-func-unknown "n/a")
-;;   ;; ;; Show the current function name in the header line
-;;   ;; (setq-default header-line-format
-;;   ;;               '((which-func-mode ("" which-func-format " "))))
-;;   ;; (setq mode-line-misc-info
-;;   ;;       ;; We remove Which Function Mode from the mode line, because it's mostly
-;;   ;;       ;; invisible here anyway.
-;;   ;;       (assq-delete-all 'which-func-mode mode-line-misc-info))
-;;   (which-function-mode t)
-;;   (add-to-list 'which-func-modes 'prog-mode)
-;;   (add-to-list 'which-func-modes 'java-mode)
-;;   (add-to-list 'which-func-modes 'emacs-lisp-mode))
+(use-package which-func
+  :disabled t
+  :ensure nil
+  :config
+  (setq which-func-unknown "n/a")
+  ;; Show the current function name in the header line
+  (setq-default header-line-format
+                '((which-func-mode ("" which-func-format " "))))
+  (setq mode-line-misc-info
+        ;; We remove Which Function Mode from the mode line, because it's mostly
+        ;; invisible here anyway.
+        (assq-delete-all 'which-func-mode mode-line-misc-info))
+  (which-function-mode t)
+  (add-to-list 'which-func-modes 'prog-mode)
+  (add-to-list 'which-func-modes 'java-ts-mode)
+  (add-to-list 'which-func-modes 'ptyhon-ts-mode)
+  (add-to-list 'which-func-modes 'go-ts-mode)
+  (add-to-list 'which-func-modes 'emacs-lisp-mode))
 
 (provide 'lang-basic)

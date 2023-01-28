@@ -82,3 +82,6 @@
 [submodule "localelpa/sort-tab"]
 	path = localelpa/sort-tab
 	url = git@github.com:manateelazycat/sort-tab.git
+[submodule "localelpa/counsel-popup"]
+	path = localelpa/counsel-popup
+	url = git@github.com:gexplorer/counsel-popup.git
