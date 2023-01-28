@@ -143,7 +143,7 @@
 (require 'init-window)
 (require 'init-projectile)
 ;; (require 'init-persp)
-;; (require 'init-tab-bar)
+(require 'init-tab-bar)
 
 (require 'init-vcs)
 

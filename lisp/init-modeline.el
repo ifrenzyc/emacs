@@ -68,6 +68,7 @@
   (minions-mode))
 
 (use-package nyan-mode
+  :disabled t
   ;; :demand t
   :after doom-modeline
   :init

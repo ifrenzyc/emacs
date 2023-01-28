@@ -37,6 +37,8 @@
   :disabled t
   :load-path "localelpa/awesome-tray"
   :demand t
+  :init
+  (setq flycheck-mode-line nil)
   :hook (after-init . awesome-tray-mode))
 
 (provide 'init-mini-modeline)

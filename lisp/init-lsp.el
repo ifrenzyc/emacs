@@ -63,7 +63,7 @@
 
   (lsp-completion-provider :none) ;; we use Corfu!
 
-  (exec-path (append exec-path '("~/.nvm/versions/node/v18.12.1/bin/")))
+  ;; go install github.com/lighttiger2505/sqls@latest
   (lsp-sqls-server "/usr/local/opt/go/libexec/bin/sqls")
 
   ;; @see https://emacs-lsp.github.io/lsp-mode/page/performance

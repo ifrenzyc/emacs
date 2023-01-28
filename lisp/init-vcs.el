@@ -29,12 +29,16 @@
   :commands (magit-status)
   :general
   (yc/nonprefix-keys
-    "C-x g" 'magit-status)
+    "C-x g" 'magit-status
+    "C-x G" 'magit-log-buffer-file)
   :hook
-  (magit-mode . selected-off)
+  (magit-mode . (lambda ()
+                  (selected-minor-mode -1)))
   (magit-log-edit-mode . (lambda ()
                            (set-fill-column 89)
                            (auto-fill-mode 1)))
+  :custom
+  (magit-git-executable "/usr/bin/git")
   :config
   (setq magit-log-arguments '("-n256" "--graph" "--decorate" "--color")
         ;; magit-completing-read-function 'magit-ido-completing-read                        ; use ido to look for branches
@@ -162,14 +166,14 @@
                                 :internal-border-color (face-foreground 'font-lock-comment-face nil t)
                                 :background-color (face-background 'tooltip nil t))
                  (unwind-protect
-                      (push (read-event) unread-command-events)
+                     (push (read-event) unread-command-events)
                    (posframe-delete buffer-name))))
               ((and (fboundp 'pos-tip-show) (display-graphic-p))
                (pos-tip-show popuped-message))
               ((fboundp 'lv-message)
                (lv-message popuped-message)
                (unwind-protect
-                    (push (read-event) unread-command-events)
+                   (push (read-event) unread-command-events)
                  (lv-delete-window)))
               (t (message "%s" popuped-message)))
         (run-hook-with-args 'git-messenger:after-popup-hook popuped-message)))

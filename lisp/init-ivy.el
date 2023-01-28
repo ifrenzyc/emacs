@@ -583,6 +583,7 @@
 (use-package counsel-popup
   :load-path "localelpa/counsel-popup"
   :after counsel
+  :commands (counsel-popup-ag counsel-popup-rg counsel-popup-grep counsel-popup-git-grep)
   ;; :bind ("C-c s" . counsel-popup-rg)
   )
 

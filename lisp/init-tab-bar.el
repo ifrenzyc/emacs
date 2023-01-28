@@ -9,6 +9,7 @@
 ;;; Code
 
 (use-package centaur-tabs
+  :disabled t
   ;; :commands (centaur-tabs-mode)
   ;; :hook
   ;; (after-init . centaur-tabs-mode)
@@ -76,7 +77,7 @@
   ;; (neotree-mode . centaur-tabs-local-mode)
   ;; (org-agenda-mode . centaur-tabs-local-mode)
   ;; (helpful-mode . centaur-tabs-local-mode)
-  :bind
+  
   ("C-c t b" . centaur-tabs-backward)
   ("C-c t f" . centaur-tabs-forward)
   ("C-c t s" . centaur-tabs-counsel-switch-group)
@@ -85,5 +86,13 @@
   (:map evil-normal-state-map
         ("g t" . centaur-tabs-forward)
         ("g T" . centaur-tabs-backward)))
+
+(use-package sort-tab
+  :disabled t
+  :load-path "localelpa/sort-tab"
+  :init
+  (require 'sort-tab)
+  :config
+  (sort-tab-mode 1))
 
 (provide 'init-tab-bar)

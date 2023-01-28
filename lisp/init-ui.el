@@ -180,6 +180,7 @@
           counsel-projectile)))
 
 (use-package all-the-icons-ivy-rich
+  :disabled t
   :after (all-the-icons ivy-rich)
   :hook (after-init . all-the-icons-ivy-rich-mode))
 
