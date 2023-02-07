@@ -85,3 +85,6 @@
 [submodule "localelpa/counsel-popup"]
 	path = localelpa/counsel-popup
 	url = git@github.com:gexplorer/counsel-popup.git
+[submodule "localelpa/treesit-auto"]
+	path = localelpa/treesit-auto
+	url = git@github.com:renzmann/treesit-auto.git

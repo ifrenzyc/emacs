@@ -15,33 +15,35 @@
   ;; https://www.nathanfurnal.xyz/posts/building-tree-sitter-langs-emacs/
   ;; https://www.reddit.com/r/emacs/comments/zzf9n6/building_treesitter_languages_for_emacs/
   (setq treesit-language-source-alist
-        '((bash . ("https://github.com/tree-sitter/tree-sitter-bash"))
-          (c . ("https://github.com/tree-sitter/tree-sitter-c"))
-          (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp"))
-          (css . ("https://github.com/tree-sitter/tree-sitter-css"))
-          (cmake . ("https://github.com/uyha/tree-sitter-cmake"))
+        '((bash       . ("https://github.com/tree-sitter/tree-sitter-bash"))
+          (c          . ("https://github.com/tree-sitter/tree-sitter-c"))
+          (cpp        . ("https://github.com/tree-sitter/tree-sitter-cpp"))
+          (css        . ("https://github.com/tree-sitter/tree-sitter-css"))
+          (cmake      . ("https://github.com/uyha/tree-sitter-cmake"))
           (dockerfile . ("https://github.com/camdencheek/tree-sitter-dockerfile"))
-          (elisp . ("https://github.com/Wilfred/tree-sitter-elisp"))
-          (go . ("https://github.com/tree-sitter/tree-sitter-go"))
-          (html . ("https://github.com/tree-sitter/tree-sitter-html"))
+          (elisp      . ("https://github.com/Wilfred/tree-sitter-elisp"))
+          (go         . ("https://github.com/tree-sitter/tree-sitter-go"))
+          (gomod      . ("https://github.com/camdencheek/tree-sitter-go-mod.git"))
+          (html       . ("https://github.com/tree-sitter/tree-sitter-html"))
+          (java       . ("https://github.com/tree-sitter/tree-sitter-java.git"))
           (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
-          (json . ("https://github.com/tree-sitter/tree-sitter-json"))
-          (lua . ("https://github.com/Azganoth/tree-sitter-lua"))
-          (make . ("https://github.com/alemuller/tree-sitter-make"))
-          (markdown . ("https://github.com/MDeiml/tree-sitter-markdown" nil "tree-sitter-markdown/src"))
-          (ocaml . ("https://github.com/tree-sitter/tree-sitter-ocaml" nil "ocaml/src"))
-          (org . ("https://github.com/milisims/tree-sitter-org"))
-          (python . ("https://github.com/tree-sitter/tree-sitter-python"))
-          (php . ("https://github.com/tree-sitter/tree-sitter-php"))
+          (json       . ("https://github.com/tree-sitter/tree-sitter-json"))
+          (lua        . ("https://github.com/Azganoth/tree-sitter-lua"))
+          (make       . ("https://github.com/alemuller/tree-sitter-make"))
+          (markdown   . ("https://github.com/MDeiml/tree-sitter-markdown" nil "tree-sitter-markdown/src"))
+          (ocaml      . ("https://github.com/tree-sitter/tree-sitter-ocaml" nil "ocaml/src"))
+          (org        . ("https://github.com/milisims/tree-sitter-org"))
+          (python     . ("https://github.com/tree-sitter/tree-sitter-python"))
+          (php        . ("https://github.com/tree-sitter/tree-sitter-php"))
           (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" nil "typescript/src"))
-          (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" nil "tsx/src"))
-          (ruby . ("https://github.com/tree-sitter/tree-sitter-ruby"))
-          (rust . ("https://github.com/tree-sitter/tree-sitter-rust"))
-          (sql . ("https://github.com/m-novikov/tree-sitter-sql"))
-          (vue . ("https://github.com/merico-dev/tree-sitter-vue"))
-          (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"))
-          (toml . ("https://github.com/tree-sitter/tree-sitter-toml"))
-          (zig . ("https://github.com/GrayJack/tree-sitter-zig"))))
+          (tsx        . ("https://github.com/tree-sitter/tree-sitter-typescript" nil "tsx/src"))
+          (ruby       . ("https://github.com/tree-sitter/tree-sitter-ruby"))
+          (rust       . ("https://github.com/tree-sitter/tree-sitter-rust"))
+          (sql        . ("https://github.com/m-novikov/tree-sitter-sql"))
+          (vue        . ("https://github.com/merico-dev/tree-sitter-vue"))
+          (yaml       . ("https://github.com/ikatyang/tree-sitter-yaml"))
+          (toml       . ("https://github.com/tree-sitter/tree-sitter-toml"))
+          (zig        . ("https://github.com/GrayJack/tree-sitter-zig"))))
   :config
   (defun nf/treesit-install-all-languages ()
     "Install all languages specified by `treesit-language-source-alist'."
@@ -50,7 +52,7 @@
       (dolist (lang languages)
 	    (treesit-install-language-grammar lang)
 	    (message "`%s' parser was installed." lang)
-	    (sit-for 0.75))))
+        (sit-for 0    . 75))))
 
   (when (treesit-available-p)
     (setq major-mode-remap-alist
@@ -63,6 +65,7 @@
             (dockerfile-mode . dockerfile-ts-mode)
             (go-mod-mode     . go-mod-ts-mode)
             (go-mode         . go-ts-mode)
+            (html-mode       . html-ts-mode)
             (java-mode       . java-ts-mode)
             (js-mode         . js-ts-mode)
             (json-mode       . json-ts-mode)
@@ -74,6 +77,14 @@
             (tsx-mode        . tsx-ts-mode)
             (typescript-mode . typescript-ts-mode)
             (yaml-mode       . yaml-ts-mode)))))
+
+(use-package treesit-auto
+  :load-path "localelpa/treesit-auto"
+  :config
+  (add-to-list 'treesit-auto-fallback-alist '(bash-ts-mode . sh-mode))
+  (treesit-auto-apply-remap)
+  (advice-add 'treesit-install-language-grammar
+              :after (lambda (&rest _r) (treesit-auto-apply-remap))))
 
 (use-package tree-sitter
   :init
