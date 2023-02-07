@@ -8,9 +8,10 @@
 ;;; Code:
 
 (require 'init-const)
+(require 'init-hydra)
 
 (use-package python
-  :mode ("\\.py\\'" . python-mode)
+  :mode ("\\.py\\'" . python-ts-mode)
   :hook
   (python-ts-mode . diff-hl-mode)
   :custom
@@ -65,6 +66,14 @@
   ;;   "Va" 'pyvenv-activate
   ;;   "Vd" 'pyvenv-deactivate
   ;;   "Vw" 'pyvenv-workon)
+  :mode-hydra
+  (python-mode
+   (:title "Python Commands")
+   ("Python"
+    (("i" elpy-importmagic-fixup "Importmagic fixup")
+     ("d" elpy-goto-definition   "Goto definition")
+     ("r" elpy-multiedit-python-symbol-at-point   "Rename symbol")
+     ("f" elpy-format-code   "Format code"))))
   )
 
 (use-package lsp-pyright
@@ -78,8 +87,8 @@
   (setq anaconda-mode-installation-directory
         (concat yc/cache-dir "/anaconda-mode"))
   :hook
-  (python-mode . anaconda-mode)
-  (python-mode . anaconda-eldoc-mode))
+  (python-ts-mode . anaconda-mode)
+  (python-ts-mode . anaconda-eldoc-mode))
 
 (use-package company-anaconda
   :after (anaconda python)
@@ -90,13 +99,7 @@
 (use-package elpy
   :after python
   :config
-  (elpy-enable)
-  (major-mode-hydra-define+ python-mode nil
-    ("Python"
-     (("i" elpy-importmagic-fixup "Importmagic fixup")
-      ("d" elpy-goto-definition   "Goto definition")
-      ("r" elpy-multiedit-python-symbol-at-point   "Rename symbol")
-      ("f" elpy-format-code   "Format code")))))
+  (elpy-enable))
 
 (use-package pyenv-mode
   :after python

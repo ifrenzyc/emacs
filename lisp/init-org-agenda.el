@@ -19,7 +19,9 @@
   :hook ((org-agenda-mode . org-super-agenda-mode)
          ;; Easily fold groups via TAB.
          (org-super-agenda-mode . origami-mode))
-  :bind (:map org-super-agenda-header-map ("<tab>" . origami-toggle-node))
+  :general
+  (org-super-agenda-header-map
+   "<tab>" 'origami-toggle-node)
   :init
   (setq org-super-agenda-groups
         '((:log t)                      ; Automatically named "Log"
@@ -52,8 +54,9 @@
   :ensure nil
   :commands org-agenda
   :general
-  ("C-c a" 'org-agenda
-   "C-c c" 'org-capture)
+  ("C-c a"   'org-agenda
+   "C-c c"   'org-capture
+   "C-c C-t" 'yc/org-todo-force-notes)
   :config
   (require 'org-habit)
   (setq org-agenda-show-future-repeats nil
@@ -134,8 +137,6 @@
                      (list state 'note 'time))
                    (apply 'append org-todo-sets))))
       (call-interactively 'org-todo)))
-
-  (define-key org-mode-map (kbd "C-c C-t") 'yc/org-todo-force-notes)
 
   ;; 使用 =C-c C-x C-c= 进入 org-columns 模式，可以看到任务总结
   (setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")

@@ -151,21 +151,22 @@
 ;; 后面的 hydra 配置，要参考 jerrypnz 的 https://github.com/jerrypnz/.emacs.d。
 ;; Major mode keys managed by a pretty hydra
 (use-package major-mode-hydra
-  :init
-  (progn
-    (autoload 'pretty-hydra-define "pretty-hydra" nil nil 'macro)
-    (autoload 'major-mode-hydra-bind "major-mode-hydra" nil 'macro))
+  :demand t
+  ;; :init
+  ;; (progn
+  ;;   (autoload 'pretty-hydra-define "pretty-hydra" nil nil 'macro)
+  ;;   (autoload 'major-mode-hydra-bind "major-mode-hydra" nil 'macro))
   :config
   (setq major-mode-hydra-separator "═")
   (setq major-mode-hydra-invisible-quit-key "q")
   (setq major-mode-hydra-title-generator
         '(lambda (mode)
-          (s-concat "\n"
-           (s-repeat 10 " ")
-           (all-the-icons-icon-for-mode mode :v-adjust 0.05)
-           " "
-           (symbol-name mode)
-           " commands"))))
+           (s-concat "\n"
+                     (s-repeat 10 " ")
+                     (all-the-icons-icon-for-mode mode :v-adjust 0.05)
+                     " "
+                     (symbol-name mode)
+                     " commands"))))
 
 ;; https://github.com/dustinlacewell/hera
 (defvar jp-window--title (with-faicon "windows" "Window Management" 1 -0.05))

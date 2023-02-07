@@ -54,20 +54,10 @@
                             ("READ" . (:foreground "#9f7efe" :slant italic :weight bold))
                             ("WAITING" . (:foreground "coral" :slant italic :weight bold))))
   :hook
-  ;; (org-mode . visual-line-mode)
-  ;; (org-mode . olivetti-mode)
   (org-mode . (lambda ()
-                ;; (auto-fill-mode t)
-                ;; (set-fill-column 89)
                 (setq-local line-spacing 0.2)
                 (setq-local truncate-lines t)
                 (setq-local word-wrap nil)))
-  :bind
-  (;; NOTE: keymaps specified with :keymaps must be quoted
-   :map org-mode-map
-   ("C-c C-j" . counsel-org-goto)
-   ("<backtab>" . org-shifttab)
-   ("<tab>" . org-cycle))
   :config
   (setq org-pretty-entities t
         org-src-fontify-natively t      ; Enable syntax highlighting in code blocks
@@ -165,50 +155,6 @@
           ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
           ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
           ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
-
-  (major-mode-hydra-bind org-mode "Move"
-    ("n" outline-next-visible-heading "next heading" :color pink)
-    ("p" outline-previous-visible-heading "prev heading" :color pink)
-    ("N" org-forward-heading-same-level "next heading at same level" :color pink)
-    ("P" org-backward-heading-same-level "prev heading at same level" :color pink)
-    ("u" outline-up-heading "up heading" :color pink)
-    ("g" org-goto "goto" :exit t))
-
-  (major-mode-hydra-bind org-mode "Zoom"
-    ("<" worf-back-to-heading "worf-back-to-heading")
-    ("l" worf-right "worf-right")
-    ("j" worf-down "worf-down")
-    ("k" worf-up "worf-up")
-    ("h" worf-left "worf-left"))
-
-  (major-mode-hydra-bind org-mode "Shift"
-    ("K" org-move-subtree-up "up" :color pink)
-    ("J" org-move-subtree-down "down" :color pink)
-    ("h" org-promote-subtree "promote" :color pink)
-    ("l" org-demote-subtree "demote" :color pink))
-
-  (major-mode-hydra-bind org-mode "Travel"
-    ("p" org-backward-heading-same-level "backward" :color pink)
-    ("n" org-forward-heading-same-level "forward" :color pink)
-    ("j" hydra-org-child-level "to child" :color pink)
-    ("k" hydra-org-parent-level "to parent" :color pink)
-    ("a" hydra-org-goto-first-sibling "first sibling")
-    ("e" hydra-org-goto-last-sibling "last sibling"))
-
-  (major-mode-hydra-bind org-mode "Perform"
-    ("r" (lambda () (interactive)
-           ;; (helm-org-rifle-current-buffer)
-           (call-interactively 'org-cycle)
-           (call-interactively 'org-cycle)) "rifle")
-    ("v" avy-org-goto-heading-timer "avy"))
-
-  (major-mode-hydra-bind org-mode "Toggles"
-    ("C-l" yc/org-toggle-link-display "link")
-    ("C-i" org-toggle-inline-images "image"))
-
-  (major-mode-hydra-bind org-mode "Quit"
-    ("C-g" nil "quit")
-    ("q" nil "quit"))
 
   (defhydra hydra-org (:color red :columns 3)
     "Org Mode Movements"
@@ -371,79 +317,83 @@ text and copying to the killring."
   ;;   (kbd "M-K") 'org-metaup
   ;;   (kbd "M-L") 'org-metaright)
 
-  (yc/leader-keys-major-mode
-    :keymaps 'org-mode-map
-    ;; "" '(:ignore t :which-key "major-mode-cmd")
-    ;; "ma" '(:ignore t :which-key "help")
-    "." 'major-mode-hydra
-    "'" 'org-edit-special
-    "SPC" 'worf-back-to-heading
-    "a" 'org-agenda
-    "c" 'org-capture
-    "b" '(:ignore t :which-key "babel")
-    "C" '(:ignore t :which-key "clocks")
-    "s" 'org-schedule
-    "d" 'org-deadline
-    "r" '(org-refile :which-key "org-refile")
-    "l" 'worf-right
-    "j" 'worf-down
-    "k" 'worf-up
-    "h" 'worf-left
-    "g" 'counsel-org-goto
-    "/" 'org-toggle-comment
-    "CI" 'org-clock-in
-    "Cn" 'org-narrow-to-subtree
-    "CN" 'widen
-    "CO" 'org-clock-out
-    "Cq" 'org-clock-cancel
-    "CR" 'org-refile
-    ;; "md" '(:ignore t :which-key "dates")
-    "e" '(:ignore t :which-key "export")
-    "f" '(:ignore t :which-key "feeds")
-    "H" 'org-shiftleft
-    "J" 'org-shiftdown
-    "K" 'org-shiftup
-    "L" 'org-shiftright
-    "T" '(:ignore t :which-key "Toggles")
-    ;; "x" '(:ignore t :which-key "text")
-    "x" 'org-archive-subtree-default-with-confirmation
-    ;; "C-S-l" 'org-shiftcontrolright
-    ;; "C-S-h" 'org-shiftcontrolleft
-    ;; "C-S-j" 'org-shiftcontroldown
-    ;; "C-S-k" 'org-shiftcontrolup
-    "t" '(:ignore t :which-key "tables")
-    "ta" 'org-table-align
-    "tb" 'org-table-blank-field
-    "tc" 'org-table-convert
-    "td" '(:ignore t :which-key "delete")
-    "tdc" 'org-table-delete-column
-    "tdr" 'org-table-kill-row
-    "te" 'org-table-eval-formula
-    "tE" 'org-table-export
-    "th" 'org-table-previous-field
-    "tH" 'org-table-move-column-left
-    "ti" '(:ignore t :which-key "insert")
-    "tic" 'org-table-insert-column
-    "tih" 'org-table-insert-hline
-    "tiH" 'org-table-hline-and-move
-    "tir" 'org-table-insert-row
-    "tI" 'org-table-import
-    "tj" 'org-table-next-row
-    "tJ" 'org-table-move-row-down
-    "tK" 'org-table-move-row-up
-    "tl" 'org-table-next-field
-    "tL" 'org-table-move-column-right
-    "tn" 'org-table-create
-    "tN" 'org-table-create-with-table.el
-    "tr" 'org-table-recalculate
-    "ts" 'org-table-sort-lines
-    "tt" '(:ignore t :which-key "toggle")
-    "ttf" 'org-table-toggle-formula-debugger
-    "tto" 'org-table-toggle-coordinate-overlays
-    "tw" 'org-table-wrap-region)
+  ;; (yc/leader-keys-major-mode
+  ;;   :keymaps 'org-mode-map
+  ;;   ;; "" '(:ignore t :which-key "major-mode-cmd")
+  ;;   ;; "ma" '(:ignore t :which-key "help")
+  ;;   "." 'major-mode-hydra
+  ;;   "'" 'org-edit-special
+  ;;   "SPC" 'worf-back-to-heading
+  ;;   "a" 'org-agenda
+  ;;   "c" 'org-capture
+  ;;   "b" '(:ignore t :which-key "babel")
+  ;;   "C" '(:ignore t :which-key "clocks")
+  ;;   "s" 'org-schedule
+  ;;   "d" 'org-deadline
+  ;;   "r" '(org-refile :which-key "org-refile")
+  ;;   "l" 'worf-right
+  ;;   "j" 'worf-down
+  ;;   "k" 'worf-up
+  ;;   "h" 'worf-left
+  ;;   "g" 'counsel-org-goto
+  ;;   "/" 'org-toggle-comment
+  ;;   "CI" 'org-clock-in
+  ;;   "Cn" 'org-narrow-to-subtree
+  ;;   "CN" 'widen
+  ;;   "CO" 'org-clock-out
+  ;;   "Cq" 'org-clock-cancel
+  ;;   "CR" 'org-refile
+  ;;   ;; "md" '(:ignore t :which-key "dates")
+  ;;   "e" '(:ignore t :which-key "export")
+  ;;   "f" '(:ignore t :which-key "feeds")
+  ;;   "H" 'org-shiftleft
+  ;;   "J" 'org-shiftdown
+  ;;   "K" 'org-shiftup
+  ;;   "L" 'org-shiftright
+  ;;   "T" '(:ignore t :which-key "Toggles")
+  ;;   ;; "x" '(:ignore t :which-key "text")
+  ;;   "x" 'org-archive-subtree-default-with-confirmation
+  ;;   ;; "C-S-l" 'org-shiftcontrolright
+  ;;   ;; "C-S-h" 'org-shiftcontrolleft
+  ;;   ;; "C-S-j" 'org-shiftcontroldown
+  ;;   ;; "C-S-k" 'org-shiftcontrolup
+  ;;   "t" '(:ignore t :which-key "tables")
+  ;;   "ta" 'org-table-align
+  ;;   "tb" 'org-table-blank-field
+  ;;   "tc" 'org-table-convert
+  ;;   "td" '(:ignore t :which-key "delete")
+  ;;   "tdc" 'org-table-delete-column
+  ;;   "tdr" 'org-table-kill-row
+  ;;   "te" 'org-table-eval-formula
+  ;;   "tE" 'org-table-export
+  ;;   "th" 'org-table-previous-field
+  ;;   "tH" 'org-table-move-column-left
+  ;;   "ti" '(:ignore t :which-key "insert")
+  ;;   "tic" 'org-table-insert-column
+  ;;   "tih" 'org-table-insert-hline
+  ;;   "tiH" 'org-table-hline-and-move
+  ;;   "tir" 'org-table-insert-row
+  ;;   "tI" 'org-table-import
+  ;;   "tj" 'org-table-next-row
+  ;;   "tJ" 'org-table-move-row-down
+  ;;   "tK" 'org-table-move-row-up
+  ;;   "tl" 'org-table-next-field
+  ;;   "tL" 'org-table-move-column-right
+  ;;   "tn" 'org-table-create
+  ;;   "tN" 'org-table-create-with-table.el
+  ;;   "tr" 'org-table-recalculate
+  ;;   "ts" 'org-table-sort-lines
+  ;;   "tt" '(:ignore t :which-key "toggle")
+  ;;   "ttf" 'org-table-toggle-formula-debugger
+  ;;   "tto" 'org-table-toggle-coordinate-overlays
+  ;;   "tw" 'org-table-wrap-region)
 
   ;; @see - https://github.com/noctuid/evil-guide
   ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
+  (org-mode-map  ;; NOTE: keymaps specified with :keymaps must be quoted
+   "C-c C-j"   'counsel-org-goto
+   "<backtab>" 'org-shifttab
+   "<tab>"     'org-cycle)
   (yc/leader-keys-major-mode
     :keymaps 'org-src-mode-map
     "'" 'org-edit-src-exit)
@@ -456,6 +406,45 @@ text and copying to the killring."
   ;;   ""  '(:ignore t :which-key "major-mode-cmd")
   ;;   "'" 'org-edit-src-exit)
   ;; key for exiting src edit mode
+  :mode-hydra
+  (org-mode
+   (:title "Org-mode Commands")
+   ("Move"
+    (("n" outline-next-visible-heading "next heading" :color pink)
+     ("p" outline-previous-visible-heading "prev heading" :color pink)
+     ("N" org-forward-heading-same-level "next heading at same level" :color pink)
+     ("P" org-backward-heading-same-level "prev heading at same level" :color pink)
+     ("u" outline-up-heading "up heading" :color pink)
+     ("g" org-goto "goto" exit t))
+    "Zoom"
+    (("<" worf-back-to-heading "worf-back-to-heading")
+     ("R" worf-right "worf-right")
+     ("D" worf-down "worf-down")
+     ("U" worf-up "worf-up")
+     ("L" worf-left "worf-left"))
+    "Shift"
+    (("K" org-move-subtree-up "up" :color pink)
+     ("J" org-move-subtree-down "down" :color pink)
+     ("h" org-promote-subtree "promote" :color pink)
+     ("l" org-demote-subtree "demote" :color pink))
+    "Travel"
+    (("b" org-backward-heading-same-level "backward" :color pink)
+     ("B" org-forward-heading-same-level "forward" :color pink)
+     ("j" hydra-org-child-level "to child" :color pink)
+     ("k" hydra-org-parent-level "to parent" :color pink)
+     ("a" hydra-org-goto-first-sibling "first sibling")
+     ("e" hydra-org-goto-last-sibling "last sibling"))
+    "Perform"
+    (("r" (lambda () (interactive)
+            (call-interactively 'org-cycle)
+            (call-interactively 'org-cycle)) "rifle")
+     ("v" avy-org-goto-heading-timer "avy"))
+    "Toggles"
+    (("C-l" yc/org-toggle-link-display "link")
+     ("C-i" org-toggle-inline-images "image"))
+    "Quit"
+    (("C-g" nil "quit")
+     ("q" nil "quit"))))
   )
 ;; 当执行 org code block 后，显示图片
 ;; - http://orgmode.org/worg/org-hacks.html#orgheadline126
@@ -885,7 +874,7 @@ text and copying to the killring."
 ;; TODO electric-quote-mode
 
 (use-package org-sticky-header
-  ;; :hook (org-mode . org-sticky-header-mode)
+  :hook (org-mode . org-sticky-header-mode)
   :disabled t
   :config
   ;; Show full path in header
@@ -959,7 +948,7 @@ text and copying to the killring."
 ;; - https://github.com/jakebox/preview-org-html-mode
 (use-package preview-org-html-mode
   :load-path "localelpa/preview-org-html-mode"
-  :init (setq preview-org-html-viewer 'xwidget)
+  ;; :init (setq preview-org-html-viewer 'xwidget)
   :general
   ("<f12>" 'preview-org-html-mode))
 

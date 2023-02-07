@@ -5,6 +5,27 @@
 ;; 
 
 ;;; Code
+(use-package emacs-lisp-mode
+  :ensure nil
+  :mode ("\\.el\\'" . emacs-lisp-mode)
+  :mode-hydra
+  ((:title "Emacs Lisp Commands")
+   ("Eval"
+    (("b" eval-buffer "buffer")
+     ("e" eval-defun "defun")
+     ("r" eval-region "region"))
+    "REPL"
+    (("I" ielm "ielm"))
+    "Test"
+    (("t" ert "prompt")
+     ("T" (ert t) "all")
+     ("F" (ert :failed) "failed"))
+    "Doc"
+    (("d" helpful-at-point "thing-at-point")
+     ("f" describe-function "function")
+     ("v" describe-variable "variable")
+     ("i" info-lookup-symbol "info lookup")))))
+
 (use-package eldoc
   :ensure nil
   :diminish
@@ -32,7 +53,6 @@
       (when eldoc-posframe--timer
         (cancel-timer eldoc-posframe--timer))
 
-      (posframe-hide eldoc-posframe-buffer)
       (dolist (hook eldoc-posframe-hide-posframe-hooks)
         (remove-hook hook #'eldoc-posframe-hide-posframe t)))
 
@@ -64,6 +84,7 @@
               (lambda ()
                 (setq-local eldoc-message-function #'eldoc-posframe-show-posframe)))))
 
+
 (use-package eldoc-box
   :after eldoc
   :custom
@@ -88,24 +109,7 @@
       ;; Fix `use-pacakge' indentation.
       (use-package . 1)))
   (pcase-dolist (`(,sym . ,spec) cm/correct-indentation-list)
-    (put sym 'common-lisp-indent-function-for-elisp spec))
-
-  (major-mode-hydra-define emacs-lisp-mode nil
-    ("Eval"
-     (("b" eval-buffer "buffer")
-      ("e" eval-defun "defun")
-      ("r" eval-region "region"))
-     "REPL"
-     (("I" ielm "ielm"))
-     "Test"
-     (("t" ert "prompt")
-      ("T" (ert t) "all")
-      ("F" (ert :failed) "failed"))
-     "Doc"
-     (("d" helpful-at-point "thing-at-point")
-      ("f" describe-function "function")
-      ("v" describe-variable "variable")
-      ("i" info-lookup-symbol "info lookup")))))
+    (put sym 'common-lisp-indent-function-for-elisp spec)))
 
 ;; Here are packages that are useful across different Lisp and Scheme implementations.
 ;; (use-package lispy

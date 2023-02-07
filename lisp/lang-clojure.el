@@ -30,19 +30,19 @@
   :config
   (setq cider-annotate-completion-candidates t
         cider-mode-line " cider")
-  
-  (major-mode-hydra-bind clojure-mode "Connect"
-    ("j" cider-jack-in "jack-in")
-    ("J" cider-jack-in-clojurescript "jack-in-cljs")
-    ("c" cider-connect "connect")
-    ("R" cider-restart "restart")
-    ("Q" cider-quit "quit"))
-
-  (major-mode-hydra-bind clojure-mode "Load"
-    ("k" cider-load-buffer "buffer")
-    ("l" cider-load-file "file")
-    ("L" cider-load-all-project-ns "all-ns")
-    ("r" cider-refresh "reload")))
+  :mode-hydra
+  ((:title "Clojure Commands")
+   ("Connect"
+    (("j" cider-jack-in "jack-in")
+     ("J" cider-jack-in-clojurescript "jack-in-cljs")
+     ("c" cider-connect "connect")
+     ("R" cider-restart "restart")
+     ("Q" cider-quit "quit"))
+    "Load"
+    (("k" cider-load-buffer "buffer")
+     ("l" cider-load-file "file")
+     ("L" cider-load-all-project-ns "all-ns")
+     ("r" cider-refresh "reload")))))
 
 (use-package clj-refactor
   :after (clojure)
