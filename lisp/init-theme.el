@@ -54,22 +54,18 @@
   (load-theme 'vscode-dark-plus t))
 
 (use-package modus-themes
-  :demand t
   :ensure nil
+  :demand t
   :load-path "localelpa/modus-themes"
-  ;; :straight (:host github :repo "protesilaos/modus-themes")
   :init
-  (require 'modus-themes)
+  ;; (require 'modus-themes)
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs nil
-        modus-themes-org-blocks 'gray-background
-        modus-themes-region '(bg-only no-extend))
+        modus-themes-org-blocks 'gray-background)
 
-  ;; Load the theme files before enabling a theme
-  (modus-themes-load-themes)
   :config
-  (modus-themes-load-operandi))
+  (modus-themes-select 'modus-operandi))
 
 ;; (use-package tron-legacy-theme
 ;;   :custom
