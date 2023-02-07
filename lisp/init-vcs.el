@@ -37,25 +37,24 @@
   (magit-log-edit-mode . (lambda ()
                            (set-fill-column 89)
                            (auto-fill-mode 1)))
-  :custom
-  (magit-git-executable "/usr/bin/git")
+  
+  ((magit-git-executable "/usr/bin/git")
+   (magit-log-arguments '("-n256" "--graph" "--decorate" "--color"))
+   ;; magit-completing-read-function 'magit-ido-completing-read                        ; use ido to look for branches
+   (magit-default-tracking-name-function 'magit-default-tracking-name-branch-only)       ; don't put "origin-" in front of new branch names by default
+   ;; Show diffs per word, looks nicer!
+   (magit-diff-refine-hunk t)        ; highlight word/letter changes in hunk diffs
+   (magit-save-some-buffers nil))    ; don't attempt to save unsaved buffers
   :config
-  (setq magit-log-arguments '("-n256" "--graph" "--decorate" "--color")
-        ;; magit-completing-read-function 'magit-ido-completing-read                        ; use ido to look for branches
-        magit-default-tracking-name-function 'magit-default-tracking-name-branch-only       ; don't put "origin-" in front of new branch names by default
-        ;; Show diffs per word, looks nicer!
-        magit-diff-refine-hunk t        ; highlight word/letter changes in hunk diffs
-        magit-save-some-buffers nil)    ; don't attempt to save unsaved buffers
+  ;; (when (featurep 'evil)
+  ;;   (setq evil-emacs-state-modes (delq 'magit-status-mode evil-emacs-state-modes)))
 
   (when (fboundp 'transient-append-suffix)
     ;; Add switch: --tags
     (transient-append-suffix 'magit-fetch
       "-p" '("-t" "Fetch all tags" ("-t" "--tags"))))
 
-  (diminish 'magit-auto-revert-mode "")
-  ;; (when (featurep 'evil)
-  ;;   (setq evil-emacs-state-modes (delq 'magit-status-mode evil-emacs-state-modes)))
-  )
+  (diminish 'magit-auto-revert-mode ""))
 
 ;; highlight git changes.
 ;; (use-package git-gutter

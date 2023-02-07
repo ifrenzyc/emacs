@@ -73,8 +73,7 @@
    (vue-mode . emmet-mode)
    (sgml-mode . emmet-mode)    ; Auto-start on any markup modes
    (css-mode . emmet-mode))    ; enable Emmet's css abbreviation.
-  :config
-  (setq emmet-expand-jsx-className? t))
+  )
 
 (use-package js2-mode
   :mode ("\\.js\\'" . js2-mode)
