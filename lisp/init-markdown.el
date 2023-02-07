@@ -27,6 +27,13 @@
   :ensure-system-package (multimarkdown . "brew install multimarkdown")
   :custom-face
   (markdown-table-face ((t (:family "Sarasa Mono SC" :size user/font-size))))
+  ;; (markdown-header-delimiter-face ((t (:foreground "#616161" :height 0.9))))
+  ;; (markdown-header-face-1 ((t (:height 1.6  :foreground "#A3BE8C" :weight extra-bold :inherit markdown-header-face))))
+  ;; (markdown-header-face-2 ((t (:height 1.4  :foreground "#EBCB8B" :weight extra-bold :inherit markdown-header-face))))
+  ;; (markdown-header-face-3 ((t (:height 1.2  :foreground "#D08770" :weight extra-bold :inherit markdown-header-face))))
+  ;; (markdown-header-face-4 ((t (:height 1.15 :foreground "#BF616A" :weight bold :inherit markdown-header-face))))
+  ;; (markdown-header-face-5 ((t (:height 1.1  :foreground "#b48ead" :weight bold :inherit markdown-header-face))))
+  ;; (markdown-header-face-6 ((t (:height 1.05 :foreground "#5e81ac" :weight semi-bold :inherit markdown-header-face))))
   :init
   (setq markdown-enable-wiki-links t
         markdown-italic-underscore t
@@ -78,12 +85,7 @@ mermaid.initialize({
   (advice-add #'markdown--command-map-prompt :override #'ignore)
   (advice-add #'markdown--style-map-prompt   :override #'ignore)
   :hook
-  ;; Turn on flyspell mode when editing markdown files
-  ;; (markdown-mode . flyspell-mode)
-  ;; (gfm-mode . flyspell-mode)
   (markdown-mode . (lambda ()
-                     ;; (auto-fill-mode t)
-                     ;; (set-fill-column 89)
                      (setq-local line-spacing 0.2)
                      (setq-local truncate-lines t)
                      (setq-local word-wrap nil)
@@ -95,7 +97,57 @@ To be used with `markdown-live-preview-window-function'."
     (let ((uri (format "file://%s" file)))
       (xwidget-webkit-browse-url uri)
       xwidget-webkit-last-session-buffer))
-  (setq markdown-live-preview-window-function 'yc/markdown-live-preview-window-xwidget-webkit))
+  (setq markdown-live-preview-window-function 'yc/markdown-live-preview-window-xwidget-webkit)
+  :mode-hydra
+  ((:title "Markdown Commands")
+   ("Format"
+    (("h" markdown-insert-header-dwim "header")
+     ("1" markdown-insert-header-atx-1 "h1")
+     ("2" markdown-insert-header-atx-2 "h2")
+     ("3" markdown-insert-header-atx-3 "h3")
+     ("4" markdown-insert-header-atx-4 "h4")
+     ("s" markdown-insert-bold "bold")
+     ("e" markdown-insert-italic "italic")
+     ("b" markdown-insert-blockquote "quote")
+     ("p" markdown-insert-pre "pre")
+     ("c" markdown-insert-code "code"))
+    "Other"
+    (("l" markdown-promote "promote")
+     ("r" markdown-demote "demote")
+     ("d" markdown-move-down "move down")
+     ("u" markdown-move-up "move up")
+     ("L" markdown-insert-link "link")
+     ("U" markdown-insert-uri "url")
+     ("F" markdown-insert-footnote "footnote")
+     ("W" markdown-insert-wiki-link "wiki")
+     ("R" markdown-insert-reference-link-dwim "r-link")
+     ("n" markdown-cleanup-list-numbers "clean-lists")
+     ("C" markdown-complete-bufer "complete"))
+    "Table"
+    (("k" markdown-table-insert-column "insert column")
+     ("K" markdown-table-delete-column "delete column")
+     ("i" markdown-table-insert-row "insert row")
+     ("I" markdown-table-delete-row "delete row")
+     ("M-<left>" markdown-table-move-column-left "move column left")
+     ("M-<right>" markdown-table-move-column-right "move column right")
+     ("M-<down>" markdown-table-move-row-down "move row down")
+     ("M-<up>" markdown-table-move-row-up "move row up"))
+    "Pandoc"
+    (("A" pandoc-article "article")
+     ("B" pandoc-beamer "beamer")
+     ("S" pandoc-slides "slides")
+     ("H" pandoc-handout "handout")
+     ("O" pandoc-obuletter "obu letter")
+     ("D" pandoc-docx "docx")
+     ("H" pandoc-html "html")
+     ("P" pandoc-pdf "pdf")
+     ("T" pandoc-clean "trash non-md"))
+    "Preview"
+    (("p" markdown-preview-mode "toggle preview")
+     ("o" markdown-preview-open-browser "open in browser"))
+    "Quit"
+    (("q" nil "quit")
+     ("C-g" nil "quit")))))
 ;; :preface
 ;; (defun yc/markdown-set-ongoing-hydra-body ()
 ;;   (setq yc/ongoing-hydra-body #'hydra-markdown/body))
@@ -104,6 +156,7 @@ To be used with `markdown-live-preview-window-function'."
 (use-package markdown-mode+
   :load-path "localelpa/markdown-mode-plus"
   :after markdown-mode)
+
 (use-package markdown-toc :after markdown-mode)
 
 (use-package markdownfmt
@@ -163,76 +216,5 @@ To be used with `markdown-live-preview-window-function'."
   :config
   ;; Path to the grip binary
   (setq grip-mode-binary-path (executable-find "grip")))
-
-;; (yc/leader-keys-major-mode
-;;   :keymaps 'markdown-mode-map
-;;   ;; "" '(:ignore t :which-key "major-mode-cmd")
-;;   "m." 'hydra-markdown/body)
-
-;; (yc/leader-keys-major-mode-copy
-;;   :keymaps 'markdown-mode-map
-;;   "" '(:ignore t :which-key "major-mode-cmd")
-;;   "m." 'hydra-markdown/body)
-
-;; (defhydra hydra-markdown (:color pink)
-;;   "
-;; ^
-;; ^Markdown^          ^Table Columns^     ^Table Rows^
-;; ^────────^──────────^─────────────^─────^──────────^────────
-;; _q_ quit            _c_ insert          _r_ insert
-;; ^^                  _C_ delete          _R_ delete
-;; ^^                  _M-<left>_ left     _M-<down>_ down
-;; ^^                  _M-<right>_ right   _M-<up>_ up
-;; ^^                  ^^                  ^^
-;; "
-;;   ("q" nil)
-;;   ("c" markdown-table-insert-column)
-;;   ("C" markdown-table-delete-column)
-;;   ("r" markdown-table-insert-row)
-;;   ("R" markdown-table-delete-row)
-;;   ("M-<left>" markdown-table-move-column-left)
-;;   ("M-<right>" markdown-table-move-column-right)
-;;   ("M-<down>" markdown-table-move-row-down)
-;;   ("M-<up>" markdown-table-move-row-up))
-
-(major-mode-hydra-bind markdown-mode "Format"
-  ("h" markdown-insert-header-dwim "header")
-  ("1" markdown-insert-header-atx-1 "h1")
-  ("2" markdown-insert-header-atx-2 "h2")
-  ("3" markdown-insert-header-atx-3 "h3")
-  ("4" markdown-insert-header-atx-4 "h4")
-  ("s" markdown-insert-bold "bold")
-  ("e" markdown-insert-italic "italic")
-  ("b" markdown-insert-blockquote "quote")
-  ("p" markdown-insert-pre "pre")
-  ("c" markdown-insert-code "code"))
-(major-mode-hydra-bind markdown-mode "Other"
-  ("l" markdown-promote "promote")
-  ("r" markdown-demote "demote")
-  ("d" markdown-move-down "move down")
-  ("u" markdown-move-up "move up")
-  ("L" markdown-insert-link "link")
-  ("U" markdown-insert-uri "url")
-  ("F" markdown-insert-footnote "footnote")
-  ("W" markdown-insert-wiki-link "wiki")
-  ("R" markdown-insert-reference-link-dwim "r-link")
-  ("n" markdown-cleanup-list-numbers "clean-lists")
-  ("C" markdown-complete-bufer "complete"))
-(major-mode-hydra-bind markdown-mode "Pandoc"
-  ("A" pandoc-article "article")
-  ("B" pandoc-beamer "beamer")
-  ("S" pandoc-slides "slides")
-  ("H" pandoc-handout "handout")
-  ("O" pandoc-obuletter "obu letter")
-  ("D" pandoc-docx "docx")
-  ("H" pandoc-html "html")
-  ("P" pandoc-pdf "pdf")
-  ("T" pandoc-clean "trash non-md"))
-(major-mode-hydra-bind markdown-mode "Preview"
-  ("p" markdown-preview-mode "toggle preview")
-  ("o" markdown-preview-open-browser "open in browser"))
-(major-mode-hydra-bind markdown-mode "Quit"
-  ("q" nil "quit")
-  ("C-g" nil "quit"))
 
 (provide 'init-markdown)
