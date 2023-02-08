@@ -362,6 +362,7 @@ active region use it instead."
 (use-package fzf)
 
 (use-package fuz
+  :disabled t
   :load-path "localelpa/fuz.el"
   :config
   (unless (require 'fuz-core nil t)
