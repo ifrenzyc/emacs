@@ -105,6 +105,7 @@
       :empty-lines 1)
      ))
   :config
+  (defalias 'orf 'org-roam-node-find)
   (setq org-roam-graph-extra-config '(("overlap" . "prism")
                                       ("color" . "skyblue")
                                       ;; ("color" . "#DEDEFF")
@@ -113,7 +114,7 @@
                                       ("fillcolor" . "#EFEFFF")
                                       ("fontcolor" . "#111111")))
   (setq org-roam-file-extensions '("txt"))
-  (setq org-roam-graphviz-executable "/usr/local/Cellar/graphviz/7.0.4/bin/dot")
+  (setq org-roam-graphviz-executable "/usr/local/opt/graphviz/bin/dot")
   (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
   (setq org-roam-completion-system 'ivy)
   (setq org-roam-verbose t)
