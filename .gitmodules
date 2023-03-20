@@ -88,3 +88,15 @@
 [submodule "localelpa/treesit-auto"]
 	path = localelpa/treesit-auto
 	url = git@github.com:renzmann/treesit-auto.git
+[submodule "localelpa/org-pretty-table"]
+	path = localelpa/org-pretty-table
+	url = git@github.com:Fuco1/org-pretty-table.git
+[submodule "localelpa/treemacs-devicons"]
+	path = localelpa/treemacs-devicons
+	url = git@github.com:rainstormstudio/treemacs-devicons.git
+[submodule "localelpa/treemacs-nerd-icons"]
+	path = localelpa/treemacs-nerd-icons
+	url = git@github.com:rainstormstudio/treemacs-nerd-icons.git
+[submodule "localelpa/emacs-nerd-icons"]
+	path = localelpa/emacs-nerd-icons
+	url = git@github.com:rainstormstudio/emacs-nerd-icons.git

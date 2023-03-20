@@ -234,6 +234,8 @@
   (custom-set-variables
    '(magit-todos-keywords (list "TODO" "FIXME"))))
 
+(use-package magit-stats)
+
 ;; - https://github.com/emacs-evil/evil-magit
 
 (use-package git-timemachine
