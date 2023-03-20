@@ -121,7 +121,7 @@
   ;;                (key (s-replace-all '(("^" . "") ("\\" . "") ("$" . "") ("." . "")) extension))
   ;;                (value (concat "\t\t" icon "\t")))
   ;;           (unless (ht-get treemacs-icons-hash (s-replace-regexp "\\?" "" key))
-  ;;             (ht-set! treemacs-icons-hash (s-replace-regexp "\\?" "" key) value))
+  
   ;;           (unless (ht-get treemacs-icons-hash (s-replace-regexp ".\\?" "" key))
   ;;             (ht-set! treemacs-icons-hash (s-replace-regexp ".\\?" "" key) value)))))))
   :bind
@@ -142,6 +142,25 @@
   ;; (:map treemacs-mode-map
   ;;       ([mouse-1]   . treemacs-single-click-expand-action))
   )
+
+(use-package treemacs-devicons
+  :disabled t
+  :load-path "localelpa/treemacs-devicons"
+  :config
+  (treemacs-load-theme "devicons"))
+
+(use-package emacs-nerd-icons
+  :disabled t
+  :load-path "localelpa/emacs-nerd-icons"
+  :custom
+  (emacs-nerd-icons-font-family "Hack Nerd Font") ;; The Nerd Font you want to use in GUI
+  )
+
+(use-package treemacs-nerd-icons
+  :disabled t
+  :load-path "localelpa/treemacs-nerd-icons"
+  :config
+  (treemacs-load-theme "emacs-nerd-icons"))
 
 (use-package treemacs-evil
   :disabled t
