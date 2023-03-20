@@ -259,6 +259,14 @@ text and copying to the killring."
     (call-process-shell-command (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
 
     (insert (concat "[[file:" filename "]]")))
+
+  ;; 不用零宽空格在 org-mode 中标记中文的办法，https://emacs-china.org/t/org-mode/22313
+  (font-lock-add-keywords 'org-mode
+                          '(("\\cc\\( \\)[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)?\\cc?"
+                             (1 (prog1 () (compose-region (match-beginning 1) (match-end 1) ""))))
+                            ("\\cc?\\( \\)?[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)\\cc"
+                             (2 (prog1 () (compose-region (match-beginning 2) (match-end 2) "")))))
+                          'append)
   :general
   ;; Great evil org mode keyboard shortcuts cribbed from cofi
   ;; (evil-define-key 'normal org-mode-map
@@ -697,6 +705,11 @@ text and copying to the killring."
   :custom
   (valign-fancy-bar nil))
 
+(use-package org-pretty-table
+  :load-path "localelpa/org-pretty-table"
+  :hook
+  (org-mode . org-pretty-table-mode))
+
 ;; (use-package ftable
 ;;   :straight (:host github
 ;;                 :repo "casouri/ftable"
@@ -718,7 +731,7 @@ text and copying to the killring."
     "Transform string into glyph, displayed correctly."
     (let ((composition nil))
       (dolist (char (string-to-list str)
-               (nreverse (cdr composition)))
+                    (nreverse (cdr composition)))
         (push char composition)
         (push '(Br . Bl) composition))))
 
@@ -795,6 +808,7 @@ text and copying to the killring."
 ;; 解决思路是自动插入一个不可见的空格字符
 ;; 详细讨论参考文章：https://emacs-china.org/t/org-mode/597/61
 (use-package separate-inline
+  :disabled t
   :load-path "localelpa/separate-inline.el"
   :hook ((org-mode-hook . separate-inline-mode)
          (org-mode-hook . (lambda ()
@@ -1050,6 +1064,21 @@ text and copying to the killring."
 (use-package ox-beamer
   :ensure nil
   :config
+  (with-eval-after-load 'ox
+    (defun eli-strip-ws-maybe (text _backend _info)
+      (let* ((text (replace-regexp-in-string
+                    "\\(\\cc\\) *\n *\\(\\cc\\)"
+                    "\\1\\2" text));; remove whitespace from line break
+             ;; remove whitespace from `org-emphasis-alist'
+             (text (replace-regexp-in-string "\\(\\cc?\\) \\(.*?\\) \\(\\cc\\)"
+                                             "\\1\\2\\3" text))
+             ;; restore whitespace between English words and Chinese words
+             (text (replace-regexp-in-string "\\(\\cc\\)\\(\\(?:<[^>]+>\\)?[a-z0-9A-Z-]+\\(?:<[^>]+>\\)?\\)\\(\\cc\\)"
+                                             "\\1 \\2 \\3" text))
+             (text (replace-regexp-in-string "\\(\\cc\\) ?\\(\\\\[^{}()]*?\\)\\(\\cc\\)"
+                                             "\\1 \\2 \\3" text)))
+        text))
+    (add-to-list 'org-export-filter-paragraph-functions #'eli-strip-ws-maybe))
   (progn
     ;; Allow for export=>beamer by placing
     ;; #+latex_class: beamer in Org files
