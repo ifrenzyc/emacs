@@ -671,7 +671,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
           ("d" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
            "** TODO %? %^g\n:PROPERTIES:\n:Effort: %^{effort|1:00|0:05|0:15|0:30|2:00|4:00}\n:END:\n:LOGBOOK:\n- CREATED: %U\n:END:\n_Desired outcome:_ %^{Desired outcome:}" :clock-in t :clock-resume t :prepend t :empty-lines 1)
           ("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")
-           "* MEETING MEETING with %? :MEETING:\n:SUBJECT:\n%T\n\n*会议内容*\n\n*重点结论*\n\n*遗留问题*\n" :clock-in t :clock-resume t :empty-lines 1)
+           "* MEETING 会议主题：%? :MEETING:\n%T\n\n*与会人员*\n- \n\n*会议议题*\n\n*重点结论*\n\n*会后 TODO*\n\n*其他事项*\n" :clock-in t :clock-resume t :empty-lines 1)
           ("w" "Work TODO" entry (file+olp org-default-notes-file "Work" "Tasks")
            "* TODO %? :work:\n:LOGBOOK:\n- CREATED: %U\n:END:" :clock-in t :clock-resume t)
           ("a" "Appointment" entry (file+headline org-default-notes-file "Appointments")
