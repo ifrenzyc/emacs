@@ -67,15 +67,6 @@
 [submodule "localelpa/sidekick"]
 	path = localelpa/sidekick
 	url = https://github.com/VernonGrant/sidekick.el.git
-[submodule "localelpa/go-translate"]
-	path = localelpa/go-translate
-	url = https://github.com/lorniu/go-translate.git
-[submodule "localelpa/valign"]
-	path = localelpa/valign
-	url = https://github.com/casouri/valign.git
-[submodule "localelpa/ivy-rich"]
-	path = localelpa/ivy-rich
-	url = git@github.com:Yevgnen/ivy-rich.git
 [submodule "localelpa/ts-fold"]
 	path = localelpa/ts-fold
 	url = git@github.com:emacs-tree-sitter/ts-fold.git
@@ -85,18 +76,10 @@
 [submodule "localelpa/counsel-popup"]
 	path = localelpa/counsel-popup
 	url = git@github.com:gexplorer/counsel-popup.git
-[submodule "localelpa/treesit-auto"]
-	path = localelpa/treesit-auto
-	url = git@github.com:renzmann/treesit-auto.git
 [submodule "localelpa/org-pretty-table"]
 	path = localelpa/org-pretty-table
 	url = git@github.com:Fuco1/org-pretty-table.git
 [submodule "localelpa/treemacs-devicons"]
 	path = localelpa/treemacs-devicons
 	url = git@github.com:rainstormstudio/treemacs-devicons.git
-[submodule "localelpa/treemacs-nerd-icons"]
-	path = localelpa/treemacs-nerd-icons
-	url = git@github.com:rainstormstudio/treemacs-nerd-icons.git
-[submodule "localelpa/emacs-nerd-icons"]
-	path = localelpa/emacs-nerd-icons
-	url = git@github.com:rainstormstudio/emacs-nerd-icons.git
+
