@@ -10,6 +10,36 @@
 
 (require 'init-const)
 
+(use-package vundo
+  :demand t
+  :custom
+  ;; Use compact layout
+  (vundo-compact-display t)
+  ;; Use pretty Unicode characters
+  ;; (vundo-glyph-alist vundo-unicode-symbols)
+  (vundo-glyph-alist
+   '((selected-node   . ?●)
+     (node            . ?○)
+     (vertical-stem   . ?│)
+     (branch          . ?├)
+     (last-branch     . ?╰)
+     (horizontal-stem . ?─)))
+  :config
+  (set-face-attribute 'vundo-default nil :family "Symbola")
+  :bind
+  (([remap undo] . vundo)
+   ("C-z" . vundo)
+   ("C-x u" . vundo)
+   :map vundo-mode-map
+   ("C-a" . vundo-stem-root)
+   ("C-e" . vundo-stem-end)
+   ;; These are for horizontal movements.
+   ("C-f" . vundo-forward)
+   ("C-b" . vundo-backward)
+   ;; These are for vertical movements.
+   ("C-n" . vundo-next)
+   ("C-p" . vundo-previous)))
+
 (use-package undo-tree
   :disabled t
   :demand t
@@ -32,5 +62,7 @@
 ;;   (global-undo-tree-mode -1)
 ;;   (define-key evil-normal-state-map "u" 'undo-fu-only-undo)
 ;;   (define-key evil-normal-state-map "\C-r" 'undo-fu-only-redo))
+
+;; (use-package undo-fu-session)
 
 (provide 'init-undo-redo)
