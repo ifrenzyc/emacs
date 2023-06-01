@@ -167,28 +167,10 @@
   ;; (setq all-the-icons-scale-factor 1.1)
   )
 
-(use-package all-the-icons-ivy
-  :after (all-the-icons projectile ivy counsel counsel-projectile)
-  :hook (after-init . all-the-icons-ivy-setup)
-  :config
-  (setq all-the-icons-ivy-file-commands
-        '(counsel-find-file
-          counsel-file-jump
-          counsel-recentf
-          counsel-projectile-find-file
-          counsel-projectile-find-dir
-          counsel-projectile)))
-
-(use-package all-the-icons-ivy-rich
-  :disabled t
-  :after (all-the-icons ivy-rich)
-  :hook (after-init . all-the-icons-ivy-rich-mode))
-
-(use-package all-the-icons-ibuffer
-  :hook (ibuffer-mode . all-the-icons-ibuffer-mode)
-  :init
-  ;; Use human readable file size in ibuffer.
-  (setq all-the-icons-ibuffer-human-readable-size t))
+(use-package nerd-icons
+  :custom
+  (emacs-nerd-icons-font-family "Hack Nerd Font") ;; The Nerd Font you want to use in GUI
+  )
 
 ;; Make certain buffers grossly incandescent
 ;; https://github.com/hlissner/emacs-solaire-mode

@@ -211,8 +211,13 @@
               (")" . dired-git-info-mode)))
 
 (use-package all-the-icons-dired
+  :disabled t
   :after (dired all-the-icons)
   :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package nerd-icons-dired
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
 ;; A package for viewing any list of files as a tree.
 ;; - https://github.com/knpatel401/filetree

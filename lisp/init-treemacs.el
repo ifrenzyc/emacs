@@ -149,18 +149,10 @@
   :config
   (treemacs-load-theme "devicons"))
 
-(use-package emacs-nerd-icons
-  :disabled t
-  :load-path "localelpa/emacs-nerd-icons"
-  :custom
-  (emacs-nerd-icons-font-family "Hack Nerd Font") ;; The Nerd Font you want to use in GUI
-  )
-
 (use-package treemacs-nerd-icons
-  :disabled t
-  :load-path "localelpa/treemacs-nerd-icons"
+  :demand t
   :config
-  (treemacs-load-theme "emacs-nerd-icons"))
+  (treemacs-load-theme "nerd-icons"))
 
 (use-package treemacs-evil
   :disabled t

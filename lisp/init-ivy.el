@@ -634,4 +634,27 @@
   :config
   (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
 
+(use-package all-the-icons-ivy
+  :disabled t
+  :after (all-the-icons projectile ivy counsel counsel-projectile)
+  :hook (after-init . all-the-icons-ivy-setup)
+  :config
+  (setq all-the-icons-ivy-file-commands
+        '(counsel-find-file
+          counsel-file-jump
+          counsel-recentf
+          counsel-projectile-find-file
+          counsel-projectile-find-dir
+          counsel-projectile)))
+
+(use-package all-the-icons-ivy-rich
+  :disabled t
+  :after (all-the-icons ivy-rich)
+  :hook (after-init . all-the-icons-ivy-rich-mode))
+
+(use-package nerd-icons-ivy-rich
+  :init
+  (nerd-icons-ivy-rich-mode 1)
+  (ivy-rich-mode 1))
+
 (provide 'init-ivy)
