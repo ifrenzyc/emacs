@@ -54,16 +54,15 @@
   (load-theme 'vscode-dark-plus t))
 
 (use-package modus-themes
-  :ensure nil
   :demand t
-  :load-path "localelpa/modus-themes"
   :init
-  ;; (require 'modus-themes)
+  (setq modus-themes-common-palette-overrides
+        '((fg-heading-2 fg-main)))
+
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs nil
         modus-themes-org-blocks 'gray-background)
-
   :config
   (modus-themes-select 'modus-operandi))
 
