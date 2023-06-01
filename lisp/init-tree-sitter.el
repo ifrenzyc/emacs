@@ -79,7 +79,6 @@
             (yaml-mode       . yaml-ts-mode)))))
 
 (use-package treesit-auto
-  :load-path "localelpa/treesit-auto"
   :config
   (add-to-list 'treesit-auto-fallback-alist '(bash-ts-mode . sh-mode))
   (treesit-auto-apply-remap)

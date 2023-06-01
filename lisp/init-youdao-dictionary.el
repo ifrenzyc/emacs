@@ -50,7 +50,6 @@
 
 ;; @see - https://github.com/lorniu/go-translate
 (use-package go-translate
-  :load-path "localelpa/go-translate"
   :commands (gts-do-translate)
   :general
   ("M-E" 'gts-do-translate)
