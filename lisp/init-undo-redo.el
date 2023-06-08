@@ -11,7 +11,6 @@
 (require 'init-const)
 
 (use-package vundo
-  :demand t
   :custom
   ;; Use compact layout
   (vundo-compact-display t)

@@ -91,7 +91,7 @@
 ;; (require 'init-nano-modeline)
 ;; (require 'init-mini-modeline)
 
-;; (require 'init-undo-redo)
+(require 'init-undo-redo)
 
 (require 'init-bookmark)
 (require 'init-dashboard)
