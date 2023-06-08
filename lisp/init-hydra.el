@@ -27,24 +27,25 @@
   ;;       (funcall yc/ongoing-hydra-body)
   ;;     (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
   :general
-  (yc/nonprefix-keys
-    "C-c h <tab>" 'hydra-fold/body
-    "C-c h d" 'hydra-dates/body
-    "C-c h f" 'hydra-flycheck/body
-    "C-c h j" 'hydra-dump-jump/body
-    "C-c h a" 'hydra-avy/body
-    "C-c h s" 'hydra-smartparens/body
-    "C-c h g" 'hydra-git-timemachine/body
-    "C-c h c" 'hydra-multiple-cursors/body
-    ;; "C-c g" 'hydra-magit/body
-    ;; "C-c h" 'hydra-helm/body
-    ;; "C-c o" 'yc/ongoing-hydra
-    ;; "C-c p" 'hydra-projectile/body
-    "C-c h i" 'hydra-imagex-sticky/body
-    "C-c h v" 'hydra-pdftools/body
-    "C-c h p" 'hydra-system/body
-    "C-c h t" 'hydra-toggles/body
-    "C-c h w" 'hydra-window/body)
+  ("C-c h <tab>" 'hydra-fold/body
+   "C-c h d" 'hydra-dates/body
+   "C-c h D" 'hydra-dired/body
+   "C-c h f" 'hydra-flycheck/body
+   "C-c h j" 'hydra-dump-jump/body
+   "C-c h a" 'hydra-avy/body
+   "C-c h s" 'hydra-smartparens/body
+   "C-c h g" 'hydra-git-timemachine/body
+   "C-c h c" 'hydra-multiple-cursors/body
+   ;; "C-c g" 'hydra-magit/body
+   ;; "C-c h" 'hydra-helm/body
+   ;; "C-c o" 'yc/ongoing-hydra
+   "C-c h i" 'hydra-imagex-sticky/body
+   "C-c h v" 'hydra-pdftools/body
+   "C-c h m" 'hydra-macro/body
+   "C-c h p" 'hydra-projectile/body
+   "C-c h P" 'hydra-system/body
+   "C-c h t" 'hydra-toggles/body
+   "C-c h w" 'hydra-window/body)
   ;; :config
   ;; (setq hydra-hint-display-type 'my/posframe)
   ;; (defun my/hydra-posframe-show (str)
@@ -427,5 +428,80 @@
   ("g" nil))
 
 (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
+
+;; (defhydra hydra-macro (:color teal
+;;                               :hint nil)
+;;   "
+;;   _r_: region  _e_: execute   _c_: counter  _f_: format
+;;   _n_: next    _p_: previous  _i_: insert   _q_: query
+;;  _(_: start  _)_: stop
+;;   "
+;;   ("q" nil "quit")
+;;   ("Q" kbd-macro-query)
+;;   ("(" kmacro-start-macro-or-insert-counter)
+;;   (")" kmacro-end-or-call-macro)
+;;   ("r" apply-macro-to-region-lines)
+;;   ("e" kmacro-end-and-call-macro)
+;;   ("n" kmacro-cycle-ring-next)
+;;   ("p" kmacro-cycle-ring-previous)
+;;   ("i" kmacro-insert-counter)
+;;   ("c" kmacro-set-counter)
+;;   ("q" kbd-macro-query)
+;;   ("f" kmacro-set-format))
+
+;; macro 的按键绑定可以参考 leuven 函数 leuven-kmacro-turn-on-recording
+(defun leuven-kmacro-turn-on-recording ()
+  "Start recording a keyboard macro and toggle functionality of key binding."
+  (interactive)
+  (global-set-key (kbd "<S-f3>") #'leuven-kmacro-turn-off-recording)
+  (kmacro-start-macro nil))
+
+(defun leuven-kmacro-turn-off-recording ()
+  "Stop recording a keyboard macro and toggle functionality of key binding."
+  (interactive)
+  (global-set-key (kbd "<S-f3>") #'leuven-kmacro-turn-on-recording)
+  (kmacro-end-macro nil))
+
+;; Start/stop recording a keyboard macro.
+(global-set-key (kbd "<S-f3>") #'leuven-kmacro-turn-on-recording)
+
+;; Execute the most recent keyboard macro.
+(global-set-key (kbd "<f3>") #'kmacro-call-macro)
+
+;; hydra for macros in emacs
+(defhydra hydra-macro (:hint nil :color pink :pre
+                             (when defining-kbd-macro
+                               (kmacro-end-macro 1)))
+  "
+  ^Create-Cycle^   ^Basic^           ^Insert^        ^Save^         ^Edit^
+╭─────────────────────────────────────────────────────────────────────────╯
+     ^_p_^           [_e_] execute    [_i_] insert    [_b_] name      [_'_] previous
+     ^^↑^^           [_d_] delete     [_t_] set       [_K_] key       [_,_] last
+ _b_ ←   → _f_     [_o_] edit       [_a_] add       [_x_] register
+     ^^↓^^           [_r_] region     [_F_] format    [_B_] defun
+     ^_n_^           [_m_] step
+    ^^   ^^          [_s_] swap
+"
+  ("b" kmacro-start-macro :color blue)
+  ("f" kmacro-end-or-call-macro-repeat)
+  ("p" kmacro-cycle-ring-previous)
+  ("n" kmacro-cycle-ring-next)
+  ("r" apply-macro-to-region-lines)
+  ("d" kmacro-delete-ring-head)
+  ("e" kmacro-end-or-call-macro-repeat)
+  ("o" kmacro-edit-macro-repeat)
+  ("m" kmacro-step-edit-macro)
+  ("s" kmacro-swap-ring)
+  ("i" kmacro-insert-counter)
+  ("t" kmacro-set-counter)
+  ("a" kmacro-add-counter)
+  ("F" kmacro-set-format)
+  ("b" kmacro-name-last-macro)
+  ("K" kmacro-bind-to-key)
+  ("B" insert-kbd-macro)
+  ("x" kmacro-to-register)
+  ("'" kmacro-edit-macro)
+  ("," edit-kbd-macro)
+  ("q" nil "Quit" :color blue))
 
 (provide 'init-hydra)
