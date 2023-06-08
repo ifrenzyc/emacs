@@ -37,12 +37,11 @@
   ;;   "ep" 'flycheck-previous-error
   ;;   "el" 'flycheck-list-errors
   ;;   "e." 'hydra-flycheck/body)
-  (yc/nonprefix-keys
-    :keymaps 'flycheck-error-list-mode-map
-    "RET" 'flycheck-error-list-goto-error
-    "j" 'flycheck-error-list-next-error
-    "k" 'flycheck-error-list-previous-error
-    "q" 'quit-window)
+  (flycheck-error-list-mode-map
+   "RET" 'flycheck-error-list-goto-error
+   "j" 'flycheck-error-list-next-error
+   "k" 'flycheck-error-list-previous-error
+   "q" 'quit-window)
   :config
   (defun my/toggle-syntax-checking ()
     (interactive)

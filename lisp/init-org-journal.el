@@ -18,8 +18,7 @@
 (use-package org-journal
   :disabled t
   :general
-  (yc/nonprefix-keys
-    "C-c j" 'org-journal-new-entry)
+  ("C-c j" 'org-journal-new-entry)
   ;; (yc/leader-keys
   ;;   "jo" 'org-journal-new-entry)
   :custom

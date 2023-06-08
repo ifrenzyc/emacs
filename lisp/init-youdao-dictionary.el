@@ -37,10 +37,9 @@
             (youdao-dictionary-search-at-point-posframe)
           (youdao-dictionary-search-at-point-tooltip))))
   :general
-  (yc/nonprefix-keys
-    "C-c y y" 'youdao-dictionary-search-at-point+
-    "C-c y i" 'youdao-dictionary-search-at-point
-    "C-c Y"   'my-youdao-search-at-point)
+  ("C-c y y" 'youdao-dictionary-search-at-point+
+   "C-c y i" 'youdao-dictionary-search-at-point
+   "C-c Y"   'my-youdao-search-at-point)
   :config
   ;; Cache documents
   (setq url-automatic-caching t)

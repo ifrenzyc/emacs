@@ -28,9 +28,8 @@
 (use-package magit
   :commands (magit-status)
   :general
-  (yc/nonprefix-keys
-    "C-x g" 'magit-status
-    "C-x G" 'magit-log-buffer-file)
+  ("C-x g" 'magit-status
+   "C-x G" 'magit-log-buffer-file)
   :hook
   (magit-mode . (lambda ()
                   (selected-minor-mode -1)))

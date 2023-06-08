@@ -93,25 +93,26 @@
   (general-define-key :keymaps 'dired-mode-map
                       :states '(emacs)
                       "\\" 'hydra-dired/body)
-  :general
-  (yc/leader-keys-major-mode
-    :keymaps 'dired-mode-map
-    "DEL" 'my/dired-up-directory
-    "RET" 'dired-find-alternate-file
-    "TAB" 'dired-subtree-toggle
-    "l" 'dired-find-alternate-file
-    "c" 'dired-do-rename
-    "C" 'dired-do-copy
-    "y" 'dired-ranger-copy
-    "p" 'dired-ranger-paste
-    "v" 'dired-ranger-move
-    "R" 'dired-do-redisplay
-    "r" 'wdired-change-to-wdired-mode
-    "f" 'counsel-file-jump
-    "o" 'my/dired-create-file
-    "O" 'dired-create-directory
-    "q" 'kill-this-buffer
-    "!" 'dired-do-shell-command))
+  ;; :general
+  ;; (yc/leader-keys-major-mode
+  ;;   :keymaps 'dired-mode-map
+  ;;   "DEL" 'my/dired-up-directory
+  ;;   "RET" 'dired-find-alternate-file
+  ;;   "TAB" 'dired-subtree-toggle
+  ;;   "l" 'dired-find-alternate-file
+  ;;   "c" 'dired-do-rename
+  ;;   "C" 'dired-do-copy
+  ;;   "y" 'dired-ranger-copy
+  ;;   "p" 'dired-ranger-paste
+  ;;   "v" 'dired-ranger-move
+  ;;   "R" 'dired-do-redisplay
+  ;;   "r" 'wdired-change-to-wdired-mode
+  ;;   "f" 'counsel-file-jump
+  ;;   "o" 'my/dired-create-file
+  ;;   "O" 'dired-create-directory
+  ;;   "q" 'kill-this-buffer
+  ;;   "!" 'dired-do-shell-command)
+  )
 
 (use-package wdired
   :after dired

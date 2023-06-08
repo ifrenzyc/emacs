@@ -86,7 +86,7 @@ FACE defaults to inheriting from default and highlight."
    ;; (org-mode . highlight-symbol-mode)
    )
   ;; :general
-  ;; (yc/nonprefix-keys
+  ;; (
   ;;   "M-<f3>" 'highlight-symbol-at-point
   ;;   "<f3>" 'highlight-symbol-next
   ;;   "s-<f3>" 'highlight-symbol-prev)

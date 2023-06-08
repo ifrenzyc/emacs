@@ -14,33 +14,34 @@
   :demand t
   ;; :init
   ;; (general-def :states '(normal motion visual) "<SPC>" nil)
-  :config
+  ;; :config
   ;; Vim-like definitions
-  (with-eval-after-load 'evil
-    (general-evil-setup t))
+  ;; (with-eval-after-load 'evil
+  ;;   (general-evil-setup t))
 
-  (general-create-definer yc/nonprefix-keys
-    :keymaps 'override)
+  ;; (general-create-definer yc/nonprefix-keys
+  ;;   :keymaps 'override)
 
-  (general-create-definer yc/leader-keys
-    :states '(normal motion visual insert emacs)
-    :keymaps 'override
-    :prefix "SPC"
-    ;; :non-normal-prefix "s-SPC")
-    :global-prefix "s-SPC")
-  ;; :prefix "C-c C-g")
-  ;; :keymaps 'override
-  ;; :prefix "<SPC>")
-  (general-create-definer yc/leader-keys-major-mode
-    :states '(normal motion visual insert emacs)
-    :keymaps 'override
-    :prefix "SPC m"
-    ;; :non-normal-prefix "s-SPC m")
-    :global-prefix "s-SPC m")
+  ;; (general-create-definer yc/leader-keys
+  ;;   :states '(normal motion visual insert emacs)
+  ;;   :keymaps 'override
+  ;;   :prefix "SPC"
+  ;;   ;; :non-normal-prefix "s-SPC")
+  ;;   :global-prefix "s-SPC")
+  ;; ;; :prefix "C-c C-g")
+  ;; ;; :keymaps 'override
+  ;; ;; :prefix "<SPC>")
+  ;; (general-create-definer yc/leader-keys-major-mode
+  ;;   :states '(normal motion visual insert emacs)
+  ;;   :keymaps 'override
+  ;;   :prefix "SPC m"
+  ;;   ;; :non-normal-prefix "s-SPC m")
+  ;;   :global-prefix "s-SPC m")
 
-  (general-define-key
-   :keymaps '(normal motion visual)
-   "<f16>" (general-simulate-key "SPC m"))
+  ;; (general-define-key
+  ;;  :keymaps '(normal motion visual)
+  ;;  "<f16>" (general-simulate-key "SPC m")
+  ;; )
 
   ;; (general-create-definer my-leader-def-2
   ;;   :states '(normal motion visual)
@@ -50,7 +51,7 @@
   ;; default :prefix
   ;; using a variable is not necessary, but it may be useful if you want to
   ;; experiment with different prefix keys and aren't using `general-create-definer'
-  (defconst my-leader ",")
+  ;; (defconst my-leader ",")
 
   ;; - https://github.com/noctuid/general.el
   ;; 参考这篇文章重新定义自己的 key bindings：https://leiyue.wordpress.com/2012/07/04/use-org-mode-and-taskjuggler-to-manage-to-project-information/

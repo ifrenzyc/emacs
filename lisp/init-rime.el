@@ -27,16 +27,15 @@
   (rime-posframe-properties
    (list :background-color "#333333"
          :foreground-color "#dcdccc"
-         :font "LXGW WenKai Mono-14"
+         :font "LXGW WenKai Mono-16"
          :internal-border-width 1))
   :general
   ("C-\\"   'yc/turn-off-input-method
    "C-|"    'yc/turn-on-rime-input-method
    "C-s-\\" 'yc/turn-on-rime-input-method)
-  (yc/nonprefix-keys
-    :keymaps 'rime-mode-map
-    "C-`" 'rime-send-keybinding
-    "M-j" 'rime-force-enable)
+  (rime-mode-map
+   "C-`" 'rime-send-keybinding
+   "M-j" 'rime-force-enable)
   :init
   (defun yc/turn-on-rime-input-method ()
     (interactive)

@@ -164,8 +164,7 @@
 
   (org-roam-setup)
   :general
-  (yc/nonprefix-keys
-    "<f4>" 'org-roam-dailies-capture-today)
+  ("<f4>" 'org-roam-dailies-capture-today)
   ;; (yc/leader-keys
   ;;   "ar" '(:ignore t :which-key "org-roam")
   ;;   "arl" 'org-roam-buffer-toggle

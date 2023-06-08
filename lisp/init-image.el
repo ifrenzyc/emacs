@@ -34,10 +34,12 @@
 
      "Save"  (("S" imagex-sticky-save-image "save image"))
      ))
-  :general (yc/leader-keys-major-mode
-             :keymaps 'image-mode-map
-             "?"  'hydra-imagex-sticky/body
-             "\\" 'hydra-imagex-sticky/body))
+  ;; :general
+  ;; (yc/leader-keys-major-mode
+  ;;   :keymaps 'image-mode-map
+  ;;   "?"  'hydra-imagex-sticky/body
+  ;;   "\\" 'hydra-imagex-sticky/body)
+  )
 ;; ("0" . imagex-sticky-restore-original)
 ;; ("+" . imagex-sticky-maximize)
 ;; ("=" . imagex-sticky-zoom-in)

@@ -402,13 +402,13 @@ text and copying to the killring."
    "C-c C-j"   'counsel-org-goto
    "<backtab>" 'org-shifttab
    "<tab>"     'org-cycle)
-  (yc/leader-keys-major-mode
-    :keymaps 'org-src-mode-map
-    "'" 'org-edit-src-exit)
-  (yc/nonprefix-keys
-    :keymaps 'org-src-mode-map
-    :states '(normal)
-    "RET" 'org-edit-src-exit)
+  ;; (yc/leader-keys-major-mode
+  ;;   :keymaps 'org-src-mode-map
+  ;;   "'" 'org-edit-src-exit)
+  ;; (yc/nonprefix-keys
+  ;;   :keymaps 'org-src-mode-map
+  ;;   :states '(normal)
+  ;;   "RET" 'org-edit-src-exit)
   ;; (yc/leader-keys-major-mode-copy
   ;;   :keymaps 'org-src-mode-map
   ;;   ""  '(:ignore t :which-key "major-mode-cmd")
@@ -697,15 +697,14 @@ text and copying to the killring."
 ;; - https://github.com/casouri/ftable
 ;; - https://github.com/Fuco1/org-pretty-table
 (use-package valign
-  :disabled t
-  :load-path "localelpa/valign"
   :after org
   :hook ((org-mode . valign-mode)
          (markdown-mode . valign-mode))
   :custom
-  (valign-fancy-bar nil))
+  (valign-fancy-bar t))
 
 (use-package org-pretty-table
+  :disabled t
   :load-path "localelpa/org-pretty-table"
   :hook
   (org-mode . org-pretty-table-mode))
