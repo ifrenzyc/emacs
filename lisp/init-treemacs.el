@@ -143,12 +143,6 @@
   ;;       ([mouse-1]   . treemacs-single-click-expand-action))
   )
 
-(use-package treemacs-devicons
-  :disabled t
-  :load-path "localelpa/treemacs-devicons"
-  :config
-  (treemacs-load-theme "devicons"))
-
 (use-package treemacs-nerd-icons
   :demand t
   :config
