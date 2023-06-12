@@ -102,9 +102,9 @@
   ;; (yc/leader-keys-major-mode
   ;;   :keymaps 'java-mode-map
   ;;   "r"   'ggtags-find-tag-dwim
-  ;;   "c"   '(:ignore t :which-key "Run/Compile")
+  ;;   "c"   '(:ignore t :wk "Run/Compile")
   ;;   "cd"  'dap-java-debug
-  ;;   "l"   '(:ignore t :which-key "lsp")
+  ;;   "l"   '(:ignore t :wk "lsp")
   ;;   "lm"  'lsp-ui-imenu
   ;;   "la"  'lsp-find-definition
   ;;   "lb"  'lsp-find-references

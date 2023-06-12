@@ -327,18 +327,18 @@ text and copying to the killring."
 
   ;; (yc/leader-keys-major-mode
   ;;   :keymaps 'org-mode-map
-  ;;   ;; "" '(:ignore t :which-key "major-mode-cmd")
-  ;;   ;; "ma" '(:ignore t :which-key "help")
+  ;;   ;; "" '(:ignore t :wk "major-mode-cmd")
+  ;;   ;; "ma" '(:ignore t :wk "help")
   ;;   "." 'major-mode-hydra
   ;;   "'" 'org-edit-special
   ;;   "SPC" 'worf-back-to-heading
   ;;   "a" 'org-agenda
   ;;   "c" 'org-capture
-  ;;   "b" '(:ignore t :which-key "babel")
-  ;;   "C" '(:ignore t :which-key "clocks")
+  ;;   "b" '(:ignore t :wk "babel")
+  ;;   "C" '(:ignore t :wk "clocks")
   ;;   "s" 'org-schedule
   ;;   "d" 'org-deadline
-  ;;   "r" '(org-refile :which-key "org-refile")
+  ;;   "r" '(org-refile :wk "org-refile")
   ;;   "l" 'worf-right
   ;;   "j" 'worf-down
   ;;   "k" 'worf-up
@@ -351,32 +351,32 @@ text and copying to the killring."
   ;;   "CO" 'org-clock-out
   ;;   "Cq" 'org-clock-cancel
   ;;   "CR" 'org-refile
-  ;;   ;; "md" '(:ignore t :which-key "dates")
-  ;;   "e" '(:ignore t :which-key "export")
-  ;;   "f" '(:ignore t :which-key "feeds")
+  ;;   ;; "md" '(:ignore t :wk "dates")
+  ;;   "e" '(:ignore t :wk "export")
+  ;;   "f" '(:ignore t :wk "feeds")
   ;;   "H" 'org-shiftleft
   ;;   "J" 'org-shiftdown
   ;;   "K" 'org-shiftup
   ;;   "L" 'org-shiftright
-  ;;   "T" '(:ignore t :which-key "Toggles")
-  ;;   ;; "x" '(:ignore t :which-key "text")
+  ;;   "T" '(:ignore t :wk "Toggles")
+  ;;   ;; "x" '(:ignore t :wk "text")
   ;;   "x" 'org-archive-subtree-default-with-confirmation
   ;;   ;; "C-S-l" 'org-shiftcontrolright
   ;;   ;; "C-S-h" 'org-shiftcontrolleft
   ;;   ;; "C-S-j" 'org-shiftcontroldown
   ;;   ;; "C-S-k" 'org-shiftcontrolup
-  ;;   "t" '(:ignore t :which-key "tables")
+  ;;   "t" '(:ignore t :wk "tables")
   ;;   "ta" 'org-table-align
   ;;   "tb" 'org-table-blank-field
   ;;   "tc" 'org-table-convert
-  ;;   "td" '(:ignore t :which-key "delete")
+  ;;   "td" '(:ignore t :wk "delete")
   ;;   "tdc" 'org-table-delete-column
   ;;   "tdr" 'org-table-kill-row
   ;;   "te" 'org-table-eval-formula
   ;;   "tE" 'org-table-export
   ;;   "th" 'org-table-previous-field
   ;;   "tH" 'org-table-move-column-left
-  ;;   "ti" '(:ignore t :which-key "insert")
+  ;;   "ti" '(:ignore t :wk "insert")
   ;;   "tic" 'org-table-insert-column
   ;;   "tih" 'org-table-insert-hline
   ;;   "tiH" 'org-table-hline-and-move
@@ -391,7 +391,7 @@ text and copying to the killring."
   ;;   "tN" 'org-table-create-with-table.el
   ;;   "tr" 'org-table-recalculate
   ;;   "ts" 'org-table-sort-lines
-  ;;   "tt" '(:ignore t :which-key "toggle")
+  ;;   "tt" '(:ignore t :wk "toggle")
   ;;   "ttf" 'org-table-toggle-formula-debugger
   ;;   "tto" 'org-table-toggle-coordinate-overlays
   ;;   "tw" 'org-table-wrap-region)
@@ -411,7 +411,7 @@ text and copying to the killring."
   ;;   "RET" 'org-edit-src-exit)
   ;; (yc/leader-keys-major-mode-copy
   ;;   :keymaps 'org-src-mode-map
-  ;;   ""  '(:ignore t :which-key "major-mode-cmd")
+  ;;   ""  '(:ignore t :wk "major-mode-cmd")
   ;;   "'" 'org-edit-src-exit)
   ;; key for exiting src edit mode
   :mode-hydra

@@ -166,7 +166,7 @@
   :general
   ("<f4>" 'org-roam-dailies-capture-today)
   ;; (yc/leader-keys
-  ;;   "ar" '(:ignore t :which-key "org-roam")
+  ;;   "ar" '(:ignore t :wk "org-roam")
   ;;   "arl" 'org-roam-buffer-toggle
   ;;   "art" 'org-roam-dailies-today
   ;;   "arf" 'org-roam-node-find
@@ -180,7 +180,7 @@
    "C-c n I" 'org-roam-insert-immediate)
   ;; (yc/leader-keys-major-mode
   ;;   :keymaps 'org-mode-map
-  ;;   "r"  '(:ignore t :which-key "org-roam")
+  ;;   "r"  '(:ignore t :wk "org-roam")
   ;;   "rl" 'org-roam
   ;;   "rt" 'org-roam-dailies-today
   ;;   "rb" 'org-roam-switch-to-buffer

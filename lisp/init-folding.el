@@ -66,7 +66,7 @@
   ;;:hook (prog-mode . origami-mode)
   :pretty-hydra
   ((:title (pretty-hydra-title "Origami" 'octicon "fold" :height 1.1 :v-adjust -0.05)
-           :color amaranth :quit-key "q")
+           :color amaranth :quit-key "C-g")
    ("Node"
     ((":" origami-recursively-toggle-node "toggle recursively")
      ("a" origami-toggle-all-nodes "toggle all")

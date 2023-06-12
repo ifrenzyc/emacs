@@ -21,9 +21,9 @@
 
 (use-package easy-hugo
   :init
-  (setq easy-hugo-basedir "/Users/yangc/src/yangc/itsyc.xyz/"
+  (setq easy-hugo-basedir "~/src/yangc/itsyc.xyz/"
         easy-hugo-url "http://itsyc.xyz"
-        easy-hugo-root "/Users/yangc/src/yangc/itsyc.xyz/"
+        easy-hugo-root "~/src/yangc/itsyc.xyz/"
         easy-hugo-previewtime "300")
   :config
   (setq easy-hugo-default-ext ".org")

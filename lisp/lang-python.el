@@ -36,19 +36,19 @@
   
   ;;   "'"  'python-start-or-switch-repl
   ;;   "="  'yapfify-buffer
-  ;;   "c"  '(:ignore t :which-key "execute")
+  ;;   "c"  '(:ignore t :wk "execute")
   ;;   "cc" 'python-execute-file
   ;;   "cC" 'python-execute-file-focus
-  ;;   "d"  '(:ignore t :which-key "debug")
+  ;;   "d"  '(:ignore t :wk "debug")
   ;;   "db" 'python-toggle-breakpoint  ; check in spacemacs
-  ;;   "h"  '(:ignore t :which-key "help")
+  ;;   "h"  '(:ignore t :wk "help")
   ;;   "hh" 'anaconda-mode-show-doc
   ;;   ;; "hd" 'helm-pydoc
-  ;;   "g"  '(:ignore t :which-key "goto")
+  ;;   "g"  '(:ignore t :wk "goto")
   ;;   "ga" 'anaconda-mode-find-assignments
   ;;   "gb" 'anaconda-mode-go-back
   ;;   "gu" 'anaconda-mode-find-references
-  ;;   "s"  '(:ignore t :which-key "send to REPL")
+  ;;   "s"  '(:ignore t :wk "send to REPL")
   ;;   "sB" 'python-shell-send-buffer-switch
   ;;   "sb" 'python-shell-send-buffer
   ;;   "sF" 'python-shell-send-defun-switch
@@ -56,13 +56,13 @@
   ;;   "si" 'python-start-or-switch-repl
   ;;   "sR" 'python-shell-send-region-switch
   ;;   "sr" 'python-shell-send-region
-  ;;   "r"  '(:ignore t :which-key "refactor")
+  ;;   "r"  '(:ignore t :wk "refactor")
   ;;   "ri" 'python-remove-unused-imports  ; in spacemacs
   ;;   "rI" 'py-isort-buffer
-  ;;   "v"  '(:ignore t :which-key "pyenv")
+  ;;   "v"  '(:ignore t :wk "pyenv")
   ;;   "vu" 'pyenv-mode-unset
   ;;   "vs" 'pyenv-mode-set
-  ;;   "V"  '(:ignore t :which-key "pyvenv")
+  ;;   "V"  '(:ignore t :wk "pyvenv")
   ;;   "Va" 'pyvenv-activate
   ;;   "Vd" 'pyvenv-deactivate
   ;;   "Vw" 'pyvenv-workon)

@@ -30,7 +30,7 @@
   ;; :general
   ;; (yc/leader-keys
   ;;   "t M-s" 'my/toggle-flyspell
-  ;;   "M-s"   '(:ignore t :which-key "Spell Check")
+  ;;   "M-s"   '(:ignore t :wk "Spell Check")
   ;;   "M-s b" 'flyspell-buffer
   ;;   "M-s n" 'flyspell-goto-next-error
   ;;   "M-s p" 'flyspell-correct-at-point

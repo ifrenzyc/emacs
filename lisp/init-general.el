@@ -58,16 +58,16 @@
   ;; 参考在 Mac 下的一些配置：https://www.emacswiki.org/emacs/EmacsForMacOS
   ;; (yc/leader-keys
   ;;   "TAB"  'mode-line-other-buffer
-  ;;   "SPC"  '(ivy-switch-buffer :which-key "Switch buffer")
+  ;;   "SPC"  '(ivy-switch-buffer :wk "Switch buffer")
   ;;   "C-g"  'keyboard-quit
   ;;   "?"    'which-key-show-top-level
-  ;;   ;; "<"    '(counsel-projectile-find-file-dwim :which-key "Find file in project")
-  ;;   "<"    '(counsel-fd-file-jump :which-key "Find file in project")
-  ;;   ":"    '(counsel-M-x :which-key "M-x")
-  ;;   ;; ";"    '(evil-ex :which-key "Ex command")
-  ;;   "'"   '(multi-vterm-project :which-key "Open project shell")
-  ;;   "\""    '(shell-pop :which-key "Open shell")
-  ;;   "0"    '(treemacs-select-window :which-key "Treemacs")
+  ;;   ;; "<"    '(counsel-projectile-find-file-dwim :wk "Find file in project")
+  ;;   "<"    '(counsel-fd-file-jump :wk "Find file in project")
+  ;;   ":"    '(counsel-M-x :wk "M-x")
+  ;;   ;; ";"    '(evil-ex :wk "Ex command")
+  ;;   "'"   '(multi-vterm-project :wk "Open project shell")
+  ;;   "\""    '(shell-pop :wk "Open shell")
+  ;;   "0"    '(treemacs-select-window :wk "Treemacs")
   ;;   ;; "`"    'winum-select-window-0-or-10
   ;;   ;; "²"    'winum-select-window-by-number
   ;;   "1"    'delete-other-windows
@@ -79,35 +79,35 @@
   ;;   ;; "7"    'winum-select-window-7
   ;;   ;; "8"    'winum-select-window-8
   ;;   ;; "9"    'winum-select-window-9
-  ;;   "/"     '(:ignore t :which-key "search")
-  ;;   "//"    '(swiper :which-key "swiper")
+  ;;   "/"     '(:ignore t :wk "search")
+  ;;   "//"    '(swiper :wk "swiper")
   ;;   "/g"    'counsel-git-grep
   ;;   "-"    'yc/split-window-vertically
   ;;   "|"    'yc/split-window-horizontally
-  ;;   "["    '(:ignore t :which-key "previous...")
-  ;;   "[["   '(text-scale-increase :which-key "text size in")
-  ;;   "]"    '(:ignore t :which-key "next...")
-  ;;   "]]"   '(text-scale-decrease :which-key "text size out")
-  ;;   "a"    '(:ignore t :which-key "applications")
-  ;;   "ai"   '(:ignore t :which-key "irc")
-  ;;   "as"   '(:ignore t :which-key "shells")
+  ;;   "["    '(:ignore t :wk "previous...")
+  ;;   "[["   '(text-scale-increase :wk "text size in")
+  ;;   "]"    '(:ignore t :wk "next...")
+  ;;   "]]"   '(text-scale-decrease :wk "text size out")
+  ;;   "a"    '(:ignore t :wk "applications")
+  ;;   "ai"   '(:ignore t :wk "irc")
+  ;;   "as"   '(:ignore t :wk "shells")
   ;;   "asa"  'shell-pop
   ;;   "ast"  'multi-vterm-project
   ;;   "asT"  'projectile-run-vterm
-  ;;   "aR"   '(ranger :which-key "call ranger")
-  ;;   "b"    '(:ignore t :which-key "buffers")
+  ;;   "aR"   '(ranger :wk "call ranger")
+  ;;   "b"    '(:ignore t :wk "buffers")
   ;;   ;; "bb"   'helm-mini
   ;;   "bk"   'kill-this-buffer
   ;;   "be"   'ibuffer
   ;;   "bb"   'bufler
-  ;;   "c"    '(:ignore t :which-key "compile/comments")
-  ;;   "C"    '(:ignore t :which-key "capture/colors")
+  ;;   "c"    '(:ignore t :wk "compile/comments")
+  ;;   "C"    '(:ignore t :wk "capture/colors")
   ;;   ;; "cl"   'evilnc-comment-or-uncomment-lines
-  ;;   "e"    '(:ignore t :which-key "errors")
-  ;;   "f"    '(:ignore t :which-key "files")
-  ;;   "fC"   '(:ignore t :which-key "files/convert")
-  ;;   "fe"   '(:ignore t :which-key "emacs(spacemacs)")
-  ;;   "fv"   '(:ignore t :which-key "variables")
+  ;;   "e"    '(:ignore t :wk "errors")
+  ;;   "f"    '(:ignore t :wk "files")
+  ;;   "fC"   '(:ignore t :wk "files/convert")
+  ;;   "fe"   '(:ignore t :wk "emacs(spacemacs)")
+  ;;   "fv"   '(:ignore t :wk "variables")
   ;;   ;; "fh"   'helm-find-files
   ;;   ;; "fc"   'helm-recentf
   ;;   "ff"   'counsel-find-file
@@ -115,22 +115,22 @@
   ;;   "ft"   'treemacs
   ;;   "fs"   'save-buffer
   ;;   "fo"   'yc/dired-open-in-finder
-  ;;   "F"    '(:ignore t :which-key "frame")
+  ;;   "F"    '(:ignore t :wk "frame")
   ;;   "Fb"   'switch-to-buffer-other-frame
   ;;   "FD"   'delete-other-frames
   ;;   "Fd"   'delete-frame
   ;;   "Fn"   'make-frame
-  ;;   "g"    '(:ignore t :which-key "git/versions-control")
-  ;;   "gs"   '(magit-status :which-key "git status")
+  ;;   "g"    '(:ignore t :wk "git/versions-control")
+  ;;   "gs"   '(magit-status :wk "git status")
   ;;   "gf"   '(magit-log-buffer-file :wk "git log current file")
   ;;   "gl"   'magit-log
   ;;   "gb"   'magit-blame
   ;;   "g*"   'diff-hl-show-hunk
-  ;;   "gt"   '(git-timemachine-toggle :which-key "git timemachine")
+  ;;   "gt"   '(git-timemachine-toggle :wk "git timemachine")
   ;;   ;; "gs"  'magit-status
-  ;;   "h"    '(:ignore t :which-key "help")
+  ;;   "h"    '(:ignore t :wk "help")
   ;;   ;; "hb"   'helm-descbinds
-  ;;   "hd"   '(:ignore t :which-key "help-describe")
+  ;;   "hd"   '(:ignore t :wk "help-describe")
   ;;   "hdk"  'describe-key
   ;;   "hdK"  'describe-keymap
   ;;   "hdb"  'describe-bindings
@@ -141,35 +141,35 @@
   ;;   "hdf"  'describe-function
   ;;   "hk"   'which-key-show-top-level
   ;;   "hm"   'which-key-show-major-mode
-  ;;   "i"    '(:ignore t :which-key "insertion")
-  ;;   "j"    '(:ignore t :which-key "jump/join/split")
+  ;;   "i"    '(:ignore t :wk "insertion")
+  ;;   "j"    '(:ignore t :wk "jump/join/split")
   ;;   "jj"   'avy-goto-word-or-subword-1
   ;;   "jk"   'avy-goto-char
   ;;   "jl"   'avy-goto-line
   ;;   "jb"   'counsel-bookmark
   ;;   "u"    'universal-argument
-  ;;   "k"    '(:ignore t :which-key "lisp")
-  ;;   "kd"   '(:ignore t :which-key "delete")
-  ;;   "kD"   '(:ignore t :which-key "delete-backward")
-  ;;   "k`"   '(:ignore t :which-key "hybrid")
-  ;;   "n"    '(:ignore t :which-key "narrow/numbers")
-  ;;   "q"    '(:ignore t :which-key "quit")
+  ;;   "k"    '(:ignore t :wk "lisp")
+  ;;   "kd"   '(:ignore t :wk "delete")
+  ;;   "kD"   '(:ignore t :wk "delete-backward")
+  ;;   "k`"   '(:ignore t :wk "hybrid")
+  ;;   "n"    '(:ignore t :wk "narrow/numbers")
+  ;;   "q"    '(:ignore t :wk "quit")
   ;;   "qs"   'save-buffers-kill-emacs
   ;;   "qq"   'delete-window
   ;;   "qr"   'restart-emacs
   ;;   "qQ"   'kill-emacs
-  ;;   "r"    '(:ignore t :which-key "Undo/Redo/registers/rings/resume")
+  ;;   "r"    '(:ignore t :wk "Undo/Redo/registers/rings/resume")
   ;;   "ru"   'undo-tree-visualize
-  ;;   "m"    '(:ignore t :which-key "major-mode-cmd")
+  ;;   "m"    '(:ignore t :wk "major-mode-cmd")
   ;;   "m."   'major-mode-hydra
-  ;;   "Re"   '(:ignore t :which-key "elisp")
-  ;;   "Rp"   '(:ignore t :which-key "pcre")
-  ;;   "s"    '(:ignore t :which-key "search/symbol")
-  ;;   "sa"   '(:ignore t :which-key "ag")
-  ;;   "sg"   '(:ignore t :which-key "grep")
-  ;;   "sk"   '(:ignore t :which-key "ack")
-  ;;   "st"   '(:ignore t :which-key "pt")
-  ;;   "sw"   '(:ignore t :which-key "web")
+  ;;   "Re"   '(:ignore t :wk "elisp")
+  ;;   "Rp"   '(:ignore t :wk "pcre")
+  ;;   "s"    '(:ignore t :wk "search/symbol")
+  ;;   "sa"   '(:ignore t :wk "ag")
+  ;;   "sg"   '(:ignore t :wk "grep")
+  ;;   "sk"   '(:ignore t :wk "ack")
+  ;;   "st"   '(:ignore t :wk "pt")
+  ;;   "sw"   '(:ignore t :wk "web")
   ;;   "saa"  'ag
   ;;   "sar"  'rg
   ;;   "sap"  'ag-project
@@ -189,11 +189,11 @@
   ;;   ;; "mL"   'hydra-move-splitter-right
   ;;   ;; "mM"   'delete-other-windows
   ;;   ;; "mb"   'balance-windows
-  ;;   "t"    '(:ignore t :which-key "toggles")
-  ;;   "tC"   '(:ignore t :which-key "colors")
-  ;;   "tE"   '(:ignore t :which-key "editing-styles")
-  ;;   "th"   '(:ignore t :which-key "highlight")
-  ;;   ;; "tm"   '(:ignore t :which-key "modeline")
+  ;;   "t"    '(:ignore t :wk "toggles")
+  ;;   "tC"   '(:ignore t :wk "colors")
+  ;;   "tE"   '(:ignore t :wk "editing-styles")
+  ;;   "th"   '(:ignore t :wk "highlight")
+  ;;   ;; "tm"   '(:ignore t :wk "modeline")
   ;;   "t."   'hydra-toggles/body
   ;;   "tf"   'toggle-frame-fullscreen
   ;;   "tm"   'toggle-frame-maximized
@@ -201,22 +201,22 @@
   ;;   "to"   'org-sticky-header-mode
   ;;   "tt"   'centaur-tabs-mode
   ;;   "tc"   'blink-cursor-mode
-  ;;   "x"    '(:ignore t :which-key "text")
-  ;;   "xa"   '(:ignore t :which-key "align")
-  ;;   "xd"   '(:ignore t :which-key "delete")
-  ;;   "xg"   '(:ignore t :which-key "google-translate")
-  ;;   "xl"   '(:ignore t :which-key "lines")
-  ;;   "xm"   '(:ignore t :which-key "move")
-  ;;   "xt"   '(:ignore t :which-key "transpose")
+  ;;   "x"    '(:ignore t :wk "text")
+  ;;   "xa"   '(:ignore t :wk "align")
+  ;;   "xd"   '(:ignore t :wk "delete")
+  ;;   "xg"   '(:ignore t :wk "google-translate")
+  ;;   "xl"   '(:ignore t :wk "lines")
+  ;;   "xm"   '(:ignore t :wk "move")
+  ;;   "xt"   '(:ignore t :wk "transpose")
   
-  ;;   "z"    '(:ignore t :which-key "zoom")
-  ;;   "C-t"  '(:ignore t :which-key "other toggles")
-  ;;   "o"    '(:ignore t :which-key "org")
+  ;;   "z"    '(:ignore t :wk "zoom")
+  ;;   "C-t"  '(:ignore t :wk "other toggles")
+  ;;   "o"    '(:ignore t :wk "org")
   ;;   "o."   'hydra-org/body
   ;;   "oa"   'org-agenda
   
   ;;   "og"   'org-clock-goto
-  ;;   "ok"   '(:ignore t :which-key "clock")
+  ;;   "ok"   '(:ignore t :wk "clock")
   ;;   "oki"  'org-clock-in
   ;;   "oko"  'org-clock-out
   ;;   "okc"  'org-clock-in-last
@@ -225,10 +225,10 @@
   ;;   "okd"  'org-clock-display
   ;;   "okg"  'org-clock-goto
   ;;   "okr"  'org-clock-report
-  ;;   "ao"   '(:ignore t :which-key "org")
+  ;;   "ao"   '(:ignore t :wk "org")
   ;;   "aoa"  'org-agenda
   ;;   "aoc"  'org-capture
-  ;;   "aok"  '(:ignore t :which-key "clock")
+  ;;   "aok"  '(:ignore t :wk "clock")
   ;;   "aoki" 'org-clock-in
   ;;   "aoko" 'org-clock-out
   ;;   "aokc" 'org-clock-in-last
@@ -250,7 +250,7 @@
 
 ;; (general-nmap
 ;;   :prefix my-leader
-;;   "c"  '(:ignore t :which-key "comment or uncomment")
+;;   "c"  '(:ignore t :wk "comment or uncomment")
 ;;   "ci" 'evilnc-comment-or-uncomment-lines
 ;;   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
 ;;   "ll" 'evilnc-quick-comment-or-uncomment-to-the-line

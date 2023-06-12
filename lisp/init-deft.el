@@ -12,8 +12,8 @@
   :commands (deft deft-open-file deft-new-file-named)
   ;; :general
   ;; (yc/leader-keys
-  ;;   "d" '(:ignore t :which-key "deft")
-  ;;   "dd" '(deft :which-key "deft"))
+  ;;   "d" '(:ignore t :wk "deft")
+  ;;   "dd" '(deft :wk "deft"))
   :config
   (setq deft-directory "~/notes/Zettelkästen"
         deft-recursive t
@@ -37,22 +37,22 @@
   :after deft
   ;; :general
   ;; (yc/leader-keys
-  ;;   "dD" '(zetteldeft-deft-new-search :which-key "new search")
-  ;;   "dR" '(deft-refresh :which-key "refresh")
-  ;;   "ds" '(zetteldeft-search-at-point :which-key "search at point")
-  ;;   "dc" '(zetteldeft-search-current-id :which-key "search current id")
-  ;;   "df" '(zetteldeft-follow-link :which-key "follow link")
-  ;;   "dF" '(zetteldeft-avy-file-search-ace-window :which-key "avy file other window")
-  ;;   "dl" '(zetteldeft-avy-link-search :which-key "avy link search")
-  ;;   "dt" '(zetteldeft-avy-tag-search :which-key "avy tag search")
-  ;;   "dT" '(zetteldeft-tag-buffer :which-key "tag list")
-  ;;   "di" '(zetteldeft-find-file-id-insert :which-key "insert id")
-  ;;   "dI" '(zetteldeft-find-file-full-title-insert :which-key "insert full title")
-  ;;   "do" '(zetteldeft-find-file :which-key "find file")
-  ;;   "dn" '(zetteldeft-new-file :which-key "new file")
-  ;;   "dN" '(zetteldeft-new-file-and-link :which-key "new file & link")
-  ;;   "dr" '(zetteldeft-file-rename :which-key "rename")
-  ;;   "dx" '(zetteldeft-count-words :which-key "count words"))
+  ;;   "dD" '(zetteldeft-deft-new-search :wk "new search")
+  ;;   "dR" '(deft-refresh :wk "refresh")
+  ;;   "ds" '(zetteldeft-search-at-point :wk "search at point")
+  ;;   "dc" '(zetteldeft-search-current-id :wk "search current id")
+  ;;   "df" '(zetteldeft-follow-link :wk "follow link")
+  ;;   "dF" '(zetteldeft-avy-file-search-ace-window :wk "avy file other window")
+  ;;   "dl" '(zetteldeft-avy-link-search :wk "avy link search")
+  ;;   "dt" '(zetteldeft-avy-tag-search :wk "avy tag search")
+  ;;   "dT" '(zetteldeft-tag-buffer :wk "tag list")
+  ;;   "di" '(zetteldeft-find-file-id-insert :wk "insert id")
+  ;;   "dI" '(zetteldeft-find-file-full-title-insert :wk "insert full title")
+  ;;   "do" '(zetteldeft-find-file :wk "find file")
+  ;;   "dn" '(zetteldeft-new-file :wk "new file")
+  ;;   "dN" '(zetteldeft-new-file-and-link :wk "new file & link")
+  ;;   "dr" '(zetteldeft-file-rename :wk "rename")
+  ;;   "dx" '(zetteldeft-count-words :wk "count words"))
   )
 
 (provide 'init-deft)

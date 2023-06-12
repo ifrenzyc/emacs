@@ -15,28 +15,28 @@
   :general
   ;; (yc/leader-keys-major-mode
   ;;   :keymaps 'go-ts-mode-map
-  ;;   ;; "" '(:ignore t :which-key "major-mode-cmd")
-  ;;   "h" '(:ignore t :which-key "help")
+  ;;   ;; "" '(:ignore t :wk "major-mode-cmd")
+  ;;   "h" '(:ignore t :wk "help")
   ;;   "hh" 'godoc-at-point
-  ;;   "i" '(:ignore t :which-key "imports")
+  ;;   "i" '(:ignore t :wk "imports")
   ;;   "ig" 'go-goto-imports
   ;;   "ia" 'go-import-add
   ;;   "ir" 'go-remove-unused-imports
-  ;;   "e" '(:ignore t :which-key "playground")
+  ;;   "e" '(:ignore t :wk "playground")
   ;;   "eb" 'go-play-buffer
   ;;   "er" 'go-play-region
   ;;   "ed" 'go-download-play
-  ;;   "x" '(:ignore t :which-key "execute")
+  ;;   "x" '(:ignore t :wk "execute")
   ;;   "xx" 'yc/go-run-main
-  ;;   "g" '(:ignore t :which-key "goto")
+  ;;   "g" '(:ignore t :wk "goto")
   ;;   "ga" 'ff-find-other-file
   ;;   "gc" 'go-coverage
-  ;;   "t" '(:ignore t :which-key "test")
+  ;;   "t" '(:ignore t :wk "test")
   ;;   "tt" 'yc/go-run-test-current-function
   ;;   "ts" 'yc/go-run-test-current-suite
   ;;   "tp" 'yc/go-run-package-tests
   ;;   "tP" 'yc/go-run-package-tests-nested
-  ;;   "f" '(:ignore t :which-key "guru")
+  ;;   "f" '(:ignore t :wk "guru")
   ;;   "fd" 'go-guru-describe
   ;;   "ff" 'go-guru-freevars
   ;;   "fi" 'go-guru-implements
@@ -49,7 +49,7 @@
   ;;   "f<" 'go-guru-callers
   ;;   "f>" 'go-guru-callees
   ;;   "fo" 'go-guru-set-scope
-  ;;   "r" '(:ignore t :which-key "rename")
+  ;;   "r" '(:ignore t :wk "rename")
   ;;   "rn" 'go-rename)
   (go-ts-mode-map
    "M-]"        'godef-jump

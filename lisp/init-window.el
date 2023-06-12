@@ -75,10 +75,10 @@
   :general
   ("C-x w o" 'doom/window-enlargen)
   ;; (yc/leader-keys
-  ;;     "w" '(:ignore t :which-key "windows")
+  ;;     "w" '(:ignore t :wk "windows")
   ;;   "w SPC" 'hydra-rotate-window/body
   ;;   "w." 'hydra-window/body
-  ;;   "wp" '(:ignore t :which-key "popup")
+  ;;   "wp" '(:ignore t :wk "popup")
   ;;   "w1" 'delete-other-windows
   ;;   "w0" 'delete-window
   ;;   "wh" 'windmove-left
