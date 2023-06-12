@@ -76,7 +76,3 @@
 [submodule "localelpa/org-pretty-table"]
 	path = localelpa/org-pretty-table
 	url = git@github.com:Fuco1/org-pretty-table.git
-[submodule "localelpa/treemacs-devicons"]
-	path = localelpa/treemacs-devicons
-	url = git@github.com:rainstormstudio/treemacs-devicons.git
-
