@@ -19,6 +19,7 @@
   :hook (after-init . save-place-mode))
 
 (use-package savehist
+  :disabled t
   :ensure nil
   :hook (after-init . savehist-mode)
   :init (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
@@ -109,7 +110,8 @@
   (("C->" . mc/mark-next-like-this)
    ("C-<" . mc/mark-previous-like-this)
    ("S-<mouse-1>" . mc/add-cursor-on-click)
-   ("C-c m" . hydra-multiple-cursors/body))
+   ;; ("C-c m" . hydra-multiple-cursors/body)
+   )
   :requires hydra
   :config
   (defhydra hydra-multiple-cursors (:hint nil :color pink)
@@ -137,30 +139,30 @@
     ("g" mc/remove-duplicated-cursors :exit t)
     ("G" mc/keyboard-quit :exit t))
 
-;; (defhydra hydra-multiple-cursors (:hint nil)
-;;   "
-;;    Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")
-;;   ------------------------------------------------------------------
-;;    [_p_]   Next     [_n_]   Next     [_l_] Edit lines  [_0_] Insert numbers
-;;    [_P_]   Skip     [_N_]   Skip     [_a_] Mark all    [_A_] Insert letters
-;;    [_M-p_] Unmark   [_M-n_] Unmark   [_s_] Search
-;;    [Click] Cursor at point       [_q_] Quit"
-;;   ("l" mc/edit-lines :exit t)
-;;   ("a" mc/mark-all-like-this :exit t)
-;;   ("n" mc/mark-next-like-this)
-;;   ("N" mc/skip-to-next-like-this)
-;;   ("M-n" mc/unmark-next-like-this)
-;;   ("p" mc/mark-previous-like-this)
-;;   ("P" mc/skip-to-previous-like-this)
-;;   ("M-p" mc/unmark-previous-like-this)
-;;   ("s" mc/mark-all-in-region-regexp :exit t)
-;;   ("0" mc/insert-numbers :exit t)
-;;   ("A" mc/insert-letters :exit t)
-;;   ("<mouse-1>" mc/add-cursor-on-click)
-;;   ;; Help with click recognition in this hydra
-;;   ("<down-mouse-1>" ignore)
-;;   ("<drag-mouse-1>" ignore)
-;;   ("q" nil))
+  ;; (defhydra hydra-multiple-cursors (:hint nil)
+  ;;   "
+  ;;    Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")
+  ;;   ------------------------------------------------------------------
+  ;;    [_p_]   Next     [_n_]   Next     [_l_] Edit lines  [_0_] Insert numbers
+  ;;    [_P_]   Skip     [_N_]   Skip     [_a_] Mark all    [_A_] Insert letters
+  ;;    [_M-p_] Unmark   [_M-n_] Unmark   [_s_] Search
+  ;;    [Click] Cursor at point       [_q_] Quit"
+  ;;   ("l" mc/edit-lines :exit t)
+  ;;   ("a" mc/mark-all-like-this :exit t)
+  ;;   ("n" mc/mark-next-like-this)
+  ;;   ("N" mc/skip-to-next-like-this)
+  ;;   ("M-n" mc/unmark-next-like-this)
+  ;;   ("p" mc/mark-previous-like-this)
+  ;;   ("P" mc/skip-to-previous-like-this)
+  ;;   ("M-p" mc/unmark-previous-like-this)
+  ;;   ("s" mc/mark-all-in-region-regexp :exit t)
+  ;;   ("0" mc/insert-numbers :exit t)
+  ;;   ("A" mc/insert-letters :exit t)
+  ;;   ("<mouse-1>" mc/add-cursor-on-click)
+  ;;   ;; Help with click recognition in this hydra
+  ;;   ("<down-mouse-1>" ignore)
+  ;;   ("<drag-mouse-1>" ignore)
+  ;;   ("q" nil))
   )
 
 (use-package mc-extras
@@ -175,32 +177,10 @@
   (pending-delete-mode t)
   :general
   ("C-=" 'er/expand-region)
-  ("C-c =" 'bk/expand-region/body)
+  ;; ("C-c =" 'bk/expand-region/body)
   ;; (evil-visual-state-map
   ;;  "v" 'er/expand-region)
-  :config
-  (defhydra bk/expand-region (:color pink :hint nil)
-    "
- ^Expand/Discard^                ^Mark^
-─^──────────────^────────────────^────^─────────────────
- _e_ or _+_: expand region         _(_:      inside pairs
- _r_ or _-_: reduce region         _)_:      around pairs
- _g_:      exit hydrant          _q_ or _'_: inside quotes
- _G_:      discard region, exit  _Q_ or _\"_: around quotes
- ^ ^    ^ ^                        _p_:      paragraph"
-    ("e" er/expand-region)
-    ("+" er/expand-region)
-    ("r" er/contract-region)
-    ("-" er/contract-region)
-    ("p" er/mark-paragraph)
-    ("(" er/mark-inside-pairs)
-    (")" er/mark-outside-pairs)
-    ("q" er/mark-inside-quotes)
-    ("'" er/mark-inside-quotes)
-    ("Q" er/mark-outside-quotes)
-    ("\"" er/mark-outside-quotes)
-    ("g" ignore :exit t)
-    ("G" #'(lambda () (interactive) (deactivate-mark)) :exit t)))
+  )
 
 ;; 针对选中的区域自定义一些按键
 ;; - https://github.com/Kungsgeten/selected.el
@@ -213,6 +193,9 @@
   :init
   (setq selected-org-mode-map (make-sparse-keymap))
   :config
+  (put 'upcase-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
+
   (defvar-local me/pretty-print-function nil)
 
   (defun me/pretty-print (beg end)
@@ -254,23 +237,50 @@ there's a region, all lines that region covers will be duplicated."
   (defun yc/show-selected-mode-keymap ()
     (interactive)
     (which-key-show-keymap 'selected-keymap))
-  :general
-  (selected-keymap
-   "M-l" 'yc/show-selected-mode-keymap
-   "q" 'selected-off
-   "s" 'sort-lines
-   "f" 'fill-region
-   "r" 'reverse-region
-   "w" 'count-words-region
-   "u" 'upcase-region
-   "l" 'downcase-region
-   "m" 'apply-macro-to-region-lines
-   "[" 'align-code
-   "a" 'align-regexp
-   "C-d" 'duplicate-current-line-or-region
-   "C-c c" 'capitalize-region)
-  (selected-org-mode-map
-   "t" 'org-table-convert-region))
+
+  ;; 这是个不错的参考：/Users/yangc/src/emacs.d/otijhuis-emacs.d/config/hydra-settings.el hydra-mark/body
+  (pretty-hydra-define hydra-selected
+    (:hint nil :foreign-keys warn :quit-key "C-g" :title "Active Region" :separator "═")
+    ("Selected"
+     (("M-l" yc/show-selected-mode-keymap)
+      ("q" selected-off)
+      ("s" sort-lines)
+      ("f" fill-region)
+      ("r" reverse-region)
+      ("w" count-words-region)
+      ("u" upcase-region)
+      ("l" downcase-region)
+      ("m" apply-macro-to-region-lines)
+      ("[" align-code)
+      ("a" align-regexp)
+      ("C-d" duplicate-current-line-or-region)
+      ("C-c c" capitalize-region))
+     "Expand/Contract"
+     (("e" er/expand-region)
+      ("C-x C-x" exchange-point-and-mark)
+      ("+" er/expand-region)
+      ("R" er/contract-region)
+      ("-" er/contract-region))
+     "Mark"
+     (("p" er/mark-paragraph)
+      ("(" er/mark-inside-pairs)
+      ;; ("q" er/mark-inside-quotes)
+      ("'" er/mark-inside-quotes)
+      ("Q" er/mark-outside-quotes)
+      ("\"" er/mark-outside-quotes)
+      ("G" #'(lambda () (interactive) (deactivate-mark)) :exit t))
+     "Symbol Overlay"
+     (("M-i" symbol-overlay-put)
+      ("M-n" symbol-overlay-jump-next)
+      ("M-p" symbol-overlay-jump-prev)
+      ("M-N" symbol-overlay-switch-forward)
+      ("M-P" symbol-overlay-switch-backward)
+      ("M-C" symbol-overlay-remove-all)
+      ("s-." symbol-overlay-transient)
+      ("M-<f3>" symbol-overlay-remove-all))
+     "Embark"
+     (("s-o" embark-act))))
+  )
 
 (use-package barrinalo
   :disabled t

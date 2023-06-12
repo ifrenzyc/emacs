@@ -90,9 +90,9 @@
     ("Z" dired-do-compress)
     ("q" nil)
     ("." nil :color blue))
-  (general-define-key :keymaps 'dired-mode-map
-                      :states '(emacs)
-                      "\\" 'hydra-dired/body)
+  :general
+  (dired-mode-map
+   ("\\" 'hydra-dired/body))
   ;; :general
   ;; (yc/leader-keys-major-mode
   ;;   :keymaps 'dired-mode-map
@@ -129,7 +129,8 @@
 (use-package direx
   :after dired
   :general
-  ("C-x C-j" 'direx:jump-to-directory))
+  (dired-mode-map
+   ("C-x C-j" 'direx:jump-to-directory)))
 ;; "z"       '(lambda () (interactive)
 ;;              (let ((fn (dired-get-file-for-visit)))
 ;;                (start-process "default-app" nil "open" fn)))))
@@ -190,14 +191,15 @@
   (peep-dired-cleanup-on-disable t)
   (peep-dired-enable-on-directories t)
   (peep-dired-ignored-extensions '("mkv" "iso" "mp4"))
-  :config
-  (with-eval-after-load 'evil
-    (evil-define-key 'normal peep-dired-mode-map (kbd "<SPC>") 'peep-dired-scroll-page-down
-                     (kbd "C-<SPC>") 'peep-dired-scroll-page-up
-                     (kbd "<backspace>") 'peep-dired-scroll-page-up
-                     (kbd "j") 'peep-dired-next-file
-                     (kbd "k") 'peep-dired-prev-file)
-    (add-hook 'peep-dired-hook 'evil-normalize-keymaps)))
+  ;; :config
+  ;; (with-eval-after-load 'evil
+  ;;   (evil-define-key 'normal peep-dired-mode-map (kbd "<SPC>") 'peep-dired-scroll-page-down
+  ;;                    (kbd "C-<SPC>") 'peep-dired-scroll-page-up
+  ;;                    (kbd "<backspace>") 'peep-dired-scroll-page-up
+  ;;                    (kbd "j") 'peep-dired-next-file
+  ;;                    (kbd "k") 'peep-dired-prev-file)
+  ;;   (add-hook 'peep-dired-hook 'evil-normalize-keymaps))
+  )
 
 ;; Colourful columns.
 (use-package diredfl
@@ -208,8 +210,9 @@
   :after dired
   :config
   (setq dgi-commit-message-format "%h\t%s\t%cr")
-  :bind (:map dired-mode-map
-              (")" . dired-git-info-mode)))
+  :general
+  (dired-mode-map
+   (")" 'dired-git-info-mode)))
 
 (use-package all-the-icons-dired
   :disabled t
@@ -220,11 +223,15 @@
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
+;; 类似 package
+;; - dired-sidebar
+;; - ranger.el
 ;; A package for viewing any list of files as a tree.
 ;; - https://github.com/knpatel401/filetree
 (use-package filetree
   :disabled t
-  :init (setq ;; filetree-notes-file "/home/david/Dropbox/Org/filtree-notes.org"
+  :init (setq
+         ;; filetree-notes-file "/home/david/Dropbox/Org/filtree-notes.org"
          filetree-info-window t
          filetree-use-all-the-icons t
          filetree-show-remote-file-info t)
@@ -235,9 +242,6 @@
   ;;        ("C-c f n" . filetree-show-files-with-notes))
   )
 
-;; 类似 package
-;; - dired-sidebar
-;; ranger.el
 (use-package dirvish
   :disabled t
   :init
@@ -245,9 +249,7 @@
   (dirvish-override-dired-mode))
 
 (use-package ranger
-  :disabled t
-  ;; :straight (:host github :repo "ralesi/ranger.el")
-  )
+  :disabled t)
 
 ;; Multi-stage copy/pasting of files and bookmarks
 (use-package dired-ranger

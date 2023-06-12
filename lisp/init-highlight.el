@@ -118,8 +118,9 @@ FACE defaults to inheriting from default and highlight."
          ([M-f3] . symbol-overlay-remove-all))
   :hook
   ((prog-mode . symbol-overlay-mode)
-   (iedit-mode . turn-off-symbol-overlay)
-   (iedit-mode-end . turn-on-symbol-overlay))
+   ;; (iedit-mode . turn-off-symbol-overlay)
+   ;; (iedit-mode-end . turn-on-symbol-overlay)
+   )
   :init
   (setq symbol-overlay-idle-time 0.1)
   (with-eval-after-load 'all-the-icons
