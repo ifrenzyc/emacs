@@ -26,9 +26,9 @@
   :config
   (set-face-attribute 'vundo-default nil :family "Symbola")
   :bind
-  (([remap undo] . vundo)
+  (;; ([remap undo] . vundo)
    ("C-z" . vundo)
-   ("C-x u" . vundo)
+   ("C-x u" . undo)
    :map vundo-mode-map
    ("C-a" . vundo-stem-root)
    ("C-e" . vundo-stem-end)

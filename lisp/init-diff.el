@@ -53,16 +53,18 @@
              (interactive)
              (save-buffer)
              (bury-buffer))
-           "Save and bury buffer" :exit t))))
-  :bind (:map smerge-mode-map
-              ("C-c m" . smerge-mode-hydra/body))
-  :hook ((find-file . (lambda ()
-                        (save-excursion
-                          (goto-char (point-min))
-                          (when (re-search-forward "^<<<<<<< " nil t)
-                            (smerge-mode 1)))))
-         (magit-diff-visit-file . (lambda ()
-                                    (when smerge-mode
-                                      (hydra-smerge/body))))))
+      "Save and bury buffer" :exit t))))
+  :general
+  (smerge-mode-map
+   ("C-c m" 'smerge-mode-hydra/body))
+  :hook
+  ((find-file . (lambda ()
+                  (save-excursion
+                    (goto-char (point-min))
+                    (when (re-search-forward "^<<<<<<< " nil t)
+                      (smerge-mode 1)))))
+   (magit-diff-visit-file . (lambda ()
+                              (when smerge-mode
+                                (hydra-smerge/body))))))
 
 (provide 'init-diff)

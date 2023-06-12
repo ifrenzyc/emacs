@@ -16,7 +16,7 @@
   :load-path "localelpa/xwwp"
   :custom
   (xwwp-follow-link-completion-system 'ivy)
-  :bind (:map xwidget-webkit-mode-map
-              ("v" . xwwp-follow-link)))
+  :general (xwidget-webkit-mode-map
+            ("v" 'xwwp-follow-link)))
 
 (provide 'init-browser)

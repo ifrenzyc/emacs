@@ -78,9 +78,10 @@
 (use-package flycheck-posframe
   ;; :straight (:host github :repo "alexmurray/flycheck-posframe")
   :hook (flycheck-mode . flycheck-posframe-mode)
-  :custom-face (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
-  :custom-face (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
-  :custom-face (flycheck-posframe-border-face ((t (:background "DarkBlue"))))
+  :custom-face
+  ((flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
+   (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
+   (flycheck-posframe-border-face ((t (:background "DarkBlue")))))
   :config
   (setq flycheck-posframe-border-width 1)
   (flycheck-posframe-configure-pretty-defaults))
