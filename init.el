@@ -106,7 +106,7 @@
 ;; (require 'init-meow)
 (require 'init-hydra)
 
-(require 'init-kill-ring)
+;; (require 'init-kill-ring)
 (require 'init-edit)
 (require 'init-diff)
 
@@ -133,7 +133,7 @@
 
 (require 'init-org)
 (require 'init-org-agenda)
-(require 'init-org-journal)
+;; (require 'init-org-journal)
 (require 'init-org-roam)
 ;; (require 'init-svg-tag)
 (require 'init-deft)
@@ -143,7 +143,7 @@
 (require 'init-window)
 (require 'init-projectile)
 ;; (require 'init-persp)
-(require 'init-tab-bar)
+;; (require 'init-tab-bar)
 
 (require 'init-vcs)
 
