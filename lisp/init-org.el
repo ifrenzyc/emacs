@@ -261,12 +261,12 @@ text and copying to the killring."
     (insert (concat "[[file:" filename "]]")))
 
   ;; 不用零宽空格在 org-mode 中标记中文的办法，https://emacs-china.org/t/org-mode/22313
-  (font-lock-add-keywords 'org-mode
-                          '(("\\cc\\( \\)[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)?\\cc?"
-                             (1 (prog1 () (compose-region (match-beginning 1) (match-end 1) ""))))
-                            ("\\cc?\\( \\)?[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)\\cc"
-                             (2 (prog1 () (compose-region (match-beginning 2) (match-end 2) "")))))
-                          'append)
+  ;; (font-lock-add-keywords 'org-mode
+  ;;                         '(("\\cc\\( \\)[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)?\\cc?"
+  ;;                            (1 (prog1 () (compose-region (match-beginning 1) (match-end 1) ""))))
+  ;;                           ("\\cc?\\( \\)?[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)\\cc"
+  ;;                            (2 (prog1 () (compose-region (match-beginning 2) (match-end 2) "")))))
+  ;;                         'append)
   :general
   ;; Great evil org mode keyboard shortcuts cribbed from cofi
   ;; (evil-define-key 'normal org-mode-map

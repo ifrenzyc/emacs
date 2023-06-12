@@ -117,8 +117,8 @@
                                 (mapcar
                                  (lambda (directory)
                                    (directory-files-recursively
-                                    directory "\\.org$\\|\\.txt$"))
-                                 '("~/notes/Zettelkästen/0x00_GTD/"))))
+                                    directory "\\.org$\\|\\.txt$\\|\\.org_archive$"))
+                                 '("~/notes/Zettelkästen/0x00_GTD/" "~/notes/Zettelkästen/daily/"))))
 
   (setq org-refile-targets '((org-agenda-file-inbox   :maxlevel . 1)
                              (org-agenda-file-gtd     :maxlevel . 2)
@@ -669,9 +669,9 @@ Headline^^            Visit entry^^               Filter^^                    Da
           ;; ("t" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
           ;;  "* TODO %i%? %^g\nSCHEDULED: %t\n%T\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
           ("d" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
-           "** TODO %? %^g\n:PROPERTIES:\n:Effort: %^{effort|1:00|0:05|0:15|0:30|2:00|4:00}\n:END:\n:LOGBOOK:\n- CREATED: %U\n:END:\n_Desired outcome:_ %^{Desired outcome:}" :clock-in t :clock-resume t :prepend t :empty-lines 1)
-          ("m" "Meeting" entry (file+headline org-agenda-file-gtd "Meeting")
-           "* MEETING 会议主题：%? :MEETING:\n%T\n\n*与会人员*\n- \n\n*会议议题*\n\n*重点结论*\n\n*会后 TODO*\n\n*其他事项*\n" :clock-in t :clock-resume t :empty-lines 1)
+           "** TODO %? %^g\n:PROPERTIES:\n:Effort: %^{effort|1:00|0:05|0:15|0:30|2:00|4:00}\n:END:\n:LOGBOOK:\n- CREATED: %U\n:END:\n_Desired outcome:_ %^{Desired outcome:}\n\n- ~工作事项~ [0%] ::\n  - [ ] \n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
+          ("m" "Meeting" entry (file+headline org-default-notes-file "Meeting")
+           "* MEETING 会议主题：%? :MEETING:\n%T\n\n*与会人员*\n- \n\n*会议议题*\n\n*重点结论*\n\n*会后 TODO*\n\n*其他事项*\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
           ("w" "Work TODO" entry (file+olp org-default-notes-file "Work" "Tasks")
            "* TODO %? :work:\n:LOGBOOK:\n- CREATED: %U\n:END:" :clock-in t :clock-resume t)
           ("a" "Appointment" entry (file+headline org-default-notes-file "Appointments")
