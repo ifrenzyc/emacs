@@ -57,7 +57,8 @@
    "C-S-F"      'gofmt
    "M-<return>" 'godef-describe)
   :mode-hydra
-  ((:title "Go Commands")
+  (go-ts-mode
+   (:title "Go Commands")
    ("Doc"
     (("d" godoc-at-point "doc at point"))
     "Imports"

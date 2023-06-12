@@ -33,7 +33,7 @@
   :general
   ("C-c h <tab>" '(hydra-fold/body :wk "hydra-fold")
    "C-c h D" '(hydra-dates/body :wk "hydra-dates")
-   "C-c h d" '(hydra-dired/body :wk "hydra-dired")
+   ;; "C-c h d" '(hydra-dired/body :wk "hydra-dired")
    "C-c h f" '(hydra-flycheck/body :wk "hydra-flycheck")
    "C-c h j" '(hydra-dump-jump/body :wk "hydra-dump-jump")
    "C-c h a" '(hydra-avy/body :wk "hydra-avy")
@@ -41,12 +41,12 @@
    ;; "C-c h s" '
    ;; "C-c h S" '(hydra-smartparens/body :wk "hydra-smartparens")
    ;; "C-c h c" '(hydra-multiple-cursors/body :wk "hydra-multiple-cursors")
-   "C-c h g" '(hydra-git-timemachine/body :wk "hydra-git-timemachine")
+   "C-c h g" '(hydra-git-timemachine/body :wk "hydra-git-timemachine") ;; TODO replace with major-mode-hydra
    ;; "C-c g" 'hydra-magit/body
    ;; "C-c h" 'hydra-helm/body
    ;; "C-c o" 'yc/ongoing-hydra
-   "C-c h i" '(hydra-imagex-sticky/body :wk "hydra-imagex-sticky")
-   "C-c h v" '(hydra-pdftools/body :wk "hydra-pdftools")
+   "C-c h i" '(hydra-imagex-sticky/body :wk "hydra-imagex-sticky")  ;; TODO replace with major-mode-hydra
+   "C-c h v" '(hydra-pdftools/body :wk "hydra-pdftools")  ;; TODO replace with major-mode-hydra
    "C-c h m" '(hydra-macro/body :wk "hydra-macro")
    "C-c h p" '(hydra-projectile/body :wk "hydra-projectile")
    "C-c h P" '(hydra-system/body :wk "hydra-system")
@@ -92,10 +92,10 @@
   (defun with-faicon (icon str &optional height v-adjust)
     (s-concat (all-the-icons-faicon icon :v-adjust (or v-adjust 0) :height (or height 1)) " " str))
   :config
+  
   (defvar jp-toggles--title (with-faicon "toggle-on" "Toggles" 1 -0.05))
-
   (pretty-hydra-define hydra-toggles
-    (:hint nil :color amaranth :quit-key "q" :title jp-toggles--title)
+    (:hint nil :color amaranth :quit-key "C-g" :title jp-toggles--title)
     ("Basic"
      (("n" (if (fboundp 'display-line-numbers-mode)
                (display-line-numbers-mode (if display-line-numbers-mode -1 1))
@@ -165,7 +165,7 @@
   ;;   (autoload 'major-mode-hydra-bind "major-mode-hydra" nil 'macro))
   :config
   (setq major-mode-hydra-separator "═")
-  (setq major-mode-hydra-invisible-quit-key "q")
+  (setq major-mode-hydra-invisible-quit-key "C-g")
   (setq major-mode-hydra-title-generator
         '(lambda (mode)
            (s-concat "\n"
@@ -205,7 +205,7 @@
   ^^                  _l_ long            _L_ long
   ^^                  ^^                  ^^
   "
-  ("q" nil)
+  ("C-g" nil)
   ("d" me/date-short)
   ("D" me/date-short-with-time)
   ("i" me/date-iso)
@@ -240,8 +240,7 @@
            (deactivate-mark)
          (rectangle-mark-mode 1)))
   ("u" undo nil)
-  ("g" nil))
-
+  ("C-g" nil))
 (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
 
 ;; (defhydra hydra-macro (:color teal

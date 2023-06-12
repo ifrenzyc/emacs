@@ -9,7 +9,8 @@
   :ensure nil
   :mode ("\\.el\\'" . emacs-lisp-mode)
   :mode-hydra
-  ((:title "Emacs Lisp Commands")
+  (emacs-lisp-mode
+   (:title "Emacs Lisp Commands")
    ("Eval"
     (("b" eval-buffer "buffer")
      ("e" eval-defun "defun")

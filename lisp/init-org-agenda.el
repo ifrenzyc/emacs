@@ -343,6 +343,7 @@
       ("o" org-clock-out "out")
       ("r" org-clock-report "report"))))
 
+  ;; TODO 这里可以用 major-mode-hydra 来绑定
   (defhydra hydra-org-agenda (:pre (setq which-key-inhibit t) :post (setq which-key-inhibit nil) :hint nil)
     "
 Headline^^            Visit entry^^               Filter^^                    Date^^                  Toggle mode^^        View^^             Clock^^        Other^^

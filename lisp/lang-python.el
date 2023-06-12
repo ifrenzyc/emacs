@@ -67,7 +67,7 @@
   ;;   "Vd" 'pyvenv-deactivate
   ;;   "Vw" 'pyvenv-workon)
   :mode-hydra
-  (python-mode
+  (python-ts-mode
    (:title "Python Commands")
    ("Python"
     (("i" elpy-importmagic-fixup "Importmagic fixup")

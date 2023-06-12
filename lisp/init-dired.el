@@ -38,61 +38,70 @@
     (dired-add-file file)
     (revert-buffer)
     (dired-goto-file (expand-file-name file)))
+  :mode-hydra
+  (dired-mode
+   (:title "Dired Mode" :color pink :separator "═")
+   (
+    ;; https://github.com/abo-abo/hydra/wiki/Dired
+    ;; (defhydra hydra-dired (:hint nil :color pink)
+    ;;   "
+    ;; _+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    wdired
+    ;; _C_opy             _O_ view other   _U_nmark all       _)_ omit-mode      _$_ hide-subdir    C-x C-q : edit
+    ;; _D_elete           _o_pen other     _u_nmark           _l_ redisplay      _w_ kill-subdir    C-c C-c : commit
+    ;; _R_ename           _M_ chmod        _t_oggle           _g_ revert buf     _e_ ediff          C-c ESC : abort
+    ;; _Y_ rel symlink    _G_ chgrp        _E_xtension mark   _s_ort             _=_ pdiff
+    ;; _S_ymlink          ^ ^              _F_ind marked      _._ toggle hydra   \\ flyspell
+    ;; _r_sync            ^ ^              ^ ^                ^ ^                _?_ summary
+    ;; _z_ compress-file  _A_ find regexp
+    ;; _Z_ compress       _Q_ repl regexp
 
-  ;; https://github.com/abo-abo/hydra/wiki/Dired
-  (defhydra hydra-dired (:hint nil :color pink)
-    "
-    _+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    wdired
-    _C_opy             _O_ view other   _U_nmark all       _)_ omit-mode      _$_ hide-subdir    C-x C-q : edit
-    _D_elete           _o_pen other     _u_nmark           _l_ redisplay      _w_ kill-subdir    C-c C-c : commit
-    _R_ename           _M_ chmod        _t_oggle           _g_ revert buf     _e_ ediff          C-c ESC : abort
-    _Y_ rel symlink    _G_ chgrp        _E_xtension mark   _s_ort             _=_ pdiff
-    _S_ymlink          ^ ^              _F_ind marked      _._ toggle hydra   \\ flyspell
-    _r_sync            ^ ^              ^ ^                ^ ^                _?_ summary
-    _z_ compress-file  _A_ find regexp
-    _Z_ compress       _Q_ repl regexp
-
-    T - tag prefix
-    "
-    ("\\" dired-do-ispell)
-    ("(" dired-hide-details-mode)
-    (")" dired-omit-mode)
-    ("+" dired-create-directory)
-    ("=" diredp-ediff) ;; smart diff
-    ("?" dired-summary)
-    ("$" diredp-hide-subdir-nomove)
-    ("A" dired-do-find-regexp)
-    ("C" dired-do-copy) ;; Copy all marked files
-    ("D" dired-do-delete)
-    ("E" dired-mark-extension)
-    ("e" dired-ediff-files)
-    ("F" dired-do-find-marked-files)
-    ("G" dired-do-chgrp)
-    ("g" revert-buffer) ;; read all directories again (refresh)
-    ("i" dired-maybe-insert-subdir)
-    ("l" dired-do-redisplay) ;; relist the marked or singel directory
-    ("M" dired-do-chmod)
-    ("m" dired-mark)
-    ("O" dired-display-file)
-    ("o" dired-find-file-other-window)
-    ("Q" dired-do-find-regexp-and-replace)
-    ("R" dired-do-rename)
-    ("r" dired-do-rsynch)
-    ("S" dired-do-symlink)
-    ("s" dired-sort-toggle-or-edit)
-    ("t" dired-toggle-marks)
-    ("U" dired-unmark-all-marks)
-    ("u" dired-unmark)
-    ("v" dired-view-file) ;; q to exit, s to search, = gets line #
-    ("w" dired-kill-subdir)
-    ("Y" dired-do-relsymlink)
-    ("z" diredp-compress-this-file)
-    ("Z" dired-do-compress)
-    ("q" nil)
-    ("." nil :color blue))
-  :general
-  (dired-mode-map
-   ("\\" 'hydra-dired/body))
+    ;; T - tag prefix
+    ;; "
+    "Edit"
+    (("+" dired-create-directory "mkdir")
+     ("C" dired-do-copy "copy") ;; Copy all marked files
+     ("D" dired-do-delete "delete")
+     ("R" dired-do-rename "rename")
+     ("Y" dired-do-relsymlink "rel symlink")
+     ("S" dired-do-symlink "symlink")
+     ("r" dired-do-rsynch "rsync")
+     ("z" diredp-compress-this-file "compress file")
+     ("Z" dired-do-compress "compress"))
+    "View"
+    (("v" dired-view-file "view") ;; q to exit, s to search, = gets line #
+     ("O" dired-display-file "view other")
+     ("o" dired-find-file-other-window "open other")
+     ("M" dired-do-chmod "chmod")
+     ("G" dired-do-chgrp "chgrp")
+     ("A" dired-do-find-regexp "find regexp")
+     ("Q" dired-do-find-regexp-and-replace "repl regexp"))
+    "Mark"
+    (("m" dired-mark "mark")
+     ("U" dired-unmark-all-marks "mark all")
+     ("u" dired-unmark "unmark")
+     ("t" dired-toggle-marks "toggle mark")
+     ("E" dired-mark-extension "extend mark")
+     ("F" dired-do-find-marked-files "find mark"))
+    "Info"
+    (("(" dired-hide-details-mode "details")
+     (")" dired-omit-mode "omit mode")
+     ("l" dired-do-redisplay "redisplay") ;; relist the marked or singel directory
+     ("g" revert-buffer "revert buffer") ;; read all directories again (refresh)
+     ("s" dired-sort-toggle-or-edit "sort")
+     ("." nil "toggle hydra" :color blue))
+    "Directory"
+    (("i" dired-maybe-insert-subdir "insert subdir")
+     ("$" diredp-hide-subdir-nomove "hide subdir")
+     ("w" dired-kill-subdir "kill subdir")
+     ("e" dired-ediff-files "ediff")
+     ("=" diredp-ediff "pdiff") ;; smart diff
+     ("\\" dired-do-ispell "flyspell")
+     ("?" dired-summary "summary"))
+    ;; "wdired"
+    ))
+  ;; :general
+  ;; (dired-mode-map
+  ;;  "C-h h" 'hydra-dired/body)
   ;; :general
   ;; (yc/leader-keys-major-mode
   ;;   :keymaps 'dired-mode-map
@@ -130,7 +139,7 @@
   :after dired
   :general
   (dired-mode-map
-   ("C-x C-j" 'direx:jump-to-directory)))
+   "C-x C-j" 'direx:jump-to-directory))
 ;; "z"       '(lambda () (interactive)
 ;;              (let ((fn (dired-get-file-for-visit)))
 ;;                (start-process "default-app" nil "open" fn)))))
@@ -212,7 +221,7 @@
   (setq dgi-commit-message-format "%h\t%s\t%cr")
   :general
   (dired-mode-map
-   (")" 'dired-git-info-mode)))
+   ")" 'dired-git-info-mode))
 
 (use-package all-the-icons-dired
   :disabled t

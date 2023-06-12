@@ -18,21 +18,22 @@
   ;;   (setq evil-emacs-state-modes (delq 'image-mode evil-emacs-state-modes)))
 
   ;; (eval-after-load 'image+ '(imagex-global-sticky-mode t))
-  
+
+  ;; TODO 整理可以用 major-mode-hydra 来绑定
   (defvar jp-imagex--title (with-faicon "camera" "Manipulating Image" 1 -0.05))
   (pretty-hydra-define hydra-imagex-sticky
     (:hint nil :foreign-keys warn :quit-key "q" :title jp-imagex--title :separator "═")
-    (
-     "Resize" (("=" imagex-sticky-zoom-in "zoom in")
-               ("-" imagex-sticky-zoom-out "zoom out")
-               ("w" image-transform-fit-to-width "fit window width")
-               ("+" imagex-sticky-maximize "maximize")
-               ("0" imagex-sticky-restore-original "reset"))
-
-     "Rotate" (("r" imagex-sticky-rotate-right "rotate right")
-               ("l" imagex-sticky-rotate-left "rotate left"))
-
-     "Save"  (("S" imagex-sticky-save-image "save image"))
+    ("Resize"
+     (("=" imagex-sticky-zoom-in "zoom in")
+      ("-" imagex-sticky-zoom-out "zoom out")
+      ("w" image-transform-fit-to-width "fit window width")
+      ("+" imagex-sticky-maximize "maximize")
+      ("0" imagex-sticky-restore-original "reset"))
+     "Rotate"
+     (("r" imagex-sticky-rotate-right "rotate right")
+      ("l" imagex-sticky-rotate-left "rotate left"))
+     "Save"
+     (("S" imagex-sticky-save-image "save image"))
      ))
   ;; :general
   ;; (yc/leader-keys-major-mode

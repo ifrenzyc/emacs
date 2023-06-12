@@ -102,6 +102,7 @@
      ("k" helpful-key "key")
      ("m" describe-mode "mode")
      ("c" helpful-command "command")
+     ("h" major-mode-hydra "major mode hydra")
      ("d" helpful-at-point "thing at point"))))
   :bind ("C-h" . helpful-hydra/body))
 

@@ -101,6 +101,7 @@
   :init (setq git-messenger:show-detail t
               git-messenger:use-magit-popup t)
   :config
+  ;; TODO 这里应该可以用 major-mode-hydra 来绑定
   (with-no-warnings
     (with-eval-after-load 'hydra
       (defhydra git-messenger-hydra (:color blue)

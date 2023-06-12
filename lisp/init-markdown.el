@@ -99,7 +99,8 @@ To be used with `markdown-live-preview-window-function'."
       xwidget-webkit-last-session-buffer))
   (setq markdown-live-preview-window-function 'yc/markdown-live-preview-window-xwidget-webkit)
   :mode-hydra
-  ((:title "Markdown Commands")
+  (markdown-mode
+   (:title "Markdown Commands")
    ("Format"
     (("h" markdown-insert-header-dwim "header")
      ("1" markdown-insert-header-atx-1 "h1")

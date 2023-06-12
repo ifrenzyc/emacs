@@ -17,6 +17,6 @@
   :custom
   (xwwp-follow-link-completion-system 'ivy)
   :general (xwidget-webkit-mode-map
-            ("v" 'xwwp-follow-link)))
+            "v" 'xwwp-follow-link))
 
 (provide 'init-browser)
