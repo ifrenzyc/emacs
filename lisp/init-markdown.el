@@ -12,7 +12,7 @@
 ;; - http://aaronbedra.com/emacs.d/
 ;; - https://leanpub.com/markdown-mode/read#leanpub-auto-quick-reference
 
-;;; Code
+;;; Code:
 (require 'init-font)
 
 (use-package markdown-mode
@@ -219,3 +219,4 @@ To be used with `markdown-live-preview-window-function'."
   (setq grip-mode-binary-path (executable-find "grip")))
 
 (provide 'init-markdown)
+;;; init-markdown.el ends here

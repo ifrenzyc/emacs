@@ -6,8 +6,7 @@
 ;; - https://github.com/casouri/vundo
 ;;
 
-;;; Code
-
+;;; Code:
 (require 'init-const)
 
 (use-package vundo
@@ -65,3 +64,4 @@
 ;; (use-package undo-fu-session)
 
 (provide 'init-undo-redo)
+;;; init-undo-redo.el ends here

@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package dockerfile-mode
   :mode ("Dockerfile\\'" . dockerfile-ts-mode)
@@ -20,3 +20,4 @@
   (add-to-list 'auto-mode-alist '("docker-compose[^/]*\\.yml\\'" . docker-compose-mode)))
 
 (provide 'lang-dockerfile)
+;;; lang-dockerfile.el ends here

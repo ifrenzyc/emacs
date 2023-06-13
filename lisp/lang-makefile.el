@@ -11,3 +11,4 @@
   :mode (("Makefile" . makefile-gmake-mode)))
 
 (provide 'lang-makefile)
+;;; lang-makefile.el ends here

@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package projectile
   :commands (projectile-project-root)
@@ -82,3 +82,4 @@
   ("q"   nil "cancel" :color blue))
 
 (provide 'init-projectile)
+;;; init-projectile.el ends here

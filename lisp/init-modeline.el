@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 (use-package doom-modeline
   ;; :after all-the-icons
   :demand t
@@ -93,3 +93,4 @@
   )
 
 (provide 'init-modeline)
+;;; init-modeline.el ends here

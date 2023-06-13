@@ -5,7 +5,7 @@
 ;; Darkroom vs Olivetti vs Writeroom-mode
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package writeroom-mode
   :disabled t
@@ -65,3 +65,4 @@
                  (setq cursor-type (if view-mode 'hollow 'box)))))
 
 (provide 'init-reader)
+;;; init-reader.el ends here

@@ -4,8 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package youdao-dictionary
   :functions (posframe-show posframe-hide)
   :preface
@@ -40,12 +39,12 @@
   ("C-c y y" 'youdao-dictionary-search-at-point+
    "C-c y i" 'youdao-dictionary-search-at-point
    "C-c Y"   'my-youdao-search-at-point)
-  :config
+  :custom
   ;; Cache documents
-  (setq url-automatic-caching t)
+  (url-automatic-caching t)
 
   ;; Enable Chinese word segmentation support (支持中文分词)
-  (setq youdao-dictionary-use-chinese-word-segmentation t))
+  (youdao-dictionary-use-chinese-word-segmentation t))
 
 ;; @see - https://github.com/lorniu/go-translate
 (use-package go-translate
@@ -64,3 +63,4 @@
          )))
 
 (provide 'init-youdao-dictionary)
+;;; init-youdao-dictionary.el ends here

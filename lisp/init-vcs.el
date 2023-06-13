@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 ;; 设定不产生备份文件
 (setq make-backup-files nil)
@@ -295,3 +295,4 @@
   :hook (magit-mode . magit-delta-mode))
 
 (provide 'init-vcs)
+;;; init-vcs.el ends here

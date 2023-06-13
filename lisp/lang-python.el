@@ -6,7 +6,6 @@
 ;; 
 
 ;;; Code:
-
 (require 'init-const)
 (require 'init-hydra)
 
@@ -122,3 +121,4 @@
   :after python)
 
 (provide 'lang-python)
+;;; lang-python.el ends here

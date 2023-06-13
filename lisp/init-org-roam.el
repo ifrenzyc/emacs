@@ -6,7 +6,6 @@
 ;; 
 
 ;;; Code:
-
 (use-package emacsql-sqlite-builtin)
 
 ;; org-roam-capture 主要参考： /Users/yangc/src/emacs.d/ody55eus-doom-emacs.d/doom/Emacs.org
@@ -227,3 +226,4 @@
 ;;   (gkroam-dynamic-brackets-mode -1))
 
 (provide 'init-org-roam)
+;;; init-org-roam.el ends here

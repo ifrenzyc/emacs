@@ -81,3 +81,4 @@
   :config (osx-trash-setup))
 
 (provide 'init-macos)
+;;; init-macos.el ends here

@@ -4,8 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package json-mode
   :mode ("\\.\\(json\\|json.j2\\|json.template\\|jsonld\\|tern-project\\|jshintrc\\)$" . json-ts-mode)
   :hook
@@ -16,3 +15,4 @@
    "C-c C-f" 'json-mode-beautify))
 
 (provide 'lang-json)
+;;; lang-json.el ends here

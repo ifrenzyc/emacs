@@ -7,7 +7,7 @@
 ;; - http://gleek.github.io/blog/2017/04/11/editing-remote-code-with-emacs/
 ;; 
 
-;;; Code
+;;; Code:
 (use-package tramp
   :ensure nil
   :init
@@ -42,3 +42,4 @@
 ;;   :custom (docker-tramp-use-names t))
 
 (provide 'init-tramp)
+;;; init-tramp.el ends here

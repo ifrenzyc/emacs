@@ -5,7 +5,7 @@
 ;; - https://github.com/Alexander-Miller/treemacs
 ;; - https://blog.jft.rocks/emacs/treemacs-icons.html
 
-;;; Code
+;;; Code:
 (use-package treemacs
   :init
   (with-eval-after-load 'winum
@@ -345,3 +345,4 @@
       (setq lsp-treemacs-theme "centaur-colors"))))
 
 (provide 'init-treemacs)
+;;; init-treemacs.el ends here

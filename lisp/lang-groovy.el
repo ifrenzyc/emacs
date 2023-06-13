@@ -4,8 +4,7 @@
 ;; 
 ;; brew install groovy
 
-;;; Code
-
+;;; Code:
 (use-package groovy-mode
   :ensure-system-package (groovy . "brew install groovy")
   :custom
@@ -17,3 +16,4 @@
          ("\\.gradle$" . groovy-mode)))
 
 (provide 'lang-groovy)
+;;; lang-groovy.el ends here

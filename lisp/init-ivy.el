@@ -13,14 +13,13 @@
 ;; - selectrum + prescient
 
 ;;; Code:
-
 (require 'init-funcs)
 
 ;; Improves sorting for fuzzy-matched results
 (use-package flx
   :after ivy
-  :init
-  (setq ivy-flx-limit 10000))
+  :custom
+  (ivy-flx-limit 10000))
 
 (use-package ivy
   :demand t
@@ -658,3 +657,4 @@
   (ivy-rich-mode 1))
 
 (provide 'init-ivy)
+;;; init-ivy.el ends here

@@ -5,8 +5,7 @@
 ;; npm install -g vls
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package vue-mode
   ;; :after lsp-mode
   :mode ("\\.vue\\'" . vue-mode)
@@ -36,3 +35,4 @@
 (use-package vue-html-mode)
 
 (provide 'lang-vue)
+;;; lang-vue.el ends here

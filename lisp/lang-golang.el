@@ -244,3 +244,4 @@
   :after go-ts-mode)
 
 (provide 'lang-golang)
+;;; lang-golang.el ends here

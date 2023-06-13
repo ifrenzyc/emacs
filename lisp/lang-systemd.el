@@ -4,9 +4,9 @@
 ;; 
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package systemd
   :mode ("\\.\\(service\\|service.j2\\|service.template\\)$" . systemd-mode))
 
 (provide 'lang-systemd)
+;;; lang-systemd.el ends here

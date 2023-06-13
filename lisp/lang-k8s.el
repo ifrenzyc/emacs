@@ -6,8 +6,7 @@
 ;; - https://www.reddit.com/r/emacs/comments/ci7s53/conquering_kubernetes_with_emacs/
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package k8s-mode
   :config
   (setq k8s-search-documentation-browser-function 'browse-url-chrome)
@@ -23,3 +22,4 @@
   :config (kubel-vterm-setup))
 
 (provide 'lang-k8s)
+;;; lang-k8s.el ends here

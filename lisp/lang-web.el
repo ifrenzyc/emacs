@@ -4,8 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package ng2-mode)
 
 (use-package tide
@@ -182,3 +181,4 @@
   (add-hook 'comint-output-filter-functions 'node-repl-comint-preoutput-filter))
 
 (provide 'lang-web)
+;;; lang-web.el ends here

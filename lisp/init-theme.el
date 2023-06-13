@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 (use-package doom-themes
   :demand t
   :init
@@ -101,3 +101,4 @@
 ;;   (load-theme 'anti-zenburn t))
 
 (provide 'init-theme)
+;;; init-theme.el ends here

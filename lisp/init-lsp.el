@@ -11,7 +11,7 @@
 ;; ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
 ;; 
 
-;;; Code
+;;; Code:
 (use-package lsp-mode
   ;; :demand t
   :commands (lsp lsp-deferred)
@@ -486,3 +486,4 @@
     (push 'company-lsp company-backends)))
 
 (provide 'init-lsp)
+;;; init-lsp.el ends here

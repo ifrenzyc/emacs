@@ -289,3 +289,4 @@
 ;;   ("f" kmacro-set-format))
 
 (provide 'init-hydra)
+;;; init-hydra.el ends here

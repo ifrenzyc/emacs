@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 (use-package emacs-lisp-mode
   :ensure nil
   :mode ("\\.el\\'" . emacs-lisp-mode)
@@ -128,3 +128,4 @@
 ;;                                         prettify)))
 
 (provide 'lang-elisp)
+;;; lang-elisp.el ends here

@@ -22,3 +22,4 @@
   :after yasnippet)
 
 (provide 'init-yasnippet)
+;;; init-yasnippet.el ends here

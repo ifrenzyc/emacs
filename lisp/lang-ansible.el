@@ -5,7 +5,6 @@
 ;; 
 
 ;;; Code:
-
 (use-package ansible
   :hook
   (yaml-mode . ansible-mode))
@@ -25,3 +24,4 @@
 (use-package poly-ansible)
 
 (provide 'lang-ansible)
+;;; lang-ansible.el ends here

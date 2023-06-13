@@ -6,8 +6,7 @@
 ;; - https://github.com/google/styleguide/blob/gh-pages/google-c-style.el
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package java-mode
   :ensure nil
   :mode ("\\.java\\'" . java-ts-mode)
@@ -173,3 +172,4 @@
   (log4j-mode . read-only-mode))
 
 (provide 'lang-java)
+;;; lang-java.el ends here

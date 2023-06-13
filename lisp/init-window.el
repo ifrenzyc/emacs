@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  scrolling                                                       ;;
@@ -601,3 +601,4 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 ;;   ("4" eyebrowse-switch-to-window-config-4))
 
 (provide 'init-window)
+;;; init-window.el ends here

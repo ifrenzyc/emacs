@@ -5,7 +5,6 @@
 ;; 
 
 ;;; Code:
-
 (use-package sql-mode
   :ensure nil
   :mode ("\\.sql\\'" . sql-mode)
@@ -43,3 +42,4 @@
   )
 
 (provide 'lang-sql)
+;;; lang-sql.el ends here

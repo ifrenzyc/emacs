@@ -5,7 +5,6 @@
 ;; 
 
 ;;; Code:
-
 (require 'treesit)
 
 (use-package treesit
@@ -117,3 +116,4 @@
   (require 'ts-fold-indicators))
 
 (provide 'init-tree-sitter)
+;;; init-tree-sitter.el ends here

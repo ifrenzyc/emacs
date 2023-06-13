@@ -5,7 +5,7 @@
 ;; - https://github.com/pashky/restclient.el
 ;; 
 
-;;; Code
+;;; Code:
 (use-package restclient
   :commands (restclient-mode)
   :mode ("\\.\\(http\\|rest\\)$" . restclient-mode))
@@ -25,3 +25,4 @@
     (add-to-list 'company-backends 'company-restclient)))
 
 (provide 'lang-restclient)
+;;; lang-restclient.el ends here

@@ -9,7 +9,6 @@
 ;; brew install libvterm
 
 ;;; Code:
-
 (use-package vterm
   :hook
   (;; 为 vterm 设置单独字体，https://emacs-china.org/t/mode/15512
@@ -92,3 +91,4 @@
   (defalias 'mt 'multi-vterm-project))
 
 (provide 'init-vterm)
+;;; init-vterm.el ends here

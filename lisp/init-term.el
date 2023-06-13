@@ -92,3 +92,4 @@
   ("<f9>" 'shell-pop))
 
 (provide 'init-term)
+;;; init-term.el ends here

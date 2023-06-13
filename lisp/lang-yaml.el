@@ -4,8 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package yaml-mode
   :mode ("\\.\\(yml\\|yaml\\|yml.j2\\|yaml.j2\\|yml.template\\|yaml.template\\)$" . yaml-ts-mode)
   :hook
@@ -15,3 +14,4 @@
    "C-c C-f" 'lsp-format-buffer))
 
 (provide 'lang-yaml)
+;;; lang-yaml.el ends here

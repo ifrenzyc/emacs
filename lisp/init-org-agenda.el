@@ -751,3 +751,4 @@
 ;;   :hook (org-agenda-finalize . org-timeline-insert-timeline))
 
 (provide 'init-org-agenda)
+;;; init-org-agenda.el ends here

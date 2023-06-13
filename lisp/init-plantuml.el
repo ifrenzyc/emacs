@@ -5,7 +5,7 @@
 ;; 需要依赖 Java 环境及 plantuml.jar（http://plantuml.com/download）。
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package plantuml-mode
   :init
@@ -18,3 +18,4 @@
   (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))
 
 (provide 'init-plantuml)
+;;; init-plantuml.el ends here

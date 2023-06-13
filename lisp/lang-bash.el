@@ -5,7 +5,6 @@
 ;; 
 
 ;;; Code:
-
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
 (use-package company-shell
@@ -38,3 +37,4 @@
    "C-c C-f" 'shfmt))
 
 (provide 'lang-bash)
+;;; lang-bash.el ends here

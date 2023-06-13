@@ -193,3 +193,4 @@
   (add-to-list 'which-func-modes 'emacs-lisp-mode))
 
 (provide 'lang-basic)
+;;; lang-basic.el ends here

@@ -4,8 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package nxml-mode
   :ensure nil
   :mode ("\\.\\(xml\\|gapp\\|plist\\|pom\\|xsd\\|xslt\\)$" . nxml-mode)
@@ -38,3 +37,4 @@
   :hook (nxml-mode . noxml-fold-mode))
 
 (provide 'lang-xml)
+;;; lang-xml.el ends here

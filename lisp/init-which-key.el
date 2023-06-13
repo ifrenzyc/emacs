@@ -6,8 +6,7 @@
 ;; - https://github.com/justbur/emacs-which-key
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package which-key
   :hook
   (after-init . which-key-mode)
@@ -46,3 +45,4 @@
   (keyfreq-autosave-mode 1))
 
 (provide 'init-which-key)
+;;; init-which-key.el ends here
