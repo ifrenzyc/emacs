@@ -80,10 +80,7 @@
 
 (use-package treesit-auto
   :config
-  (add-to-list 'treesit-auto-fallback-alist '(bash-ts-mode . sh-mode))
-  (treesit-auto-apply-remap)
-  (advice-add 'treesit-install-language-grammar
-              :after (lambda (&rest _r) (treesit-auto-apply-remap))))
+  (add-to-list 'treesit-auto-fallback-alist '(bash-ts-mode . sh-mode)))
 
 (use-package tree-sitter
   :init
