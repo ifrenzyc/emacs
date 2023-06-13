@@ -556,3 +556,4 @@ If there is only one overlay at point, just return it, no matter region or symbo
   (aorst/display-fill-column-indicator-setup-faces))
 
 (provide 'init-highlight)
+;;; init-highlight.el ends here

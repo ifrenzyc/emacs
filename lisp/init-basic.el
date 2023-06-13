@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 ;; Set the default encoding system, use `UTF-8` for env.
 (set-default-coding-systems 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -70,21 +70,22 @@
 
   ;; 在行首 C-k 时，同时删除该行
   (setq-default kill-whole-line t)
-  (setq warning-minimum-level :error))
+  (setq warning-minimum-level :error)
 
-;; - https://dougie.io/coding/tabs-in-emacs/
-;; In Emacs, sentences uses double-spaces by default. Use single spaces instead:
-(setq sentence-end-double-space nil)
+  ;; - https://dougie.io/coding/tabs-in-emacs/
+  ;; In Emacs, sentences uses double-spaces by default. Use single spaces instead:
+  (setq sentence-end-double-space nil)
 
-;; Disable tabs and set prefered indentation width in spaces
-;; (In this case the indent size is 2-spaces wide)
-(setq-default indent-tabs-mode nil)
-(setq-default standard-indent 4)
-(setq-default tab-width 4)
-(setq-default js-indent-width 4)
+  ;; Disable tabs and set prefered indentation width in spaces
+  ;; (In this case the indent size is 2-spaces wide)
+  (setq-default indent-tabs-mode nil)
+  (setq-default standard-indent 4)
+  (setq-default tab-width 4)
+  (setq-default js-indent-width 4)
 
-;; Make the backspace properly erase the tab instead of
-;; removing 1 space at a time.
-(setq backward-delete-char-untabify-method 'hungry)
+  ;; Make the backspace properly erase the tab instead of
+  ;; removing 1 space at a time.
+  (setq backward-delete-char-untabify-method 'hungry))
 
 (provide 'init-basic)
+;;; init-basic.el ends here

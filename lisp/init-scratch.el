@@ -10,19 +10,10 @@
 ;; ╔═╗┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬
 ;; ╚═╗│  ├┬┘├─┤ │ │  ├─┤
 ;; ╚═╝└─┘┴└─┴ ┴ ┴ └─┘┴ ┴
+;; ═════════════════════
 
 
 ")
-
-;; (setq initial-scratch-message "\
-;; ;; Happy cake day!
-
-;; ")
-
-;; (setq initial-scratch-message "\
-;; ;; Don't Complain!
-
-;; ")
 
 ;; Recreate scratch buffer
 ;; just recreates scratch buffer when it's killed, I got this from the EmacsWiki
@@ -49,3 +40,4 @@
          (lisp-interaction-mode . persistent-scratch-mode)))
 
 (provide 'init-scratch)
+;;; init-scratch.el ends here

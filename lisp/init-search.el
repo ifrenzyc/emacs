@@ -11,16 +11,17 @@
   :ensure nil
   :no-require t
   :commands swiper-from-isearch
-  :bind (("M-s ." . isearch-forward-symbol-at-point)
-         ;; ("C-s" . isearch-forward-regexp)
-         ("C-r" . isearch-backward-regexp)
-         ("C-M-s" . isearch-forward-other-window)
-         ("C-M-r" . isearch-backward-other-window)
-         ("M-s SPC" . xah-search-current-word)
-         :map isearch-mode-map
-         ("C-;" . swiper-from-isearch)
-         ("C-'" . avy-isearch)
-         ("C-l" . counsel-git-grep-from-isearch))
+  :general
+  ("M-s ."   'isearch-forward-symbol-at-point
+   ;; "C-s"   'isearch-forward-regexp
+   "C-r"     'isearch-backward-regexp
+   "C-M-s"   'isearch-forward-other-window
+   "C-M-r"   'isearch-backward-other-window
+   "M-s SPC" 'xah-search-current-word)
+  (isearch-mode-map
+   "C-;" 'swiper-from-isearch
+   "C-'" 'avy-isearch
+   "C-l" 'counsel-git-grep-from-isearch)
   :config
   ;; Isearch in other windows
   (defun isearch-forward-other-window (prefix)
@@ -117,7 +118,8 @@ Version 2015-04-09"
                           ?a ?s ?d ?f ?g ?h ?j
                           ?k ?l ?' ?x ?c ?v ?b
                           ?n ?, ?/)))
-  :hook (after-init . avy-setup-default)
+  :hook
+  (after-init . avy-setup-default)
   :general
   ("C-;"   'avy-goto-char-timer
    "C-:"   'avy-goto-line
@@ -385,10 +387,10 @@ active region use it instead."
 (use-package counsel-ag-popup)
 
 (use-package rg
-  :config
+  :custom
   ;; (evil-set-initial-state 'rg-mode 'emacs)
-  (setq rg-group-result t)
-  (setq rg-show-header t))
+  (rg-group-result t)
+  (rg-show-header t))
 
 ;; https://github.com/manateelazycat/color-rg
 (use-package color-rg
@@ -415,3 +417,4 @@ active region use it instead."
 (use-package deadgrep)
 
 (provide 'init-search)
+;;; init-search.el ends here

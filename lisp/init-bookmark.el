@@ -4,13 +4,12 @@
 ;; 
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package bookmark
   :ensure nil
-  :config
+  :custom
   ;; disable bookmark face after org-capture
-  (setq bookmark-set-fringe-mark nil)
-  (setq bookmark-fontify nil))
+  (bookmark-fringe-mark nil))
 
 (provide 'init-bookmark)
+;;; init-bookmark.el ends here

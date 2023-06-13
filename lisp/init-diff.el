@@ -14,11 +14,11 @@
          (ediff-prepare-buffer . outline-show-all)
          ;; restore window layout when done
          (ediff-quit . winner-undo))
-  :config
-  (setq ediff-diff-options "-w"
-        ediff-split-window-function 'split-window-horizontally
-        ediff-window-setup-function 'ediff-setup-windows-plain
-        ediff-merge-split-window-function 'split-window-horizontally))
+  :custom
+  (ediff-diff-options "-w")
+  (ediff-split-window-function 'split-window-horizontally)
+  (ediff-window-setup-function 'ediff-setup-windows-plain)
+  (ediff-merge-split-window-function 'split-window-horizontally))
 
 ;; (use-package evil-ediff)
 
@@ -28,7 +28,7 @@
   :diminish
   :pretty-hydra
   ((:title (pretty-hydra-title "Smerge" 'octicon "diff")
-           :color pink :quit-key "q")
+           :color pink :quit-key "C-g")
    ("Move"
     (("n" smerge-next "next")
      ("p" smerge-prev "previous"))
@@ -68,3 +68,4 @@
                                 (hydra-smerge/body))))))
 
 (provide 'init-diff)
+;;; init-diff.el ends here

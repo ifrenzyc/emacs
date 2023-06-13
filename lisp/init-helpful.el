@@ -4,8 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
-
+;;; Code:
 (use-package info
   :general
   (Info-mode-map
@@ -24,8 +23,7 @@
                       :family 'unspecified
                       :inherit font-lock-type-face)
 
-  (defhydra hydra-info (:color pink
-                        :hint nil)
+  (defhydra hydra-info (:color pink :hint nil)
     "
   Info-mode:
   _I_ndex(virtual)    _T_OC                            ^ ^^ ^  ^ ^ ^^     _k_/_u_p   ( )
@@ -95,15 +93,21 @@
 
 (use-package helpful
   :pretty-hydra
-  ((:color teal :quit-key "q")
+  ((:color teal :quit-key "C-g")
    ("Helpful"
     (("f" helpful-callable "callable")
      ("v" helpful-variable "variable")
      ("k" helpful-key "key")
      ("m" describe-mode "mode")
      ("c" helpful-command "command")
-     ("h" major-mode-hydra "major mode hydra")
-     ("d" helpful-at-point "thing at point"))))
-  :bind ("C-h" . helpful-hydra/body))
+     ("d" helpful-at-point "thing at point"))
+    "Which key"
+    (("b" which-key-show-top-level)
+     ("B" which-key-show-standard-help))
+    "Major mode hydra"
+    (("h" major-mode-hydra "major mode hydra"))))
+  :general
+  ("C-h" 'helpful-hydra/body))
 
 (provide 'init-helpful)
+;;; init-helpful.el ends here

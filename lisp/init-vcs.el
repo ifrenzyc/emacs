@@ -259,7 +259,7 @@
     "Git timemachine"
     ("p" git-timemachine-show-previous-revision "previous revision")
     ("n" git-timemachine-show-next-revision "next revision")
-    ("q" nil "quit"))
+    ("C-g" nil "quit"))
   )
 
 ;; - https://github.com/thisch/gerrit.el

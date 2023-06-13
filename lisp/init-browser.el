@@ -5,7 +5,7 @@
 ;; - https://github.com/akirakyle/emacs-webkit
 ;; 
 
-;;; Code
+;;; Code:
 
 ;; (set browse-url-browser-function 'xwidget-webkit-browse-url)
 
@@ -16,7 +16,9 @@
   :load-path "localelpa/xwwp"
   :custom
   (xwwp-follow-link-completion-system 'ivy)
-  :general (xwidget-webkit-mode-map
-            "v" 'xwwp-follow-link))
+  :general
+  (xwidget-webkit-mode-map
+   "v" 'xwwp-follow-link))
 
 (provide 'init-browser)
+;;; init-browser.el ends here

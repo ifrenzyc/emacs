@@ -13,35 +13,34 @@
 ;; 
 
 ;;; Code:
-
 (require 'init-const)
 
 (use-package company
-  :hook (after-init . global-company-mode)
-  :bind
-  (("C-." . company-complete)
-   ;; :map company-mode-map
-   ;; ("<backtab>" . company-yasnippet)
-   :map company-active-map
-   ("<tab>" . company-complete-selection)
-   ("C-n" . company-select-next)
-   ("C-p" . company-select-previous)
-   ("C-d" . company-show-doc-buffer)
-   ("C-f" . company-filter-candidates)
-   ("C-r" . company-search-candidates)
-   ("C-/" . counsel-company)
-   ("<backtab>" . my-company-yasnippet)
-   :map company-search-map
-   ("C-p" . company-select-previous)
-   ("C-n" . company-select-next)
-   )
+  :hook
+  (after-init . global-company-mode)
+  :general
+  ("C-." 'company-complete)
+  ;; :map company-mode-map
+  ;; ("<backtab>" . company-yasnippet)
+  (company-active-map
+   "<tab>" 'company-complete-selection
+   "C-n" 'company-select-next
+   "C-p" 'company-select-previous
+   "C-d" 'company-show-doc-buffer
+   "C-f" 'company-filter-candidates
+   "C-r" 'company-search-candidates
+   "C-/" 'counsel-company
+   "<backtab>" 'my-company-yasnippet)
+  (company-search-map
+   "C-p" 'company-select-previous
+   "C-n" 'company-select-next)
   :config
-  (with-eval-after-load 'evil
-    (with-eval-after-load 'company
-      (define-key evil-insert-state-map (kbd "C-n") nil)
-      (define-key evil-insert-state-map (kbd "C-p") nil)
-      (evil-define-key nil company-active-map (kbd "C-n") #'company-select-next)
-      (evil-define-key nil company-active-map (kbd "C-p") #'company-select-previous)))
+  ;; (with-eval-after-load 'evil
+  ;;   (with-eval-after-load 'company
+  ;;     (define-key evil-insert-state-map (kbd "C-n") nil)
+  ;;     (define-key evil-insert-state-map (kbd "C-p") nil)
+  ;;     (evil-define-key nil company-active-map (kbd "C-n") #'company-select-next)
+  ;;     (evil-define-key nil company-active-map (kbd "C-p") #'company-select-previous)))
   (defun my-company-yasnippet ()
     "Hide the current completeions and show snippets."
     (interactive)
@@ -120,12 +119,15 @@
 
 (use-package company-box
   :diminish
-  :hook (company-mode . company-box-mode)
-  :defines (company-box-icons-all-the-icons-material company-box-icons-all-the-icons-faicon)
-  :init (setq company-box-enable-icon t
-              company-box-backends-colors nil
-              company-box-show-single-candidate t
-              company-box-doc-delay 0.3)
+  :hook
+  (company-mode . company-box-mode)
+  :defines
+  (company-box-icons-all-the-icons-material company-box-icons-all-the-icons-faicon)
+  :custom
+  (company-box-enable-icon t)
+  (company-box-backends-colors nil)
+  (company-box-show-single-candidate t)
+  (company-box-doc-delay 0.3)
   :config
   (declare-function all-the-icons-faicon 'all-the-icons)
   (declare-function all-the-icons-material 'all-the-icons)
@@ -308,23 +310,27 @@
 ;; Popup documentation for completion candidates
 ;; - https://github.com/expez/company-quickhelp
 (use-package company-quickhelp
-  :hook (company-mode . company-quickhelp-mode)
+  :hook
+  (company-mode . company-quickhelp-mode)
   :defines company-quickhelp-delay
-  :bind (:map company-active-map
-              ([remap company-show-doc-buffer] . company-quickhelp-manual-begin))
+  :bind
+  (:map company-active-map
+        ([remap company-show-doc-buffer] . company-quickhelp-manual-begin)
+        ("M-h" . company-quickhelp-manual-begin))
   :config
   (setq company-quickhelp-delay 0.5)
   (setq pos-tip-background-color (face-background 'company-tooltip)
         pos-tip-foreground-color (face-foreground 'company-tooltip))
-  :bind (:map company-active-map
-              ("M-h" . company-quickhelp-manual-begin)))
+  )
 
 (use-package company-statistics
-  :hook (company-mode . company-statistics-mode))
+  :hook
+  (company-mode . company-statistics-mode))
 
 ;; Better sorting and filtering
 (use-package company-prescient
-  :hook (company-mode . company-prescient-mode))
+  :hook
+  (company-mode . company-prescient-mode))
 
 ;; 基于 Company 编写了一个带中文注释的英文补全助手 - Emacs-general - Emacs China
 ;; - https://emacs-china.org/t/company/6322/186
@@ -335,3 +341,4 @@
   (setq company-english-helper-fuzz-search-p t))
 
 (provide 'init-company)
+;;; init-company.el ends here

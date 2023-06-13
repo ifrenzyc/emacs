@@ -30,70 +30,47 @@
   (vimish-fold-global-mode)
   :config
   (setq-default vimish-fold-header-width 119)
-  (defhydra hydra-vimish-fold (:color red :hint nil)
-    "
- _f_: fold  _u_: unfold  _r_: refold  _t_: toggle  _d_: delete    _n_: next      _q_: quit
-          _U_: Unfold  _R_: Refold  _T_: Toggle  _D_: Delete    _p_: previous
-  "
-    ("f" vimish-fold)
-    ("u" vimish-fold-unfold)
-    ("U" vimish-fold-unfold)
-    ("r" vimish-fold-refold)
-    ("t" vimish-fold-toggle)
-    ("d" vimish-fold-delete)
-    
-    ("R" vimish-fold-refold-all)
-    ("T" vimish-fold-toggle-all)
-    ("D" vimish-fold-delete-all)
-    ("n" vimish-fold-next-fold)
-    ("p" vimish-fold-previous-fold)
-    ("q" nil :color blue))
-  (pretty-hydra-define hydra-fold
-    (:hint nil :foreign-keys warn :quit-key "q")
-    ("Fold"
-     (("q" nil "Quit"))
-     "Do" (("f" vimish-fold)
-           ("k" vimish-fold-delete)
-           ("K" vimish-fold-delete-all))
-     "Jump"
-     (("<tab>" vimish-fold-toggle)
-      ("S-<tab>" vimish-fold-toggle-all))
-     "Toggle"
-     (("<" vimish-fold-previous-fold)
-      (">" vimish-fold-next-fold)))))
-
-(use-package origami
-  ;;:hook (prog-mode . origami-mode)
   :pretty-hydra
-  ((:title (pretty-hydra-title "Origami" 'octicon "fold" :height 1.1 :v-adjust -0.05)
-           :color amaranth :quit-key "C-g")
-   ("Node"
+  (hydra-fold
+   (:title (pretty-hydra-title "Folding" 'octicon "fold" :height 1.1 :v-adjust -0.05)
+           :pre (global-origami-mode t) :color teal :quit-key "C-g")
+   ("Fold(vimish)"
+    (("f" vimish-fold)
+     ("F" vimish-fold)
+     ("u" vimish-fold-unfold)
+     ("U" vimish-fold-unfold)
+     ("r" vimish-fold-refold)
+     ("R" vimish-fold-refold-all)
+     ("d" vimish-fold-delete)
+     ("D" vimish-fold-delete-all))
+    "Jump(Vimish)"
+    (("<" vimish-fold-previous-fold)
+     (">" vimish-fold-next-fold))
+    "Toggle(Vimish)"
+    (("<tab>" vimish-fold-toggle)
+     ("S-<tab>" vimish-fold-toggle-all))
+    "Origami Node"
     ((":" origami-recursively-toggle-node "toggle recursively")
      ("a" origami-toggle-all-nodes "toggle all")
      ("t" origami-toggle-node "toggle current")
-     ("o" origami-show-only-node "only show current"))
-    "Actions"
-    (("u" origami-undo "undo")
-     ("d" origami-redo "redo")
-     ("r" origami-reset "reset"))))
-  :bind (:map origami-mode-map
-              ("C-`" . origami-hydra/body))
-  :init (setq origami-show-fold-header t)
+     ("o" origami-open-node)
+     ("c" origami-close-node)
+     ("n" origami-next-fold)
+     ("p" origami-previous-fold)
+     ("]" origami-forward-toggle-node)
+     ("O" origami-show-only-node "only show current"))
+    "Origami Actions"
+    (("h" origami-undo "undo")
+     ("k" origami-redo "redo")
+     ("[" origami-reset "reset"))))
+  )
+
+(use-package origami
+  :custom
+  (origami-show-fold-header t)
   :config
   (global-origami-mode t)
-  (face-spec-reset-face 'origami-fold-header-face)
-  (defhydra hydra-origami (:color red)
-    "
-  _o_pen node    _n_ext fold       toggle _f_orward
-  _c_lose node   _p_revious fold   toggle _a_ll
-  "
-    ("o" origami-open-node)
-    ("c" origami-close-node)
-    ("n" origami-next-fold)
-    ("p" origami-previous-fold)
-    ("f" origami-forward-toggle-node)
-    ("a" origami-toggle-all-nodes)
-    ("t" origami-toggle-node)))
+  (face-spec-reset-face 'origami-fold-header-face))
 
 ;; origami-predef
 
@@ -105,3 +82,4 @@
   (lsp-after-open . lsp-origami-try-enable))
 
 (provide 'init-folding)
+;;; init-folding.el ends here

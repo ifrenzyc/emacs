@@ -6,8 +6,7 @@
 ;; - https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-emacs/
 ;; 
 
-;;; Code
-
+;;; Code:
 (require 'init-funcs)
 
 (use-package general
@@ -272,3 +271,4 @@
 (general-define-key "C-x C-m" 'yc/move-file)
 
 (provide 'init-general)
+;;; init-general.el ends here

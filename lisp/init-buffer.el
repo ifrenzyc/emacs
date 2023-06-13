@@ -9,7 +9,8 @@
 ;; mapping key to =C-c f= .
 ;; Save a list of recent files visited. (open recent file with C-c f)
 (use-package recentf
-  :hook (after-init . recentf-mode)
+  :hook
+  (after-init . recentf-mode)
   :init
   ;; Save a list of recent files visited. (open recent file with C-x f)
   (setq recentf-max-saved-items 1000   ; just 1000 is too recent
@@ -24,20 +25,22 @@
 
 (use-package all-the-icons-ibuffer
   :disabled t
-  :hook (ibuffer-mode . all-the-icons-ibuffer-mode)
+  :hook
+  (ibuffer-mode . all-the-icons-ibuffer-mode)
   :init
   ;; Use human readable file size in ibuffer.
   (setq all-the-icons-ibuffer-human-readable-size t))
 
 (use-package nerd-icons-ibuffer
-  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+  :hook
+  (ibuffer-mode . nerd-icons-ibuffer-mode))
 
 (use-package ibuffer
-  :bind (([remap list-buffers] . ibuffer))
+  :bind
+  (([remap list-buffers] . ibuffer))
   :custom
   (ibuffer-expert t)
-  :init
-  (setq ibuffer-show-empty-filter-groups nil)
+  (ibuffer-show-empty-filter-groups nil)
   :config
   (setq ibuffer-formats
 	    '((mark modified read-only " "
@@ -53,8 +56,9 @@
 
 (use-package ibuffer-vc
   :after ibuffer
-  :config
-  (define-key ibuffer-mode-map (kbd "/ V") 'ibuffer-vc-set-filter-groups-by-vc-root))
+  :general
+  (ibuffer-mode-map
+   "/ V" 'ibuffer-vc-set-filter-groups-by-vc-root))
 
 (use-package ibuffer-projectile
   :after projectile
@@ -70,6 +74,8 @@
   (bufler-workspace-mode))
 
 (use-package unmodified-buffer
-  :hook (after-init . unmodified-buffer-mode))
+  :hook
+  (after-init . unmodified-buffer-mode))
 
 (provide 'init-buffer)
+;;; init-buffer.el ends here

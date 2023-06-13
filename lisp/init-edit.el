@@ -585,3 +585,4 @@ there's a region, all lines that region covers will be duplicated."
     (add-hook 'evil-insert-state-exit-hook (lambda () (fancy-dabbrev-mode 0)))))
 
 (provide 'init-edit)
+;;; init-edit.el ends here

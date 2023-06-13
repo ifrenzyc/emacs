@@ -13,8 +13,7 @@
 ;;   (after-init . benchmark-init/deactivate))
 
 (use-package esup
-  :disabled t
-  )
+  :disabled t)
 
 ;; Hunt down errors by bisecting elisp files
 ;; (use-package bug-hunter)
@@ -56,3 +55,4 @@
 ;;   (gcmh-high-cons-threshold #x6400000))
 
 (provide 'init-gc)
+;;; init-gc.el ends here

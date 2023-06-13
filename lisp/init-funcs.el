@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 (require 'windmove)
 
 ;; Split and move the cursor to the new split
@@ -177,3 +177,4 @@ Version 2015-05-16"
 
 
 (provide 'init-funcs)
+;;; init-funcs.el ends here

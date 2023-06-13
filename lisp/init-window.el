@@ -193,7 +193,28 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
   :init
   (eyebrowse-mode 1)
   :config
-  (setq-default eyebrowse-new-workspace t))
+  (setq-default eyebrowse-new-workspace t)
+
+;; (defhydra hydra-eyebrowse (:color blue)
+;;   "
+;; ^
+;; ^Eyebrowse^         ^Do^                ^Switch^
+;; ^─────────^─────────^──^────────────────^──────^────────────
+;; _q_ quit            _c_ create          _<_ previous
+;; ^^                  _k_ kill            _>_ next
+;; ^^                  _r_ rename          _e_ last
+;; ^^                  ^^                  _s_ switch
+;; ^^                  ^^                  ^^
+;; "
+;;   ("q" nil)
+;;   ("<" eyebrowse-prev-window-config :color red)
+;;   (">" eyebrowse-next-window-config :color red)
+;;   ("c" eyebrowse-create-window-config)
+;;   ("e" eyebrowse-last-window-config)
+;;   ("k" eyebrowse-close-window-config :color red)
+;;   ("r" eyebrowse-rename-window-config)
+;;   ("s" eyebrowse-switch-to-window-config))
+  )
 
 ;; - https://github.com/pashinin/workgroups2
 (use-package workgroups2

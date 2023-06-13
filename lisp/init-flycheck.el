@@ -7,17 +7,19 @@
 ;;; Code
 (use-package flycheck
   :commands global-flycheck-mode
-  :hook (after-init . global-flycheck-mode)
-  :init (setq flycheck-global-modes
-              '(not text-mode outline-mode fundamental-mode lisp-interaction-mode
-                    org-mode diff-mode shell-mode eshell-mode term-mode vterm-mode)
-              flycheck-emacs-lisp-load-path 'inherit
-              flycheck-display-errors-function 'flycheck-pos-tip-error-messages
-              flycheck-indication-mode (if (display-graphic-p)
-                                           'right-fringe
-                                         'right-margin)
-              ;; Only check while saving and opening files
-              flycheck-check-syntax-automatically '(save mode-enabled))
+  :hook
+  (after-init . global-flycheck-mode)
+  :init
+  (setq flycheck-global-modes
+        '(not text-mode outline-mode fundamental-mode lisp-interaction-mode
+              org-mode diff-mode shell-mode eshell-mode term-mode vterm-mode)
+        flycheck-emacs-lisp-load-path 'inherit
+        flycheck-display-errors-function 'flycheck-pos-tip-error-messages
+        flycheck-indication-mode (if (display-graphic-p)
+                                     'right-fringe
+                                   'right-margin)
+        ;; Only check while saving and opening files
+        flycheck-check-syntax-automatically '(save mode-enabled))
   (setenv "DICTIONARY" "en_US")
   :custom
   (flyspell-abbrev-p t)
@@ -90,7 +92,8 @@
   :hook (flycheck-mode . flycheck-inline-mode))
 
 (use-package flycheck-posframe
-  :hook (flycheck-mode . flycheck-posframe-mode)
+  :hook
+  (flycheck-mode . flycheck-posframe-mode)
   :custom-face
   (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
   (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
@@ -100,3 +103,4 @@
   (flycheck-posframe-configure-pretty-defaults))
 
 (provide 'init-flycheck)
+;;; init-flycheck.el ends here

@@ -7,7 +7,7 @@
 ;; - https://archive.casouri.co.uk/note/2019/emacs-%E5%AD%97%E4%BD%93%E4%B8%8E%E5%AD%97%E4%BD%93%E9%9B%86/index.html
 ;; 
 
-;;; Code
+;;; Code:
 
 ;; JetBrains Mono
 ;; Roboto Mono
@@ -84,3 +84,4 @@
   :load-path "localelpa/fixed-pitch-mode")
 
 (provide 'init-font)
+;;; init-font.el ends here

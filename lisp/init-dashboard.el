@@ -13,3 +13,4 @@
 (setq inhibit-startup-screen t)
 
 (provide 'init-dashboard)
+;;; init-dashboard.el ends here

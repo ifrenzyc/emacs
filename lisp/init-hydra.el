@@ -19,14 +19,6 @@
 (require 'init-funcs)
 
 (use-package hydra
-  ;; :preface
-  ;; (defvar-local yc/ongoing-hydra-body nil)
-  ;; (defun yc/ongoing-hydra ()
-  ;;   (interactive)
-  ;;   (if yc/ongoing-hydra-body
-  ;;       (funcall yc/ongoing-hydra-body)
-  ;;     (user-error "yc/ongoing-hydra: yc/ongoing-hydra-body is not set")))
-
   ;; novoid 的很多 hydra 配置值得参考：
   ;; - /Users/yangc/src/emacs.d/novoid-dot-emacs/config.org
   ;; - /Users/yangc/src/emacs.d/caiohcs-emacs/settings.el
@@ -41,33 +33,16 @@
    ;; "C-c h s" '
    ;; "C-c h S" '(hydra-smartparens/body :wk "hydra-smartparens")
    ;; "C-c h c" '(hydra-multiple-cursors/body :wk "hydra-multiple-cursors")
-   "C-c h g" '(hydra-git-timemachine/body :wk "hydra-git-timemachine") ;; TODO replace with major-mode-hydra
+   "C-c h g" '(hydra-git-timemachine/body :wk "hydra-git-timemachine")
    ;; "C-c g" 'hydra-magit/body
    ;; "C-c h" 'hydra-helm/body
    ;; "C-c o" 'yc/ongoing-hydra
-   "C-c h i" '(hydra-imagex-sticky/body :wk "hydra-imagex-sticky")  ;; TODO replace with major-mode-hydra
-   "C-c h v" '(hydra-pdftools/body :wk "hydra-pdftools")  ;; TODO replace with major-mode-hydra
+   ;; "C-c h v" '(hydra-pdftools/body :wk "hydra-pdftools")
    "C-c h m" '(hydra-macro/body :wk "hydra-macro")
    "C-c h p" '(hydra-projectile/body :wk "hydra-projectile")
    "C-c h P" '(hydra-system/body :wk "hydra-system")
    "C-c h t" '(hydra-toggles/body :wk "hydra-toggles")
    "C-c h w" '(hydra-window/body :wk "hydra-window"))
-  ;; :config
-  ;; (setq hydra-hint-display-type 'my/posframe)
-  ;; (defun my/hydra-posframe-show (str)
-  ;;   (require 'posframe)
-  ;;   (posframe-show
-  ;;    " *hydra-posframe*"
-  ;;    :string str
-  ;;    :point (point)
-  ;;    :internal-border-color "gray50"
-  ;;    :internal-border-width 2
-  ;;    :poshandler #'posframe-poshandler-frame-top-center))
-  ;; (defun my/hydra-posframe-hide ()
-  ;;   (posframe-hide " *hydra-posframe*"))
-  ;; (setq hydra-hint-display-alist
-  ;;       (list (list 'my/posframe #'my/hydra-posframe-show #'my/hydra-posframe-hide))
-  ;;       hydra--work-around-dedicated nil)
   )
 
 ;; 关于 Hydra 高效的按键绑定，参考：
@@ -75,8 +50,7 @@
 (use-package pretty-hydra
   :bind ("<f6>" . hydra-toggles/body)
   :init
-  (cl-defun pretty-hydra-title (title &optional icon-type icon-name
-                                      &key face height v-adjust)
+  (cl-defun pretty-hydra-title (title &optional icon-type icon-name &key face height v-adjust)
     "Add an icon in the hydra title."
     (let ((face (or face `(:foreground ,(face-background 'highlight))))
           (height (or height 1.0))
@@ -149,8 +123,24 @@
 ;;   :after (hydra posframe)
 ;;   :hook (after-init . hydra-posframe-enable)
 ;;   :custom-face (hydra-posframe-face ((t (:background "DarkSlateBlue"))))
-;;   :custom-face (hydra-posframe-border-face ((t (:background "DarkBlue")))))
-
+;;   :custom-face (hydra-posframe-border-face ((t (:background "DarkBlue"))))
+;; :config
+;; (setq hydra-hint-display-type 'my/posframe)
+;; (defun my/hydra-posframe-show (str)
+;;   (require 'posframe)
+;;   (posframe-show
+;;    " *hydra-posframe*"
+;;    :string str
+;;    :point (point)
+;;    :internal-border-color "gray50"
+;;    :internal-border-width 2
+;;    :poshandler #'posframe-poshandler-frame-top-center))
+;; (defun my/hydra-posframe-hide ()
+;;   (posframe-hide " *hydra-posframe*"))
+;; (setq hydra-hint-display-alist
+;;       (list (list 'my/posframe #'my/hydra-posframe-show #'my/hydra-posframe-hide))
+;;       hydra--work-around-dedicated nil)
+;; )
 
 ;; 这个是参考了 spacemacs 针对 hydra 的扩展，能够方便地绑定 major mode 的按键。
 ;; 比如，当前的 major mode 是 org-mode，则可以快速唤出相应 org-mode 自定义的 hydra 按键，统一所有 major-mode 的按键。
@@ -174,26 +164,6 @@
                      " "
                      (symbol-name mode)
                      " commands"))))
-
-;; (defhydra hydra-eyebrowse (:color blue)
-;;   "
-;; ^
-;; ^Eyebrowse^         ^Do^                ^Switch^
-;; ^─────────^─────────^──^────────────────^──────^────────────
-;; _q_ quit            _c_ create          _<_ previous
-;; ^^                  _k_ kill            _>_ next
-;; ^^                  _r_ rename          _e_ last
-;; ^^                  ^^                  _s_ switch
-;; ^^                  ^^                  ^^
-;; "
-;;   ("q" nil)
-;;   ("<" eyebrowse-prev-window-config :color red)
-;;   (">" eyebrowse-next-window-config :color red)
-;;   ("c" eyebrowse-create-window-config)
-;;   ("e" eyebrowse-last-window-config)
-;;   ("k" eyebrowse-close-window-config :color red)
-;;   ("r" eyebrowse-rename-window-config)
-;;   ("s" eyebrowse-switch-to-window-config))
 
 (defhydra hydra-dates (:color red)
   "
@@ -242,26 +212,6 @@
   ("u" undo nil)
   ("C-g" nil))
 (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
-
-;; (defhydra hydra-macro (:color teal
-;;                               :hint nil)
-;;   "
-;;   _r_: region  _e_: execute   _c_: counter  _f_: format
-;;   _n_: next    _p_: previous  _i_: insert   _q_: query
-;;  _(_: start  _)_: stop
-;;   "
-;;   ("q" nil "quit")
-;;   ("Q" kbd-macro-query)
-;;   ("(" kmacro-start-macro-or-insert-counter)
-;;   (")" kmacro-end-or-call-macro)
-;;   ("r" apply-macro-to-region-lines)
-;;   ("e" kmacro-end-and-call-macro)
-;;   ("n" kmacro-cycle-ring-next)
-;;   ("p" kmacro-cycle-ring-previous)
-;;   ("i" kmacro-insert-counter)
-;;   ("c" kmacro-set-counter)
-;;   ("q" kbd-macro-query)
-;;   ("f" kmacro-set-format))
 
 ;; macro 的按键绑定可以参考 leuven 函数 leuven-kmacro-turn-on-recording
 (defun leuven-kmacro-turn-on-recording ()
@@ -316,6 +266,26 @@
   ("x" kmacro-to-register)
   ("'" kmacro-edit-macro)
   ("," edit-kbd-macro)
-  ("q" nil "Quit" :color blue))
+  ("C-g" nil "Quit" :color blue))
+
+;; (defhydra hydra-macro (:color teal
+;;                               :hint nil)
+;;   "
+;;   _r_: region  _e_: execute   _c_: counter  _f_: format
+;;   _n_: next    _p_: previous  _i_: insert   _q_: query
+;;  _(_: start  _)_: stop
+;;   "
+;;   ("q" nil "quit")
+;;   ("Q" kbd-macro-query)
+;;   ("(" kmacro-start-macro-or-insert-counter)
+;;   (")" kmacro-end-or-call-macro)
+;;   ("r" apply-macro-to-region-lines)
+;;   ("e" kmacro-end-and-call-macro)
+;;   ("n" kmacro-cycle-ring-next)
+;;   ("p" kmacro-cycle-ring-previous)
+;;   ("i" kmacro-insert-counter)
+;;   ("c" kmacro-set-counter)
+;;   ("q" kbd-macro-query)
+;;   ("f" kmacro-set-format))
 
 (provide 'init-hydra)
