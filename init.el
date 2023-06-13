@@ -136,7 +136,7 @@
 ;; (require 'init-org-journal)
 (require 'init-org-roam)
 ;; (require 'init-svg-tag)
-(require 'init-deft)
+;; (require 'init-deft)
 (require 'init-markdown)
 (require 'init-reader)
 
