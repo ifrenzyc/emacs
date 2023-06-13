@@ -10,6 +10,7 @@ custom.el
 persp-confs/
 elpa/
 emacs.el
+*.elc
 emojis/
 eshell/
 ido.last
@@ -19,6 +20,9 @@ projectile.cache
 projects
 pyim/
 elpy/
+lisp/flycheck_init*.el
+lisp/flycheck_lang*.el
+lisp/*.elc
 recentf
 smex-items
 amx-items
