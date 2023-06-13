@@ -200,7 +200,7 @@
   ^
   ^Dates^             ^Insert^            ^Insert with Time^
   ^─────^─────────────^──────^────────────^────────────────^──
-  _q_ quit            _d_ short           _D_ short
+  _C-g_ quit            _d_ short           _D_ short
   ^^                  _i_ iso             _I_ iso
   ^^                  _l_ long            _L_ long
   ^^                  ^^                  ^^
@@ -221,7 +221,7 @@
     ^_k_^       _w_ copy      _o_pen       _N_umber-lines                |\\     -,,,--,,_
   _h_   _l_     _y_ank        _t_ype       _e_xchange-point              /,`.-'`'   ..  \-;;,_
     ^_j_^       _d_ kill      _c_lear      _r_eset-region-mark          |,4-  ) )_   .;.(  `'-'
-  ^^^^          _u_ndo        _g_ quit     _C_ua-rectangle-mark-mode   '---''(./..)-'(_\_)
+  ^^^^          _u_ndo        _C-g_ quit     _C_ua-rectangle-mark-mode   '---''(./..)-'(_\_)
   "
   ("k" rectangle-previous-line)
   ("j" rectangle-next-line)

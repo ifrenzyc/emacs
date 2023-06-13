@@ -55,13 +55,27 @@
 
   (progn (use-package popup)
          (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc))
-
-  (defhydra hydra-flycheck ()
-    "errors"
-    ("n" flycheck-next-error "next")
-    ("p" flycheck-previous-error "previous")
-    ;; ("h" helm-flycheck "helm" :color blue)
-    ("q" nil "quit")))
+  :pretty-hydra
+  (hydra-flycheck
+   (:hint nil :color teal :quit-key "C-g" :title (with-faicon "plane" "Flycheck" 1 -0.05))
+   ("Current error"
+    (("e" flycheck-explain-error-at-point "explain")
+     ("c" flycheck-copy-errors-as-kill "copy"))
+    "Checker"
+    (("?" flycheck-describe-checker "describe")
+     ("d" flycheck-disable-checker "disable")
+     ("m" flycheck-mode "mode")
+     ("s" flycheck-select-checker "select"))
+    "Errors"
+    (("k" flycheck-previous-error "previous" :color pink)
+     ("j" flycheck-next-error "next" :color pink)
+     ("f" flycheck-buffer "check")
+     ("l" flycheck-list-errors "list")
+     ("L" flycheck-projectile-list-errors "list project"))
+    "Other"
+    (("M" flycheck-manual "manual")
+     ("v" flycheck-verify-setup "verify setup"))))
+  )
 
 ;; - https://github.com/gexplorer/flycheck-indicator
 (use-package flycheck-indicator
@@ -76,12 +90,11 @@
   :hook (flycheck-mode . flycheck-inline-mode))
 
 (use-package flycheck-posframe
-  ;; :straight (:host github :repo "alexmurray/flycheck-posframe")
   :hook (flycheck-mode . flycheck-posframe-mode)
   :custom-face
-  ((flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
-   (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
-   (flycheck-posframe-border-face ((t (:background "DarkBlue")))))
+  (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
+  (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
+  (flycheck-posframe-border-face ((t (:background "DarkBlue"))))
   :config
   (setq flycheck-posframe-border-width 1)
   (flycheck-posframe-configure-pretty-defaults))
