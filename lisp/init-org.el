@@ -251,7 +251,7 @@ text and copying to the killring."
     (setq filename
           (concat
            (make-temp-name
-            (concat "/Users/yangc/notes/images/"
+            (concat "~/notes/images/"
                     (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
     ;;  (unless (file-exists-p (file-name-directory filename))
     ;;    (make-directory (file-name-directory filename)))
