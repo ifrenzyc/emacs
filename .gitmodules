@@ -76,3 +76,6 @@
 [submodule "localelpa/org-pretty-table"]
 	path = localelpa/org-pretty-table
 	url = git@github.com:Fuco1/org-pretty-table.git
+[submodule "localelpa/treemacs-nerd-icons"]
+	path = localelpa/treemacs-nerd-icons
+	url = https://github.com/ifrenzyc/treemacs-nerd-icons.git
