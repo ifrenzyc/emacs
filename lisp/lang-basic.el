@@ -17,6 +17,7 @@
 (setq yc/programming-modes '(js-mode
                              python-mode
                              html-mode
+                             web-mode
                              vue-html-mode
                              java-mode
                              c-mode
@@ -26,8 +27,10 @@
                              fish-mode
                              go-mode
                              js-mode
+                             lua-mode
                              stylus-mode
                              json-mode
+                             jsonian-mode
                              makefile-mode
                              jenkinsfile-mode
                              nxml-mode
@@ -44,6 +47,7 @@
                              bash-ts-mode
                              c++-ts-mode
                              c-ts-mode
+                             c-or-c++-ts-mode
                              cmake-ts-mode
                              csharp-ts-mode
                              css-ts-mode

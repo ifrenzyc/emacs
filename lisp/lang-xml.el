@@ -34,7 +34,20 @@
    "C-c C-f" 'xml-format))
 
 (use-package noxml-fold
+  :disabled t
   :hook (nxml-mode . noxml-fold-mode))
+
+(use-package hideshow
+  :hook
+  (nxml-mode . hs-minor-mode)
+  :config
+  (add-to-list 'hs-special-modes-alist
+               '(nxml-mode
+                 "<!--\\|<[^/>]*[^/]>"
+                 "-->\\|</[^/>]*[^/]>"
+                 "<!--"
+                 nxml-forward-element
+                 nil)))
 
 (provide 'lang-xml)
 ;;; lang-xml.el ends here
