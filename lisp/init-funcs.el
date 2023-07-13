@@ -80,6 +80,43 @@
       (shrink-window arg)
     (enlarge-window arg)))
 
+(defun doom/window-enlargen (&optional arg)
+  "Enlargen the current window to focus on this one. Does not close other
+windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
+  (interactive "P")
+  (let ((param 'doom--enlargen-last-wconf))
+    (cl-destructuring-bind (window . wconf)
+        (or (frame-parameter nil param)
+            (cons nil nil))
+      (set-frame-parameter
+       nil param
+       (if (and (equal window (selected-window))
+                (not arg)
+                wconf)
+           (ignore
+            (let ((source-window (selected-window)))
+              (set-window-configuration wconf)
+              (when (window-live-p source-window)
+                (select-window source-window))))
+         (prog1 (cons (selected-window) (or wconf (current-window-configuration)))
+           (let* ((window (selected-window))
+                  (dedicated-p (window-dedicated-p window))
+                  (preserved-p (window-parameter window 'window-preserved-size))
+                  (ignore-window-parameters t)
+                  (window-resize-pixelwise nil)
+                  (frame-resize-pixelwise nil))
+             (unwind-protect
+                 (progn
+                   (when dedicated-p
+                     (set-window-dedicated-p window nil))
+                   (when preserved-p
+                     (set-window-parameter window 'window-preserved-size nil))
+                   (maximize-window window))
+               (set-window-dedicated-p window dedicated-p)
+               (when preserved-p
+                 (set-window-parameter window 'window-preserved-size preserved-p))
+               (add-hook 'doom-switch-window-hook #'doom--enlargened-forget-last-wconf-h)))))))))
+
 ;; steal from - https://github.com/purcell/emacs.d/blob/master/lisp/init-windows.el
 ;;----------------------------------------------------------------------------
 ;; Rearrange split windows
@@ -141,23 +178,6 @@
   (let ((process-connection-type nil))
     (start-process "" nil "open" ".")))
 
-;; `C-a' first takes you to the first non-whitespace char as
-;; `back-to-indentation' on a line, and if pressed again takes you to
-;; the actual beginning of the line.
-(defun smarter-move-beginning-of-line (arg)
-  "Move depending on ARG to beginning of visible line or not.
-  From https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/."
-  (interactive "^p")
-  (setq arg (or arg 1))
-  (when (/= arg 1)
-    (let ((line-move-visual nil))
-      (forward-line (1- arg))))
-  (let ((orig-point (point)))
-    (back-to-indentation)
-    (when (= orig-point (point))
-      (move-beginning-of-line 1))))
-(global-set-key [remap move-beginning-of-line] 'smarter-move-beginning-of-line)
-
 ;; 参考：http://ergoemacs.org/emacs/modernization_mark-word.html
 (defun xah-select-text-in-quote ()
   "Select text between the nearest left and right delimiters.
@@ -175,6 +195,33 @@ Version 2015-05-16"
     (setq -p2 (point))
     (set-mark -p1)))
 
+;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+(defun endless/narrow-or-widen-dwim (p)
+  "Widen if buffer is narrowed, narrow-dwim otherwise.
+Dwim means: region, org-src-block, org-subtree, or
+defun, whichever applies first. Narrowing to
+org-src-block actually calls `org-edit-src-code'.
+
+With prefix P, don't widen, just narrow even if buffer
+is already narrowed."
+  (interactive "P")
+  (declare (interactive-only))
+  (cond ((and (buffer-narrowed-p) (not p)) (widen))
+        ((region-active-p)
+         (narrow-to-region (region-beginning)
+                           (region-end)))
+        ((derived-mode-p 'org-mode)
+         ;; `org-edit-src-code' is not a real narrowing
+         ;; command. Remove this first conditional if
+         ;; you don't want it.
+         (cond ((ignore-errors (org-edit-src-code) t)
+                (delete-other-windows))
+               ((ignore-errors (org-narrow-to-block) t))
+               (t (org-narrow-to-subtree))))
+        ((derived-mode-p 'latex-mode)
+         (LaTeX-narrow-to-environment))
+        (t (narrow-to-defun))))
+(global-set-key (kbd "C-x n x") 'endless/narrow-or-widen-dwim)
 
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

@@ -357,6 +357,7 @@ active region use it instead."
 
 ;; Goto last change
 (use-package goto-chg
+  :disabled t
   :general
   ("C-c b ," 'goto-last-change
    "C-c b ." 'goto-last-change-reverse))
@@ -406,6 +407,7 @@ active region use it instead."
 ;; *About:* 多文件查找替换
 ;; - https://github.com/mhayashi1120/Emacs-wgrep
 ;; - https://www.reddit.com/r/emacs/comments/ce0557/emacs_editing_multiple_files_with_grep_wgrep/
+;; Writeable grep
 (use-package wgrep
   :commands (wgrep-change-to-wgrep-mode ivy-wgrep-change-to-wgrep-mode)
   :config

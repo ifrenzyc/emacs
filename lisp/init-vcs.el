@@ -11,7 +11,7 @@
 (setq-default make-backup-files nil)    ; 不生成临时文件
 
 ;; 取消自动保存模式
-(setq auto-save-mode nil)
+(auto-save-mode nil)
 
 (setq backup-by-copying nil)
 
@@ -237,6 +237,29 @@
 (use-package magit-stats)
 
 ;; - https://github.com/emacs-evil/evil-magit
+
+;; Highlight uncommitted changes using VC
+;; 高亮显示未提交的代码块
+;; 
+;; 参考：采用 hook 方式解决：参考 leuven 的配置，解决 magit commit 后，当前打开的文件 diff-hl 还显示文件变更差异
+;; file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
+(use-package diff-hl
+  :init
+  (setq diff-hl-draw-borders nil)
+  (setq diff-hl-side 'left)
+  :hook ((after-init . global-diff-hl-mode)
+         (dired-mode . diff-hl-dired-mode))
+  :config
+  (diff-hl-flydiff-mode t)
+  ;; Integration with magit
+  (with-eval-after-load 'magit
+    (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
+    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
+  ;; (custom-set-faces
+  ;;  '(diff-hl-change ((t (:background "#3a81c3"))))
+  ;;  '(diff-hl-insert ((t (:background "#7ccd7c"))))
+  ;;  '(diff-hl-delete ((t (:background "#ee6363")))))
+  )
 
 (use-package git-timemachine
   :custom-face

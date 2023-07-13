@@ -338,29 +338,6 @@ If there is only one overlay at point, just return it, no matter region or symbo
   (dolist (keyword '("WORKAROUND" "HACK" "TRICK"))
     (cl-pushnew `(,keyword . ,(face-foreground 'warning)) hl-todo-keyword-faces)))
 
-;; Highlight uncommitted changes using VC
-;; 高亮显示未提交的代码块
-;; 
-;; 参考：采用 hook 方式解决：参考 leuven 的配置，解决 magit commit 后，当前打开的文件 diff-hl 还显示文件变更差异
-;; file:/Users/yangc/src/emacs.d/emacs-leuven/emacs-leuven.txt::2705
-(use-package diff-hl
-  :init
-  (setq diff-hl-draw-borders nil)
-  (setq diff-hl-side 'left)
-  :hook ((after-init . global-diff-hl-mode)
-         (dired-mode . diff-hl-dired-mode))
-  :config
-  (diff-hl-flydiff-mode t)
-  ;; Integration with magit
-  (with-eval-after-load 'magit
-    (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
-    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
-  ;; (custom-set-faces
-  ;;  '(diff-hl-change ((t (:background "#3a81c3"))))
-  ;;  '(diff-hl-insert ((t (:background "#7ccd7c"))))
-  ;;  '(diff-hl-delete ((t (:background "#ee6363")))))
-  )
-
 ;; - https://github.com/antonj/Highlight-Indentation-for-Emacs
 ;; - https://github.com/DarthFennec/highlight-indent-guides
 (use-package highlight-indentation

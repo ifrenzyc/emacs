@@ -30,6 +30,8 @@
 ;;        scroll-preserve-screen-position t)
 ;; (setq auto-window-vscroll nil)
 
+(require 'init-funcs)
+
 (use-package good-scroll
   :disabled t
   :config
@@ -73,7 +75,13 @@
 (use-package window
   :ensure nil
   :general
-  ("C-x w o" 'doom/window-enlargen)
+  ("s-<left>"     'hydra-move-splitter-left
+   "s-<right>"    'hydra-move-splitter-right
+   "s-<up>"       'hydra-move-splitter-up
+   "s-<down>"     'hydra-move-splitter-down
+   "s-S-<left>"   'hydra-move-splitter-left-4x
+   "s-S-<right>"  'hydra-move-splitter-right-4x
+   "s-<return>"   'doom/window-enlargen)
   ;; (yc/leader-keys
   ;;     "w" '(:ignore t :wk "windows")
   ;;   "w SPC" 'hydra-rotate-window/body
@@ -91,43 +99,7 @@
   ;;   "wo" '(doom/window-enlargen :wk "doom/enlargen")
   ;;   "wu" 'winner-undo
   ;;   "wr" 'winner-redo)
-  :config
-  (defun doom/window-enlargen (&optional arg)
-    "Enlargen the current window to focus on this one. Does not close other
-windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
-    (interactive "P")
-    (let ((param 'doom--enlargen-last-wconf))
-      (cl-destructuring-bind (window . wconf)
-          (or (frame-parameter nil param)
-              (cons nil nil))
-        (set-frame-parameter
-         nil param
-         (if (and (equal window (selected-window))
-                  (not arg)
-                  wconf)
-             (ignore
-              (let ((source-window (selected-window)))
-                (set-window-configuration wconf)
-                (when (window-live-p source-window)
-                  (select-window source-window))))
-           (prog1 (cons (selected-window) (or wconf (current-window-configuration)))
-             (let* ((window (selected-window))
-                    (dedicated-p (window-dedicated-p window))
-                    (preserved-p (window-parameter window 'window-preserved-size))
-                    (ignore-window-parameters t)
-                    (window-resize-pixelwise nil)
-                    (frame-resize-pixelwise nil))
-               (unwind-protect
-                   (progn
-                     (when dedicated-p
-                       (set-window-dedicated-p window nil))
-                     (when preserved-p
-                       (set-window-parameter window 'window-preserved-size nil))
-                     (maximize-window window))
-                 (set-window-dedicated-p window dedicated-p)
-                 (when preserved-p
-                   (set-window-parameter window 'window-preserved-size preserved-p))
-                 (add-hook 'doom-switch-window-hook #'doom--enlargened-forget-last-wconf-h))))))))))
+  )
 
 
 ;; Winner Mode 是 Emacs 自带的一个 minor mode，可以用于快速恢复窗口分割状态。
@@ -139,7 +111,17 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
 ;; winner-undo 来恢复。还可以再 winner-redo 来撤销刚才的 undo。
 (use-package winner-mode
   :ensure nil
-  :hook (after-init . winner-mode))
+  :hook (after-init . winner-mode)
+  :config
+  ;; Add advice to stop hangs on EXWM
+  ;; The problem happens with floating windows that disappear - like open file dialog or a Zoom dialog when starting a meeting
+  ;; The solution is to assure all frames in winner-modified-list pass the frame-live-p test
+  (defun gjg/winner-clean-up-modified-list ()
+    "Remove dead frames from `winner-modified-list`"
+    (dolist (frame winner-modified-list)
+      (unless (frame-live-p frame)
+        (delete frame winner-modified-list))))
+  (advice-add 'winner-save-old-configurations :before #'gjg/winner-clean-up-modified-list))
 
 (use-package winum
   :init
@@ -355,7 +337,7 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
           ;; ("^\\*vterminal<.+>\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
           ;; ("^\\*vterm - .*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
           ;; ("^\\*vterm .*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
-          ;; (vterm-mode :select t :size 0.4 :align 'below :autoclose t)
+          (vterm-mode :select t :size 0.4 :align 'below :autoclose t)
           ("\\*[Wo]*Man.*\\*" :regexp t :select t :align 'below :autoclose t)
           ("*Calendar*" :select t :size 0.3 :align 'below)
           (("*shell*" "*eshell*" "*ielm*") :popup t :size 0.3 :align 'below)
@@ -410,7 +392,7 @@ windows (unlike `doom/window-maximize-buffer'). Activate again to undo."
   (transwin-toggle-transparent-frame))
 
 ;; https://github.com/dustinlacewell/hera
-(defvar jp-window--title (with-faicon "windows" "Window Management" 1 -0.05))
+(defvar jp-window--title (with-faicon "nf-fa-window_restore" "Window Management" 1 -0.05))
 (pretty-hydra-define hydra-window
   (:hint nil :foreign-keys warn :quit-key "q" :title jp-window--title :separator "═")
   (;; general window management commands
