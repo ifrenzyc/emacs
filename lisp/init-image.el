@@ -15,7 +15,7 @@
   :mode-hydra
   ;; 相关快捷键参考官方文档：https://github.com/mhayashi1120/Emacs-imagex
   (image-mode
-   (:hint nil :foreign-keys warn :quit-key "C-g" :title (with-faicon "camera" "Manipulating Image" 1 -0.05) :separator "═")
+   (:hint nil :foreign-keys warn :quit-key "C-g" :title (with-faicon "nf-fa-camera" "Manipulating Image" 1 -0.05) :separator "═")
    ("Resize"
     (("=" imagex-sticky-zoom-in "zoom in")
      ("-" imagex-sticky-zoom-out "zoom out")

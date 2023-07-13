@@ -103,7 +103,9 @@
      ("d" helpful-at-point "thing at point"))
     "Which key"
     (("b" which-key-show-top-level)
-     ("B" which-key-show-standard-help))
+     ("B" which-key-show-standard-help)
+     ("i" which-key-show-major-mode)
+     ("I" which-key-show-full-major-mode))
     "Major mode hydra"
     (("h" major-mode-hydra "major mode hydra"))))
   :general

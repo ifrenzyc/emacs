@@ -59,7 +59,7 @@
          (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc))
   :pretty-hydra
   (hydra-flycheck
-   (:hint nil :color teal :quit-key "C-g" :title (with-faicon "plane" "Flycheck" 1 -0.05))
+   (:hint nil :color teal :quit-key "C-g" :title (with-faicon "nf-fa-plane" "Flycheck" 1 -0.05))
    ("Current error"
     (("e" flycheck-explain-error-at-point "explain")
      ("c" flycheck-copy-errors-as-kill "copy"))

@@ -242,8 +242,11 @@ text and copying to the killring."
       (save-buffer)
       (message "Copied %s to killring (clipboard)" mytmplink)
       ))
-  
-  (global-set-key (kbd "<f5>") 'yc/copy-idlink-to-clipboard)
+
+  (defun yc/counsel-rg-in-itsycnotes ()
+    "rg in ~/notes"
+    (interactive)
+    (counsel-rg ivy-text "~/notes/" nil nil))
   
   (defun yc/org-insert-clipboard-image ()
     "paste image from clipboard"
@@ -268,6 +271,9 @@ text and copying to the killring."
   ;;                            (2 (prog1 () (compose-region (match-beginning 2) (match-end 2) "")))))
   ;;                         'append)
   :general
+  ("H-c"     'org-capture
+   "<f5>"    'yc/copy-idlink-to-clipboard
+   "M-s M-R" 'yc/counsel-rg-in-itsycnotes)
   ;; Great evil org mode keyboard shortcuts cribbed from cofi
   ;; (evil-define-key 'normal org-mode-map
   ;;   (kbd "RET") 'org-open-at-point

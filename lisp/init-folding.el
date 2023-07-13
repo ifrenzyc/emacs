@@ -33,8 +33,19 @@
   :pretty-hydra
   (hydra-fold
    (:title (pretty-hydra-title "Folding" 'octicon "fold" :height 1.1 :v-adjust -0.05)
-           :pre (global-origami-mode t) :color teal :quit-key "C-g")
-   ("Fold(vimish)"
+           :pre (global-origami-mode t) :color pink :quit-key "C-g")
+   ("Move"
+    (("C-a" mwim-beginning-of-code-or-line "⭰")
+     ("C-e" mwim-end-of-code-or-line "⭲")
+     ("C-b" backward-char "←")
+     ("C-n" next-line "↓")
+     ("C-p" previous-line "↑")
+     ("C-f" forward-char "→")
+     ("C-v" pager-page-down "↘")
+     ("M-v" pager-page-up "↖")
+     ("M-<" beginning-of-buffer "⭶")
+     ("M->" end-of-buffer "⭸"))
+    "Fold(vimish)"
     (("f" vimish-fold)
      ("F" vimish-fold)
      ("u" vimish-fold-unfold)
@@ -49,9 +60,19 @@
     "Toggle(Vimish)"
     (("<tab>" vimish-fold-toggle)
      ("S-<tab>" vimish-fold-toggle-all))
+    "Hideshow"
+    (("}" hs-cycle "cycle block")
+     ("{" hs-global-cycle)
+     ("A" hs-toggle-all "toggle all")
+     ("a" hs-show-all "show all")
+     ("i" hs-hide-all "hide all")
+     ("g" hs-toggle-hiding "toggle hiding")
+     ("s" hs-show-block "show block")
+     ("b" hs-hide-block "hide block")
+     ("l" hs-hide-level "hide level"))
     "Origami Node"
     ((":" origami-recursively-toggle-node "toggle recursively")
-     ("a" origami-toggle-all-nodes "toggle all")
+     ("T" origami-toggle-all-nodes "toggle all")
      ("t" origami-toggle-node "toggle current")
      ("o" origami-open-node)
      ("c" origami-close-node)
@@ -62,8 +83,68 @@
     "Origami Actions"
     (("h" origami-undo "undo")
      ("k" origami-redo "redo")
-     ("[" origami-reset "reset"))))
-  )
+     ("[" origami-reset "reset")))))
+
+(use-package hideshow
+  :hook
+  (prog-mode . hs-minor-mode)
+  :general
+  ("C-<tab>"         'hs-cycle
+   "C-<iso-lefttab>" 'hs-global-cycle
+   "C-S-<tab>"       'hs-global-cycle)
+  :config
+  (setq hs-hide-comments-when-hiding-all nil
+        ;; Nicer code-folding overlays (with fringe indicators)
+        hs-set-up-overlay #'hideshow-set-up-overlay-fn)
+
+  (defface hideshow-folded-face
+    `((t (:inherit font-lock-comment-face :weight light)))
+    "Face to hightlight `hideshow' overlays."
+    :group 'hideshow)
+  
+  (defun hideshow-set-up-overlay-fn (ov)
+    (when (eq 'code (overlay-get ov 'hs))
+      (overlay-put
+       ov 'display (propertize "  [...]  " 'face 'hideshow-folded-face))))
+  
+  (dolist (hs-command (list #'hs-cycle
+                            #'hs-global-cycle))
+    (advice-add hs-command :before
+                (lambda (&optional end) "Advice to ensure `hs-minor-mode' is enabled"
+                  (unless (bound-and-true-p hs-minor-mode)
+                    (hs-minor-mode +1)))))
+
+  (defun hs-cycle (&optional level)
+    (interactive "p")
+    (save-excursion
+      (if (= level 1)
+          (pcase last-command
+            ('hs-cycle
+             (hs-hide-level 1)
+             (setq this-command 'hs-cycle-children))
+            ('hs-cycle-children
+             ;;TODO: Fix this case. `hs-show-block' needs to be called twice to
+             ;;open all folds of the parent block.
+             (hs-show-block)
+             (hs-show-block)
+             (setq this-command 'hs-cycle-subtree))
+            ('hs-cycle-subtree
+             (hs-hide-block))
+            (_
+             (if (not (hs-already-hidden-p))
+                 (hs-hide-block)
+               (hs-hide-level 1)
+               (setq this-command 'hs-cycle-children))))
+        (hs-hide-level level)
+        (setq this-command 'hs-hide-level))))
+  
+  (defun hs-global-cycle ()
+    (interactive)
+    (pcase last-command
+      ('hs-global-cycle
+       (save-excursion (hs-show-all))
+       (setq this-command 'hs-global-show))
+      (_ (hs-hide-all)))))
 
 (use-package origami
   :custom

@@ -21,7 +21,7 @@
 ;;; Code:
 ;; native-comp
 (when (boundp 'native-comp-eln-load-path)
-  (setenv "LIBRARY_PATH" "/usr/local/opt/gcc/lib/gcc/12:/usr/local/opt/gcc/lib/gcc/12/gcc/x86_64-apple-darwin21/12")
+  (setenv "LIBRARY_PATH" "/usr/local/opt/gcc/lib/gcc/13:/usr/local/opt/gcc/lib/gcc/13/gcc/x86_64-apple-darwin21/13")
   (setq comp-async-report-warnings-errors nil)
   (setq native-comp-async-report-warnings-errors nil)
   ;; (add-to-list 'native-comp-eln-load-path (expand-file-name ".cache/eln-cache/" user-emacs-directory))

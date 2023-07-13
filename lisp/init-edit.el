@@ -8,8 +8,8 @@
 
 ;; 当文件内容有修改时，可以通过 autorevert 重新加载这个文件
 (use-package autorevert
-  :hook ((after-init . global-auto-revert-mode)
-         (dired-mode . auto-revert-mode)))
+   :hook ((after-init . global-auto-revert-mode)
+          (dired-mode . auto-revert-mode)))
 
 ;; 关闭 emacs 后，重新打开文件时跳转到上一次打开该文件时的位置（所在行）。
 ;; Restore cursor to file position in previous editing session.
@@ -312,6 +312,32 @@ there's a region, all lines that region covers will be duplicated."
   :diminish (beginend-mode beginend-global-mode)
   :hook (after-init . beginend-global-mode))
 
+;; Move to the beginning/end of line or code
+(use-package mwim
+  :demand t
+  :bind (;; ([remap move-beginning-of-line] . mwim-beginning-of-code-or-line)
+         ;; ([remap move-end-of-line] . mwim-end-of-code-or-line)
+         ("C-a" . mwim-beginning-of-code-or-line)
+         ("C-e" . mwim-end-of-code-or-line))
+  ;; :config  
+  ;; `C-a' first takes you to the first non-whitespace char as
+  ;; `back-to-indentation' on a line, and if pressed again takes you to
+  ;; the actual beginning of the line.
+  ;; (defun smarter-move-beginning-of-line (arg)
+  ;;   "Move depending on ARG to beginning of visible line or not.
+  ;; From https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/."
+  ;;   (interactive "^p")
+  ;;   (setq arg (or arg 1))
+  ;;   (when (/= arg 1)
+  ;;     (let ((line-move-visual nil))
+  ;;       (forward-line (1- arg))))
+  ;;   (let ((orig-point (point)))
+  ;;     (back-to-indentation)
+  ;;     (when (= orig-point (point))
+  ;;       (move-beginning-of-line 1))))
+  ;; (global-set-key [remap move-beginning-of-line] 'smarter-move-beginning-of-line)
+  )
+
 ;; View Large Files
 ;; - https://github.com/m00natic/vlfi
 ;; - https://writequit.org/articles/working-with-logs-in-emacs.html
@@ -533,6 +559,7 @@ there's a region, all lines that region covers will be duplicated."
     ("." hydra-repeat "Repeat")))
 
 (use-package cycle-quotes
+  :disabled t
   :commands (cycle-quotes))
 
 (use-package hippie-expand
@@ -572,17 +599,23 @@ there's a region, all lines that region covers will be duplicated."
 
 (use-package fancy-dabbrev
   :commands (fancy-dabbrev-mode)
-  :config
-  (setq fancy-dabbrev-preview-delay 0.1)
-  (setq fancy-dabbrev-preview-context 'before-non-word)
+  :custom
+  (fancy-dabbrev-preview-delay 0.1)
+  (fancy-dabbrev-preview-context 'before-non-word)
 
-  (setq fancy-dabbrev-expansion-on-preview-only t)
-  (setq fancy-dabbrev-indent-command 'tab-to-tab-stop)
+  (fancy-dabbrev-expansion-on-preview-only t)
+  (fancy-dabbrev-indent-command 'tab-to-tab-stop)
 
   ;; Only while in insert mode.
-  (with-eval-after-load 'evil
-    (add-hook 'evil-insert-state-entry-hook (lambda () (fancy-dabbrev-mode 1)))
-    (add-hook 'evil-insert-state-exit-hook (lambda () (fancy-dabbrev-mode 0)))))
+  ;; (with-eval-after-load 'evil
+  ;;   (add-hook 'evil-insert-state-entry-hook (lambda () (fancy-dabbrev-mode 1)))
+  ;;   (add-hook 'evil-insert-state-exit-hook (lambda () (fancy-dabbrev-mode 0))))
+  )
+
+;; - Zap To Char Usage :: https://www.emacswiki.org/emacs/ZapToCharUsage
+(use-package zzz-to-char
+  :bind
+  ([remap zap-to-char] . zzz-to-char))
 
 (provide 'init-edit)
 ;;; init-edit.el ends here

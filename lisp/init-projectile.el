@@ -8,6 +8,10 @@
 
 (use-package projectile
   :commands (projectile-project-root)
+  :custom
+  ((projectile-enable-caching t)
+   (projectile-completion-system 'ivy)
+   (projectile-indexing-method 'native))
   :general
   ;; (yc/leader-keys
   ;;   :states 'normal
@@ -27,25 +31,22 @@
   :config
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
   (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
-  (setq projectile-enable-caching t
-        projectile-completion-system 'ivy
-        projectile-indexing-method 'native)
 
   ;; add to the globally ignored files
   (dolist (file-name '("*~" "*.elc" "*.class" "node_modules" "elpa" "localelpa"))
     (add-to-list 'projectile-globally-ignored-files file-name))
-  (projectile-mode t))
+  (projectile-mode t)
+  
+  (defhydra hydra-projectile-other-window (:color red)
+    "projectile-other-window"
+    ("f"  projectile-find-file-other-window        "file")
+    ("g"  projectile-find-file-dwim-other-window   "file dwim")
+    ("d"  projectile-find-dir-other-window         "dir")
+    ("b"  projectile-switch-to-buffer-other-window "buffer")
+    ("q"  nil                                      "cancel" :color blue))
 
-(defhydra hydra-projectile-other-window (:color red)
-  "projectile-other-window"
-  ("f"  projectile-find-file-other-window        "file")
-  ("g"  projectile-find-file-dwim-other-window   "file dwim")
-  ("d"  projectile-find-dir-other-window         "dir")
-  ("b"  projectile-switch-to-buffer-other-window "buffer")
-  ("q"  nil                                      "cancel" :color blue))
-
-(defhydra hydra-projectile (:color red :hint nil)
-  "
+  (defhydra hydra-projectile (:color red :hint nil)
+    "
        PROJECTILE: %(projectile-project-root)
                                                                                  ╭────────────┐
        Find File            Search/Tags          Buffers                Cache    │ Projectile │
@@ -57,29 +58,29 @@
       _d_: dir
 
   "
-  ("a"   projectile-ag)
-  ("b"   projectile-switch-to-buffer)
-  ("c"   projectile-invalidate-cache)
-  ("d"   projectile-find-dir)
-  ("s-f" projectile-find-file)
-  ("ff"  projectile-find-file-dwim)
-  ("fd"  projectile-find-file-in-directory)
-  ("g"   ggtags-update-tags)
-  ("s-g" ggtags-update-tags)
-  ("i"   projectile-ibuffer)
-  ("K"   projectile-kill-buffers)
-  ("s-k" projectile-kill-buffers)
-  ("m"   projectile-multi-occur)
-  ("o"   projectile-multi-occur)
-  ("s-p" projectile-switch-project "switch project")
-  ("p"   projectile-switch-project)
-  ("s"   projectile-switch-project)
-  ("r"   projectile-recentf)
-  ("x"   projectile-remove-known-project)
-  ("X"   projectile-cleanup-known-projects)
-  ("z"   projectile-cache-current-file)
-  ("`"   hydra-projectile-other-window/body "other window")
-  ("q"   nil "cancel" :color blue))
+    ("a"   projectile-ag)
+    ("b"   projectile-switch-to-buffer)
+    ("c"   projectile-invalidate-cache)
+    ("d"   projectile-find-dir)
+    ("s-f" projectile-find-file)
+    ("ff"  projectile-find-file-dwim)
+    ("fd"  projectile-find-file-in-directory)
+    ("g"   ggtags-update-tags)
+    ("s-g" ggtags-update-tags)
+    ("i"   projectile-ibuffer)
+    ("K"   projectile-kill-buffers)
+    ("s-k" projectile-kill-buffers)
+    ("m"   projectile-multi-occur)
+    ("o"   projectile-multi-occur)
+    ("s-p" projectile-switch-project "switch project")
+    ("p"   projectile-switch-project)
+    ("s"   projectile-switch-project)
+    ("r"   projectile-recentf)
+    ("x"   projectile-remove-known-project)
+    ("X"   projectile-cleanup-known-projects)
+    ("z"   projectile-cache-current-file)
+    ("`"   hydra-projectile-other-window/body "other window")
+    ("q"   nil "cancel" :color blue)))
 
 (provide 'init-projectile)
 ;;; init-projectile.el ends here

@@ -305,6 +305,9 @@
    "M-s s" 'swiper-isearch
    "C-s" 'swiper-isearch
    "C-c u" 'swiper-all)
+  (swiper-isearch-map
+   "M-<down>" 'ivy-next-history-element
+   "M-<up>" 'ivy-previous-history-element)
   (swiper-map
    "M-q" 'swiper-query-replace
    "C-l" 'swiper-recenter-top-bottom

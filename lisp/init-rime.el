@@ -29,6 +29,7 @@
   :general
   ("C-\\"   'yc/turn-off-input-method
    "C-|"    'yc/turn-on-rime-input-method
+   "H-SPC"  'yc/turn-on-rime-input-method
    "C-s-\\" 'yc/turn-on-rime-input-method)
   (rime-mode-map
    "C-`" 'rime-send-keybinding

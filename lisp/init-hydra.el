@@ -62,12 +62,11 @@
             (apply f (list icon-name :face face :height height :v-adjust v-adjust))
             " "))))
       (propertize title 'face face)))
-  (require 'all-the-icons)
+  (require 'nerd-icons)
   (defun with-faicon (icon str &optional height v-adjust)
-    (s-concat (all-the-icons-faicon icon :v-adjust (or v-adjust 0) :height (or height 1)) " " str))
+    (s-concat (nerd-icons-faicon icon :v-adjust (or v-adjust 0) :height (or height 1)) " " str))
   :config
-  
-  (defvar jp-toggles--title (with-faicon "toggle-on" "Toggles" 1 -0.05))
+  (defvar jp-toggles--title (with-faicon "nf-fa-toggle_on" "Toggles" 1 -0.05))
   (pretty-hydra-define hydra-toggles
     (:hint nil :color amaranth :quit-key "C-g" :title jp-toggles--title)
     ("Basic"

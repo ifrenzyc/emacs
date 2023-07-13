@@ -42,15 +42,16 @@
     ("n" flyspell-goto-next-error "next")
     ("c" flyspell-correct-previous-word-generic "correct")
     ("q" nil "quit"))
+  
   (defun my/toggle-flyspell ()
     (interactive)
     (if (bound-and-true-p flyspell-mode)
-	    (progn
-	      (flyspell-mode -1)
-	      (message "Flyspell mode disabled in current buffer"))
+        (progn
+          (flyspell-mode -1)
+          (message "Flyspell mode disabled in current buffer"))
       (progn
-	    (flyspell-mode 1)
-	    (message "Flyspell mode enabled in current buffer"))))
+        (flyspell-mode 1)
+        (message "Flyspell mode enabled in current buffer"))))
   )
 
 (use-package flyspell-correct
@@ -72,7 +73,18 @@
 
 ;; using a grammar & style checker
 (use-package langtool
-  :config
-  (setq langtool-language-tool-jar (expand-file-name "bin/LanguageTool-4.9/languagetool-commandline.jar" user-emacs-directory)))
+  :custom
+  (langtool-language-tool-jar (expand-file-name "bin/LanguageTool-6.1/languagetool-commandline.jar" user-emacs-directory)))
+
+(use-package langtool-popup)
+
+;; https://github.com/minad/jinx
+(use-package jinx
+  :ensure-system-package (enchant . "brew install enchant pkgconf")
+  :hook
+  (emacs-startup . global-jinx-mode)
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages)))
 
 (provide 'init-spell)
+;; init-spell.el ends here

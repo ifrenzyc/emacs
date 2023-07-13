@@ -184,8 +184,8 @@
      "quit"
      (("q" nil "Quit"))))
   (pretty-hydra-define hydra-lsp-map
-    (:title (pretty-hydra-title "LSP UI" 'faicon "rocket" :face 'all-the-icons-green)
-            :hint nil :color blue :quit-key "q")
+    (:title (with-faicon "nf-fa-rocket" "LSP UI" 1 -0.05)
+            :hint nil :color blue :quit-key "C-g")
     ("Formatting"
      (("= =" lsp-format-buffer "format buffer")
       ("= r" lsp-format-region "format region"))

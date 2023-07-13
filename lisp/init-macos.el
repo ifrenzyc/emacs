@@ -14,7 +14,7 @@
   (setq mac-command-modifier 'meta
         mac-option-modifier 'super
         mac-control-modifier 'control
-        ns-function-modifier 'hyper))
+        mac-right-option-modifier 'hyper))
 
 ;; 加载系统的环境变量
 (use-package exec-path-from-shell

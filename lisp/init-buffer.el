@@ -52,7 +52,7 @@
 		        " " filename-and-process)
 	      (mark " "
 		        (name 16 -1)
-		        " " filename))))
+                " " filename))))
 
 (use-package ibuffer-vc
   :after ibuffer

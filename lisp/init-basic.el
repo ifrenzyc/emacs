@@ -16,8 +16,8 @@
 
 (setq locale-coding-system 'utf-8
       buffer-file-coding-system 'utf-8
-      default-file-name-coding-system 'utf-8
-      default-buffer-file-coding-system 'utf-8)
+      default-file-name-coding-system 'utf-8)
+      ;; default-buffer-file-coding-system 'utf-8
 
 (modify-coding-system-alist 'process "*" 'utf-8)
 
@@ -58,7 +58,8 @@
 
   (setq-default cursor-in-non-selected-windows nil)
 
-  (global-visual-line-mode t)
+  ;; (global-visual-line-mode t)  ;; this enable beginning-of-visual-line to remap move-beginning-of-line
+  ;; (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
   (global-hl-line-mode 0)
   (setq word-wrap t)
   (setq truncate-lines nil)
@@ -70,7 +71,6 @@
 
   ;; 在行首 C-k 时，同时删除该行
   (setq-default kill-whole-line t)
-  (setq warning-minimum-level :error)
 
   ;; - https://dougie.io/coding/tabs-in-emacs/
   ;; In Emacs, sentences uses double-spaces by default. Use single spaces instead:

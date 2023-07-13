@@ -51,11 +51,11 @@
       (dolist (lang languages)
 	    (treesit-install-language-grammar lang)
 	    (message "`%s' parser was installed." lang)
-        (sit-for 0    . 75))))
+	    (sit-for 0.75))))
 
   (when (treesit-available-p)
     (setq major-mode-remap-alist
-          '((sh-mode       . bash-ts-mode)
+          '((sh-mode         . bash-ts-mode)
             (c++-mode        . c++-ts-mode)
             (c-mode          . c-ts-mode)
             (cmake-mode      . cmake-ts-mode)
