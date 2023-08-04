@@ -45,15 +45,15 @@
    "k" 'flycheck-error-list-previous-error
    "q" 'quit-window)
   :config
-  (defun my/toggle-syntax-checking ()
-    (interactive)
-    (if (bound-and-true-p flycheck-mode)
-        (progn
-          (flycheck-mode -1)
-          (message "Flycheck mode disabled in current buffer"))
-      (progn
-        (flycheck-mode 1)
-        (message "Flycheck mode enabled in current buffer"))))
+  ;; (defun my/toggle-syntax-checking ()
+  ;;   (interactive)
+  ;;   (if (bound-and-true-p flycheck-mode)
+  ;;       (progn
+  ;;         (flycheck-mode -1)
+  ;;         (message "Flycheck mode disabled in current buffer"))
+  ;;     (progn
+  ;;       (flycheck-mode 1)
+  ;;       (message "Flycheck mode enabled in current buffer"))))
 
   (progn (use-package popup)
          (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc))

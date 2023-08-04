@@ -87,6 +87,7 @@
   :hook (tree-sitter-after-on . tree-sitter-hl-mode))
 
 (use-package tree-sitter-langs
+  :disabled t
   :after tree-sitter
   :init
   ;; (tree-sitter-load 'vue)

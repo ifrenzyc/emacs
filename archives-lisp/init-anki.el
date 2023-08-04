@@ -21,6 +21,6 @@
   (setq anki-shr-rendering-functions (append anki-shr-rendering-functions shr-external-rendering-functions))
   (setq sql-sqlite-program "/usr/bin/sqlite3")
   ;; Set up the collection directory, which should contain a file - collection.anki2 and a folder - collection.media
-  (setq anki-collection-dir "~/Library/Application Support/Anki2/User 1"))
+  (setq anki-collection-dir "~/Library/Application Support/Anki2/用户1"))
 
 (provide 'init-anki)

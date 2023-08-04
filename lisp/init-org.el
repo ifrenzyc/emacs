@@ -707,6 +707,7 @@ text and copying to the killring."
   :hook ((org-mode . valign-mode)
          (markdown-mode . valign-mode))
   :custom
+  (valign-max-table-size 10000)  ;; 0 to valign doesn’t check for table sizes.
   (valign-fancy-bar t))
 
 (use-package org-pretty-table

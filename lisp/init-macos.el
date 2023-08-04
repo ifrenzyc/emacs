@@ -78,7 +78,9 @@
 ;; https://github.com/lunaryorn/osx-trash.el
 (use-package osx-trash
   :if IS-MAC
-  :config (osx-trash-setup))
+  :config
+  (setq delete-by-moving-to-trash t)      ; Deleting files go to OS's trash folder
+  (osx-trash-setup))
 
 (provide 'init-macos)
 ;;; init-macos.el ends here

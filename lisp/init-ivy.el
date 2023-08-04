@@ -303,16 +303,16 @@
   :general
   ("C-M-s" 'swiper-isearch
    "M-s s" 'swiper-isearch
-   "C-s" 'swiper-isearch
+   "C-s"   'swiper-isearch
    "C-c u" 'swiper-all)
   (swiper-isearch-map
    "M-<down>" 'ivy-next-history-element
-   "M-<up>" 'ivy-previous-history-element)
+   "M-<up>"   'ivy-previous-history-element)
   (swiper-map
-   "M-q" 'swiper-query-replace
-   "C-l" 'swiper-recenter-top-bottom
-   "C-." 'swiper-mc
-   "C-'" 'swiper-avy))
+   "M-q"  'swiper-query-replace
+   "C-l"  'swiper-recenter-top-bottom
+   "C-."  'swiper-mc
+   "C-'"  'swiper-avy))
 
 (use-package counsel
   :demand t
@@ -561,8 +561,8 @@
    "C-x l"   'counsel-locate
    "C-h f"   'counsel-describe-function
    "C-h v"   'counsel-describe-variable
-   ;; "C-c j"   'counsel-git    ; 与 org-journal 冲突
-   "C-c f"   'counsel-recentf)
+   "C-c f"   'counsel-git    ; 与 org-journal 冲突
+   "C-c F"   'counsel-recentf)
   (help-map
    "f" 'counsel-describe-function
    "v" 'counsel-describe-variable

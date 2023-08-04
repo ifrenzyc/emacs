@@ -30,12 +30,6 @@
   ;; 改变 Emacs 要你回答 yes 的行为。按 y 或空格键表示 yes，n 表示 no。
   (fset 'yes-or-no-p 'y-or-n-p)
 
-  ;; 打开括号匹配显示模式
-  (show-paren-mode t)
-
-  ;; 括号匹配时可以高亮显示另外一边的括号，但光标不会烦人的跳到另一个括号处。
-  (setq show-paren-style 'parenthesis)
-
   ;; 光标靠近鼠标指针时，让鼠标指针自动让开，别挡住视线。
   (setq mouse-avoidance-mode 'animate)
 
@@ -43,7 +37,6 @@
   (setq ring-bell-function 'ignore) ; visible-bell doesn’t work well on OS X, so disable those notifications completely
 
   (setq inhibit-compacting-font-caches t) ; Don’t compact font caches during GC.
-  (setq delete-by-moving-to-trash t)      ; Deleting files go to OS's trash folder
 
   (setq uniquify-buffer-name-style 'post-forward-angle-brackets) ; Show path if names are same
 

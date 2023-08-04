@@ -196,5 +196,8 @@
   (add-to-list 'which-func-modes 'go-ts-mode)
   (add-to-list 'which-func-modes 'emacs-lisp-mode))
 
+;; code format
+;; - https://github.com/radian-software/apheleia
+
 (provide 'lang-basic)
 ;;; lang-basic.el ends here

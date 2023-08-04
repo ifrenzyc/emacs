@@ -7,18 +7,6 @@
 
 ;;; Code:
 
-(use-package writeroom-mode
-  :disabled t
-  :commands (writeroom-mode)
-  :general
-  (writeroom-mode-map
-   "C-M-<" 'writeroom-decrease-width
-   "C-M->" 'writeroom-increase-width
-   "C-M-=" 'writeroom-adjust-width)
-  :config
-  (setq writeroom-restore-window-config t
-        writeroom-width 89))
-
 (use-package olivetti
   :commands (olivetti-mode)
   :hook
@@ -42,7 +30,7 @@
   ;; (setq-default cursor-type 'box)
 
   (general-define-key
-   :keymaps 'view-mode-map
+   
    "SPC" (general-simulate-key "<f16>"))
 
   ;; (defun xfk-command-mode-on ()
@@ -63,6 +51,18 @@
   ;;                (setq cursor-type (if view-mode 'box 'bar))))
   (view-mode . (lambda ()
                  (setq cursor-type (if view-mode 'hollow 'box)))))
+
+(use-package writeroom-mode
+  :disabled t
+  :commands (writeroom-mode)
+  :general
+  (writeroom-mode-map
+   "C-M-<" 'writeroom-decrease-width
+   "C-M->" 'writeroom-increase-width
+   "C-M-=" 'writeroom-adjust-width)
+  :config
+  (setq writeroom-restore-window-config t
+        writeroom-width 89))
 
 (provide 'init-reader)
 ;;; init-reader.el ends here

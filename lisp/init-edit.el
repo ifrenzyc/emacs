@@ -190,14 +190,11 @@
   (selected-minor-mode-override t)
   :hook
   (after-init . selected-global-mode)
-  :init
-  (setq selected-org-mode-map (make-sparse-keymap))
   :config
   (put 'upcase-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
 
   (defvar-local me/pretty-print-function nil)
-
   (defun me/pretty-print (beg end)
     (interactive "r")
     (if me/pretty-print-function

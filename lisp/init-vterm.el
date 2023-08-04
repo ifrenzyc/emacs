@@ -14,10 +14,12 @@
   (;; 为 vterm 设置单独字体，https://emacs-china.org/t/mode/15512
    (vterm-mode . (lambda () (setq buffer-face-mode-face '((:family "Cascadia Code" :height 130)))
                    (buffer-face-mode t))))
-  :custom ((vterm-buffer-name-string "*vterm %s*")
-           (vterm-kill-buffer-on-exit t)
-           (vterm-max-scrollback 100000))
+  :custom
+  ((vterm-buffer-name-string "*vterm %s*")
+   (vterm-kill-buffer-on-exit t)
+   (vterm-max-scrollback 100000))
   :init
+  (setq-default shell-file-name "/usr/local/bin/zsh")
   (setq vterm-always-compile-module t)
 
   (add-hook 'vterm-exit-functions

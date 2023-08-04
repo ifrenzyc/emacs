@@ -16,7 +16,6 @@
 (setq backup-by-copying nil)
 
 (use-package git-modes
-  ;; :straight (:host github :repo "magit/git-modes")
   :after (magit)
   :config
   (use-package gitignore-mode

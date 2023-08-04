@@ -108,6 +108,7 @@
   ;;   "!" 'dired-do-shell-command)
   )
 
+;; Writeable dired
 (use-package wdired
   :after dired
   :commands wdired-change-to-wdired-mode

@@ -7,7 +7,7 @@
 ;; - https://github.com/EFLS/zetteldeft
 ;; 
 
-;;; Code
+;;; Code:
 (use-package deft
   :commands (deft deft-open-file deft-new-file-named)
   ;; :general
@@ -56,3 +56,4 @@
   )
 
 (provide 'init-deft)
+;;; init-deft.el ends here

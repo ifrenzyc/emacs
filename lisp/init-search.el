@@ -332,6 +332,7 @@ active region use it instead."
 
 ;; https://github.com/winterTTr/ace-jump-mode
 (use-package ace-jump-mode
+  :disabled t
   :demand t
   :general
   ("C-x j" 'ace-jump-mode

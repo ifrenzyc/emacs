@@ -151,7 +151,7 @@
 ;; (require 'init-neotree)
 (require 'init-helpful)
 
-(require 'init-term)
+;; (require 'init-term)
 (require 'init-vterm)
 ;; (require 'init-eshell)  ;; I don't use eshell
 (require 'init-rime)    ;; Chinese input method
