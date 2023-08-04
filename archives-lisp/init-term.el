@@ -11,9 +11,6 @@
 ;; 
 
 ;;; Code:
-
-(setq-default shell-file-name "/usr/local/bin/zsh")
-
 (use-package multi-term
   :disabled t
   :init
