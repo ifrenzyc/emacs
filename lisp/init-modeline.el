@@ -88,9 +88,9 @@
   :commands hide-mode-line-mode
   :hook
   ((completion-list-mode
+    treemacs-mode
     ;; vterm-mode
-    neotree-mode) . hide-mode-line-mode)
-  )
+    neotree-mode) . hide-mode-line-mode))
 
 (provide 'init-modeline)
 ;;; init-modeline.el ends here
