@@ -89,7 +89,7 @@
   :hook
   ((completion-list-mode
     treemacs-mode
-    ;; vterm-mode
+    vterm-mode
     neotree-mode) . hide-mode-line-mode))
 
 (provide 'init-modeline)

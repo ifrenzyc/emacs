@@ -893,8 +893,8 @@ text and copying to the killring."
 ;; TODO electric-quote-mode
 
 (use-package org-sticky-header
-  :hook (org-mode . org-sticky-header-mode)
   :disabled t
+  :hook (org-mode . org-sticky-header-mode)  
   :config
   ;; Show full path in header
   (setq org-sticky-header-full-path 'full)

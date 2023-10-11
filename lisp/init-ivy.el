@@ -324,10 +324,10 @@
   (setq counsel-find-file-at-point t)
   (setq counsel-yank-pop-separator "\n—————————————————————————————————————————————\n")
   (cond
-   ((executable-find "ugrep")
-    (setq counsel-grep-base-command "ugrep --color=never -n -e '%s' '%s'"))
    ((executable-find "rg")
-    (setq counsel-grep-base-command "rg -S --no-heading --line-number --color never '%s' '%s'")))
+    (setq counsel-grep-base-command "rg -S --no-heading --line-number --color never '%s' '%s'"))
+   ((executable-find "ugrep")
+    (setq counsel-grep-base-command "ugrep --color=never -n -e '%s' '%s'")))
   ;; (if (executable-find "rg")
   ;;     ;; if rg is installed, use rg for `counsel-grep-or-swiper' and `counsel-rg'
   ;;     (setq counsel-grep-base-command "rg -n -M 512 --line-number --smart-case --with-filename --color never --no-heading -i \"%s\" %s"
