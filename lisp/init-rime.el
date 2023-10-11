@@ -27,16 +27,18 @@
          :font "LXGW WenKai Mono-16"
          :internal-border-width 1))
   :general
-  ("C-\\"   'yc/turn-off-input-method
-   "C-|"    'yc/turn-on-rime-input-method
-   "H-SPC"  'yc/turn-on-rime-input-method
-   "C-s-\\" 'yc/turn-on-rime-input-method)
+  ("M-SPC"  'yc/turn-off-input-method
+   ;; "C-\\"   'yc/turn-off-input-method
+   ;; "C-|"    'yc/turn-on-rime-input-method
+   ;; "C-s-\\" 'yc/turn-on-rime-input-method
+   "H-SPC"  'yc/turn-on-rime-input-method)
   (rime-mode-map
    "C-`" 'rime-send-keybinding
    "M-j" 'rime-force-enable)
   :init
   (defun yc/turn-on-rime-input-method ()
     (interactive)
+    (shell-command-to-string "osascript ~/bin/turn_off_input_method_global.scpt")
     (deactivate-input-method)
     (setq-local default-input-method "rime")
     (toggle-input-method)
@@ -44,6 +46,7 @@
 
   (defun yc/turn-off-input-method ()
     (interactive)
+    (shell-command-to-string "osascript ~/bin/turn_off_input_method_global.scpt")
     (deactivate-input-method))
   :config
   ;; 增加断言列表，当其中有任何一个断言的值不是 nil 时，会自动使用英文。

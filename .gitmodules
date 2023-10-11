@@ -58,9 +58,6 @@
 [submodule "localelpa/preview-org-html-mode"]
 	path = localelpa/preview-org-html-mode
 	url = git@github.com:jakebox/preview-org-html-mode.git
-[submodule "localelpa/org-modern-indent"]
-	path = localelpa/org-modern-indent
-	url = https://github.com/jdtsmith/org-modern-indent.git
 [submodule "localelpa/sidekick"]
 	path = localelpa/sidekick
 	url = https://github.com/VernonGrant/sidekick.el.git
@@ -79,3 +76,6 @@
 [submodule "localelpa/treemacs-nerd-icons"]
 	path = localelpa/treemacs-nerd-icons
 	url = https://github.com/ifrenzyc/treemacs-nerd-icons.git
+[submodule "localelpa/indent-bars"]
+	path = localelpa/indent-bars
+	url = git@github.com:jdtsmith/indent-bars.git

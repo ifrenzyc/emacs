@@ -43,10 +43,9 @@
   ("<f9>"  'projectile-run-vterm
    "S-<f9>" 'vterm)
   (vterm-mode-map
-   "<f8>"  'treemacs
-   "C-\\"   'yc/turn-off-input-method
-   "C-|"    'yc/turn-on-rime-input-method
-   "C-s-\\" 'yc/turn-on-rime-input-method)
+   "<f8>"    'treemacs
+   "M-SPC"   'yc/turn-off-input-method
+   "H-SPC"   'yc/turn-on-rime-input-method)
   :config
   (defun my/vterm-execute-current-line ()
     "Insert text of current line in vterm and execute."
