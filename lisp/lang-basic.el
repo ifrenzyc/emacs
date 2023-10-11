@@ -25,6 +25,7 @@
                              ruby-mode
                              sh-mode
                              fish-mode
+                             bat-mode
                              go-mode
                              js-mode
                              lua-mode
@@ -198,6 +199,74 @@
 
 ;; code format
 ;; - https://github.com/radian-software/apheleia
+;; - https://github.com/lassik/emacs-format-all-the-code
+
+;; - https://github.com/antonj/Highlight-Indentation-for-Emacs
+;; - https://github.com/DarthFennec/highlight-indent-guides
+;; - https://github.com/jdtsmith/indent-bars
+(use-package highlight-indentation
+  :disabled t
+  ;; :hook (prog-mode . highlight-indentation-mode)
+  ;; :config
+  ;; (set-face-background 'highlight-indentation-face "#e3e3d3")
+  ;; (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
+  )
+
+(use-package highlight-indent-guides
+  :disabled t
+  ;; :hook (prog-mode . highlight-indent-guides-mode)  ; 默认不启动这个，非常影响性能
+  :functions (macrostep-expand macrostep-collapse)
+  :init
+  (setq highlight-indent-guides-auto-character-face-perc 25
+        ;; highlight-indent-guides-character ?|
+        ;; highlight-indent-guides-character ?❚
+		;; highlight-indent-guides-character ?‖
+        highlight-indent-guides-responsive 'top
+        highlight-indent-guides-method 'character)  ;; 'column 'character 'bitmap
+
+  ;; (set-face-background 'highlight-indent-guides-odd-face "darkgray")
+  ;; (set-face-background 'highlight-indent-guides-even-face "dimgray")
+  
+  :config
+  ;; WORKAROUND: Reset the faces after changing theme
+  (add-hook 'after-load-theme-hook
+            (lambda ()
+              "Re-render indentations after changing theme."
+              (when highlight-indent-guides-mode
+                (highlight-indent-guides-auto-set-faces))))
+
+  ;; Don't display first level of indentation
+  (defun my-indent-guides-for-all-but-first-column (level responsive display)
+    (unless (< level 1)
+      (highlight-indent-guides--highlighter-default level responsive display)))
+  (setq highlight-indent-guides-highlighter-function
+        #'my-indent-guides-for-all-but-first-column)
+
+  ;; Don't display indentations in `swiper'
+  ;; https://github.com/DarthFennec/highlight-indent-guides/issues/40
+  (with-eval-after-load 'ivy
+    (defun my-ivy-cleanup-indentation (str)
+      "Clean up indentation highlighting in ivy minibuffer."
+      (let ((pos 0)
+            (next 0)
+            (limit (length str))
+            (prop 'highlight-indent-guides-prop))
+        (while (and pos next)
+          (setq next (text-property-not-all pos limit prop nil str))
+          (when next
+            (setq pos (text-property-any next limit prop nil str))
+            (ignore-errors
+              (remove-text-properties next pos '(display nil face nil) str))))))
+    (advice-add #'ivy-cleanup-string :after #'my-ivy-cleanup-indentation)))
+
+(use-package indent-bars
+  :load-path "localelpa/indent-bars"
+  :hook
+  ((python-mode
+    python-ts-mode
+    yaml-mode
+    yaml-ts-mode
+    nxml-mode) . indent-bars-mode))
 
 (provide 'lang-basic)
 ;;; lang-basic.el ends here
