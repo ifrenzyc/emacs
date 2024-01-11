@@ -64,7 +64,7 @@
         modus-themes-bold-constructs nil
         modus-themes-org-blocks 'gray-background)
   :config
-  (modus-themes-select 'modus-operandi))
+  (modus-themes-select 'modus-operandi-tinted))
 
 ;; (use-package tron-legacy-theme
 ;;   :custom
