@@ -197,6 +197,7 @@
 (require 'lang-json)
 (require 'lang-xml)
 (require 'lang-yaml)
+(require 'lang-protobuf)
 (require 'lang-bash)
 (require 'lang-dockerfile)
 (require 'lang-docker)
@@ -208,6 +209,7 @@
 (require 'lang-makefile)
 (require 'lang-jenkinsfile)
 (require 'lang-vimrc)
+(require 'lang-applescript)
 (require 'lang-restclient)
 
 (require 'init-gc)

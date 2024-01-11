@@ -16,6 +16,7 @@
 ;; custom program language font
 (setq yc/programming-modes '(js-mode
                              python-mode
+                             python-ts-mode
                              html-mode
                              web-mode
                              vue-html-mode
@@ -29,6 +30,8 @@
                              go-mode
                              js-mode
                              lua-mode
+                             perl-mode
+                             systemd-mode
                              stylus-mode
                              json-mode
                              jsonian-mode
@@ -43,8 +46,10 @@
                              racket-mode
                              conf-mode
                              fundamental-mode
+                             applescript-mode
                              emacs-lisp-mode
                              lisp-interaction-mode
+                             protobuf-mode
                              bash-ts-mode
                              c++-ts-mode
                              c-ts-mode
@@ -59,7 +64,6 @@
                              js-ts-mode
                              json-ts-mode
                              ng2-ts-mode
-                             python-ts-mode
                              ruby-ts-mode
                              rust-ts-mode
                              toml-ts-mode

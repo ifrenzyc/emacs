@@ -28,6 +28,7 @@
           (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript"))
           (json       . ("https://github.com/tree-sitter/tree-sitter-json"))
           (lua        . ("https://github.com/Azganoth/tree-sitter-lua"))
+          (proto      . ("https://github.com/mitchellh/tree-sitter-proto"))
           (make       . ("https://github.com/alemuller/tree-sitter-make"))
           (markdown   . ("https://github.com/MDeiml/tree-sitter-markdown" nil "tree-sitter-markdown/src"))
           (ocaml      . ("https://github.com/tree-sitter/tree-sitter-ocaml" nil "ocaml/src"))
@@ -82,6 +83,8 @@
   (add-to-list 'treesit-auto-fallback-alist '(bash-ts-mode . sh-mode)))
 
 (use-package tree-sitter
+  :custom
+  (tree-sitter-load-path "~/.emacs.d/tree-sitter/")
   :init
   (global-tree-sitter-mode)
   :hook (tree-sitter-after-on . tree-sitter-hl-mode))
