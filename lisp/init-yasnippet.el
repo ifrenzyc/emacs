@@ -8,6 +8,7 @@
 (require 'init-funcs)
 
 (use-package yasnippet
+  :after org
   :hook
   (prog-mode . yas-minor-mode)
   (org-mode . yas-minor-mode)
@@ -15,7 +16,7 @@
   ;; Suppress excessive log messages
   (setq yas-verbosity 1
         yas-triggers-in-field t
-        yas-prompt-functions '(yas-ido-prompt))
+        yas-prompt-functions '(yas-dropdown-prompt yas-completing-prompt yas-maybe-ido-prompt yas-no-prompt))
   (yas-global-mode t))
 
 (use-package yasnippet-snippets
