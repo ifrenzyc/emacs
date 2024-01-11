@@ -25,6 +25,7 @@
    (list :background-color "#333333"
          :foreground-color "#dcdccc"
          :font "LXGW WenKai Mono-16"
+         :internal-border-color "Purple"
          :internal-border-width 1))
   :general
   ("M-SPC"  'yc/turn-off-input-method
@@ -36,9 +37,19 @@
    "C-`" 'rime-send-keybinding
    "M-j" 'rime-force-enable)
   :init
+  (rime-lighter)
+
+  ;; change cursor color
+  (add-to-list 'load-path (expand-file-name "localelpa/im-cursor-chg" user-emacs-directory))
+  (with-eval-after-load 'rime
+    (require 'im-cursor-chg)
+    (cursor-chg-mode 1))
+
   (defun yc/turn-on-rime-input-method ()
     (interactive)
-    (shell-command-to-string "osascript ~/bin/turn_off_input_method_global.scpt")
+    ;; (set-cursor-color "Orange")
+    ;; (shell-command-to-string "osascript ~/bin/turn_on_rime_input_method_global.scpt")
+    (shell-command-to-string "/opt/homebrew/bin/macism com.apple.keylayout.US")
     (deactivate-input-method)
     (setq-local default-input-method "rime")
     (toggle-input-method)
@@ -46,7 +57,7 @@
 
   (defun yc/turn-off-input-method ()
     (interactive)
-    (shell-command-to-string "osascript ~/bin/turn_off_input_method_global.scpt")
+    (shell-command-to-string "/opt/homebrew/bin/macism com.apple.keylayout.US")
     (deactivate-input-method))
   :config
   ;; 增加断言列表，当其中有任何一个断言的值不是 nil 时，会自动使用英文。
@@ -62,13 +73,7 @@
   (setq rime-cursor "˰")
   ;; 默认值
   (setq rime-translate-keybindings
-        '("C-f" "C-b" "C-n" "C-p" "C-g"))
-
-  ;; change cursor color
-  (add-to-list 'load-path (expand-file-name "localelpa/im-cursor-chg" user-emacs-directory))
-  (with-eval-after-load 'rime
-    (require 'im-cursor-chg)
-    (cursor-chg-mode 1)))
+        '("C-f" "C-b" "C-n" "C-p" "C-g")))
 
 ;; 在 Emacs 中使用原生的输入法
 ;; - https://emacs-china.org/t/smart-input-source-evil/12592/37

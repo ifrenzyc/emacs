@@ -591,7 +591,10 @@
 
 (use-package counsel-osx-app
   :after counsel
-  ;; :general (("s-o" 'counsel-osx-app))
+  :general ("H-v" '(lambda ()
+                     (interactive)
+                     (call-process-shell-command "open /Applications/Paste.app")
+                     ))
   )
 
 (use-package counsel-fd
