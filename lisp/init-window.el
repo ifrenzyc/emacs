@@ -37,26 +37,40 @@
   :config
   (good-scroll-mode t))
 
-(use-package pixel-scroll-precision
+(use-package pixel-scroll
   :ensure nil
+  :custom
+  (pixel-scroll-precision-interpolation-factor 1.0)
+  (pixel-scroll-precision-interpolate-page t)
   :init
   (pixel-scroll-precision-mode t)
+  :bind
+  (([remap scroll-up-command]    . +pixel-scroll-up-command)
+   ([remap scroll-down-command]  . +pixel-scroll-down-command)
+   ([remap recenter-top-bottom]  . +pixel-recenter-top-bottom))
   :config
-  (setq pixel-scroll-precision-interpolate-page t)
-  (defun +pixel-scroll-interpolate-down (&optional lines)
+  ;; scroll less than default
+  (defvar fk/default-scroll-lines 15)
+  
+  (defun +pixel-scroll-up-command ()
+    "Similar to `scroll-up-command' but with pixel scrolling."
     (interactive)
-    (if lines
-        (pixel-scroll-precision-interpolate (* -1 lines (pixel-line-height)))
-      (pixel-scroll-interpolate-down)))
+    (pixel-scroll-precision-interpolate (- (* fk/default-scroll-lines (line-pixel-height)))))
 
-  (defun +pixel-scroll-interpolate-up (&optional lines)
+  (defun +pixel-scroll-down-command ()
+    "Similar to `scroll-down-command' but with pixel scrolling."
     (interactive)
-    (if lines
-        (pixel-scroll-precision-interpolate (* lines (pixel-line-height))))
-    (pixel-scroll-interpolate-up))
+    (pixel-scroll-precision-interpolate (* fk/default-scroll-lines (line-pixel-height))))
 
-  (defalias 'scroll-up-command '+pixel-scroll-interpolate-down)
-  (defalias 'scroll-down-command '+pixel-scroll-interpolate-up))
+  (defun +pixel-recenter-top-bottom ()
+    "Similar to `recenter-top-bottom' but with pixel scrolling."
+    (interactive)
+    (let* ((current-row (cdr (nth 6 (posn-at-point))))
+           (target-row (save-window-excursion
+                         (recenter-top-bottom)
+                         (cdr (nth 6 (posn-at-point)))))
+           (distance-in-pixels (* (- target-row current-row) (line-pixel-height))))
+      (pixel-scroll-precision-interpolate distance-in-pixels))))
 
 ;; (use-package yascroll
 ;;   :init
