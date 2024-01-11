@@ -1,0 +1,5 @@
+RIME_PLUGINS=rime/librime-charcode hchunhui/librime-lua lotem/librime-octagram
+librime a608767
+rime/librime-charcode 3e73214
+hchunhui/librime-lua a06b973
+lotem/librime-octagram a6ced5a
