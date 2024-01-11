@@ -113,7 +113,7 @@
                                       ("fillcolor" . "#EFEFFF")
                                       ("fontcolor" . "#111111")))
   (setq org-roam-file-extensions '("txt"))
-  (setq org-roam-graphviz-executable "/usr/local/opt/graphviz/bin/dot")
+  (setq org-roam-graphviz-executable "/opt/homebrew/opt/graphviz/bin/dot")
   (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
   (setq org-roam-completion-system 'ivy)
   (setq org-roam-verbose t)

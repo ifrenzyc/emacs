@@ -8,6 +8,8 @@
 ;; 
 
 ;;; Code:
+(require 'init-const)
+
 (use-package tramp
   :ensure nil
   :init

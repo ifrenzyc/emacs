@@ -7,8 +7,8 @@
 ;; - lsp-mode 的优化提速 :: http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
 ;; 
 ;; 解决 macOS 下，使用 nvm 管理 nodejs，在执行 (lsp-install-server) 时报错 =env: node: No such file or directory=，原因应该是 lsp 在系统路径上找 node 和 npm 没找到
-;; ln -s ~/.nvm/versions/node/v14.11.0/bin/npm /usr/local/bin/npm
-;; ln -s ~/.nvm/versions/node/v14.11.0/bin/node /usr/local/bin/node
+;; ln -s ~/.nvm/versions/node/v14.11.0/bin/npm /opt/homebrew/bin/npm
+;; ln -s ~/.nvm/versions/node/v14.11.0/bin/node /opt/homebrew/bin/node
 ;; 
 
 ;;; Code:
@@ -18,9 +18,10 @@
   :hook
   ((lsp . lsp-lens-mode)
    ;; (prog-mode . lsp-deferred)
-   (lsp-managed-mode . (lambda ()
-                         (with-eval-after-load 'company
-                           (setq-local company-backends '((company-capf :with company-yasnippet))))))
+   ;; (lsp-managed-mode . (lambda ()
+   ;;                       (with-eval-after-load 'company
+   ;;                         (setq-local company-backends '((company-capf :with company-yasnippet)))
+   ;;                         )))
    (lsp-mode . lsp-enable-which-key-integration))
   ;; (lsp-after-open . lsp-enable-imenu)
   :general
@@ -64,7 +65,7 @@
   (lsp-completion-provider :none) ;; we use Corfu!
 
   ;; go install github.com/lighttiger2505/sqls@latest
-  (lsp-sqls-server "/usr/local/opt/go/libexec/bin/sqls")
+  (lsp-sqls-server "/opt/homebrew/opt/go/libexec/bin/sqls")
 
   ;; @see https://emacs-lsp.github.io/lsp-mode/page/performance
   (read-process-output-max (* 1024 1024)) ;; 1mb

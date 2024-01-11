@@ -36,7 +36,7 @@
                            (set-fill-column 89)
                            (auto-fill-mode 1)))
   
-  ((magit-git-executable "/usr/bin/git")
+  ((magit-git-executable "/opt/homebrew/bin/git")
    (magit-log-arguments '("-n256" "--graph" "--decorate" "--color"))
    ;; magit-completing-read-function 'magit-ido-completing-read                        ; use ido to look for branches
    (magit-default-tracking-name-function 'magit-default-tracking-name-branch-only)       ; don't put "origin-" in front of new branch names by default

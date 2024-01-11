@@ -32,8 +32,8 @@
               lsp-headerline-breadcrumb-enable t
               lsp-signature-auto-activate t)
 
-  ;; (defvar java-home "/usr/local/opt/java/current")
-  ;; (defvar m2-home "/usr/local/opt/maven/current")
+  ;; (defvar java-home "/opt/homebrew/opt/java/current")
+  ;; (defvar m2-home "/opt/homebrew/opt/maven/current")
   ;; (setenv "JAVA_HOME" java-home)
   ;; (setenv "M2_HOME" m2-home)
   ;; (setenv "PATH" (concat (getenv "PATH") (format ":%s/bin:%s/bin" java-home m2-home)))
@@ -43,8 +43,9 @@
         ;; Currently (2019-04-24), dap-mode works best with Oracle
         ;; JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
         ;; 这里为什么指定 java, 参考这个 issues(https://github.com/eclipse/eclipse.jdt.ls/pull/1509), 需要 java 11 以上
-        ;; lsp-java-java-path "/usr/local/opt/java/bin/java"
-        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-20.jdk/Contents/Home/bin/java"
+        ;; lsp-java-java-path "/opt/homebrew/opt/java/bin/java"
+        ;; 如果 jdk 的版本不对， lsp 会报错："Doing vfork: No such file or directory"
+        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home/bin/java"
         ;; lsp-java-java-path "/usr/bin/java"
         ;; Use Google style formatting by default
         lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"

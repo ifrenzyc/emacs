@@ -218,8 +218,8 @@
     (unless (file-exists-p (file-name-directory filename))
       (make-directory (file-name-directory filename)))
 
-    (message (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
-    (call-process-shell-command (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
+    (message (concat "/opt/homebrew/bin/pngpaste " (concat "\"" filename "\"")))
+    (call-process-shell-command (concat "/opt/homebrew/bin/pngpaste " (concat "\"" filename "\"")))
 
     (insert (concat "[[file:" filename "]]")))
 
@@ -258,8 +258,8 @@ text and copying to the killring."
                     (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
     ;;  (unless (file-exists-p (file-name-directory filename))
     ;;    (make-directory (file-name-directory filename)))
-    (message (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
-    (call-process-shell-command (concat "/usr/local/bin/pngpaste " (concat "\"" filename "\"")))
+    (message (concat "/opt/homebrew/bin/pngpaste " (concat "\"" filename "\"")))
+    (call-process-shell-command (concat "/opt/homebrew/bin/pngpaste " (concat "\"" filename "\"")))
 
     (insert (concat "[[file:" filename "]]")))
 

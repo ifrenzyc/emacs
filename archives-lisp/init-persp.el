@@ -6,7 +6,7 @@
 ;; - https://github.com/semiosis/shane-emacs-config-dump/blob/ecbab875a369c8afec18e89178743729717ca92e/config/my-persp.el
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package persp-mode
   :demand t

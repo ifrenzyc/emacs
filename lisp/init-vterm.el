@@ -19,7 +19,7 @@
    (vterm-kill-buffer-on-exit t)
    (vterm-max-scrollback 100000))
   :init
-  (setq-default shell-file-name "/usr/local/bin/zsh")
+  (setq-default shell-file-name "/opt/homebrew/bin/zsh")
   (setq vterm-always-compile-module t)
 
   (add-hook 'vterm-exit-functions
@@ -69,7 +69,13 @@
         (vterm-send-string command)
         (vterm-send-return)
         (switch-to-buffer-other-window buf)
-        ))))
+        )))
+  (defun yc/vterm-other-frame ()
+    "Create a new frame with a new vterm."
+    (interactive)
+    (make-frame)
+    (vterm "Untitled-Vterm"))
+  )
 
 (use-package vterm-toggle
   :disabled t

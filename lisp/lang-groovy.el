@@ -10,7 +10,7 @@
   :custom
   (groovy-indent-offset 4)
   (lsp-groovy-server-file "~/src/opensource/groovy-language-server/build/libs/groovy-language-server-all.jar")
-  (lsp-groovy-classpath "/usr/local/opt/groovy/libexec/lib")
+  (lsp-groovy-classpath "/opt/homebrew/opt/groovy/libexec/lib")
   :hook (groovy-mode . lsp-deferred)
   :mode (("\\.groovy$" . groovy-mode)
          ("\\.gradle$" . groovy-mode)))

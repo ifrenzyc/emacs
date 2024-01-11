@@ -21,14 +21,10 @@
   :if IS-MAC
   :demand t
   :config
-  (setq exec-path-from-shell-arguments '("-l")
-        exec-path-from-shell-variables '("PATH" "GOROOT" "GOPATH" "MANPATH" "CLASSPATH" "RIME_PATH" "PKG_CONFIG_PATH"))
+  ;; (setq exec-path-from-shell-arguments '("-l")
+  ;;       exec-path-from-shell-variables '("PATH" "GOROOT" "GOPATH" "MANPATH" "CLASSPATH" "RIME_PATH" "PKG_CONFIG_PATH"))
 
-  ;; (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-  ;; (setq exec-path (append exec-path '("/usr/local/bin")))
-
-  (setenv "LD_LIBRARY_PATH" (concat (getenv "LD_LIBRARY_PATH") ":/usr/local/lib"))
-  (setq exec-path (append exec-path '("/usr/local/lib")))
+  (setenv "LD_LIBRARY_PATH" (concat (getenv "LD_LIBRARY_PATH") ":/opt/homebrew/lib"))
   
   (exec-path-from-shell-initialize))
 

@@ -42,7 +42,7 @@
         markdown-gfm-uppercase-checkbox t
         markdown-fontify-code-blocks-natively t)
 
-  (setq markdown-command "/usr/local/bin/multimarkdown")
+  (setq markdown-command "/opt/homebrew/bin/multimarkdown")
 
   (setq markdown-content-type "application/xhtml+xml")
   (setq markdown-css-paths '("https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css"

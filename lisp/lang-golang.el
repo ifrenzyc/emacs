@@ -129,7 +129,7 @@
           (message "Gocheck is needed to test the current suite"))
       (message "Must be in a _test.go file to run go-test-current-suite")))
 
-  ;; *问题* ：这里需要设置为 ="/usr/local/bin/go"= ，可能应为某些环境变量没有设置成功，暂时还不知道具体哪里没设置，先配置成这样。
+  ;; *问题* ：这里需要设置为 ="/opt/homebrew/bin/go"= ，可能应为某些环境变量没有设置成功，暂时还不知道具体哪里没设置，先配置成这样。
   ;; 用上面的 =exec-path-from-shell= 包暂时解决了这个问题
 
   ;; Run Current File
@@ -156,7 +156,7 @@
              ("py" . "python")
              ("py3" . ,(if (string-equal system-type "windows-nt") "c:/Python32/python.exe" "python3"))
              ("rb" . "ruby")
-             ("go" . "/usr/local/bin/go run")
+             ("go" . "/opt/homebrew/bin/go run")
              ("hs" . "runhaskell")
              ("js" . "node") ; node.js
              ("ts" . "tsc --alwaysStrict --lib DOM,ES2015,DOM.Iterable,ScriptHost --target ES5") ; TypeScript
@@ -168,7 +168,7 @@
              ("tex" . "pdflatex")
              ("latex" . "pdflatex")
              ("java" . "javac")
-             ;; ("pov" . "/usr/local/bin/povray +R2 +A0.1 +J1.2 +Am2 +Q9 +H480 +W640")
+             ;; ("pov" . "/opt/homebrew/bin/povray +R2 +A0.1 +J1.2 +Am2 +Q9 +H480 +W640")
              ))
           $fname
           $fSuffix
