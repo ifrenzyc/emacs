@@ -20,6 +20,8 @@
 (use-package exec-path-from-shell
   :if IS-MAC
   :demand t
+  :custom
+  (exec-path-from-shell-variables '("PATH" "GOROOT" "GOPATH" "GO111MODULE" "EMACS_MODULE_HEADER_ROOT"))
   :config
   ;; (setq exec-path-from-shell-arguments '("-l")
   ;;       exec-path-from-shell-variables '("PATH" "GOROOT" "GOPATH" "MANPATH" "CLASSPATH" "RIME_PATH" "PKG_CONFIG_PATH"))

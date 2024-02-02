@@ -16,8 +16,7 @@
    "C-c C-f" 'lsp-format-buffer))
 
 (use-package docker-compose-mode
-  :config
-  (add-to-list 'auto-mode-alist '("docker-compose[^/]*\\.yml\\'" . docker-compose-mode)))
+  :mode ("docker-compose[^/]*\\.\\(yml\\|yaml\\)$" . docker-compose-mode))
 
 (provide 'lang-dockerfile)
 ;;; lang-dockerfile.el ends here
