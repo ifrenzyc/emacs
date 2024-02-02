@@ -106,7 +106,7 @@
   (setq org-agenda-file-done (expand-file-name "0x00_GTD/done.org_archive" org-directory))
   (setq org-agenda-file-journal (expand-file-name "journal.txt" org-directory))
   (setq org-agenda-file-thoughts (expand-file-name "thoughts.txt" org-directory))
-  (setq org-agenda-file-notes (expand-file-name "notes.txt" org-directory))
+  (setq org-agenda-file-notes (expand-file-name "../notes.txt" org-directory))
   (setq org-agenda-file-code-snippet (expand-file-name "snippet.txt" org-directory))
   (setq org-agenda-diary-file (expand-file-name "diary.txt" org-directory))
   (setq org-default-notes-file (expand-file-name "0x00_GTD/00_inbox.txt" org-directory))

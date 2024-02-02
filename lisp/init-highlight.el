@@ -154,6 +154,10 @@ FACE defaults to inheriting from default and highlight."
   (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay)
 
   (use-package transient
+    :custom
+    ((transient-levels-file (concat yc/cache-dir "/transient/levels.el"))
+     (transient-values-file (concat yc/cache-dir "/transient/values.el"))
+     (transient-history-file (concat yc/cache-dir "transient/history.el")))
     :config
     (transient-define-prefix symbol-overlay-transient ()
       "Symbol Overlay transient"
