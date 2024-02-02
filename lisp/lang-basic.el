@@ -30,6 +30,8 @@
                              go-mode
                              js-mode
                              lua-mode
+                             lua-ts-mode
+                             php-mode
                              perl-mode
                              systemd-mode
                              stylus-mode
@@ -58,6 +60,7 @@
                              csharp-ts-mode
                              css-ts-mode
                              dockerfile-ts-mode
+                             docker-compose-mode
                              go-mod-ts-mode
                              go-ts-mode
                              java-ts-mode

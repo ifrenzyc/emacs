@@ -7,21 +7,24 @@
 
 ;;; Code:
 (use-package treemacs
-  :init
-  (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-  :commands (treemacs-follow-mode
-             treemacs-filewatch-mode
-             treemacs-fringe-indicator-mode
-             treemacs-git-mode)
+  ;; :init
+  ;; :commands (treemacs-follow-mode
+  ;;            treemacs-filewatch-mode
+  ;;            treemacs-fringe-indicator-mode
+  ;;            treemacs-git-mode)
+  :custom-face
+  (treemacs-window-background-face ((t (:background "#efe9dd" :height 140))))
   :hook
   ;; init treemacs in emacs keys;
   ;; (treemacs-mode . evil-normalize-keymaps)
   (treemacs-mode . (lambda ()
+                     (setq-local line-spacing 0.4)
                      (setq-local truncate-lines t)
-                     (setq-local word-wrap nil)
-                     ))
+                     (setq-local word-wrap nil)))
   :config
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  
   (setq treemacs-collapse-dirs                 (if (treemacs--find-python3) 3 0)
         treemacs-deferred-git-apply-delay      0.5
         treemacs-display-in-side-window        t
@@ -72,8 +75,9 @@
   ;; using a Hi-DPI display, uncomment this to double the icon size.
   ;;(treemacs-resize-icons 44)
 
-  (treemacs-follow-mode t)
+  (treemacs-follow-mode nil)
   (treemacs-filewatch-mode t)
+  (treemacs-hide-gitignored-files-mode nil)
   (treemacs-fringe-indicator-mode t)
   (pcase (cons (not (null (executable-find "git")))
                (not (null (treemacs--find-python3))))

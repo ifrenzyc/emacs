@@ -6,10 +6,12 @@
 
 ;;; Code:
 (use-package ansible
+  :disabled t
   :hook
   (yaml-mode . ansible-mode))
 
 (use-package ansible-doc
+  :disabled t
   :hook
   (yaml-mode . ansible-doc-mode))
 
@@ -17,6 +19,7 @@
 ;;   :init (add-hook 'yaml-mode-hook 'ansible-vault-mode))
 
 (use-package company-ansible
+  :disabled t
   :config
   (with-eval-after-load 'company
     (add-to-list 'company-backends 'company-ansible)))
