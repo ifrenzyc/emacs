@@ -45,7 +45,7 @@
         ;; 这里为什么指定 java, 参考这个 issues(https://github.com/eclipse/eclipse.jdt.ls/pull/1509), 需要 java 11 以上
         ;; lsp-java-java-path "/opt/homebrew/opt/java/bin/java"
         ;; 如果 jdk 的版本不对， lsp 会报错："Doing vfork: No such file or directory"
-        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home/bin/java"
+        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/bin/java"
         ;; lsp-java-java-path "/usr/bin/java"
         ;; Use Google style formatting by default
         lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
@@ -85,7 +85,7 @@
          "-Dlog.level=INFO"
          ;; "--illegal-access=permit"
          "-XX:+UseStringDeduplication"
-         "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar"
+         "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"
          )
         )
   :hook
