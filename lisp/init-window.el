@@ -5,6 +5,65 @@
 ;; 
 
 ;;; Code:
+(require 'init-funcs)
+
+(use-package good-scroll
+  :disabled t
+  :config
+  (good-scroll-mode t))
+
+(use-package pixel-scroll
+  :ensure nil
+  :bind
+  (([remap scroll-up-command]    . +pixel-scroll-up-command)
+   ([remap scroll-down-command]  . +pixel-scroll-down-command)
+   ([remap recenter-top-bottom]  . +pixel-recenter-top-bottom)
+   ("C-M-v"   . sloth/scroll-other-window-up)
+   ("C-M-S-v" . sloth/scroll-other-window-down))
+  :custom
+  (pixel-scroll-precision-interpolation-factor 1.0)
+  (pixel-scroll-precision-interpolate-page t)
+  :init
+  (pixel-scroll-precision-mode t)
+  :config
+  ;; scroll less than default
+  (defvar fk/default-scroll-lines 15)
+  
+  (defun +pixel-scroll-up-command ()
+    "Similar to `scroll-up-command' but with pixel scrolling."
+    (interactive)
+    (pixel-scroll-precision-interpolate (- (* fk/default-scroll-lines (line-pixel-height)))))
+
+  (defun +pixel-scroll-down-command ()
+    "Similar to `scroll-down-command' but with pixel scrolling."
+    (interactive)
+    (pixel-scroll-precision-interpolate (* fk/default-scroll-lines (line-pixel-height))))
+
+  (defun +pixel-recenter-top-bottom ()
+    "Similar to `recenter-top-bottom' but with pixel scrolling."
+    (interactive)
+    (let* ((current-row (cdr (nth 6 (posn-at-point))))
+           (target-row (save-window-excursion
+                         (recenter-top-bottom)
+                         (cdr (nth 6 (posn-at-point)))))
+           (distance-in-pixels (* (- target-row current-row) (line-pixel-height))))
+      (pixel-scroll-precision-interpolate distance-in-pixels)))
+
+  (defun sloth/scroll-other-window-up ()
+    "Scroll selected window up."
+    (interactive)
+    (when current-prefix-arg
+      (setq-local other-window-scroll-buffer
+                  (window-buffer (aw-select "Select window to scroll"))))
+    (scroll-other-window))
+
+  (defun sloth/scroll-other-window-down ()
+    "Scroll selected window down."
+    (interactive)
+    (when current-prefix-arg
+      (setq-local other-window-scroll-buffer
+                  (window-buffer (aw-select "Select window to scroll"))))
+    (scroll-other-window-down)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  scrolling                                                       ;;
@@ -29,48 +88,6 @@
 ;;        scroll-margin 0
 ;;        scroll-preserve-screen-position t)
 ;; (setq auto-window-vscroll nil)
-
-(require 'init-funcs)
-
-(use-package good-scroll
-  :disabled t
-  :config
-  (good-scroll-mode t))
-
-(use-package pixel-scroll
-  :ensure nil
-  :custom
-  (pixel-scroll-precision-interpolation-factor 1.0)
-  (pixel-scroll-precision-interpolate-page t)
-  :init
-  (pixel-scroll-precision-mode t)
-  :bind
-  (([remap scroll-up-command]    . +pixel-scroll-up-command)
-   ([remap scroll-down-command]  . +pixel-scroll-down-command)
-   ([remap recenter-top-bottom]  . +pixel-recenter-top-bottom))
-  :config
-  ;; scroll less than default
-  (defvar fk/default-scroll-lines 15)
-  
-  (defun +pixel-scroll-up-command ()
-    "Similar to `scroll-up-command' but with pixel scrolling."
-    (interactive)
-    (pixel-scroll-precision-interpolate (- (* fk/default-scroll-lines (line-pixel-height)))))
-
-  (defun +pixel-scroll-down-command ()
-    "Similar to `scroll-down-command' but with pixel scrolling."
-    (interactive)
-    (pixel-scroll-precision-interpolate (* fk/default-scroll-lines (line-pixel-height))))
-
-  (defun +pixel-recenter-top-bottom ()
-    "Similar to `recenter-top-bottom' but with pixel scrolling."
-    (interactive)
-    (let* ((current-row (cdr (nth 6 (posn-at-point))))
-           (target-row (save-window-excursion
-                         (recenter-top-bottom)
-                         (cdr (nth 6 (posn-at-point)))))
-           (distance-in-pixels (* (- target-row current-row) (line-pixel-height))))
-      (pixel-scroll-precision-interpolate distance-in-pixels))))
 
 ;; (use-package yascroll
 ;;   :init
@@ -154,12 +171,6 @@
   (advice-add 'winner-save-old-configurations :before #'gjg/winner-clean-up-modified-list))
 
 (use-package winum
-  :init
-  (setq winum-auto-setup-mode-line nil)
-  (winum-mode 1)
-  :config
-  (setq winum-auto-assign-0-to-minibuffer nil
-        winum-ignored-buffers '(" *which-key*"))
   :general
   (winum-keymap
    ;; "M-0" 'winum-select-window-0-or-10
@@ -171,11 +182,19 @@
    "M-6" 'winum-select-window-6
    "M-7" 'winum-select-window-7
    "M-8" 'winum-select-window-8
-   "M-9" 'winum-select-window-9))
+   "M-9" 'winum-select-window-9)
+  :init
+  (setq winum-auto-setup-mode-line nil)
+  (winum-mode 1)
+  :config
+  (setq winum-auto-assign-0-to-minibuffer nil
+        winum-ignored-buffers '(" *which-key*")))
 
 ;; 或许试试这个 Package： https://github.com/dimitri/switch-window
 ;; https://sachachua.com/blog/2015/01/emacs-microhabit-switching-windows-windmove-ace-window-ace-jump/
 (use-package ace-window
+  :general
+  ("M-o" 'ace-window)
   :init
   (setq ;; aw-keys '(?h ?j ?k ?l ?y ?u ?i ?o ?p)
    aw-background nil
@@ -190,8 +209,6 @@
   (aw-leading-char-face ((t (:inherit font-lock-keyword-face :foreground unspecified :bold t :height 3.0))))
   (aw-minibuffer-leading-char-face ((t (:inherit font-lock-keyword-face :bold t :height 1.0))))
   (aw-mode-line-face ((t (:inherit mode-line-emphasis :bold t))))
-  :general
-  ("M-o" 'ace-window)
   :config
   (ace-window-display-mode 1))
 
@@ -296,11 +313,11 @@
 (put 'shackle--current-popup-window 'permanent-local t)
 
 (use-package shackle
+  :general
+  ("C-c z" 'shackle-last-popup-buffer)
   :functions org-switch-to-buffer-other-window
   :commands shackle-display-buffer
   :hook (after-init . shackle-mode)
-  :general
-  ("C-c z" 'shackle-last-popup-buffer)
   :config
   (eval-and-compile
     (defun shackle-last-popup-buffer ()

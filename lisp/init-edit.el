@@ -5,11 +5,12 @@
 ;; edit enhance
 
 ;;; Code:
+(require 'init-const)
 
 ;; 当文件内容有修改时，可以通过 autorevert 重新加载这个文件
 (use-package autorevert
-   :hook ((after-init . global-auto-revert-mode)
-          (dired-mode . auto-revert-mode)))
+  :hook ((after-init . global-auto-revert-mode)
+         (dired-mode . auto-revert-mode)))
 
 ;; 关闭 emacs 后，重新打开文件时跳转到上一次打开该文件时的位置（所在行）。
 ;; Restore cursor to file position in previous editing session.

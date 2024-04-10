@@ -654,13 +654,13 @@
 
 (use-package all-the-icons-ivy-rich
   :disabled t
-  :after (all-the-icons ivy-rich)
-  :hook (after-init . all-the-icons-ivy-rich-mode))
+  :after (all-the-icons ivy-rich-mode)
+  :hook (ivy-rich-mode . all-the-icons-ivy-rich-mode))
 
 (use-package nerd-icons-ivy-rich
-  :init
-  (nerd-icons-ivy-rich-mode 1)
-  (ivy-rich-mode 1))
+  :after (ivy-rich-mode)
+  :hook
+  (ivy-rich-mode . nerd-icons-ivy-rich-mode))
 
 (provide 'init-ivy)
 ;;; init-ivy.el ends here

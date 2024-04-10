@@ -97,7 +97,7 @@ default lsp-passthrough."
   (kind-icon-use-icons t)
   (kind-icon-default-face 'corfu-default) ; Have background color be the same as `corfu' face background
   (kind-icon-blend-background nil)  ; Use midpoint color between foreground and background colors ("blended")?
-  (kind-icon-blend-frac 0.08)
+  (kind-icon-blend-frac 0.08)  
 
   ;; NOTE 2022-02-05: `kind-icon' depends `svg-lib' which creates a cache
   ;; directory that defaults to the `user-emacs-directory'. Here, I change that
@@ -116,6 +116,11 @@ default lsp-passthrough."
   ;; function unless you use something similar
   ;; (add-hook 'kb/themes-hooks #'(lambda () (interactive) (kind-icon-reset-cache)))
   )
+
+(use-package nerd-icons-corfu
+  :after (corfu)
+  :hook
+  (corfu-mode . nerd-icons-corfu))
 
 (use-package corfu-doc
   :after corfu

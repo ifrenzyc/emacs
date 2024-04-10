@@ -237,6 +237,7 @@
   :after go-ts-mode projectile)
 
 (use-package go-snippets
+  :disabled t
   :after (go-ts-mode)
   :init (go-snippets-initialize))
 

@@ -4,8 +4,7 @@
 ;; 
 ;; - https://github.com/emacs-evil/evil-collection/blob/master/evil-collection-neotree.el
 
-;;; Code
-
+;;; Code:
 (use-package neotree
   :commands (neotree-toggle)
   :hook

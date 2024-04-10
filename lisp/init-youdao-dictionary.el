@@ -7,6 +7,10 @@
 ;;; Code:
 (use-package youdao-dictionary
   :functions (posframe-show posframe-hide)
+  :general
+  ("C-c y y" 'youdao-dictionary-search-at-point+
+   "C-c y i" 'youdao-dictionary-search-at-point
+   "C-c Y"   'my-youdao-search-at-point)
   :preface
   (with-eval-after-load 'posframe
     (defun youdao-dictionary-search-at-point-posframe ()
@@ -35,10 +39,6 @@
         (if (fboundp 'youdao-dictionary-search-at-point-posframe)
             (youdao-dictionary-search-at-point-posframe)
           (youdao-dictionary-search-at-point-tooltip))))
-  :general
-  ("C-c y y" 'youdao-dictionary-search-at-point+
-   "C-c y i" 'youdao-dictionary-search-at-point
-   "C-c Y"   'my-youdao-search-at-point)
   :custom
   ;; Cache documents
   (url-automatic-caching t)

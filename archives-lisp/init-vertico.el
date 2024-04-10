@@ -91,10 +91,16 @@
   (marginalia-mode))
 
 (use-package all-the-icons-completion
+  :disabled t
   :after (marginalia all-the-icons)
   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
   :init
   (all-the-icons-completion-mode))
+
+(use-package nerd-icons-completion
+  :after (marginalia-mode)
+  :hook
+  (marginalia-mode . nerd-icons-completion-mode))
 
 (use-package orderless
   :custom
@@ -134,11 +140,11 @@ the first word of the candidate.  If ANCHORED is `both' require
 that the first and last initials appear in the first and last
 words of the candidate, respectively."
     (orderless--separated-by
-        '(seq (zero-or-more alpha) word-end (zero-or-more (not alpha)))
-      (cl-loop for char across component collect `(seq word-start ,char))
-      (when anchored '(seq (group buffer-start) (zero-or-more (not alpha))))
-      (when (eq anchored 'both)
-        '(seq (zero-or-more alpha) word-end (zero-or-more (not alpha)) eol))))
+     '(seq (zero-or-more alpha) word-end (zero-or-more (not alpha)))
+     (cl-loop for char across component collect `(seq word-start ,char))
+     (when anchored '(seq (group buffer-start) (zero-or-more (not alpha))))
+     (when (eq anchored 'both)
+       '(seq (zero-or-more alpha) word-end (zero-or-more (not alpha)) eol))))
 
   (defun orderless-strict-initialism (component)
     "Match a COMPONENT as a strict initialism.

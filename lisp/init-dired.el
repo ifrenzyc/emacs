@@ -5,6 +5,8 @@
 ;; 
 
 ;;; Code:
+(require 'init-const)
+
 ;; - https://jonathanabennett.github.io/blog/2019/06/05/file-management-in-emacs-with-dired-mode/
 ;; - https://stackoverflow.com/questions/23798021/disabling-evil-mode-for-nav-in-emacs-or-any-read-only-buffers
 (use-package dired
