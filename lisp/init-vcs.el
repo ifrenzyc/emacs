@@ -54,40 +54,6 @@
 
   (diminish 'magit-auto-revert-mode ""))
 
-;; highlight git changes.
-;; (use-package git-gutter
-;;   :config (global-git-gutter-mode)
-;;   (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
-;;                                         :hint nil)
-;;     ("n" git-gutter:next-hunk "next hunk")
-;;     ("p" git-gutter:previous-hunk "previous hunk")
-;;     ("N" git-gutter+-next-hunk "next hunk+")
-;;     ("P" git-gutter+-previous-hunk "previous hunk+")
-;;     ("h" (progn (goto-char (point-min)) (git-gutter:next-hunk 1)) "first hunk")
-;;     ("l" (progn (goto-char (point-min)) (git-gutter:previous-hunk 1)) "last hunk")
-;;     ("<SPC>" git-gutter:popup-hunk "popup hunk")
-;;     ("s" git-gutter:stage-hunk "stage hunk")
-;;     ("r" git-gutter:revert-hunk "revert hunk")
-;;     ("q" nil "quit")))
-
-;; (use-package git-gutter+
-;;   :after (git-gutter))
-
-;; A git blame plugin for emacs inspired by VS Code’s GitLens plugin and Vim plugin
-;; https://codeberg.org/akib/emacs-why-this
-;; (use-package blamer
-;;   :straight (:host github :repo "artawower/blamer.el")
-;;   :init
-;;   (setq blamer-idle-time 0.3)
-;;   (setq blamer-min-offset 70)
-;;   :custom-face
-;;   (blamer-face ((t :foreground "#7a88cf"
-;;                    :background nil
-;;                    :height 140
-;;                    :italic t)))
-;;   :config
-;;   (global-blamer-mode 1))
-
 ;; Pop up last commit information of current line
 ;; https://github.com/syohex/emacs-git-messenger
 ;; copy from: https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-vcs.el#L79
@@ -180,48 +146,6 @@
     (advice-add #'git-messenger:popup-close :override #'ignore)
     (advice-add #'git-messenger:popup-message :override #'my-git-messenger:popup-message)))
 
-;; Display transient in child frame
-;; (use-package transient-posframe
-;;   :diminish
-;;   :custom-face
-;;   (transient-posframe-border ((t (:background ,(face-foreground 'font-lock-comment-face)))))
-;;   :hook (after-init . transient-posframe-mode)
-;;   :init
-;;   (setq transient-posframe-border-width 3
-;;         transient-posframe-min-height 21
-;;         transient-posframe-min-width nil
-;;         transient-posframe-parameters
-;;         `((background-color . ,(face-background 'tooltip))))
-;;   :config
-;;   (add-hook 'after-load-theme-hook
-;;             (lambda ()
-;;               (posframe-delete-all)
-;;               (custom-set-faces
-;;                `(transient-posframe-border
-;;                  ((t (:background ,(face-foreground 'font-lock-comment-face))))))
-;;               (setf (alist-get 'background-color transient-posframe-parameters)
-;;                     (face-background 'tooltip))))
-
-;;   (with-no-warnings
-;;     (defun my-transient-posframe--show-buffer (buffer _alist)
-;;       "Show BUFFER in posframe and we do not use _ALIST at this period."
-;;       (when (posframe-workable-p)
-;;         (let ((posframe (posframe-show
-;;                          buffer
-;; 			             :font transient-posframe-font
-;; 			             :position (point)
-;; 			             :poshandler transient-posframe-poshandler
-;; 			             :background-color (face-attribute 'transient-posframe :background nil t)
-;; 			             :foreground-color (face-attribute 'transient-posframe :foreground nil t)
-;; 			             :min-width (or transient-posframe-min-width (round (* (frame-width) 0.62)))
-;; 			             :min-height transient-posframe-min-height
-;;                          :lines-truncate t
-;; 			             :internal-border-width transient-posframe-border-width
-;; 			             :internal-border-color (face-attribute 'transient-posframe-border :background nil t)
-;; 			             :override-parameters transient-posframe-parameters)))
-;;           (frame-selected-window posframe))))
-;;     (advice-add #'transient-posframe--show-buffer :override #'my-transient-posframe--show-buffer)))
-
 (use-package magit-todos
   :after magit
   :commands (magit-todos-mode)
@@ -274,12 +198,6 @@
                               (user-error "Cannot revert the timemachine buffer")))))
   (git-timemachine-mode . hydra-git-timemachine/body)
   :config
-  ;; (eval-after-load 'git-timemachine
-  ;;   '(progn
-  ;;      (evil-make-overriding-map git-timemachine-mode-map 'normal)
-  ;;      ;; force update evil keymaps after git-timemachine-mode loaded
-  ;;      (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
-
   (defhydra hydra-git-timemachine ()
     "Git timemachine"
     ("p" git-timemachine-show-previous-revision "previous revision")
@@ -318,6 +236,82 @@
   :disabled t
   ;; :straight (:host github :repo "dandavison/magit-delta")
   :hook (magit-mode . magit-delta-mode))
+
+;; highlight git changes.
+;; (use-package git-gutter
+;;   :config (global-git-gutter-mode)
+;;   (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
+;;                                         :hint nil)
+;;     ("n" git-gutter:next-hunk "next hunk")
+;;     ("p" git-gutter:previous-hunk "previous hunk")
+;;     ("N" git-gutter+-next-hunk "next hunk+")
+;;     ("P" git-gutter+-previous-hunk "previous hunk+")
+;;     ("h" (progn (goto-char (point-min)) (git-gutter:next-hunk 1)) "first hunk")
+;;     ("l" (progn (goto-char (point-min)) (git-gutter:previous-hunk 1)) "last hunk")
+;;     ("<SPC>" git-gutter:popup-hunk "popup hunk")
+;;     ("s" git-gutter:stage-hunk "stage hunk")
+;;     ("r" git-gutter:revert-hunk "revert hunk")
+;;     ("q" nil "quit")))
+
+;; (use-package git-gutter+
+;;   :after (git-gutter))
+
+;; A git blame plugin for emacs inspired by VS Code’s GitLens plugin and Vim plugin
+;; https://codeberg.org/akib/emacs-why-this
+;; (use-package blamer
+;;   :straight (:host github :repo "artawower/blamer.el")
+;;   :init
+;;   (setq blamer-idle-time 0.3)
+;;   (setq blamer-min-offset 70)
+;;   :custom-face
+;;   (blamer-face ((t :foreground "#7a88cf"
+;;                    :background nil
+;;                    :height 140
+;;                    :italic t)))
+;;   :config
+;;   (global-blamer-mode 1))
+
+;; Display transient in child frame
+;; (use-package transient-posframe
+;;   :diminish
+;;   :custom-face
+;;   (transient-posframe-border ((t (:background ,(face-foreground 'font-lock-comment-face)))))
+;;   :hook (after-init . transient-posframe-mode)
+;;   :init
+;;   (setq transient-posframe-border-width 3
+;;         transient-posframe-min-height 21
+;;         transient-posframe-min-width nil
+;;         transient-posframe-parameters
+;;         `((background-color . ,(face-background 'tooltip))))
+;;   :config
+;;   (add-hook 'after-load-theme-hook
+;;             (lambda ()
+;;               (posframe-delete-all)
+;;               (custom-set-faces
+;;                `(transient-posframe-border
+;;                  ((t (:background ,(face-foreground 'font-lock-comment-face))))))
+;;               (setf (alist-get 'background-color transient-posframe-parameters)
+;;                     (face-background 'tooltip))))
+
+;;   (with-no-warnings
+;;     (defun my-transient-posframe--show-buffer (buffer _alist)
+;;       "Show BUFFER in posframe and we do not use _ALIST at this period."
+;;       (when (posframe-workable-p)
+;;         (let ((posframe (posframe-show
+;;                          buffer
+;; 			             :font transient-posframe-font
+;; 			             :position (point)
+;; 			             :poshandler transient-posframe-poshandler
+;; 			             :background-color (face-attribute 'transient-posframe :background nil t)
+;; 			             :foreground-color (face-attribute 'transient-posframe :foreground nil t)
+;; 			             :min-width (or transient-posframe-min-width (round (* (frame-width) 0.62)))
+;; 			             :min-height transient-posframe-min-height
+;;                          :lines-truncate t
+;; 			             :internal-border-width transient-posframe-border-width
+;; 			             :internal-border-color (face-attribute 'transient-posframe-border :background nil t)
+;; 			             :override-parameters transient-posframe-parameters)))
+;;           (frame-selected-window posframe))))
+;;     (advice-add #'transient-posframe--show-buffer :override #'my-transient-posframe--show-buffer)))
 
 (provide 'init-vcs)
 ;;; init-vcs.el ends here

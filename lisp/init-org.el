@@ -28,151 +28,12 @@
    "<f5>"    'yc/copy-idlink-to-clipboard
    "<f7>"    'org-redisplay-inline-images
    "M-s M-R" 'yc/counsel-rg-in-itsycnotes)
-  ;; Great evil org mode keyboard shortcuts cribbed from cofi
-  ;; (evil-define-key 'normal org-mode-map
-  ;;   (kbd "RET") 'org-open-at-point
-  ;;   "za"        'org-cycle
-  ;;   "zA"        'org-shifttab
-  ;;   "zm"        'hide-body
-  ;;   "zr"        'show-all
-  ;;   "zo"        'show-subtree
-  ;;   "zO"        'show-all
-  ;;   "zc"        'hide-subtree
-  ;;   "zC"        'hide-all
-  ;;   (kbd "M-h") 'org-metaleft
-  ;;   ;; (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-l") 'org-metaright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
-
-  ;; (evil-define-key 'normal orgstruct-mode-map
-  ;;   (kbd "RET") 'org-open-at-point
-  ;;   "za"        'org-cycle
-  ;;   "zA"        'org-shifttab
-  ;;   "zm"        'hide-body
-  ;;   "zr"        'show-all
-  ;;   "zo"        'show-subtree
-  ;;   "zO"        'show-all
-  ;;   "zc"        'hide-subtree
-  ;;   "zC"        'hide-all
-  ;;   (kbd "M-h") 'org-metaleft
-  ;;   ;; (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-l") 'org-metaright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
-
-  ;; (evil-define-key 'insert org-mode-map
-  ;;   (kbd "M-h") 'org-metaleft
-  ;;   ;; (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-l") 'org-metaright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
-
-  ;; (evil-define-key 'insert orgstruct-mode-map
-  ;;   ;; (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
-
-  ;; (yc/leader-keys-major-mode
-  ;;   :keymaps 'org-mode-map
-  ;;   ;; "" '(:ignore t :wk "major-mode-cmd")
-  ;;   ;; "ma" '(:ignore t :wk "help")
-  ;;   "." 'major-mode-hydra
-  ;;   "'" 'org-edit-special
-  ;;   "SPC" 'worf-back-to-heading
-  ;;   "a" 'org-agenda
-  ;;   "c" 'org-capture
-  ;;   "b" '(:ignore t :wk "babel")
-  ;;   "C" '(:ignore t :wk "clocks")
-  ;;   "s" 'org-schedule
-  ;;   "d" 'org-deadline
-  ;;   "r" '(org-refile :wk "org-refile")
-  ;;   "l" 'worf-right
-  ;;   "j" 'worf-down
-  ;;   "k" 'worf-up
-  ;;   "h" 'worf-left
-  ;;   "g" 'counsel-org-goto
-  ;;   "/" 'org-toggle-comment
-  ;;   "CI" 'org-clock-in
-  ;;   "Cn" 'org-narrow-to-subtree
-  ;;   "CN" 'widen
-  ;;   "CO" 'org-clock-out
-  ;;   "Cq" 'org-clock-cancel
-  ;;   "CR" 'org-refile
-  ;;   ;; "md" '(:ignore t :wk "dates")
-  ;;   "e" '(:ignore t :wk "export")
-  ;;   "f" '(:ignore t :wk "feeds")
-  ;;   "H" 'org-shiftleft
-  ;;   "J" 'org-shiftdown
-  ;;   "K" 'org-shiftup
-  ;;   "L" 'org-shiftright
-  ;;   "T" '(:ignore t :wk "Toggles")
-  ;;   ;; "x" '(:ignore t :wk "text")
-  ;;   "x" 'org-archive-subtree-default-with-confirmation
-  ;;   ;; "C-S-l" 'org-shiftcontrolright
-  ;;   ;; "C-S-h" 'org-shiftcontrolleft
-  ;;   ;; "C-S-j" 'org-shiftcontroldown
-  ;;   ;; "C-S-k" 'org-shiftcontrolup
-  ;;   "t" '(:ignore t :wk "tables")
-  ;;   "ta" 'org-table-align
-  ;;   "tb" 'org-table-blank-field
-  ;;   "tc" 'org-table-convert
-  ;;   "td" '(:ignore t :wk "delete")
-  ;;   "tdc" 'org-table-delete-column
-  ;;   "tdr" 'org-table-kill-row
-  ;;   "te" 'org-table-eval-formula
-  ;;   "tE" 'org-table-export
-  ;;   "th" 'org-table-previous-field
-  ;;   "tH" 'org-table-move-column-left
-  ;;   "ti" '(:ignore t :wk "insert")
-  ;;   "tic" 'org-table-insert-column
-  ;;   "tih" 'org-table-insert-hline
-  ;;   "tiH" 'org-table-hline-and-move
-  ;;   "tir" 'org-table-insert-row
-  ;;   "tI" 'org-table-import
-  ;;   "tj" 'org-table-next-row
-  ;;   "tJ" 'org-table-move-row-down
-  ;;   "tK" 'org-table-move-row-up
-  ;;   "tl" 'org-table-next-field
-  ;;   "tL" 'org-table-move-column-right
-  ;;   "tn" 'org-table-create
-  ;;   "tN" 'org-table-create-with-table.el
-  ;;   "tr" 'org-table-recalculate
-  ;;   "ts" 'org-table-sort-lines
-  ;;   "tt" '(:ignore t :wk "toggle")
-  ;;   "ttf" 'org-table-toggle-formula-debugger
-  ;;   "tto" 'org-table-toggle-coordinate-overlays
-  ;;   "tw" 'org-table-wrap-region)
-
   ;; @see - https://github.com/noctuid/evil-guide
   ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
   (org-mode-map  ;; NOTE: keymaps specified with :keymaps must be quoted
    "C-c C-j"   'counsel-org-goto
    "<backtab>" 'org-shifttab
    "<tab>"     'org-cycle)
-  ;; (yc/leader-keys-major-mode
-  ;;   :keymaps 'org-src-mode-map
-  ;;   "'" 'org-edit-src-exit)
-  ;; (yc/nonprefix-keys
-  ;;   :keymaps 'org-src-mode-map
-  ;;   :states '(normal)
-  ;;   "RET" 'org-edit-src-exit)
-  ;; (yc/leader-keys-major-mode-copy
-  ;;   :keymaps 'org-src-mode-map
-  ;;   ""  '(:ignore t :wk "major-mode-cmd")
-  ;;   "'" 'org-edit-src-exit)
   ;; key for exiting src edit mode
   :mode-hydra
   (org-mode
@@ -462,6 +323,156 @@ text and copying to the killring."
   ;;                            (2 (prog1 () (compose-region (match-beginning 2) (match-end 2) "")))))
   ;;                         'append)
   )
+
+;; Auto-show Markup Symbols/
+;; This package makes it much easier to edit Org documents when org-hide-emphasis-markers is turned on.
+;; It temporarily shows the emphasis markers around certain markup elements when you place your cursor
+;; inside of them. No more fumbling around with = and * characters!
+(use-package org-appear
+  :hook (org-mode . org-appear-mode))
+
+(use-package org-spacer
+  :commands (org-spacer-enforce)
+  :load-path "localelpa/org-spacer.el"
+  :config
+  (setq org-spacer-element-blanks
+        '((0 headline)
+          (1 paragraph src-block table property-drawer))))
+
+;; moving images from point A to point B.
+;; https://github.com/abo-abo/org-download
+;; - https://github.com/jethrokuan/.emacs.d/blob/master/config.org#org-download
+;; - https://coldnew.github.io/hexo-org-example/2018/05/22/use-org-download-to-drag-image-to-emacs/
+(use-package org-download
+  :ensure-system-package (pngpaste . "brew install pngpaste")
+  :after org
+  :hook ((dired-mode . org-download-enable)
+         (org-mode . org-download-enable))
+  :config
+  (org-download-enable)
+  (if (memq window-system '(mac ns))
+      (setq org-download-screenshot-method "screencapture -i %s")
+    (setq org-download-screenshot-method "maim -s %s"))
+  (defun yc/org-download-method (link)
+    "This is a helper function for org-download.
+    It creates a folder in the root directory (~/.org/img/) named after the
+    org filename (sans extension) and puts all images from that file in there.
+    Inspired by https://github.com/daviderestivo/emacs-config/blob/6086a7013020e19c0bc532770e9533b4fc549438/init.el#L701"
+    (let ((filename
+           (file-name-nondirectory
+            (car (url-path-and-query
+                  (url-generic-parse-url link)))))
+          ;; Create folder name with current buffer name, and place in root dir
+          (setq dirname "/Users/yangc/notes/images/")
+          ;; (dirname (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name)) "_imgs/"))
+          ;; (dirname (concat "./images/"
+          ;;                   (replace-regexp-in-string " " "_" (downcase (file-name-base buffer-file-name))))))
+          )
+
+
+      ;; Add timestamp to filename
+      (setq filename-with-timestamp (format "%s%s.%s"
+                                            (file-name-sans-extension filename)
+                                            (format-time-string org-download-timestamp)
+                                            (file-name-extension filename)))
+      ;; Create folder if necessary
+      (unless (file-exists-p dirname)
+        (make-directory dirname))
+      (expand-file-name filename-with-timestamp dirname)))
+  (setq org-download-method 'yc/org-download-method))
+
+;; lets you insert a link from your clipboard with a title that is fetched from the page’s metadata by curl.
+;; https://github.com/rexim/org-cliplink
+(use-package org-cliplink
+  :commands (org-cliplink org-cliplink-clipboard-content)
+  :general
+  ("C-c s-l" 'org-store-link
+   "C-c s-i" 'org-cliplink))
+
+(use-package org-ol-tree
+  :commands org-ol-tree
+  :load-path "localelpa/org-ol-tree")
+
+;; - https://github.com/takaxp/org-tree-slide
+(use-package org-tree-slide
+  :commands (org-tree-slide-mode org-tree-slide-skip-done-toggle)
+  :custom
+  (org-tree-slide-skip-outline-level 4)
+  (org-tree-slide-skip-done nil)
+  :config
+  ;; (define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
+  ;; (define-key org-mode-map (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
+  ;; (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
+  ;; (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
+  ;; (define-key org-tree-slide-mode-map (kbd "<f11>") 'org-tree-slide-content)
+  (org-tree-slide-narrowing-control-profile))
+
+(use-package org-superstar
+  :hook (org-mode . org-superstar-mode)
+  :custom
+  ;; Make leading stars truly invisible, by rendering them as spaces!
+  (org-superstar-leading-bullet ?\s)
+  (org-superstar-leading-fallback ?\s)
+  (org-superstar-special-todo-items nil)
+  (org-superstar-headline-bullets-list
+   '("⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫"))
+  (org-superstar-item-bullet-alist
+   '((?* . ?☯)
+     (?+ . ?✚)
+     (?- . ?▶))))
+
+;; - https://github.com/jakebox/preview-org-html-mode
+(use-package preview-org-html-mode
+  :load-path "localelpa/preview-org-html-mode"
+  ;; :init (setq preview-org-html-viewer 'xwidget)
+  :general
+  ("<f12>" 'preview-org-html-mode))
+
+(use-package ob-go)
+
+(use-package ox-gfm)
+(eval-after-load "org"
+  '(require 'ox-gfm nil t))
+
+;; https://github.com/kawabata/ox-pandoc
+(use-package ox-pandoc
+  :config
+  (with-eval-after-load 'ox
+    (require 'ox-pandoc))
+  ;; special settings for beamer-pdf and latex-pdf exporters
+  (setq org-pandoc-options-for-beamer-pdf '((pdf-engine . "xelatex")))
+  (setq org-pandoc-options-for-latex-pdf '((pdf-engine . "pdflatex"))))
+
+(use-package ox-beamer
+  :ensure nil
+  :config
+  (with-eval-after-load 'ox
+    (defun eli-strip-ws-maybe (text _backend _info)
+      (let* ((text (replace-regexp-in-string
+                    "\\(\\cc\\) *\n *\\(\\cc\\)"
+                    "\\1\\2" text));; remove whitespace from line break
+             ;; remove whitespace from `org-emphasis-alist'
+             (text (replace-regexp-in-string "\\(\\cc?\\) \\(.*?\\) \\(\\cc\\)"
+                                             "\\1\\2\\3" text))
+             ;; restore whitespace between English words and Chinese words
+             (text (replace-regexp-in-string "\\(\\cc\\)\\(\\(?:<[^>]+>\\)?[a-z0-9A-Z-]+\\(?:<[^>]+>\\)?\\)\\(\\cc\\)"
+                                             "\\1 \\2 \\3" text))
+             (text (replace-regexp-in-string "\\(\\cc\\) ?\\(\\\\[^{}()]*?\\)\\(\\cc\\)"
+                                             "\\1 \\2 \\3" text)))
+        text))
+    (add-to-list 'org-export-filter-paragraph-functions #'eli-strip-ws-maybe))
+  (progn
+    ;; Allow for export=>beamer by placing
+    ;; #+latex_class: beamer in Org files
+    (add-to-list 'org-latex-classes
+                 '("beamer"
+                   "\\documentclass[presentation]{beamer}"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
+
+(use-package htmlize)
+
 ;; 当执行 org code block 后，显示图片
 ;; - http://orgmode.org/worg/org-hacks.html#orgheadline126
 ;; (defun yc/ogrep (search &optional context)
@@ -625,50 +636,6 @@ text and copying to the killring."
 ;;         ("i" "#+index: ?" "#+index: ?")
 ;;         ("I" "#+include %file ?" "<include file=%file markup=\"?\">")))
 
-;; UTF-8 bullets for org-mode.
-;; - https://github.com/sabof/org-bullets
-;; - https://github.com/integral-dw/org-superstar-mode
-;; (use-package org-bullets
-;;   :if (char-displayable-p ?⚫)
-;;   :hook (org-mode . org-bullets-mode)
-;;   ;; ◎ ⊛ ✪ ☯ ⊙ ➲ ● 🌑 ⬤ ⚉ ⸖ ͼ ͽ ○ ￮ ⚬ ⦾ ◦ ∙ ∘ ⚪ ◯ ⌾ ⎉ ⎊ ☉ ✿ ☀ ⚆ ⚇ ⚈ ⚝ ☼ ⚭ ⛒  ⛮ ⚫ ⌀  ⍟ ⎔
-;;   ;; (setq org-bullets-bullet-list '("☀" "✪" "❂" "✸" "☼" "☉" "⊛" "◉" "◌"))
-;;   :init
-;;   (setq org-bullets-bullet-list '("⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫")))
-
-;; https://github.com/minad/org-modern
-(use-package org-modern
-  :disabled t
-  ;; :straight (:host github :repo "minad/org-modern")
-  :hook (org-mode . org-modern-mode))
-
-(use-package org-modern-indent
-  :load-path "localelpa/org-modern-indent"
-  :disabled t
-  :hook
-  (org-mode . org-modern-indent-mode))
-
-(use-package org-superstar
-  :hook (org-mode . org-superstar-mode)
-  :custom
-  ;; Make leading stars truly invisible, by rendering them as spaces!
-  (org-superstar-leading-bullet ?\s)
-  (org-superstar-leading-fallback ?\s)
-  (org-superstar-special-todo-items nil)
-  (org-superstar-headline-bullets-list
-   '("⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫"))
-  (org-superstar-item-bullet-alist
-   '((?* . ?☯)
-     (?+ . ?✚)
-     (?- . ?▶))))
-
-;; Auto-show Markup Symbols/
-;; This package makes it much easier to edit Org documents when org-hide-emphasis-markers is turned on.
-;; It temporarily shows the emphasis markers around certain markup elements when you place your cursor
-;; inside of them. No more fumbling around with = and * characters!
-(use-package org-appear
-  :hook (org-mode . org-appear-mode))
-
 ;; visual indent
 ;; (use-package org-bars
 ;;   :straight (:host github :repo "tonyaldon/org-bars")
@@ -805,14 +772,6 @@ text and copying to the killring."
   (org-treescope-cyclestates-todo '(nil ("TODO") ("WAITING" "DONE")))
   (org-treescope-cyclestates-priority '(nil ("A" "B" "C") ("D"))))
 
-(use-package org-spacer
-  :commands (org-spacer-enforce)
-  :load-path "localelpa/org-spacer.el"
-  :config
-  (setq org-spacer-element-blanks
-        '((0 headline)
-          (1 paragraph src-block table property-drawer))))
-
 ;; 解决在中文环境下，样式字符需要前后添加空格才能正确格式化的问题
 ;; 解决思路是自动插入一个不可见的空格字符
 ;; 详细讨论参考文章：https://emacs-china.org/t/org-mode/597/61
@@ -843,56 +802,6 @@ text and copying to the killring."
 ;;   :bind
 ;;   (:map org-mode-map ("C-c s-g" . org-mac-grab-link)))
 
-;; moving images from point A to point B.
-;; https://github.com/abo-abo/org-download
-;; - https://github.com/jethrokuan/.emacs.d/blob/master/config.org#org-download
-;; - https://coldnew.github.io/hexo-org-example/2018/05/22/use-org-download-to-drag-image-to-emacs/
-(use-package org-download
-  :ensure-system-package (pngpaste . "brew install pngpaste")
-  :after org
-  :hook ((dired-mode . org-download-enable)
-         (org-mode . org-download-enable))
-  :config
-  (org-download-enable)
-  (if (memq window-system '(mac ns))
-      (setq org-download-screenshot-method "screencapture -i %s")
-    (setq org-download-screenshot-method "maim -s %s"))
-  (defun yc/org-download-method (link)
-    "This is a helper function for org-download.
-    It creates a folder in the root directory (~/.org/img/) named after the
-    org filename (sans extension) and puts all images from that file in there.
-    Inspired by https://github.com/daviderestivo/emacs-config/blob/6086a7013020e19c0bc532770e9533b4fc549438/init.el#L701"
-    (let ((filename
-           (file-name-nondirectory
-            (car (url-path-and-query
-                  (url-generic-parse-url link)))))
-          ;; Create folder name with current buffer name, and place in root dir
-          (setq dirname "/Users/yangc/notes/images/")
-          ;; (dirname (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name)) "_imgs/"))
-          ;; (dirname (concat "./images/"
-          ;;                   (replace-regexp-in-string " " "_" (downcase (file-name-base buffer-file-name))))))
-          )
-
-
-      ;; Add timestamp to filename
-      (setq filename-with-timestamp (format "%s%s.%s"
-                                            (file-name-sans-extension filename)
-                                            (format-time-string org-download-timestamp)
-                                            (file-name-extension filename)))
-      ;; Create folder if necessary
-      (unless (file-exists-p dirname)
-        (make-directory dirname))
-      (expand-file-name filename-with-timestamp dirname)))
-  (setq org-download-method 'yc/org-download-method))
-
-;; lets you insert a link from your clipboard with a title that is fetched from the page’s metadata by curl.
-;; https://github.com/rexim/org-cliplink
-(use-package org-cliplink
-  :commands (org-cliplink org-cliplink-clipboard-content)
-  :general
-  ("C-c s-l" 'org-store-link
-   "C-c s-i" 'org-cliplink))
-
 ;; TODO electric-quote-mode
 
 (use-package org-sticky-header
@@ -904,10 +813,6 @@ text and copying to the killring."
   ;; Use > instead of / as separator
   (setq org-sticky-header-outline-path-separator " > "))
 
-(use-package org-ol-tree
-  :commands org-ol-tree
-  :load-path "localelpa/org-ol-tree")
-
 ;; - https://github.com/alphapapa/org-sidebar
 (use-package org-sidebar
   :disabled t
@@ -915,26 +820,10 @@ text and copying to the killring."
   ;; :straight (:host github :repo "alphapapa/org-sidebar")
   )
 
-;; - https://github.com/takaxp/org-tree-slide
-(use-package org-tree-slide
-  :commands (org-tree-slide-mode org-tree-slide-skip-done-toggle)
-  :custom
-  (org-tree-slide-skip-outline-level 4)
-  (org-tree-slide-skip-done nil)
-  :config
-  ;; (define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
-  ;; (define-key org-mode-map (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
-  ;; (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
-  ;; (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree)
-  ;; (define-key org-tree-slide-mode-map (kbd "<f11>") 'org-tree-slide-content)
-  (org-tree-slide-narrowing-control-profile))
-
 ;; Table-of-contents sidebar for Emacs.
 ;; 暂时还没在 mpla 里
 (use-package outline-toc
   :disabled t)
-
-(use-package htmlize)
 
 ;; (setq org-publish-project-alist
 ;;       '(
@@ -967,13 +856,6 @@ text and copying to the killring."
 ;; (eval-after-load "org"
 ;;   '(require 'ox-md nil t))
 
-;; - https://github.com/jakebox/preview-org-html-mode
-(use-package preview-org-html-mode
-  :load-path "localelpa/preview-org-html-mode"
-  ;; :init (setq preview-org-html-viewer 'xwidget)
-  :general
-  ("<f12>" 'preview-org-html-mode))
-
 ;; MobileOrg
 ;; documentation: https://mobileorg.github.io/documentation/
 ;; 执行命令进行推送： =M-x org-mobile-push= or =C-c C-x RET p= 。
@@ -981,49 +863,6 @@ text and copying to the killring."
 ;; (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
 ;; ;; Set to <your Dropbox root directory>/MobileOrg.
 ;; (setq org-mobile-directory "~/Dropbox/应用/MobileOrg")
-
-(use-package ob-go)
-
-(use-package ox-gfm)
-(eval-after-load "org"
-  '(require 'ox-gfm nil t))
-
-;; https://github.com/kawabata/ox-pandoc
-(use-package ox-pandoc
-  :config
-  (with-eval-after-load 'ox
-    (require 'ox-pandoc))
-  ;; special settings for beamer-pdf and latex-pdf exporters
-  (setq org-pandoc-options-for-beamer-pdf '((pdf-engine . "xelatex")))
-  (setq org-pandoc-options-for-latex-pdf '((pdf-engine . "pdflatex"))))
-
-(use-package ox-beamer
-  :ensure nil
-  :config
-  (with-eval-after-load 'ox
-    (defun eli-strip-ws-maybe (text _backend _info)
-      (let* ((text (replace-regexp-in-string
-                    "\\(\\cc\\) *\n *\\(\\cc\\)"
-                    "\\1\\2" text));; remove whitespace from line break
-             ;; remove whitespace from `org-emphasis-alist'
-             (text (replace-regexp-in-string "\\(\\cc?\\) \\(.*?\\) \\(\\cc\\)"
-                                             "\\1\\2\\3" text))
-             ;; restore whitespace between English words and Chinese words
-             (text (replace-regexp-in-string "\\(\\cc\\)\\(\\(?:<[^>]+>\\)?[a-z0-9A-Z-]+\\(?:<[^>]+>\\)?\\)\\(\\cc\\)"
-                                             "\\1 \\2 \\3" text))
-             (text (replace-regexp-in-string "\\(\\cc\\) ?\\(\\\\[^{}()]*?\\)\\(\\cc\\)"
-                                             "\\1 \\2 \\3" text)))
-        text))
-    (add-to-list 'org-export-filter-paragraph-functions #'eli-strip-ws-maybe))
-  (progn
-    ;; Allow for export=>beamer by placing
-    ;; #+latex_class: beamer in Org files
-    (add-to-list 'org-latex-classes
-                 '("beamer"
-                   "\\documentclass[presentation]{beamer}"
-                   ("\\section{%s}" . "\\section*{%s}")
-                   ("\\subsection{%s}" . "\\subsection*{%s}")
-                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
 
 ;; Exports Org-mode contents to Reveal.js HTML presentation.
 (use-package ox-reveal
@@ -1121,6 +960,29 @@ text and copying to the killring."
 ;;   (evil-define-key 'normal org-mode-map (kbd "gl") 'air-org-goto-first-child)
 ;;   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "@" 'org-refile)
 ;;   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
+
+;; UTF-8 bullets for org-mode.
+;; - https://github.com/sabof/org-bullets
+;; - https://github.com/integral-dw/org-superstar-mode
+;; (use-package org-bullets
+;;   :if (char-displayable-p ?⚫)
+;;   :hook (org-mode . org-bullets-mode)
+;;   ;; ◎ ⊛ ✪ ☯ ⊙ ➲ ● 🌑 ⬤ ⚉ ⸖ ͼ ͽ ○ ￮ ⚬ ⦾ ◦ ∙ ∘ ⚪ ◯ ⌾ ⎉ ⎊ ☉ ✿ ☀ ⚆ ⚇ ⚈ ⚝ ☼ ⚭ ⛒  ⛮ ⚫ ⌀  ⍟ ⎔
+;;   ;; (setq org-bullets-bullet-list '("☀" "✪" "❂" "✸" "☼" "☉" "⊛" "◉" "◌"))
+;;   :init
+;;   (setq org-bullets-bullet-list '("⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫" "⚫")))
+
+;; https://github.com/minad/org-modern
+(use-package org-modern
+  :disabled t
+  ;; :straight (:host github :repo "minad/org-modern")
+  :hook (org-mode . org-modern-mode))
+
+(use-package org-modern-indent
+  :load-path "localelpa/org-modern-indent"
+  :disabled t
+  :hook
+  (org-mode . org-modern-indent-mode))
 
 (provide 'init-org)
 ;;; init-org.el ends here

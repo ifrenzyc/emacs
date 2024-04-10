@@ -142,17 +142,6 @@
   (add-hook 'dap-stopped-hook
             (lambda (arg) (call-interactively #'dap-hydra))))
 
-;; (use-package ggtags
-;;   :ensure-system-package (yapf . "brew install global ctags")
-;;   :config
-;;   (add-hook 'c-mode-common-hook
-;; 	        (lambda ()
-;; 	          (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-;; 		        (ggtags-mode 1))))
-
-;;   (setq ggtags-global-ignore-case t
-;;         ggtags-sort-by-nearness t))
-
 ;; Minor mode to aggressively keep your code always indented
 (use-package aggressive-indent
   :diminish
@@ -182,9 +171,29 @@
   :load-path "localelpa/sidekick"
   :commands (sidekick-at-point sidekick-focus-toggle sidekick-search-for-literal))
 
+(use-package indent-bars
+  :load-path "localelpa/indent-bars"
+  :hook
+  ((python-mode
+    python-ts-mode
+    yaml-mode
+    yaml-ts-mode
+    nxml-mode) . indent-bars-mode))
+
 ;; shows a sticky header at the top of the window
 ;; (use-package topsy
 ;;   :hook (prog-mode . topsy-mode))
+
+;; (use-package ggtags
+;;   :ensure-system-package (yapf . "brew install global ctags")
+;;   :config
+;;   (add-hook 'c-mode-common-hook
+;; 	        (lambda ()
+;; 	          (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+;; 		        (ggtags-mode 1))))
+
+;;   (setq ggtags-global-ignore-case t
+;;         ggtags-sort-by-nearness t))
 
 (use-package which-func
   :disabled t
@@ -266,15 +275,6 @@
             (ignore-errors
               (remove-text-properties next pos '(display nil face nil) str))))))
     (advice-add #'ivy-cleanup-string :after #'my-ivy-cleanup-indentation)))
-
-(use-package indent-bars
-  :load-path "localelpa/indent-bars"
-  :hook
-  ((python-mode
-    python-ts-mode
-    yaml-mode
-    yaml-ts-mode
-    nxml-mode) . indent-bars-mode))
 
 (provide 'lang-basic)
 ;;; lang-basic.el ends here

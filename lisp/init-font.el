@@ -70,6 +70,9 @@
 (add-hook 'before-make-frame-hook #'user/set-font)
 ;; (setq-default line-spacing 0.2)
 
+(use-package fixed-pitch
+  :load-path "localelpa/fixed-pitch-mode")
+
 ;; Unicode is an required aesthetic
 ;; (use-package pcache ;; Required by unicode-fonts
 ;;   :init
@@ -79,9 +82,6 @@
 ;; (use-package unicode-fonts
 ;;   :config
 ;;   (unicode-fonts-setup))
-
-(use-package fixed-pitch
-  :load-path "localelpa/fixed-pitch-mode")
 
 (provide 'init-font)
 ;;; init-font.el ends here

@@ -62,8 +62,7 @@
   :config
   ;; 增加断言列表，当其中有任何一个断言的值不是 nil 时，会自动使用英文。
   (setq rime-disable-predicates
-        '(;; rime-predicate-evil-mode-p  ;; evil-normal-state
-          rime-predicate-after-ascii-char-p     ;; 任意英文字符后
+        '(rime-predicate-after-ascii-char-p     ;; 任意英文字符后
           rime-predicate-after-alphabet-char-p  ;; 在英文字符串之后（必须为以字母开头的英文字符串）
           rime-predicate-ace-window-p           ;; 激活 ace-window-mode
           rime-predicate-hydra-p                ;; 激活了一个 hydra keymap

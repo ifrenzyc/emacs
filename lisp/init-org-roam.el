@@ -15,13 +15,7 @@
    "C-c n f" 'org-roam-node-find
    "C-c n i" 'org-roam-node-insert
    "C-c n h" 'org-id-get-create
-   "<f4>"    'org-roam-dailies-capture-today)  
-  ;; (yc/leader-keys
-  ;;   "ar" '(:ignore t :wk "org-roam")
-  ;;   "arl" 'org-roam-buffer-toggle
-  ;;   "art" 'org-roam-dailies-today
-  ;;   "arf" 'org-roam-node-find
-  ;;   "arg" 'org-roam-show-graph)
+   "<f4>"    'org-roam-dailies-capture-today)
   (org-roam-mode-map
    "C-c n l" 'org-roam-buffer-toggle
    "C-c n f" 'org-roam-node-find
@@ -29,15 +23,6 @@
   (org-mode-map
    "C-c n i" 'org-roam-node-insert
    "C-c n I" 'org-roam-insert-immediate)
-  ;; (yc/leader-keys-major-mode
-  ;;   :keymaps 'org-mode-map
-  ;;   "r"  '(:ignore t :wk "org-roam")
-  ;;   "rl" 'org-roam
-  ;;   "rt" 'org-roam-dailies-today
-  ;;   "rb" 'org-roam-switch-to-buffer
-  ;;   "rf" 'org-roam-find-file
-  ;;   "ri" 'org-roam-insert
-  ;;   "rg" 'org-roam-show-graph)
   :delight " 𝕫"
   :custom
   (org-roam-database-connector 'sqlite-builtin)

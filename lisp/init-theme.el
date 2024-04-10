@@ -42,17 +42,6 @@
   ;; (doom-themes-org-config)
   )
 
-(use-package vscode-dark-plus-theme
-  ;; :after solaire-mode
-  :disabled t
-  :demand t
-  ;; :straight (:host github :repo "ianyepan/vscode-dark-plus-emacs-theme")
-  :custom
-  (vscode-dark-plus-scale-org-faces nil)
-  (vscode-dark-plus-box-org-todo nil)
-  :config
-  (load-theme 'vscode-dark-plus t))
-
 (use-package modus-themes
   :demand t
   :init
@@ -99,6 +88,17 @@
 ;;   :demand t
 ;;   :config
 ;;   (load-theme 'anti-zenburn t))
+
+(use-package vscode-dark-plus-theme
+  ;; :after solaire-mode
+  :disabled t
+  :demand t
+  ;; :straight (:host github :repo "ianyepan/vscode-dark-plus-emacs-theme")
+  :custom
+  (vscode-dark-plus-scale-org-faces nil)
+  (vscode-dark-plus-box-org-todo nil)
+  :config
+  (load-theme 'vscode-dark-plus t))
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

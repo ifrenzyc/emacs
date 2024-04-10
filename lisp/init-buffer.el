@@ -23,14 +23,6 @@
   :config
   (push (expand-file-name recentf-save-file) recentf-exclude))
 
-(use-package all-the-icons-ibuffer
-  :disabled t
-  :hook
-  (ibuffer-mode . all-the-icons-ibuffer-mode)
-  :init
-  ;; Use human readable file size in ibuffer.
-  (setq all-the-icons-ibuffer-human-readable-size t))
-
 (use-package nerd-icons-ibuffer
   :hook
   (ibuffer-mode . nerd-icons-ibuffer-mode))
@@ -76,6 +68,14 @@
 (use-package unmodified-buffer
   :hook
   (after-init . unmodified-buffer-mode))
+
+(use-package all-the-icons-ibuffer
+  :disabled t
+  :hook
+  (ibuffer-mode . all-the-icons-ibuffer-mode)
+  :init
+  ;; Use human readable file size in ibuffer.
+  (setq all-the-icons-ibuffer-human-readable-size t))
 
 (provide 'init-buffer)
 ;;; init-buffer.el ends here

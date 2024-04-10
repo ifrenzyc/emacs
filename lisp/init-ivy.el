@@ -535,11 +535,11 @@
 
 (use-package counsel-osx-app
   :after counsel
-  :general ("H-v" '(lambda ()
-                     (interactive)
-                     (call-process-shell-command "open /Applications/Paste.app")
-                     ))
-  )
+  :general
+  ("H-v" '(lambda ()
+            (interactive)
+            (call-process-shell-command "open /Applications/Paste.app")
+            )))
 
 (use-package counsel-fd
   :after counsel
@@ -558,34 +558,6 @@
   ;; ("C-c i" 'counsel-at-point-imenu)
   ;; )
   )
-
-(use-package ivy-fuz
-  :disabled t
-  :demand t
-  :after ivy
-  :custom
-  (ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
-  (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy)))
-  :config
-  (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
-
-(use-package all-the-icons-ivy
-  :disabled t
-  :after (all-the-icons projectile ivy counsel counsel-projectile)
-  :hook (after-init . all-the-icons-ivy-setup)
-  :config
-  (setq all-the-icons-ivy-file-commands
-        '(counsel-find-file
-          counsel-file-jump
-          counsel-recentf
-          counsel-projectile-find-file
-          counsel-projectile-find-dir
-          counsel-projectile)))
-
-(use-package all-the-icons-ivy-rich
-  :disabled t
-  :after (all-the-icons ivy-rich-mode)
-  :hook (ivy-rich-mode . all-the-icons-ivy-rich-mode))
 
 (use-package nerd-icons-ivy-rich
   :after (ivy-rich-mode)
@@ -627,14 +599,6 @@
 
 ;; (use-package ivy-bibtex
 ;;   :commands ivy-bibtex
-;;   :init
-;;   (progn
-;;     (yc/leader-keys
-;; 	  "ib" 'ivy-bibtex)
-;;     ;; (yc/leader-keys-minor-mode
-;;     ;;   :keymaps 'bibtex-completion-notes-mode-map
-;;     ;;   "s" 'bibtex-completion-exit-notes-buffer)
-;;     )
 ;;   :config
 ;;   (setq bibtex-completion-pdf-field "file"
 ;; 	    bibtex-completion-cite-prompt-for-optional-arguments nil
@@ -651,9 +615,6 @@
 
 ;; - https://github.com/redguardtoo/counsel-etags
 ;; (use-package counsel-etags
-;;   :general
-;;   (yc/nonprefix-keys
-;;     "C-]" 'counsel-etags-find-tag-at-point)
 ;;   :init
 ;;   (add-hook 'prog-mode-hook
 ;;             (lambda ()
@@ -662,6 +623,34 @@
 ;;   :config
 ;;   (setq counsel-etags-update-interval 60)
 ;;   (push "build" counsel-etags-ignore-directories))
+
+(use-package ivy-fuz
+  :disabled t
+  :demand t
+  :after ivy
+  :custom
+  (ivy-sort-matches-functions-alist '((t . ivy-fuz-sort-fn)))
+  (ivy-re-builders-alist '((t . ivy-fuz-regex-fuzzy)))
+  :config
+  (add-to-list 'ivy-highlight-functions-alist '(ivy-fuz-regex-fuzzy . ivy-fuz-highlight-fn)))
+
+(use-package all-the-icons-ivy
+  :disabled t
+  :after (all-the-icons projectile ivy counsel counsel-projectile)
+  :hook (after-init . all-the-icons-ivy-setup)
+  :config
+  (setq all-the-icons-ivy-file-commands
+        '(counsel-find-file
+          counsel-file-jump
+          counsel-recentf
+          counsel-projectile-find-file
+          counsel-projectile-find-dir
+          counsel-projectile)))
+
+(use-package all-the-icons-ivy-rich
+  :disabled t
+  :after (all-the-icons ivy-rich-mode)
+  :hook (ivy-rich-mode . all-the-icons-ivy-rich-mode))
 
 (provide 'init-ivy)
 ;;; init-ivy.el ends here

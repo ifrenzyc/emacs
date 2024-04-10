@@ -13,21 +13,6 @@
    "j" 'flycheck-error-list-next-error
    "k" 'flycheck-error-list-previous-error
    "q" 'quit-window)
-  ;; (yc/leader-keys
-  ;;     "ts" 'my/toggle-syntax-checking
-  ;;   "eb" 'flycheck-buffer
-  ;;   "ec" 'flycheck-clear
-  ;;   "eh" 'flycheck-describe-checker
-  ;;   "es" 'flycheck-select-checker
-  ;;   "eS" 'flycheck-set-checker-executable
-  ;;   "ev" 'flycheck-verify-setup
-  ;;   "ey" 'flycheck-copy-errors-as-kill
-  ;;   "ex" 'flycheck-explain-error-at-point
-  ;;   ;; navigation
-  ;;   "en" 'flycheck-next-error
-  ;;   "ep" 'flycheck-previous-error
-  ;;   "el" 'flycheck-list-errors
-  ;;   "e." 'hydra-flycheck/body)
   :pretty-hydra
   (hydra-flycheck
    (:hint nil :color teal :quit-key "C-g" :title (with-faicon "nf-fa-plane" "Flycheck" 1 -0.05))

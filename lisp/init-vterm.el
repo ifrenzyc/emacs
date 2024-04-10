@@ -74,8 +74,7 @@
     "Create a new frame with a new vterm."
     (interactive)
     (make-frame)
-    (vterm "Untitled-Vterm"))
-  )
+    (vterm "Untitled-Vterm")))
 
 (use-package vterm-toggle
   :disabled t

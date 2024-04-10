@@ -7,11 +7,6 @@
 ;;; Code:
 (require 'init-funcs)
 
-(use-package good-scroll
-  :disabled t
-  :config
-  (good-scroll-mode t))
-
 (use-package pixel-scroll
   :ensure nil
   :bind
@@ -65,60 +60,6 @@
                   (window-buffer (aw-select "Select window to scroll"))))
     (scroll-other-window-down)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  scrolling                                                       ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; This makes scrolling gradual rather than by half page.
-;; I find that the half page scroll really makes me lose where I am
-;; in the file so here I make sure to scroll one line at a time.
-;; In addition I want to keep what I'm working on centered so
-;; I start scrolling when the cursor is 10 lines away from the margin.
-;; This behaviour in general emulates the scrolloff option in vim.
-;; faster scrolling
-;; - https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746
-;; - https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#defaults
-
-;; ;; (setq scroll-margin 10
-;; ;;       scroll-step 1
-;; ;;       scroll-conservatively 10000
-;; ;;       scroll-preserve-screen-position 1)
-;; (setq  hscroll-margin 1
-;;        hscroll-step 1
-;;        scroll-conservatively 100000
-;;        scroll-margin 0
-;;        scroll-preserve-screen-position t)
-;; (setq auto-window-vscroll nil)
-
-;; (use-package yascroll
-;;   :init
-;;   (global-yascroll-bar-mode t))
-
-;; (use-package smooth-scrolling
-;;   :init
-;;   (smooth-scrolling-mode t)
-;;   (setq smooth-scroll-margin 5))
-
-;; (use-package scrollkeeper
-;;   :bind (([remap scroll-up-command] . scrollkeeper-contents-up)
-;;          ([remap scroll-down-command] . scrollkeeper-contents-down)))
-
-;; (use-package sublimity
-;;   :commands (sublimity-map-show sublimity-mode)
-;;   :config
-;;   (require 'sublimity)
-;;   (require 'sublimity-scroll)
-;;   (require 'sublimity-map)
-;;   (setq sublimity-scroll-weight 5
-;;         sublimity-scroll-drift-length 10
-;;         sublimity-map-size 20
-;;         sublimity-map-fraction 0.3
-;;         sublimity-map-text-scale -7)
-;;   (setq sublimity-map-set-delay 5)
-;;   (setq sublimity-attractive-hide-bars t)
-;;   (setq sublimity-attractive-hide-vertical-border t)
-;;   (setq sublimity-attractive-hide-fringes t)
-;;   (setq sublimity-attractive-hide-modelines t))
-
 (use-package window
   :ensure nil
   :general
@@ -128,26 +69,7 @@
    "s-<down>"     'hydra-move-splitter-down
    "s-S-<left>"   'hydra-move-splitter-left-4x
    "s-S-<right>"  'hydra-move-splitter-right-4x
-   "s-<return>"   'doom/window-enlargen)
-  ;; (yc/leader-keys
-  ;;     "w" '(:ignore t :wk "windows")
-  ;;   "w SPC" 'hydra-rotate-window/body
-  ;;   "w." 'hydra-window/body
-  ;;   "wp" '(:ignore t :wk "popup")
-  ;;   "w1" 'delete-other-windows
-  ;;   "w0" 'delete-window
-  ;;   "wh" 'windmove-left
-  ;;   "wl" 'windmove-right
-  ;;   "wk" 'windmove-up
-  ;;   "wj" 'windmove-down
-  ;;   "w-" 'yc/split-window-vertically
-  ;;   "w|" 'yc/split-window-horizontally
-  ;;   "wd" 'delete-frame
-  ;;   "wo" '(doom/window-enlargen :wk "doom/enlargen")
-  ;;   "wu" 'winner-undo
-  ;;   "wr" 'winner-redo)
-  )
-
+   "s-<return>"   'doom/window-enlargen))
 
 ;; Winner Mode 是 Emacs 自带的一个 minor mode，可以用于快速恢复窗口分割状态。
 ;; 默认使用 =C-c <left>= 组合键，就可以快速退回上一个窗口设置； =C-c <right>= 组合键，向前恢复一个窗口设置。
@@ -212,65 +134,6 @@
   :config
   (ace-window-display-mode 1))
 
-;; eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工作空间。
-;; 目前是使用 =<f5>= 、 =<f6>= 、 =<f7>= 、 =<f8>= 进行工作空间切换。
-;; *注意：* 这个的使用和 Winner Mode 有点冲突，通过 Winner Mode 进行恢复窗口时，会恢复到其他工作空间的窗口。
-;; https://github.com/wasamasa/eyebrowse
-;; - TODO: 把这个 eyebrowse 的按键配置到 Hydra 上面。
-(use-package eyebrowse
-  :disabled t
-  :init
-  (eyebrowse-mode 1)
-  :config
-  (setq-default eyebrowse-new-workspace t)
-
-;; (defhydra hydra-eyebrowse (:color blue)
-;;   "
-;; ^
-;; ^Eyebrowse^         ^Do^                ^Switch^
-;; ^─────────^─────────^──^────────────────^──────^────────────
-;; _q_ quit            _c_ create          _<_ previous
-;; ^^                  _k_ kill            _>_ next
-;; ^^                  _r_ rename          _e_ last
-;; ^^                  ^^                  _s_ switch
-;; ^^                  ^^                  ^^
-;; "
-;;   ("q" nil)
-;;   ("<" eyebrowse-prev-window-config :color red)
-;;   (">" eyebrowse-next-window-config :color red)
-;;   ("c" eyebrowse-create-window-config)
-;;   ("e" eyebrowse-last-window-config)
-;;   ("k" eyebrowse-close-window-config :color red)
-;;   ("r" eyebrowse-rename-window-config)
-;;   ("s" eyebrowse-switch-to-window-config))
-  )
-
-;; - https://github.com/pashinin/workgroups2
-(use-package workgroups2
-  :disabled t
-  :config
-  ;; Change prefix key (before activating WG)
-  ;; (setq wg-prefix-key (kbd "C-c z"))
-
-  ;; Change workgroups session file
-  (setq wg-session-file (expand-file-name ".cache/.emacs_workgroups" user-emacs-directory))
-  ;; What to do on Emacs exit / workgroups-mode exit?
-  (setq wg-emacs-exit-save-behavior 'save)          ; Options: 'save 'ask nil
-  (setq wg-workgroups-mode-exit-save-behavior 'save) ; Options: 'save 'ask nil
-
-  ;; Mode Line changes
-  ;; Display workgroups in Mode Line?
-  (setq wg-mode-line-display-on t)      ; Default: (not (featurep 'powerline))
-  (setq wg-flag-modified t)             ; Display modified flags as well
-  (setq wg-mode-line-decor-left-brace "["
-        wg-mode-line-decor-right-brace "]" ; how to surround it
-        wg-mode-line-decor-divider ":")
-  (workgroups-mode 1))
-
-;; - https://github.com/alphapapa/burly.el
-(use-package burly
-  :disabled t)
-
 ;; 类似于 tmux 的最大化当前窗口功能，保持和我在 tmux 下的习惯一致。
 ;; https://github.com/syohex/emacs-zoom-window
 (use-package zoom-window
@@ -295,11 +158,7 @@
     ("k" (progn (scroll-up-line 1)) "↑")
     ("K" (progn (scroll-up-line 4)) "4x ↑")
     ("C-g" nil "quit")
-    ("q" nil "quit"))
-  ;; :config
-  ;; (evil-leader/set-key
-  ;;   "SPC" 'hydra-rotate-window/body)
-  )
+    ("q" nil "quit")))
 
 ;; - https://depp.brause.cc/shackle/
 ;; - file:~/src/emacs.d/kaushalmodi-emacs.d/setup-files/setup-shackle.el
@@ -311,6 +170,94 @@
 (defvar shackle--popup-window-list nil) ; all popup windows
 (defvar-local shackle--current-popup-window nil) ; current popup window
 (put 'shackle--current-popup-window 'permanent-local t)
+
+;; https://github.com/dustinlacewell/hera
+(defvar jp-window--title (with-faicon "nf-fa-window_restore" "Window Management" 1 -0.05))
+(pretty-hydra-define hydra-window
+  (:hint nil :foreign-keys warn :quit-key "q" :title jp-window--title :separator "═")
+  (;; general window management commands
+   "Windows"
+   (("x" ace-delete-window "delete")
+    ("s" ace-swap-window "swap")
+    ("a" ace-select-window "select")
+    ("o" other-window "cycle")
+    ("d" delete-window "delete")
+    ("m" ace-delete-other-windows "maximize")
+    ("M" delete-other-windows "delete other windows")
+    ;;("K" ace-delete-other-windows)
+    ("S" save-buffer "Save Buffer")
+    ("D" (lambda ()
+           (interactive)
+           (ace-delete-window)
+           (add-hook 'ace-window-end-once-hook
+                     'hydra-window/body)) "delete"))
+   ;; resize
+   "Resize"
+   (("h" hydra-move-splitter-left "←")
+    ("j" hydra-move-splitter-down "↓")
+    ("k" hydra-move-splitter-up "↑")
+    ("l" hydra-move-splitter-right "→")
+    ("n" balance-windows "balance")
+    ("H" hydra-move-splitter-left-4x "←")
+    ("J" enlarge-window "↓")
+    ("K" shrink-window "↑")
+    ("L" hydra-move-splitter-right-4x "→"))
+   ;; split
+   "Split"
+   (("b" split-window-right "horizontally")
+    ("B" split-window-horizontally-instead "horizontally instead")
+    ("v" split-window-below "vertically")
+    ("V" split-window-vertically-instead "vertically instead")
+    ("-" yc/split-window-horizontally "horizontally")
+    ("|" yc/split-window-vertically "vertically")
+    ("u" (progn
+           (winner-undo)
+           (setq this-command 'winner-undo)) "undo")
+    ("r" winner-redo "redo"))
+   "Zoom"
+   (("+" text-scale-increase "in")
+    ("-" text-scale-decrease "out")
+    ;; ("0" (text-scale-set 0) "reset")
+    ("0" (text-scale-adjust 0) "reset"))
+   "Eyebrowse"
+   (("<" eyebrowse-prev-window-config "previous")
+    (">" eyebrowse-next-window-config "next")
+    ("C" eyebrowse-create-window-config "create")
+    ("E" eyebrowse-last-window-config "last")
+    ("K" eyebrowse-close-window-config "kill")
+    ("R" eyebrowse-rename-window-config "rename")
+    ("w" eyebrowse-switch-to-window-config "switch")
+    ("1" eyebrowse-switch-to-window-config-1 "workspace ➊")
+    ("2" eyebrowse-switch-to-window-config-2 "workspace ➋")
+    ("3" eyebrowse-switch-to-window-config-3 "workspace ➌")
+    ("4" eyebrowse-switch-to-window-config-4 "workspace ➍"))
+   ;; ;; Move
+   ;; "Movement" (("h" windmove-left)
+   ;;             ("j" windmove-down)
+   ;;             ("k" windmove-up)
+   ;;             ("l" windmove-right)
+   ;;             )
+
+   ;; "Window Purpose" (("P" purpose-set-window-purpose)
+   ;;                   ("B" ivy-purpose-switch-buffer-with-purpose)
+   ;;                   ("!" purpose-toggle-window-purpose-dedicated)
+   ;;                   ("#" purpose-toggle-window-buffer-dedicated))
+   ;; "Others" (
+   ;;           ("x" counsel-M-x)
+   ;;           ("q" nil))
+   "Switch"
+   (("b" ivy-purpose-switch-buffer-without-purpose)
+    ("f" counsel-find-file "find file")
+    ("a" (lambda ()
+           (interactive)
+           (ace-window 1)
+           (add-hook 'ace-window-end-once-hook
+                     'hydra-window/body)) "switch")
+    ("s" (lambda ()
+           (interactive)
+           (ace-swap-window)
+           (add-hook 'ace-window-end-once-hook
+                     'hydra-window/body)) "swap"))))
 
 (use-package shackle
   :general
@@ -431,100 +378,130 @@
           (list-environment-mode :select t :size 0.3 :align 'below :autoclose t)
           (tabulated-list-mode :size 0.4 :align 'below))))
 
+(use-package good-scroll
+  :disabled t
+  :config
+  (good-scroll-mode t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  scrolling                                                       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This makes scrolling gradual rather than by half page.
+;; I find that the half page scroll really makes me lose where I am
+;; in the file so here I make sure to scroll one line at a time.
+;; In addition I want to keep what I'm working on centered so
+;; I start scrolling when the cursor is 10 lines away from the margin.
+;; This behaviour in general emulates the scrolloff option in vim.
+;; faster scrolling
+;; - https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746
+;; - https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#defaults
+
+;; ;; (setq scroll-margin 10
+;; ;;       scroll-step 1
+;; ;;       scroll-conservatively 10000
+;; ;;       scroll-preserve-screen-position 1)
+;; (setq  hscroll-margin 1
+;;        hscroll-step 1
+;;        scroll-conservatively 100000
+;;        scroll-margin 0
+;;        scroll-preserve-screen-position t)
+;; (setq auto-window-vscroll nil)
+
+;; (use-package yascroll
+;;   :init
+;;   (global-yascroll-bar-mode t))
+
+;; (use-package smooth-scrolling
+;;   :init
+;;   (smooth-scrolling-mode t)
+;;   (setq smooth-scroll-margin 5))
+
+;; (use-package scrollkeeper
+;;   :bind (([remap scroll-up-command] . scrollkeeper-contents-up)
+;;          ([remap scroll-down-command] . scrollkeeper-contents-down)))
+
+;; (use-package sublimity
+;;   :commands (sublimity-map-show sublimity-mode)
+;;   :config
+;;   (require 'sublimity)
+;;   (require 'sublimity-scroll)
+;;   (require 'sublimity-map)
+;;   (setq sublimity-scroll-weight 5
+;;         sublimity-scroll-drift-length 10
+;;         sublimity-map-size 20
+;;         sublimity-map-fraction 0.3
+;;         sublimity-map-text-scale -7)
+;;   (setq sublimity-map-set-delay 5)
+;;   (setq sublimity-attractive-hide-bars t)
+;;   (setq sublimity-attractive-hide-vertical-border t)
+;;   (setq sublimity-attractive-hide-fringes t)
+;;   (setq sublimity-attractive-hide-modelines t))
+
+;; eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工作空间。
+;; 目前是使用 =<f5>= 、 =<f6>= 、 =<f7>= 、 =<f8>= 进行工作空间切换。
+;; *注意：* 这个的使用和 Winner Mode 有点冲突，通过 Winner Mode 进行恢复窗口时，会恢复到其他工作空间的窗口。
+;; https://github.com/wasamasa/eyebrowse
+;; - TODO: 把这个 eyebrowse 的按键配置到 Hydra 上面。
+(use-package eyebrowse
+  :disabled t
+  :init
+  (eyebrowse-mode 1)
+  :config
+  (setq-default eyebrowse-new-workspace t)
+
+  ;; (defhydra hydra-eyebrowse (:color blue)
+  ;;   "
+  ;; ^
+  ;; ^Eyebrowse^         ^Do^                ^Switch^
+  ;; ^─────────^─────────^──^────────────────^──────^────────────
+  ;; _q_ quit            _c_ create          _<_ previous
+  ;; ^^                  _k_ kill            _>_ next
+  ;; ^^                  _r_ rename          _e_ last
+  ;; ^^                  ^^                  _s_ switch
+  ;; ^^                  ^^                  ^^
+  ;; "
+  ;;   ("q" nil)
+  ;;   ("<" eyebrowse-prev-window-config :color red)
+  ;;   (">" eyebrowse-next-window-config :color red)
+  ;;   ("c" eyebrowse-create-window-config)
+  ;;   ("e" eyebrowse-last-window-config)
+  ;;   ("k" eyebrowse-close-window-config :color red)
+  ;;   ("r" eyebrowse-rename-window-config)
+  ;;   ("s" eyebrowse-switch-to-window-config))
+  )
+
+;; - https://github.com/pashinin/workgroups2
+(use-package workgroups2
+  :disabled t
+  :config
+  ;; Change prefix key (before activating WG)
+  ;; (setq wg-prefix-key (kbd "C-c z"))
+
+  ;; Change workgroups session file
+  (setq wg-session-file (expand-file-name ".cache/.emacs_workgroups" user-emacs-directory))
+  ;; What to do on Emacs exit / workgroups-mode exit?
+  (setq wg-emacs-exit-save-behavior 'save)          ; Options: 'save 'ask nil
+  (setq wg-workgroups-mode-exit-save-behavior 'save) ; Options: 'save 'ask nil
+
+  ;; Mode Line changes
+  ;; Display workgroups in Mode Line?
+  (setq wg-mode-line-display-on t)      ; Default: (not (featurep 'powerline))
+  (setq wg-flag-modified t)             ; Display modified flags as well
+  (setq wg-mode-line-decor-left-brace "["
+        wg-mode-line-decor-right-brace "]" ; how to surround it
+        wg-mode-line-decor-divider ":")
+  (workgroups-mode 1))
+
+;; - https://github.com/alphapapa/burly.el
+(use-package burly
+  :disabled t)
+
 ;; 透明化窗口设置
 (use-package transwin
   :disabled t
   ;; :straight (:host github :repo "jcs-elpa/transwin")
   :config
   (transwin-toggle-transparent-frame))
-
-;; https://github.com/dustinlacewell/hera
-(defvar jp-window--title (with-faicon "nf-fa-window_restore" "Window Management" 1 -0.05))
-(pretty-hydra-define hydra-window
-  (:hint nil :foreign-keys warn :quit-key "q" :title jp-window--title :separator "═")
-  (;; general window management commands
-   "Windows"
-   (("x" ace-delete-window "delete")
-    ("s" ace-swap-window "swap")
-    ("a" ace-select-window "select")
-    ("o" other-window "cycle")
-    ("d" delete-window "delete")
-    ("m" ace-delete-other-windows "maximize")
-    ("M" delete-other-windows "delete other windows")
-    ;;("K" ace-delete-other-windows)
-    ("S" save-buffer "Save Buffer")
-    ("D" (lambda ()
-           (interactive)
-           (ace-delete-window)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)) "delete"))
-   ;; resize
-   "Resize"
-   (("h" hydra-move-splitter-left "←")
-    ("j" hydra-move-splitter-down "↓")
-    ("k" hydra-move-splitter-up "↑")
-    ("l" hydra-move-splitter-right "→")
-    ("n" balance-windows "balance")
-    ("H" hydra-move-splitter-left-4x "←")
-    ("J" enlarge-window "↓")
-    ("K" shrink-window "↑")
-    ("L" hydra-move-splitter-right-4x "→"))
-   ;; split
-   "Split"
-   (("b" split-window-right "horizontally")
-    ("B" split-window-horizontally-instead "horizontally instead")
-    ("v" split-window-below "vertically")
-    ("V" split-window-vertically-instead "vertically instead")
-    ("-" yc/split-window-horizontally "horizontally")
-    ("|" yc/split-window-vertically "vertically")
-    ("u" (progn
-           (winner-undo)
-           (setq this-command 'winner-undo)) "undo")
-    ("r" winner-redo "redo"))
-   "Zoom"
-   (("+" text-scale-increase "in")
-    ("-" text-scale-decrease "out")
-    ;; ("0" (text-scale-set 0) "reset")
-    ("0" (text-scale-adjust 0) "reset"))
-   "Eyebrowse"
-   (("<" eyebrowse-prev-window-config "previous")
-    (">" eyebrowse-next-window-config "next")
-    ("C" eyebrowse-create-window-config "create")
-    ("E" eyebrowse-last-window-config "last")
-    ("K" eyebrowse-close-window-config "kill")
-    ("R" eyebrowse-rename-window-config "rename")
-    ("w" eyebrowse-switch-to-window-config "switch")
-    ("1" eyebrowse-switch-to-window-config-1 "workspace ➊")
-    ("2" eyebrowse-switch-to-window-config-2 "workspace ➋")
-    ("3" eyebrowse-switch-to-window-config-3 "workspace ➌")
-    ("4" eyebrowse-switch-to-window-config-4 "workspace ➍"))
-   ;; ;; Move
-   ;; "Movement" (("h" windmove-left)
-   ;;             ("j" windmove-down)
-   ;;             ("k" windmove-up)
-   ;;             ("l" windmove-right)
-   ;;             )
-
-   ;; "Window Purpose" (("P" purpose-set-window-purpose)
-   ;;                   ("B" ivy-purpose-switch-buffer-with-purpose)
-   ;;                   ("!" purpose-toggle-window-purpose-dedicated)
-   ;;                   ("#" purpose-toggle-window-buffer-dedicated))
-   ;; "Others" (
-   ;;           ("x" counsel-M-x)
-   ;;           ("q" nil))
-   "Switch"
-   (("b" ivy-purpose-switch-buffer-without-purpose)
-    ("f" counsel-find-file "find file")
-    ("a" (lambda ()
-           (interactive)
-           (ace-window 1)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)) "switch")
-    ("s" (lambda ()
-           (interactive)
-           (ace-swap-window)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)) "swap"))))
 
 ;; (defhydra hydra-window ()
 ;;   "

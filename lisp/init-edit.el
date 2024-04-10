@@ -19,12 +19,6 @@
   :ensure nil
   :hook (after-init . save-place-mode))
 
-;; 文本替换，使用 =query-replace= 或者 =M-%= 命令。
-;; - https://github.com/syohex/emacs-anzu
-;; anzu 依赖这个 mdi
-;; (use-package mdi
-;;   :load-path "localelpa/mdi/")
-
 ;; 另外一个与 anzu 替代： https://github.com/benma/visual-regexp.el 
 (use-package anzu
   :bind (([remap query-replace] . anzu-query-replace)
@@ -48,8 +42,6 @@
   :general
   ("C-=" 'er/expand-region)
   ;; ("C-c =" 'bk/expand-region/body)
-  ;; (evil-visual-state-map
-  ;;  "v" 'er/expand-region)
   :init
   (pending-delete-mode t))
 
@@ -264,18 +256,18 @@ there's a region, all lines that region covers will be duplicated."
   (fancy-dabbrev-preview-context 'before-non-word)
 
   (fancy-dabbrev-expansion-on-preview-only t)
-  (fancy-dabbrev-indent-command 'tab-to-tab-stop)
-
-  ;; Only while in insert mode.
-  ;; (with-eval-after-load 'evil
-  ;;   (add-hook 'evil-insert-state-entry-hook (lambda () (fancy-dabbrev-mode 1)))
-  ;;   (add-hook 'evil-insert-state-exit-hook (lambda () (fancy-dabbrev-mode 0))))
-  )
+  (fancy-dabbrev-indent-command 'tab-to-tab-stop))
 
 ;; - Zap To Char Usage :: https://www.emacswiki.org/emacs/ZapToCharUsage
 (use-package zzz-to-char
   :bind
   ([remap zap-to-char] . zzz-to-char))
+
+;; 文本替换，使用 =query-replace= 或者 =M-%= 命令。
+;; - https://github.com/syohex/emacs-anzu
+;; anzu 依赖这个 mdi
+;; (use-package mdi
+;;   :load-path "localelpa/mdi/")
 
 ;; 高亮显示匹配的分隔符，自动输入删除
 ;; - https://github.com/Fuco1/smartparens
@@ -334,14 +326,6 @@ there's a region, all lines that region covers will be duplicated."
 ;;   (smartparens-strict-mode-map
 ;;    "M-d" 'kill-sexp
 ;;    "M-D" 'sp-kill-sexp))
-
-;; ;; - https://github.com/expez/evil-smartparens
-;; (use-package evil-smartparens
-;;   :after (evil smartparens)
-;;   :config
-;;   (defvar show-paren-delay 0)
-;;   :hook
-;;   (smartparens-enabled . evil-smartparens-mode))
 
 ;; ;; https://github.com/abo-abo/hydra/wiki/Smartparens
 ;; (defhydra hydra-smartparens (:hint nil)

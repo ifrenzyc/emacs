@@ -156,15 +156,6 @@
   :config
   (treemacs-load-theme "nerd-icons"))
 
-(use-package treemacs-evil
-  :disabled t
-  :after (evil treemacs)
-  :bind
-  (:map evil-treemacs-state-map
-        ("H" . hydra-move-splitter-left-2x)
-        ("L" . hydra-move-splitter-right-2x)
-        ))
-
 (use-package treemacs-projectile
   :after treemacs projectile
   :bind (([M-f8] . treemacs-projectile)

@@ -35,12 +35,6 @@
   :hook
   (after-init . global-company-mode)
   :config
-  ;; (with-eval-after-load 'evil
-  ;;   (with-eval-after-load 'company
-  ;;     (define-key evil-insert-state-map (kbd "C-n") nil)
-  ;;     (define-key evil-insert-state-map (kbd "C-p") nil)
-  ;;     (evil-define-key nil company-active-map (kbd "C-n") #'company-select-next)
-  ;;     (evil-define-key nil company-active-map (kbd "C-p") #'company-select-previous)))
   (defun my-company-yasnippet ()
     "Hide the current completeions and show snippets."
     (interactive)
@@ -313,8 +307,7 @@
   :config
   (setq company-quickhelp-delay 0.5)
   (setq pos-tip-background-color (face-background 'company-tooltip)
-        pos-tip-foreground-color (face-foreground 'company-tooltip))
-  )
+        pos-tip-foreground-color (face-foreground 'company-tooltip)))
 
 (use-package company-statistics
   :hook

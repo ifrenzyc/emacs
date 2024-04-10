@@ -190,6 +190,21 @@ To be used with `markdown-live-preview-window-function'."
      (substitute-command-keys
       "\\<edit-indirect-mode-map>Edit, then exit with `\\[edit-indirect-commit]' or abort with `\\[edit-indirect-abort]'"))))
 
+;; grip-mode
+;; markdown preview
+;; macOS:
+;; pip install grip
+(use-package grip-mode
+  :general
+  (markdown-mode-command-map
+   "g" 'grip-mode)
+  :commands (grip-mode)
+  ;; :straight (:host github :repo "seagle0128/grip-mode")
+  :ensure-system-package (grip . "pip install grip")
+  :config
+  ;; Path to the grip binary
+  (setq grip-mode-binary-path (executable-find "grip")))
+
 ;; (use-package separedit
 ;;   :hook (separedit-buffer-creation . aorst/separedit-header-line-setup)
 ;;   :bind (:map
@@ -205,21 +220,6 @@ To be used with `markdown-live-preview-window-function'."
 ;;      header-line-format
 ;;      (substitute-command-keys
 ;;       "Edit, then exit with `\\[separedit-commit]' or abort with `\\[edit-indirect-abort]'"))))
-
-;; grip-mode
-;; markdown preview
-;; macOS:
-;; pip install grip
-(use-package grip-mode
-  :general
-  (markdown-mode-command-map
-   "g" 'grip-mode)
-  :commands (grip-mode)
-  ;; :straight (:host github :repo "seagle0128/grip-mode")
-  :ensure-system-package (grip . "pip install grip")
-  :config
-  ;; Path to the grip binary
-  (setq grip-mode-binary-path (executable-find "grip")))
 
 (provide 'init-markdown)
 ;;; init-markdown.el ends here

@@ -13,44 +13,6 @@
   (go-ts-mode . flycheck-mode)
   (go-ts-mode . lsp-deferred)
   :general
-  ;; (yc/leader-keys-major-mode
-  ;;   :keymaps 'go-ts-mode-map
-  ;;   ;; "" '(:ignore t :wk "major-mode-cmd")
-  ;;   "h" '(:ignore t :wk "help")
-  ;;   "hh" 'godoc-at-point
-  ;;   "i" '(:ignore t :wk "imports")
-  ;;   "ig" 'go-goto-imports
-  ;;   "ia" 'go-import-add
-  ;;   "ir" 'go-remove-unused-imports
-  ;;   "e" '(:ignore t :wk "playground")
-  ;;   "eb" 'go-play-buffer
-  ;;   "er" 'go-play-region
-  ;;   "ed" 'go-download-play
-  ;;   "x" '(:ignore t :wk "execute")
-  ;;   "xx" 'yc/go-run-main
-  ;;   "g" '(:ignore t :wk "goto")
-  ;;   "ga" 'ff-find-other-file
-  ;;   "gc" 'go-coverage
-  ;;   "t" '(:ignore t :wk "test")
-  ;;   "tt" 'yc/go-run-test-current-function
-  ;;   "ts" 'yc/go-run-test-current-suite
-  ;;   "tp" 'yc/go-run-package-tests
-  ;;   "tP" 'yc/go-run-package-tests-nested
-  ;;   "f" '(:ignore t :wk "guru")
-  ;;   "fd" 'go-guru-describe
-  ;;   "ff" 'go-guru-freevars
-  ;;   "fi" 'go-guru-implements
-  ;;   "fc" 'go-guru-peers
-  ;;   "fr" 'go-guru-referrers
-  ;;   "fj" 'go-guru-definition
-  ;;   "fp" 'go-guru-pointsto
-  ;;   "fs" 'go-guru-callstack
-  ;;   "fe" 'go-guru-whicherrs
-  ;;   "f<" 'go-guru-callers
-  ;;   "f>" 'go-guru-callees
-  ;;   "fo" 'go-guru-set-scope
-  ;;   "r" '(:ignore t :wk "rename")
-  ;;   "rn" 'go-rename)
   (go-ts-mode-map
    "M-]"        'godef-jump
    "M-["        'pop-tag-mark

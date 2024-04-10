@@ -327,50 +327,9 @@ active region use it instead."
        (cdr (ring-ref avy-ring 0))))
     t)
 
-  (setf (alist-get ?G avy-dispatch-alist) 'avy-action-tuxi)
-  )
-
-;; https://github.com/winterTTr/ace-jump-mode
-(use-package ace-jump-mode
-  :disabled t
-  :demand t
-  :general
-  ("C-x j" 'ace-jump-mode
-   "M-g f" 'ace-jump-mode)
-  :config
-  ;; Thanks to: https://github.com/winterTTr/ace-jump-mode/issues/23
-  (defun ace-jump-two-chars-mode (&optional query-char query-char-2)
-    "AceJump two chars mode"
-    (interactive)
-
-    ;; (evil-half-cursor)
-    (setq query-char (or query-char (read-char ">")))
-    (setq query-char-2 (or query-char-2 (read-char (concat ">" (string query-char)))))
-
-    (if (eq (ace-jump-char-category query-char) 'other)
-        (error "[AceJump] Non-printable character"))
-
-    ;; others : digit , alpha, punc
-    (setq ace-jump-query-char query-char)
-    (setq ace-jump-current-mode 'ace-jump-char-mode)
-    (ace-jump-do (regexp-quote (concat (char-to-string query-char)
-                                       (char-to-string query-char-2))))))
-
-;; Goto last change
-(use-package goto-chg
-  :disabled t
-  :general
-  ("C-c b ," 'goto-last-change
-   "C-c b ." 'goto-last-change-reverse))
+  (setf (alist-get ?G avy-dispatch-alist) 'avy-action-tuxi))
 
 (use-package fzf)
-
-(use-package fuz
-  :disabled t
-  :load-path "localelpa/fuz.el"
-  :config
-  (unless (require 'fuz-core nil t)
-    (fuz-build-and-load-dymod)))
 
 ;; fuzzy file finder
 (use-package fiplr
@@ -390,7 +349,6 @@ active region use it instead."
 
 (use-package rg
   :custom
-  ;; (evil-set-initial-state 'rg-mode 'emacs)
   (rg-group-result t)
   (rg-show-header t))
 
@@ -418,6 +376,45 @@ active region use it instead."
 (use-package ripgrep :commands ripgrep-regexp)
 
 (use-package deadgrep)
+
+;; https://github.com/winterTTr/ace-jump-mode
+(use-package ace-jump-mode
+  :disabled t
+  :demand t
+  :general
+  ("C-x j" 'ace-jump-mode
+   "M-g f" 'ace-jump-mode)
+  :config
+  ;; Thanks to: https://github.com/winterTTr/ace-jump-mode/issues/23
+  (defun ace-jump-two-chars-mode (&optional query-char query-char-2)
+    "AceJump two chars mode"
+    (interactive)
+
+    (setq query-char (or query-char (read-char ">")))
+    (setq query-char-2 (or query-char-2 (read-char (concat ">" (string query-char)))))
+
+    (if (eq (ace-jump-char-category query-char) 'other)
+        (error "[AceJump] Non-printable character"))
+
+    ;; others : digit , alpha, punc
+    (setq ace-jump-query-char query-char)
+    (setq ace-jump-current-mode 'ace-jump-char-mode)
+    (ace-jump-do (regexp-quote (concat (char-to-string query-char)
+                                       (char-to-string query-char-2))))))
+
+;; Goto last change
+(use-package goto-chg
+  :disabled t
+  :general
+  ("C-c b ," 'goto-last-change
+   "C-c b ." 'goto-last-change-reverse))
+
+(use-package fuz
+  :disabled t
+  :load-path "localelpa/fuz.el"
+  :config
+  (unless (require 'fuz-core nil t)
+    (fuz-build-and-load-dymod)))
 
 (provide 'init-search)
 ;;; init-search.el ends here

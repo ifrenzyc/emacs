@@ -29,34 +29,6 @@
   :general
   (java-ts-mode-map
    "C-c C-f" 'lsp-format-buffer)
-  ;; (yc/leader-keys-major-mode
-  ;;   :keymaps 'java-mode-map
-  ;;   "r"   'ggtags-find-tag-dwim
-  ;;   "c"   '(:ignore t :wk "Run/Compile")
-  ;;   "cd"  'dap-java-debug
-  ;;   "l"   '(:ignore t :wk "lsp")
-  ;;   "lm"  'lsp-ui-imenu
-  ;;   "la"  'lsp-find-definition
-  ;;   "lb"  'lsp-find-references
-  ;;   "lh"  'lsp-ui-doc-show
-  ;;   "le"  'lsp-goto-implementation
-  ;;   "lr"  'lsp-goto-type-definition
-  ;;   "li"  'lsp-java-organize-imports
-  ;;   "ld"  'lsp-describe-thing-at-point
-  ;;   "lf"  'lsp-format-buffer
-  ;;   "lr"  'lsp-format-region
-  ;;   "la"  'lsp-java-add-import
-  ;;   "lt"  'lsp-java-add-throws
-  ;;   "lc"  'lsp-java-create-field
-  ;;   "ll"  'lsp-java-create-local
-  ;;   "lp"  'lsp-java-create-parameter
-  ;;   "ls"  'lsp-java-spring-initializr
-  ;;   "lx"  'lsp-java-extract-to-constant
-  ;;   "lu"  'lsp-java-add-unimplemented-methods
-  ;;   "lv"  'lsp-java-extract-to-local-variable
-  ;;   "lg"  'lsp-java-generate-getters-and-setters
-  ;;   "lu"  'lsp-java-generate-equals-and-hash-code)
-  ;; :mode ("\\.java\\'" . java-mode)
   :init
   (setq-local lsp-ui-doc-enable t
               lsp-headerline-breadcrumb-enable t
@@ -136,6 +108,24 @@
   ;; (global-set-key (kbd "<f9>") 'dap-continue)
   )
 
+;; A nice collection of stealable Java snippets:
+(use-package java-snippets
+  :after yasnippet)
+
+;; Gradle
+(use-package gradle-mode
+  :mode ("\\.gradle\\'". gradle-mode))
+
+;; https://writequit.org/articles/working-with-logs-in-emacs.html
+(use-package log4j-mode
+  :hook
+  (log4j-mode . view-mode)
+  (log4j-mode . read-only-mode))
+
+;; decompile class file
+(use-package autodisass-java-bytecode
+  :disabled t)
+
 (use-package meghanada
   :disabled t
   :init (setq meghanada-server-install-dir (concat yc/cache-dir "meghanada"))
@@ -152,24 +142,6 @@
         meghanada-use-auto-start t
         meghanada-java-path "java"
         meghanada-maven-path "mvn"))
-
-;; A nice collection of stealable Java snippets:
-(use-package java-snippets
-  :after yasnippet)
-
-;; decompile class file
-(use-package autodisass-java-bytecode
-  :disabled t)
-
-;; Gradle
-(use-package gradle-mode
-  :mode ("\\.gradle\\'". gradle-mode))
-
-;; https://writequit.org/articles/working-with-logs-in-emacs.html
-(use-package log4j-mode
-  :hook
-  (log4j-mode . view-mode)
-  (log4j-mode . read-only-mode))
 
 (provide 'lang-java)
 ;;; lang-java.el ends here

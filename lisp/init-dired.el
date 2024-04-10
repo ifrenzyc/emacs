@@ -11,35 +11,6 @@
 ;; - https://stackoverflow.com/questions/23798021/disabling-evil-mode-for-nav-in-emacs-or-any-read-only-buffers
 (use-package dired
   :ensure nil
-  :hook
-  ((dired-mode . hl-line-mode)
-   (dired-mode . dired-hide-details-mode))
-  :custom
-  ;; show human readable file sizes in dired
-  ;; http://pragmaticemacs.com/emacs/dired-human-readable-sizes-and-sort-by-size/
-  ;; (setq dired-listing-switches "-aBhl --group-directories-first -v")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
-  ;; (setq dired-listing-switches "-AFhlv --dired-listing-switches")
-  (dired-listing-switches "-alh")
-  (dired-use-ls-dired 'unspecified)
-  ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
-  (dired-dwim-target t)     ;; https://emacs.stackexchange.com/a/5604
-  (dired-recursive-copies 'always) ;; Recursive Copying and Deleting
-  (dired-recursive-deletes 'always)
-  :config
-  (defun yc/dired-up-directory ()
-    "Take dired up one directory, but behave like dired-find-alternative-file (leave no orphan buffer)"
-    (interactive)
-    (let ((old (current-buffer)))
-      (dired-up-directory)
-      (kill-buffer old)))
-  (defun yc/dired-create-file (file)
-    (interactive
-     (list
-      (read-file-name "Create file: " (dired-current-directory))))
-    (write-region "" nil (expand-file-name file) t)
-    (dired-add-file file)
-    (revert-buffer)
-    (dired-goto-file (expand-file-name file)))
   :mode-hydra
   ;; https://github.com/abo-abo/hydra/wiki/Dired
   (dired-mode
@@ -86,29 +57,35 @@
      ("?" dired-summary "summary"))
     ;; "wdired"
     ))
-  ;; :general
-  ;; (dired-mode-map
-  ;;  "C-h h" 'hydra-dired/body)
-  ;; :general
-  ;; (yc/leader-keys-major-mode
-  ;;   :keymaps 'dired-mode-map
-  ;;   "DEL" 'my/dired-up-directory
-  ;;   "RET" 'dired-find-alternate-file
-  ;;   "TAB" 'dired-subtree-toggle
-  ;;   "l" 'dired-find-alternate-file
-  ;;   "c" 'dired-do-rename
-  ;;   "C" 'dired-do-copy
-  ;;   "y" 'dired-ranger-copy
-  ;;   "p" 'dired-ranger-paste
-  ;;   "v" 'dired-ranger-move
-  ;;   "R" 'dired-do-redisplay
-  ;;   "r" 'wdired-change-to-wdired-mode
-  ;;   "f" 'counsel-file-jump
-  ;;   "o" 'my/dired-create-file
-  ;;   "O" 'dired-create-directory
-  ;;   "q" 'kill-this-buffer
-  ;;   "!" 'dired-do-shell-command)
-  )
+  :hook
+  ((dired-mode . hl-line-mode)
+   (dired-mode . dired-hide-details-mode))
+  :custom
+  ;; show human readable file sizes in dired
+  ;; http://pragmaticemacs.com/emacs/dired-human-readable-sizes-and-sort-by-size/
+  ;; (setq dired-listing-switches "-aBhl --group-directories-first -v")  ; 这个目前会导致带有中文名字的文件名显示成转义字符
+  ;; (setq dired-listing-switches "-AFhlv --dired-listing-switches")
+  (dired-listing-switches "-alh")
+  (dired-use-ls-dired 'unspecified)
+  ;; This allows dired to copy/paste/move files over to the other directory in a separate window pane quickly.
+  (dired-dwim-target t)     ;; https://emacs.stackexchange.com/a/5604
+  (dired-recursive-copies 'always) ;; Recursive Copying and Deleting
+  (dired-recursive-deletes 'always)
+  :config
+  (defun yc/dired-up-directory ()
+    "Take dired up one directory, but behave like dired-find-alternative-file (leave no orphan buffer)"
+    (interactive)
+    (let ((old (current-buffer)))
+      (dired-up-directory)
+      (kill-buffer old)))
+  (defun yc/dired-create-file (file)
+    (interactive
+     (list
+      (read-file-name "Create file: " (dired-current-directory))))
+    (write-region "" nil (expand-file-name file) t)
+    (dired-add-file file)
+    (revert-buffer)
+    (dired-goto-file (expand-file-name file))))
 
 ;; Writeable dired
 (use-package wdired
@@ -131,32 +108,6 @@
 ;; "z"       '(lambda () (interactive)
 ;;              (let ((fn (dired-get-file-for-visit)))
 ;;                (start-process "default-app" nil "open" fn)))))
-
-;; (use-package dired-rainbow
-;;   :init
-;;   (eval-after-load 'dired '(require 'dired-rainbow))
-;;   :config
-;;   (dired-rainbow-define audio "#329EE8" ("mp3" "MP3" "ogg" "OGG" "flac" "FLAC" "wav" "WAV"))
-;;   (dired-rainbow-define media "#ce5c00" ("mp3" "mp4" "MP3" "MP4" "avi" "mpg" "flv" "ogg"))
-;;   (dired-rainbow-define video "#455AFC" ("vob" "VOB" "mkv" "MKV" "mpe" "mpg" "MPG" "mp4" "MP4" "ts" "TS" "m2ts"))
-;;   (dired-rainbow-define html "#4e9a06" ("htm" "html" "xhtml"))
-;;   (dired-rainbow-define xml "DarkGreen" ("xml" "xsd" "xsl" "xslt" "wsdl"))
-;;   (dired-rainbow-define document "#ce5c00" ("doc" "docx" "odt" "pdb" "pdf" "ps" "rtf" "djvu"))
-;;   (dired-rainbow-define image "#ff4b4b" ("jpg" "png" "jpeg" "gif"))
-;;   (dired-rainbow-define sourcefile "#3F82FD" ("el" "groovy" "gradle" "py" "c" "cc" "h" "java" "pl" "rb"))
-;;   (dired-rainbow-define executable "#8cc4ff" ("exe" "msi"))
-;;   (dired-rainbow-define compressed "#ad7fa8" ("zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
-;;   (dired-rainbow-define packaged "#e6a8df" ("deb" "rpm"))
-;;   (dired-rainbow-define encrypted "LightBlue" ("gpg" "pgp"))
-;;   (dired-rainbow-define-chmod executable-unix "Green" "-.*x.*")
-;;   (dired-rainbow-define log (:inherit default :italic t) ".*\\.log")
-;;   (dired-rainbow-define org "#5F9EA0" (".*\\.org")))
-
-;; (use-package dired-k
-;;   :hook (dired-after-readin . dired-k-no-revert)
-;;   :hook (dired-initial-position . dired-k)
-;;   :config
-;;   (setq dired-k-padding 1))
 
 (use-package dired-hacks
   :load-path "localelpa/dired-hacks")
@@ -187,16 +138,7 @@
   :custom
   (peep-dired-cleanup-on-disable t)
   (peep-dired-enable-on-directories t)
-  (peep-dired-ignored-extensions '("mkv" "iso" "mp4"))
-  ;; :config
-  ;; (with-eval-after-load 'evil
-  ;;   (evil-define-key 'normal peep-dired-mode-map (kbd "<SPC>") 'peep-dired-scroll-page-down
-  ;;                    (kbd "C-<SPC>") 'peep-dired-scroll-page-up
-  ;;                    (kbd "<backspace>") 'peep-dired-scroll-page-up
-  ;;                    (kbd "j") 'peep-dired-next-file
-  ;;                    (kbd "k") 'peep-dired-prev-file)
-  ;;   (add-hook 'peep-dired-hook 'evil-normalize-keymaps))
-  )
+  (peep-dired-ignored-extensions '("mkv" "iso" "mp4")))
 
 ;; Colourful columns.
 (use-package diredfl
@@ -214,6 +156,32 @@
 (use-package nerd-icons-dired
   :hook
   (dired-mode . nerd-icons-dired-mode))
+
+;; (use-package dired-rainbow
+;;   :init
+;;   (eval-after-load 'dired '(require 'dired-rainbow))
+;;   :config
+;;   (dired-rainbow-define audio "#329EE8" ("mp3" "MP3" "ogg" "OGG" "flac" "FLAC" "wav" "WAV"))
+;;   (dired-rainbow-define media "#ce5c00" ("mp3" "mp4" "MP3" "MP4" "avi" "mpg" "flv" "ogg"))
+;;   (dired-rainbow-define video "#455AFC" ("vob" "VOB" "mkv" "MKV" "mpe" "mpg" "MPG" "mp4" "MP4" "ts" "TS" "m2ts"))
+;;   (dired-rainbow-define html "#4e9a06" ("htm" "html" "xhtml"))
+;;   (dired-rainbow-define xml "DarkGreen" ("xml" "xsd" "xsl" "xslt" "wsdl"))
+;;   (dired-rainbow-define document "#ce5c00" ("doc" "docx" "odt" "pdb" "pdf" "ps" "rtf" "djvu"))
+;;   (dired-rainbow-define image "#ff4b4b" ("jpg" "png" "jpeg" "gif"))
+;;   (dired-rainbow-define sourcefile "#3F82FD" ("el" "groovy" "gradle" "py" "c" "cc" "h" "java" "pl" "rb"))
+;;   (dired-rainbow-define executable "#8cc4ff" ("exe" "msi"))
+;;   (dired-rainbow-define compressed "#ad7fa8" ("zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+;;   (dired-rainbow-define packaged "#e6a8df" ("deb" "rpm"))
+;;   (dired-rainbow-define encrypted "LightBlue" ("gpg" "pgp"))
+;;   (dired-rainbow-define-chmod executable-unix "Green" "-.*x.*")
+;;   (dired-rainbow-define log (:inherit default :italic t) ".*\\.log")
+;;   (dired-rainbow-define org "#5F9EA0" (".*\\.org")))
+
+;; (use-package dired-k
+;;   :hook (dired-after-readin . dired-k-no-revert)
+;;   :hook (dired-initial-position . dired-k)
+;;   :config
+;;   (setq dired-k-padding 1))
 
 (use-package all-the-icons-dired
   :disabled t

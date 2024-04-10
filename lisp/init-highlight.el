@@ -85,22 +85,6 @@ FACE defaults to inheriting from default and highlight."
   :diminish highlight-parentheses-mode
   :config (global-highlight-parentheses-mode))
 
-(use-package highlight-symbol
-  :disabled t
-  :hook
-  ((prog-mode . highlight-symbol-mode)
-   (highlight-symbol-mode . highlight-symbol-nav-mode)
-   ;; (org-mode . highlight-symbol-mode)
-   )
-  ;; :general
-  ;; (
-  ;;   "M-<f3>" 'highlight-symbol-at-point
-  ;;   "<f3>" 'highlight-symbol-next
-  ;;   "s-<f3>" 'highlight-symbol-prev)
-  :config
-  (setq highlight-symbol-idle-delay 0.5)
-  (highlight-symbol-mode t))
-
 ;; Highlight symbols
 (use-package symbol-overlay
   :bind
@@ -163,22 +147,22 @@ FACE defaults to inheriting from default and highlight."
      (transient-history-file (concat yc/cache-dir "/transient/history.el")))
     :config
     (transient-define-prefix symbol-overlay-transient ()
-      "Symbol Overlay transient"
-      ["Symbol Overlay"
-       ["Overlays"
-        ("." "Add/Remove at point" symbol-overlay-put)
-        ("k" "Remove All" symbol-overlay-remove-all)
-        ]
-       ["Move to Symbol"
-        ("n" "Next" symbol-overlay-switch-forward)
-        ("p" "Previous" symbol-overlay-switch-backward)
-        ]
-       ["Other"
-        ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
-        ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)
-        ]
-       ]
-      )
+                             "Symbol Overlay transient"
+                             ["Symbol Overlay"
+                              ["Overlays"
+                               ("." "Add/Remove at point" symbol-overlay-put)
+                               ("k" "Remove All" symbol-overlay-remove-all)
+                               ]
+                              ["Move to Symbol"
+                               ("n" "Next" symbol-overlay-switch-forward)
+                               ("p" "Previous" symbol-overlay-switch-backward)
+                               ]
+                              ["Other"
+                               ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
+                               ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)
+                               ]
+                              ]
+                             )
     )
   (defun symbol-overlay-switch-first ()
     (interactive)
@@ -297,19 +281,6 @@ If there is only one overlay at point, just return it, no matter region or symbo
     (interactive)
     (hilight-jump-prev)
     (hydra-hilight-jump/body))
-
-  ;; (with-eval-after-load 'evil
-  ;;   (evil-leader/set-key
-  ;;    "hh" 'hilight-toggle          ;; instead of `symbol-overlay-put'
-  ;;    "hn" 'hilight-jump-next+hydra ;; instead of `symbol-overlay-jump-next'
-  ;;    "hp" 'hilight-jump-prev+hydra ;; instead of `symbol-overlay-jump-prev'
-  ;;    "ht" 'symbol-overlay-toggle-in-scope
-  ;;    "ha" 'symbol-overlay-remove-all
-  ;;    "he" 'symbol-overlay-echo-mark
-  ;;    "hd" 'symbol-overlay-jump-to-definition
-  ;;    "hs" 'symbol-overlay-isearch-literally
-  ;;    "hq" 'symbol-overlay-query-replace
-  ;;    "hr" 'symbol-overlay-rename))
   )
 
 ;; (use-package highlight-thing
@@ -319,10 +290,6 @@ If there is only one overlay at point, just return it, no matter region or symbo
 
 ;;   (add-hook 'iedit-mode-end-hook (lambda()
 ;; 				                   (highlight-thing-mode 1)))
-;;   (add-hook 'evil-visual-state-entry-hook (lambda()
-;; 					                        (highlight-thing-mode -1)))
-;;   (add-hook 'evil-visual-state-exit-hook (lambda()
-;; 					                       (highlight-thing-mode 1)))
 ;;   :init
 ;;   (setq highlight-thing-what-thing 'symbol
 ;; 	    highlight-thing-delay-seconds 0.5
@@ -382,26 +349,6 @@ If there is only one overlay at point, just return it, no matter region or symbo
       "Clear all rainbow overlays."
       (remove-overlays (point-min) (point-max) 'ovrainbow t))
     (advice-add #'rainbow-turn-off :after #'my-rainbow-clear-overlays)))
-
-;; Visually highlight the selected buffer.
-;; 高亮光标所在的 window
-;; - https://github.com/gonewest818/dimmer.el
-;; (use-package dimmer
-;;   :init
-;;   (dimmer-activate)
-;;   :config
-;;   (setq dimmer-percent 0.40)
-;;   (dimmer-configure-hydra)
-;;   (dimmer-configure-which-key)
-;;   ;; (dimmer-configure-org)
-;;   )
-
-;; 当切换到不同的 buffer 时，会高亮当前光标所在的行
-;; makes sure you don’t lose track of your cursor when jumping around a buffer.
-;; - https://github.com/Malabarba/beacon
-;; (use-package beacon
-;;   :init
-;;   (beacon-mode +1))
 
 ;; Pulse current line
 (use-package pulse
@@ -472,7 +419,7 @@ If there is only one overlay at point, just return it, no matter region or symbo
   (display-fill-column-indicator-character ?¦)
   (display-fill-column-indicator-column 119)
   :init
-  (setq-default fill-column  119)
+  (setq-default fill-column 119)
   :config
   (defun aorst/display-fill-column-indicator-setup-faces ()
     (if (eq (frame-parameter nil 'background-mode) 'dark)
@@ -485,6 +432,42 @@ If there is only one overlay at point, just return it, no matter region or symbo
                           :distant-foreground "gray80"
                           :inherit nil)))
   (aorst/display-fill-column-indicator-setup-faces))
+
+(use-package highlight-symbol
+  :disabled t
+  :hook
+  ((prog-mode . highlight-symbol-mode)
+   (highlight-symbol-mode . highlight-symbol-nav-mode)
+   ;; (org-mode . highlight-symbol-mode)
+   )
+  ;; :general
+  ;; (
+  ;;   "M-<f3>" 'highlight-symbol-at-point
+  ;;   "<f3>" 'highlight-symbol-next
+  ;;   "s-<f3>" 'highlight-symbol-prev)
+  :config
+  (setq highlight-symbol-idle-delay 0.5)
+  (highlight-symbol-mode t))
+
+;; Visually highlight the selected buffer.
+;; 高亮光标所在的 window
+;; - https://github.com/gonewest818/dimmer.el
+;; (use-package dimmer
+;;   :init
+;;   (dimmer-activate)
+;;   :config
+;;   (setq dimmer-percent 0.40)
+;;   (dimmer-configure-hydra)
+;;   (dimmer-configure-which-key)
+;;   ;; (dimmer-configure-org)
+;;   )
+
+;; 当切换到不同的 buffer 时，会高亮当前光标所在的行
+;; makes sure you don’t lose track of your cursor when jumping around a buffer.
+;; - https://github.com/Malabarba/beacon
+;; (use-package beacon
+;;   :init
+;;   (beacon-mode +1))
 
 (provide 'init-highlight)
 ;;; init-highlight.el ends here

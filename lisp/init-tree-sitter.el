@@ -83,11 +83,20 @@
   (add-to-list 'treesit-auto-fallback-alist '(bash-ts-mode . sh-mode)))
 
 (use-package tree-sitter
-  :custom
-  (tree-sitter-load-path (expand-file-name "bin/tree-sitter" user-emacs-directory))
   :init
+  (setq tree-sitter-load-path (expand-file-name "bin/tree-sitter" user-emacs-directory))
   (global-tree-sitter-mode)
   :hook (tree-sitter-after-on . tree-sitter-hl-mode))
+
+(use-package fringe-helper)
+
+(use-package ts-fold
+  :load-path "localelpa/ts-fold"
+  :hook
+  (tree-sitter-after-on . ts-fold-mode)
+  (tree-sitter-after-on . ts-fold-indicators-mode)
+  :init
+  (require 'ts-fold-indicators))
 
 (use-package tree-sitter-langs
   :disabled t
@@ -108,16 +117,6 @@
   (add-to-list 'tree-sitter-major-mode-language-alist '(markdown-mode . markdown))
   (tree-sitter-load 'sql)
   (add-to-list 'tree-sitter-major-mode-language-alist '(sql-mode . sql)))
-
-(use-package fringe-helper)
-
-(use-package ts-fold
-  :load-path "localelpa/ts-fold"
-  :hook
-  (tree-sitter-after-on . ts-fold-mode)
-  (tree-sitter-after-on . ts-fold-indicators-mode)
-  :init
-  (require 'ts-fold-indicators))
 
 (provide 'init-tree-sitter)
 ;;; init-tree-sitter.el ends here

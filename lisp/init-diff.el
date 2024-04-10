@@ -54,9 +54,6 @@
              (save-buffer)
              (bury-buffer))
       "Save and bury buffer" :exit t))))
-  ;; :general
-  ;; (smerge-mode-map
-  ;;  "C-c m" 'smerge-mode-hydra/body)
   :hook
   ((find-file . (lambda ()
                   (save-excursion

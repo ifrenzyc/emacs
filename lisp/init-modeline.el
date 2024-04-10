@@ -67,16 +67,6 @@
   :init
   (minions-mode))
 
-(use-package nyan-mode
-  :disabled t
-  ;; :demand t
-  :after doom-modeline
-  :init
-  (setq nyan-animate-nyancat t
-        nyan-wavy-trail t)
-  (nyan-mode)
-  (nyan-start-animation))
-
 ;; TODO try https://github.com/lunaryorn/fancy-battery.el
 (use-package battery
   :ensure nil
@@ -91,6 +81,16 @@
     treemacs-mode
     vterm-mode
     neotree-mode) . hide-mode-line-mode))
+
+(use-package nyan-mode
+  :disabled t
+  ;; :demand t
+  :after doom-modeline
+  :init
+  (setq nyan-animate-nyancat t
+        nyan-wavy-trail t)
+  (nyan-mode)
+  (nyan-start-animation))
 
 (provide 'init-modeline)
 ;;; init-modeline.el ends here

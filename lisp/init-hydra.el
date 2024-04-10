@@ -118,30 +118,6 @@
       ("yi" youdao-dictionary-search-at-point)
       ("Y" my-youdao-search-at-point)))))
 
-;; (use-package hydra-posframe
-;;   :straight (:host github :repo "Ladicle/hydra-posframe")
-;;   :after (hydra posframe)
-;;   :hook (after-init . hydra-posframe-enable)
-;;   :custom-face (hydra-posframe-face ((t (:background "DarkSlateBlue"))))
-;;   :custom-face (hydra-posframe-border-face ((t (:background "DarkBlue"))))
-;; :config
-;; (setq hydra-hint-display-type 'my/posframe)
-;; (defun my/hydra-posframe-show (str)
-;;   (require 'posframe)
-;;   (posframe-show
-;;    " *hydra-posframe*"
-;;    :string str
-;;    :point (point)
-;;    :internal-border-color "gray50"
-;;    :internal-border-width 2
-;;    :poshandler #'posframe-poshandler-frame-top-center))
-;; (defun my/hydra-posframe-hide ()
-;;   (posframe-hide " *hydra-posframe*"))
-;; (setq hydra-hint-display-alist
-;;       (list (list 'my/posframe #'my/hydra-posframe-show #'my/hydra-posframe-hide))
-;;       hydra--work-around-dedicated nil)
-;; )
-
 ;; 这个是参考了 spacemacs 针对 hydra 的扩展，能够方便地绑定 major mode 的按键。
 ;; 比如，当前的 major mode 是 org-mode，则可以快速唤出相应 org-mode 自定义的 hydra 按键，统一所有 major-mode 的按键。
 ;; https://github.com/jerrypnz/major-mode-hydra.el
@@ -287,6 +263,30 @@
 ;;   ("c" kmacro-set-counter)
 ;;   ("q" kbd-macro-query)
 ;;   ("f" kmacro-set-format))
+
+;; (use-package hydra-posframe
+;;   :straight (:host github :repo "Ladicle/hydra-posframe")
+;;   :after (hydra posframe)
+;;   :hook (after-init . hydra-posframe-enable)
+;;   :custom-face (hydra-posframe-face ((t (:background "DarkSlateBlue"))))
+;;   :custom-face (hydra-posframe-border-face ((t (:background "DarkBlue"))))
+;; :config
+;; (setq hydra-hint-display-type 'my/posframe)
+;; (defun my/hydra-posframe-show (str)
+;;   (require 'posframe)
+;;   (posframe-show
+;;    " *hydra-posframe*"
+;;    :string str
+;;    :point (point)
+;;    :internal-border-color "gray50"
+;;    :internal-border-width 2
+;;    :poshandler #'posframe-poshandler-frame-top-center))
+;; (defun my/hydra-posframe-hide ()
+;;   (posframe-hide " *hydra-posframe*"))
+;; (setq hydra-hint-display-alist
+;;       (list (list 'my/posframe #'my/hydra-posframe-show #'my/hydra-posframe-hide))
+;;       hydra--work-around-dedicated nil)
+;; )
 
 (provide 'init-hydra)
 ;;; init-hydra.el ends here
