@@ -16,7 +16,7 @@
 
 (use-package rime
   :custom
-  (rime-librime-root (expand-file-name "librime/dist" user-emacs-directory))
+  (rime-librime-root (expand-file-name "bin/librime/dist" user-emacs-directory))
   (rime-user-data-dir (expand-file-name "rime" user-emacs-directory))
   (default-input-method "rime")
   (rime-title "ㄓ")
