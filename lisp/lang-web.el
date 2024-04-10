@@ -82,29 +82,6 @@
   (setq js-indent-level 4
         typescript-indent-level 4))
 
-(use-package tern
-  :disabled t
-  :ensure-system-package (tern . "npm install tern -g")
-  :commands tern-mode
-  :hook (js2-mode . tern-mode)
-  :general
-  (tern-mode-keymap
-   "M-."        'tern-find-definition
-   "C-M-."      'tern-find-definition-by-name
-   "M-,"        'tern-pop-find-definition
-   "C-c C-r"    'tern-rename-variable
-   "C-c C-c"    'tern-get-type
-   "C-c C-d"    'tern-get-docs
-   "M-<return>" 'tern-get-docs))
-
-(use-package company-tern
-  :disabled t
-  :load-path "localelpa/company-tern"
-  :after (tern company)
-  :config
-  (with-eval-after-load 'company
-    (add-to-list 'company-backends 'company-tern)))
-
 (use-package js-comint
   :config
   (defun whitespace-clean-and-compile ()
@@ -179,6 +156,29 @@
 
   (add-hook 'comint-preoutput-filter-functions 'node-repl-comint-preoutput-filter)
   (add-hook 'comint-output-filter-functions 'node-repl-comint-preoutput-filter))
+
+(use-package tern
+  :disabled t
+  :general
+  (tern-mode-keymap
+   "M-."        'tern-find-definition
+   "C-M-."      'tern-find-definition-by-name
+   "M-,"        'tern-pop-find-definition
+   "C-c C-r"    'tern-rename-variable
+   "C-c C-c"    'tern-get-type
+   "C-c C-d"    'tern-get-docs
+   "M-<return>" 'tern-get-docs)
+  :ensure-system-package (tern . "npm install tern -g")
+  :commands tern-mode
+  :hook (js2-mode . tern-mode))
+
+(use-package company-tern
+  :disabled t
+  :load-path "localelpa/company-tern"
+  :after (tern company)
+  :config
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-tern)))
 
 (provide 'lang-web)
 ;;; lang-web.el ends here

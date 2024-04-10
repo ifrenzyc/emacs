@@ -92,6 +92,8 @@
 (use-package info-colors)
 
 (use-package helpful
+  :general
+  ("C-h" 'helpful-hydra/body)
   :pretty-hydra
   ((:color teal :quit-key "C-g")
    ("Helpful"
@@ -107,9 +109,7 @@
      ("i" which-key-show-major-mode)
      ("I" which-key-show-full-major-mode))
     "Major mode hydra"
-    (("h" major-mode-hydra "major mode hydra"))))
-  :general
-  ("C-h" 'helpful-hydra/body))
+    (("h" major-mode-hydra "major mode hydra")))))
 
 (provide 'init-helpful)
 ;;; init-helpful.el ends here

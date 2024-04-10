@@ -15,6 +15,9 @@
 ;; - https://github.com/alphapapa/org-super-agenda
 ;; - https://github.com/alphapapa/org-super-agenda/blob/master/examples.org
 (use-package org-super-agenda
+  :general
+  (org-super-agenda-header-map
+   "<tab>" 'origami-toggle-node)
   :commands (org-agenda)
   :hook ((org-agenda-mode . org-super-agenda-mode)
          (org-agenda-mode . (lambda ()
@@ -32,9 +35,6 @@
   (org-time-grid ((t (:height 160))))
   (org-todo ((t (:height 160))))
   (org-agenda-current-time ((t (:height 160))))
-  :general
-  (org-super-agenda-header-map
-   "<tab>" 'origami-toggle-node)
   :init
   (setq org-super-agenda-groups
         '((:log t)                      ; Automatically named "Log"
@@ -65,11 +65,73 @@
 
 (use-package org-agenda
   :ensure nil
-  :commands org-agenda
   :general
   ("C-c a"   'org-agenda
    "C-c c"   'org-capture
    "C-c C-t" 'yc/org-todo-force-notes)
+  ;; (global-set-key (kbd "<f5>") 'makeMatrix)
+  :mode-hydra
+  (org-agenda-mode
+   (:title "Org Agenda Mode" :color pink :pre (setq which-key-inhibit t) :post (setq which-key-inhibit nil) :hint nil :separator "═")
+   ("Headline"
+    (("hp" org-agenda-priority "set priority")
+     ("ht" org-agenda-todo "set status")
+     ("hk" org-agenda-kill "kill")
+     ("hr" org-agenda-refile "refile")
+     ("hA" org-agenda-archive-default "archive")
+     ("h:" org-agenda-set-tags "set tags"))
+    "Visit entry"
+    (("SPC" org-agenda-show-and-scroll-up "in other window")
+     ("<tab>" org-agenda-goto "go to location" :exit t)
+     ("RET" org-agenda-switch-to "enter & delete other window" :exit t)
+     ("o"   link-hint-open-link "link" :exit t))
+    "Date"
+    (("ds" org-agenda-schedule "schedule")
+     ("dS" (lambda () (interactive)
+             (let ((current-prefix-arg '(4)))
+               (call-interactively 'org-agenda-schedule))) "un-schedule")
+     ("dd" org-agenda-deadline "set deadline")
+     ("dD" (lambda () (interactive)
+             (let ((current-prefix-arg '(4)))
+               
+               ("dt" org-agenda-date-prompt "timestamp")
+               ("+" org-agenda-do-date-later "do later")
+               ("-" org-agenda-do-date-earlier "do earlier")))))
+    "View"
+    (("vd" org-agenda-day-view "day")
+     ("vw" org-agenda-week-view "week")
+     ("vt" org-agenda-fortnight-view "fortnight")
+     ("vm" org-agenda-month-view "month")
+     ("vy" org-agenda-year-view "year")
+     ("vn" org-agenda-later "next span")
+     ("vp" org-agenda-earlier "prev span")
+     ("vr" org-agenda-reset-view "reset"))
+    "Filter"
+    (("ft" org-agenda-filter-by-tag "by tag")
+     ("fr" org-agenda-filter-by-tag-refine "refine by tag")
+     ("fc" org-agenda-filter-by-category "by category")
+     ("fh" org-agenda-filter-by-top-headline "by top headline")
+     ("fx" org-agenda-filter-by-regexp "by regexp")
+     ("fd" org-agenda-filter-remove-all "delete all filters"))
+    "Toggle mode"
+    (("tf" org-agenda-follow-mode "follow")
+     ("tl" org-agenda-log-mode "log")
+     ("ta" org-agenda-archives-mode "archive")
+     ("tr" org-agenda-clockreport-mode "clock report")
+     ("td" org-agenda-toggle-diary "diaries"))
+    "Clock"
+    (("cI" org-agenda-clock-in "in" :exit t)
+     ("cO" org-agenda-clock-out "out")
+     ("cj" org-agenda-clock-goto "goto" :exit t)
+     ("cd" org-clock-display "display")
+     ("ce" org-clock-modify-effort-estimate "effort")
+     ("cr" org-clock-report "report")
+     ("cq" org-agenda-clock-cancel "cancel"))
+    "Other"
+    (("gr" org-agenda-redo "reload")
+     ("." org-agenda-goto-today "go to today")
+     ("gd" org-agenda-goto-date "go to date"))))
+  :commands org-agenda
   :config
   (require 'org-habit)
   (setq org-agenda-show-future-repeats nil
@@ -682,71 +744,7 @@
     (switch-to-buffer  "*Org Agenda(4)*")  ;put the Agenda(3) in the left, down quadrant
     (windmove-left)
     (switch-to-buffer  "*Org Agenda(3)*")  ;put the Agenda(4) in the right, down quadrant
-    )
-  ;; (global-set-key (kbd "<f5>") 'makeMatrix)
-  :mode-hydra
-  (org-agenda-mode
-   (:title "Org Agenda Mode" :color pink :pre (setq which-key-inhibit t) :post (setq which-key-inhibit nil) :hint nil :separator "═")
-   ("Headline"
-    (("hp" org-agenda-priority "set priority")
-     ("ht" org-agenda-todo "set status")
-     ("hk" org-agenda-kill "kill")
-     ("hr" org-agenda-refile "refile")
-     ("hA" org-agenda-archive-default "archive")
-     ("h:" org-agenda-set-tags "set tags"))
-    "Visit entry"
-    (("SPC" org-agenda-show-and-scroll-up "in other window")
-     ("<tab>" org-agenda-goto "go to location" :exit t)
-     ("RET" org-agenda-switch-to "enter & delete other window" :exit t)
-     ("o"   link-hint-open-link "link" :exit t))
-    "Date"
-    (("ds" org-agenda-schedule "schedule")
-     ("dS" (lambda () (interactive)
-             (let ((current-prefix-arg '(4)))
-               (call-interactively 'org-agenda-schedule))) "un-schedule")
-     ("dd" org-agenda-deadline "set deadline")
-     ("dD" (lambda () (interactive)
-             (let ((current-prefix-arg '(4)))
-               
-               ("dt" org-agenda-date-prompt "timestamp")
-               ("+" org-agenda-do-date-later "do later")
-               ("-" org-agenda-do-date-earlier "do earlier")))))
-    "View"
-    (("vd" org-agenda-day-view "day")
-     ("vw" org-agenda-week-view "week")
-     ("vt" org-agenda-fortnight-view "fortnight")
-     ("vm" org-agenda-month-view "month")
-     ("vy" org-agenda-year-view "year")
-     ("vn" org-agenda-later "next span")
-     ("vp" org-agenda-earlier "prev span")
-     ("vr" org-agenda-reset-view "reset"))
-    "Filter"
-    (("ft" org-agenda-filter-by-tag "by tag")
-     ("fr" org-agenda-filter-by-tag-refine "refine by tag")
-     ("fc" org-agenda-filter-by-category "by category")
-     ("fh" org-agenda-filter-by-top-headline "by top headline")
-     ("fx" org-agenda-filter-by-regexp "by regexp")
-     ("fd" org-agenda-filter-remove-all "delete all filters"))
-    "Toggle mode"
-    (("tf" org-agenda-follow-mode "follow")
-     ("tl" org-agenda-log-mode "log")
-     ("ta" org-agenda-archives-mode "archive")
-     ("tr" org-agenda-clockreport-mode "clock report")
-     ("td" org-agenda-toggle-diary "diaries"))
-    "Clock"
-    (("cI" org-agenda-clock-in "in" :exit t)
-     ("cO" org-agenda-clock-out "out")
-     ("cj" org-agenda-clock-goto "goto" :exit t)
-     ("cd" org-clock-display "display")
-     ("ce" org-clock-modify-effort-estimate "effort")
-     ("cr" org-clock-report "report")
-     ("cq" org-agenda-clock-cancel "cancel"))
-    "Other"
-    (("gr" org-agenda-redo "reload")
-     ("." org-agenda-goto-today "go to today")
-     ("gd" org-agenda-goto-date "go to date")))
-   )
-  )
+    ))
 
 ;; - https://github.com/alphapapa/org-ql
 ;; org-ql 常用命令的使用说明 https://emacs-china.org/t/org-ql/21486/2

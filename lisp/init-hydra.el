@@ -48,7 +48,8 @@
 ;; 关于 Hydra 高效的按键绑定，参考：
 ;; - https://github.com/troyp/spacemacs-private/tree/master/docs/hydra-wiki
 (use-package pretty-hydra
-  :bind ("<f6>" . hydra-toggles/body)
+  :bind
+  ("<f6>" . hydra-toggles/body)
   :init
   (cl-defun pretty-hydra-title (title &optional icon-type icon-name &key face height v-adjust)
     "Add an icon in the hydra title."

@@ -25,11 +25,6 @@
   :bind
   (:map vimish-fold-folded-keymap ("<tab>" . vimish-fold-unfold)
         :map vimish-fold-unfolded-keymap ("<tab>" . vimish-fold-refold))
-  :init
-  (setq-default vimish-fold-dir (expand-file-name ".vimish-fold/" yc/cache-dir))
-  (vimish-fold-global-mode)
-  :config
-  (setq-default vimish-fold-header-width 119)
   :pretty-hydra
   (hydra-fold
    (:title (pretty-hydra-title "Folding" 'octicon "fold" :height 1.1 :v-adjust -0.05)
@@ -65,8 +60,7 @@
      ("{" hs-global-cycle)
      ("A" hs-toggle-all "toggle all")
      ("a" hs-show-all "show all")
-     ("i" hs-hide-all "hide all")
-     ("g" hs-toggle-hiding "toggle hiding")
+     ("i" hs-hide-all "hide all")     
      ("s" hs-show-block "show block")
      ("b" hs-hide-block "hide block")
      ("l" hs-hide-level "hide level"))
@@ -83,15 +77,20 @@
     "Origami Actions"
     (("h" origami-undo "undo")
      ("k" origami-redo "redo")
-     ("[" origami-reset "reset")))))
+     ("[" origami-reset "reset"))))
+  :init
+  (setq-default vimish-fold-dir (expand-file-name ".vimish-fold/" yc/cache-dir))
+  (vimish-fold-global-mode)
+  :config
+  (setq-default vimish-fold-header-width 119))
 
 (use-package hideshow
-  :hook
-  (prog-mode . hs-minor-mode)
   :general
   ("C-<tab>"         'hs-cycle
    "C-<iso-lefttab>" 'hs-global-cycle
    "C-S-<tab>"       'hs-global-cycle)
+  :hook
+  (prog-mode . hs-minor-mode)
   :config
   (setq hs-hide-comments-when-hiding-all nil
         ;; Nicer code-folding overlays (with fringe indicators)

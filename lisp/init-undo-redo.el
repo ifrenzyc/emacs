@@ -10,6 +10,19 @@
 (require 'init-const)
 
 (use-package vundo
+  :bind
+  (;; ([remap undo] . vundo)
+   ("C-z" . vundo)
+   ("C-x u" . undo)
+   :map vundo-mode-map
+   ("C-a" . vundo-stem-root)
+   ("C-e" . vundo-stem-end)
+   ;; These are for horizontal movements.
+   ("C-f" . vundo-forward)
+   ("C-b" . vundo-backward)
+   ;; These are for vertical movements.
+   ("C-n" . vundo-next)
+   ("C-p" . vundo-previous))
   :custom
   ;; Use compact layout
   (vundo-compact-display t)
@@ -23,20 +36,7 @@
      (last-branch     . ?╰)
      (horizontal-stem . ?─)))
   :config
-  (set-face-attribute 'vundo-default nil :family "Symbola")
-  :bind
-  (;; ([remap undo] . vundo)
-   ("C-z" . vundo)
-   ("C-x u" . undo)
-   :map vundo-mode-map
-   ("C-a" . vundo-stem-root)
-   ("C-e" . vundo-stem-end)
-   ;; These are for horizontal movements.
-   ("C-f" . vundo-forward)
-   ("C-b" . vundo-backward)
-   ;; These are for vertical movements.
-   ("C-n" . vundo-next)
-   ("C-p" . vundo-previous)))
+  (set-face-attribute 'vundo-default nil :family "Symbola"))
 
 (use-package undo-tree
   :disabled t

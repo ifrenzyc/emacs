@@ -110,16 +110,6 @@ Version 2015-04-09"
 ;; - 配置来源于： https://gist.github.com/karthink/af013ffd77fe09e67360f040b57b4c7b （https://karthinks.com/software/avy-can-do-anything/）
 ;; - https://gist.github.com/Zetagon/1068474ef68ae0640f14dda240966ad1
 (use-package avy
-  :custom ((avy-all-windows nil)
-           (avy-all-windows-alt t)
-           (avy-background t)
-           (avy-style 'pre)
-           (avy-keys '(?q ?e ?r ?y ?u ?o ?p
-                          ?a ?s ?d ?f ?g ?h ?j
-                          ?k ?l ?' ?x ?c ?v ?b
-                          ?n ?, ?/)))
-  :hook
-  (after-init . avy-setup-default)
   :general
   ("C-;"   'avy-goto-char-timer
    "C-:"   'avy-goto-line
@@ -130,6 +120,16 @@ Version 2015-04-09"
    "M-j" 'avy-isearch)
   ;; (swiper-map
   ;;   "M-j" 'swiper-avy)
+  :custom ((avy-all-windows nil)
+           (avy-all-windows-alt t)
+           (avy-background t)
+           (avy-style 'pre)
+           (avy-keys '(?q ?e ?r ?y ?u ?o ?p
+                          ?a ?s ?d ?f ?g ?h ?j
+                          ?k ?l ?' ?x ?c ?v ?b
+                          ?n ?, ?/)))
+  :hook
+  (after-init . avy-setup-default)
   :config
   (defhydra hydra-avy (:color red)
     "avy-goto"

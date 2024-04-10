@@ -113,12 +113,12 @@
 ;; Writeable dired
 (use-package wdired
   :after dired
-  :commands wdired-change-to-wdired-mode
-  :custom
-  (wdired-allow-to-change-permissions t)
   :general
   (dired-mode-map
-   "C-c C-c" 'wdired-change-to-wdired-mode))
+   "C-c C-c" 'wdired-change-to-wdired-mode)
+  :commands wdired-change-to-wdired-mode
+  :custom
+  (wdired-allow-to-change-permissions t))
 
 ;; dired 模式扩展
 ;; - https://github.com/Fuco1/dired-hacks
@@ -171,15 +171,15 @@
 
 (use-package dired-narrow
   :after (dired)
-  :config
-  (setq dired-narrow-exit-when-one-left t
-        dired-narrow-enable-blinking t
-        dired-narrow-blink-time 0.3)
   :general
   (dired-mode-map
    "C-c C-n" 'dired-narrow
    "C-c C-f" 'dired-narrow-fuzzy
-   "C-c C-N" 'dired-narrow-regexp))
+   "C-c C-N" 'dired-narrow-regexp)
+  :config
+  (setq dired-narrow-exit-when-one-left t
+        dired-narrow-enable-blinking t
+        dired-narrow-blink-time 0.3))
 
 ;; Peep file in dired
 ;; https://github.com/asok/peep-dired
@@ -205,20 +205,20 @@
 ;; adds git logs to dired file and directory details.
 (use-package dired-git-info
   :after dired
-  :config
-  (setq dgi-commit-message-format "%h\t%s\t%cr")
   :general
   (dired-mode-map
-   ")" 'dired-git-info-mode))
+   ")" 'dired-git-info-mode)
+  :config
+  (setq dgi-commit-message-format "%h\t%s\t%cr"))
+
+(use-package nerd-icons-dired
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
 (use-package all-the-icons-dired
   :disabled t
   :after (dired all-the-icons)
   :hook (dired-mode . all-the-icons-dired-mode))
-
-(use-package nerd-icons-dired
-  :hook
-  (dired-mode . nerd-icons-dired-mode))
 
 ;; 类似 package
 ;; - dired-sidebar

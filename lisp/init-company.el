@@ -16,8 +16,6 @@
 (require 'init-const)
 
 (use-package company
-  :hook
-  (after-init . global-company-mode)
   :general
   ("C-." 'company-complete)
   ;; :map company-mode-map
@@ -34,6 +32,8 @@
   (company-search-map
    "C-p" 'company-select-previous
    "C-n" 'company-select-next)
+  :hook
+  (after-init . global-company-mode)
   :config
   ;; (with-eval-after-load 'evil
   ;;   (with-eval-after-load 'company
@@ -280,14 +280,6 @@
         (company-box--maybe-move-number (or company-box--last-start 1))))
     (advice-add #'company-box--display :override #'my-company-box--display)))
 
-(use-package company-fuzzy
-  :disabled t
-  :hook (company-mode . company-fuzzy-mode)
-  :init
-  (setq company-fuzzy-sorting-backend 'flx
-        company-fuzzy-prefix-on-top nil
-        company-fuzzy-trigger-symbols '("." "->" "<" "\"" "'" "@")))
-
 ;; 在 MacOS 下使用 posframe 时，Emacs 全屏状态下的问题：https://emacs-china.org/t/topic/4662/132
 (use-package posframe)
 
@@ -340,6 +332,14 @@
   :config
   (require 'company-english-helper)
   (setq company-english-helper-fuzz-search-p t))
+
+(use-package company-fuzzy
+  :disabled t
+  :hook (company-mode . company-fuzzy-mode)
+  :init
+  (setq company-fuzzy-sorting-backend 'flx
+        company-fuzzy-prefix-on-top nil
+        company-fuzzy-trigger-symbols '("." "->" "<" "\"" "'" "@")))
 
 (provide 'init-company)
 ;;; init-company.el ends here

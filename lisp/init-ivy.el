@@ -233,67 +233,10 @@
 ;; https://github.com/abo-abo/hydra/wiki/hydra-ivy-replacement
 (use-package ivy-hydra)
 
-;; (use-package ivy-posframe
-;;   :after (ivy swiper counsel)
-;;   :init
-;;   (progn
-;;     (push '(counsel-M-x . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
-;;     (push '(ivy-switch-buffer . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
-;;     (ivy-posframe-enable)
-;;     (set-face-attribute 'internal-border nil :background "gray50")
-;;     (setq ivy-posframe-hide-minibuffer nil)
-;;     (setq ivy-posframe-border-width 1)))
-
-;; (use-package ivy-posframe
-;;   :delight
-;;   :hook (after-init . ivy-posframe-mode)
-;;   :init
-;;   (ivy-posframe-mode 1)
-;;   :config
-;;   (setq ivy-posframe-parameters
-;;         '((left-fringe . 2)
-;;           (right-fringe . 2)
-;;           (internal-border-width . 2)
-;;           ;; (font . "DejaVu Sans Mono-10.75:hintstyle=hintfull")
-;;           ))
-;;   ;; (setq ivy-posframe-height-alist
-;;   ;;       '((swiper . 15)
-;;   ;;         (swiper-isearch . 15)
-;;   ;;         (t . 10)))
-;;   (setq ivy-posframe-display-functions-alist
-;;         '((complete-symbol . ivy-posframe-display-at-point)
-;;           (swiper . nil)
-;;           (swiper-isearch . nil)
-;;           (t . ivy-posframe-display-at-frame-top-center))))
-
 (use-package ivy-xref
   :after (ivy xref)
   :init
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
-
-;; (use-package ivy-bibtex
-;;   :commands ivy-bibtex
-;;   :init
-;;   (progn
-;;     (yc/leader-keys
-;; 	  "ib" 'ivy-bibtex)
-;;     ;; (yc/leader-keys-minor-mode
-;;     ;;   :keymaps 'bibtex-completion-notes-mode-map
-;;     ;;   "s" 'bibtex-completion-exit-notes-buffer)
-;;     )
-;;   :config
-;;   (setq bibtex-completion-pdf-field "file"
-;; 	    bibtex-completion-cite-prompt-for-optional-arguments nil
-;; 	    bibtex-completion-pdf-symbol "ρ"
-;; 	    bibtex-completion-notes-symbol "η"
-;; 	    bibtex-completion-find-additional-pdfs t
-;; 	    bibtex-completion-bibliography "~/Dropbox/itsycnotes/bibtex/main.bib"
-;; 	    bibtex-completion-notes-path "~/Dropbox/itsycnotes/references/ref-notes.org"
-;; 	    bibtex-completion-notes-template-one-file
-;; 	    "\n** ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :NOTER_DOCUMENT: ${file}\n  :END:"
-;; 	    bibtex-completion-additional-search-fields '(eventtitle)
-;; 	    bibtex-completion-display-formats
-;; 	    '((t . "${=has-pdf=:1} ${=has-note=:1} ${=type=:3} ${year:4} ${author:25} ${title:100}"))))
 
 ;;  类似于 =M-x isearch= 的功能，提供内容查找功能
 ;; - https://github.com/abo-abo/swiper
@@ -316,6 +259,32 @@
 
 (use-package counsel
   :demand t
+  :general
+  ("C-x C-f" 'counsel-find-file
+   "C-x d"   'counsel-dired
+   ;; "M-y"     'counsel-yank-pop
+   "M-s M-r" 'counsel-rg
+   "M-s r"   'rg
+   "M-s R"   'rg-project
+   "M-s a"   'counsel-ag
+   "M-s g"   'counsel-git-grep
+   "M-s f"   'counsel-fzf
+   "M-s F"   'fiplr-find-file
+   "C-c C-r" 'ivy-resume
+   "C-c i"   'counsel-imenu
+   "C-x k"   'kill-buffer
+   "C-x l"   'counsel-locate
+   "C-h f"   'counsel-describe-function
+   "C-h v"   'counsel-describe-variable
+   "C-c f"   'counsel-git    ; 与 org-journal 冲突
+   "C-c F"   'counsel-recentf)
+  (help-map
+   "f" 'counsel-describe-function
+   "v" 'counsel-describe-variable
+   "l" 'counsel-info-lookup-symbol)
+  :bind
+  (([remap execute-extended-command] . counsel-M-x)
+   ([remap yank-pop] . counsel-yank-pop))
   :ensure-system-package
   ((ag . "brew install the_silver_searcher")
    (rg . "brew install ripgrep"))
@@ -543,44 +512,19 @@
     (interactive)
     (ivy-quit-and-run
       (counsel-fzf (or ivy-text "") default-directory)))
-  (bind-key "<C-return>" #'my-counsel-find-file-toggle-fzf counsel-find-file-map)
-  :general
-  ("C-x C-f" 'counsel-find-file
-   "C-x d"   'counsel-dired
-   ;; "M-y"     'counsel-yank-pop
-   "M-s M-r" 'counsel-rg
-   "M-s r"   'rg
-   "M-s R"   'rg-project
-   "M-s a"   'counsel-ag
-   "M-s g"   'counsel-git-grep
-   "M-s f"   'counsel-fzf
-   "M-s F"   'fiplr-find-file
-   "C-c C-r" 'ivy-resume
-   "C-c i"   'counsel-imenu
-   "C-x k"   'kill-buffer
-   "C-x l"   'counsel-locate
-   "C-h f"   'counsel-describe-function
-   "C-h v"   'counsel-describe-variable
-   "C-c f"   'counsel-git    ; 与 org-journal 冲突
-   "C-c F"   'counsel-recentf)
-  (help-map
-   "f" 'counsel-describe-function
-   "v" 'counsel-describe-variable
-   "l" 'counsel-info-lookup-symbol)
-  :bind
-  (([remap execute-extended-command] . counsel-M-x)
-   ([remap yank-pop] . counsel-yank-pop)))
+  (bind-key "<C-return>" #'my-counsel-find-file-toggle-fzf counsel-find-file-map))
 
 ;; https://github.com/ericdanan/counsel-projectile
 (use-package counsel-projectile
+  :general
+  ("C-x C-p" 'counsel-projectile-switch-project
+   "C-x p B" 'counsel-projectile-switch-to-buffer)
   :after (counsel projectile)
   :hook (counsel-mode . counsel-projectile-mode)
   :init
   (setq counsel-projectile-grep-initial-input '(ivy-thing-at-point))
   (when (executable-find "ugrep")
-    (setq counsel-projectile-grep-base-command "ugrep --color=never -rnEI %s"))
-  :general ("C-x C-p" 'counsel-projectile-switch-project
-            "C-x p B" 'counsel-projectile-switch-to-buffer))
+    (setq counsel-projectile-grep-base-command "ugrep --color=never -rnEI %s")))
 
 (use-package counsel-popup
   :load-path "localelpa/counsel-popup"
@@ -615,20 +559,6 @@
   ;; )
   )
 
-;; - https://github.com/redguardtoo/counsel-etags
-;; (use-package counsel-etags
-;;   :general
-;;   (yc/nonprefix-keys
-;;     "C-]" 'counsel-etags-find-tag-at-point)
-;;   :init
-;;   (add-hook 'prog-mode-hook
-;;             (lambda ()
-;;               (add-hook 'after-save-hook
-;;                         'counsel-etags-virtual-update-tags 'append 'local)))
-;;   :config
-;;   (setq counsel-etags-update-interval 60)
-;;   (push "build" counsel-etags-ignore-directories))
-
 (use-package ivy-fuz
   :disabled t
   :demand t
@@ -661,6 +591,77 @@
   :after (ivy-rich-mode)
   :hook
   (ivy-rich-mode . nerd-icons-ivy-rich-mode))
+
+;; (use-package ivy-posframe
+;;   :after (ivy swiper counsel)
+;;   :init
+;;   (progn
+;;     (push '(counsel-M-x . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
+;;     (push '(ivy-switch-buffer . ivy-posframe-display-at-frame-center) ivy-display-functions-alist)
+;;     (ivy-posframe-enable)
+;;     (set-face-attribute 'internal-border nil :background "gray50")
+;;     (setq ivy-posframe-hide-minibuffer nil)
+;;     (setq ivy-posframe-border-width 1)))
+
+;; (use-package ivy-posframe
+;;   :delight
+;;   :hook (after-init . ivy-posframe-mode)
+;;   :init
+;;   (ivy-posframe-mode 1)
+;;   :config
+;;   (setq ivy-posframe-parameters
+;;         '((left-fringe . 2)
+;;           (right-fringe . 2)
+;;           (internal-border-width . 2)
+;;           ;; (font . "DejaVu Sans Mono-10.75:hintstyle=hintfull")
+;;           ))
+;;   ;; (setq ivy-posframe-height-alist
+;;   ;;       '((swiper . 15)
+;;   ;;         (swiper-isearch . 15)
+;;   ;;         (t . 10)))
+;;   (setq ivy-posframe-display-functions-alist
+;;         '((complete-symbol . ivy-posframe-display-at-point)
+;;           (swiper . nil)
+;;           (swiper-isearch . nil)
+;;           (t . ivy-posframe-display-at-frame-top-center))))
+
+;; (use-package ivy-bibtex
+;;   :commands ivy-bibtex
+;;   :init
+;;   (progn
+;;     (yc/leader-keys
+;; 	  "ib" 'ivy-bibtex)
+;;     ;; (yc/leader-keys-minor-mode
+;;     ;;   :keymaps 'bibtex-completion-notes-mode-map
+;;     ;;   "s" 'bibtex-completion-exit-notes-buffer)
+;;     )
+;;   :config
+;;   (setq bibtex-completion-pdf-field "file"
+;; 	    bibtex-completion-cite-prompt-for-optional-arguments nil
+;; 	    bibtex-completion-pdf-symbol "ρ"
+;; 	    bibtex-completion-notes-symbol "η"
+;; 	    bibtex-completion-find-additional-pdfs t
+;; 	    bibtex-completion-bibliography "~/Dropbox/itsycnotes/bibtex/main.bib"
+;; 	    bibtex-completion-notes-path "~/Dropbox/itsycnotes/references/ref-notes.org"
+;; 	    bibtex-completion-notes-template-one-file
+;; 	    "\n** ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :NOTER_DOCUMENT: ${file}\n  :END:"
+;; 	    bibtex-completion-additional-search-fields '(eventtitle)
+;; 	    bibtex-completion-display-formats
+;; 	    '((t . "${=has-pdf=:1} ${=has-note=:1} ${=type=:3} ${year:4} ${author:25} ${title:100}"))))
+
+;; - https://github.com/redguardtoo/counsel-etags
+;; (use-package counsel-etags
+;;   :general
+;;   (yc/nonprefix-keys
+;;     "C-]" 'counsel-etags-find-tag-at-point)
+;;   :init
+;;   (add-hook 'prog-mode-hook
+;;             (lambda ()
+;;               (add-hook 'after-save-hook
+;;                         'counsel-etags-virtual-update-tags 'append 'local)))
+;;   :config
+;;   (setq counsel-etags-update-interval 60)
+;;   (push "build" counsel-etags-ignore-directories))
 
 (provide 'init-ivy)
 ;;; init-ivy.el ends here

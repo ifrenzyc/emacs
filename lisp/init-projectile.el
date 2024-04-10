@@ -7,11 +7,6 @@
 ;;; Code:
 
 (use-package projectile
-  :commands (projectile-project-root)
-  :custom
-  ((projectile-enable-caching t)
-   (projectile-completion-system 'ivy)
-   (projectile-indexing-method 'native))
   :general
   ;; (yc/leader-keys
   ;;   :states 'normal
@@ -28,6 +23,11 @@
    "a"   'projectile-ag
    "C-r" 'projectile-run-project
    "p"   'counsel-projectile-switch-project)
+  :commands (projectile-project-root)
+  :custom
+  ((projectile-enable-caching t)
+   (projectile-completion-system 'ivy)
+   (projectile-indexing-method 'native))
   :config
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
   (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))

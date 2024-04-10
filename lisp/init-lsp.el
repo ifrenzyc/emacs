@@ -14,16 +14,18 @@
 ;;; Code:
 (use-package lsp-mode
   ;; :demand t
-  :commands (lsp lsp-deferred)
-  :hook
-  ((lsp . lsp-lens-mode)
-   ;; (prog-mode . lsp-deferred)
-   ;; (lsp-managed-mode . (lambda ()
-   ;;                       (with-eval-after-load 'company
-   ;;                         (setq-local company-backends '((company-capf :with company-yasnippet)))
-   ;;                         )))
-   (lsp-mode . lsp-enable-which-key-integration))
-  ;; (lsp-after-open . lsp-enable-imenu)
+  :bind (("C-c u" . lsp-ui-imenu)
+         :map lsp-ui-mode-map
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions) ; [M-.]
+         ([remap xref-find-references] . lsp-ui-peek-find-references)   ; [M-?]
+         ("M-<f6>" . lsp-ui-hydra/body)
+         ("M-RET" . lsp-ui-sideline-apply-code-actions))
+  ;; :general
+  ;; (yc/leader-keys
+  ;;   :keymaps 'lsp-ui-mode-map
+  ;;   "jp" '(:ignore t :wk "peek")
+  ;;   "jpd" 'lsp-ui-peek-find-definitions
+  ;;   "jpr" 'lsp-ui-peek-find-references)
   :general
   ;; (yc/leader-keys
   ;;   "l" '(:keymap lsp-command-map :package lsp-mode :wk "lsp"))
@@ -38,6 +40,16 @@
   (lsp-mode-map
    "C-c C-d" 'lsp-describe-thing-at-point
    "C-c l" 'hydra-lsp-map/body)
+  :commands (lsp lsp-deferred)
+  :hook
+  ((lsp . lsp-lens-mode)
+   ;; (prog-mode . lsp-deferred)
+   ;; (lsp-managed-mode . (lambda ()
+   ;;                       (with-eval-after-load 'company
+   ;;                         (setq-local company-backends '((company-capf :with company-yasnippet)))
+   ;;                         )))
+   (lsp-mode . lsp-enable-which-key-integration))
+  ;; (lsp-after-open . lsp-enable-imenu)
   :custom
   (lsp-auto-guess-root t)               ; Detect project root
   (lsp-prefer-flymake nil)              ; Use lsp-ui and flycheck
@@ -301,18 +313,6 @@
      ("M-b" backward-word nil)
      ("M-f" forward-word nil)
      ("c" lsp-ui-sideline-apply-code-actions "apply code actions"))))
-  :bind (("C-c u" . lsp-ui-imenu)
-         :map lsp-ui-mode-map
-         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions) ; [M-.]
-         ([remap xref-find-references] . lsp-ui-peek-find-references)   ; [M-?]
-         ("M-<f6>" . lsp-ui-hydra/body)
-         ("M-RET" . lsp-ui-sideline-apply-code-actions))
-  ;; :general
-  ;; (yc/leader-keys
-  ;;   :keymaps 'lsp-ui-mode-map
-  ;;   "jp" '(:ignore t :wk "peek")
-  ;;   "jpd" 'lsp-ui-peek-find-definitions
-  ;;   "jpr" 'lsp-ui-peek-find-references)
   :hook
   (lsp-mode . lsp-ui-mode)
   (lsp-mode . lsp-ui-sideline-mode)

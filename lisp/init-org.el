@@ -23,6 +23,196 @@
   :ensure nil
   :mode ("\\.\\(org\\|txt\\)$" . org-mode)
   :delight org-mode "Org"
+  :general
+  ("H-c"     'org-capture
+   "<f5>"    'yc/copy-idlink-to-clipboard
+   "<f7>"    'org-redisplay-inline-images
+   "M-s M-R" 'yc/counsel-rg-in-itsycnotes)
+  ;; Great evil org mode keyboard shortcuts cribbed from cofi
+  ;; (evil-define-key 'normal org-mode-map
+  ;;   (kbd "RET") 'org-open-at-point
+  ;;   "za"        'org-cycle
+  ;;   "zA"        'org-shifttab
+  ;;   "zm"        'hide-body
+  ;;   "zr"        'show-all
+  ;;   "zo"        'show-subtree
+  ;;   "zO"        'show-all
+  ;;   "zc"        'hide-subtree
+  ;;   "zC"        'hide-all
+  ;;   (kbd "M-h") 'org-metaleft
+  ;;   ;; (kbd "M-j") 'org-shiftleft
+  ;;   (kbd "M-k") 'org-shiftright
+  ;;   (kbd "M-l") 'org-metaright
+  ;;   (kbd "M-H") 'org-metaleft
+  ;;   (kbd "M-J") 'org-metadown
+  ;;   (kbd "M-K") 'org-metaup
+  ;;   (kbd "M-L") 'org-metaright)
+
+  ;; (evil-define-key 'normal orgstruct-mode-map
+  ;;   (kbd "RET") 'org-open-at-point
+  ;;   "za"        'org-cycle
+  ;;   "zA"        'org-shifttab
+  ;;   "zm"        'hide-body
+  ;;   "zr"        'show-all
+  ;;   "zo"        'show-subtree
+  ;;   "zO"        'show-all
+  ;;   "zc"        'hide-subtree
+  ;;   "zC"        'hide-all
+  ;;   (kbd "M-h") 'org-metaleft
+  ;;   ;; (kbd "M-j") 'org-shiftleft
+  ;;   (kbd "M-k") 'org-shiftright
+  ;;   (kbd "M-l") 'org-metaright
+  ;;   (kbd "M-H") 'org-metaleft
+  ;;   (kbd "M-J") 'org-metadown
+  ;;   (kbd "M-K") 'org-metaup
+  ;;   (kbd "M-L") 'org-metaright)
+
+  ;; (evil-define-key 'insert org-mode-map
+  ;;   (kbd "M-h") 'org-metaleft
+  ;;   ;; (kbd "M-j") 'org-shiftleft
+  ;;   (kbd "M-k") 'org-shiftright
+  ;;   (kbd "M-l") 'org-metaright
+  ;;   (kbd "M-H") 'org-metaleft
+  ;;   (kbd "M-J") 'org-metadown
+  ;;   (kbd "M-K") 'org-metaup
+  ;;   (kbd "M-L") 'org-metaright)
+
+  ;; (evil-define-key 'insert orgstruct-mode-map
+  ;;   ;; (kbd "M-j") 'org-shiftleft
+  ;;   (kbd "M-k") 'org-shiftright
+  ;;   (kbd "M-H") 'org-metaleft
+  ;;   (kbd "M-J") 'org-metadown
+  ;;   (kbd "M-K") 'org-metaup
+  ;;   (kbd "M-L") 'org-metaright)
+
+  ;; (yc/leader-keys-major-mode
+  ;;   :keymaps 'org-mode-map
+  ;;   ;; "" '(:ignore t :wk "major-mode-cmd")
+  ;;   ;; "ma" '(:ignore t :wk "help")
+  ;;   "." 'major-mode-hydra
+  ;;   "'" 'org-edit-special
+  ;;   "SPC" 'worf-back-to-heading
+  ;;   "a" 'org-agenda
+  ;;   "c" 'org-capture
+  ;;   "b" '(:ignore t :wk "babel")
+  ;;   "C" '(:ignore t :wk "clocks")
+  ;;   "s" 'org-schedule
+  ;;   "d" 'org-deadline
+  ;;   "r" '(org-refile :wk "org-refile")
+  ;;   "l" 'worf-right
+  ;;   "j" 'worf-down
+  ;;   "k" 'worf-up
+  ;;   "h" 'worf-left
+  ;;   "g" 'counsel-org-goto
+  ;;   "/" 'org-toggle-comment
+  ;;   "CI" 'org-clock-in
+  ;;   "Cn" 'org-narrow-to-subtree
+  ;;   "CN" 'widen
+  ;;   "CO" 'org-clock-out
+  ;;   "Cq" 'org-clock-cancel
+  ;;   "CR" 'org-refile
+  ;;   ;; "md" '(:ignore t :wk "dates")
+  ;;   "e" '(:ignore t :wk "export")
+  ;;   "f" '(:ignore t :wk "feeds")
+  ;;   "H" 'org-shiftleft
+  ;;   "J" 'org-shiftdown
+  ;;   "K" 'org-shiftup
+  ;;   "L" 'org-shiftright
+  ;;   "T" '(:ignore t :wk "Toggles")
+  ;;   ;; "x" '(:ignore t :wk "text")
+  ;;   "x" 'org-archive-subtree-default-with-confirmation
+  ;;   ;; "C-S-l" 'org-shiftcontrolright
+  ;;   ;; "C-S-h" 'org-shiftcontrolleft
+  ;;   ;; "C-S-j" 'org-shiftcontroldown
+  ;;   ;; "C-S-k" 'org-shiftcontrolup
+  ;;   "t" '(:ignore t :wk "tables")
+  ;;   "ta" 'org-table-align
+  ;;   "tb" 'org-table-blank-field
+  ;;   "tc" 'org-table-convert
+  ;;   "td" '(:ignore t :wk "delete")
+  ;;   "tdc" 'org-table-delete-column
+  ;;   "tdr" 'org-table-kill-row
+  ;;   "te" 'org-table-eval-formula
+  ;;   "tE" 'org-table-export
+  ;;   "th" 'org-table-previous-field
+  ;;   "tH" 'org-table-move-column-left
+  ;;   "ti" '(:ignore t :wk "insert")
+  ;;   "tic" 'org-table-insert-column
+  ;;   "tih" 'org-table-insert-hline
+  ;;   "tiH" 'org-table-hline-and-move
+  ;;   "tir" 'org-table-insert-row
+  ;;   "tI" 'org-table-import
+  ;;   "tj" 'org-table-next-row
+  ;;   "tJ" 'org-table-move-row-down
+  ;;   "tK" 'org-table-move-row-up
+  ;;   "tl" 'org-table-next-field
+  ;;   "tL" 'org-table-move-column-right
+  ;;   "tn" 'org-table-create
+  ;;   "tN" 'org-table-create-with-table.el
+  ;;   "tr" 'org-table-recalculate
+  ;;   "ts" 'org-table-sort-lines
+  ;;   "tt" '(:ignore t :wk "toggle")
+  ;;   "ttf" 'org-table-toggle-formula-debugger
+  ;;   "tto" 'org-table-toggle-coordinate-overlays
+  ;;   "tw" 'org-table-wrap-region)
+
+  ;; @see - https://github.com/noctuid/evil-guide
+  ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
+  (org-mode-map  ;; NOTE: keymaps specified with :keymaps must be quoted
+   "C-c C-j"   'counsel-org-goto
+   "<backtab>" 'org-shifttab
+   "<tab>"     'org-cycle)
+  ;; (yc/leader-keys-major-mode
+  ;;   :keymaps 'org-src-mode-map
+  ;;   "'" 'org-edit-src-exit)
+  ;; (yc/nonprefix-keys
+  ;;   :keymaps 'org-src-mode-map
+  ;;   :states '(normal)
+  ;;   "RET" 'org-edit-src-exit)
+  ;; (yc/leader-keys-major-mode-copy
+  ;;   :keymaps 'org-src-mode-map
+  ;;   ""  '(:ignore t :wk "major-mode-cmd")
+  ;;   "'" 'org-edit-src-exit)
+  ;; key for exiting src edit mode
+  :mode-hydra
+  (org-mode
+   (:title "Org-mode Commands")
+   ("Move"
+    (("n" outline-next-visible-heading "next heading" :color pink)
+     ("p" outline-previous-visible-heading "prev heading" :color pink)
+     ("N" org-forward-heading-same-level "next heading at same level" :color pink)
+     ("P" org-backward-heading-same-level "prev heading at same level" :color pink)
+     ("u" outline-up-heading "up heading" :color pink)
+     ("g" org-goto "goto" exit t))
+    "Zoom"
+    (("<" worf-back-to-heading "worf-back-to-heading")
+     ("R" worf-right "worf-right")
+     ("D" worf-down "worf-down")
+     ("U" worf-up "worf-up")
+     ("L" worf-left "worf-left"))
+    "Shift"
+    (("K" org-move-subtree-up "up" :color pink)
+     ("J" org-move-subtree-down "down" :color pink)
+     ("h" org-promote-subtree "promote" :color pink)
+     ("l" org-demote-subtree "demote" :color pink))
+    "Travel"
+    (("b" org-backward-heading-same-level "backward" :color pink)
+     ("B" org-forward-heading-same-level "forward" :color pink)
+     ("j" hydra-org-child-level "to child" :color pink)
+     ("k" hydra-org-parent-level "to parent" :color pink)
+     ("a" hydra-org-goto-first-sibling "first sibling")
+     ("e" hydra-org-goto-last-sibling "last sibling"))
+    "Perform"
+    (("r" (lambda () (interactive)
+            (call-interactively 'org-cycle)
+            (call-interactively 'org-cycle)) "rifle")
+     ("v" avy-org-goto-heading-timer "avy"))
+    "Toggles"
+    (("C-l" yc/org-toggle-link-display "link")
+     ("C-i" org-toggle-inline-images "image"))
+    "Quit"
+    (("C-g" nil "quit")
+     ("q" nil "quit"))))
   :custom-face
   ;; 单独给 org-table 设一个等宽字体
   ;; 目前使用是有问题的，英文字符是按照设置的 Sarasa 字体，但是中文不是，导致还是不能正确对齐
@@ -271,196 +461,6 @@ text and copying to the killring."
   ;;                           ("\\cc?\\( \\)?[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)\\cc"
   ;;                            (2 (prog1 () (compose-region (match-beginning 2) (match-end 2) "")))))
   ;;                         'append)
-  :general
-  ("H-c"     'org-capture
-   "<f5>"    'yc/copy-idlink-to-clipboard
-   "<f7>"    'org-redisplay-inline-images
-   "M-s M-R" 'yc/counsel-rg-in-itsycnotes)
-  ;; Great evil org mode keyboard shortcuts cribbed from cofi
-  ;; (evil-define-key 'normal org-mode-map
-  ;;   (kbd "RET") 'org-open-at-point
-  ;;   "za"        'org-cycle
-  ;;   "zA"        'org-shifttab
-  ;;   "zm"        'hide-body
-  ;;   "zr"        'show-all
-  ;;   "zo"        'show-subtree
-  ;;   "zO"        'show-all
-  ;;   "zc"        'hide-subtree
-  ;;   "zC"        'hide-all
-  ;;   (kbd "M-h") 'org-metaleft
-  ;;   ;; (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-l") 'org-metaright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
-
-  ;; (evil-define-key 'normal orgstruct-mode-map
-  ;;   (kbd "RET") 'org-open-at-point
-  ;;   "za"        'org-cycle
-  ;;   "zA"        'org-shifttab
-  ;;   "zm"        'hide-body
-  ;;   "zr"        'show-all
-  ;;   "zo"        'show-subtree
-  ;;   "zO"        'show-all
-  ;;   "zc"        'hide-subtree
-  ;;   "zC"        'hide-all
-  ;;   (kbd "M-h") 'org-metaleft
-  ;;   ;; (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-l") 'org-metaright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
-
-  ;; (evil-define-key 'insert org-mode-map
-  ;;   (kbd "M-h") 'org-metaleft
-  ;;   ;; (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-l") 'org-metaright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
-
-  ;; (evil-define-key 'insert orgstruct-mode-map
-  ;;   ;; (kbd "M-j") 'org-shiftleft
-  ;;   (kbd "M-k") 'org-shiftright
-  ;;   (kbd "M-H") 'org-metaleft
-  ;;   (kbd "M-J") 'org-metadown
-  ;;   (kbd "M-K") 'org-metaup
-  ;;   (kbd "M-L") 'org-metaright)
-
-  ;; (yc/leader-keys-major-mode
-  ;;   :keymaps 'org-mode-map
-  ;;   ;; "" '(:ignore t :wk "major-mode-cmd")
-  ;;   ;; "ma" '(:ignore t :wk "help")
-  ;;   "." 'major-mode-hydra
-  ;;   "'" 'org-edit-special
-  ;;   "SPC" 'worf-back-to-heading
-  ;;   "a" 'org-agenda
-  ;;   "c" 'org-capture
-  ;;   "b" '(:ignore t :wk "babel")
-  ;;   "C" '(:ignore t :wk "clocks")
-  ;;   "s" 'org-schedule
-  ;;   "d" 'org-deadline
-  ;;   "r" '(org-refile :wk "org-refile")
-  ;;   "l" 'worf-right
-  ;;   "j" 'worf-down
-  ;;   "k" 'worf-up
-  ;;   "h" 'worf-left
-  ;;   "g" 'counsel-org-goto
-  ;;   "/" 'org-toggle-comment
-  ;;   "CI" 'org-clock-in
-  ;;   "Cn" 'org-narrow-to-subtree
-  ;;   "CN" 'widen
-  ;;   "CO" 'org-clock-out
-  ;;   "Cq" 'org-clock-cancel
-  ;;   "CR" 'org-refile
-  ;;   ;; "md" '(:ignore t :wk "dates")
-  ;;   "e" '(:ignore t :wk "export")
-  ;;   "f" '(:ignore t :wk "feeds")
-  ;;   "H" 'org-shiftleft
-  ;;   "J" 'org-shiftdown
-  ;;   "K" 'org-shiftup
-  ;;   "L" 'org-shiftright
-  ;;   "T" '(:ignore t :wk "Toggles")
-  ;;   ;; "x" '(:ignore t :wk "text")
-  ;;   "x" 'org-archive-subtree-default-with-confirmation
-  ;;   ;; "C-S-l" 'org-shiftcontrolright
-  ;;   ;; "C-S-h" 'org-shiftcontrolleft
-  ;;   ;; "C-S-j" 'org-shiftcontroldown
-  ;;   ;; "C-S-k" 'org-shiftcontrolup
-  ;;   "t" '(:ignore t :wk "tables")
-  ;;   "ta" 'org-table-align
-  ;;   "tb" 'org-table-blank-field
-  ;;   "tc" 'org-table-convert
-  ;;   "td" '(:ignore t :wk "delete")
-  ;;   "tdc" 'org-table-delete-column
-  ;;   "tdr" 'org-table-kill-row
-  ;;   "te" 'org-table-eval-formula
-  ;;   "tE" 'org-table-export
-  ;;   "th" 'org-table-previous-field
-  ;;   "tH" 'org-table-move-column-left
-  ;;   "ti" '(:ignore t :wk "insert")
-  ;;   "tic" 'org-table-insert-column
-  ;;   "tih" 'org-table-insert-hline
-  ;;   "tiH" 'org-table-hline-and-move
-  ;;   "tir" 'org-table-insert-row
-  ;;   "tI" 'org-table-import
-  ;;   "tj" 'org-table-next-row
-  ;;   "tJ" 'org-table-move-row-down
-  ;;   "tK" 'org-table-move-row-up
-  ;;   "tl" 'org-table-next-field
-  ;;   "tL" 'org-table-move-column-right
-  ;;   "tn" 'org-table-create
-  ;;   "tN" 'org-table-create-with-table.el
-  ;;   "tr" 'org-table-recalculate
-  ;;   "ts" 'org-table-sort-lines
-  ;;   "tt" '(:ignore t :wk "toggle")
-  ;;   "ttf" 'org-table-toggle-formula-debugger
-  ;;   "tto" 'org-table-toggle-coordinate-overlays
-  ;;   "tw" 'org-table-wrap-region)
-
-  ;; @see - https://github.com/noctuid/evil-guide
-  ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
-  (org-mode-map  ;; NOTE: keymaps specified with :keymaps must be quoted
-   "C-c C-j"   'counsel-org-goto
-   "<backtab>" 'org-shifttab
-   "<tab>"     'org-cycle)
-  ;; (yc/leader-keys-major-mode
-  ;;   :keymaps 'org-src-mode-map
-  ;;   "'" 'org-edit-src-exit)
-  ;; (yc/nonprefix-keys
-  ;;   :keymaps 'org-src-mode-map
-  ;;   :states '(normal)
-  ;;   "RET" 'org-edit-src-exit)
-  ;; (yc/leader-keys-major-mode-copy
-  ;;   :keymaps 'org-src-mode-map
-  ;;   ""  '(:ignore t :wk "major-mode-cmd")
-  ;;   "'" 'org-edit-src-exit)
-  ;; key for exiting src edit mode
-  :mode-hydra
-  (org-mode
-   (:title "Org-mode Commands")
-   ("Move"
-    (("n" outline-next-visible-heading "next heading" :color pink)
-     ("p" outline-previous-visible-heading "prev heading" :color pink)
-     ("N" org-forward-heading-same-level "next heading at same level" :color pink)
-     ("P" org-backward-heading-same-level "prev heading at same level" :color pink)
-     ("u" outline-up-heading "up heading" :color pink)
-     ("g" org-goto "goto" exit t))
-    "Zoom"
-    (("<" worf-back-to-heading "worf-back-to-heading")
-     ("R" worf-right "worf-right")
-     ("D" worf-down "worf-down")
-     ("U" worf-up "worf-up")
-     ("L" worf-left "worf-left"))
-    "Shift"
-    (("K" org-move-subtree-up "up" :color pink)
-     ("J" org-move-subtree-down "down" :color pink)
-     ("h" org-promote-subtree "promote" :color pink)
-     ("l" org-demote-subtree "demote" :color pink))
-    "Travel"
-    (("b" org-backward-heading-same-level "backward" :color pink)
-     ("B" org-forward-heading-same-level "forward" :color pink)
-     ("j" hydra-org-child-level "to child" :color pink)
-     ("k" hydra-org-parent-level "to parent" :color pink)
-     ("a" hydra-org-goto-first-sibling "first sibling")
-     ("e" hydra-org-goto-last-sibling "last sibling"))
-    "Perform"
-    (("r" (lambda () (interactive)
-            (call-interactively 'org-cycle)
-            (call-interactively 'org-cycle)) "rifle")
-     ("v" avy-org-goto-heading-timer "avy"))
-    "Toggles"
-    (("C-l" yc/org-toggle-link-display "link")
-     ("C-i" org-toggle-inline-images "image"))
-    "Quit"
-    (("C-g" nil "quit")
-     ("q" nil "quit"))))
   )
 ;; 当执行 org code block 后，显示图片
 ;; - http://orgmode.org/worg/org-hacks.html#orgheadline126
@@ -984,6 +984,71 @@ text and copying to the killring."
 
 (use-package ob-go)
 
+(use-package ox-gfm)
+(eval-after-load "org"
+  '(require 'ox-gfm nil t))
+
+;; https://github.com/kawabata/ox-pandoc
+(use-package ox-pandoc
+  :config
+  (with-eval-after-load 'ox
+    (require 'ox-pandoc))
+  ;; special settings for beamer-pdf and latex-pdf exporters
+  (setq org-pandoc-options-for-beamer-pdf '((pdf-engine . "xelatex")))
+  (setq org-pandoc-options-for-latex-pdf '((pdf-engine . "pdflatex"))))
+
+(use-package ox-beamer
+  :ensure nil
+  :config
+  (with-eval-after-load 'ox
+    (defun eli-strip-ws-maybe (text _backend _info)
+      (let* ((text (replace-regexp-in-string
+                    "\\(\\cc\\) *\n *\\(\\cc\\)"
+                    "\\1\\2" text));; remove whitespace from line break
+             ;; remove whitespace from `org-emphasis-alist'
+             (text (replace-regexp-in-string "\\(\\cc?\\) \\(.*?\\) \\(\\cc\\)"
+                                             "\\1\\2\\3" text))
+             ;; restore whitespace between English words and Chinese words
+             (text (replace-regexp-in-string "\\(\\cc\\)\\(\\(?:<[^>]+>\\)?[a-z0-9A-Z-]+\\(?:<[^>]+>\\)?\\)\\(\\cc\\)"
+                                             "\\1 \\2 \\3" text))
+             (text (replace-regexp-in-string "\\(\\cc\\) ?\\(\\\\[^{}()]*?\\)\\(\\cc\\)"
+                                             "\\1 \\2 \\3" text)))
+        text))
+    (add-to-list 'org-export-filter-paragraph-functions #'eli-strip-ws-maybe))
+  (progn
+    ;; Allow for export=>beamer by placing
+    ;; #+latex_class: beamer in Org files
+    (add-to-list 'org-latex-classes
+                 '("beamer"
+                   "\\documentclass[presentation]{beamer}"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
+
+;; Exports Org-mode contents to Reveal.js HTML presentation.
+(use-package ox-reveal
+  :disabled t
+  ;; :straight (:host github :repo "yjwen/org-reveal")
+  :after org
+  :init
+  (setq org-reveal-mathjax t)
+  :config
+  (require 'ox-reveal)
+  ;; (setq org-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0"))
+  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+  (setq org-reveal-theme "black")
+  (setq org-reveal-width 1200)
+  (setq org-reveal-height 1000)
+  (setq org-reveal-margin "0.1")
+  (setq org-reveal-min-scale "0.5")
+  (setq org-reveal-max-scale "2.5")
+  (setq org-reveal-transition "cube")
+  (setq org-reveal-plugins '(classList markdown zoom notes))
+  (setq org-reveal-control t)
+  (setq org-reveal-center t)
+  (setq org-reveal-progress t)
+  (setq org-reveal-history nil))
+
 ;; Evaluate org-src-block asynchronously.
 ;; https://github.com/astahlman/ob-async
 ;; 如果要加这个，是不是要在 begin_src 上加上关键字，还是默认全部都执行，对 emacs dotfile 的加载有没有影响，这些都要验证。
@@ -1056,71 +1121,6 @@ text and copying to the killring."
 ;;   (evil-define-key 'normal org-mode-map (kbd "gl") 'air-org-goto-first-child)
 ;;   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "@" 'org-refile)
 ;;   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
-
-(use-package ox-gfm)
-(eval-after-load "org"
-  '(require 'ox-gfm nil t))
-
-;; https://github.com/kawabata/ox-pandoc
-(use-package ox-pandoc
-  :config
-  (with-eval-after-load 'ox
-    (require 'ox-pandoc))
-  ;; special settings for beamer-pdf and latex-pdf exporters
-  (setq org-pandoc-options-for-beamer-pdf '((pdf-engine . "xelatex")))
-  (setq org-pandoc-options-for-latex-pdf '((pdf-engine . "pdflatex"))))
-
-(use-package ox-beamer
-  :ensure nil
-  :config
-  (with-eval-after-load 'ox
-    (defun eli-strip-ws-maybe (text _backend _info)
-      (let* ((text (replace-regexp-in-string
-                    "\\(\\cc\\) *\n *\\(\\cc\\)"
-                    "\\1\\2" text));; remove whitespace from line break
-             ;; remove whitespace from `org-emphasis-alist'
-             (text (replace-regexp-in-string "\\(\\cc?\\) \\(.*?\\) \\(\\cc\\)"
-                                             "\\1\\2\\3" text))
-             ;; restore whitespace between English words and Chinese words
-             (text (replace-regexp-in-string "\\(\\cc\\)\\(\\(?:<[^>]+>\\)?[a-z0-9A-Z-]+\\(?:<[^>]+>\\)?\\)\\(\\cc\\)"
-                                             "\\1 \\2 \\3" text))
-             (text (replace-regexp-in-string "\\(\\cc\\) ?\\(\\\\[^{}()]*?\\)\\(\\cc\\)"
-                                             "\\1 \\2 \\3" text)))
-        text))
-    (add-to-list 'org-export-filter-paragraph-functions #'eli-strip-ws-maybe))
-  (progn
-    ;; Allow for export=>beamer by placing
-    ;; #+latex_class: beamer in Org files
-    (add-to-list 'org-latex-classes
-                 '("beamer"
-                   "\\documentclass[presentation]{beamer}"
-                   ("\\section{%s}" . "\\section*{%s}")
-                   ("\\subsection{%s}" . "\\subsection*{%s}")
-                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
-
-;; Exports Org-mode contents to Reveal.js HTML presentation.
-(use-package ox-reveal
-  :disabled t
-  ;; :straight (:host github :repo "yjwen/org-reveal")
-  :after org
-  :init
-  (setq org-reveal-mathjax t)
-  :config
-  (require 'ox-reveal)
-  ;; (setq org-reveal-root "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0"))
-  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-  (setq org-reveal-theme "black")
-  (setq org-reveal-width 1200)
-  (setq org-reveal-height 1000)
-  (setq org-reveal-margin "0.1")
-  (setq org-reveal-min-scale "0.5")
-  (setq org-reveal-max-scale "2.5")
-  (setq org-reveal-transition "cube")
-  (setq org-reveal-plugins '(classList markdown zoom notes))
-  (setq org-reveal-control t)
-  (setq org-reveal-center t)
-  (setq org-reveal-progress t)
-  (setq org-reveal-history nil))
 
 (provide 'init-org)
 ;;; init-org.el ends here

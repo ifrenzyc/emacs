@@ -7,6 +7,8 @@
 ;;; Code:
 
 (use-package embark
+  :general
+  ("s-o" 'embark-act)
   :config
   ;; Use Embark instead of `describe-prefix-bindings'
   (setq prefix-help-command #'embark-prefix-help-command)
@@ -49,9 +51,7 @@ targets."
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
-                 (window-parameters (mode-line-format . none))))
-  :general
-  ("s-o" 'embark-act))
+                 (window-parameters (mode-line-format . none)))))
 
 (provide 'init-embark)
 ;;; init-embark.el ends here

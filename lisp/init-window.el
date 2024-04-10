@@ -282,6 +282,8 @@
 
 (use-package rotate
   ;; :commands (rotate-layout rotate-window hydra-rotate-window/body)
+  :general
+  ("C-x w ." 'hydra-rotate-window/body)
   :init
   (defhydra hydra-rotate-window ()
     "rotate-layout"
@@ -294,8 +296,6 @@
     ("K" (progn (scroll-up-line 4)) "4x ↑")
     ("C-g" nil "quit")
     ("q" nil "quit"))
-  :general
-  ("C-x w ." 'hydra-rotate-window/body)
   ;; :config
   ;; (evil-leader/set-key
   ;;   "SPC" 'hydra-rotate-window/body)

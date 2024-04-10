@@ -10,6 +10,34 @@
 
 ;; org-roam-capture 主要参考： /Users/yangc/src/emacs.d/ody55eus-doom-emacs.d/doom/Emacs.org
 (use-package org-roam
+  :general
+  ("C-c n l" 'org-roam-buffer-toggle
+   "C-c n f" 'org-roam-node-find
+   "C-c n i" 'org-roam-node-insert
+   "C-c n h" 'org-id-get-create
+   "<f4>"    'org-roam-dailies-capture-today)  
+  ;; (yc/leader-keys
+  ;;   "ar" '(:ignore t :wk "org-roam")
+  ;;   "arl" 'org-roam-buffer-toggle
+  ;;   "art" 'org-roam-dailies-today
+  ;;   "arf" 'org-roam-node-find
+  ;;   "arg" 'org-roam-show-graph)
+  (org-roam-mode-map
+   "C-c n l" 'org-roam-buffer-toggle
+   "C-c n f" 'org-roam-node-find
+   "C-c n g" 'org-roam-graph)
+  (org-mode-map
+   "C-c n i" 'org-roam-node-insert
+   "C-c n I" 'org-roam-insert-immediate)
+  ;; (yc/leader-keys-major-mode
+  ;;   :keymaps 'org-mode-map
+  ;;   "r"  '(:ignore t :wk "org-roam")
+  ;;   "rl" 'org-roam
+  ;;   "rt" 'org-roam-dailies-today
+  ;;   "rb" 'org-roam-switch-to-buffer
+  ;;   "rf" 'org-roam-find-file
+  ;;   "ri" 'org-roam-insert
+  ;;   "rg" 'org-roam-show-graph)
   :delight " 𝕫"
   :custom
   (org-roam-database-connector 'sqlite-builtin)
@@ -161,36 +189,7 @@
 
   ;; (setq org-roam-node-display-template (concat "${type:15} ${doom-hierarchy:80} " (propertize "${tags:*}" 'face 'org-tag)))
 
-  (org-roam-setup)
-  :general
-  ("C-c n l" 'org-roam-buffer-toggle
-   "C-c n f" 'org-roam-node-find
-   "C-c n i" 'org-roam-node-insert
-   "C-c n h" 'org-id-get-create
-   "<f4>"    'org-roam-dailies-capture-today)  
-  ;; (yc/leader-keys
-  ;;   "ar" '(:ignore t :wk "org-roam")
-  ;;   "arl" 'org-roam-buffer-toggle
-  ;;   "art" 'org-roam-dailies-today
-  ;;   "arf" 'org-roam-node-find
-  ;;   "arg" 'org-roam-show-graph)
-  (org-roam-mode-map
-   "C-c n l" 'org-roam-buffer-toggle
-   "C-c n f" 'org-roam-node-find
-   "C-c n g" 'org-roam-graph)
-  (org-mode-map
-   "C-c n i" 'org-roam-node-insert
-   "C-c n I" 'org-roam-insert-immediate)
-  ;; (yc/leader-keys-major-mode
-  ;;   :keymaps 'org-mode-map
-  ;;   "r"  '(:ignore t :wk "org-roam")
-  ;;   "rl" 'org-roam
-  ;;   "rt" 'org-roam-dailies-today
-  ;;   "rb" 'org-roam-switch-to-buffer
-  ;;   "rf" 'org-roam-find-file
-  ;;   "ri" 'org-roam-insert
-  ;;   "rg" 'org-roam-show-graph)
-  )
+  (org-roam-setup))
 
 (use-package org-roam-bibtex
   :after org-roam

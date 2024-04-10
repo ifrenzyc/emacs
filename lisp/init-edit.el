@@ -19,19 +19,6 @@
   :ensure nil
   :hook (after-init . save-place-mode))
 
-(use-package savehist
-  :disabled t
-  :ensure nil
-  :hook (after-init . savehist-mode)
-  :init (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
-              history-length 1000
-              savehist-additional-variables '(mark-ring
-                                              global-mark-ring
-                                              search-ring
-                                              regexp-search-ring
-                                              extended-command-history)
-              savehist-autosave-interval 300))
-
 ;; 文本替换，使用 =query-replace= 或者 =M-%= 命令。
 ;; - https://github.com/syohex/emacs-anzu
 ;; anzu 依赖这个 mdi
@@ -54,134 +41,17 @@
                 ;; anzu-replace-to-string-separator (mdi "arrow-right" t)
                 ))
 
-;; *About:* 快速编辑选中的区域
-;; Edit multiple regions in the same way simultaneously
-;; 参考：https://github.com/andreyorst/dotfiles/tree/master/.config/emacs
-(use-package iedit
-  :disabled t
-  :bind (("M-n" . aorst/iedit-current-or-expand))
-  :custom
-  (iedit-toggle-key-default nil)
-  :init
-  (defun aorst/iedit-to-mc-hydrant ()
-    "Calls `iedit-to-mc-mode' and opens hydra for multiple cursors."
-    (interactive)
-    (iedit-switch-to-mc-mode)
-    (hydra-iedit/body))
-  (defun aorst/iedit-current-or-expand (&optional arg)
-    "Select only currnent occurrence with `iedit-mode'.  Expand to
-  next occurrence if `iedit-mode' is already active."
-    (interactive "P")
-    (if (bound-and-true-p iedit-mode)
-        (if (symbolp arg)
-            (iedit-expand-down-to-occurrence)
-          (iedit-expand-up-to-occurrence))
-      (iedit-mode 1)))
-  (defun aorst/iedit-hydrant ()
-    "toggle iedit mode for item under point, and open `hydrant/iedit'."
-    (interactive)
-    (ignore-errors
-      (iedit-mode 1)
-      (hydra-iedit/body)))
-  (defhydra hydra-iedit (:hint nil :color pink)
-    "
- ^Select^                  ^Discard^                   ^Edit^               ^Navigate^
-─^──────^──────────────────^───────^───────────────────^────^───────────────^────────^─────────────
- _n_: next occurrence      _M-SPC_:  toggle selection  _u_: uppercase       _(_: previous selection
- _p_: previous occurrence  _q_ or _g_: exit hydrant      _d_: downcase        _)_: next selection
- ^ ^                       _G_:      exit iedit-mode   _#_: insert numbers
- ^ ^                       _m_:      switch to mc"
-    ("n" iedit-expand-down-to-occurrence)
-    ("m" aorst/iedit-to-mc-hydrant :exit t)
-    ("p" iedit-expand-up-to-occurrence)
-    ("u" iedit-upcase-occurrences)
-    ("d" iedit-downcase-occurrences)
-    ("#" iedit-number-occurrences)
-    ("(" iedit-prev-occurrence)
-    (")" iedit-next-occurrence)
-    ("M-SPC" iedit-toggle-selection)
-    ("q" ignore :exit t)
-    ("g" ignore :exit t)
-    ("G" #'(lambda () (interactive) (iedit-mode -1)) :exit t)))
-
-;; 参考：http://www.cauchy.me/2015/08/20/emacs-multi-cursors/
-(use-package multiple-cursors
-  :disabled t
-  :bind
-  (("C->" . mc/mark-next-like-this)
-   ("C-<" . mc/mark-previous-like-this)
-   ("S-<mouse-1>" . mc/add-cursor-on-click)
-   ;; ("C-c m" . hydra-multiple-cursors/body)
-   )
-  :requires hydra
-  :config
-  (defhydra hydra-multiple-cursors (:hint nil :color pink)
-    "
- ^Select^                 ^Discard^                     ^Edit^               ^Navigate^
-─^──────^─────────────────^───────^─────────────────────^────^───────────────^────────^─────────
- _M-s_: split lines       _M-SPC_:  discard current      _&_: align           _(_: cycle backward
- _s_:   select regexp     _b_:      discard blank lines  _#_: insert numbers  _)_: cycle forward
- _n_:   select next       _d_:      remove duplicated    ^ ^                  ^ ^
- _p_:   select previous   _q_ or _g_: exit hydrant       ^ ^                  ^ ^
- _C_:   select next line  _G_:      exit mc mode"
-    ("M-s" mc/edit-ends-of-lines)
-    ("s" mc/mark-all-in-region-regexp)
-    ("n" mc/mark-next-like-this-word)
-    ("p" mc/mark-previous-like-this-word)
-    ("&" mc/vertical-align-with-space)
-    ("(" mc/cycle-backward)
-    (")" mc/cycle-forward)
-    ("M-SPC" mc/remove-current-cursor)
-    ("b" mc/remove-cursors-on-blank-lines)
-    ("d" mc/remove-duplicated-cursors)
-    ("C" mc/mark-next-lines)
-    ("#" mc/insert-numbers)
-    ("q" mc/remove-duplicated-cursors :exit t)
-    ("g" mc/remove-duplicated-cursors :exit t)
-    ("G" mc/keyboard-quit :exit t))
-
-  ;; (defhydra hydra-multiple-cursors (:hint nil)
-  ;;   "
-  ;;    Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")
-  ;;   ------------------------------------------------------------------
-  ;;    [_p_]   Next     [_n_]   Next     [_l_] Edit lines  [_0_] Insert numbers
-  ;;    [_P_]   Skip     [_N_]   Skip     [_a_] Mark all    [_A_] Insert letters
-  ;;    [_M-p_] Unmark   [_M-n_] Unmark   [_s_] Search
-  ;;    [Click] Cursor at point       [_q_] Quit"
-  ;;   ("l" mc/edit-lines :exit t)
-  ;;   ("a" mc/mark-all-like-this :exit t)
-  ;;   ("n" mc/mark-next-like-this)
-  ;;   ("N" mc/skip-to-next-like-this)
-  ;;   ("M-n" mc/unmark-next-like-this)
-  ;;   ("p" mc/mark-previous-like-this)
-  ;;   ("P" mc/skip-to-previous-like-this)
-  ;;   ("M-p" mc/unmark-previous-like-this)
-  ;;   ("s" mc/mark-all-in-region-regexp :exit t)
-  ;;   ("0" mc/insert-numbers :exit t)
-  ;;   ("A" mc/insert-letters :exit t)
-  ;;   ("<mouse-1>" mc/add-cursor-on-click)
-  ;;   ;; Help with click recognition in this hydra
-  ;;   ("<down-mouse-1>" ignore)
-  ;;   ("<drag-mouse-1>" ignore)
-  ;;   ("q" nil))
-  )
-
-(use-package mc-extras
-  :disabled t
-  :after multiple-cursors)
-
 ;; Emacs extension to increase selected region by semantic units.
 ;; - https://github.com/magnars/expand-region.el
 (use-package expand-region
   :requires hydra
-  :init
-  (pending-delete-mode t)
   :general
   ("C-=" 'er/expand-region)
   ;; ("C-c =" 'bk/expand-region/body)
   ;; (evil-visual-state-map
   ;;  "v" 'er/expand-region)
-  )
+  :init
+  (pending-delete-mode t))
 
 ;; 针对选中的区域自定义一些按键
 ;; - https://github.com/Kungsgeten/selected.el
@@ -277,17 +147,7 @@ there's a region, all lines that region covers will be duplicated."
       ("s-." symbol-overlay-transient)
       ("M-<f3>" symbol-overlay-remove-all))
      "Embark"
-     (("s-o" embark-act))))
-  )
-
-(use-package barrinalo
-  :disabled t
-  :load-path "localelpa/barrinalo"
-  :bind
-  ("M-p" . barrinalo-swap-up)
-  ("M-n" . barrinalo-swap-down)
-  ("M-P" . barrinalo-duplicate-backward)
-  ("M-N" . barrinalo-duplicate-forward))
+     (("s-o" embark-act)))))
 
 ;; 选中文本后，直接输入就可以，省去了删除操作。这在其他文本编辑器里都是标配，建议打开。
 (use-package delsel
@@ -361,6 +221,61 @@ there's a region, all lines that region covers will be duplicated."
   ;;                    (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
   :config
   (global-pangu-spacing-mode t))
+
+(use-package hippie-expand
+  :ensure nil
+  :general
+  ("M-/" 'hippie-expand)
+  :init
+  (setq hippie-expand-try-functions-list
+	    '(
+	      ;; Try to expand yasnippet snippets based on prefix
+	      yas-hippie-try-expand
+	      ;; Try to expand word "dynamically", searching the current buffer.
+	      try-expand-dabbrev
+	      ;; Try to expand word "dynamically", searching all other buffers.
+	      try-expand-dabbrev-all-buffers
+	      ;; Try to expand word "dynamically", searching the kill ring.
+	      try-expand-dabbrev-from-kill
+	      ;; Try to complete text as a file name, as many characters as unique.
+	      try-complete-file-name-partially
+	      ;; Try to complete text as a file name.
+	      try-complete-file-name
+	      ;; Try to expand word before point according to all abbrev tables.
+	      try-expand-all-abbrevs
+	      ;; Try to complete the current line to an entire line in the buffer.
+	      try-expand-list
+	      ;; Try to complete the current line to an entire line in the buffer.
+	      try-expand-line
+	      ;; Try to complete as an Emacs Lisp symbol, as many characters as
+	      ;; unique.
+	      try-complete-lisp-symbol-partially
+	      ;; Try to complete word as an Emacs Lisp symbol.
+	      try-complete-lisp-symbol
+	      ))
+  :config
+  ;; override dabbrev-expand’s keybinding to use hippie-expand instead
+  (define-key (current-global-map) [remap dabbrev-expand] 'hippie-expand))
+
+(use-package fancy-dabbrev
+  :commands (fancy-dabbrev-mode)
+  :custom
+  (fancy-dabbrev-preview-delay 0.1)
+  (fancy-dabbrev-preview-context 'before-non-word)
+
+  (fancy-dabbrev-expansion-on-preview-only t)
+  (fancy-dabbrev-indent-command 'tab-to-tab-stop)
+
+  ;; Only while in insert mode.
+  ;; (with-eval-after-load 'evil
+  ;;   (add-hook 'evil-insert-state-entry-hook (lambda () (fancy-dabbrev-mode 1)))
+  ;;   (add-hook 'evil-insert-state-exit-hook (lambda () (fancy-dabbrev-mode 0))))
+  )
+
+;; - Zap To Char Usage :: https://www.emacswiki.org/emacs/ZapToCharUsage
+(use-package zzz-to-char
+  :bind
+  ([remap zap-to-char] . zzz-to-char))
 
 ;; 高亮显示匹配的分隔符，自动输入删除
 ;; - https://github.com/Fuco1/smartparens
@@ -560,60 +475,143 @@ there's a region, all lines that region covers will be duplicated."
   :disabled t
   :commands (cycle-quotes))
 
-(use-package hippie-expand
-  :ensure nil
-  :init
-  (setq hippie-expand-try-functions-list
-	    '(
-	      ;; Try to expand yasnippet snippets based on prefix
-	      yas-hippie-try-expand
-	      ;; Try to expand word "dynamically", searching the current buffer.
-	      try-expand-dabbrev
-	      ;; Try to expand word "dynamically", searching all other buffers.
-	      try-expand-dabbrev-all-buffers
-	      ;; Try to expand word "dynamically", searching the kill ring.
-	      try-expand-dabbrev-from-kill
-	      ;; Try to complete text as a file name, as many characters as unique.
-	      try-complete-file-name-partially
-	      ;; Try to complete text as a file name.
-	      try-complete-file-name
-	      ;; Try to expand word before point according to all abbrev tables.
-	      try-expand-all-abbrevs
-	      ;; Try to complete the current line to an entire line in the buffer.
-	      try-expand-list
-	      ;; Try to complete the current line to an entire line in the buffer.
-	      try-expand-line
-	      ;; Try to complete as an Emacs Lisp symbol, as many characters as
-	      ;; unique.
-	      try-complete-lisp-symbol-partially
-	      ;; Try to complete word as an Emacs Lisp symbol.
-	      try-complete-lisp-symbol
-	      ))
-  :general
-  ("M-/" 'hippie-expand)
-  :config
-  ;; override dabbrev-expand’s keybinding to use hippie-expand instead
-  (define-key (current-global-map) [remap dabbrev-expand] 'hippie-expand))
-
-(use-package fancy-dabbrev
-  :commands (fancy-dabbrev-mode)
+;; *About:* 快速编辑选中的区域
+;; Edit multiple regions in the same way simultaneously
+;; 参考：https://github.com/andreyorst/dotfiles/tree/master/.config/emacs
+(use-package iedit
+  :disabled t
+  :bind (("M-n" . aorst/iedit-current-or-expand))
   :custom
-  (fancy-dabbrev-preview-delay 0.1)
-  (fancy-dabbrev-preview-context 'before-non-word)
+  (iedit-toggle-key-default nil)
+  :init
+  (defun aorst/iedit-to-mc-hydrant ()
+    "Calls `iedit-to-mc-mode' and opens hydra for multiple cursors."
+    (interactive)
+    (iedit-switch-to-mc-mode)
+    (hydra-iedit/body))
+  (defun aorst/iedit-current-or-expand (&optional arg)
+    "Select only currnent occurrence with `iedit-mode'.  Expand to
+  next occurrence if `iedit-mode' is already active."
+    (interactive "P")
+    (if (bound-and-true-p iedit-mode)
+        (if (symbolp arg)
+            (iedit-expand-down-to-occurrence)
+          (iedit-expand-up-to-occurrence))
+      (iedit-mode 1)))
+  (defun aorst/iedit-hydrant ()
+    "toggle iedit mode for item under point, and open `hydrant/iedit'."
+    (interactive)
+    (ignore-errors
+      (iedit-mode 1)
+      (hydra-iedit/body)))
+  (defhydra hydra-iedit (:hint nil :color pink)
+    "
+ ^Select^                  ^Discard^                   ^Edit^               ^Navigate^
+─^──────^──────────────────^───────^───────────────────^────^───────────────^────────^─────────────
+ _n_: next occurrence      _M-SPC_:  toggle selection  _u_: uppercase       _(_: previous selection
+ _p_: previous occurrence  _q_ or _g_: exit hydrant      _d_: downcase        _)_: next selection
+ ^ ^                       _G_:      exit iedit-mode   _#_: insert numbers
+ ^ ^                       _m_:      switch to mc"
+    ("n" iedit-expand-down-to-occurrence)
+    ("m" aorst/iedit-to-mc-hydrant :exit t)
+    ("p" iedit-expand-up-to-occurrence)
+    ("u" iedit-upcase-occurrences)
+    ("d" iedit-downcase-occurrences)
+    ("#" iedit-number-occurrences)
+    ("(" iedit-prev-occurrence)
+    (")" iedit-next-occurrence)
+    ("M-SPC" iedit-toggle-selection)
+    ("q" ignore :exit t)
+    ("g" ignore :exit t)
+    ("G" #'(lambda () (interactive) (iedit-mode -1)) :exit t)))
 
-  (fancy-dabbrev-expansion-on-preview-only t)
-  (fancy-dabbrev-indent-command 'tab-to-tab-stop)
+;; 参考：http://www.cauchy.me/2015/08/20/emacs-multi-cursors/
+(use-package multiple-cursors
+  :disabled t
+  :bind
+  (("C->" . mc/mark-next-like-this)
+   ("C-<" . mc/mark-previous-like-this)
+   ("S-<mouse-1>" . mc/add-cursor-on-click)
+   ;; ("C-c m" . hydra-multiple-cursors/body)
+   )
+  :requires hydra
+  :config
+  (defhydra hydra-multiple-cursors (:hint nil :color pink)
+    "
+ ^Select^                 ^Discard^                     ^Edit^               ^Navigate^
+─^──────^─────────────────^───────^─────────────────────^────^───────────────^────────^─────────
+ _M-s_: split lines       _M-SPC_:  discard current      _&_: align           _(_: cycle backward
+ _s_:   select regexp     _b_:      discard blank lines  _#_: insert numbers  _)_: cycle forward
+ _n_:   select next       _d_:      remove duplicated    ^ ^                  ^ ^
+ _p_:   select previous   _q_ or _g_: exit hydrant       ^ ^                  ^ ^
+ _C_:   select next line  _G_:      exit mc mode"
+    ("M-s" mc/edit-ends-of-lines)
+    ("s" mc/mark-all-in-region-regexp)
+    ("n" mc/mark-next-like-this-word)
+    ("p" mc/mark-previous-like-this-word)
+    ("&" mc/vertical-align-with-space)
+    ("(" mc/cycle-backward)
+    (")" mc/cycle-forward)
+    ("M-SPC" mc/remove-current-cursor)
+    ("b" mc/remove-cursors-on-blank-lines)
+    ("d" mc/remove-duplicated-cursors)
+    ("C" mc/mark-next-lines)
+    ("#" mc/insert-numbers)
+    ("q" mc/remove-duplicated-cursors :exit t)
+    ("g" mc/remove-duplicated-cursors :exit t)
+    ("G" mc/keyboard-quit :exit t))
 
-  ;; Only while in insert mode.
-  ;; (with-eval-after-load 'evil
-  ;;   (add-hook 'evil-insert-state-entry-hook (lambda () (fancy-dabbrev-mode 1)))
-  ;;   (add-hook 'evil-insert-state-exit-hook (lambda () (fancy-dabbrev-mode 0))))
+  ;; (defhydra hydra-multiple-cursors (:hint nil)
+  ;;   "
+  ;;    Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")
+  ;;   ------------------------------------------------------------------
+  ;;    [_p_]   Next     [_n_]   Next     [_l_] Edit lines  [_0_] Insert numbers
+  ;;    [_P_]   Skip     [_N_]   Skip     [_a_] Mark all    [_A_] Insert letters
+  ;;    [_M-p_] Unmark   [_M-n_] Unmark   [_s_] Search
+  ;;    [Click] Cursor at point       [_q_] Quit"
+  ;;   ("l" mc/edit-lines :exit t)
+  ;;   ("a" mc/mark-all-like-this :exit t)
+  ;;   ("n" mc/mark-next-like-this)
+  ;;   ("N" mc/skip-to-next-like-this)
+  ;;   ("M-n" mc/unmark-next-like-this)
+  ;;   ("p" mc/mark-previous-like-this)
+  ;;   ("P" mc/skip-to-previous-like-this)
+  ;;   ("M-p" mc/unmark-previous-like-this)
+  ;;   ("s" mc/mark-all-in-region-regexp :exit t)
+  ;;   ("0" mc/insert-numbers :exit t)
+  ;;   ("A" mc/insert-letters :exit t)
+  ;;   ("<mouse-1>" mc/add-cursor-on-click)
+  ;;   ;; Help with click recognition in this hydra
+  ;;   ("<down-mouse-1>" ignore)
+  ;;   ("<drag-mouse-1>" ignore)
+  ;;   ("q" nil))
   )
 
-;; - Zap To Char Usage :: https://www.emacswiki.org/emacs/ZapToCharUsage
-(use-package zzz-to-char
+(use-package mc-extras
+  :disabled t
+  :after multiple-cursors)
+
+(use-package barrinalo
+  :disabled t
+  :load-path "localelpa/barrinalo"
   :bind
-  ([remap zap-to-char] . zzz-to-char))
+  ("M-p" . barrinalo-swap-up)
+  ("M-n" . barrinalo-swap-down)
+  ("M-P" . barrinalo-duplicate-backward)
+  ("M-N" . barrinalo-duplicate-forward))
+
+(use-package savehist
+  :disabled t
+  :ensure nil
+  :hook (after-init . savehist-mode)
+  :init (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
+              history-length 1000
+              savehist-additional-variables '(mark-ring
+                                              global-mark-ring
+                                              search-ring
+                                              regexp-search-ring
+                                              extended-command-history)
+              savehist-autosave-interval 300))
 
 (provide 'init-edit)
 ;;; init-edit.el ends here

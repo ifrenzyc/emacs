@@ -29,9 +29,8 @@
   ;; (set-cursor-color "DarkCyan")
   ;; (setq-default cursor-type 'box)
 
-  (general-define-key
-   
-   "SPC" (general-simulate-key "<f16>"))
+  ;; (general-define-key
+  ;;  "SPC" (general-simulate-key "<f16>"))
 
   ;; (defun xfk-command-mode-on ()
   ;;   (global-hl-line-mode 1)

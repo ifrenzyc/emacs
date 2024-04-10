@@ -175,12 +175,14 @@ To be used with `markdown-live-preview-window-function'."
                       "blob/master/data/css/github.css"))))
 
 (use-package edit-indirect
-  :hook ((edit-indirect-after-creation . aorst/real-buffer-setup)
-         (edit-indirect-after-creation . aorst/edit-indirect-header-line-setup))
-  :general (edit-indirect-mode-map
-            "C-c C-c" 'edit-indirect-commit
-            "C-c C-k" 'edit-indirect-abort
-            "C-c '"   'nil)
+  :general
+  (edit-indirect-mode-map
+   "C-c C-c" 'edit-indirect-commit
+   "C-c C-k" 'edit-indirect-abort
+   "C-c '"   'nil)
+  :hook
+  ((edit-indirect-after-creation . aorst/real-buffer-setup)
+   (edit-indirect-after-creation . aorst/edit-indirect-header-line-setup))
   :init
   (defun aorst/edit-indirect-header-line-setup ()
     (setq-local
@@ -209,11 +211,12 @@ To be used with `markdown-live-preview-window-function'."
 ;; macOS:
 ;; pip install grip
 (use-package grip-mode
+  :general
+  (markdown-mode-command-map
+   "g" 'grip-mode)
   :commands (grip-mode)
   ;; :straight (:host github :repo "seagle0128/grip-mode")
   :ensure-system-package (grip . "pip install grip")
-  :general (markdown-mode-command-map
-            "g" 'grip-mode)
   :config
   ;; Path to the grip binary
   (setq grip-mode-binary-path (executable-find "grip")))

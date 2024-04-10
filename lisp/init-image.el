@@ -6,12 +6,6 @@
 
 ;;; Code:
 (use-package image+
-  :init
-  (eval-after-load 'image '(require 'image+))
-  ;; :hook
-  ;; (image-mode . (lambda () (require 'image+)))
-  :config
-  (imagex-global-sticky-mode t)
   :mode-hydra
   ;; 相关快捷键参考官方文档：https://github.com/mhayashi1120/Emacs-imagex
   (image-mode
@@ -28,7 +22,12 @@
     "Save"
     (("S" imagex-sticky-save-image "save image"))
     ))
-  )
+  :init
+  (eval-after-load 'image '(require 'image+))
+  ;; :hook
+  ;; (image-mode . (lambda () (require 'image+)))
+  :config
+  (imagex-global-sticky-mode t))
 
 (use-package iscroll
   :disabled t

@@ -103,6 +103,15 @@ FACE defaults to inheriting from default and highlight."
 
 ;; Highlight symbols
 (use-package symbol-overlay
+  :bind
+  (("M-i" . symbol-overlay-put)
+   ("M-n" . symbol-overlay-jump-next)
+   ("M-p" . symbol-overlay-jump-prev)
+   ("M-N" . symbol-overlay-switch-forward)
+   ("M-P" . symbol-overlay-switch-backward)
+   ("M-C" . symbol-overlay-remove-all)
+   ("s-." . symbol-overlay-transient)
+   ([M-f3] . symbol-overlay-remove-all))
   :diminish
   :functions (turn-off-symbol-overlay turn-on-symbol-overlay)
   ;; :custom-face
@@ -115,14 +124,6 @@ FACE defaults to inheriting from default and highlight."
   ;; (symbol-overlay-face-6 ((t (:inherit all-the-icons-maroon :background unspecified :foreground unspecified :inverse-video t))))
   ;; (symbol-overlay-face-7 ((t (:inherit all-the-icons-green :background unspecified :foreground unspecified :inverse-video t))))
   ;; (symbol-overlay-face-8 ((t (:inherit all-the-icons-cyan :background unspecified :foreground unspecified :inverse-video t))))
-  :bind (("M-i" . symbol-overlay-put)
-         ("M-n" . symbol-overlay-jump-next)
-         ("M-p" . symbol-overlay-jump-prev)
-         ("M-N" . symbol-overlay-switch-forward)
-         ("M-P" . symbol-overlay-switch-backward)
-         ("M-C" . symbol-overlay-remove-all)
-         ("s-." . symbol-overlay-transient)
-         ([M-f3] . symbol-overlay-remove-all))
   :hook
   ((prog-mode . symbol-overlay-mode)
    ;; (iedit-mode . turn-off-symbol-overlay)

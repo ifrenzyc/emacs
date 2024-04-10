@@ -106,9 +106,10 @@
 
 (use-package dap-mode
   :after lsp
-  :general (dap-mode-map
-            "<f5>"  'dap-debug
-            "<f7>"  'dap-hydra)
+  :general
+  (dap-mode-map
+   "<f5>"  'dap-debug
+   "<f7>"  'dap-hydra)
   :hook ((prog-mode . dap-mode)
          (dap-mode . dap-ui-mode)
          (dap-session-created . (lambda (&_rest) (dap-hydra)))

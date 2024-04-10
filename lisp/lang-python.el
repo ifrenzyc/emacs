@@ -11,6 +11,14 @@
 
 (use-package python
   :mode ("\\.py\\'" . python-ts-mode)
+  :mode-hydra
+  (python-ts-mode
+   (:title "Python Commands")
+   ("Python"
+    (("i" elpy-importmagic-fixup "Importmagic fixup")
+     ("d" elpy-goto-definition   "Goto definition")
+     ("r" elpy-multiedit-python-symbol-at-point   "Rename symbol")
+     ("f" elpy-format-code   "Format code"))))
   :hook
   (python-ts-mode . diff-hl-mode)
   :custom
@@ -65,14 +73,6 @@
   ;;   "Va" 'pyvenv-activate
   ;;   "Vd" 'pyvenv-deactivate
   ;;   "Vw" 'pyvenv-workon)
-  :mode-hydra
-  (python-ts-mode
-   (:title "Python Commands")
-   ("Python"
-    (("i" elpy-importmagic-fixup "Importmagic fixup")
-     ("d" elpy-goto-definition   "Goto definition")
-     ("r" elpy-multiedit-python-symbol-at-point   "Rename symbol")
-     ("f" elpy-format-code   "Format code"))))
   )
 
 (use-package lsp-pyright
