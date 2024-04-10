@@ -13,7 +13,7 @@
   ;;            treemacs-fringe-indicator-mode
   ;;            treemacs-git-mode)
   :custom-face
-  (treemacs-window-background-face ((t (:background "#efe9dd" :height 140))))
+  (treemacs-window-background-face ((t (:background "#efe9dd" :height 160))))
   :hook
   ;; init treemacs in emacs keys;
   ;; (treemacs-mode . evil-normalize-keymaps)
@@ -23,7 +23,7 @@
                      (setq-local word-wrap nil)))
   :config
   (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    (define-key winum-keymap (kbd "<f8>") #'treemacs-select-window))
   
   (setq treemacs-collapse-dirs                 (if (treemacs--find-python3) 3 0)
         treemacs-deferred-git-apply-delay      0.5
@@ -129,8 +129,8 @@
   ;;           (unless (ht-get treemacs-icons-hash (s-replace-regexp ".\\?" "" key))
   ;;             (ht-set! treemacs-icons-hash (s-replace-regexp ".\\?" "" key) value)))))))
   :bind
-  (([f8]        . treemacs)
-   ("M-0"       . treemacs-select-window)
+  (("M-0"       . treemacs)
+   ([f8]        . treemacs-select-window)
    ("C-x t 1"   . treemacs-delete-other-windows)
    ("C-x t B"   . treemacs-bookmark)
    ("C-x t C-t" . treemacs-find-file)
