@@ -159,15 +159,15 @@
 
 (use-package tern
   :disabled t
-  :general
-  (tern-mode-keymap
-   "M-."        'tern-find-definition
-   "C-M-."      'tern-find-definition-by-name
-   "M-,"        'tern-pop-find-definition
-   "C-c C-r"    'tern-rename-variable
-   "C-c C-c"    'tern-get-type
-   "C-c C-d"    'tern-get-docs
-   "M-<return>" 'tern-get-docs)
+  :bind
+  (:map tern-mode-keymap
+        ("M-."        . tern-find-definition)
+        ("C-M-."      . tern-find-definition-by-name)
+        ("M-,"        . tern-pop-find-definition)
+        ("C-c C-r"    . tern-rename-variable)
+        ("C-c C-c"    . tern-get-type)
+        ("C-c C-d"    . tern-get-docs)
+        ("M-<return>" . tern-get-docs))
   :ensure-system-package (tern . "npm install tern -g")
   :commands tern-mode
   :hook (js2-mode . tern-mode))

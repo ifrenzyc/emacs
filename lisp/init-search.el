@@ -11,17 +11,17 @@
   :ensure nil
   :no-require t
   :commands swiper-from-isearch
-  :general
-  ("M-s ."   'isearch-forward-symbol-at-point
+  :bind
+  (("M-s ."   . isearch-forward-symbol-at-point)
    ;; "C-s"   'isearch-forward-regexp
-   "C-r"     'isearch-backward-regexp
-   "C-M-s"   'isearch-forward-other-window
-   "C-M-r"   'isearch-backward-other-window
-   "M-s SPC" 'xah-search-current-word)
-  (isearch-mode-map
-   "C-;" 'swiper-from-isearch
-   "C-'" 'avy-isearch
-   "C-l" 'counsel-git-grep-from-isearch)
+   ("C-r"     . isearch-backward-regexp)
+   ("C-M-s"   . isearch-forward-other-window)
+   ("C-M-r"   . isearch-backward-other-window)
+   ("M-s SPC" . xah-search-current-word))
+  (:map isearch-mode-map
+        ("C-;" . swiper-from-isearch)
+        ("C-'" . avy-isearch)
+        ("C-l" . counsel-git-grep-from-isearch))
   :config
   ;; Isearch in other windows
   (defun isearch-forward-other-window (prefix)
@@ -72,8 +72,8 @@ Version 2015-04-09"
 
 (use-package occur
   :ensure nil
-  :general
-  ("M-s o" 'occur-dwim)
+  :bind
+  ("M-s o" . occur-dwim)
   :config
   ;; - https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#occur
   (defun occur-dwim ()
@@ -110,14 +110,14 @@ Version 2015-04-09"
 ;; - 配置来源于： https://gist.github.com/karthink/af013ffd77fe09e67360f040b57b4c7b （https://karthinks.com/software/avy-can-do-anything/）
 ;; - https://gist.github.com/Zetagon/1068474ef68ae0640f14dda240966ad1
 (use-package avy
-  :general
-  ("C-;"   'avy-goto-char-timer
-   "C-:"   'avy-goto-line
-   "M-g A" 'ace-jump-two-chars-mode
-   "M-g a" 'avy-goto-char
-   "M-g l" 'avy-goto-char-2)
-  (isearch-mode-map
-   "M-j" 'avy-isearch)
+  :bind
+  (("C-;"   . avy-goto-char-timer)
+   ("C-:"   . avy-goto-line)
+   ("M-g A" . ace-jump-two-chars-mode)
+   ("M-g a" . avy-goto-char)
+   ("M-g l" . avy-goto-char-2))
+  (:map isearch-mode-map
+        ("M-j" . avy-isearch))
   ;; (swiper-map
   ;;   "M-j" 'swiper-avy)
   :custom ((avy-all-windows nil)
@@ -333,8 +333,8 @@ active region use it instead."
 
 ;; fuzzy file finder
 (use-package fiplr
-  :general
-  ("C-c p p" 'fiplr-find-file)
+  :bind
+  ("C-c p p" . fiplr-find-file)
   :config
   (setq fiplr-root-markers '(".git" ".svn"))
   (setq fiplr-ignored-globs '((directories (".git" ".svn" "node_modules" "elpa" "localelpa"))
@@ -360,8 +360,8 @@ active region use it instead."
              color-rg-search-input
              color-rg-search-symbol
              color-rg-search-project)
-  :general
-  ("M-s M-s" 'color-rg-search-project))
+  :bind
+  ("M-s M-s" . color-rg-search-project))
 
 ;; *About:* 多文件查找替换
 ;; - https://github.com/mhayashi1120/Emacs-wgrep
@@ -381,9 +381,9 @@ active region use it instead."
 (use-package ace-jump-mode
   :disabled t
   :demand t
-  :general
-  ("C-x j" 'ace-jump-mode
-   "M-g f" 'ace-jump-mode)
+  :bind
+  (("C-x j" . ace-jump-mode)
+   ("M-g f" . ace-jump-mode))
   :config
   ;; Thanks to: https://github.com/winterTTr/ace-jump-mode/issues/23
   (defun ace-jump-two-chars-mode (&optional query-char query-char-2)
@@ -405,9 +405,9 @@ active region use it instead."
 ;; Goto last change
 (use-package goto-chg
   :disabled t
-  :general
-  ("C-c b ," 'goto-last-change
-   "C-c b ." 'goto-last-change-reverse))
+  :bind
+  (("C-c b ," . goto-last-change)
+   ("C-c b ." . goto-last-change-reverse)))
 
 (use-package fuz
   :disabled t

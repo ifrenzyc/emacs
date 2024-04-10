@@ -8,7 +8,8 @@
 
 (use-package docker
   :disabled t
-  :bind ("C-c d" . docker))
+  :bind
+  ("C-c d" . docker))
 
 (provide 'lang-docker)
 ;;; lang-docker.el ends here

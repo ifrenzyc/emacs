@@ -23,12 +23,12 @@
 
 (use-package ivy
   :demand t
-  ;; :general
-  ;; ("C-x b" 'ivy-switch-buffer
-  ;;  "C-x B" 'ivy-switch-buffer-other-window)
   :bind
   (([remap switch-to-buffer] . ivy-switch-buffer)
-   ([remap switch-to-bufer-other-window] . ivy-switch-buffer-other-window))
+   ([remap switch-to-bufer-other-window] . ivy-switch-buffer-other-window)
+   ;; ("C-x b" . ivy-switch-buffer)
+   ;; ("C-x B" . ivy-switch-buffer-other-window)
+   )
   :hook
   (minibuffer-setup . yc--minibuffer-setup-hook)
   (minibuffer-exit . yc--minibuffer-exit-hook)
@@ -39,7 +39,7 @@
   (ivy-use-virtual-buffers t)
   :config
   (ivy-mode 1)
-  
+
   ;; Display an arrow with the selected item
   (defun my-ivy-format-function-arrow (cands)
     "Transform CANDS into a string for minibuffer."
@@ -243,48 +243,47 @@
 ;; - https://oremacs.com/swiper/
 (use-package swiper
   :commands (swiper swiper-all swiper-isearch)
-  :general
-  ("C-M-s" 'swiper-isearch
-   "M-s s" 'swiper-isearch
-   "C-s"   'swiper-isearch
-   "C-c u" 'swiper-all)
-  (swiper-isearch-map
-   "M-<down>" 'ivy-next-history-element
-   "M-<up>"   'ivy-previous-history-element)
-  (swiper-map
-   "M-q"  'swiper-query-replace
-   "C-l"  'swiper-recenter-top-bottom
-   "C-."  'swiper-mc
-   "C-'"  'swiper-avy))
+  :bind
+  (("C-M-s" . swiper-isearch)
+   ("M-s s" . swiper-isearch)
+   ("C-s"   . swiper-isearch)
+   ("C-c u" . swiper-all))
+  (:map swiper-isearch-map
+        ("M-<down>" . ivy-next-history-element)
+        ("M-<up>"   . ivy-previous-history-element))
+  (:map swiper-map
+        ("M-q"  . swiper-query-replace)
+        ("C-l"  . swiper-recenter-top-bottom)
+        ("C-."  . swiper-mc)
+        ("C-'"  . swiper-avy)))
 
 (use-package counsel
   :demand t
-  :general
-  ("C-x C-f" 'counsel-find-file
-   "C-x d"   'counsel-dired
-   ;; "M-y"     'counsel-yank-pop
-   "M-s M-r" 'counsel-rg
-   "M-s r"   'rg
-   "M-s R"   'rg-project
-   "M-s a"   'counsel-ag
-   "M-s g"   'counsel-git-grep
-   "M-s f"   'counsel-fzf
-   "M-s F"   'fiplr-find-file
-   "C-c C-r" 'ivy-resume
-   "C-c i"   'counsel-imenu
-   "C-x k"   'kill-buffer
-   "C-x l"   'counsel-locate
-   "C-h f"   'counsel-describe-function
-   "C-h v"   'counsel-describe-variable
-   "C-c f"   'counsel-git    ; 与 org-journal 冲突
-   "C-c F"   'counsel-recentf)
-  (help-map
-   "f" 'counsel-describe-function
-   "v" 'counsel-describe-variable
-   "l" 'counsel-info-lookup-symbol)
   :bind
   (([remap execute-extended-command] . counsel-M-x)
-   ([remap yank-pop] . counsel-yank-pop))
+   ([remap yank-pop] . counsel-yank-pop)
+   ("C-x C-f" . counsel-find-file)
+   ("C-x d"   . counsel-dired)
+   ;; "M-y"     'counsel-yank-pop
+   ("M-s M-r" . counsel-rg)
+   ("M-s r"   . rg)
+   ("M-s R"   . rg-project)
+   ("M-s a"   . counsel-ag)
+   ("M-s g"   . counsel-git-grep)
+   ("M-s f"   . counsel-fzf)
+   ("M-s F"   . fiplr-find-file)
+   ("C-c C-r" . ivy-resume)
+   ("C-c i"   . counsel-imenu)
+   ("C-x k"   . kill-buffer)
+   ("C-x l"   . counsel-locate)
+   ("C-h f"   . counsel-describe-function)
+   ("C-h v"   . counsel-describe-variable)
+   ("C-c f"   . counsel-git)    ; 与 org-journal 冲突
+   ("C-c F"   . counsel-recentf))
+  (:map help-map
+        ("f" . counsel-describe-function)
+        ("v" . counsel-describe-variable)
+        ("l" . counsel-info-lookup-symbol))
   :ensure-system-package
   ((ag . "brew install the_silver_searcher")
    (rg . "brew install ripgrep"))
@@ -516,9 +515,9 @@
 
 ;; https://github.com/ericdanan/counsel-projectile
 (use-package counsel-projectile
-  :general
-  ("C-x C-p" 'counsel-projectile-switch-project
-   "C-x p B" 'counsel-projectile-switch-to-buffer)
+  :bind
+  (("C-x C-p" . counsel-projectile-switch-project)
+   ("C-x p B" . counsel-projectile-switch-to-buffer))
   :after (counsel projectile)
   :hook (counsel-mode . counsel-projectile-mode)
   :init
@@ -535,11 +534,11 @@
 
 (use-package counsel-osx-app
   :after counsel
-  :general
-  ("H-v" '(lambda ()
-            (interactive)
-            (call-process-shell-command "open /Applications/Paste.app")
-            )))
+  :bind
+  ("H-v" . (lambda ()
+             (interactive)
+             (call-process-shell-command "open /Applications/Paste.app")
+             )))
 
 (use-package counsel-fd
   :after counsel
@@ -551,11 +550,11 @@
   (counsel-at-point-file-jump
    counsel-at-point-git-grep
    counsel-at-point-imenu)
-  ;; :general
+  ;; :bind
   ;; Example key bindings.
-  ;; (("M-n" 'counsel-at-point-git-grep)
-  ;; ("M-p" 'counsel-at-point-file-jump)
-  ;; ("C-c i" 'counsel-at-point-imenu)
+  ;; (("M-n" . counsel-at-point-git-grep)
+  ;; ("M-p" . counsel-at-point-file-jump)
+  ;; ("C-c i" . counsel-at-point-imenu)
   ;; )
   )
 

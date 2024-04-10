@@ -13,18 +13,18 @@
 
 ;;; Code:
 (use-package lsp-mode
-  :general
-  (lsp-command-map
-   "d" 'lsp-find-definition
-   "f" 'lsp-find-references
-   "H" 'lsp-ui-doc-show
-   "i" 'lsp-goto-implementation
-   "t" 'lsp-goto-type-definition
-   "s" 'lsp-ivy-workspace-symbol
-   "S" 'lsp-ivy-global-workspace-symbol)
-  (lsp-mode-map
-   "C-c C-d" 'lsp-describe-thing-at-point
-   "C-c l" 'hydra-lsp-map/body)
+  :bind
+  (:map lsp-command-map
+        ("d" . lsp-find-definition)
+        ("f" . lsp-find-references)
+        ("H" . lsp-ui-doc-show)
+        ("i" . lsp-goto-implementation)
+        ("t" . lsp-goto-type-definition)
+        ("s" . lsp-ivy-workspace-symbol)
+        ("S" . lsp-ivy-global-workspace-symbol))
+  (:map lsp-mode-map
+        ("C-c C-d" . lsp-describe-thing-at-point)
+        ("C-c l"   . hydra-lsp-map/body))
   :commands (lsp lsp-deferred)
   :hook
   ((lsp . lsp-lens-mode)
@@ -62,7 +62,7 @@
 
   (lsp-completion-provider :none) ;; we use Corfu!
 
-  ;; go install github.com/lighttiger2505/sqls@latest
+  ;; go install github.com/sqls-server/sqls@latest
   (lsp-sqls-server "/opt/homebrew/opt/go/libexec/bin/sqls")
 
   (lsp-semantic-tokens-enable t)

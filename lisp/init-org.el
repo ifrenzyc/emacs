@@ -23,17 +23,17 @@
   :ensure nil
   :mode ("\\.\\(org\\|txt\\)$" . org-mode)
   :delight org-mode "Org"
-  :general
-  ("H-c"     'org-capture
-   "<f5>"    'yc/copy-idlink-to-clipboard
-   "<f7>"    'org-redisplay-inline-images
-   "M-s M-R" 'yc/counsel-rg-in-itsycnotes)
+  :bind
+  (("H-c"     . org-capture)
+   ("<f5>"    . yc/copy-idlink-to-clipboard)
+   ("<f7>"    . org-redisplay-inline-images)
+   ("M-s M-R" . yc/counsel-rg-in-itsycnotes))
   ;; @see - https://github.com/noctuid/evil-guide
   ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
-  (org-mode-map  ;; NOTE: keymaps specified with :keymaps must be quoted
-   "C-c C-j"   'counsel-org-goto
-   "<backtab>" 'org-shifttab
-   "<tab>"     'org-cycle)
+  (:map org-mode-map  ;; NOTE: keymaps specified with :keymaps must be quoted
+        ("C-c C-j"   . counsel-org-goto)
+        ("<backtab>" . org-shifttab)
+        ("<tab>"     . org-cycle))
   ;; key for exiting src edit mode
   :mode-hydra
   (org-mode
@@ -385,9 +385,9 @@ text and copying to the killring."
 ;; https://github.com/rexim/org-cliplink
 (use-package org-cliplink
   :commands (org-cliplink org-cliplink-clipboard-content)
-  :general
-  ("C-c s-l" 'org-store-link
-   "C-c s-i" 'org-cliplink))
+  :bind
+  (("C-c s-l" . org-store-link)
+   ("C-c s-i" . org-cliplink)))
 
 (use-package org-ol-tree
   :commands org-ol-tree
@@ -425,8 +425,8 @@ text and copying to the killring."
 (use-package preview-org-html-mode
   :load-path "localelpa/preview-org-html-mode"
   ;; :init (setq preview-org-html-viewer 'xwidget)
-  :general
-  ("<f12>" 'preview-org-html-mode))
+  :bind
+  ([f12] . preview-org-html-mode))
 
 (use-package ob-go)
 

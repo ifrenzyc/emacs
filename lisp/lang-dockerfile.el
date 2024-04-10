@@ -11,9 +11,9 @@
   :hook
   ((dockerfile-mode . lsp-deferred)
    (dockerfile-ts-mode . lsp-deferred))
-  :general
-  (dockerfile-ts-mode-map
-   "C-c C-f" 'lsp-format-buffer))
+  :bind
+  (:map dockerfile-ts-mode-map
+        ("C-c C-f" . lsp-format-buffer)))
 
 (use-package docker-compose-mode
   :mode ("docker-compose[^/]*\\.\\(yml\\|yaml\\)$" . docker-compose-mode))

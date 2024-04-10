@@ -7,6 +7,12 @@
 ;;; Code:
 (require 'windmove)
 
+(global-set-key (kbd "C-x 2") 'yc/split-window-vertically)
+(global-set-key (kbd "C-x 3") 'yc/split-window-horizontally)
+
+(global-set-key (kbd "C-c n n") 'yc/new-buffer-frame)
+(global-set-key (kbd "C-x C-m") 'yc/move-file)
+
 ;; Split and move the cursor to the new split
 (defun yc/split-window-vertically ()
   "Split the window vertically and display the previous buffer."

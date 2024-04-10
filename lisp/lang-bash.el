@@ -32,9 +32,9 @@
   (flycheck-checkbashisms-setup))
 
 (use-package shfmt
-  :general
-  (sh-mode-map
-   "C-c C-f" 'shfmt))
+  :bind
+  (:map sh-mode-map
+        ("C-c C-f" . shfmt)))
 
 (provide 'lang-bash)
 ;;; lang-bash.el ends here

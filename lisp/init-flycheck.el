@@ -7,12 +7,12 @@
 ;;; Code
 (use-package flycheck
   :commands global-flycheck-mode
-  :general
-  (flycheck-error-list-mode-map
-   "RET" 'flycheck-error-list-goto-error
-   "j" 'flycheck-error-list-next-error
-   "k" 'flycheck-error-list-previous-error
-   "q" 'quit-window)
+  :bind
+  (:map flycheck-error-list-mode-map
+        ("RET" . flycheck-error-list-goto-error)
+        ("j"   . flycheck-error-list-next-error)
+        ("k"   . flycheck-error-list-previous-error)
+        ("q"   . quit-window))
   :pretty-hydra
   (hydra-flycheck
    (:hint nil :color teal :quit-key "C-g" :title (with-faicon "nf-fa-plane" "Flycheck" 1 -0.05))

@@ -90,9 +90,9 @@
 ;; Writeable dired
 (use-package wdired
   :after dired
-  :general
-  (dired-mode-map
-   "C-c C-c" 'wdired-change-to-wdired-mode)
+  :bind
+  (:map dired-mode-map
+        ("C-c C-c" . wdired-change-to-wdired-mode))
   :commands wdired-change-to-wdired-mode
   :custom
   (wdired-allow-to-change-permissions t))
@@ -102,9 +102,9 @@
 ;; - https://jblevins.org/log/dired-open
 (use-package direx
   :after dired
-  :general
-  (dired-mode-map
-   "C-x C-j" 'direx:jump-to-directory))
+  :bind
+  (:map dired-mode-map
+        ("C-x C-j" . direx:jump-to-directory)))
 ;; "z"       '(lambda () (interactive)
 ;;              (let ((fn (dired-get-file-for-visit)))
 ;;                (start-process "default-app" nil "open" fn)))))
@@ -115,18 +115,18 @@
 ;; Show subtree when pressing =i=
 (use-package dired-subtree
   :after (dired)
-  :general
-  (dired-mode-map
-   "TAB" 'dired-subtree-toggle
-   "<backtab>" 'dired-subtree-cycle))
+  :bind
+  (:map dired-mode-map
+        ("TAB" . dired-subtree-toggle)
+        ("<backtab>" . dired-subtree-cycle)))
 
 (use-package dired-narrow
   :after (dired)
-  :general
-  (dired-mode-map
-   "C-c C-n" 'dired-narrow
-   "C-c C-f" 'dired-narrow-fuzzy
-   "C-c C-N" 'dired-narrow-regexp)
+  :bind
+  (:map dired-mode-map
+        ("C-c C-n" . dired-narrow)
+        ("C-c C-f" . dired-narrow-fuzzy)
+        ("C-c C-N" . dired-narrow-regexp))
   :config
   (setq dired-narrow-exit-when-one-left t
         dired-narrow-enable-blinking t
@@ -147,9 +147,9 @@
 ;; adds git logs to dired file and directory details.
 (use-package dired-git-info
   :after dired
-  :general
-  (dired-mode-map
-   ")" 'dired-git-info-mode)
+  :bind
+  (:map dired-mode-map
+        (")" . dired-git-info-mode))
   :config
   (setq dgi-commit-message-format "%h\t%s\t%cr"))
 

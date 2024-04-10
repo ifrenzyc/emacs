@@ -440,7 +440,7 @@ If there is only one overlay at point, just return it, no matter region or symbo
    (highlight-symbol-mode . highlight-symbol-nav-mode)
    ;; (org-mode . highlight-symbol-mode)
    )
-  ;; :general
+  ;; :bind
   ;; (
   ;;   "M-<f3>" 'highlight-symbol-at-point
   ;;   "<f3>" 'highlight-symbol-next

@@ -6,18 +6,18 @@
 
 ;;; Code:
 (use-package info
-  :general
-  (Info-mode-map
-   "h" 'Info-backward-node    ; h was Info-help, Info-backward-node was [
-   "l" 'Info-forward-node     ; l was Info-history-back, Info-forward-node was ]
-   "y" 'Info-help             ; y wasn't bound, Info-help was h
-   "K" 'Info-history          ; K wasn't bound, Info-history was L
-   "H" 'Info-history-back     ; H was describe-mode, Info-history-back was l
-   "L" 'Info-history-forward  ; L was Info-history, Info-history-forward was r
-   "k" 'Info-up               ; k wasn't bound, Info-up was ^ and u
-   "j" 'Info-menu             ; j was bmkp-info-jump, Info-menu was m
-   "b" 'bmkp-info-jump        ; b was beginning-of-buffer, bmkp-info-jump was j
-   "?" 'hydra-info/body)
+  :bind
+  (:map Info-mode-map
+        ("h" . Info-backward-node)    ; h was Info-help, Info-backward-node was [
+        ("l" . Info-forward-node)     ; l was Info-history-back, Info-forward-node was ]
+        ("y" . Info-help)             ; y wasn't bound, Info-help was h
+        ("K" . Info-history)          ; K wasn't bound, Info-history was L
+        ("H" . Info-history-back)     ; H was describe-mode, Info-history-back was l
+        ("L" . Info-history-forward)  ; L was Info-history, Info-history-forward was r
+        ("k" . Info-up)               ; k wasn't bound, Info-up was ^ and u
+        ("j" . Info-menu)             ; j was bmkp-info-jump, Info-menu was m
+        ("b" . bmkp-info-jump)        ; b was beginning-of-buffer, bmkp-info-jump was j
+        ("?" . hydra-info/body))
   :config
   (set-face-attribute 'Info-quoted nil
                       :family 'unspecified
@@ -92,8 +92,8 @@
 (use-package info-colors)
 
 (use-package helpful
-  :general
-  ("C-h" 'helpful-hydra/body)
+  :bind
+  ("C-h" . helpful-hydra/body)
   :pretty-hydra
   ((:color teal :quit-key "C-g")
    ("Helpful"

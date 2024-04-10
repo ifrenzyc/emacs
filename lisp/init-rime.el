@@ -15,15 +15,15 @@
 ;;; Code:
 
 (use-package rime
-  :general
-  ("M-SPC"  'yc/turn-off-input-method
+  :bind
+  (("M-SPC"  . yc/turn-off-input-method)
    ;; "C-\\"   'yc/turn-off-input-method
    ;; "C-|"    'yc/turn-on-rime-input-method
    ;; "C-s-\\" 'yc/turn-on-rime-input-method
-   "H-SPC"  'yc/turn-on-rime-input-method)
-  (rime-mode-map
-   "C-`" 'rime-send-keybinding
-   "M-j" 'rime-force-enable)
+   ("H-SPC"  . yc/turn-on-rime-input-method))
+  (:map rime-mode-map
+        ("C-`" . rime-send-keybinding)
+        ("M-j" . rime-force-enable))
   :custom
   (rime-librime-root (expand-file-name "bin/librime/dist" user-emacs-directory))
   (rime-user-data-dir (expand-file-name "rime" user-emacs-directory))

@@ -15,9 +15,9 @@
 ;; - https://github.com/alphapapa/org-super-agenda
 ;; - https://github.com/alphapapa/org-super-agenda/blob/master/examples.org
 (use-package org-super-agenda
-  :general
-  (org-super-agenda-header-map
-   "<tab>" 'origami-toggle-node)
+  :bind
+  (:map org-super-agenda-header-map
+        ("<tab>" . origami-toggle-node))
   :commands (org-agenda)
   :hook ((org-agenda-mode . org-super-agenda-mode)
          (org-agenda-mode . (lambda ()
@@ -65,10 +65,10 @@
 
 (use-package org-agenda
   :ensure nil
-  :general
-  ("C-c a"   'org-agenda
-   "C-c c"   'org-capture
-   "C-c C-t" 'yc/org-todo-force-notes)
+  :bind
+  (("C-c a"   . org-agenda)
+   ("C-c c"   . org-capture)
+   ("C-c C-t" . yc/org-todo-force-notes))
   ;; (global-set-key (kbd "<f5>") 'makeMatrix)
   :mode-hydra
   (org-agenda-mode
@@ -686,8 +686,9 @@
 ;; Pomodoro
 (use-package org-pomodoro
   :after org org-agenda
-  :general (org-agenda-mode-map
-            "P" 'org-pomodoro))
+  :bind
+  (:map org-agenda-mode-map
+        ("P" . org-pomodoro)))
 
 ;; Add graphical view of agenda
 ;; (use-package org-timeline

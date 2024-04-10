@@ -16,22 +16,22 @@
 (require 'init-const)
 
 (use-package company
-  :general
-  ("C-." 'company-complete)
+  :bind
+  ("C-." . company-complete)
   ;; :map company-mode-map
   ;; ("<backtab>" . company-yasnippet)
-  (company-active-map
-   "<tab>" 'company-complete-selection
-   "C-n" 'company-select-next
-   "C-p" 'company-select-previous
-   "C-d" 'company-show-doc-buffer
-   "C-f" 'company-filter-candidates
-   "C-r" 'company-search-candidates
-   "C-/" 'counsel-company
-   "<backtab>" 'my-company-yasnippet)
-  (company-search-map
-   "C-p" 'company-select-previous
-   "C-n" 'company-select-next)
+  (:map company-active-map
+        ("<tab>" . company-complete-selection)
+        ("C-n" . company-select-next)
+        ("C-p" . company-select-previous)
+        ("C-d" . company-show-doc-buffer)
+        ("C-f" . company-filter-candidates)
+        ("C-r" . company-search-candidates)
+        ("C-/" . counsel-company)
+        ("<backtab>" . my-company-yasnippet))
+  (:map company-search-map
+        ("C-p" . company-select-previous)
+        ("C-n" . company-select-next))
   :hook
   (after-init . global-company-mode)
   :config

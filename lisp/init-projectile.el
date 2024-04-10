@@ -7,16 +7,16 @@
 ;;; Code:
 
 (use-package projectile
-  :general
-  (projectile-command-map
-   "."   'hydra-projectile/body
-   "f"   'counsel-projectile-find-file
-   "F"   'projectile-find-file-dwim-other-window
-   "b"   'counsel-projectile-switch-to-buffer
-   "B"   'projectile-switch-to-buffer-other-window
-   "a"   'projectile-ag
-   "C-r" 'projectile-run-project
-   "p"   'counsel-projectile-switch-project)
+  :bind
+  (:map projectile-command-map
+        ("."   . hydra-projectile/body)
+        ("f"   . counsel-projectile-find-file)
+        ("F"   . projectile-find-file-dwim-other-window)
+        ("b"   . counsel-projectile-switch-to-buffer)
+        ("B"   . projectile-switch-to-buffer-other-window)
+        ("a"   . projectile-ag)
+        ("C-r" . projectile-run-project)
+        ("p"   . counsel-projectile-switch-project))
   :commands (projectile-project-root)
   :custom
   ((projectile-enable-caching t)

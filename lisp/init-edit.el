@@ -39,8 +39,8 @@
 ;; - https://github.com/magnars/expand-region.el
 (use-package expand-region
   :requires hydra
-  :general
-  ("C-=" 'er/expand-region)
+  :bind
+  ("C-=" . er/expand-region)
   ;; ("C-c =" 'bk/expand-region/body)
   :init
   (pending-delete-mode t))
@@ -216,8 +216,8 @@ there's a region, all lines that region covers will be duplicated."
 
 (use-package hippie-expand
   :ensure nil
-  :general
-  ("M-/" 'hippie-expand)
+  :bind
+  ("M-/" . hippie-expand)
   :init
   (setq hippie-expand-try-functions-list
 	    '(
@@ -317,7 +317,7 @@ there's a region, all lines that region covers will be duplicated."
 
 ;;   (custom-set-faces
 ;;    '(sp-show-pair-match-face ((t (:weight regular :foreground "SpringGreen3" :underline t)))))
-;;   :general
+;;   :bind
 ;;   (smartparens-mode-map
 ;;    ;; custom keybindings for smartparens mode
 ;;    "M-("       'sp-forward-barf-sexp

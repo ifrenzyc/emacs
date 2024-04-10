@@ -106,10 +106,10 @@
 
 (use-package dap-mode
   :after lsp
-  :general
-  (dap-mode-map
-   "<f5>"  'dap-debug
-   "<f7>"  'dap-hydra)
+  :bind
+  (:map dap-mode-map
+        ([f5]  . dap-debug)
+        ([f7]  . dap-hydra))
   :hook ((prog-mode . dap-mode)
          (dap-mode . dap-ui-mode)
          (dap-session-created . (lambda (&_rest) (dap-hydra)))
@@ -164,7 +164,7 @@
                '(and (derived-mode-p 'c-mode 'c-ts-mode 'c++-mode 'c++-ts-mode 'csharp-mode 'csharp-ts-mode
                                      'java-mode 'java-ts-mode 'go-mode 'go-ts-mode 'swift-mode)
                      (null (string-match "\\([;{}]\\|\\b\\(if\\|for\\|while\\)\\b\\)"
-                                         (thing-at-point 'line))))))
+                                              (thing-at-point 'line))))))
 
 ;; @see - https://github.com/VernonGrant/sidekick.el
 (use-package sidekick

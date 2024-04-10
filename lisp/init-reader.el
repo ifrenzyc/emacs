@@ -29,9 +29,6 @@
   ;; (set-cursor-color "DarkCyan")
   ;; (setq-default cursor-type 'box)
 
-  ;; (general-define-key
-  ;;  "SPC" (general-simulate-key "<f16>"))
-
   ;; (defun xfk-command-mode-on ()
   ;;   (global-hl-line-mode 1)
   ;;   (set-cursor-color "yellow")
@@ -54,11 +51,11 @@
 (use-package writeroom-mode
   :disabled t
   :commands (writeroom-mode)
-  :general
-  (writeroom-mode-map
-   "C-M-<" 'writeroom-decrease-width
-   "C-M->" 'writeroom-increase-width
-   "C-M-=" 'writeroom-adjust-width)
+  :bind
+  (:map writeroom-mode-map
+        ("C-M-<" . writeroom-decrease-width)
+        ("C-M->" . writeroom-increase-width)
+        ("C-M-=" . writeroom-adjust-width))
   :config
   (setq writeroom-restore-window-config t
         writeroom-width 89))

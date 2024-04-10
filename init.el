@@ -100,7 +100,6 @@
 (require 'init-highlight)
 
 (require 'init-which-key)
-(require 'init-general)
 ;; (require 'init-evil)
 ;; (require 'init-xah-fly-keys)
 ;; (require 'init-meow)

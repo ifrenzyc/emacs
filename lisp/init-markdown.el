@@ -162,8 +162,9 @@ To be used with `markdown-live-preview-window-function'."
 
 (use-package markdownfmt
   :after markdown-mode
-  :general
-  (markdown-mode-map "C-c C-f" 'markdownfmt-format-buffer))
+  :bind
+  (:map markdown-mode-map
+        ("C-c C-f" . markdownfmt-format-buffer)))
 
 (use-package markdown-preview-mode
   :after markdown-mode
@@ -175,11 +176,11 @@ To be used with `markdown-live-preview-window-function'."
                       "blob/master/data/css/github.css"))))
 
 (use-package edit-indirect
-  :general
-  (edit-indirect-mode-map
-   "C-c C-c" 'edit-indirect-commit
-   "C-c C-k" 'edit-indirect-abort
-   "C-c '"   'nil)
+  :bind
+  (:map edit-indirect-mode-map
+        ("C-c C-c" . edit-indirect-commit)
+        ("C-c C-k" . edit-indirect-abort)
+        ("C-c '"   . nil))
   :hook
   ((edit-indirect-after-creation . aorst/real-buffer-setup)
    (edit-indirect-after-creation . aorst/edit-indirect-header-line-setup))
@@ -195,11 +196,10 @@ To be used with `markdown-live-preview-window-function'."
 ;; macOS:
 ;; pip install grip
 (use-package grip-mode
-  :general
-  (markdown-mode-command-map
-   "g" 'grip-mode)
+  :bind
+  (:map markdown-mode-command-map
+        ("g" . grip-mode))
   :commands (grip-mode)
-  ;; :straight (:host github :repo "seagle0128/grip-mode")
   :ensure-system-package (grip . "pip install grip")
   :config
   ;; Path to the grip binary
@@ -207,8 +207,7 @@ To be used with `markdown-live-preview-window-function'."
 
 ;; (use-package separedit
 ;;   :hook (separedit-buffer-creation . aorst/separedit-header-line-setup)
-;;   :bind (:map
-;;          prog-mode-map
+;;   :bind (:map prog-mode-map
 ;;          ("C-c '" . separedit)
 ;;          :map edit-indirect-mode-map
 ;;          ("C-c '" . separedit))

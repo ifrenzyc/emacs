@@ -7,8 +7,8 @@
 ;;; Code:
 
 (use-package embark
-  :general
-  ("s-o" 'embark-act)
+  :bind
+  ("s-o" . embark-act)
   :config
   ;; Use Embark instead of `describe-prefix-bindings'
   (setq prefix-help-command #'embark-prefix-help-command)

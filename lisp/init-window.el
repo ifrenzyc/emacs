@@ -62,14 +62,14 @@
 
 (use-package window
   :ensure nil
-  :general
-  ("s-<left>"     'hydra-move-splitter-left
-   "s-<right>"    'hydra-move-splitter-right
-   "s-<up>"       'hydra-move-splitter-up
-   "s-<down>"     'hydra-move-splitter-down
-   "s-S-<left>"   'hydra-move-splitter-left-4x
-   "s-S-<right>"  'hydra-move-splitter-right-4x
-   "s-<return>"   'doom/window-enlargen))
+  :bind
+  (("s-<left>"     . hydra-move-splitter-left)
+   ("s-<right>"    . hydra-move-splitter-right)
+   ("s-<up>"       . hydra-move-splitter-up)
+   ("s-<down>"     . hydra-move-splitter-down)
+   ("s-S-<left>"   . hydra-move-splitter-left-4x)
+   ("s-S-<right>"  . hydra-move-splitter-right-4x)
+   ("s-<return>"   . doom/window-enlargen)))
 
 ;; Winner Mode 是 Emacs 自带的一个 minor mode，可以用于快速恢复窗口分割状态。
 ;; 默认使用 =C-c <left>= 组合键，就可以快速退回上一个窗口设置； =C-c <right>= 组合键，向前恢复一个窗口设置。
@@ -93,18 +93,18 @@
   (advice-add 'winner-save-old-configurations :before #'gjg/winner-clean-up-modified-list))
 
 (use-package winum
-  :general
-  (winum-keymap
-   ;; "M-0" 'winum-select-window-0-or-10
-   "M-1" 'winum-select-window-1
-   "M-2" 'winum-select-window-2
-   "M-3" 'winum-select-window-3
-   "M-4" 'winum-select-window-4
-   "M-5" 'winum-select-window-5
-   "M-6" 'winum-select-window-6
-   "M-7" 'winum-select-window-7
-   "M-8" 'winum-select-window-8
-   "M-9" 'winum-select-window-9)
+  :bind
+  (:map winum-keymap
+        ;; "M-0" 'winum-select-window-0-or-10
+        ("M-1" . winum-select-window-1)
+        ("M-2" . winum-select-window-2)
+        ("M-3" . winum-select-window-3)
+        ("M-4" . winum-select-window-4)
+        ("M-5" . winum-select-window-5)
+        ("M-6" . winum-select-window-6)
+        ("M-7" . winum-select-window-7)
+        ("M-8" . winum-select-window-8)
+        ("M-9" . winum-select-window-9))
   :init
   (setq winum-auto-setup-mode-line nil)
   (winum-mode 1)
@@ -115,8 +115,8 @@
 ;; 或许试试这个 Package： https://github.com/dimitri/switch-window
 ;; https://sachachua.com/blog/2015/01/emacs-microhabit-switching-windows-windmove-ace-window-ace-jump/
 (use-package ace-window
-  :general
-  ("M-o" 'ace-window)
+  :bind
+  ("M-o" . ace-window)
   :init
   (setq ;; aw-keys '(?h ?j ?k ?l ?y ?u ?i ?o ?p)
    aw-background nil
@@ -138,15 +138,15 @@
 ;; https://github.com/syohex/emacs-zoom-window
 (use-package zoom-window
   :commands zoom-window-zoom
-  :general
-  ("C-x w z" 'zoom-window-zoom)
+  :bind
+  ("C-x w z" . zoom-window-zoom)
   :config
   (setq zoom-window-mode-line-color "DarkGreen"))
 
 (use-package rotate
   ;; :commands (rotate-layout rotate-window hydra-rotate-window/body)
-  :general
-  ("C-x w ." 'hydra-rotate-window/body)
+  :bind
+  ("C-x w ." . hydra-rotate-window/body)
   :init
   (defhydra hydra-rotate-window ()
     "rotate-layout"
@@ -260,8 +260,8 @@
                      'hydra-window/body)) "swap"))))
 
 (use-package shackle
-  :general
-  ("C-c z" 'shackle-last-popup-buffer)
+  :bind
+  ("C-c z" . shackle-last-popup-buffer)
   :functions org-switch-to-buffer-other-window
   :commands shackle-display-buffer
   :hook (after-init . shackle-mode)

@@ -22,27 +22,27 @@
   ;; novoid 的很多 hydra 配置值得参考：
   ;; - /Users/yangc/src/emacs.d/novoid-dot-emacs/config.org
   ;; - /Users/yangc/src/emacs.d/caiohcs-emacs/settings.el
-  :general
-  ("C-c h <tab>" '(hydra-fold/body :wk "hydra-fold")
-   "C-c h D" '(hydra-dates/body :wk "hydra-dates")
-   ;; "C-c h d" '(hydra-dired/body :wk "hydra-dired")
-   "C-c h f" '(hydra-flycheck/body :wk "hydra-flycheck")
-   "C-c h j" '(hydra-dump-jump/body :wk "hydra-dump-jump")
-   "C-c h a" '(hydra-avy/body :wk "hydra-avy")
-   "C-c h s" '(hydra-selected/body :wk "hydra-selected")
-   ;; "C-c h s" '
-   ;; "C-c h S" '(hydra-smartparens/body :wk "hydra-smartparens")
-   ;; "C-c h c" '(hydra-multiple-cursors/body :wk "hydra-multiple-cursors")
-   "C-c h g" '(hydra-git-timemachine/body :wk "hydra-git-timemachine")
-   ;; "C-c g" 'hydra-magit/body
-   ;; "C-c h" 'hydra-helm/body
-   ;; "C-c o" 'yc/ongoing-hydra
-   ;; "C-c h v" '(hydra-pdftools/body :wk "hydra-pdftools")
-   "C-c h m" '(hydra-macro/body :wk "hydra-macro")
-   "C-c h p" '(hydra-projectile/body :wk "hydra-projectile")
-   "C-c h P" '(hydra-system/body :wk "hydra-system")
-   "C-c h t" '(hydra-toggles/body :wk "hydra-toggles")
-   "C-c h w" '(hydra-window/body :wk "hydra-window"))
+  ;; :bind
+  ;; (("C-c h <tab>" . (hydra-fold/body :wk "hydra-fold"))
+  ;;  ("C-c h D" . (hydra-dates/body :wk "hydra-dates"))
+  ;;  ;; "C-c h d" '(hydra-dired/body :wk "hydra-dired")
+  ;;  ("C-c h f" . (hydra-flycheck/body :wk "hydra-flycheck"))
+  ;;  ("C-c h j" . (hydra-dump-jump/body :wk "hydra-dump-jump"))
+  ;;  ("C-c h a" . (hydra-avy/body :wk "hydra-avy"))
+  ;;  ("C-c h s" . (hydra-selected/body :wk "hydra-selected"))
+  ;;  ;; "C-c h s" '
+  ;;  ;; "C-c h S" '(hydra-smartparens/body :wk "hydra-smartparens")
+  ;;  ;; "C-c h c" '(hydra-multiple-cursors/body :wk "hydra-multiple-cursors")
+  ;;  ("C-c h g" . (hydra-git-timemachine/body :wk "hydra-git-timemachine"))
+  ;;  ;; "C-c g" 'hydra-magit/body
+  ;;  ;; "C-c h" 'hydra-helm/body
+  ;;  ;; "C-c o" 'yc/ongoing-hydra
+  ;;  ;; "C-c h v" '(hydra-pdftools/body :wk "hydra-pdftools")
+  ;;  ("C-c h m" . (hydra-macro/body :wk "hydra-macro"))
+  ;;  ("C-c h p" . (hydra-projectile/body :wk "hydra-projectile"))
+  ;;  ("C-c h P" . (hydra-system/body :wk "hydra-system"))
+  ;;  ("C-c h t" . (hydra-toggles/body :wk "hydra-toggles"))
+  ;;  ("C-c h w" . (hydra-window/body :wk "hydra-window")))
   )
 
 ;; 关于 Hydra 高效的按键绑定，参考：

@@ -10,13 +10,13 @@
 
 ;;; Code:
 (use-package vterm
-  :general
-  ("<f9>"  'projectile-run-vterm
-   "S-<f9>" 'vterm)
-  (vterm-mode-map
-   "<f8>"    'treemacs
-   "M-SPC"   'yc/turn-off-input-method
-   "H-SPC"   'yc/turn-on-rime-input-method)
+  :bind
+  (("<f9>"   . projectile-run-vterm)
+   ("S-<f9>" . vterm))
+  (:map vterm-mode-map
+        ("<f8>"    . treemacs)
+        ("M-SPC"   . yc/turn-off-input-method)
+        ("H-SPC"   . yc/turn-on-rime-input-method))
   :hook
   (;; 为 vterm 设置单独字体，https://emacs-china.org/t/mode/15512
    (vterm-mode . (lambda () (setq buffer-face-mode-face '((:family "Cascadia Code" :height 130)))
@@ -86,12 +86,12 @@
 ;; https://github.com/suonlight/multi-libvterm
 (use-package multi-vterm
   :disabled t
-  :general
-  (vterm-mode-map
-   ;; Switch to next/previous vterm buffer
-   "s-n"   'multi-vterm-next
-   "s-p"   'multi-vterm-prev
-   "<f8>"  'treemacs)
+  :bind
+  (:map vterm-mode-map
+        ;; Switch to next/previous vterm buffer
+        ("s-n"   . multi-vterm-next)
+        ("s-p"   . multi-vterm-prev)
+        ("<f8>"  . treemacs))
   :commands (multi-vterm multi-vterm-project)
   :config
   (defalias 'mt 'multi-vterm-project))

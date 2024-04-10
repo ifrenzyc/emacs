@@ -26,9 +26,9 @@
 ;; - https://github.com/emacs-lsp/lsp-java
 (use-package lsp-java
   :after java-ts-mode
-  :general
-  (java-ts-mode-map
-   "C-c C-f" 'lsp-format-buffer)
+  :bind
+  (:map java-ts-mode-map
+        ("C-c C-f" . lsp-format-buffer))
   :init
   (setq-local lsp-ui-doc-enable t
               lsp-headerline-breadcrumb-enable t

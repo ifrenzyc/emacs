@@ -7,9 +7,9 @@
 ;;; Code:
 (use-package jsonian
   :mode ("\\.\\(json\\|json.j2\\|json.template\\|jsonld\\|tern-project\\|jshintrc\\)$" . jsonian-mode)
-  :general
-  (jsonian-mode-map
-   "C-c C-f" 'json-mode-beautify)
+  :bind
+  (:map jsonian-mode-map
+        ("C-c C-f" . json-mode-beautify))
   :custom
   (jsonian-no-so-long-mode)
   :hook
@@ -18,9 +18,9 @@
 
 (use-package json-mode
   :disabled t
-  :general
-  (json-ts-mode-map
-   "C-c C-f" 'json-mode-beautify)
+  :bind
+  (:map json-ts-mode-map
+        ("C-c C-f" . json-mode-beautify))
   :mode ("\\.\\(json\\|json.j2\\|json.template\\|jsonld\\|tern-project\\|jshintrc\\)$" . json-ts-mode)
   :hook
   (json-ts-mode . flycheck-mode)

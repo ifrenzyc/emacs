@@ -12,12 +12,12 @@
   :hook
   (go-ts-mode . flycheck-mode)
   (go-ts-mode . lsp-deferred)
-  :general
-  (go-ts-mode-map
-   "M-]"        'godef-jump
-   "M-["        'pop-tag-mark
-   "C-S-F"      'gofmt
-   "M-<return>" 'godef-describe)
+  :bind
+  (:map go-ts-mode-map
+        ("M-]"        . godef-jump)
+        ("M-["        . pop-tag-mark)
+        ("C-S-F"      . gofmt)
+        ("M-<return>" . godef-describe))
   :mode-hydra
   (go-ts-mode
    (:title "Go Commands")
@@ -174,9 +174,9 @@
 
 (use-package go-direx
   :after go-ts-mode
-  :general
-  (go-mode-map
-   "C-c C-j" 'go-direx-pop-to-buffer))
+  :bind
+  (:map go-mode-map
+        ("C-c C-j" . go-direx-pop-to-buffer)))
 
 (use-package go-eldoc
   :after go-ts-mode

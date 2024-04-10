@@ -5,7 +5,7 @@
 ;; 
 
 ;;; Code:
-(require 'treesit)
+`(require 'treesit)
 
 (use-package treesit
   :ensure nil
@@ -84,7 +84,6 @@
 
 (use-package tree-sitter
   :init
-  (setq tree-sitter-load-path (expand-file-name "bin/tree-sitter" user-emacs-directory))
   (global-tree-sitter-mode)
   :hook (tree-sitter-after-on . tree-sitter-hl-mode))
 

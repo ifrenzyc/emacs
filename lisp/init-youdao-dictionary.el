@@ -7,10 +7,10 @@
 ;;; Code:
 (use-package youdao-dictionary
   :functions (posframe-show posframe-hide)
-  :general
-  ("C-c y y" 'youdao-dictionary-search-at-point+
-   "C-c y i" 'youdao-dictionary-search-at-point
-   "C-c Y"   'my-youdao-search-at-point)
+  :bind
+  (("C-c y y" . youdao-dictionary-search-at-point+)
+   ("C-c y i" . youdao-dictionary-search-at-point)
+   ("C-c Y"   . my-youdao-search-at-point))
   :preface
   (with-eval-after-load 'posframe
     (defun youdao-dictionary-search-at-point-posframe ()
@@ -49,8 +49,8 @@
 ;; @see - https://github.com/lorniu/go-translate
 (use-package go-translate
   :commands (gts-do-translate)
-  :general
-  ("M-E" 'gts-do-translate)
+  :bind
+  ("M-E" . gts-do-translate)
   :config
   (setq gts-translate-list '(("en" "zh") ("zh" "en") ("jp" "zh")))
 

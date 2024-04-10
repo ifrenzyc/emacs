@@ -10,19 +10,19 @@
 
 ;; org-roam-capture 主要参考： /Users/yangc/src/emacs.d/ody55eus-doom-emacs.d/doom/Emacs.org
 (use-package org-roam
-  :general
-  ("C-c n l" 'org-roam-buffer-toggle
-   "C-c n f" 'org-roam-node-find
-   "C-c n i" 'org-roam-node-insert
-   "C-c n h" 'org-id-get-create
-   "<f4>"    'org-roam-dailies-capture-today)
-  (org-roam-mode-map
-   "C-c n l" 'org-roam-buffer-toggle
-   "C-c n f" 'org-roam-node-find
-   "C-c n g" 'org-roam-graph)
-  (org-mode-map
-   "C-c n i" 'org-roam-node-insert
-   "C-c n I" 'org-roam-insert-immediate)
+  :bind
+  (("C-c n l" . org-roam-buffer-toggle)
+   ("C-c n f" . org-roam-node-find)
+   ("C-c n i" . org-roam-node-insert)
+   ("C-c n h" . org-id-get-create)
+   ("<f4>"    . org-roam-dailies-capture-today))
+  (:map org-roam-mode-map
+        ("C-c n l" . org-roam-buffer-toggle)
+        ("C-c n f" . org-roam-node-find)
+        ("C-c n g" . org-roam-graph))
+  (:map org-mode-map
+        ("C-c n i" . org-roam-node-insert)
+        ("C-c n I" . org-roam-insert-immediate))
   :delight " 𝕫"
   :custom
   (org-roam-database-connector 'sqlite-builtin)

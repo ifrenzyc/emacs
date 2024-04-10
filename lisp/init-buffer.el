@@ -48,9 +48,9 @@
 
 (use-package ibuffer-vc
   :after ibuffer
-  :general
-  (ibuffer-mode-map
-   "/ V" 'ibuffer-vc-set-filter-groups-by-vc-root))
+  :bind
+  (:map ibuffer-mode-map
+        ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root)))
 
 (use-package ibuffer-projectile
   :after projectile

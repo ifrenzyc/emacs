@@ -7,9 +7,9 @@
 ;;; Code:
 (use-package nxml-mode
   :ensure nil
-  :general
-  (nxml-mode-map
-   "C-c C-f" 'lsp-format-buffer)
+  :bind
+  (:map nxml-mode-map
+        ("C-c C-f" . lsp-format-buffer))
   :mode ("\\.\\(xml\\|gapp\\|plist\\|pom\\|xsd\\|xslt\\)$" . nxml-mode)
   :hook
   (nxml-mode . lsp-deferred)
@@ -44,9 +44,9 @@
 (use-package xml-format
   :disabled t
   :after nxml-mode
-  :general
-  (nxml-mode-map
-   "C-c C-f" 'xml-format)
+  :bind
+  (:map nxml-mode-map
+        ("C-c C-f" . xml-format))
   :ensure-system-package (xmllint . "brew install libxml2"))
 
 (provide 'lang-xml)

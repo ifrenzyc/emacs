@@ -85,10 +85,10 @@
   (setq-default vimish-fold-header-width 119))
 
 (use-package hideshow
-  :general
-  ("C-<tab>"         'hs-cycle
-   "C-<iso-lefttab>" 'hs-global-cycle
-   "C-S-<tab>"       'hs-global-cycle)
+  :bind
+  (("C-<tab>"         . hs-cycle)
+   ("C-<iso-lefttab>" . hs-global-cycle)
+   ("C-S-<tab>"       . hs-global-cycle))
   :hook
   (prog-mode . hs-minor-mode)
   :config

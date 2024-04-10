@@ -35,8 +35,8 @@
 
 (use-package counsel-tramp
   :after (tramp counsel)
-  :general
-  ("C-c s" 'counsel-tramp))
+  :bind
+  ("C-c s" . counsel-tramp))
 
 ;; OBSOLETED
 ;; (use-package docker-tramp

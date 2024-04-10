@@ -26,9 +26,9 @@
 ;; - https://emacsair.me/2017/09/01/magit-walk-through/
 (use-package magit
   :commands (magit-status)
-  :general
-  ("C-x g" 'magit-status
-   "C-x G" 'magit-log-buffer-file)
+  :bind
+  (("C-x g" . magit-status)
+   ("C-x G" . magit-log-buffer-file))
   :hook
   (magit-mode . (lambda ()
                   (selected-minor-mode -1)))
