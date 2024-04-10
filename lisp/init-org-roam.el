@@ -145,7 +145,7 @@
   ;;       If some elements are missing, they will be stripped out."
   ;;   (let ((title     (org-roam-node-title node))
   ;;         (olp       (org-roam-node-olp   node))
-  ;;         (level     (org-roam-node-level node))
+  
   ;;         (filetitle (org-roam-node-doom-filetitle node))
   ;;         (separator (propertize " > " 'face 'shadow)))
   ;;     (cl-case level
@@ -163,7 +163,11 @@
 
   (org-roam-setup)
   :general
-  ("<f4>" 'org-roam-dailies-capture-today)
+  ("C-c n l" 'org-roam-buffer-toggle
+   "C-c n f" 'org-roam-node-find
+   "C-c n i" 'org-roam-node-insert
+   "C-c n h" 'org-id-get-create
+   "<f4>"    'org-roam-dailies-capture-today)  
   ;; (yc/leader-keys
   ;;   "ar" '(:ignore t :wk "org-roam")
   ;;   "arl" 'org-roam-buffer-toggle

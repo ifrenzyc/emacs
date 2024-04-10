@@ -17,8 +17,21 @@
 (use-package org-super-agenda
   :commands (org-agenda)
   :hook ((org-agenda-mode . org-super-agenda-mode)
+         (org-agenda-mode . (lambda ()
+                              (setq-local line-spacing 0.8)))
          ;; Easily fold groups via TAB.
          (org-super-agenda-mode . origami-mode))
+  :custom-face
+  (org-agenda-date ((t (:height 160))))
+  (org-agenda-date-today ((t (:height 160))))
+  (org-agenda-done ((t (:height 160))))
+  (org-scheduled-today ((t (:height 160))))
+  (org-super-agenda-header ((t (:height 160))))
+  (org-scheduled ((t (:height 160))))
+  (org-agenda-structure ((t (:height 160))))
+  (org-time-grid ((t (:height 160))))
+  (org-todo ((t (:height 160))))
+  (org-agenda-current-time ((t (:height 160))))
   :general
   (org-super-agenda-header-map
    "<tab>" 'origami-toggle-node)

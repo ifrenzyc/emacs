@@ -55,7 +55,8 @@
                             ("WAITING" . (:foreground "coral" :slant italic :weight bold))))
   :hook
   (org-mode . (lambda ()
-                (setq-local line-spacing 0.2)
+                (text-scale-increase 1)
+                (setq-local line-spacing 0.5)
                 (setq-local truncate-lines t)
                 (setq-local word-wrap nil)))
   :config
@@ -254,7 +255,7 @@ text and copying to the killring."
     (setq filename
           (concat
            (make-temp-name
-            (concat "~/notes/images/"
+            (concat "/Users/yangc/notes/images/"
                     (format-time-string "%Y%m%d_%H%M%S_"))) ".png"))
     ;;  (unless (file-exists-p (file-name-directory filename))
     ;;    (make-directory (file-name-directory filename)))
@@ -273,6 +274,7 @@ text and copying to the killring."
   :general
   ("H-c"     'org-capture
    "<f5>"    'yc/copy-idlink-to-clipboard
+   "<f7>"    'org-redisplay-inline-images
    "M-s M-R" 'yc/counsel-rg-in-itsycnotes)
   ;; Great evil org mode keyboard shortcuts cribbed from cofi
   ;; (evil-define-key 'normal org-mode-map
@@ -703,6 +705,7 @@ text and copying to the killring."
 ;; - https://github.com/casouri/ftable
 ;; - https://github.com/Fuco1/org-pretty-table
 (use-package valign
+  :disabled t
   :after org
   :hook ((org-mode . valign-mode)
          (markdown-mode . valign-mode))
