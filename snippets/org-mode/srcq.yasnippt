@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: OrgMode quote code block
+# name: OrgMode quote block
 # key: <q
 # --
 #+begin_quote
