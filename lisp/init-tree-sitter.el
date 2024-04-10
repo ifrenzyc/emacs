@@ -84,7 +84,7 @@
 
 (use-package tree-sitter
   :custom
-  (tree-sitter-load-path "~/.emacs.d/tree-sitter/")
+  (tree-sitter-load-path (expand-file-name "bin/tree-sitter" user-emacs-directory))
   :init
   (global-tree-sitter-mode)
   :hook (tree-sitter-after-on . tree-sitter-hl-mode))
