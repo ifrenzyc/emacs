@@ -5,6 +5,8 @@
 ;; 
 
 ;;; Code:
+(require 'init-const)
+
 ;; 实现类似在 vs 编辑器中，按 =<F3>= 快速搜索光标当前所在的词。
 ;; 当光标移到某个词上面的时候自动高亮显示当前的词，当光标处在某个词上面时，高亮其他相同的词。 /效果如下:/
 
@@ -157,7 +159,7 @@ FACE defaults to inheriting from default and highlight."
     :custom
     ((transient-levels-file (concat yc/cache-dir "/transient/levels.el"))
      (transient-values-file (concat yc/cache-dir "/transient/values.el"))
-     (transient-history-file (concat yc/cache-dir "transient/history.el")))
+     (transient-history-file (concat yc/cache-dir "/transient/history.el")))
     :config
     (transient-define-prefix symbol-overlay-transient ()
       "Symbol Overlay transient"
