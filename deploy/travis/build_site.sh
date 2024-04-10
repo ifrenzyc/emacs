@@ -2,7 +2,7 @@
 
 emacs --version
 emacs --batch -f org-version --kill
-cd travis
+cd deploy/travis
 emacs --script install.el
 emacs --script generate-html.el
 emacs --batch -f org-version --kill
