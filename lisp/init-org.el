@@ -25,8 +25,8 @@
   :delight org-mode "Org"
   :bind
   (("H-c"     . org-capture)
-   ("<f5>"    . yc/copy-idlink-to-clipboard)
-   ("<f7>"    . org-redisplay-inline-images)
+   ([f5]      . yc/copy-idlink-to-clipboard)
+   ([f7]      . org-redisplay-inline-images)
    ("M-s M-R" . yc/counsel-rg-in-itsycnotes))
   ;; @see - https://github.com/noctuid/evil-guide
   ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)

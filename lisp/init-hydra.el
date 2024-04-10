@@ -22,34 +22,25 @@
   ;; novoid 的很多 hydra 配置值得参考：
   ;; - /Users/yangc/src/emacs.d/novoid-dot-emacs/config.org
   ;; - /Users/yangc/src/emacs.d/caiohcs-emacs/settings.el
-  ;; :bind
-  ;; (("C-c h <tab>" . (hydra-fold/body :wk "hydra-fold"))
-  ;;  ("C-c h D" . (hydra-dates/body :wk "hydra-dates"))
-  ;;  ;; "C-c h d" '(hydra-dired/body :wk "hydra-dired")
-  ;;  ("C-c h f" . (hydra-flycheck/body :wk "hydra-flycheck"))
-  ;;  ("C-c h j" . (hydra-dump-jump/body :wk "hydra-dump-jump"))
-  ;;  ("C-c h a" . (hydra-avy/body :wk "hydra-avy"))
-  ;;  ("C-c h s" . (hydra-selected/body :wk "hydra-selected"))
-  ;;  ;; "C-c h s" '
-  ;;  ;; "C-c h S" '(hydra-smartparens/body :wk "hydra-smartparens")
-  ;;  ;; "C-c h c" '(hydra-multiple-cursors/body :wk "hydra-multiple-cursors")
-  ;;  ("C-c h g" . (hydra-git-timemachine/body :wk "hydra-git-timemachine"))
-  ;;  ;; "C-c g" 'hydra-magit/body
-  ;;  ;; "C-c h" 'hydra-helm/body
-  ;;  ;; "C-c o" 'yc/ongoing-hydra
-  ;;  ;; "C-c h v" '(hydra-pdftools/body :wk "hydra-pdftools")
-  ;;  ("C-c h m" . (hydra-macro/body :wk "hydra-macro"))
-  ;;  ("C-c h p" . (hydra-projectile/body :wk "hydra-projectile"))
-  ;;  ("C-c h P" . (hydra-system/body :wk "hydra-system"))
-  ;;  ("C-c h t" . (hydra-toggles/body :wk "hydra-toggles"))
-  ;;  ("C-c h w" . (hydra-window/body :wk "hydra-window")))
-  )
+  :bind
+  (("C-c h <tab>" . hydra-fold/body)
+   ("C-c h D" . hydra-dates/body)
+   ("C-c h f" . hydra-flycheck/body)
+   ("C-c h j" . hydra-dump-jump/body)
+   ("C-c h a" . hydra-avy/body)
+   ("C-c h s" . hydra-selected/body)
+   ("C-c h g" . hydra-git-timemachine/body)
+   ("C-c h m" . hydra-macro/body)
+   ("C-c h p" . hydra-projectile/body)
+   ("C-c h P" . hydra-system/body)
+   ("C-c h t" . hydra-toggles/body)
+   ("C-c h w" . hydra-window/body)))
 
 ;; 关于 Hydra 高效的按键绑定，参考：
 ;; - https://github.com/troyp/spacemacs-private/tree/master/docs/hydra-wiki
 (use-package pretty-hydra
   :bind
-  ("<f6>" . hydra-toggles/body)
+  ([f6]  . hydra-toggles/body)
   :init
   (cl-defun pretty-hydra-title (title &optional icon-type icon-name &key face height v-adjust)
     "Add an icon in the hydra title."
@@ -143,14 +134,14 @@
 
 (defhydra hydra-dates (:color red)
   "
-  ^
-  ^Dates^             ^Insert^            ^Insert with Time^
-  ^─────^─────────────^──────^────────────^────────────────^──
-  _C-g_ quit            _d_ short           _D_ short
-  ^^                  _i_ iso             _I_ iso
-  ^^                  _l_ long            _L_ long
-  ^^                  ^^                  ^^
-  "
+                     ^
+                     ^Dates^             ^Insert^            ^Insert with Time^
+                     ^─────^─────────────^──────^────────────^────────────────^──
+                     _C-g_ quit            _d_ short           _D_ short
+                     ^^                  _i_ iso             _I_ iso
+                     ^^                  _l_ long            _L_ long
+                     ^^                  ^^                  ^^
+                     "
   ("C-g" nil)
   ("d" me/date-short)
   ("D" me/date-short-with-time)
@@ -164,9 +155,9 @@
                                      :hint nil
                                      :post (deactivate-mark))
   "
-    ^_k_^       _w_ copy      _o_pen       _N_umber-lines                |\\     -,,,--,,_
-  _h_   _l_     _y_ank        _t_ype       _e_xchange-point              /,`.-'`'   ..  \-;;,_
-    ^_j_^       _d_ kill      _c_lear      _r_eset-region-mark          |,4-  ) )_   .;.(  `'-'
+                     ^_k_^       _w_ copy      _o_pen       _N_umber-lines                |\\     -,,,--,,_
+                     _h_   _l_     _y_ank        _t_ype       _e_xchange-point              /,`.-'`'   ..  \-;;,_
+                     ^_j_^       _d_ kill      _c_lear      _r_eset-region-mark          |,4-  ) )_   .;.(  `'-'
   ^^^^          _u_ndo        _C-g_ quit     _C_ua-rectangle-mark-mode   '---''(./..)-'(_\_)
   "
   ("k" rectangle-previous-line)

@@ -15,7 +15,7 @@
    ("C-c n f" . org-roam-node-find)
    ("C-c n i" . org-roam-node-insert)
    ("C-c n h" . org-id-get-create)
-   ("<f4>"    . org-roam-dailies-capture-today))
+   ([f4]      . org-roam-dailies-capture-today))
   (:map org-roam-mode-map
         ("C-c n l" . org-roam-buffer-toggle)
         ("C-c n f" . org-roam-node-find)
