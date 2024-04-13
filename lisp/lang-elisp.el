@@ -115,9 +115,6 @@
 ;;   :hook ((emacs-lisp-mode . lispy-mode)
 ;;          (scheme-mode . lispy-mode)))
 
-;; (use-package evil-lispy
-;;   :hook ((lispy-mode . evil-lispy-mode)))
-
 ;; (use-package lispyville
 ;;   :hook ((lispy-mode . lispyville-mode))
 ;;   :config

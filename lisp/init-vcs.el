@@ -44,9 +44,6 @@
    (magit-diff-refine-hunk t)        ; highlight word/letter changes in hunk diffs
    (magit-save-some-buffers nil))    ; don't attempt to save unsaved buffers
   :config
-  ;; (when (featurep 'evil)
-  ;;   (setq evil-emacs-state-modes (delq 'magit-status-mode evil-emacs-state-modes)))
-
   (when (fboundp 'transient-append-suffix)
     ;; Add switch: --tags
     (transient-append-suffix 'magit-fetch

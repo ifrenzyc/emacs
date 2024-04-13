@@ -926,32 +926,6 @@ text and copying to the killring."
 ;;   ("h" worf-left "worf-left")
 ;;   ("q" nil))
 
-;; org-mode 的 evil 按键扩展
-;; - https://github.com/Somelauw/evil-org-mode
-;; - https://github.com/edwtjo/evil-org-mode
-;; (use-package evil-org
-;;   :hook
-;;   (org-mode . evil-org-mode)
-;;   (evil-org-mode . (lambda ()
-;;                      (evil-org-set-key-theme '(operators textobjects table))))
-;;   :config
-;;   ;; diable o/O special handling for items
-;;   (setq evil-org-special-o/O nil)
-
-;;   (require 'evil-org-agenda)
-;;   (evil-org-agenda-set-keys))
-
-;; 这个和上面的 evil-org-mode 是相同功能的两个
-;; - https://github.com/GuiltyDolphin/org-evil
-;; (use-package org-evil
-;;   :after (org evil)
-;;   :config
-;;   ;; "gh" goes up a level, and is defined by org-evil-mode.
-;;   ;; "gH" goes to the top level, and is defined by org-evil-mode.
-;;   (evil-define-key 'normal org-mode-map (kbd "gl") 'air-org-goto-first-child)
-;;   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "@" 'org-refile)
-;;   (evil-define-minor-mode-key 'normal 'org-evil-heading-mode "#" 'org-add-note))
-
 ;; UTF-8 bullets for org-mode.
 ;; - https://github.com/sabof/org-bullets
 ;; - https://github.com/integral-dw/org-superstar-mode

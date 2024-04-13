@@ -276,10 +276,7 @@ there's a region, all lines that region covers will be duplicated."
 ;; - https://github.com/Fuco1/smartparens
 ;; - https://ebzzry.io/en/emacs-pairs/ (paredit: http://emacsrocks.com/e14.html)
 ;; Highlight matching and auto insert parenthesis.
-;; 这个要看看，结合 evil 要怎么用，或者有其他的 mode 可以替代，比如 evil-xxx？
 ;; (use-package smartparens
-;;   ;; :after (evil general)
-;;   :after (general)
 ;;   :init
 ;;   ;; (require 'smartparens-config)
 ;;   ;; (require 'smartparens-org)

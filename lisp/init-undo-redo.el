@@ -2,7 +2,6 @@
 
 ;;; Commentary:
 ;;
-;; 设置 =evil-undo-system= 参数为 =undo-tree= 时，需要先启用 undo-tree
 ;; - https://github.com/casouri/vundo
 ;;
 

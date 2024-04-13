@@ -15,12 +15,12 @@
    ("C-x t C-t" . treemacs-find-file)
    ("C-x t M-t" . treemacs-find-tag))
   (:map treemacs-mode-map
-        ("j" . treemacs-next-line)
-        ("A" . mine/toggle-maximize-treemacs)
-        ("k" . treemacs-previous-line)
         ("SPC" . (lambda () (interactive) (treemacs-visit-node-no-split t)))  ;; similar to neotree-quick-look
-        ("H" . hydra-move-splitter-left-2x)
-        ("L" . hydra-move-splitter-right-2x))
+        ("j"   . treemacs-next-line)
+        ("A"   . mine/toggle-maximize-treemacs)
+        ("k"   . treemacs-previous-line)
+        ("H"   . hydra-move-splitter-left-2x)
+        ("L"   . hydra-move-splitter-right-2x))
 
   ;; (:map treemacs-mode-map
   ;;       ([mouse-1]   . treemacs-single-click-expand-action))
@@ -32,8 +32,6 @@
   :custom-face
   (treemacs-window-background-face ((t (:background "#efe9dd" :height 160))))
   :hook
-  ;; init treemacs in emacs keys;
-  ;; (treemacs-mode . evil-normalize-keymaps)
   (treemacs-mode . (lambda ()
                      (setq-local line-spacing 0.4)
                      (setq-local truncate-lines t)

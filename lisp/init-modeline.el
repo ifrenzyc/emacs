@@ -32,9 +32,6 @@
 
         doom-modeline-buffer-encoding t
 
-        ;; Whether display the `evil' state icon.
-        ;; doom-modeline-evil-state-icon t
-
         ;; Whether display perspective name or not. Non-nil to display in mode-line.
         doom-modeline-persp-name t
         ;; Whether display environment version or not
