@@ -17,15 +17,14 @@
         ("a"   . projectile-ag)
         ("C-r" . projectile-run-project)
         ("p"   . counsel-projectile-switch-project))
+  (:map projectile-mode-map
+        ("C-x p" . projectile-command-map))
   :commands (projectile-project-root)
   :custom
   ((projectile-enable-caching t)
    (projectile-completion-system 'ivy)
    (projectile-indexing-method 'native))
   :config
-  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
-  (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
-
   ;; add to the globally ignored files
   (dolist (file-name '("*~" "*.elc" "*.class" "node_modules" "elpa" "localelpa"))
     (add-to-list 'projectile-globally-ignored-files file-name))
@@ -50,7 +49,6 @@
      _fd_: file curr dir     _o_: multi-occur     _s-k_: Kill all buffers    _X_: cleanup non-existing
       _r_: recent file                                                   ^^^^_z_: cache current
       _d_: dir
-
   "
     ("a"   projectile-ag)
     ("b"   projectile-switch-to-buffer)

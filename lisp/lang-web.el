@@ -34,17 +34,17 @@
 (use-package web-mode
   :commands web-mode
   :mode
-  (("\\.phtml\\'" . web-mode)
+  (("\\.phtml\\'"     . web-mode)
    ("\\.tpl\\.php\\'" . web-mode)
-   ("\\.[agj]sp\\'" . web-mode)
-   ("\\.as[cp]x\\'" . web-mode)
-   ("\\.jsx\\'" . web-mode)
-   ("\\.js\\'" . web-mode)
-   ("\\.erb\\'" . web-mode)
-   ("\\.mustache\\'" . web-mode)
-   ("\\.djhtml\\'" . web-mode)
-   ("\\.html?\\'" . web-mode)
-   ("\\.css?\\'" . web-mode))
+   ("\\.[agj]sp\\'"   . web-mode)
+   ("\\.as[cp]x\\'"   . web-mode)
+   ("\\.jsx\\'"       . web-mode)
+   ("\\.js\\'"        . web-mode)
+   ("\\.erb\\'"       . web-mode)
+   ("\\.mustache\\'"  . web-mode)
+   ("\\.djhtml\\'"    . web-mode)
+   ("\\.html?\\'"     . web-mode)
+   ("\\.css?\\'"      . web-mode))
   :config ;; Autocomplete end tag when finished writing opening tag
   (setq web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2
@@ -68,10 +68,10 @@
 
 (use-package emmet-mode
   :hook
-  ((web-mode . emmet-mode)
-   (vue-mode . emmet-mode)
+  ((web-mode  . emmet-mode)
+   (vue-mode  . emmet-mode)
    (sgml-mode . emmet-mode)    ; Auto-start on any markup modes
-   (css-mode . emmet-mode))    ; enable Emmet's css abbreviation.
+   (css-mode  . emmet-mode))    ; enable Emmet's css abbreviation.
   )
 
 (use-package js2-mode
@@ -104,10 +104,10 @@
 
   (add-hook 'js-mode-hook #'(lambda ()
                               (local-set-key "\C-x\C-e" 'eval-last-sexp)
-                              (local-set-key "\C-cb" 'js-send-buffer)
+                              (local-set-key "\C-cb"    'js-send-buffer)
                               (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
-                              (local-set-key "\C-cl" 'js-load-file-and-go)
-                              (local-set-key "\C-c!" 'run-js)
+                              (local-set-key "\C-cl"    'js-load-file-and-go)
+                              (local-set-key "\C-c!"    'run-js)
                               (local-set-key "\C-c\C-r" 'js-send-region)
                               (local-set-key "\C-c\C-j" 'js-send-line)
                               (local-set-key "\C-c\C-u" 'whitespace-clean-and-compile)
@@ -123,8 +123,7 @@
     Basically, by adding this preoutput filter to the
     comint-preoutput-filter-functions list we take the output of
     comint in a *js* buffer and do a find/replace to replace the
-    ANSI escape noise with a reasonable prompt.
-  "
+    ANSI escape noise with a reasonable prompt."
     (if (equal (buffer-name) "*js*")
         (progn
           ;; Uncomment these to debug the IO of the node process

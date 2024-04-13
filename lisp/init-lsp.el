@@ -27,7 +27,7 @@
         ("C-c l"   . hydra-lsp-map/body))
   :commands (lsp lsp-deferred)
   :hook
-  ((lsp . lsp-lens-mode)
+  ((lsp      . lsp-lens-mode)
    (lsp-mode . lsp-enable-which-key-integration)
    ;; (lsp-after-open . lsp-enable-imenu)
    ;; (prog-mode . lsp-deferred)
@@ -122,15 +122,12 @@
     ("s" lsp-signature-help)
     ("o" lsp-describe-thing-at-point)
     ("r" lsp-rename)
-
     ("f" lsp-format-buffer)
     ("m" lsp-ui-imenu)
     ("x" lsp-execute-code-action)
-
     ("M-s" lsp-describe-session)
     ("M-r" lsp-restart-workspace)
     ("S" lsp-shutdown-workspace))
-
   (pretty-hydra-define hydra-lsp-new-2
     (:hint nil :color blue :foreign-keys warn :quit-key "q")
     ("Xref"
@@ -156,7 +153,6 @@
      (("l" lsp-ui-flycheck-list "List errs/warns/notes"))
      "quit"
      (("q" nil "Quit"))))
-
   (pretty-hydra-define hydra-lsp-new
     (:hint nil :color blue :foreign-keys warn :quit-key "q")
     ("definitions"
@@ -242,9 +238,9 @@
   :bind (("C-c u" . lsp-ui-imenu)
          :map lsp-ui-mode-map
          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions) ; [M-.]
-         ([remap xref-find-references] . lsp-ui-peek-find-references)   ; [M-?]
+         ([remap xref-find-references]  . lsp-ui-peek-find-references)   ; [M-?]
          ("M-<f6>" . lsp-ui-hydra/body)
-         ("M-RET" . lsp-ui-sideline-apply-code-actions))
+         ("M-RET"  . lsp-ui-sideline-apply-code-actions))
   :custom-face
   (lsp-ui-sideline-code-action ((t (:inherit warning))))
   :pretty-hydra
@@ -314,20 +310,17 @@
         lsp-ui-doc-include-signature t
         lsp-ui-doc-show-with-cursor nil ;; disable cursor hover
         lsp-ui-doc-show-with-mouse nil  ;; disable mouse hover
-
         lsp-ui-sideline-enable nil
         lsp-ui-sideline-show-diagnostics nil
         lsp-ui-sideline-ignore-duplicate t
         lsp-ui-sideline-show-code-actions nil
-
         lsp-lens-enable nil
-
         lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
                               ,(face-foreground 'font-lock-string-face)
                               ,(face-foreground 'font-lock-constant-face)
                               ,(face-foreground 'font-lock-variable-name-face)))
   
-  (setq lsp-ui-doc-use-webkit nil) ;; (featurep 'xwidget-internal)
+  (setq lsp-ui-doc-use-webkit nil)    ; (featurep 'xwidget-internal)
   ;; (if (featurep 'xwidget-internal)
   ;;     (setq lsp-ui-doc-use-webkit t))
   ;; (setq-default lsp-ui-doc-frame-parameters
@@ -348,7 +341,6 @@
   ;;                 (line-spacing . 0.2)
   ;;                 (unsplittable . t)
   ;;                 (undecorated . t)
-  
   ;;                 (visibility . nil)
   ;;                 (mouse-wheel-frame . nil)
   ;;                 (no-other-frame . t)
@@ -395,9 +387,10 @@
 
 (use-package lsp-ivy
   :after lsp-mode
-  :bind (:map lsp-mode-map
-              ([remap xref-find-apropos] . lsp-ivy-workspace-symbol)
-              ("s-l g A" . lsp-ivy-global-workspace-symbol))
+  :bind
+  (:map lsp-mode-map
+        ([remap xref-find-apropos] . lsp-ivy-workspace-symbol)
+        ("s-l g A" . lsp-ivy-global-workspace-symbol))
   :config
   (with-no-warnings
     (defvar lsp-ivy-symbol-kind-icons
@@ -431,17 +424,17 @@
         ))
 
     (lsp-defun my-lsp-ivy--format-symbol-match
-               ((sym &as &SymbolInformation :kind :location (&Location :uri))
-                project-root)
-               "Convert the match returned by `lsp-mode` into a candidate string."
-               (let* ((sanitized-kind (if (< kind (length lsp-ivy-symbol-kind-icons)) kind 0))
-                      (type (elt lsp-ivy-symbol-kind-icons sanitized-kind))
-                      (typestr (if lsp-ivy-show-symbol-kind (format "%s " type) ""))
-                      (pathstr (if lsp-ivy-show-symbol-filename
-                                   (propertize (format " · %s" (file-relative-name (lsp--uri-to-path uri) project-root))
-                                               'face font-lock-comment-face)
-                                 "")))
-                 (concat typestr (lsp-render-symbol-information sym ".") pathstr)))
+      ((sym &as &SymbolInformation :kind :location (&Location :uri))
+       project-root)
+      "Convert the match returned by `lsp-mode` into a candidate string."
+      (let* ((sanitized-kind (if (< kind (length lsp-ivy-symbol-kind-icons)) kind 0))
+             (type (elt lsp-ivy-symbol-kind-icons sanitized-kind))
+             (typestr (if lsp-ivy-show-symbol-kind (format "%s " type) ""))
+             (pathstr (if lsp-ivy-show-symbol-filename
+                          (propertize (format " · %s" (file-relative-name (lsp--uri-to-path uri) project-root))
+                                      'face font-lock-comment-face)
+                        "")))
+        (concat typestr (lsp-render-symbol-information sym ".") pathstr)))
     (advice-add #'lsp-ivy--format-symbol-match :override #'my-lsp-ivy--format-symbol-match)))
 
 ;; - https://github.com/tigersoldier/company-lsp
@@ -466,12 +459,12 @@
 ;; https://github.com/emacs-lsp/lsp-sonarlint
 (use-package lsp-sonarlint
   :disabled t
-  :init
-  (setq lsp-sonarlint-html-enabled t)
-  (setq lsp-sonarlint-java-enabled t)
-  (setq lsp-sonarlint-xml-enabled t)
-  (setq lsp-sonarlint-python-enabled t)
-  (setq lsp-sonarlint-javascript-enabled t))
+  :custom
+  (lsp-sonarlint-html-enabled t)
+  (lsp-sonarlint-java-enabled t)
+  (lsp-sonarlint-xml-enabled t)
+  (lsp-sonarlint-python-enabled t)
+  (lsp-sonarlint-javascript-enabled t))
 
 (provide 'init-lsp)
 ;;; init-lsp.el ends here

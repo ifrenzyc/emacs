@@ -27,7 +27,7 @@
     (("ia" go-import-add "add")
      ("ir" go-remove-unused-imports "cleanup"))))
   :config
-  ;;                (setq go-mode-map
+  ;; (setq go-mode-map
   ;; (let ((m (make-sparse-keymap)))
   ;;   (define-key m "}" #'go-mode-insert-and-indent)
   ;;   (define-key m ")" #'go-mode-insert-and-indent)
@@ -48,14 +48,14 @@
   ;;                       (setq tab-width 4)
   ;;                       (setq indent-tabs-mode nil)))
 
+  ;; use goimports instead of gofmt ::super
+  (setq gofmt-command "goimports")
+
   ;; Quick run current buffer
   (defun yc/go ()
     "run current buffer"
     (interactive)
     (compile (concat "go run " (buffer-file-name))))
-
-  ;; use goimports instead of gofmt ::super
-  (setq gofmt-command "goimports")
 
   (defun yc/go-run-tests (args)
     (interactive)
@@ -198,13 +198,13 @@
 (use-package go-projectile
   :after go-ts-mode projectile)
 
+(use-package go-rename
+  :after go-ts-mode)
+
 (use-package go-snippets
   :disabled t
   :after (go-ts-mode)
   :init (go-snippets-initialize))
-
-(use-package go-rename
-  :after go-ts-mode)
 
 (provide 'lang-golang)
 ;;; lang-golang.el ends here

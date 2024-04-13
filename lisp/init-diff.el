@@ -20,8 +20,6 @@
   (ediff-window-setup-function 'ediff-setup-windows-plain)
   (ediff-merge-split-window-function 'split-window-horizontally))
 
-;; (use-package evil-ediff)
-
 ;; Resolve diff3 conflicts
 (use-package smerge-mode
   :ensure nil

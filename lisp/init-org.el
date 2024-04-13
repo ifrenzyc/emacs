@@ -28,13 +28,10 @@
    ([f5]      . yc/copy-idlink-to-clipboard)
    ([f7]      . org-redisplay-inline-images)
    ("M-s M-R" . yc/counsel-rg-in-itsycnotes))
-  ;; @see - https://github.com/noctuid/evil-guide
-  ;; (add-hook 'org-src-mode-hook #'evil-normalize-keymaps)
-  (:map org-mode-map  ;; NOTE: keymaps specified with :keymaps must be quoted
+  (:map org-mode-map
         ("C-c C-j"   . counsel-org-goto)
         ("<backtab>" . org-shifttab)
         ("<tab>"     . org-cycle))
-  ;; key for exiting src edit mode
   :mode-hydra
   (org-mode
    (:title "Org-mode Commands")
@@ -67,13 +64,13 @@
     (("r" (lambda () (interactive)
             (call-interactively 'org-cycle)
             (call-interactively 'org-cycle)) "rifle")
-     ("v" avy-org-goto-heading-timer "avy"))
+     ("v"   avy-org-goto-heading-timer "avy"))
     "Toggles"
     (("C-l" yc/org-toggle-link-display "link")
-     ("C-i" org-toggle-inline-images "image"))
+     ("C-i" org-toggle-inline-images   "image"))
     "Quit"
     (("C-g" nil "quit")
-     ("q" nil "quit"))))
+     ("q"   nil "quit"))))
   :custom-face
   ;; 单独给 org-table 设一个等宽字体
   ;; 目前使用是有问题的，英文字符是按照设置的 Sarasa 字体，但是中文不是，导致还是不能正确对齐
@@ -111,6 +108,17 @@
                 (setq-local truncate-lines t)
                 (setq-local word-wrap nil)))
   :config
+  (defhydra hydra-org (:color red :columns 3)
+    "Org Mode Movements"
+    ("n" outline-next-visible-heading "next heading")
+    ("p" outline-previous-visible-heading "prev heading")
+    ("N" org-forward-heading-same-level "next heading at same level")
+    ("P" org-backward-heading-same-level "prev heading at same level")
+    ("u" outline-up-heading "up heading")
+    ("C-l" yc/org-toggle-link-display "link")
+    ("C-i" org-toggle-inline-images "image")
+    ("g" org-goto "goto" :exit t))
+  
   (setq org-pretty-entities t
         org-src-fontify-natively t      ; Enable syntax highlighting in code blocks
         org-indent-mode t
@@ -189,13 +197,6 @@
           (sequence "READ(r!/!)" "|" "READ_DONE(R!/!)")
           (sequence "WAITING(w@/!)" "REPEAT(r!/!)" "MABE(m!/!)" "HOLD(h!/!)")))
 
-  ;; (setq org-todo-keywords 
-  ;;       (quote ((sequence "TODO(t!/!)" "NEXT(n!/!)" 
-  ;;                         "STARTED(s!)" "|" "DONE(d!/!)")
-  ;;               (type "PROJECT(p!/!)" "|" "DONE_PROJECT(D!/!)")
-  ;;               (sequence "WAITING(w@/!)" "SOMEDAY(S!)"  "|"
-  ;;                         "CANCELLED(c@/!)"))))
-
   (setq org-use-fast-todo-selection t)
   (setq org-todo-state-tags-triggers
         '(("CANCELLED" ("CANCELLED" . t))
@@ -207,17 +208,6 @@
           ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
           ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
           ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
-
-  (defhydra hydra-org (:color red :columns 3)
-    "Org Mode Movements"
-    ("n" outline-next-visible-heading "next heading")
-    ("p" outline-previous-visible-heading "prev heading")
-    ("N" org-forward-heading-same-level "next heading at same level")
-    ("P" org-backward-heading-same-level "prev heading at same level")
-    ("u" outline-up-heading "up heading")
-    ("C-l" yc/org-toggle-link-display "link")
-    ("C-i" org-toggle-inline-images "image")
-    ("g" org-goto "goto" :exit t))
 
   (defun yc/org-toggle-link-display ()
     "Toggle the literal or descriptive display of links."
@@ -292,8 +282,7 @@ text and copying to the killring."
       (setq mytmplink (format "[[id:%s][%s]]" mytmpid mytmphead))
       (kill-new mytmplink)
       (save-buffer)
-      (message "Copied %s to killring (clipboard)" mytmplink)
-      ))
+      (message "Copied %s to killring (clipboard)" mytmplink)))
 
   (defun yc/counsel-rg-in-itsycnotes ()
     "rg in ~/notes"
@@ -424,9 +413,11 @@ text and copying to the killring."
 ;; - https://github.com/jakebox/preview-org-html-mode
 (use-package preview-org-html-mode
   :load-path "localelpa/preview-org-html-mode"
-  ;; :init (setq preview-org-html-viewer 'xwidget)
+  :custom
+  (preview-org-html-viewer 'xwidget)
   :bind
-  ([f12] . preview-org-html-mode))
+  (:map org-mode-map
+        ([f12] . preview-org-html-mode)))
 
 (use-package ob-go)
 

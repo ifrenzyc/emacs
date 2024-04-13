@@ -24,23 +24,23 @@
   ;; - /Users/yangc/src/emacs.d/caiohcs-emacs/settings.el
   :bind
   (("C-c h <tab>" . hydra-fold/body)
-   ("C-c h D" . hydra-dates/body)
-   ("C-c h f" . hydra-flycheck/body)
-   ("C-c h j" . hydra-dump-jump/body)
-   ("C-c h a" . hydra-avy/body)
-   ("C-c h s" . hydra-selected/body)
-   ("C-c h g" . hydra-git-timemachine/body)
-   ("C-c h m" . hydra-macro/body)
-   ("C-c h p" . hydra-projectile/body)
-   ("C-c h P" . hydra-system/body)
-   ("C-c h t" . hydra-toggles/body)
-   ("C-c h w" . hydra-window/body)))
+   ("C-c h D"     . hydra-dates/body)
+   ("C-c h f"     . hydra-flycheck/body)
+   ("C-c h j"     . hydra-dump-jump/body)
+   ("C-c h a"     . hydra-avy/body)
+   ("C-c h s"     . hydra-selected/body)
+   ("C-c h g"     . hydra-git-timemachine/body)
+   ("C-c h m"     . hydra-macro/body)
+   ("C-c h p"     . hydra-projectile/body)
+   ("C-c h P"     . hydra-system/body)
+   ("C-c h t"     . hydra-toggles/body)
+   ("C-c h w"     . hydra-window/body)))
 
 ;; 关于 Hydra 高效的按键绑定，参考：
 ;; - https://github.com/troyp/spacemacs-private/tree/master/docs/hydra-wiki
 (use-package pretty-hydra
   :bind
-  ([f6]  . hydra-toggles/body)
+  ([f6] . hydra-toggles/body)
   :init
   (cl-defun pretty-hydra-title (title &optional icon-type icon-name &key face height v-adjust)
     "Add an icon in the hydra title."
@@ -179,25 +179,6 @@
   ("u" undo nil)
   ("C-g" nil))
 (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
-
-;; macro 的按键绑定可以参考 leuven 函数 leuven-kmacro-turn-on-recording
-(defun leuven-kmacro-turn-on-recording ()
-  "Start recording a keyboard macro and toggle functionality of key binding."
-  (interactive)
-  (global-set-key (kbd "<S-f3>") #'leuven-kmacro-turn-off-recording)
-  (kmacro-start-macro nil))
-
-(defun leuven-kmacro-turn-off-recording ()
-  "Stop recording a keyboard macro and toggle functionality of key binding."
-  (interactive)
-  (global-set-key (kbd "<S-f3>") #'leuven-kmacro-turn-on-recording)
-  (kmacro-end-macro nil))
-
-;; Start/stop recording a keyboard macro.
-(global-set-key (kbd "<S-f3>") #'leuven-kmacro-turn-on-recording)
-
-;; Execute the most recent keyboard macro.
-(global-set-key (kbd "<f3>") #'kmacro-call-macro)
 
 ;; hydra for macros in emacs
 (defhydra hydra-macro (:hint nil :color pink :pre

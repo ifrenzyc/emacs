@@ -12,7 +12,7 @@
   ((dockerfile-mode . lsp-deferred)
    (dockerfile-ts-mode . lsp-deferred))
   :bind
-  (:map dockerfile-ts-mode-map
+  (:map dockerfile-mode-map
         ("C-c C-f" . lsp-format-buffer)))
 
 (use-package docker-compose-mode

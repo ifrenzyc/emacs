@@ -23,8 +23,7 @@
   (python-ts-mode . diff-hl-mode)
   :custom
   ;; use the wx backend, for both mayavi and matplotlib
-  (py-python-command-args
-   '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
+  (py-python-command-args '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
   (py-force-py-shell-name-p t)
 
   ;; switch to the interpreter after executing code
@@ -40,9 +39,10 @@
   (setq-default py-which-bufname "IPython"))
 
 (use-package lsp-pyright
-  :hook (python-ts-mode . (lambda ()
-                            (require 'lsp-pyright)
-                            (lsp-deferred))))
+  :hook
+  (python-ts-mode . (lambda ()
+                      (require 'lsp-pyright)
+                      (lsp-deferred))))
 
 (use-package anaconda-mode
   :after python

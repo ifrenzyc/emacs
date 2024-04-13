@@ -18,8 +18,6 @@
 (use-package company
   :bind
   ("C-." . company-complete)
-  ;; :map company-mode-map
-  ;; ("<backtab>" . company-yasnippet)
   (:map company-active-map
         ("<tab>" . company-complete-selection)
         ("C-n" . company-select-next)
@@ -34,6 +32,22 @@
         ("C-n" . company-select-next))
   :hook
   (after-init . global-company-mode)
+  :custom
+  (company-minimum-prefix-length 3)
+  (company-show-quick-access t)
+  (company-require-match nil)
+  (company-dabbrev-time-limit 0.3)
+  (company-dabbrev-downcase nil)                  ; make company-complete care about case
+  (company-dabbrev-ignore-case nil)               ; fix case-sensitive, default is keep-prefix
+  (company-dabbrev-other-buffers t)
+  (company-echo-delay 0)                          ; remove annoying blinking
+  (company-idle-delay 0.2)                        ; decrease delay before autocompletion popup shows
+  (company-tooltip-align-annotations t)
+  (company-tooltip-limit 20)                      ; bigger popup window
+  (company-tooltip-flip-when-above t)
+  (company-insertion-triggers nil)
+  (company-insertion-on-trigger t)
+  (company-selection-wrap-around t)
   :config
   (defun my-company-yasnippet ()
     "Hide the current completeions and show snippets."
@@ -47,21 +61,6 @@
   ;;       '(company-tng-frontend
   ;;         company-pseudo-tooltip-frontend
   ;;         company-echo-metadata-frontend))
-  (setq company-minimum-prefix-length 3
-        company-show-numbers t
-        company-require-match nil
-        company-dabbrev-time-limit 0.3
-        company-dabbrev-downcase nil                  ; make company-complete care about case
-        company-dabbrev-ignore-case nil               ; fix case-sensitive, default is keep-prefix
-        company-dabbrev-other-buffers t
-        company-echo-delay 0                          ; remove annoying blinking
-        company-idle-delay 0.2                        ; decrease delay before autocompletion popup shows
-        company-tooltip-align-annotations t
-        company-tooltip-limit 20                      ; bigger popup window
-        company-tooltip-flip-when-above t
-        company-auto-complete-chars nil
-        company-auto-complete t
-        company-selection-wrap-around t)
   (setq company-backends '((company-capf :with company-yasnippet)
                            (company-dabbrev-code company-keywords company-files)
                            company-dabbrev))

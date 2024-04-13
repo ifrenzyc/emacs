@@ -5,7 +5,10 @@
 ;; 
 
 ;;; Code:
-(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+(use-package shell-mode
+  :ensure nil
+  :hook
+  (after-save-hook . executable-make-buffer-file-executable-if-script-p))
 
 (use-package company-shell
   :after (company shell-mode)

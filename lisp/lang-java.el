@@ -11,16 +11,10 @@
   :ensure nil
   :mode ("\\.java\\'" . java-ts-mode)
   :hook
-  (java-ts-mode . (lambda()
+  (java-ts-mode . (lambda ()
                     (setq-local c-basic-offset 4)
                     (subword-mode)
-                    ;; (google-set-c-style)
-                    ;; (google-make-newline-indent)
-                    ))
-  ;; :init
-  ;; (add-to-list 'load-path (expand-file-name "localelpa/google-c-style" user-emacs-directory))
-  ;; (require 'google-c-style)
-  )
+                    )))
 
 ;; - https://xpressrazor.wordpress.com/2020/11/04/java-programming-in-emacs/
 ;; - https://github.com/emacs-lsp/lsp-java
@@ -42,12 +36,10 @@
   
   ;; (require 'lsp-java-boot)
   (setq lsp-java-inhibit-message t
-        ;; Currently (2019-04-24), dap-mode works best with Oracle
-        ;; JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
+        ;; Currently (2019-04-24), dap-mode works best with Oracle JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
         ;; 这里为什么指定 java, 参考这个 issues(https://github.com/eclipse/eclipse.jdt.ls/pull/1509), 需要 java 11 以上
-        ;; lsp-java-java-path "/opt/homebrew/opt/java/bin/java"
         ;; 如果 jdk 的版本不对， lsp 会报错："Doing vfork: No such file or directory"
-        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/bin/java"
+        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java"
         ;; lsp-java-java-path "/usr/bin/java"
         ;; Use Google style formatting by default
         lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
@@ -60,13 +52,10 @@
 
         ;; Don't organise imports on save
         lsp-java-save-actions-organize-imports nil
-
         lsp-java-maven-download-sources t
+        lsp-java-progress-reports-enabled t
         ;; lsp-java-references-code-lens-enabled t
         ;; lsp-java-implementations-code-lens-enabled t
-
-        lsp-java-progress-reports-enabled t
-
         ;; lsp-java-autobuild-enabled nil
         ;; lsp-java-import-maven-enabled nil
         ;; lsp-java-import-gradle-enabled nil
@@ -83,17 +72,16 @@
          ;; "-Dsun.zip.disableMemoryMapping=true"
          ;; "-XX:+UseG1GC"
          "-XX:+UseZGC"
-         "-Xmx4G"
+         "-Xmx8G"
          "-Dlog.level=INFO"
          ;; "--illegal-access=permit"
          "-XX:+UseStringDeduplication"
-         "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar"
+         "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar"
          )
         )
   :hook
   ((java-mode . lsp-deferred)
    (java-ts-mode . lsp-deferred)
-   ;; (java-mode . lsp)
    ;; (java-mode . lsp-java-lens-mode)
    ;; (java-mode . lsp-java-boot-lens-mode)
    ;; (java-mode . lsp-java-boot-lens-mode)
@@ -102,10 +90,10 @@
 (use-package dap-java
   :ensure nil
   :after (lsp-java dap)
-  ;; :config
-  ;; (global-set-key (kbd "<f7>") 'dap-step-in)
-  ;; (global-set-key (kbd "<f8>") 'dap-next)
-  ;; (global-set-key (kbd "<f9>") 'dap-continue)
+  ;; :bind
+  ;; (("<f7>" . dap-step-in)
+  ;;  ("<f8>" . dap-next)
+  ;;  ("<f9>" . dap-continue))
   )
 
 ;; A nice collection of stealable Java snippets:
@@ -128,20 +116,17 @@
 
 (use-package meghanada
   :disabled t
-  :init (setq meghanada-server-install-dir (concat yc/cache-dir "meghanada"))
+  :custom
+  ((meghanada-server-install-dir (concat yc/cache-dir "meghanada"))
+   (meghanada-use-eldoc t)
+   (meghanada-use-auto-start t)
+   (meghanada-java-path "java")
+   (meghanada-maven-path "mvn"))
   :hook
   (java-ts-mode . (lambda ()
-                    ;; meghanada-mode on
                     (meghanada-mode t)
                     (flycheck-mode +1)
-                    ;; use code format
-                    ;; (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)
-                    ))
-  :config
-  (setq meghanada-use-eldoc t
-        meghanada-use-auto-start t
-        meghanada-java-path "java"
-        meghanada-maven-path "mvn"))
+                    )))
 
 (provide 'lang-java)
 ;;; lang-java.el ends here

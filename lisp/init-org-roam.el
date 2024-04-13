@@ -27,6 +27,9 @@
   :custom
   (org-roam-database-connector 'sqlite-builtin)
   (org-roam-directory "~/notes/Zettelkästen")
+  (org-roam-file-extensions '("txt"))
+  (org-roam-verbose t)
+  (org-roam-db-location (concat org-roam-directory "/.database/org-roam.db"))
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
       :if-new (file+head "${slug}.txt"
@@ -125,13 +128,9 @@
                                       ("style" . "rounded,filled")
                                       ("fillcolor" . "#EFEFFF")
                                       ("fontcolor" . "#111111")))
-  (setq org-roam-file-extensions '("txt"))
   (setq org-roam-graphviz-executable "/opt/homebrew/opt/graphviz/bin/dot")
   (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
   (setq org-roam-completion-system 'ivy)
-  (setq org-roam-verbose t)
-  (setq org-roam-db-location
-        (concat org-roam-directory "/.database/org-roam.db"))
 
   ;; 这里和默认的 org-mode refile 重复设置了
   ;; (setq org-refile-targets '((org-roam-list-files . (:maxlevel . 1))))
@@ -174,7 +173,7 @@
 
   ;; (setq org-roam-node-display-template (concat "${type:15} ${doom-hierarchy:80} " (propertize "${tags:*}" 'face 'org-tag)))
 
-  (org-roam-setup))
+  (org-roam-db-autosync-enable))
 
 (use-package org-roam-bibtex
   :after org-roam

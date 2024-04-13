@@ -31,9 +31,9 @@
   :ensure nil
   :diminish
   :delight eldoc-mode
-  :init
-  (setq eldoc-idle-delay 0.1
-        eldoc-echo-area-use-multiline-p nil)
+  :custom
+  ((eldoc-idle-delay 0.1)
+   (eldoc-echo-area-use-multiline-p nil))
   :config
   ;; Display `eldoc' in child frame
   (with-no-warnings
@@ -85,7 +85,6 @@
               (lambda ()
                 (setq-local eldoc-message-function #'eldoc-posframe-show-posframe)))))
 
-
 (use-package eldoc-box
   :after eldoc
   :custom
@@ -96,7 +95,6 @@
 
 (use-package cl-indent
   :ensure nil
-  ;; :demand t
   :config
   (setq lisp-indent-function #'common-lisp-indent-function)
   (defvar cm/correct-indentation-list

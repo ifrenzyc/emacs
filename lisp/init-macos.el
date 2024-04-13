@@ -47,18 +47,12 @@
 (when IS-MAC
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark)) ; light or dark - depending on your theme
-  ;; Render thinner fonts
-  (setq ns-use-thin-smoothing t)
-  ;; Don't open a file in a new frame
-  (setq ns-pop-up-frames nil)
-  (setq frame-resize-pixelwise t))
-
-;; If using OSX, the colors and fonts look a bit wonky, so let's fix that
-(when IS-MAC
-  (setq ns-use-srgb-colorspace t
-        mac-allow-anti-aliasing t))      ; Anti-aliasinga
-
-(when IS-MAC
+  (setq ns-use-thin-smoothing t)  ; Render thinner fonts
+  (setq ns-pop-up-frames nil)     ; Don't open a file in a new frame
+  ;; If using OSX, the colors and fonts look a bit wonky, so let's fix that
+  (setq ns-use-srgb-colorspace t)
+  (setq frame-resize-pixelwise t)
+  (setq mac-allow-anti-aliasing t)      ; Anti-aliasinga
   (add-hook 'after-load-theme-hook
             (lambda ()
               (let ((bg (frame-parameter nil 'background-mode)))

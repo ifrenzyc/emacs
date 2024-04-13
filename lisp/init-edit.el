@@ -9,24 +9,28 @@
 
 ;; 当文件内容有修改时，可以通过 autorevert 重新加载这个文件
 (use-package autorevert
-  :hook ((after-init . global-auto-revert-mode)
-         (dired-mode . auto-revert-mode)))
+  :hook
+  ((after-init . global-auto-revert-mode)
+   (dired-mode . auto-revert-mode)))
 
 ;; 关闭 emacs 后，重新打开文件时跳转到上一次打开该文件时的位置（所在行）。
 ;; Restore cursor to file position in previous editing session.
 ;; 参考文档：https://www.emacswiki.org/emacs/SavePlace#toc1
 (use-package saveplace
   :ensure nil
-  :hook (after-init . save-place-mode))
+  :hook
+  (after-init . save-place-mode))
 
 ;; 另外一个与 anzu 替代： https://github.com/benma/visual-regexp.el 
 (use-package anzu
-  :bind (([remap query-replace] . anzu-query-replace)
-         ([remap query-replace-regexp] . anzu-query-replace-regexp)
-         :map isearch-mode-map
-         ([remap isearch-query-replace] . anzu-isearch-query-replace)
-         ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))
-  :hook (after-init . global-anzu-mode)
+  :bind
+  (([remap query-replace] . anzu-query-replace)
+   ([remap query-replace-regexp] . anzu-query-replace-regexp)
+   :map isearch-mode-map
+   ([remap isearch-query-replace] . anzu-isearch-query-replace)
+   ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))
+  :hook
+  (after-init . global-anzu-mode)
   :config
   (set-face-attribute 'anzu-mode-line nil
                       :foreground "yellow" :weight 'bold)
@@ -144,13 +148,15 @@ there's a region, all lines that region covers will be duplicated."
 ;; 选中文本后，直接输入就可以，省去了删除操作。这在其他文本编辑器里都是标配，建议打开。
 (use-package delsel
   :ensure nil
-  :hook (after-init . delete-selection-mode))
+  :hook
+  (after-init . delete-selection-mode))
 
 ;; Hungry deletion
 (use-package hungry-delete
   :hook
   (after-init . global-hungry-delete-mode)
-  (minibuffer-setup . (lambda () (hungry-delete-mode -1)))
+  (minibuffer-setup . (lambda ()
+                        (hungry-delete-mode -1)))
   :config
   (setq-default hungry-delete-chars-to-skip " \t\f\v"))
 
@@ -160,15 +166,14 @@ there's a region, all lines that region covers will be duplicated."
 
 (use-package beginend
   :diminish (beginend-mode beginend-global-mode)
-  :hook (after-init . beginend-global-mode))
+  :hook
+  (after-init . beginend-global-mode))
 
 ;; Move to the beginning/end of line or code
 (use-package mwim
   :demand t
-  :bind (;; ([remap move-beginning-of-line] . mwim-beginning-of-code-or-line)
-         ;; ([remap move-end-of-line] . mwim-end-of-code-or-line)
-         ("C-a" . mwim-beginning-of-code-or-line)
-         ("C-e" . mwim-end-of-code-or-line))
+  :bind (("C-a" . mwim-beginning-of-code-or-line)   ; ([remap move-beginning-of-line] . mwim-beginning-of-code-or-line)
+         ("C-e" . mwim-end-of-code-or-line))        ; ([remap move-end-of-line] . mwim-end-of-code-or-line)
   ;; :config  
   ;; `C-a' first takes you to the first non-whitespace char as
   ;; `back-to-indentation' on a line, and if pressed again takes you to
@@ -218,6 +223,7 @@ there's a region, all lines that region covers will be duplicated."
   :ensure nil
   :bind
   ("M-/" . hippie-expand)
+  ([remap dabbrev-expand] . hippie-expand)    ; override dabbrev-expand’s keybinding to use hippie-expand instead
   :init
   (setq hippie-expand-try-functions-list
 	    '(
@@ -244,10 +250,7 @@ there's a region, all lines that region covers will be duplicated."
 	      try-complete-lisp-symbol-partially
 	      ;; Try to complete word as an Emacs Lisp symbol.
 	      try-complete-lisp-symbol
-	      ))
-  :config
-  ;; override dabbrev-expand’s keybinding to use hippie-expand instead
-  (define-key (current-global-map) [remap dabbrev-expand] 'hippie-expand))
+	      )))
 
 (use-package fancy-dabbrev
   :commands (fancy-dabbrev-mode)

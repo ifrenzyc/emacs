@@ -8,7 +8,6 @@
 ;; 
 
 ;;; Code:
-
 (require 'init-org)
 
 ;; TODO: 具体配置参考这个：
@@ -20,10 +19,9 @@
         ("<tab>" . origami-toggle-node))
   :commands (org-agenda)
   :hook ((org-agenda-mode . org-super-agenda-mode)
+         (org-super-agenda-mode . origami-mode)    ; Easily fold groups via TAB.
          (org-agenda-mode . (lambda ()
-                              (setq-local line-spacing 0.8)))
-         ;; Easily fold groups via TAB.
-         (org-super-agenda-mode . origami-mode))
+                              (setq-local line-spacing 0.8))))
   :custom-face
   (org-agenda-date ((t (:height 160))))
   (org-agenda-date-today ((t (:height 160))))
@@ -69,7 +67,6 @@
   (("C-c a"   . org-agenda)
    ("C-c c"   . org-capture)
    ("C-c C-t" . yc/org-todo-force-notes))
-  ;; (global-set-key (kbd "<f5>") 'makeMatrix)
   :mode-hydra
   (org-agenda-mode
    (:title "Org Agenda Mode" :color pink :pre (setq which-key-inhibit t) :post (setq which-key-inhibit nil) :hint nil :separator "═")
@@ -203,6 +200,11 @@
   (setq org-outline-path-complete-in-steps nil)    ; refile in a single go
   (setq org-refile-use-outline-path t)             ; show full paths for refiling
 
+  ;; Eisenhower Matrix
+  (setq org-lowest-priority ?E)
+  (setq org-default-priority ?E)
+  (setq org-agenda-sticky t)  ;generate differens agendas buffers in separated windows
+  
   ;; - https://ivanmalison.github.io/dotfiles/
   ;; - https://emacs.stackexchange.com/questions/90/how-to-sometimes-but-not-always-add-a-note-to-an-org-todo-state-change
   (defun yc/org-todo-force-notes ()
@@ -226,96 +228,6 @@
           (todo   . " ")
           (tags   . " %i %-12:c")
           (search . " %i %-12:c")))
-  ;; (setq org-agenda-prefix-format
-  ;;       '((agenda . " %i %-12t% s %-12(car (last (org-get-outline-path)))")
-  ;;         (timeline . "  % s")
-  ;;         (todo . " %i %-12:c")
-  ;;         (tags . " %i %-12:c")
-  ;;         (search . " %i %-12:c")))
-
-  ;; (setq org-agenda-prefix-format
-  ;;       '((agenda  . " %i %-12:c%?-12t% s")
-  ;;         (timeline  . "  % s")
-  ;;         (todo  . " %i %-30:c")
-  ;;         (tags  . " %i %-40:c")
-  ;;         (search . " %i %-12:c")))
-
-  ;; (setq org-agenda-prefix-format
-  ;;       '((agenda . " %i %-14:c%?-12t% s%5e")
-  ;;         (timeline . "  % s")
-  ;;         (todo . " %i %-14:c")
-  ;;         (tags . " %i %-14:c")
-  ;;         (search . " %i %-14:c")))
-
-  ;; Agendas should be full screen!
-  ;; (add-hook 'org-agenda-finalize-hook (lambda () (delete-other-windows)))
-  
-  ;; ;; This function opens the agenda in full screen.
-  ;; (defun yc/open-agenda ()
-  ;;   "Opens the org-agenda."
-  ;;   (interactive)
-  ;;   (let ((agenda "*Org Agenda*"))
-  ;;     (if (equal (get-buffer agenda) nil)
-  ;;         (org-agenda-list)
-  ;;       (unless (equal (buffer-name (current-buffer)) agenda)
-  ;;         (switch-to-buffer agenda))
-  ;;       (org-agenda-redo t)
-  ;;       (beginning-of-buffer))))
-
-  ;; Archive subtrees under the same hierarchy as original in the archive files
-  ;; 参考：https://github.com/Fuco1/Fuco1.github.io/blob/master/posts/2017-04-20-Archive-subtrees-under-the-same-hierarchy-as-original-in-the-archive-files.org
-  ;; (defadvice org-archive-subtree (around fix-hierarchy activate)
-  ;;   (let* ((fix-archive-p (and (not current-prefix-arg)
-  ;;                              (not (use-region-p))))
-  ;;          (afile (org-extract-archive-file (org-get-local-archive-location)))
-  ;;          (buffer (or (find-buffer-visiting afile) (find-file-noselect afile))))
-  ;;     ad-do-it
-  ;;     (when fix-archive-p
-  ;;       (with-current-buffer buffer
-  ;;         (goto-char (point-max))
-  ;;         (while (org-up-heading-safe))
-  ;;         (let* ((olpath (org-entry-get (point) "ARCHIVE_OLPATH"))
-  ;;                (path (and olpath (split-string olpath "/")))
-  ;;                (level 1)
-  ;;                tree-text)
-  ;;           (when olpath
-  ;;             (org-mark-subtree)
-  ;;             (setq tree-text (buffer-substring (region-beginning) (region-end)))
-  ;;             (let (this-command) (org-cut-subtree))
-  ;;             (goto-char (point-min))
-  ;;             (save-restriction
-  ;;               (widen)
-  ;;               (-each path
-  ;;                 (lambda (heading)
-  ;;                   (if (re-search-forward
-  ;;                        (rx-to-string
-  ;;                         `(: bol (repeat ,level "*") (1+ " ") ,heading)) nil t)
-  ;;                       (org-narrow-to-subtree)
-  ;;                     (goto-char (point-max))
-  ;;                     (unless (looking-at "^")
-  ;;                       (insert "\n"))
-  ;;                     (insert (make-string level ?*)
-  ;;                             " "
-  ;;                             heading
-  ;;                             "\n"))
-  ;;                   (cl-incf level)))
-  ;;               (widen)
-  ;;               (org-end-of-subtree t t)
-  ;;               (org-paste-subtree level tree-text))))))))
-
-  ;; 参考这个配置自动归档：https://emacs.stackexchange.com/questions/19995/automatically-archive-done-entries-regardless-of-keyword
-  ;; https://stackoverflow.com/questions/6997387/how-to-archive-all-the-done-tasks-using-a-single-command
-  ;; (defun yc/org-archive-done-tasks ()
-  ;;   (interactive)
-  ;;   (org-map-entries 'org-archive-subtree "/DONE" 'file))
-
-  ;; (defun yc/org-buffer-day-agenda ()
-  ;;   (interactive)
-  ;;   "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list), d (org-agenda-day-view)."
-  ;;   (progn
-  ;;     (org-agenda-set-restriction-lock 'file)
-  ;;     (org-agenda-list)
-  ;;     (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
 
   ;; - https://emacs.stackexchange.com/questions/16551/how-do-i-view-all-org-mode-todos-that-are-not-recurring-or-not-scheduled
   (setq org-agenda-custom-commands
@@ -599,11 +511,6 @@
           ("h" "Habit" entry  (file (concat org-directory "/refile.txt"))
            "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
           ))
-  
-  ;; Eisenhower Matrix
-  (setq org-lowest-priority ?E)
-  (setq org-default-priority ?E)
-  (setq org-agenda-sticky t)  ;generate differens agendas buffers in separated windows
 
   (add-to-list 'org-agenda-custom-commands
                '("1" "Eisenhower matrix"
@@ -676,7 +583,78 @@
     (switch-to-buffer  "*Org Agenda(4)*")  ;put the Agenda(3) in the left, down quadrant
     (windmove-left)
     (switch-to-buffer  "*Org Agenda(3)*")  ;put the Agenda(4) in the right, down quadrant
-    ))
+    )
+
+  ;; Agendas should be full screen!
+  ;; (add-hook 'org-agenda-finalize-hook (lambda () (delete-other-windows)))
+  
+  ;; ;; This function opens the agenda in full screen.
+  ;; (defun yc/open-agenda ()
+  ;;   "Opens the org-agenda."
+  ;;   (interactive)
+  ;;   (let ((agenda "*Org Agenda*"))
+  ;;     (if (equal (get-buffer agenda) nil)
+  ;;         (org-agenda-list)
+  ;;       (unless (equal (buffer-name (current-buffer)) agenda)
+  ;;         (switch-to-buffer agenda))
+  ;;       (org-agenda-redo t)
+  ;;       (beginning-of-buffer))))
+
+  ;; Archive subtrees under the same hierarchy as original in the archive files
+  ;; 参考：https://github.com/Fuco1/Fuco1.github.io/blob/master/posts/2017-04-20-Archive-subtrees-under-the-same-hierarchy-as-original-in-the-archive-files.org
+  ;; (defadvice org-archive-subtree (around fix-hierarchy activate)
+  ;;   (let* ((fix-archive-p (and (not current-prefix-arg)
+  ;;                              (not (use-region-p))))
+  ;;          (afile (org-extract-archive-file (org-get-local-archive-location)))
+  ;;          (buffer (or (find-buffer-visiting afile) (find-file-noselect afile))))
+  ;;     ad-do-it
+  ;;     (when fix-archive-p
+  ;;       (with-current-buffer buffer
+  ;;         (goto-char (point-max))
+  ;;         (while (org-up-heading-safe))
+  ;;         (let* ((olpath (org-entry-get (point) "ARCHIVE_OLPATH"))
+  ;;                (path (and olpath (split-string olpath "/")))
+  ;;                (level 1)
+  ;;                tree-text)
+  ;;           (when olpath
+  ;;             (org-mark-subtree)
+  ;;             (setq tree-text (buffer-substring (region-beginning) (region-end)))
+  ;;             (let (this-command) (org-cut-subtree))
+  ;;             (goto-char (point-min))
+  ;;             (save-restriction
+  ;;               (widen)
+  ;;               (-each path
+  ;;                 (lambda (heading)
+  ;;                   (if (re-search-forward
+  ;;                        (rx-to-string
+  ;;                         `(: bol (repeat ,level "*") (1+ " ") ,heading)) nil t)
+  ;;                       (org-narrow-to-subtree)
+  ;;                     (goto-char (point-max))
+  ;;                     (unless (looking-at "^")
+  ;;                       (insert "\n"))
+  ;;                     (insert (make-string level ?*)
+  ;;                             " "
+  ;;                             heading
+  ;;                             "\n"))
+  ;;                   (cl-incf level)))
+  ;;               (widen)
+  ;;               (org-end-of-subtree t t)
+  ;;               (org-paste-subtree level tree-text))))))))
+
+  ;; 参考这个配置自动归档：https://emacs.stackexchange.com/questions/19995/automatically-archive-done-entries-regardless-of-keyword
+  ;; https://stackoverflow.com/questions/6997387/how-to-archive-all-the-done-tasks-using-a-single-command
+  ;; (defun yc/org-archive-done-tasks ()
+  ;;   (interactive)
+  ;;   (org-map-entries 'org-archive-subtree "/DONE" 'file))
+
+  ;; (defun yc/org-buffer-day-agenda ()
+  ;;   (interactive)
+  ;;   "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list), d (org-agenda-day-view)."
+  ;;   (progn
+  ;;     (org-agenda-set-restriction-lock 'file)
+  ;;     (org-agenda-list)
+  ;;     (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
+  )
 
 ;; - https://github.com/alphapapa/org-ql
 ;; org-ql 常用命令的使用说明 https://emacs-china.org/t/org-ql/21486/2

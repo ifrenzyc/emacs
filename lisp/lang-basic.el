@@ -9,9 +9,10 @@
 ;; Show native line numbers if possible, otherwise use `linum'
 (use-package display-line-numbers
   :ensure nil
-  :hook (prog-mode . display-line-numbers-mode)
-  :config
-  (setq display-line-numbers-width-start t))
+  :hook
+  (prog-mode . display-line-numbers-mode)
+  :custom
+  (display-line-numbers-width-start t))
 
 ;; custom program language font
 (setq yc/programming-modes '(js-mode
@@ -86,14 +87,15 @@
   (add-hook (derived-mode-hook-name yc/mode) 'yc/apply-monofont))
 
 (use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :bind
+  (("M-g o" . dumb-jump-go-other-window)
+   ("M-g j" . dumb-jump-go)
+   ("M-g i" . dumb-jump-go-prompt)
+   ("M-g x" . dumb-jump-go-prefer-external)
+   ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :custom
+  (dumb-jump-selector 'ivy)    ; helm
   :config
-  (setq dumb-jump-selector 'ivy)  ;; 'helm
-
   (defhydra hydra-dumb-jump (:color blue :columns 3)
     "Dumb Jump"
     ("j" dumb-jump-go "Go")
@@ -110,21 +112,24 @@
   (:map dap-mode-map
         ([f5]  . dap-debug)
         ([f7]  . dap-hydra))
-  :hook ((prog-mode . dap-mode)
-         (dap-mode . dap-ui-mode)
-         (dap-session-created . (lambda (&_rest) (dap-hydra)))
-         (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
-         (python-ts-mode . (lambda () (require 'dap-python)))
-         (ruby-ts-mode . (lambda () (require 'dap-ruby)))
-         (go-ts-mode . (lambda () (require 'dap-go)))
-         (java-ts-mode . (lambda () (require 'dap-java)))
-         ((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
-         (php-mode . (lambda () (require 'dap-php)))
-         (elixir-mode . (lambda () (require 'dap-elixir)))
-         ((js-mode js-ts-mode js2-mode) . (lambda () (require 'dap-chrome))))
+  :hook
+  ((prog-mode . dap-mode)
+   (dap-mode . dap-ui-mode)
+   (dap-session-created . (lambda (&_rest) (dap-hydra)))
+   (dap-terminated . (lambda (&_rest) (dap-hydra/nil)))
+   (dap-stopped    . (lambda (arg) (call-interactively #'dap-hydra)))   ; automatically trigger the hydra when the program hits a breakpoint
+   (python-ts-mode . (lambda () (require 'dap-python)))
+   (ruby-ts-mode   . (lambda () (require 'dap-ruby)))
+   (go-ts-mode     . (lambda () (require 'dap-go)))
+   (java-ts-mode   . (lambda () (require 'dap-java)))
+   ((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode swift) . (lambda () (require 'dap-lldb)))
+   (php-mode    . (lambda () (require 'dap-php)))
+   (elixir-mode . (lambda () (require 'dap-elixir)))
+   ((js-mode js-ts-mode js2-mode) . (lambda () (require 'dap-chrome))))
+  :custom
+  (dap-java-test-runner (concat lsp-java-server-install-dir "test-runner/junit-platform-console-standalone.jar"))
+  (dap-breakpoints-file (concat yc/cache-dir ".dap-breakpoints"))
   :config
-  (setq dap-java-test-runner (concat lsp-java-server-install-dir "test-runner/junit-platform-console-standalone.jar"))
-  (setq dap-breakpoints-file (concat yc/cache-dir ".dap-breakpoints"))
   (dap-auto-configure-mode t)
   (dap-mode 1)
 
@@ -137,10 +142,7 @@
   (tooltip-mode 1)
   ;; displays floating panel with debug buttons
   ;; requies emacs 26+
-  (dap-ui-controls-mode 1)
-  ;; automatically trigger the hydra when the program hits a breakpoint
-  (add-hook 'dap-stopped-hook
-            (lambda (arg) (call-interactively #'dap-hydra))))
+  (dap-ui-controls-mode 1))
 
 ;; Minor mode to aggressively keep your code always indented
 (use-package aggressive-indent
@@ -223,11 +225,11 @@
 ;; - https://github.com/jdtsmith/indent-bars
 (use-package highlight-indentation
   :disabled t
-  ;; :hook (prog-mode . highlight-indentation-mode)
-  ;; :config
-  ;; (set-face-background 'highlight-indentation-face "#e3e3d3")
-  ;; (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
-  )
+  :hook
+  (prog-mode . highlight-indentation-mode)
+  :config
+  (set-face-background 'highlight-indentation-face "#e3e3d3")
+  (set-face-background 'highlight-indentation-current-column-face "#c3b3b3"))
 
 (use-package highlight-indent-guides
   :disabled t
@@ -243,7 +245,6 @@
 
   ;; (set-face-background 'highlight-indent-guides-odd-face "darkgray")
   ;; (set-face-background 'highlight-indent-guides-even-face "dimgray")
-  
   :config
   ;; WORKAROUND: Reset the faces after changing theme
   (add-hook 'after-load-theme-hook

@@ -18,8 +18,11 @@
 (use-package markdown-mode
   :mode
   (("README\\.md\\'" . gfm-mode)
-   ("\\.md\\'" . markdown-mode)
+   ("\\.md\\'"       . markdown-mode)
    ("\\.markdown\\'" . markdown-mode))
+  :bind
+  (:map markdown-mode-map
+        ([f12] . markdown-live-preview-mode))
   :hook
   ((markdown-mode . lsp-deferred))
   :commands
@@ -166,15 +169,6 @@ To be used with `markdown-live-preview-window-function'."
   (:map markdown-mode-map
         ("C-c C-f" . markdownfmt-format-buffer)))
 
-(use-package markdown-preview-mode
-  :after markdown-mode
-  :config
-  (add-to-list 'markdown-preview-javascript "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
-
-  (setq markdown-preview-stylesheets
-        (list (concat "https://github.com/dmarcotte/github-markdown-preview/"
-                      "blob/master/data/css/github.css"))))
-
 (use-package edit-indirect
   :bind
   (:map edit-indirect-mode-map
@@ -190,6 +184,14 @@ To be used with `markdown-live-preview-window-function'."
      header-line-format
      (substitute-command-keys
       "\\<edit-indirect-mode-map>Edit, then exit with `\\[edit-indirect-commit]' or abort with `\\[edit-indirect-abort]'"))))
+
+(use-package markdown-preview-mode
+  :after markdown-mode
+  :config
+  (add-to-list 'markdown-preview-javascript "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML")
+  (setq markdown-preview-stylesheets
+        (list (concat "https://github.com/dmarcotte/github-markdown-preview/"
+                      "blob/master/data/css/github.css"))))
 
 ;; grip-mode
 ;; markdown preview

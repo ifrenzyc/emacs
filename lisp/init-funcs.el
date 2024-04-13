@@ -229,5 +229,24 @@ is already narrowed."
         (t (narrow-to-defun))))
 (global-set-key (kbd "C-x n x") 'endless/narrow-or-widen-dwim)
 
+;; macro 的按键绑定可以参考 leuven 函数 leuven-kmacro-turn-on-recording
+(defun leuven-kmacro-turn-on-recording ()
+  "Start recording a keyboard macro and toggle functionality of key binding."
+  (interactive)
+  (global-set-key (kbd "<S-f3>") #'leuven-kmacro-turn-off-recording)
+  (kmacro-start-macro nil))
+
+(defun leuven-kmacro-turn-off-recording ()
+  "Stop recording a keyboard macro and toggle functionality of key binding."
+  (interactive)
+  (global-set-key (kbd "<S-f3>") #'leuven-kmacro-turn-on-recording)
+  (kmacro-end-macro nil))
+
+;; Start/stop recording a keyboard macro.
+(global-set-key (kbd "<S-f3>") #'leuven-kmacro-turn-on-recording)
+
+;; Execute the most recent keyboard macro.
+(global-set-key (kbd "<f3>") #'kmacro-call-macro)
+
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

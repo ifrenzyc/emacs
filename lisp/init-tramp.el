@@ -12,26 +12,20 @@
 
 (use-package tramp
   :ensure nil
-  :init
-  (setq tramp-default-method "ssh")
-  (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
-  (setq password-cache-expiry nil)
-  :config
-  (setq tramp-auto-save-directory (expand-file-name ".cache/tramp-autosave-dir" user-emacs-directory)
-        tramp-backup-directory-alist `(("." . ,(concat yc/cache-dir ".saves_tramp")))
-        tramp-inline-compress-start-size 10000000
-        tramp-chunksize 2000
-        ;; Make SSH work faster by reusing connections
-        tramp-ssh-controlmaster-options
-        "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
-
+  :hook
   ;; https://github.com/masasam/emacs-counsel-tramp#if-you-want-to-speed-up-tramp
-  (add-hook 'counsel-tramp-pre-command-hook #'(lambda ()
-                                                (projectile-mode 0)
-                                                ))
-  (add-hook 'counsel-tramp-quit-hook #'(lambda ()
-                                         (projectile-mode 1)
-                                         )))
+  (counsel-tramp-pre-command . (lambda ()
+                                 (projectile-mode 0)))
+  (counsel-tramp-quit . (lambda ()
+                          (projectile-mode 1)))
+  :custom
+  ((tramp-default-method "ssh")
+   (password-cache-expiry nil)
+   (tramp-auto-save-directory (expand-file-name ".cache/tramp-autosave-dir" user-emacs-directory))
+   (tramp-backup-directory-alist `(("." . ,(concat yc/cache-dir ".saves_tramp"))))
+   (tramp-chunksize 2000))
+  :init
+  (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
 
 (use-package counsel-tramp
   :after (tramp counsel)
