@@ -8,10 +8,16 @@
 ;;; Code:
 
 (use-package go-mode
-  :mode ("\\.go\\'" . go-ts-mode)
+  :mode
+  (("\\.go\\'" . go-ts-mode)
+   ("go.mod"   . go-mod-ts-mode)
+   ("go.sum"   . go-mod-ts-mode))
   :hook
   (go-ts-mode . flycheck-mode)
-  (go-ts-mode . lsp-deferred)
+  (go-ts-mode . lsp)
+  (go-mode    . (lambda ()
+                  (setq-local tab-width 4)
+                  (setq-local indent-tabs-mode nil)))
   :bind
   (:map go-ts-mode-map
         ("M-]"        . godef-jump)
@@ -26,31 +32,13 @@
     "Imports"
     (("ia" go-import-add "add")
      ("ir" go-remove-unused-imports "cleanup"))))
-  :config
-  ;; (setq go-mode-map
-  ;; (let ((m (make-sparse-keymap)))
-  ;;   (define-key m "}" #'go-mode-insert-and-indent)
-  ;;   (define-key m ")" #'go-mode-insert-and-indent)
-  ;;   (define-key m "," #'go-mode-insert-and-indent)
-  ;;   (define-key m ":" #'go-mode-insert-and-indent)
-  ;;   (define-key m "=" #'go-mode-insert-and-indent)
-  ;;   (define-key m (kbd "C-c C-a") #'go-import-add)
-  ;;   (define-key m (kbd "C-c C-j") #'godef-jump)
-  ;;   ;; go back to point after called godef-jump.  ::super
-  ;;   (define-key m (kbd "C-c C-b") #'pop-tag-mark)
-  ;;   (define-key m (kbd "C-x 4 C-c C-j") #'godef-jump-other-window)
-  ;;   (define-key m (kbd "C-c C-d") #'godef-describe)
-  ;;   m))
-  (setq compile-command "echo Building... && go build -v && echo Testing... && go test -v && echo Linter... && golint")
-  (setq compilation-read-command nil)
-  ;;           (add-hook 'go-mode-hook
-  ;;                     (lambda ()
-  ;;                       (setq tab-width 4)
-  ;;                       (setq indent-tabs-mode nil)))
+  :custom
+  (compile-command "echo Building... && go build -v && echo Testing... && go test -v && echo Linter... && golint")
+  (compilation-read-command nil)
 
   ;; use goimports instead of gofmt ::super
-  (setq gofmt-command "goimports")
-
+  (gofmt-command "goimports")
+  :config
   ;; Quick run current buffer
   (defun yc/go ()
     "run current buffer"

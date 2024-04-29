@@ -87,14 +87,18 @@
   (add-hook (derived-mode-hook-name yc/mode) 'yc/apply-monofont))
 
 (use-package dumb-jump
+  :custom
+  (xref-show-definitions-function #'xref-show-definitions-completing-read)
+  (dumb-jump-prefer-searcher 'rg)
+  (dumb-jump-selector 'ivy)    ; helm
+  :hook
+  (xref-backend-functions . dumb-jump-xref-activate)
   :bind
   (("M-g o" . dumb-jump-go-other-window)
    ("M-g j" . dumb-jump-go)
    ("M-g i" . dumb-jump-go-prompt)
    ("M-g x" . dumb-jump-go-prefer-external)
    ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :custom
-  (dumb-jump-selector 'ivy)    ; helm
   :config
   (defhydra hydra-dumb-jump (:color blue :columns 3)
     "Dumb Jump"
