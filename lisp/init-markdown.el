@@ -24,7 +24,7 @@
   (:map markdown-mode-map
         ([f12] . markdown-live-preview-mode))
   :hook
-  ((markdown-mode . lsp-deferred))
+  ((markdown-mode . lsp))
   :commands
   (markdown-mode gfm-mode)
   :ensure-system-package (multimarkdown . "brew install multimarkdown")

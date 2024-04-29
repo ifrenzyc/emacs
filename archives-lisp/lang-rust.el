@@ -59,6 +59,6 @@
   :ensure nil
   :after (lsp-mode rust-mode)
   :hook
-  (rust-mode . lsp-deferred))
+  (rust-mode . lsp))
 
 (provide 'lang-rust)
