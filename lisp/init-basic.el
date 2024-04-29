@@ -79,7 +79,9 @@
 
   ;; Make the backspace properly erase the tab instead of
   ;; removing 1 space at a time.
-  (setq backward-delete-char-untabify-method 'hungry))
+  (setq backward-delete-char-untabify-method 'hungry)
+
+  (unbind-key "C-z" global-map))
 
 (provide 'init-basic)
 ;;; init-basic.el ends here
