@@ -71,13 +71,6 @@
     "Quit"
     (("C-g" nil "quit")
      ("q"   nil "quit"))))
-  :custom-face
-  ;; 单独给 org-table 设一个等宽字体
-  ;; 目前使用是有问题的，英文字符是按照设置的 Sarasa 字体，但是中文不是，导致还是不能正确对齐
-  ;; Org table font
-  (org-table ((t (:family "Sarasa Mono SC" :size 13))))
-  (org-done ((t (:strike-through t))))
-  (org-headline-done ((t (:strike-through t))))
   :custom
   ;; "#0098dd"
   ;; "#0fbf5c"
@@ -96,18 +89,103 @@
   ;; "#f1c40f"
   ;; "#feb24c"
   ;; "#ff6480"
-  (org-todo-keyword-faces '(("DELEGATED" . (:foreground "#feb24c" :slant italic :weight bold))
+  (org-todo-keyword-faces '(("DONE" . (:foreground "#006800" :strike-through t :height 160 :weight bold))
+                            ("DELEGATED" . (:foreground "#feb24c" :slant italic :weight bold))
                             ("MABE" . (:foreground "#6e90c8" :slant italic :weight bold))
                             ("PROJ" . (:foreground "#b294bb" :slant italic :weight bold))
                             ("READ" . (:foreground "#9f7efe" :slant italic :weight bold))
                             ("WAITING" . (:foreground "coral" :slant italic :weight bold))))
+
+  
+  (org-log-done 'time)                      ; 记录时间
+  (org-log-reschedule t)
+  (org-log-redeadline t)
+  (org-log-into-drawer t)                   ; hide org todo state changes in drawer or properties
+  (org-drawers '("PROPERTIES" "LOGBOOK"))   ; separate drawers for clocking and logs
+  (org-clock-into-drawer t)                 ; save clock data and state changes and notes in the LOGBOOK drawer
+  (org-clock-out-remove-zero-time-clocks t) ; removes clocked tasks with 0:00 duration
+  (org-clock-out-when-done t)               ; clock out when moving task to a done state
+
+  (org-goto-interface 'outline-path-completion org-goto-max-level 10)
+
+  ;; Blank lines.
+  (org-blank-before-new-entry
+   '(;; Insert  a blank line before new heading.
+     (heading . t)
+
+     ;; Try to make an intelligent decision whether to insert a
+     ;; blank line or not before a new item.
+     (plain-list-item . auto)))
+
+  ;; Disabling underscore-to-subscript in Emacs Org-Mode export
+  ;; @see - http://stackoverflow.com/questions/698562/disabling-underscore-to-subscript-in-emacs-org-mode-export/701201#701201
+  (org-export-with-sub-superscripts nil) ; 全局禁用导出时 ^ 和 _ 作为上下标符号
+  (org-pretty-entities-include-sub-superscripts nil)
+
+  ;; 打开文件时，隐藏内容
+  ;; Keep the headlines expanded in Org-Mode
+  ;; @see - http://emacs.stackexchange.com/questions/9709/keep-the-headlines-expanded-in-org-mode
+  (org-startup-folded "showall")
+
+  ;; 所有标题按 4 个字符缩进
+  (org-startup-indented t)             ; turn on header line 'org-indent-mode' by default
+  (org-indent-indentation-per-level 3) ; indent, default value: '2'
+
+  ;; 重新定义不同状态的 todoList 的排版
+  ;; - http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
+  (org-fontify-whole-heading-line t)
+  (org-fontify-done-headline nil)
+  (org-fontify-quote-and-verse-blocks t)
+
+  (org-todo-keywords
+   '((sequence "TODO(t!/!)" "NEXT(n!/!)" "DELEGATED(l!/!)" "|" "DONE(d!/!)" "DEFERRED(f!/!)" "CANCELLED(c@/!)")
+     (sequence "MEETING" "|" "MEETING_DONE")
+     (sequence "PROJ(p!/!)" "|" "PROJ_DONE(P!/!)")
+     (sequence "READ(r!/!)" "|" "READ_DONE(R!/!)")
+     (sequence "WAITING(w@/!)" "REPEAT(r!/!)" "MABE(m!/!)" "HOLD(h!/!)")))
+
+  (org-use-fast-todo-selection t)
+  (org-todo-state-tags-triggers
+   '(("CANCELLED" ("CANCELLED" . t))
+     ("WAITING" ("WAITING" . t))
+     ("DELEGATED" ("delegated" . t))
+     ("MABE" ("WAITING" . t))
+     ("HOLD" ("WAITING") ("HOLD" . t))
+     (done ("WAITING") ("HOLD"))
+     ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+     ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+     ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
+  
+  (org-pretty-entities t)
+  (org-src-fontify-natively t)           ; Enable syntax highlighting in code blocks
+  (org-indent-mode t)
+  (org-use-property-inheritance t)
+  (org-list-allow-alphabetical t)        ; have a. A. a) A) list bullets
+  (org-src-preserve-indentation t)       ; 这个需要注释掉，会导致 org-src 里面的代码不会自动缩进两列
+  ;; (org-edit-src-content-indentation 2)  ; 设置 org-src 里面的代码自动缩进 2 列
+  (org-enforce-todo-dependencies t)
+  (org-enforce-todo-checkbox-dependencies t)
+  (org-hide-emphasis-markers t)          ; 隐藏 org-mode 语法中的标记字符
+  (org-image-actual-width (/ (frame-pixel-width) 2))
+
+  (org-id-link-to-org-use-id 'use-existing)
+  ;; (org-image-actual-width '(400))
   :hook
   (org-mode . (lambda ()
                 (text-scale-increase 1)
+                (fixed-pitch-mode t)
                 (setq-local line-spacing 0.5)
                 (setq-local truncate-lines t)
                 (setq-local word-wrap nil)))
   :config
+  (custom-set-faces
+   '(org-done ((t (:strike-through t))))
+   '(org-headline-done ((t (:strike-through t))))
+   ;; 单独给 org-table 设一个等宽字体
+   ;; 目前使用是有问题的，英文字符是按照设置的 Sarasa 字体，但是中文不是，导致还是不能正确对齐
+   ;; Org table font
+   '(org-table ((t (:family "Sarasa Gothic SC" :height 160)))))
+  
   (defhydra hydra-org (:color red :columns 3)
     "Org Mode Movements"
     ("n" outline-next-visible-heading "next heading")
@@ -118,58 +196,9 @@
     ("C-l" yc/org-toggle-link-display "link")
     ("C-i" org-toggle-inline-images "image")
     ("g" org-goto "goto" :exit t))
-  
-  (setq org-pretty-entities t
-        org-src-fontify-natively t      ; Enable syntax highlighting in code blocks
-        org-indent-mode t
-        org-use-property-inheritance t
-        org-list-allow-alphabetical t   ; have a. A. a) A) list bullets
-        org-src-preserve-indentation t  ; 这个需要注释掉，会导致 org-src 里面的代码不会自动缩进两列
-        ;; org-edit-src-content-indentation 2  ; 设置 org-src 里面的代码自动缩进 2 列
-        org-enforce-todo-dependencies t
-        org-enforce-todo-checkbox-dependencies t
-        org-hide-emphasis-markers t     ; 隐藏 org-mode 语法中的标记字符
-        org-image-actual-width (/ (frame-pixel-width) 2))
-
-  (setq org-id-link-to-org-use-id 'use-existing)
-  ;; org-image-actual-width '(400))
 
   ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
-
-  (setq org-log-done 'time                      ; 记录时间
-        org-log-reschedule t
-        org-log-redeadline t
-        org-log-into-drawer t                   ; hide org todo state changes in drawer or properties
-        org-drawers '("PROPERTIES" "LOGBOOK")   ; separate drawers for clocking and logs
-        org-clock-into-drawer t                 ; save clock data and state changes and notes in the LOGBOOK drawer
-        org-clock-out-remove-zero-time-clocks t ; removes clocked tasks with 0:00 duration
-        org-clock-out-when-done t)              ; clock out when moving task to a done state
-
-  (setq org-goto-interface 'outline-path-completion org-goto-max-level 10)
-
-  ;; Blank lines.
-  (setq org-blank-before-new-entry
-        '(;; Insert  a blank line before new heading.
-          (heading . t)
-
-          ;; Try to make an intelligent decision whether to insert a
-          ;; blank line or not before a new item.
-          (plain-list-item . auto)))
-
-  ;; Disabling underscore-to-subscript in Emacs Org-Mode export
-  ;; @see - http://stackoverflow.com/questions/698562/disabling-underscore-to-subscript-in-emacs-org-mode-export/701201#701201
-  (setq org-export-with-sub-superscripts nil ; 全局禁用导出时 ^ 和 _ 作为上下标符号
-        org-pretty-entities-include-sub-superscripts nil)
-
-  ;; 打开文件时，隐藏内容
-  ;; Keep the headlines expanded in Org-Mode
-  ;; @see - http://emacs.stackexchange.com/questions/9709/keep-the-headlines-expanded-in-org-mode
-  (setq org-startup-folded "showall")
-
-  ;; 所有标题按 4 个字符缩进
-  (setq org-startup-indented t)             ; turn on header line 'org-indent-mode' by default
-  (setq org-indent-indentation-per-level 3) ; indent, default value: '2'
 
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -183,31 +212,6 @@
   (defun add-pcomplete-to-capf ()
     (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
   (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
-
-  ;; 重新定义不同状态的 todoList 的排版
-  ;; - http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
-  (setq org-fontify-whole-heading-line t
-        org-fontify-done-headline nil
-        org-fontify-quote-and-verse-blocks t)
-
-  (setq org-todo-keywords
-        '((sequence "TODO(t!/!)" "NEXT(n!/!)" "DELEGATED(l!/!)" "|" "DONE(d!/!)" "DEFERRED(f!/!)" "CANCELLED(c@/!)")
-          (sequence "MEETING" "|" "MEETING_DONE")
-          (sequence "PROJ(p!/!)" "|" "PROJ_DONE(P!/!)")
-          (sequence "READ(r!/!)" "|" "READ_DONE(R!/!)")
-          (sequence "WAITING(w@/!)" "REPEAT(r!/!)" "MABE(m!/!)" "HOLD(h!/!)")))
-
-  (setq org-use-fast-todo-selection t)
-  (setq org-todo-state-tags-triggers
-        '(("CANCELLED" ("CANCELLED" . t))
-          ("WAITING" ("WAITING" . t))
-          ("DELEGATED" ("delegated" . t))
-          ("MABE" ("WAITING" . t))
-          ("HOLD" ("WAITING") ("HOLD" . t))
-          (done ("WAITING") ("HOLD"))
-          ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-          ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-          ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
 
   (defun yc/org-toggle-link-display ()
     "Toggle the literal or descriptive display of links."

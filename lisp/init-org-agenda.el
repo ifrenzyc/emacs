@@ -17,11 +17,12 @@
   :bind
   (:map org-super-agenda-header-map
         ("<tab>" . origami-toggle-node))
-  :commands (org-agenda)
-  :hook ((org-agenda-mode . org-super-agenda-mode)
-         (org-super-agenda-mode . origami-mode)    ; Easily fold groups via TAB.
-         (org-agenda-mode . (lambda ()
-                              (setq-local line-spacing 0.8))))
+  :commands (org-agenda org-super-agenda)
+  :hook
+  ((org-agenda-mode . org-super-agenda-mode)
+   (org-super-agenda-mode . origami-mode)    ; Easily fold groups via TAB.
+   (org-agenda-mode . (lambda ()
+                        (setq-local line-spacing 0.8))))
   :custom-face
   (org-agenda-date ((t (:height 160))))
   (org-agenda-date-today ((t (:height 160))))
@@ -32,6 +33,8 @@
   (org-agenda-structure ((t (:height 160))))
   (org-time-grid ((t (:height 160))))
   (org-todo ((t (:height 160))))
+  (org-done ((t (:height 160))))
+  (org-agenda-calendar-event ((t (:height 160))))
   (org-agenda-current-time ((t (:height 160))))
   :init
   (setq org-super-agenda-groups
@@ -178,7 +181,7 @@
   (setq org-agenda-file-done (expand-file-name "0x00_GTD/done.org_archive" org-directory))
   (setq org-agenda-file-journal (expand-file-name "journal.txt" org-directory))
   (setq org-agenda-file-thoughts (expand-file-name "thoughts.txt" org-directory))
-  (setq org-agenda-file-notes (expand-file-name "../notes.txt" org-directory))
+  (setq org-agenda-file-notes (expand-file-name "0x00_GTD/notes.txt" org-directory))
   (setq org-agenda-file-code-snippet (expand-file-name "snippet.txt" org-directory))
   (setq org-agenda-diary-file (expand-file-name "diary.txt" org-directory))
   (setq org-default-notes-file (expand-file-name "0x00_GTD/00_inbox.txt" org-directory))
@@ -469,7 +472,7 @@
           ;;  "* TODO %i%? %^g\nSCHEDULED: %t\n%T\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
           ("d" "todo [inbox]" entry (file+headline org-default-notes-file "Inbox")
            "** TODO %? %^g\n:PROPERTIES:\n:Effort: %^{effort|1:00|0:05|0:15|0:30|2:00|4:00}\n:END:\n:LOGBOOK:\n- CREATED: %U\n:END:\n_Desired outcome:_ %^{Desired outcome:}\n\n- ~工作事项~ [0%] ::\n  - [ ] \n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
-          ("m" "Meeting" entry (file+headline org-default-notes-file "Meeting")
+          ("m" "Meeting" entry (file+headline org-default-notes-file "Inbox")   ; Meeting
            "* MEETING 会议主题：%? :MEETING:\n%T\n\n*与会人员*\n- \n\n*会议议题*\n\n*重点结论*\n\n*会后 TODO*\n\n*其他事项*\n" :clock-in t :clock-resume t :prepend t :empty-lines 1)
           ("w" "Work TODO" entry (file+olp org-default-notes-file "Work" "Tasks")
            "* TODO %? :work:\n:LOGBOOK:\n- CREATED: %U\n:END:" :clock-in t :clock-resume t)
@@ -481,15 +484,15 @@
            "* READ %?%^L %^g\n%T" :prepend t :empty-lines 1)
           ("K" "Cliplink capture task" entry (file+headline org-agenda-file-gtd "Reading List")
            "* READ %(org-cliplink-capture)\n" :prepend t :empty-lines 1)
-          ("n" "Note" entry (file+headline org-agenda-file-notes "Notes")
+          ("n" "Note" entry (file org-agenda-file-notes)
            "* Note %?\n%T")
-          ("N" "NOTES" entry (file+headline org-agenda-file-notes "Notes")
+          ("N" "NOTES" entry (file org-agenda-file-notes)
            "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
           ("i" "Idea" entry (file+headline org-agenda-file-thoughts "Thoughts")
            "* %? :IDEA:\n%t" :clock-in t :clock-resume t)
           ("b" "Blog idea" entry (file+headline org-default-notes-file "Blog Topics:")
            "* %?\n%T" :prepend t)
-          ;; ("j" "Journal" entry (file+olp+datetree org-agenda-file-journal)
+          
           ;;  "* %?\nEntered on %U\n  %i\n  %a")
           ("j" "Journal")
           ("jd" "Diary" entry (file+olp+datetree "diary.txt")
@@ -511,79 +514,6 @@
           ("h" "Habit" entry  (file (concat org-directory "/refile.txt"))
            "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
           ))
-
-  (add-to-list 'org-agenda-custom-commands
-               '("1" "Eisenhower matrix"
-                 ((tags-todo
-                   "+PRIORITY=\"A\""
-                   ((org-agenda-overriding-header "Urgent and important （紧急且重要 DO）"))))
-                 nil))
-
-  (add-to-list 'org-agenda-custom-commands
-               '("2" "Eisenhower matrix"
-                 ((tags-todo
-                   "+PRIORITY=\"B\""
-                   ((org-agenda-overriding-header "Important but not urgent （重要但不紧急 PLAN）"))))
-                 nil))
-
-  (add-to-list 'org-agenda-custom-commands
-               '("3" "Eisenhower matrix"
-                 ((tags-todo
-                   "+PRIORITY=\"C\""
-                   ((org-agenda-overriding-header "Urgent but not important （紧急但不重要 DELEGATE）"))))
-                 nil))
-
-  (add-to-list 'org-agenda-custom-commands
-               '("4" "Eisenhower matrix"
-                 ((tags-todo
-                   "+PRIORITY=0-PRIORITY=\"A\"-PRIORITY=\"B\"-PRIORITY=\"C\""
-                   ((org-agenda-overriding-header "Neither important nor urgent （即不重要且不紧急 ELIMINATE）"))))
-                 nil))
-
-  (defun myAgenda1 ()
-    (interactive)
-    (org-agenda nil "1"))
-
-  (defun myAgenda2 ()
-    (interactive)
-    (org-agenda nil "2"))
-
-  (defun myAgenda3 ()
-    (interactive)
-    (org-agenda nil "3"))
-
-  (defun myAgenda4 ()
-    (interactive)
-    (org-agenda nil "4"))
-
-  (defun split-4-ways ()
-    (interactive)
-    (delete-other-windows)
-    (split-window-right)
-    (split-window-below)
-    (windmove-right)
-    (split-window-below)
-    (windmove-left))
-
-  (defun makeAgendas ()
-    (interactive)
-    (myAgenda1)
-    (myAgenda2)
-    (myAgenda3)
-    (myAgenda4))
-
-  (defun makeMatrix ()
-    (interactive)
-    (makeAgendas) ;it opens: *Org Agenda(1)*, *Org Agenda(2)*, *Org Agenda(3)*, *Org Agenda(4)*
-    (split-4-ways)  ;make the 4 quadrant windows
-    (switch-to-buffer  "*Org Agenda(1)*")  ;put the Agenda(1) in the left, up quadrant
-    (windmove-right)
-    (switch-to-buffer  "*Org Agenda(2)*")  ;put the Agenda(2) in the right, up quadrant
-    (windmove-down)
-    (switch-to-buffer  "*Org Agenda(4)*")  ;put the Agenda(3) in the left, down quadrant
-    (windmove-left)
-    (switch-to-buffer  "*Org Agenda(3)*")  ;put the Agenda(4) in the right, down quadrant
-    )
 
   ;; Agendas should be full screen!
   ;; (add-hook 'org-agenda-finalize-hook (lambda () (delete-other-windows)))
@@ -671,6 +601,12 @@
 ;; Add graphical view of agenda
 ;; (use-package org-timeline
 ;;   :hook (org-agenda-finalize . org-timeline-insert-timeline))
+
+(defun yc/find-all-org-files-in-notes (&optional rec)
+  "Find files with TXT in notes.
+REC searches recursively."
+  (interactive)
+  (split-string (shell-command-to-string (format "fd . '%s' -e %s" "/Users/yangc/notes" "txt"))))  ; find %s -not -path '*/\.*' -name '*.%s'
 
 (provide 'init-org-agenda)
 ;;; init-org-agenda.el ends here

@@ -11,11 +11,11 @@
 ;; org-roam-capture 主要参考： /Users/yangc/src/emacs.d/ody55eus-doom-emacs.d/doom/Emacs.org
 (use-package org-roam
   :bind
-  (("C-c n l" . org-roam-buffer-toggle)
+  (([f4]      . org-roam-dailies-capture-today)
+   ("C-c n l" . org-roam-buffer-toggle)
    ("C-c n f" . org-roam-node-find)
    ("C-c n i" . org-roam-node-insert)
-   ("C-c n h" . org-id-get-create)
-   ([f4]      . org-roam-dailies-capture-today))
+   ("C-c n h" . org-id-get-create))
   (:map org-roam-mode-map
         ("C-c n l" . org-roam-buffer-toggle)
         ("C-c n f" . org-roam-node-find)
@@ -30,6 +30,15 @@
   (org-roam-file-extensions '("txt"))
   (org-roam-verbose t)
   (org-roam-db-location (concat org-roam-directory "/.database/org-roam.db"))
+  (org-roam-graph-extra-config '(("overlap"   . "prism")
+                                 ("color"     . "skyblue")     ; "#DEDEFF"
+                                 ("shape"     . "ellipse")
+                                 ("style"     . "rounded,filled")
+                                 ("fillcolor" . "#EFEFFF")
+                                 ("fontcolor" . "#111111")))
+  (org-roam-graphviz-executable "/opt/homebrew/opt/graphviz/bin/dot")
+  (org-roam-graphviz-extra-options '(("overlap" . "false")))
+  (org-roam-completion-system 'ivy)
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
       :if-new (file+head "${slug}.txt"
@@ -106,7 +115,7 @@
       "* %i%?"
       :target (file+head "daily-%<%Y-%m-%d>.txt"
                          "#+TITLE: %<%A, %d %b %Y>\n#+filetags: :daily-notes:\n\n"))
-     ("l" "log entry" plain 
+     ("l" "log entry" plain
       "**** %<%I:%M %p> - %?"
       :if-new (file+datetree "current.txt" :day)
       :prepend t
@@ -121,17 +130,6 @@
      ))
   :config
   (defalias 'orf 'org-roam-node-find)
-  (setq org-roam-graph-extra-config '(("overlap" . "prism")
-                                      ("color" . "skyblue")
-                                      ;; ("color" . "#DEDEFF")
-                                      ("shape" . "ellipse")
-                                      ("style" . "rounded,filled")
-                                      ("fillcolor" . "#EFEFFF")
-                                      ("fontcolor" . "#111111")))
-  (setq org-roam-graphviz-executable "/opt/homebrew/opt/graphviz/bin/dot")
-  (setq org-roam-graphviz-extra-options '(("overlap" . "false")))
-  (setq org-roam-completion-system 'ivy)
-
   ;; 这里和默认的 org-mode refile 重复设置了
   ;; (setq org-refile-targets '((org-roam-list-files . (:maxlevel . 1))))
 
@@ -198,11 +196,13 @@
   (when (featurep 'xwidget-internal)
     (setq org-roam-ui-browser-function #'xwidget-webkit-browse-url))
   :hook (org-roam . org-roam-ui-mode)
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t))
+  :custom
+  (org-roam-ui-sync-theme t)
+  (org-roam-ui-follow t)
+  (org-roam-ui-update-on-save t)
+  (org-roam-ui-open-on-start t))
+
+;; - quickroam :: https://github.com/meedstrom/quickroam
 
 ;; (use-package gkroam
 ;;   :init
