@@ -10,7 +10,7 @@
 
 (use-package vundo
   :bind
-  (("C-z" . vundo)
+  (;; ("C-z" . vundo)
    ("C-x u" . undo)
    :map vundo-mode-map
    ("C-a" . vundo-stem-root)
