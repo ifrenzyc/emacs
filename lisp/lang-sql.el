@@ -8,7 +8,7 @@
 (use-package sql-mode
   :ensure nil
   :mode ("\\.sql\\'" . sql-mode)
-  :hook (sql-mode . lsp-deferred))
+  :hook (sql-mode   . lsp))
 
 (use-package sqlformat
   :ensure-system-package (sqlformat . "pip install sqlparse")

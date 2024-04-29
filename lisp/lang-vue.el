@@ -8,6 +8,8 @@
 ;;; Code:
 (use-package vue-mode
   :mode ("\\.vue\\'" . vue-mode)
+  ;; :custom-face
+  ;; (mmm-default-submode-face :background nil)
   :custom
   ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
   ((mmm-submode-decoration-level 3)
@@ -18,7 +20,7 @@
   :ensure nil
   :after (vue-mode lsp-mode)
   :hook
-  ((vue-mode . lsp-deferred)
+  ((vue-mode . lsp)
    ;; (vue-mode . lsp-vue-mmm-enable)
    )
   ;; :config

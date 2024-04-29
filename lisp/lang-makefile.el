@@ -8,7 +8,7 @@
 
 (use-package make-mode
   :ensure nil
-  :mode (("Makefile" . makefile-gmake-mode)))
+  :mode ("Makefile" . makefile-gmake-mode))
 
 (provide 'lang-makefile)
 ;;; lang-makefile.el ends here

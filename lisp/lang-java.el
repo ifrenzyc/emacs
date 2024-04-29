@@ -80,11 +80,11 @@
          )
         )
   :hook
-  ((java-mode . lsp-deferred)
-   (java-ts-mode . lsp-deferred)
-   ;; (java-mode . lsp-java-lens-mode)
-   ;; (java-mode . lsp-java-boot-lens-mode)
-   ;; (java-mode . lsp-java-boot-lens-mode)
+  ((java-mode    . lsp)
+   (java-ts-mode . lsp)
+   ;; (java-mode    . lsp-java-lens-mode)
+   ;; (java-mode    . lsp-java-boot-lens-mode)
+   ;; (java-mode    . lsp-java-boot-lens-mode)
    ))
 
 (use-package dap-java

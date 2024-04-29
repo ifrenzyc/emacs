@@ -14,7 +14,7 @@
   :mode (("\\.groovy$" . groovy-mode)
          ("\\.gradle$" . groovy-mode))
   :hook
-  (groovy-mode . lsp-deferred))
+  (groovy-mode . lsp))
 
 (provide 'lang-groovy)
 ;;; lang-groovy.el ends here

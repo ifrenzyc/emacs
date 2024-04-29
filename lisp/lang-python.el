@@ -42,7 +42,7 @@
   :hook
   (python-ts-mode . (lambda ()
                       (require 'lsp-pyright)
-                      (lsp-deferred))))
+                      (lsp))))
 
 (use-package anaconda-mode
   :after python

@@ -11,7 +11,7 @@
   (:map yaml-mode-map
         ("C-c C-f" . lsp-format-buffer))
   :hook
-  (yaml-ts-mode . lsp-deferred))
+  (yaml-ts-mode . lsp))
 
 (provide 'lang-yaml)
 ;;; lang-yaml.el ends here

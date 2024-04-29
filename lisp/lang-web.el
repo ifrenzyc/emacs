@@ -9,7 +9,8 @@
 
 (use-package tide
   :hook
-  (typescript-mode . lsp-deferred)
+  (typescript-mode    . lsp)
+  (typescript-ts-mode . lsp)
   ;; (typescript-mode . setup-tide-mode)
   ;; formats the buffer before saving
   ;; (typescript-mode . (lambda ()   ; 保存文件的时候对该源文件做一下 gofmt

@@ -9,8 +9,8 @@
 (use-package dockerfile-mode
   :mode ("Dockerfile\\'" . dockerfile-ts-mode)
   :hook
-  ((dockerfile-mode . lsp-deferred)
-   (dockerfile-ts-mode . lsp-deferred))
+  ((dockerfile-mode    . lsp)
+   (dockerfile-ts-mode . lsp))
   :bind
   (:map dockerfile-mode-map
         ("C-c C-f" . lsp-format-buffer)))

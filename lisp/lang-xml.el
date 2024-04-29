@@ -12,7 +12,7 @@
         ("C-c C-f" . lsp-format-buffer))
   :mode ("\\.\\(xml\\|gapp\\|plist\\|pom\\|xsd\\|xslt\\)$" . nxml-mode)
   :hook
-  (nxml-mode . lsp-deferred)
+  (nxml-mode . lsp)
   ;; (nxml-mode . highlight-indent-guides-mode)
   :custom
   ;; lsp-xml 依赖 eclipse/lemminx 项目，工程： ~/src/opensource/lemminx
