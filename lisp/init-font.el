@@ -71,7 +71,12 @@
 ;; (setq-default line-spacing 0.2)
 
 (use-package fixed-pitch
-  :load-path "localelpa/fixed-pitch-mode")
+  :load-path "localelpa/fixed-pitch-mode"
+  :custom
+  (fixed-pitch-dont-change-cursor t)
+  (fixed-pitch-use-extended-default t)
+  :init
+  (require 'fixed-pitch))
 
 ;; Unicode is an required aesthetic
 ;; (use-package pcache ;; Required by unicode-fonts
