@@ -130,6 +130,8 @@
 ;; (require 'init-smex)
 (require 'init-utils)
 
+(require 'init-llm)
+
 (require 'init-org)
 (require 'init-org-agenda)
 ;; (require 'init-org-journal)
