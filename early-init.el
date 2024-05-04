@@ -38,7 +38,7 @@
 ;; -DeferGC
 
 ;; Increase max-lisp-eval-depth
-(setq max-lisp-eval-depth 3200)
+(setq max-lisp-eval-depth 6400)
 ;; -Increase max-lisp-eval-depth
 
 ;; UnsetPES
