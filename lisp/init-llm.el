@@ -23,42 +23,62 @@
   (setopt ellama-language "Chinese")
   (setopt ellama-user-nick (car (string-split user-full-name)))
   (require 'llm-ollama)
+  
+  (defvar +ellama-process-name "ellama-server")
+  (defvar +ellama-server-buffer-name " *ellama-server*")
+  (defun +ellama-serve ()
+    "Start Ellama server."
+    (interactive)
+    (if (executable-find "ollama")
+        (if (get-process +ellama-process-name)
+            (message "The Ollama server is already running, call `+ellama-kill-server' to stop it.")
+          (if (make-process :name +ellama-process-name :buffer +ellama-server-buffer-name :command '("ollama" "serve"))
+              (message "Successfully started Ollama server.")
+            (user-error "Cannot start the Ollama server"))
+          (with-eval-after-load 'ellama (+ellama-set-providers)))
+      (user-error "Cannot find the \"ollama\" executable")))
+  (defun +ellama-kill-server ()
+    "Kill Ellama server."
+    (interactive)
+    (let ((ollama (get-process +ellama-process-name)))
+      (if ollama
+          (if (kill-process ollama)
+              (message "Killed Ollama server.")
+            (user-error "Cannot kill the Ollama server"))
+        (message "No running Ollama server."))))
   :config
-  ;; TODO: 可以参考这篇内容，查看本地 Ollama 安装了哪些 models 并自动加载
-  ;; https://github.com/abougouffa/minemacs/blob/557f0a74610d702962fed376bdc0d05be693650a/modules/me-ai.el#L15
-  (setq llama3-prv (make-llm-ollama
-                    :chat-model "llama3"
-                    :embedding-model "llama3:latest"))
-  (setq llama2-chinese-prv (make-llm-ollama
-                            :chat-model "llama2-chinese"
-                            :embedding-model "llama2-chinese:latest"))
-  (setq phi3-prv (make-llm-ollama
-                  :chat-model "phi3"
-                  :embedding-model "phi3:latest"))
-  (setq codellama-prv (make-llm-ollama
-                       :chat-model "codellama"
-                       :embedding-model "codellama:latest"))
-  (setq gemma-prv (make-llm-ollama
-                   :chat-model "gemma"
-                   :embedding-model "gemma:latest"))
-  (setopt ellama-provider llama3-prv)
-  (setopt ellama-naming-provider phi3-prv)
-  (setopt ellama-providers
-          '(("phi3"            . phi3-prv)
-            ("codellama"       . codellama-prv)
-            ("llama3"          . llama3-prv)
-            ("llama2-chinese"  . llama2-chinese-prv)
-            ("gemma"           . gemma-prv)))
-  ;; Naming new sessions with llm
-  (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
+  ;; 可以参考这篇内容，查看本地 Ollama 安装了哪些 models 并自动加载
+  ;; https://github.com/abougouffa/minemacs/blob/main/modules/me-ai.el#L15
+  (defun +ellama-list-installed-models ()
+    "Return the installed models"
+    (let* ((ret (shell-command-to-string "ollama list"))
+           (models (cdr (string-lines ret))))
+      (if (and (string-match-p "NAME[[:space:]]*ID[[:space:]]*SIZE[[:space:]]*MODIFIED" ret) (length> models 0))
+          (mapcar (lambda (m) (car (string-split m))) models)
+        (user-error "Cannot detect installed models, please make sure Ollama server is started"))))
+  (defun +ellama-set-providers ()
+    (setopt ellama-providers
+            (cl-loop for model in (+ellama-list-installed-models)
+                     collect (cons model (make-llm-ollama :chat-model model :embedding-model model)))
+            ellama-provider (cdr (car ellama-providers))))
+  
+  (setopt ellama-provider (make-llm-ollama
+                           :chat-model "llama3"
+                           :embedding-model "llama3:latest"))
+  (setopt ellama-naming-provider (make-llm-ollama
+                                  :chat-model "qwen:14b"
+                                  :embedding-model "qwen:14b"))
   ;; Translation llm provider
   (setopt ellama-translation-provider (make-llm-ollama
                                        :chat-model "mistral"
                                        :embedding-model "mistral:latest"))
+  ;; Naming new sessions with llm
+  (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
+  
   ;; TODO: 参考这篇代码，配置一份 hydra 方便调用 ellama
-  ;; https://github.com/RowPJ/.emacs.d/blob/11b5c331daf27c7d02120fab2104e463f0b59e32/config/ellama-config.el#L79
+  ;; https://github.com/RowPJ/.emacs.d/blob/main/config/ellama-config.el#L79
 
-  ;; 代码来源 :: https://github.com/erickgnavar/dotfiles/blob/master/.emacs.d/bootstrap.org#ia-models-integration
+  ;; my/switch-ollama-provider 函数代码来源 :: https://github.com/erickgnavar/dotfiles/blob/master/.emacs.d/bootstrap.org#ia-models-integration
   (defun my/switch-ollama-provider ()
     "Switch ollama provider by using the installed local models."
     (interactive)
@@ -68,7 +88,6 @@
            (model (completing-read "Choose model" choices)))
       (setopt ellama-provider (make-llm-ollama :host "localhost" :chat-model model))
       (message "Model %s configured as ollama provider." (propertize model 'face '(:foreground "magenta")))))
-
   ;; 使用 ellama 连接 Gemini
   ;; https://github.com/r0man/.emacs.d/blob/master/init.el.org
   )
@@ -85,13 +104,12 @@
                         :stream t
                         :models '("llama3:latest"))))
 
-
 (use-package copilot
   :disabled t
   ;; zerolfx/copilot.el
   ;; TODO: copilot 配置可以参考这份代码
   ;; https://github.com/christianromney/dotfiles/blob/main/private_dot_config/doom/config.el#L787
-  ;; https://github.com/proprietary/dotfiles/blob/27d2cd792b679dcda98004ec543adec02f859229/emacs/init.el#L583
+  ;; https://github.com/proprietary/dotfiles/blob/main/emacs/init.el#L583
   :hook
   (prog-mode  . copilot-mode)
   :bind
