@@ -129,6 +129,7 @@
       :empty-lines 1)
      ))
   :config
+  (which-key-add-key-based-replacements "C-c n" "org-roam")
   (defalias 'orf 'org-roam-node-find)
   ;; 这里和默认的 org-mode refile 重复设置了
   ;; (setq org-refile-targets '((org-roam-list-files . (:maxlevel . 1))))

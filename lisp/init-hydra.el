@@ -34,7 +34,9 @@
    ("C-c h p"     . hydra-projectile/body)
    ("C-c h P"     . hydra-system/body)
    ("C-c h t"     . hydra-toggles/body)
-   ("C-c h w"     . hydra-window/body)))
+   ("C-c h w"     . hydra-window/body))
+  :config
+  (which-key-add-key-based-replacements "C-c h"   "hydra"))
 
 ;; 关于 Hydra 高效的按键绑定，参考：
 ;; - https://github.com/troyp/spacemacs-private/tree/master/docs/hydra-wiki

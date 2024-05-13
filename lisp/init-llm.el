@@ -47,6 +47,15 @@
             (user-error "Cannot kill the Ollama server"))
         (message "No running Ollama server."))))
   :config
+  (which-key-add-key-based-replacements "C-c e"   "ellama")
+  (which-key-add-key-based-replacements "C-c e a" "Ask")
+  (which-key-add-key-based-replacements "C-c e c" "Code")
+  (which-key-add-key-based-replacements "C-c e d" "Define")
+  (which-key-add-key-based-replacements "C-c e i" "Improve")
+  (which-key-add-key-based-replacements "C-c e m" "Make")
+  (which-key-add-key-based-replacements "C-c e p" "Provider")
+  (which-key-add-key-based-replacements "C-c e s" "Summarize")
+  (which-key-add-key-based-replacements "C-c e x" "Context")
   ;; 可以参考这篇内容，查看本地 Ollama 安装了哪些 models 并自动加载
   ;; https://github.com/abougouffa/minemacs/blob/main/modules/me-ai.el#L15
   (defun +ellama-list-installed-models ()

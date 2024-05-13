@@ -25,6 +25,7 @@
    (projectile-completion-system 'ivy)
    (projectile-indexing-method 'native))
   :config
+  (which-key-add-key-based-replacements "C-x p"   "Project & Projectile")
   ;; add to the globally ignored files
   (dolist (file-name '("*~" "*.elc" "*.class" "node_modules" "elpa" "localelpa"))
     (add-to-list 'projectile-globally-ignored-files file-name))

@@ -109,6 +109,7 @@
   (setq winum-auto-setup-mode-line nil)
   (winum-mode 1)
   :config
+  (which-key-add-key-based-replacements "C-x w"   "winum")
   (setq winum-auto-assign-0-to-minibuffer nil
         winum-ignored-buffers '(" *which-key*")))
 

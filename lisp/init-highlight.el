@@ -311,6 +311,7 @@ If there is only one overlay at point, just return it, no matter region or symbo
   :hook
   (after-init . global-hl-todo-mode)
   :config
+  (which-key-add-key-based-replacements "C-c t"   "hl-todo")
   (dolist (keyword '("BUG" "DEFECT" "ISSUE"))
     (cl-pushnew `(,keyword . ,(face-foreground 'error)) hl-todo-keyword-faces))
   (dolist (keyword '("WORKAROUND" "HACK" "TRICK"))
