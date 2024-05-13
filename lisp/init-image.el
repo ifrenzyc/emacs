@@ -24,10 +24,8 @@
     ))
   :init
   (eval-after-load 'image '(require 'image+))
-  ;; :hook
-  ;; (image-mode . (lambda () (require 'image+)))
-  :config
-  (imagex-global-sticky-mode t))
+  :hook
+  (image-mode . imagex-sticky-mode))
 
 (use-package iscroll
   :disabled t
