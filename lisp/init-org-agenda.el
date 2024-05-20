@@ -31,6 +31,7 @@
   (org-super-agenda-header ((t (:height 160))))
   (org-scheduled ((t (:height 160))))
   (org-agenda-structure ((t (:height 160))))
+  (org-agenda-dimmed-todo-face ((t (:height 160))))
   (org-time-grid ((t (:height 160))))
   (org-todo ((t (:height 160))))
   (org-done ((t (:height 160))))
