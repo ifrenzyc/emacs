@@ -32,7 +32,7 @@
                   (push (read-event) unread-command-events)
                 (posframe-hide youdao-dictionary-buffer-name)))
           (message "Nothing to look up")))))
-
+  :config
   (defun my-youdao-search-at-point ()
     (interactive)
     (if (display-graphic-p)
@@ -51,16 +51,15 @@
   :commands (gts-do-translate)
   :bind
   ("M-E" . gts-do-translate)
-  :config
-  (setq gts-translate-list '(("en" "zh") ("zh" "en") ("jp" "zh")))
-
-  (setq gts-default-translator
-        (gts-translator
-         :picker (gts-prompt-picker)
-         :engines (list (gts-bing-engine) (gts-google-engine))
-         :render (gts-buffer-render)
-         ;; :render (gts-posframe-pop-render)
-         )))
+  :custom
+  (gts-translate-list '(("en" "zh") ("zh" "en") ("jp" "zh")))
+  (gts-default-translator
+   (gts-translator
+    :picker (gts-prompt-picker)
+    :engines (list (gts-bing-engine) (gts-google-engine))
+    :render (gts-buffer-render)
+    ;; :render (gts-posframe-pop-render)
+    )))
 
 (provide 'init-youdao-dictionary)
 ;;; init-youdao-dictionary.el ends here
