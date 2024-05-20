@@ -39,7 +39,7 @@
         ;; Currently (2019-04-24), dap-mode works best with Oracle JDK, see https://github.com/emacs-lsp/dap-mode/issues/31
         ;; 这里为什么指定 java, 参考这个 issues(https://github.com/eclipse/eclipse.jdt.ls/pull/1509), 需要 java 11 以上
         ;; 如果 jdk 的版本不对， lsp 会报错："Doing vfork: No such file or directory"
-        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java"
+        lsp-java-java-path "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/bin/java"
         ;; lsp-java-java-path "/usr/bin/java"
         ;; Use Google style formatting by default
         lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml"
@@ -73,7 +73,7 @@
          ;; "-XX:+UseG1GC"
          "-XX:+UseZGC"
          "-Xmx8G"
-         "-Dlog.level=INFO"
+         "-Dlog.level=ERROR"
          ;; "--illegal-access=permit"
          "-XX:+UseStringDeduplication"
          "-javaagent:/Users/yangc/.m2/repository/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar"
