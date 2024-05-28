@@ -7,10 +7,10 @@
 ;;; Code:
 (use-package youdao-dictionary
   :functions (posframe-show posframe-hide)
-  :bind
-  (("C-c y y" . youdao-dictionary-search-at-point+)
-   ("C-c y i" . youdao-dictionary-search-at-point)
-   ("C-c Y"   . my-youdao-search-at-point))
+  ;; :bind
+  ;; (("C-c y y" . youdao-dictionary-search-at-point+)
+  ;;  ("C-c y i" . youdao-dictionary-search-at-point)
+  ;;  ("C-c Y"   . yc/youdao-search-at-point))
   :preface
   (with-eval-after-load 'posframe
     (defun youdao-dictionary-search-at-point-posframe ()
@@ -33,7 +33,7 @@
                 (posframe-hide youdao-dictionary-buffer-name)))
           (message "Nothing to look up")))))
   :config
-  (defun my-youdao-search-at-point ()
+  (defun yc/youdao-search-at-point ()
     (interactive)
     (if (display-graphic-p)
         (if (fboundp 'youdao-dictionary-search-at-point-posframe)
@@ -46,20 +46,30 @@
   ;; Enable Chinese word segmentation support (支持中文分词)
   (youdao-dictionary-use-chinese-word-segmentation t))
 
+(use-package fanyi
+  :commands fanyi-dwim fanyi-dwim2
+  :custom (fanyi-providers '(fanyi-haici-provider
+                             fanyi-youdao-thesaurus-provider
+                             fanyi-etymon-provider
+                             fanyi-longman-provider)))
+
 ;; @see - https://github.com/lorniu/go-translate
 (use-package go-translate
-  :commands (gts-do-translate)
-  :bind
-  ("M-E" . gts-do-translate)
-  :custom
-  (gts-translate-list '(("en" "zh") ("zh" "en") ("jp" "zh")))
-  (gts-default-translator
-   (gts-translator
-    :picker (gts-prompt-picker)
-    :engines (list (gts-bing-engine) (gts-google-engine))
-    :render (gts-buffer-render)
-    ;; :render (gts-posframe-pop-render)
-    )))
+  :commands (gt-do-translate)
+  ;; :bind
+  ;; ("M-E" . gt-do-translate)
+  :init
+  (setq gt-langs '("en" "zh")
+        gt-buffer-render-follow-p t
+        gt-buffer-render-window-config
+        '((display-buffer-reuse-window display-buffer-in-direction)
+          (direction . bottom)
+          (window-height . 0.4)))
+
+  (setq gt-pop-posframe-forecolor (face-foreground 'tooltip nil t)
+        gt-pop-posframe-backcolor (face-background 'tooltip nil t))
+  (when (facep 'posframe-border)
+    (setq gt-pin-posframe-bdcolor (face-background 'posframe-border nil t))))
 
 (provide 'init-youdao-dictionary)
 ;;; init-youdao-dictionary.el ends here

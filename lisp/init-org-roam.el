@@ -204,6 +204,10 @@
   (org-roam-ui-open-on-start t))
 
 ;; - quickroam :: https://github.com/meedstrom/quickroam
+(use-package quickroam
+  :load-path "localelpa/quickroam"
+  :hook
+  (org-mode . quickroam-enable-cache))
 
 ;; (use-package gkroam
 ;;   :init

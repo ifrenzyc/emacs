@@ -79,3 +79,6 @@
 [submodule "localelpa/indent-bars"]
 	path = localelpa/indent-bars
 	url = git@github.com:jdtsmith/indent-bars.git
+[submodule "localelpa/quickroam"]
+	path = localelpa/quickroam
+	url = git@github.com:meedstrom/quickroam.git
