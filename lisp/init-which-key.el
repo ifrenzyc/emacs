@@ -18,6 +18,13 @@
   (which-key-setup-minibuffer)
   (which-key-setup-side-window-bottom))
 
+;; https://tildegit.org/acdw/define-repeat-map.el
+;; https://karthinks.com/software/persistent-prefix-keymaps-in-emacs/
+(use-package repeat-help
+  :hook (repeat-mode . repeat-help-mode)
+  :init
+  (repeat-mode t))
+
 ;; https://github.com/tarsius/keycast
 (use-package keycast
   :disabled t

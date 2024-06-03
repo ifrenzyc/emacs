@@ -82,3 +82,6 @@
 [submodule "localelpa/quickroam"]
 	path = localelpa/quickroam
 	url = git@github.com:meedstrom/quickroam.git
+[submodule "localelpa/awesome-tab"]
+	path = localelpa/awesome-tab
+	url = git@github.com:manateelazycat/awesome-tab.git
