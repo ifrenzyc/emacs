@@ -19,8 +19,8 @@
         ("j"   . treemacs-next-line)
         ("A"   . mine/toggle-maximize-treemacs)
         ("k"   . treemacs-previous-line)
-        ("H"   . hydra-move-splitter-left-2x)
-        ("L"   . hydra-move-splitter-right-2x))
+        ("H"   . hydra-move-splitter-left-4x)
+        ("L"   . hydra-move-splitter-right-4x))
 
   ;; (:map treemacs-mode-map
   ;;       ([mouse-1]   . treemacs-single-click-expand-action))

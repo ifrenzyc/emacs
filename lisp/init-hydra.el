@@ -3,17 +3,42 @@
 ;;; Commentary:
 ;; 
 ;; make Emacs bindings that stick around.
-;; 参考：https://github.com/abo-abo/hydra/wiki
+;; 参考：
+;; - https://github.com/abo-abo/hydra/wiki
 ;; - https://irreal.org/blog/?p=6453
 ;; - https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org
 ;; - https://ericjmritz.wordpress.com/2015/10/14/some-personal-hydras-for-gnu-emacs/
 ;; - https://dfeich.github.io/www/org-mode/emacs/2018/05/10/context-hydra.html
 ;; - https://www.reddit.com/r/emacs/comments/8of6tx/tip_how_to_be_a_beast_with_hydra/
 ;; - https://dustinlacewell.github.io/emacs.d/#org1fab346
-;; - 这里面有很多 Hydra 配置可以参考 https://github.com/ejmr/DotEmacs/blob/master/init.el
+;; 这里面有很多 Hydra 配置可以参考
+;; - https://github.com/ejmr/DotEmacs/blob/master/init.el
 ;; - https://github.com/mrbig033/emacs/blob/master/modules/packages/misc/hydra/hydras.org
 ;; - https://www.reddit.com/r/emacs/comments/c29edh/does_anybody_have_any_more_real_cool_hydras_to
-;; 
+;;
+;; https://github.com/abo-abo/hydra/wiki/Hydra-Colors#colorful-hydras
+;; https://github.com/abo-abo/hydra/wiki/internals#exit
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | Body     | Non-color                   | Head      | Executing             | After     |
+;; | Color    | Alternative                 | Inherited | NON-HEADS             | executing |
+;; |          |                             | Color     |                       | HEADS     |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | red      | :foreign-keys nil (default) | red       | Allow and Quit        |           |
+;; |          | :exit nil (default)         |           |                       | Continue  |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | blue     | :foreign-keys nil (default) | blue      | Allow and Quit        |           |
+;; |          | :exit t                     |           |                       | Quit      |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | amaranth | :foreign-keys warn          | red       | Disallow and Continue |           |
+;; |          | :exit nil (default)         |           |                       | Continue  |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | teal     | :foreign-keys warn          | blue      | Disallow and Continue |           |
+;; |          | :exit t                     |           |                       | Quit      |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;; | pink     | :foreign-keys run           | red       | Allow and Continue    |           |
+;; |          | :exit nil (default)         |           |                       | Continue  |
+;; |----------+-----------------------------+-----------+-----------------------+-----------|
+;;
 
 ;;; Code:
 (require 'init-funcs)
@@ -37,9 +62,69 @@
    ("C-z w"     . hydra-window/body))
   :config
   ;; (which-key-add-key-based-replacements "C-c h"   "hydra")
-  
-(defhydra hydra-dates (:color red)
+  (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
+                                       :color pink
+                                       :hint nil
+                                       :post (deactivate-mark))
+    "
+                     ^_k_^       _w_ copy      _o_pen       _N_umber-lines                |\\     -,,,--,,_
+                   _h_   _l_     _y_ank        _t_ype       _e_xchange-point              /,`.-'`'   ..  \-;;,_
+                     ^_j_^       _d_ kill      _c_lear      _r_eset-region-mark          |,4-  ) )_   .;.(  `'-'
+  ^^^^              _u_ndo        _C-g_ quit     _C_ua-rectangle-mark-mode              '---''(./..)-'(_\_)
   "
+    ("k" rectangle-previous-line)
+    ("j" rectangle-next-line)
+    ("h" rectangle-backward-char)
+    ("l" rectangle-forward-char)
+    ("d" kill-rectangle)                   ;; C-x r k
+    ("y" yank-rectangle)                   ;; C-x r y
+    ("w" copy-rectangle-as-kill)           ;; C-x r M-w
+    ("o" open-rectangle)                   ;; C-x r o
+    ("t" string-rectangle)                 ;; C-x r t
+    ("c" clear-rectangle)                  ;; C-x r c
+    ("e" rectangle-exchange-point-and-mark) ;; C-x C-x
+    ("N" rectangle-number-lines)            ;; C-x r N
+    ("C" cua-rectangle-mark-mode)
+    ("r" (if (region-active-p)
+             (deactivate-mark)
+           (rectangle-mark-mode 1)))
+    ("u" undo nil)
+    ("C-g" nil))
+  (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
+
+  ;; hydra for macros in emacs
+  (pretty-hydra-define hydra-macro
+    (:hint nil :color pink :quit-key "C-g" :pre (when defining-kbd-macro
+                                                  (kmacro-end-macro 1)))
+    ("Create-Cycle"
+     (("s" kmacro-start-macro :color blue)   ;; C-x (
+      ("(" kmacro-start-macro-or-insert-counter :color blue)
+      
+      (")" kmacro-end-and-call-macro)        ;; C-x )
+      ("p" kmacro-cycle-ring-previous)
+      ("n" kmacro-cycle-ring-next))
+     "Basic"
+     (("r" apply-macro-to-region-lines)
+      ("d" kmacro-delete-ring-head)
+      ("e" kmacro-end-or-call-macro-repeat)
+      ("o" kmacro-edit-macro-repeat)
+      ("m" kmacro-step-edit-macro)
+      ("S" kmacro-swap-ring))
+     "Insert"
+     (("i" kmacro-insert-counter)
+      ("t" kmacro-set-counter)
+      ("a" kmacro-add-counter)
+      ("F" kmacro-set-format))
+     "Save"
+     (("b" kmacro-name-last-macro)
+      ("K" kmacro-bind-to-key)
+      ("B" insert-kbd-macro)
+      ("x" kmacro-to-register))
+     "Edit"
+     (("'" kmacro-edit-macro)
+      ("," edit-kbd-macro))))
+  (defhydra hydra-dates (:color red)
+    "
                      ^
                      ^Dates^             ^Insert^            ^Insert with Time^
                      ^─────^─────────────^──────^────────────^────────────────^──
@@ -48,100 +133,13 @@
                      ^^                  _l_ long            _L_ long
                      ^^                  ^^                  ^^
                      "
-  ("C-g" nil)
-  ("d" me/date-short)
-  ("D" me/date-short-with-time)
-  ("i" me/date-iso)
-  ("I" me/date-iso-with-time)
-  ("l" me/date-long)
-  ("L" me/date-long-with-time))
-
-(defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
-                                     :color pink
-                                     :hint nil
-                                     :post (deactivate-mark))
-  "
-                     ^_k_^       _w_ copy      _o_pen       _N_umber-lines                |\\     -,,,--,,_
-                     _h_   _l_     _y_ank        _t_ype       _e_xchange-point              /,`.-'`'   ..  \-;;,_
-                     ^_j_^       _d_ kill      _c_lear      _r_eset-region-mark          |,4-  ) )_   .;.(  `'-'
-  ^^^^          _u_ndo        _C-g_ quit     _C_ua-rectangle-mark-mode   '---''(./..)-'(_\_)
-  "
-  ("k" rectangle-previous-line)
-  ("j" rectangle-next-line)
-  ("h" rectangle-backward-char)
-  ("l" rectangle-forward-char)
-  ("d" kill-rectangle)                   ;; C-x r k
-  ("y" yank-rectangle)                   ;; C-x r y
-  ("w" copy-rectangle-as-kill)           ;; C-x r M-w
-  ("o" open-rectangle)                   ;; C-x r o
-  ("t" string-rectangle)                 ;; C-x r t
-  ("c" clear-rectangle)                  ;; C-x r c
-  ("e" rectangle-exchange-point-and-mark) ;; C-x C-x
-  ("N" rectangle-number-lines)            ;; C-x r N
-  ("C" cua-rectangle-mark-mode)
-  ("r" (if (region-active-p)
-           (deactivate-mark)
-         (rectangle-mark-mode 1)))
-  ("u" undo nil)
-  ("C-g" nil))
-(global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
-
-;; hydra for macros in emacs
-(defhydra hydra-macro (:hint nil :color pink :pre
-                             (when defining-kbd-macro
-                               (kmacro-end-macro 1)))
-  "
-  ^Create-Cycle^   ^Basic^           ^Insert^        ^Save^         ^Edit^
-╭─────────────────────────────────────────────────────────────────────────╯
-     ^_p_^           [_e_] execute    [_i_] insert    [_b_] name      [_'_] previous
-     ^^↑^^           [_d_] delete     [_t_] set       [_K_] key       [_,_] last
- _b_ ←   → _f_     [_o_] edit       [_a_] add       [_x_] register
-     ^^↓^^           [_r_] region     [_F_] format    [_B_] defun
-     ^_n_^           [_m_] step
-    ^^   ^^          [_s_] swap
-"
-  ("b" kmacro-start-macro :color blue)
-  ("f" kmacro-end-or-call-macro-repeat)
-  ("p" kmacro-cycle-ring-previous)
-  ("n" kmacro-cycle-ring-next)
-  ("r" apply-macro-to-region-lines)
-  ("d" kmacro-delete-ring-head)
-  ("e" kmacro-end-or-call-macro-repeat)
-  ("o" kmacro-edit-macro-repeat)
-  ("m" kmacro-step-edit-macro)
-  ("s" kmacro-swap-ring)
-  ("i" kmacro-insert-counter)
-  ("t" kmacro-set-counter)
-  ("a" kmacro-add-counter)
-  ("F" kmacro-set-format)
-  ("b" kmacro-name-last-macro)
-  ("K" kmacro-bind-to-key)
-  ("B" insert-kbd-macro)
-  ("x" kmacro-to-register)
-  ("'" kmacro-edit-macro)
-  ("," edit-kbd-macro)
-  ("C-g" nil "Quit" :color blue))
-
-;; (defhydra hydra-macro (:color teal
-;;                               :hint nil)
-;;   "
-;;   _r_: region  _e_: execute   _c_: counter  _f_: format
-;;   _n_: next    _p_: previous  _i_: insert   _q_: query
-;;  _(_: start  _)_: stop
-;;   "
-;;   ("q" nil "quit")
-;;   ("Q" kbd-macro-query)
-;;   ("(" kmacro-start-macro-or-insert-counter)
-;;   (")" kmacro-end-or-call-macro)
-;;   ("r" apply-macro-to-region-lines)
-;;   ("e" kmacro-end-and-call-macro)
-;;   ("n" kmacro-cycle-ring-next)
-;;   ("p" kmacro-cycle-ring-previous)
-;;   ("i" kmacro-insert-counter)
-;;   ("c" kmacro-set-counter)
-;;   ("q" kbd-macro-query)
-;;   ("f" kmacro-set-format))
-  )
+    ("C-g" nil)
+    ("d" me/date-short)
+    ("D" me/date-short-with-time)
+    ("i" me/date-iso)
+    ("I" me/date-iso-with-time)
+    ("l" me/date-long)
+    ("L" me/date-long-with-time)))
 
 ;; 关于 Hydra 高效的按键绑定，参考：
 ;; - https://github.com/troyp/spacemacs-private/tree/master/docs/hydra-wiki
@@ -211,7 +209,7 @@
      "Org Mode"
      (("C-l" yc/org-toggle-link-display "link" :toggle t)
       ("C-i" org-toggle-inline-images "image" :toggle t))
-     "Dict"
+     "Translate"
      (("t y" youdao-dictionary-search-at-point+)
       ("t i" youdao-dictionary-search-at-point)
       ("t Y" yc/youdao-search-at-point)

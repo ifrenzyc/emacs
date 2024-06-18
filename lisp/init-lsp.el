@@ -134,8 +134,9 @@
      (("d" xref-find-definitions "Definitions")
       ("D" xref-find-definitions-other-window "-> other win")
       ("r" xref-find-references "References")
-      ("s" netrom/helm-lsp-workspace-symbol-at-point "Helm search")
-      ("S" netrom/helm-lsp-global-workspace-symbol-at-point "Helm global search"))
+      ;; ("s" netrom/helm-lsp-workspace-symbol-at-point "Helm search")
+      ;; ("S" netrom/helm-lsp-global-workspace-symbol-at-point "Helm global search")
+      )
      "Peek"
      (("C-d" lsp-ui-peek-find-definitions "Definitions")
       ("C-r" lsp-ui-peek-find-references "References")
@@ -146,8 +147,8 @@
       ("R" lsp-rename "Rename")
       ("t" lsp-goto-type-definition "Type definition")
       ("i" lsp-goto-implementation "Implementation")
-      ("f" helm-imenu "Filter funcs/classes (Helm)")
-      ("F" helm-imenu-in-all-buffers "-> in all buffers")
+      ;; ("f" helm-imenu "Filter funcs/classes (Helm)")
+      ;; ("F" helm-imenu-in-all-buffers "-> in all buffers")
       ("C-c" lsp-describe-session "Describe session"))
      "Flycheck"
      (("l" lsp-ui-flycheck-list "List errs/warns/notes"))
@@ -237,7 +238,7 @@
   :after lsp-mode
   :bind (("C-c u" . lsp-ui-imenu)
          :map lsp-ui-mode-map
-         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions) ; [M-.]
+         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)  ; [M-.]
          ([remap xref-find-references]  . lsp-ui-peek-find-references)   ; [M-?]
          ("M-<f6>" . lsp-ui-hydra/body)
          ("M-RET"  . lsp-ui-sideline-apply-code-actions))

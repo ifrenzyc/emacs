@@ -9,12 +9,12 @@
 
 (use-package pixel-scroll
   :ensure nil
-  :bind
-  (([remap scroll-up-command]    . +pixel-scroll-up-command)
-   ([remap scroll-down-command]  . +pixel-scroll-down-command)
-   ([remap recenter-top-bottom]  . +pixel-recenter-top-bottom)
-   ("C-M-v"   . sloth/scroll-other-window-up)
-   ("C-M-S-v" . sloth/scroll-other-window-down))
+  ;; :bind
+  ;; (([remap scroll-up-command]    . +pixel-scroll-up-command)
+  ;; ([remap scroll-down-command]  . +pixel-scroll-down-command)
+  ;; ([remap recenter-top-bottom]  . +pixel-recenter-top-bottom)
+  ;; ("C-M-v"   . sloth/scroll-other-window-up)
+  ;; ("C-M-S-v" . sloth/scroll-other-window-down))
   :custom
   (pixel-scroll-precision-interpolation-factor 1.0)
   (pixel-scroll-precision-interpolate-page t)
@@ -63,19 +63,114 @@
 (use-package window
   :ensure nil
   :bind
-  (("s-<left>"     . hydra-move-splitter-left)
+  (([f2]           . previous-buffer)
+   ([f3]           . next-buffer)
+   ("s-<left>"     . hydra-move-splitter-left)
    ("s-<right>"    . hydra-move-splitter-right)
    ("s-<up>"       . hydra-move-splitter-up)
    ("s-<down>"     . hydra-move-splitter-down)
    ("s-S-<left>"   . hydra-move-splitter-left-4x)
    ("s-S-<right>"  . hydra-move-splitter-right-4x)
-   ("s-<return>"   . doom/window-enlargen)))
+   ("s-+"          . balance-windows)
+   ("s-<return>"   . doom/window-enlargen)
+   ("s-S-<return>" . zoom-window-zoom))
+  ;; :init
+  ;; (unbind-key "<f2>" global-map)
+  ;; (unbind-key "<f3>" global-map)
+  :config
+  ;; https://github.com/dustinlacewell/hera
+  (defvar jp-window--title (with-faicon "nf-fa-window_restore" "Window Management" 1 -0.05))
+  (pretty-hydra-define hydra-window
+    (:hint nil :foreign-keys warn :quit-key "q" :title jp-window--title :separator "═")
+    ("Windows"
+     (("x" ace-delete-window "delete")
+      ("s" ace-swap-window "swap")
+      ("a" ace-select-window "select")
+      ("o" other-window "cycle")
+      ("d" delete-window "delete")
+      ("m" ace-delete-other-windows "maximize")
+      ("M" delete-other-windows "delete other windows")
+      ;;("K" ace-delete-other-windows)
+      ("S" save-buffer "Save Buffer")
+      ("D" (lambda ()
+             (interactive)
+             (ace-delete-window)
+             (add-hook 'ace-window-end-once-hook
+                       'hydra-window/body)) "delete"))
+     "Resize"
+     (("n" balance-windows "balance")
+      ("s-<left>" hydra-move-splitter-left "←")
+      ("s-<right>" hydra-move-splitter-right "→")
+      ("s-<up>"   hydra-move-splitter-up "↑")
+      ("s-<down>" hydra-move-splitter-down "↓")
+      ("s-S-<left>" hydra-move-splitter-left-4x "4x ←")
+      ("s-S-<right>" hydra-move-splitter-right-4x "4x →")
+      ("s-+"  balance-windows)
+      ("K" shrink-window "↑")
+      ("J" enlarge-window "↓"))
+     "Split"
+     (("b" split-window-right "horizontally")
+      ("B" split-window-horizontally-instead "horizontally instead")
+      ("v" split-window-below "vertically")
+      ("V" split-window-vertically-instead "vertically instead")
+      ("-" yc/split-window-horizontally "horizontally")
+      ("|" yc/split-window-vertically "vertically")
+      ("u" (progn
+             (winner-undo)
+             (setq this-command 'winner-undo)) "undo")
+      ("r" winner-redo "redo"))
+     "Text Scale"
+     (("+" text-scale-increase "in")
+      ("-" text-scale-decrease "out")
+      ;; ("0" (text-scale-set 0) "reset")
+      ("0" (text-scale-adjust 0) "reset"))
+     ;; "Eyebrowse"
+     ;; (("<" eyebrowse-prev-window-config "previous")
+     ;;  (">" eyebrowse-next-window-config "next")
+     ;;  ("C" eyebrowse-create-window-config "create")
+     ;;  ("E" eyebrowse-last-window-config "last")
+     ;;  ("K" eyebrowse-close-window-config "kill")
+     ;;  ("R" eyebrowse-rename-window-config "rename")
+     ;;  ("w" eyebrowse-switch-to-window-config "switch")
+     ;;  ("1" eyebrowse-switch-to-window-config-1 "workspace ➊")
+     ;;  ("2" eyebrowse-switch-to-window-config-2 "workspace ➋")
+     ;;  ("3" eyebrowse-switch-to-window-config-3 "workspace ➌")
+     ;;  ("4" eyebrowse-switch-to-window-config-4 "workspace ➍"))
+     ;; "Movement"
+     ;; (("h" windmove-left)
+     ;;             ("j" windmove-down)
+     ;;             ("k" windmove-up)
+     ;;             ("l" windmove-right)
+     ;;             )
+     ;; "Window Purpose"
+     ;; (("P" purpose-set-window-purpose)
+     ;;                   ("B" ivy-purpose-switch-buffer-with-purpose)
+     ;;                   ("!" purpose-toggle-window-purpose-dedicated)
+     ;;                   ("#" purpose-toggle-window-buffer-dedicated))
+     ;; "Others" 
+     ;;           (("x" counsel-M-x)
+     ;;           ("q" nil))
+     "Rotate Layout"
+     (("SPC" rotate-layout "rotate")
+      ("w"   rotate-window "swap")
+      ("1"   delete-other-windows "maximize" :exit t)) ; 暂时不加这个，因为旋转窗口就是因为有多窗口的需要
+     "Switch"
+     (("b" ivy-purpose-switch-buffer-without-purpose)
+      ("f" counsel-find-file "find file")
+      ("a" (lambda ()
+             (interactive)
+             (ace-window 1)
+             (add-hook 'ace-window-end-once-hook
+                       'hydra-window/body)) "switch")
+      ("s" (lambda ()
+             (interactive)
+             (ace-swap-window)
+             (add-hook 'ace-window-end-once-hook
+                       'hydra-window/body)) "swap")))))
 
 ;; Winner Mode 是 Emacs 自带的一个 minor mode，可以用于快速恢复窗口分割状态。
 ;; 默认使用 =C-c <left>= 组合键，就可以快速退回上一个窗口设置； =C-c <right>= 组合键，向前恢复一个窗口设置。
-
 ;; 在 Hydra 模式下， =u= 按键快速回退上一个窗口； =r= 按键快速向前恢复一个窗口。
-
 ;; winner-mode 是一个全局的 minor mode，它的主要功能是记录窗体的变动。例如当前有 2 个窗口，然后你关了一个，这时可以通过
 ;; winner-undo 来恢复。还可以再 winner-redo 来撤销刚才的 undo。
 (use-package winner-mode
@@ -147,13 +242,15 @@
 (use-package rotate
   ;; :commands (rotate-layout rotate-window hydra-rotate-window/body)
   :bind
-  ("C-x w ." . hydra-rotate-window/body)
+  (("C-x w ." . hydra-rotate-window/body)
+   ("C-x M-w" . rotate-window)
+   ("C-x M-r" . rotate-layout))
   :init
   (defhydra hydra-rotate-window ()
     "rotate-layout"
-    ("SPC" rotate-layout "rotate")
-    ("w" rotate-window "swap")
-    ("1" delete-other-windows "maximize" :exit t) ; 暂时不加这个，因为旋转窗口就是因为有多窗口的需要
+    ("SPC" rotate-layout "rotate layout")
+    ("w" rotate-window "swap window")
+    ("1" delete-other-windows "maximize window" :exit t) ; 暂时不加这个，因为旋转窗口就是因为有多窗口的需要
     ("j" (progn (scroll-down-line 1)) "↓")
     ("J" (progn (scroll-down-line 4)) "4x ↓")
     ("k" (progn (scroll-up-line 1)) "↑")
@@ -171,95 +268,6 @@
 (defvar shackle--popup-window-list nil) ; all popup windows
 (defvar-local shackle--current-popup-window nil) ; current popup window
 (put 'shackle--current-popup-window 'permanent-local t)
-
-;; https://github.com/dustinlacewell/hera
-(defvar jp-window--title (with-faicon "nf-fa-window_restore" "Window Management" 1 -0.05))
-(pretty-hydra-define hydra-window
-  (:hint nil :foreign-keys warn :quit-key "q" :title jp-window--title :separator "═")
-  (;; general window management commands
-   "Windows"
-   (("x" ace-delete-window "delete")
-    ("s" ace-swap-window "swap")
-    ("a" ace-select-window "select")
-    ("o" other-window "cycle")
-    ("d" delete-window "delete")
-    ("m" ace-delete-other-windows "maximize")
-    ("M" delete-other-windows "delete other windows")
-    ;;("K" ace-delete-other-windows)
-    ("S" save-buffer "Save Buffer")
-    ("D" (lambda ()
-           (interactive)
-           (ace-delete-window)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)) "delete"))
-   ;; resize
-   "Resize"
-   (("h" hydra-move-splitter-left "←")
-    ("j" hydra-move-splitter-down "↓")
-    ("k" hydra-move-splitter-up "↑")
-    ("l" hydra-move-splitter-right "→")
-    ("n" balance-windows "balance")
-    ("H" hydra-move-splitter-left-4x "←")
-    ("J" enlarge-window "↓")
-    ("K" shrink-window "↑")
-    ("L" hydra-move-splitter-right-4x "→"))
-   ;; split
-   "Split"
-   (("b" split-window-right "horizontally")
-    ("B" split-window-horizontally-instead "horizontally instead")
-    ("v" split-window-below "vertically")
-    ("V" split-window-vertically-instead "vertically instead")
-    ("-" yc/split-window-horizontally "horizontally")
-    ("|" yc/split-window-vertically "vertically")
-    ("u" (progn
-           (winner-undo)
-           (setq this-command 'winner-undo)) "undo")
-    ("r" winner-redo "redo"))
-   "Zoom"
-   (("+" text-scale-increase "in")
-    ("-" text-scale-decrease "out")
-    ;; ("0" (text-scale-set 0) "reset")
-    ("0" (text-scale-adjust 0) "reset"))
-   "Eyebrowse"
-   (("<" eyebrowse-prev-window-config "previous")
-    (">" eyebrowse-next-window-config "next")
-    ("C" eyebrowse-create-window-config "create")
-    ("E" eyebrowse-last-window-config "last")
-    ("K" eyebrowse-close-window-config "kill")
-    ("R" eyebrowse-rename-window-config "rename")
-    ("w" eyebrowse-switch-to-window-config "switch")
-    ("1" eyebrowse-switch-to-window-config-1 "workspace ➊")
-    ("2" eyebrowse-switch-to-window-config-2 "workspace ➋")
-    ("3" eyebrowse-switch-to-window-config-3 "workspace ➌")
-    ("4" eyebrowse-switch-to-window-config-4 "workspace ➍"))
-   ;; ;; Move
-   ;; "Movement" (("h" windmove-left)
-   ;;             ("j" windmove-down)
-   ;;             ("k" windmove-up)
-   ;;             ("l" windmove-right)
-   ;;             )
-
-   ;; "Window Purpose" (("P" purpose-set-window-purpose)
-   ;;                   ("B" ivy-purpose-switch-buffer-with-purpose)
-   ;;                   ("!" purpose-toggle-window-purpose-dedicated)
-   ;;                   ("#" purpose-toggle-window-buffer-dedicated))
-   ;; "Others" (
-   ;;           ("x" counsel-M-x)
-   ;;           ("q" nil))
-   "Switch"
-   (("b" ivy-purpose-switch-buffer-without-purpose)
-    ("f" counsel-find-file "find file")
-    ("a" (lambda ()
-           (interactive)
-           (ace-window 1)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)) "switch")
-    ("s" (lambda ()
-           (interactive)
-           (ace-swap-window)
-           (add-hook 'ace-window-end-once-hook
-                     'hydra-window/body)) "swap"))))
-
 (use-package shackle
   :bind
   ("C-c z" . shackle-last-popup-buffer)
@@ -379,11 +387,6 @@
           (list-environment-mode :select t :size 0.3 :align 'below :autoclose t)
           (tabulated-list-mode :size 0.4 :align 'below))))
 
-(use-package good-scroll
-  :disabled t
-  :config
-  (good-scroll-mode t))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  scrolling                                                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -437,6 +440,11 @@
 ;;   (setq sublimity-attractive-hide-vertical-border t)
 ;;   (setq sublimity-attractive-hide-fringes t)
 ;;   (setq sublimity-attractive-hide-modelines t))
+
+(use-package good-scroll
+  :disabled t
+  :config
+  (good-scroll-mode t))
 
 ;; eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工作空间。
 ;; 目前是使用 =<f5>= 、 =<f6>= 、 =<f7>= 、 =<f8>= 进行工作空间切换。

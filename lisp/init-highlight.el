@@ -315,7 +315,13 @@ If there is only one overlay at point, just return it, no matter region or symbo
   (dolist (keyword '("BUG" "DEFECT" "ISSUE"))
     (cl-pushnew `(,keyword . ,(face-foreground 'error)) hl-todo-keyword-faces))
   (dolist (keyword '("WORKAROUND" "HACK" "TRICK"))
-    (cl-pushnew `(,keyword . ,(face-foreground 'warning)) hl-todo-keyword-faces)))
+    (cl-pushnew `(,keyword . ,(face-foreground 'warning)) hl-todo-keyword-faces))
+
+  (defvar-keymap hl-todo-repeat-map
+    :repeat (:enter (hl-todo-insert) :exit (hl-todo-occur))
+    "n" #'hl-todo-next
+    "p" #'hl-todo-previous
+    "o" #'hl-todo-occur))
 
 ;; *About:* 不同层级的代码块分隔符显示不同颜色
 ;; Highlight brackets according to their depth
