@@ -109,8 +109,8 @@
 (require 'init-edit)
 (require 'init-diff)
 
-(require 'init-ivy)
-;; (require 'init-vertico)
+;; (require 'init-ivy)
+(require 'init-vertico)
 (require 'init-embark)
 ;; (require 'init-ido)
 ;; (require 'init-icomplete)
