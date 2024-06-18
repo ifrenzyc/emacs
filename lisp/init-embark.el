@@ -8,7 +8,11 @@
 
 (use-package embark
   :bind
-  ("s-o" . embark-act)
+  (("s-o" . embark-act)
+   ([remap describe-bindings] . embark-bindings)
+   :map minibuffer-local-map
+   ("C-c C-c" . embark-export)
+   ("C-c C-o" . embark-collect))
   :config
   ;; Use Embark instead of `describe-prefix-bindings'
   (setq prefix-help-command #'embark-prefix-help-command)
@@ -52,6 +56,12 @@ targets."
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
                  (window-parameters (mode-line-format . none)))))
+
+;; Consult users will also want the embark-consult package.
+(use-package embark-consult
+  :after embark consult
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 
 (provide 'init-embark)
 ;;; init-embark.el ends here
