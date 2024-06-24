@@ -17,6 +17,8 @@
 
 (use-package ellama
   :if (executable-find "ollama")
+  :custom
+  (ellama-sessions-directory (expand-file-name ".cache/ellama-sessions/" user-emacs-directory))
   :init
   (setopt ellama-enable-keymap t)
   (setopt ellama-keymap-prefix "C-c e")
