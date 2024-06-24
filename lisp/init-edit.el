@@ -21,7 +21,7 @@
   :hook
   (after-init . save-place-mode))
 
-;; 另外一个与 anzu 替代： https://github.com/benma/visual-regexp.el 
+;; 另外一个与 anzu 替代： https://github.com/benma/visual-regexp.el
 (use-package anzu
   :bind
   (([remap query-replace] . anzu-query-replace)
@@ -219,7 +219,7 @@ there's a region, all lines that region covers will be duplicated."
   :config
   (global-pangu-spacing-mode t))
 
-(use-package hippie-expand
+(use-package hippie-exp
   :ensure nil
   :bind
   ("M-/" . hippie-expand)
@@ -259,7 +259,9 @@ there's a region, all lines that region covers will be duplicated."
   (fancy-dabbrev-preview-context 'before-non-word)
 
   (fancy-dabbrev-expansion-on-preview-only t)
-  (fancy-dabbrev-indent-command 'tab-to-tab-stop))
+  (fancy-dabbrev-indent-command 'tab-to-tab-stop)
+  :config
+  (global-fancy-dabbrev-mode t))
 
 ;; - Zap To Char Usage :: https://www.emacswiki.org/emacs/ZapToCharUsage
 (use-package zzz-to-char

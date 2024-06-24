@@ -38,6 +38,7 @@
                              stylus-mode
                              json-mode
                              jsonian-mode
+                             dockerfile-mode
                              makefile-mode
                              jenkinsfile-mode
                              nxml-mode
@@ -179,12 +180,16 @@
 
 (use-package indent-bars
   :load-path "localelpa/indent-bars"
+  :init
+  (require 'indent-bars-ts)
+  :custom
+  (indent-bars-treesit-support t)
+  (indent-bars-treesit-ignore-blank-lines-types '("module"))
   :hook
-  ((python-mode
-    python-ts-mode
-    yaml-mode
-    yaml-ts-mode
-    nxml-mode) . indent-bars-mode))
+  ((python-mode python-ts-mode
+                yaml-mode yaml-ts-mode
+                dockerfile-mode dockerfile-ts-mode
+                nxml-mode) . indent-bars-mode))
 
 ;; shows a sticky header at the top of the window
 ;; (use-package topsy

@@ -19,9 +19,9 @@
         ("f" . lsp-find-references)
         ("H" . lsp-ui-doc-show)
         ("i" . lsp-goto-implementation)
-        ("t" . lsp-goto-type-definition)
-        ("s" . lsp-ivy-workspace-symbol)
-        ("S" . lsp-ivy-global-workspace-symbol))
+        ("t" . lsp-goto-type-definition))
+  ;; ("s" . lsp-ivy-workspace-symbol)
+  ;; ("S" . lsp-ivy-global-workspace-symbol)
   (:map lsp-mode-map
         ("C-c C-d" . lsp-describe-thing-at-point)
         ("C-c l"   . hydra-lsp-map/body))
@@ -55,12 +55,14 @@
   (lsp-modeline-diagnostics-enable nil)
   (lsp-modeline-workspace-status-enable nil)
   (lsp-headerline-breadcrumb-enable nil)
+  (lsp-print-performance t)
+  (lsp-idle-delay 0.500)
   (lsp-headerline-breadcrumb-enable-diagnostics nil)
   (flymake-fringe-indicator-position 'right-fringe)
   (lsp-signature-function 'lsp-signature-posframe)
   (lsp-eldoc-enable-hover nil)
 
-  (lsp-completion-provider :none) ;; we use Corfu!
+  (lsp-completion-provider :none)   ;; we use Corfu!
 
   ;; go install github.com/sqls-server/sqls@latest
   (lsp-sqls-server "/opt/homebrew/opt/go/libexec/bin/sqls")
@@ -75,7 +77,6 @@
   ;; (setq gc-cons-threshold 100000000
   ;;       ;; lsp-file-watch-threshold 1000
   ;;       lsp-enable-semantic-highlighting t
-  ;;       lsp-idle-delay 0.500
   ;;       lsp-diagnostics-modeline-scope :project    ;; :project/:workspace/:file
   ;; (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
   ;; :custom-face
@@ -387,6 +388,7 @@
               (set-face-background 'lsp-ui-doc-background (face-background 'tooltip nil t)))))
 
 (use-package lsp-ivy
+  :disabled t
   :after lsp-mode
   :bind
   (:map lsp-mode-map

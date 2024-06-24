@@ -87,12 +87,69 @@
         ("g t" . centaur-tabs-forward)
         ("g T" . centaur-tabs-backward)))
 
+(use-package awesome-tab
+  :load-path "localelpa/awesome-tab"
+  :config
+  (awesome-tab-mode t))
+
 (use-package sort-tab
-  :disabled t
+  ;; :disabled t
   :load-path "localelpa/sort-tab"
   :init
   (require 'sort-tab)
   :config
   (sort-tab-mode 1))
+
+;; tabspaces - https://github.com/mclear-tools/tabspaces
+(use-package project-tab-groups
+  :init
+  (setq project-tab-groups-tab-group-name-function #'+project-tab-groups-name-by-project-root)
+  (project-tab-groups-mode t)
+  :config
+  (defun +project-tab-groups-name-by-project-root (dir)
+    "Derive tab group name for project in DIR."
+    (with-temp-buffer
+      (setq default-directory dir)
+      (hack-dir-local-variables-non-file-buffer)
+      (let ((name (or (and (boundp 'tab-group-name) tab-group-name)
+                      (and (boundp 'project-name) project-name)
+                      (and (fboundp 'project-root)
+                           (when-let ((project-current (project-current)))
+                             (project-root project-current)))
+                      (file-name-nondirectory (directory-file-name dir))))
+            (name-template (or (and (boundp 'tab-group-name-template) tab-group-name-template)
+                               (and (boundp 'project-name-template) project-name-template)
+                               "%s")))
+        (format name-template name)))))
+
+(use-package tabspaces
+  :hook (after-init . tabspaces-mode)
+  :bind-keymap ("H-t" . tabspaces-command-map)
+  :bind (:map tabspaces-command-map
+              ("2" . tab-new)
+              ("0" . tabspaces-close-workspace)
+              ("p" . project-other-tab-command)
+              ("k" . tabspaces-kill-buffers-close-workspace)
+              ("DEL" . tabspaces-remove-current-buffer))
+  :custom
+  (tab-bar-show nil)
+
+  (tabspaces-use-filtered-buffers-as-default t)
+  (tabspaces-initialize-project-with-todo nil)
+  (tabspaces-default-tab "Default")
+  (tabspaces-remove-to-default t)
+  (tabspaces-include-buffers '("*scratch*" "*Messages*"))
+  ;; sessions
+  ;; (tabspaces-session t)
+  ;; (tabspaces-session-auto-restore t)
+  :config
+  ;; Ensure reading project list
+  (require 'project)
+  (project--ensure-read-project-list)
+  
+  (tabspaces-mode 1)
+  
+  ;; Rename the first tab to `tabspaces-default-tab'
+  (tab-bar-rename-tab tabspaces-default-tab))
 
 (provide 'init-tab-bar)
