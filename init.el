@@ -142,6 +142,7 @@
 (require 'init-reader)
 
 (require 'init-window)
+(require 'init-frame)
 (require 'init-projectile)
 ;; (require 'init-persp)
 ;; (require 'init-tab-bar)
