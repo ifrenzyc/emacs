@@ -11,7 +11,7 @@
   :mode
   ("\\.plantuml\\'" . plantuml-mode)
   :custom
-  (plantuml-java-args (expand-file-name "bin/plantuml.jar" user-emacs-directory))
+  (plantuml-java-args (expand-file-name "bin/plantuml-1.2024.4.jar" user-emacs-directory))
   :config
   ;; Enable plantuml-mode within an org-mode document
   (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))

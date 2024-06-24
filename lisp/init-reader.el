@@ -21,7 +21,7 @@
   :disabled t
   :ensure nil
   :bind
-  (([f18] . view-mode)  ;; remap R-Shift to F 13
+  (([f18] . view-mode)  ;; remap R-Shift to F18
    :map view-mode-map
    ("n" . next-line)
    ("p" . previous-line))

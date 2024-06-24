@@ -13,7 +13,7 @@
   :commands swiper-from-isearch
   :bind
   (("M-s ."   . isearch-forward-symbol-at-point)
-   ;; "C-s"   'isearch-forward-regexp
+   ;; "C-s"     . isearch-forward-regexp
    ("C-r"     . isearch-backward-regexp)
    ("C-M-s"   . isearch-forward-other-window)
    ("C-M-r"   . isearch-backward-other-window)
@@ -333,6 +333,7 @@ active region use it instead."
 
 ;; fuzzy file finder
 (use-package fiplr
+  :disabled t
   :bind
   ("C-c p p" . fiplr-find-file)
   :config

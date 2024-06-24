@@ -20,17 +20,15 @@
         ("H" . lsp-ui-doc-show)
         ("i" . lsp-goto-implementation)
         ("t" . lsp-goto-type-definition))
-  ;; ("s" . lsp-ivy-workspace-symbol)
-  ;; ("S" . lsp-ivy-global-workspace-symbol)
   (:map lsp-mode-map
-        ("C-c C-d" . lsp-describe-thing-at-point)
-        ("C-c l"   . hydra-lsp-map/body))
+        ("C-c C-d" . lsp-describe-thing-at-point))
   :commands (lsp lsp-deferred)
   :hook
   ((lsp      . lsp-lens-mode)
    (lsp-mode . lsp-enable-which-key-integration)
    ;; (lsp-after-open . lsp-enable-imenu)
    ;; (prog-mode . lsp-deferred)
+   ;; (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
    ;; (lsp-managed-mode . (lambda ()
    ;;                       (with-eval-after-load 'company
    ;;                         (setq-local company-backends '((company-capf :with company-yasnippet)))
@@ -68,6 +66,7 @@
   (lsp-sqls-server "/opt/homebrew/opt/go/libexec/bin/sqls")
 
   (lsp-semantic-tokens-enable t)
+  (lsp-enable-semantic-highlighting t)
   (lsp-progress-spinner-type 'horizontal-breathing)
 
   ;; @see https://emacs-lsp.github.io/lsp-mode/page/performance
@@ -76,289 +75,51 @@
   ;; ;; https://github.com/emacs-lsp/lsp-mode#performance
   ;; (setq gc-cons-threshold 100000000
   ;;       ;; lsp-file-watch-threshold 1000
-  ;;       lsp-enable-semantic-highlighting t
   ;;       lsp-diagnostics-modeline-scope :project    ;; :project/:workspace/:file
-  ;; (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode)
-  ;; :custom-face
-  ;; (lsp-headerline-breadcrumb-path-error-face
-  ;;  ((t :underline (:style wave :color ,(face-foreground 'error))
-  ;;      :inherit lsp-headerline-breadcrumb-path-face)))
-  ;; (lsp-headerline-breadcrumb-path-warning-face
-  ;;  ((t :underline (:style wave :color ,(face-foreground 'warning))
-  ;;      :inherit lsp-headerline-breadcrumb-path-face)))
-  ;; (lsp-headerline-breadcrumb-path-info-face
-  ;;  ((t :underline (:style wave :color ,(face-foreground 'success))
-  ;;      :inherit lsp-headerline-breadcrumb-path-face)))
-  ;; (lsp-headerline-breadcrumb-path-hint-face
-  ;;  ((t :underline (:style wave :color ,(face-foreground 'success))
-  ;;      :inherit lsp-headerline-breadcrumb-path-face)))
-  ;; (lsp-headerline-breadcrumb-symbols-error-face
-  ;;  ((t :inherit lsp-headerline-breadcrumb-symbols-face
-  ;;      :underline (:style wave :color ,(face-foreground 'error)))))
-  ;; (lsp-headerline-breadcrumb-symbols-warning-face
-  ;;  ((t :inherit lsp-headerline-breadcrumb-symbols-face
-  ;;      :underline (:style wave :color ,(face-foreground 'warning)))))
-  ;; (lsp-headerline-breadcrumb-symbols-info-face
-  ;;  ((t :inherit lsp-headerline-breadcrumb-symbols-face
-  ;;      :underline (:style wave :color ,(face-foreground 'success)))))
-  ;; (lsp-headerline-breadcrumb-symbols-hint-face
-  ;;  ((t :inherit lsp-headerline-breadcrumb-symbols-face
-  ;;      :underline (:style wave :color ,(face-foreground 'success)))))
   :init
-  (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
-  :config
-  (defhydra hydra-lsp (:exit t :hint nil)
-    "
-   Buffer^^               Server^^                   Symbol
-  -------------------------------------------------------------------------------------
-   [_f_] format           [_M-r_] restart            [_d_] declaration       [_i_] implementation        [_o_] documentation
-   [_m_] imenu            [_S_]   shutdown           [_D_] peek definition   [_I_] peek implementation   [_r_] rename
-   [_x_] execute action   [_M-s_] describe session   [_R_] peek references   [_t_] type                  [_s_] signature"
-    ("d" lsp-find-declaration)
-    ("D" lsp-ui-peek-find-definitions)
-    ("R" lsp-ui-peek-find-references)
-    ("I" lsp-ui-peek-find-implementation)
-    ("i" lsp-find-implementation)
-    ("t" lsp-find-type-definition)
-    ("s" lsp-signature-help)
-    ("o" lsp-describe-thing-at-point)
-    ("r" lsp-rename)
-    ("f" lsp-format-buffer)
-    ("m" lsp-ui-imenu)
-    ("x" lsp-execute-code-action)
-    ("M-s" lsp-describe-session)
-    ("M-r" lsp-restart-workspace)
-    ("S" lsp-shutdown-workspace))
-  (pretty-hydra-define hydra-lsp-new-2
-    (:hint nil :color blue :foreign-keys warn :quit-key "q")
-    ("Xref"
-     (("d" xref-find-definitions "Definitions")
-      ("D" xref-find-definitions-other-window "-> other win")
-      ("r" xref-find-references "References")
-      ;; ("s" netrom/helm-lsp-workspace-symbol-at-point "Helm search")
-      ;; ("S" netrom/helm-lsp-global-workspace-symbol-at-point "Helm global search")
-      )
-     "Peek"
-     (("C-d" lsp-ui-peek-find-definitions "Definitions")
-      ("C-r" lsp-ui-peek-find-references "References")
-      ("C-i" lsp-ui-peek-find-implementation "Implementation"))
-     "LSP"
-     (("p" lsp-describe-thing-at-point "Describe at point")
-      ("C-a" lsp-execute-code-action "Execute code action")
-      ("R" lsp-rename "Rename")
-      ("t" lsp-goto-type-definition "Type definition")
-      ("i" lsp-goto-implementation "Implementation")
-      ;; ("f" helm-imenu "Filter funcs/classes (Helm)")
-      ;; ("F" helm-imenu-in-all-buffers "-> in all buffers")
-      ("C-c" lsp-describe-session "Describe session"))
-     "Flycheck"
-     (("l" lsp-ui-flycheck-list "List errs/warns/notes"))
-     "quit"
-     (("q" nil "Quit"))))
-  (pretty-hydra-define hydra-lsp-new
-    (:hint nil :color blue :foreign-keys warn :quit-key "q")
-    ("definitions"
-     (("d" lsp-ui-peek-find-definitions "peek definition")
-      ("D" xref-find-definitions "xref definitions"))
-     "references"
-     (("r" lsp-ui-peek-find-references "peek references")
-      ("R" xref-find-references "xref references")
-      ("u" lsp-treemacs-references "usages"))
-     "refactor"
-     (("n" lsp-rename "rename")
-      ("=" lsp-format-buffer "format")
-      ("a" lsp-ui-sideline-apply-code-actions "apply code action"))
-     "info"
-     (("o" lsp-treemacs-symbols "outline"))
-     "errors"
-     (("e" lsp-treemacs-errors-list "list"))
-     "workspace"
-     (("i" lsp-describe-session "session info")
-      ("S" lsp-restart-workspace "restart workspace"))
-     "folders"
-     (("w a" lsp-workspace-folders-add "add folder" :column "workspace")
-      ("w r" lsp-workspace-folders-remove "remove folder")
-      ("w s" lsp-workspace-folders-switch "switch folder"))
-     "quit"
-     (("q" nil "Quit"))))
-  (pretty-hydra-define hydra-lsp-map
-    (:title (with-faicon "nf-fa-rocket" "LSP UI" 1 -0.05)
-            :hint nil :color blue :quit-key "C-g")
-    ("Formatting"
-     (("= =" lsp-format-buffer "format buffer")
-      ("= r" lsp-format-region "format region"))
-     "Actions"
-     (("a a" lsp-execute-code-action "code actions")
-      ("a h" lsp-document-highlight "highlight symbol")
-      ("a l" lsp-avy-lens "lens"))
-     "Folders"
-     (("F a" lsp-workspace-folders-add "add folder")
-      ("F b" lsp-workspace-blacklist-remove "un-blacklist folder")
-      ("F r" lsp-workspace-folders-remove "remove folder"))
-     "Peeks"
-     (("G g" lsp-ui-peek-find-definitions "peek definitions")
-      ("G i" lsp-ui-peek-find-implementation "peek implementations")
-      ("G r" lsp-ui-peek-find-references "peek references")
-      ("G s" lsp-ui-peek-find-workspace-symbol "peek workspace symbol"))
-     "Goto"
-     (("g a" xref-find-apropos "find symbol in workspace")
-      ("g d" lsp-find-declaration "find declarations")
-      ("g e" lsp-treemacs-errors-list "show errors")
-      ("g g" lsp-find-definition "find definitions")
-      ("g h" lsp-treemacs-call-hierarchy "call hierarchy")
-      ("g i" lsp-find-implementation "find implementations")
-      ("g r" lsp-find-references "find references")
-      ("g t" lsp-find-type-definition "find type definition"))
-     "Help"
-     (("h g" lsp-ui-doc-glance "glance symbol")
-      ("h h" lsp-describe-thing-at-point "describe symbol at point")
-      ("h s" lsp-signature-activate "signature help"))
-     "Refactoring"
-     (("r o" lsp-organize-imports "organize imports")
-      ("r r" lsp-rename "rename"))
-     "Toggles"
-     (("T D" lsp-modeline-diagnostics-mode "toggle modeline diagnostics")
-      ("T L" lsp-toggle-trace-io "toggle log io")
-      ("T S" lsp-ui-sideline-mode "toggle sideline")
-      ("T T" lsp-treemacs-sync-mode "toggle treemacs integration")
-      ("T a" lsp-modeline-code-actions-mode "toggle modeline code actions")
-      ("T b" lsp-headerline-breadcrumb-mode "toggle breadcrumb")
-      ("T d" lsp-ui-doc-mode "toggle documentation popup")
-      ("T f" lsp-toggle-on-type-formatting "toggle on type formatting")
-      ("T h" lsp-toggle-symbol-highlight "toggle highlighting")
-      ("T l" lsp-lens-mode "toggle lenses")
-      ("T s" lsp-toggle-signature-auto-activate "toggle signature"))
-     "Workspaces"
-     (("w D" lsp-disconnect "disconnect")
-      ("w d" lsp-describe-session)
-      ("w q" lsp-workspace-shutdown "shutdown server")
-      ("w r" lsp-workspace-restart "restart server")
-      ("w s" lsp "start server")))))
+  (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht))))))
 
 (use-package lsp-ui
   :after lsp-mode
-  :bind (("C-c u" . lsp-ui-imenu)
-         :map lsp-ui-mode-map
-         ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)  ; [M-.]
-         ([remap xref-find-references]  . lsp-ui-peek-find-references)   ; [M-?]
-         ("M-<f6>" . lsp-ui-hydra/body)
-         ("M-RET"  . lsp-ui-sideline-apply-code-actions))
+  :bind
+  (("C-c u" . lsp-ui-imenu)
+   :map lsp-ui-mode-map
+   ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)  ; [M-.]
+   ([remap xref-find-references]  . lsp-ui-peek-find-references)   ; [M-?]
+   ("M-RET"  . lsp-ui-sideline-apply-code-actions))
   :custom-face
   (lsp-ui-sideline-code-action ((t (:inherit warning))))
-  :pretty-hydra
-  ((:title (pretty-hydra-title "LSP UI" 'faicon "rocket" :face 'all-the-icons-green)
-           :color amaranth :quit-key "q")
-   ("Doc"
-    (("d e" (progn
-              (lsp-ui-doc-enable (not lsp-ui-doc-mode))
-              (setq lsp-ui-doc-enable (not lsp-ui-doc-enable)))
-      "enable" :toggle lsp-ui-doc-mode)
-     ("d s" (setq lsp-ui-doc-include-signature (not lsp-ui-doc-include-signature))
-      "signature" :toggle lsp-ui-doc-include-signature)
-     ("d t" (setq lsp-ui-doc-position 'top)
-      "top" :toggle (eq lsp-ui-doc-position 'top))
-     ("d b" (setq lsp-ui-doc-position 'bottom)
-      "bottom" :toggle (eq lsp-ui-doc-position 'bottom))
-     ("d p" (setq lsp-ui-doc-position 'at-point)
-      "at point" :toggle (eq lsp-ui-doc-position 'at-point))
-     ("d h" (setq lsp-ui-doc-header (not lsp-ui-doc-header))
-      "header" :toggle lsp-ui-doc-header)
-     ("d f" (setq lsp-ui-doc-alignment 'frame)
-      "align frame" :toggle (eq lsp-ui-doc-alignment 'frame))
-     ("d w" (setq lsp-ui-doc-alignment 'window)
-      "align window" :toggle (eq lsp-ui-doc-alignment 'window)))
-    "Sideline"
-    (("s e" (progn
-              (lsp-ui-sideline-enable (not lsp-ui-sideline-mode))
-              (setq lsp-ui-sideline-enable (not lsp-ui-sideline-enable)))
-      "enable" :toggle lsp-ui-sideline-mode)
-     ("s h" (setq lsp-ui-sideline-show-hover (not lsp-ui-sideline-show-hover))
-      "hover" :toggle lsp-ui-sideline-show-hover)
-     ("s d" (setq lsp-ui-sideline-show-diagnostics (not lsp-ui-sideline-show-diagnostics))
-      "diagnostics" :toggle lsp-ui-sideline-show-diagnostics)
-     ("s s" (setq lsp-ui-sideline-show-symbol (not lsp-ui-sideline-show-symbol))
-      "symbol" :toggle lsp-ui-sideline-show-symbol)
-     ("s c" (setq lsp-ui-sideline-show-code-actions (not lsp-ui-sideline-show-code-actions))
-      "code actions" :toggle lsp-ui-sideline-show-code-actions)
-     ("s i" (setq lsp-ui-sideline-ignore-duplicate (not lsp-ui-sideline-ignore-duplicate))
-      "ignore duplicate" :toggle lsp-ui-sideline-ignore-duplicate))
-    "Breadcrumb"
-    (("b b" (setq lsp-headerline-breadcrumb-enable (not lsp-headerline-breadcrumb-enable))
-      "breadcrumb" :toggle lsp-headerline-breadcrumb-enable))
-    "Action"
-    (("h" backward-char "←")
-     ("j" next-line "↓")
-     ("k" previous-line "↑")
-     ("l" forward-char "→")
-     ("C-a" mwim-beginning-of-code-or-line nil)
-     ("C-e" mwim-end-of-code-or-line nil)
-     ("C-b" backward-char nil)
-     ("C-n" next-line nil)
-     ("C-p" previous-line nil)
-     ("C-f" forward-char nil)
-     ("M-b" backward-word nil)
-     ("M-f" forward-word nil)
-     ("c" lsp-ui-sideline-apply-code-actions "apply code actions"))))
   :hook
   (lsp-mode . lsp-ui-mode)
   (lsp-mode . lsp-ui-sideline-mode)
-  :init
-  (setq lsp-ui-doc-enable nil
-        lsp-ui-doc-header t
-        lsp-ui-doc-position 'top ;; at-point
-        lsp-ui-doc-delay 0.2     ;; 延迟 2s 再打开 doc 窗口
-        ;; lsp-ui-doc-border (face-foreground 'default)
-        lsp-ui-doc-border "orange" ;; (face-foreground 'font-lock-comment-face nil t)
-        lsp-ui-doc-include-signature t
-        lsp-ui-doc-show-with-cursor nil ;; disable cursor hover
-        lsp-ui-doc-show-with-mouse nil  ;; disable mouse hover
-        lsp-ui-sideline-enable nil
-        lsp-ui-sideline-show-diagnostics nil
-        lsp-ui-sideline-ignore-duplicate t
-        lsp-ui-sideline-show-code-actions nil
-        lsp-lens-enable nil
-        lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
-                              ,(face-foreground 'font-lock-string-face)
-                              ,(face-foreground 'font-lock-constant-face)
-                              ,(face-foreground 'font-lock-variable-name-face)))
-  
-  (setq lsp-ui-doc-use-webkit nil)    ; (featurep 'xwidget-internal)
-  ;; (if (featurep 'xwidget-internal)
-  ;;     (setq lsp-ui-doc-use-webkit t))
-  ;; (setq-default lsp-ui-doc-frame-parameters
-  ;;               '((left . -1)
-  ;;                 (top . -1)
-  ;;                 (no-accept-focus . t)
-  ;;                 (min-width . 0)
-  ;;                 (width . 0)
-  ;;                 (min-height . 0)
-  ;;                 (height . 0)
-  ;;                 (internal-border-width . 0)
-  ;;                 (vertical-scroll-bars)
-  ;;                 (horizontal-scroll-bars)
-  ;;                 (left-fringe . 0)
-  ;;                 (right-fringe . 8)
-  ;;                 (menu-bar-lines . 0)
-  ;;                 (tool-bar-lines . 0)
-  ;;                 (line-spacing . 0.2)
-  ;;                 (unsplittable . t)
-  ;;                 (undecorated . t)
-  ;;                 (visibility . nil)
-  ;;                 (mouse-wheel-frame . nil)
-  ;;                 (no-other-frame . t)
-  ;;                 (cursor-type)
-  ;;                 (no-special-glyphs . t)))
-  ;; (set-face-attribute 'lsp-ui-sideline-global nil
-  ;;                     :inherit 'shadow
-  ;;                     :background "#f9f")
-  ;; for "Jimx-/lsp-ui" fork has xwebkit support.
+  :custom
+  (lsp-ui-doc-enable nil)
+  (lsp-ui-doc-header t)
+  (lsp-ui-doc-position 'top) ;; at-point
+  (lsp-ui-doc-delay 0.2)     ;; 延迟 2s 再打开 doc 窗口
+  ;; (lsp-ui-doc-border (face-foreground 'default))
+  (lsp-ui-doc-border "orange") ;; (face-foreground 'font-lock-comment-face nil t)
+  (lsp-ui-doc-include-signature t)
+  (lsp-ui-doc-show-with-cursor nil) ;; disable cursor hover
+  (lsp-ui-doc-show-with-mouse nil)  ;; disable mouse hover
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-show-diagnostics nil)
+  (lsp-ui-sideline-ignore-duplicate t)
+  (lsp-ui-sideline-show-code-actions nil)
+  (lsp-lens-enable nil)
+  (lsp-ui-imenu-colors `(,(face-foreground 'font-lock-keyword-face)
+                         ,(face-foreground 'font-lock-string-face)
+                         ,(face-foreground 'font-lock-constant-face)
+                         ,(face-foreground 'font-lock-variable-name-face)))
+
+  (lsp-ui-doc-use-webkit nil)    ; (featurep 'xwidget-internal)
   :config
   ;; https://github.com/emacs-lsp/lsp-ui/issues/441
   (defun lsp-ui-peek--peek-display (src1 src2)
     (-let* ((win-width (frame-width))
             (lsp-ui-peek-list-width (/ (frame-width) 2))
             (string (-some--> (-zip-fill "" src1 src2)
-                      (--map (lsp-ui-peek--adjust win-width it) it)
+                      
                       (-map-indexed 'lsp-ui-peek--make-line it)
                       (-concat it (lsp-ui-peek--make-footer))))
             )
@@ -377,7 +138,7 @@
 
   (advice-add #'lsp-ui-peek--peek-new :override #'lsp-ui-peek--peek-display)
   (advice-add #'lsp-ui-peek--peek-hide :override #'lsp-ui-peek--peek-destroy)
-  
+
   ;; `C-g'to close doc
   (advice-add #'keyboard-quit :before #'lsp-ui-doc-hide)
 
@@ -386,6 +147,20 @@
             (lambda ()
               (setq lsp-ui-doc-border (face-foreground 'font-lock-comment-face nil t))
               (set-face-background 'lsp-ui-doc-background (face-background 'tooltip nil t)))))
+
+;; - https://github.com/tigersoldier/company-lsp
+(use-package company-lsp
+  :load-path "localelpa/company-lsp"
+  :after (lsp company-mode)
+  :custom
+  (company-lsp-enable-snippet t)        ; 开启 yasnippet 支持
+  ;; Disable client-side cache because the LSP server does a better job.
+  (company-transformers nil)
+  (company-lsp-async t)
+  (company-lsp-cache-candidates nil)
+  :config
+  (with-eval-after-load 'company
+    (push 'company-lsp company-backends)))
 
 (use-package lsp-ivy
   :disabled t
@@ -427,32 +202,18 @@
         ))
 
     (lsp-defun my-lsp-ivy--format-symbol-match
-      ((sym &as &SymbolInformation :kind :location (&Location :uri))
-       project-root)
-      "Convert the match returned by `lsp-mode` into a candidate string."
-      (let* ((sanitized-kind (if (< kind (length lsp-ivy-symbol-kind-icons)) kind 0))
-             (type (elt lsp-ivy-symbol-kind-icons sanitized-kind))
-             (typestr (if lsp-ivy-show-symbol-kind (format "%s " type) ""))
-             (pathstr (if lsp-ivy-show-symbol-filename
-                          (propertize (format " · %s" (file-relative-name (lsp--uri-to-path uri) project-root))
-                                      'face font-lock-comment-face)
-                        "")))
-        (concat typestr (lsp-render-symbol-information sym ".") pathstr)))
+               ((sym &as &SymbolInformation :kind :location (&Location :uri))
+                project-root)
+               "Convert the match returned by `lsp-mode` into a candidate string."
+               (let* ((sanitized-kind (if (< kind (length lsp-ivy-symbol-kind-icons)) kind 0))
+                      (type (elt lsp-ivy-symbol-kind-icons sanitized-kind))
+                      (typestr (if lsp-ivy-show-symbol-kind (format "%s " type) ""))
+                      (pathstr (if lsp-ivy-show-symbol-filename
+                                   (propertize (format " · %s" (file-relative-name (lsp--uri-to-path uri) project-root))
+                                               'face font-lock-comment-face)
+                                 "")))
+                 (concat typestr (lsp-render-symbol-information sym ".") pathstr)))
     (advice-add #'lsp-ivy--format-symbol-match :override #'my-lsp-ivy--format-symbol-match)))
-
-;; - https://github.com/tigersoldier/company-lsp
-(use-package company-lsp
-  :load-path "localelpa/company-lsp"
-  :after (lsp company-mode)
-  :custom
-  (company-lsp-enable-snippet t)        ; 开启 yasnippet 支持
-  ;; Disable client-side cache because the LSP server does a better job.
-  (company-transformers nil)
-  (company-lsp-async t)
-  (company-lsp-cache-candidates nil)
-  :config
-  (with-eval-after-load 'company
-    (push 'company-lsp company-backends)))
 
 ;; (use-package lsp-clients
 ;;   :ensure nil

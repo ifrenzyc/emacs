@@ -140,8 +140,7 @@
      ;; (("h" windmove-left)
      ;;             ("j" windmove-down)
      ;;             ("k" windmove-up)
-     ;;             ("l" windmove-right)
-     ;;             )
+     ;;             ("l" windmove-right))
      ;; "Window Purpose"
      ;; (("P" purpose-set-window-purpose)
      ;;                   ("B" ivy-purpose-switch-buffer-with-purpose)
@@ -387,65 +386,6 @@
           (list-environment-mode :select t :size 0.3 :align 'below :autoclose t)
           (tabulated-list-mode :size 0.4 :align 'below))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  scrolling                                                       ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; This makes scrolling gradual rather than by half page.
-;; I find that the half page scroll really makes me lose where I am
-;; in the file so here I make sure to scroll one line at a time.
-;; In addition I want to keep what I'm working on centered so
-;; I start scrolling when the cursor is 10 lines away from the margin.
-;; This behaviour in general emulates the scrolloff option in vim.
-;; faster scrolling
-;; - https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746
-;; - https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#defaults
-
-;; ;; (setq scroll-margin 10
-;; ;;       scroll-step 1
-;; ;;       scroll-conservatively 10000
-;; ;;       scroll-preserve-screen-position 1)
-;; (setq  hscroll-margin 1
-;;        hscroll-step 1
-;;        scroll-conservatively 100000
-;;        scroll-margin 0
-;;        scroll-preserve-screen-position t)
-;; (setq auto-window-vscroll nil)
-
-;; (use-package yascroll
-;;   :init
-;;   (global-yascroll-bar-mode t))
-
-;; (use-package smooth-scrolling
-;;   :init
-;;   (smooth-scrolling-mode t)
-;;   (setq smooth-scroll-margin 5))
-
-;; (use-package scrollkeeper
-;;   :bind (([remap scroll-up-command] . scrollkeeper-contents-up)
-;;          ([remap scroll-down-command] . scrollkeeper-contents-down)))
-
-;; (use-package sublimity
-;;   :commands (sublimity-map-show sublimity-mode)
-;;   :config
-;;   (require 'sublimity)
-;;   (require 'sublimity-scroll)
-;;   (require 'sublimity-map)
-;;   (setq sublimity-scroll-weight 5
-;;         sublimity-scroll-drift-length 10
-;;         sublimity-map-size 20
-;;         sublimity-map-fraction 0.3
-;;         sublimity-map-text-scale -7)
-;;   (setq sublimity-map-set-delay 5)
-;;   (setq sublimity-attractive-hide-bars t)
-;;   (setq sublimity-attractive-hide-vertical-border t)
-;;   (setq sublimity-attractive-hide-fringes t)
-;;   (setq sublimity-attractive-hide-modelines t))
-
-(use-package good-scroll
-  :disabled t
-  :config
-  (good-scroll-mode t))
-
 ;; eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工作空间。
 ;; 目前是使用 =<f5>= 、 =<f6>= 、 =<f7>= 、 =<f8>= 进行工作空间切换。
 ;; *注意：* 这个的使用和 Winner Mode 有点冲突，通过 Winner Mode 进行恢复窗口时，会恢复到其他工作空间的窗口。
@@ -456,28 +396,7 @@
   :init
   (eyebrowse-mode 1)
   :config
-  (setq-default eyebrowse-new-workspace t)
-
-  ;; (defhydra hydra-eyebrowse (:color blue)
-  ;;   "
-  ;; ^
-  ;; ^Eyebrowse^         ^Do^                ^Switch^
-  ;; ^─────────^─────────^──^────────────────^──────^────────────
-  ;; _q_ quit            _c_ create          _<_ previous
-  ;; ^^                  _k_ kill            _>_ next
-  ;; ^^                  _r_ rename          _e_ last
-  ;; ^^                  ^^                  _s_ switch
-  ;; ^^                  ^^                  ^^
-  ;; "
-  ;;   ("q" nil)
-  ;;   ("<" eyebrowse-prev-window-config :color red)
-  ;;   (">" eyebrowse-next-window-config :color red)
-  ;;   ("c" eyebrowse-create-window-config)
-  ;;   ("e" eyebrowse-last-window-config)
-  ;;   ("k" eyebrowse-close-window-config :color red)
-  ;;   ("r" eyebrowse-rename-window-config)
-  ;;   ("s" eyebrowse-switch-to-window-config))
-  )
+  (setq-default eyebrowse-new-workspace t))
 
 ;; - https://github.com/pashinin/workgroups2
 (use-package workgroups2
@@ -511,109 +430,6 @@
   ;; :straight (:host github :repo "jcs-elpa/transwin")
   :config
   (transwin-toggle-transparent-frame))
-
-;; (defhydra hydra-window ()
-;;   "
-;;     Movement^   ^Split^         ^Switch^       ^^^Resize^         ^Window Purpose^
-;;     ------------------------------------------------------------------------------------------------------
-;;     _h_ ←        _|_ vertical    ^_b_uffer       _H_  X←          choose window _P_urpose
-;;     _j_ ↓        _-_ horizontal  ^_f_ind files   _J_  X↓          switch to _B_uffer w/ same purpose
-;;     _k_ ↑        _u_ undo        ^_a_ce window   _K_  X↑          Purpose-dedication(_!_)
-;;     _l_ →        _r_ reset       ^_s_wap         _K_  X→          Buffer-dedication(_#_)
-;;     ^^^^^^^                                      _M_aximize
-;;     ^^^^^^^                                      _d_elete
-;;     _x_ M-x      _q_ quit
-;;     "
-;;   ("h" windmove-left)
-;;   ("j" windmove-down)
-;;   ("k" windmove-up)
-;;   ("l" windmove-right)
-;;   ("|" (lambda ()
-;;          (interactive)
-;;          (split-window-right)
-;;          (windmove-right)))
-;;   ("-" (lambda ()
-;;          (interactive)
-;;          (split-window-below)
-;;          (windmove-down)))
-;;   ("u" (progn
-;;          (winner-undo)
-;;          (setq this-command 'winner-undo)))
-;;   ("r" winner-redo)
-;;   ("b" ivy-purpose-switch-buffer-without-purpose)
-;;   ("f" counsel-find-file)
-;;   ("a" (lambda ()
-;;          (interactive)
-;;          (ace-window 1)
-;;          (add-hook 'ace-window-end-once-hook
-;;                    'hydra-window/body)))
-;;   ("s" (lambda ()
-;;          (interactive)
-;;          (ace-swap-window)
-;;          (add-hook 'ace-window-end-once-hook
-;;                    'hydra-window/body)))
-;;   ("H" hydra-move-splitter-left)
-;;   ("J" hydra-move-splitter-down)
-;;   ("K" hydra-move-splitter-up)
-;;   ("L" hydra-move-splitter-right)
-;;   ("M" delete-other-windows)
-;;   ("d" delete-window)
-
-;;   ("P" purpose-set-window-purpose)
-;;   ("B" ivy-purpose-switch-buffer-with-purpose)
-;;   ("!" purpose-toggle-window-purpose-dedicated)
-;;   ("#" purpose-toggle-window-buffer-dedicated)
-
-;;   ("K" ace-delete-other-windows)
-;;   ("S" save-buffer)
-;;   ("d" delete-window)
-;;   ("D" (lambda ()
-;;          (interactive)
-;;          (ace-delete-window)
-;;          (add-hook 'ace-window-end-once-hook
-;;                    'hydra-window/body))
-;;    )
-
-;;   ("x" counsel-M-x)
-;;   ("q" nil)
-;;   )
-;; (general-define-key
-;;  "<f1>"  'hydra-window/body)
-
-;; (defhydra hydra-windows (:color pink)
-;;   "
-;; ^
-;; ^Windows^           ^Window^            ^Zoom^              ^Eyebrowse Do^            ^Eyebrowse Switch^
-;; ^───────^───────────^──────^────────────^────^──────────────^────────────^────────────^────────────────^────────────
-;; _q_ quit            _b_ balance         _-_ out             _c_ create                _<_ previous
-;; ^^                  _i_ heighten        _+_ in              _k_ kill                  _>_ next
-;; ^^                  _j_ narrow          _=_ reset           _r_ rename                _e_ last
-;; ^^                  _k_ lower           ^^                  ^^                        _s_ switch
-;; ^^                  _l_ widen           ^^                  ^^                        _1_ workspace ➊
-;; ^^                  ^^                  ^^                  ^^                        _2_ workspace ➋
-;; ^^                  ^^                  ^^                  ^^                        _3_ workspace ➌
-;; ^^                  ^^                  ^^                  ^^                        _4_ workspace ➍
-;; "
-;;   ("q" nil)
-;;   ("b" balance-windows)
-;;   ("i" enlarge-window)
-;;   ("j" shrink-window-horizontally)
-;;   ("k" shrink-window)
-;;   ("l" enlarge-window-horizontally)
-;;   ("-" text-scale-decrease)
-;;   ("+" text-scale-increase)
-;;   ("=" (text-scale-increase 0))
-;;   ("<" eyebrowse-prev-window-config :color red)
-;;   (">" eyebrowse-next-window-config :color red)
-;;   ("c" eyebrowse-create-window-config)
-;;   ("e" eyebrowse-last-window-config)
-;;   ("k" eyebrowse-close-window-config :color red)
-;;   ("r" eyebrowse-rename-window-config)
-;;   ("s" eyebrowse-switch-to-window-config)
-;;   ("1" eyebrowse-switch-to-window-config-1)
-;;   ("2" eyebrowse-switch-to-window-config-2)
-;;   ("3" eyebrowse-switch-to-window-config-3)
-;;   ("4" eyebrowse-switch-to-window-config-4))
 
 (provide 'init-window)
 ;;; init-window.el ends here

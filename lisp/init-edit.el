@@ -174,7 +174,7 @@ there's a region, all lines that region covers will be duplicated."
   :demand t
   :bind (("C-a" . mwim-beginning-of-code-or-line)   ; ([remap move-beginning-of-line] . mwim-beginning-of-code-or-line)
          ("C-e" . mwim-end-of-code-or-line))        ; ([remap move-end-of-line] . mwim-end-of-code-or-line)
-  ;; :config  
+  ;; :config
   ;; `C-a' first takes you to the first non-whitespace char as
   ;; `back-to-indentation' on a line, and if pressed again takes you to
   ;; the actual beginning of the line.
@@ -219,7 +219,7 @@ there's a region, all lines that region covers will be duplicated."
   :config
   (global-pangu-spacing-mode t))
 
-(use-package hippie-exp
+(use-package hippie-expand
   :ensure nil
   :bind
   ("M-/" . hippie-expand)

@@ -10,7 +10,7 @@
 ;; - https://github.com/merrickluo/liberime
 ;; 
 ;; - https://github.com/DogLooksGood/emacs-rime
-;; - https://emacs-china.org/t/topic/17717 
+;; - https://emacs-china.org/t/topic/17717
 
 ;;; Code:
 

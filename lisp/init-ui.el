@@ -31,6 +31,7 @@
   (help-mode . page-break-lines-mode))
 
 (use-package all-the-icons
+  :disabled t
   :demand t
   :when (display-graphic-p)
   :config
@@ -126,8 +127,7 @@
 
 (use-package nerd-icons
   :custom
-  (emacs-nerd-icons-font-family "Hack Nerd Font") ;; The Nerd Font you want to use in GUI
-  )
+  (emacs-nerd-icons-font-family "Hack Nerd Font")) ;; The Nerd Font you want to use in GUI
 
 (use-package whitespace
   :disabled t

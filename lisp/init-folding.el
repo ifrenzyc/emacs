@@ -60,7 +60,7 @@
      ("{" hs-global-cycle)
      ("A" hs-toggle-all "toggle all")
      ("a" hs-show-all "show all")
-     ("i" hs-hide-all "hide all")     
+     ("i" hs-hide-all "hide all")
      ("s" hs-show-block "show block")
      ("b" hs-hide-block "hide block")
      ("l" hs-hide-level "hide level"))

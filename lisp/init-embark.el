@@ -5,6 +5,7 @@
 ;; 
 
 ;;; Code:
+(require 'init-which-key)
 
 (use-package embark
   :bind

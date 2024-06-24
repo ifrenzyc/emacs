@@ -5,6 +5,7 @@
 ;; 
 
 ;;; Code:
+(require 'init-which-key)
 
 (use-package projectile
   :bind

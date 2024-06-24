@@ -158,8 +158,6 @@
 
 (use-package magit-stats)
 
-;; - https://github.com/emacs-evil/evil-magit
-
 ;; Highlight uncommitted changes using VC
 ;; 高亮显示未提交的代码块
 ;; 
@@ -199,8 +197,7 @@
     "Git timemachine"
     ("p" git-timemachine-show-previous-revision "previous revision")
     ("n" git-timemachine-show-next-revision "next revision")
-    ("C-g" nil "quit"))
-  )
+    ("C-g" nil "quit")))
 
 ;; - https://github.com/thisch/gerrit.el
 ;; (use-package gerrit

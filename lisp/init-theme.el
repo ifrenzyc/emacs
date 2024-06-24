@@ -31,7 +31,7 @@
   (doom-themes-visual-bell-config)
 
   ;; Enable custom neotree theme
-  (doom-themes-neotree-config)    ; all-the-icons fonts must be installed!
+  ;; (doom-themes-neotree-config)    ; all-the-icons fonts must be installed!
 
   ;; (doom-themes-treemacs-config)
   ;; (with-eval-after-load 'lsp-treemacs

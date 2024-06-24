@@ -91,24 +91,6 @@
         (setq company-backends
               (remove 'company-backends (remq 'company-capf company-backends))))
       (advice-add #'lsp-completion--enable :after #'my-lsp-fix-company-capf)
-
-      ;; (defun my-company-yasnippet-disable-inline (fun command &optional arg &rest _ignore)
-      ;;   "Enable yasnippet but disable it inline."
-      ;;   (if (eq command 'prefix)
-      ;;       (when-let ((prefix (funcall fun 'prefix)))
-      ;;         (unless (memq (char-before (- (point) (length prefix)))
-      ;;                       '(?. ?< ?> ?\( ?\) ?\[ ?{ ?} ?\" ?' ?`))
-      ;;           prefix))
-      ;;     (progn
-      ;;       (when (and (bound-and-true-p lsp-mode)
-      ;;                  arg (not (get-text-property 0 'yas-annotation-patch arg)))
-      ;;         (let* ((name (get-text-property 0 'yas-annotation arg))
-      ;;                (snip (format "%s (Snippet)" name))
-      ;;                (len (length arg)))
-      ;;           (put-text-property 0 len 'yas-annotation snip arg)
-      ;;           (put-text-property 0 len 'yas-annotation-patch t arg)))
-      ;;       (funcall fun command arg))))
-      ;; (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline)
       )))
 
 (use-package company-box

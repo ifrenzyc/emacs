@@ -30,11 +30,11 @@
   :ensure nil
   :hook
   (after-init . show-paren-mode)
-  :init
-  (setq show-paren-when-point-inside-paren t
-        show-paren-when-point-in-periphery t)
+  :custom
+  (show-paren-when-point-inside-paren t)
+  (show-paren-when-point-in-periphery t)
   ;; 括号匹配时可以高亮显示另外一边的括号，但光标不会烦人的跳到另一个括号处。
-  (setq show-paren-style 'parenthesis)
+  (show-paren-style 'parenthesis)
   :config
   (with-no-warnings
     ;; Display matching line for off-screen paren.
@@ -88,43 +88,23 @@ FACE defaults to inheriting from default and highlight."
 ;; Highlight symbols
 (use-package symbol-overlay
   :bind
-  (("M-i" . symbol-overlay-put)
-   ("M-n" . symbol-overlay-jump-next)
-   ("M-p" . symbol-overlay-jump-prev)
-   ("M-N" . symbol-overlay-switch-forward)
-   ("M-P" . symbol-overlay-switch-backward)
-   ("M-C" . symbol-overlay-remove-all)
-   ("s-." . symbol-overlay-transient)
-   ([M-f3] . symbol-overlay-remove-all))
+  (("M-i"   . symbol-overlay-put)
+   ("M-n"   . symbol-overlay-jump-next)
+   ("M-p"   . symbol-overlay-jump-prev)
+   ("M-N"   . symbol-overlay-switch-forward)
+   ("M-P"   . symbol-overlay-switch-backward)
+   ("M-C"   . symbol-overlay-remove-all)
+   ("s-."   . symbol-overlay-transient)
+   ([M-f3]  . symbol-overlay-remove-all))
   :diminish
   :functions (turn-off-symbol-overlay turn-on-symbol-overlay)
-  ;; :custom-face
-  ;; (symbol-overlay-default-face ((t (:inherit region :background unspecified :foreground unspecified))))
-  ;; (symbol-overlay-face-1 ((t (:inherit all-the-icons-blue :background unspecified :foreground unspecified :inverse-video t))))
-  ;; (symbol-overlay-face-2 ((t (:inherit all-the-icons-pink :background unspecified :foreground unspecified :inverse-video t))))
-  ;; (symbol-overlay-face-3 ((t (:inherit all-the-icons-yellow :background unspecified :foreground unspecified :inverse-video t))))
-  ;; (symbol-overlay-face-4 ((t (:inherit all-the-icons-orange :background unspecified :foreground unspecified :inverse-video t))))
-  ;; (symbol-overlay-face-5 ((t (:inherit all-the-icons-red :background unspecified :foreground unspecified :inverse-video t))))
-  ;; (symbol-overlay-face-6 ((t (:inherit all-the-icons-maroon :background unspecified :foreground unspecified :inverse-video t))))
-  ;; (symbol-overlay-face-7 ((t (:inherit all-the-icons-green :background unspecified :foreground unspecified :inverse-video t))))
-  ;; (symbol-overlay-face-8 ((t (:inherit all-the-icons-cyan :background unspecified :foreground unspecified :inverse-video t))))
   :hook
   ((prog-mode . symbol-overlay-mode)
    ;; (iedit-mode . turn-off-symbol-overlay)
    ;; (iedit-mode-end . turn-on-symbol-overlay)
    )
-  :init
-  (setq symbol-overlay-idle-time 0.1)
-  ;; (with-eval-after-load 'all-the-icons
-  ;;   (setq symbol-overlay-faces
-  ;;         '((:inherit (all-the-icons-blue bold) :inverse-video t)
-  ;;           (:inherit (all-the-icons-pink bold) :inverse-video t)
-  ;;           (:inherit (all-the-icons-yellow bold) :inverse-video t)
-  ;;           (:inherit (all-the-icons-purple bold) :inverse-video t)
-  ;;           (:inherit (all-the-icons-red bold) :inverse-video t)
-  ;;           (:inherit (all-the-icons-orange bold) :inverse-video t)
-  ;;           (:inherit (all-the-icons-green bold) :inverse-video t)
-  ;;           (:inherit (all-the-icons-cyan bold) :inverse-video t))))
+  :custom
+  (symbol-overlay-idle-time 0.1)
   :config
   ;; Disable symbol highlighting while selecting
   (defun turn-off-symbol-overlay (&rest _)
@@ -147,23 +127,22 @@ FACE defaults to inheriting from default and highlight."
      (transient-history-file (concat yc/cache-dir "/transient/history.el")))
     :config
     (transient-define-prefix symbol-overlay-transient ()
-                             "Symbol Overlay transient"
-                             ["Symbol Overlay"
-                              ["Overlays"
-                               ("." "Add/Remove at point" symbol-overlay-put)
-                               ("k" "Remove All" symbol-overlay-remove-all)
-                               ]
-                              ["Move to Symbol"
-                               ("n" "Next" symbol-overlay-switch-forward)
-                               ("p" "Previous" symbol-overlay-switch-backward)
-                               ]
-                              ["Other"
-                               ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
-                               ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)
-                               ]
-                              ]
-                             )
-    )
+      "Symbol Overlay transient"
+      ["Symbol Overlay"
+       ["Overlays"
+        ("." "Add/Remove at point" symbol-overlay-put)
+        ("k" "Remove All" symbol-overlay-remove-all)
+        ]
+       ["Move to Symbol"
+        ("n" "Next" symbol-overlay-switch-forward)
+        ("p" "Previous" symbol-overlay-switch-backward)
+        ]
+       ["Other"
+        ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
+        ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)
+        ]
+       ]
+      ))
   (defun symbol-overlay-switch-first ()
     (interactive)
     (let* ((symbol (symbol-overlay-get-symbol))
