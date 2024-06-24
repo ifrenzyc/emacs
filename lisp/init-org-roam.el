@@ -203,6 +203,10 @@
   (org-roam-ui-update-on-save t)
   (org-roam-ui-open-on-start t))
 
+(use-package embark-org-roam
+  :after (org-roam embark)
+  :demand t)
+
 ;; - quickroam :: https://github.com/meedstrom/quickroam
 (use-package quickroam
   :load-path "localelpa/quickroam"

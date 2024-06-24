@@ -8,6 +8,9 @@
 
 ;; Vertico 和 Orderless 主要配置来源： https://kristofferbalintona.me/posts/vertico-marginalia-all-the-icons-completion-and-orderless/#marginalia
 (use-package vertico
+  :hook
+  (rfn-eshadow-update-overlay . vertico-directory-tidy)
+  (minibuffer-setup . vertico-repeat-save)
   :bind
   (:map vertico-map
         ("<tab>"     . vertico-insert)    ; Choose selected candidate
@@ -15,8 +18,17 @@
         ;; NOTE 2022-02-05: Cycle through candidate groups
         ("C-M-n"     . vertico-next-group)
         ("C-M-p"     . vertico-previous-group)
+        :map minibuffer-local-map
         ("C-c C-o"   . embark-export)
-        ("C-c C-c"   . embark-collect))
+        ("C-c C-c"   . embark-collect)
+        :map vertico-map
+        ("RET"   . vertico-directory-enter)
+        ("DEL"   . vertico-directory-delete-char)
+        ("M-DEL" . vertico-directory-delete-word)
+        ("M-P"   . vertico-repeat-previous)
+        ("M-N"   . vertico-repeat-next)
+        ("S-<prior>"  . vertico-repeat-previous)
+        ("S-<next>"   . vertico-repeat-next))
   :custom
   (vertico-count 13)               ; Number of candidates to display
   (vertico-resize nil)
@@ -168,8 +180,14 @@ parses its input."
   (consult-project-root-function #'projectile-project-root))
 
 (use-package consult-git-log-grep
-  :custom 
+  :custom
   (consult-git-log-grep-open-function #'magit-show-commit))
+
+(use-package consult-dir)
+(use-package consult-flycheck)
+(use-package consult-lsp)
+(use-package consult-org-roam)
+(use-package consult-projectile)
 
 (use-package all-the-icons-completion
   :disabled t

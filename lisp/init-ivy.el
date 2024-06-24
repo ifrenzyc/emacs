@@ -24,11 +24,8 @@
 (use-package ivy
   :demand t
   :bind
-  (([remap switch-to-buffer] . ivy-switch-buffer)
-   ([remap switch-to-bufer-other-window] . ivy-switch-buffer-other-window)
-   ;; ("C-x b" . ivy-switch-buffer)
-   ;; ("C-x B" . ivy-switch-buffer-other-window)
-   )
+  (([remap switch-to-buffer] . ivy-switch-buffer)  ;; C-x b
+   ([remap switch-to-bufer-other-window] . ivy-switch-buffer-other-window))  ;; C-x 4 b
   :hook
   (minibuffer-setup . yc--minibuffer-setup-hook)
   (minibuffer-exit . yc--minibuffer-exit-hook)
@@ -153,7 +150,7 @@
   (setq ivy-rich-display-transformers-list
         '(ivy-switch-buffer
           (:columns
-           ((ivy-rich-candidate (:width 30)) ; return the candidate itself
+           ((ivy-rich-candidate (:width 60)) ; return the candidate itself
             (ivy-rich-switch-buffer-size (:width 7)) ; return the buffer size
             (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right)); return the buffer indicators
             (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))          ; return the major mode info
@@ -163,7 +160,7 @@
            (lambda (cand) (get-buffer cand)))
           ivy-switch-buffer-other-window
           (:columns
-           ((ivy-rich-candidate (:width 30)) ; return the candidate itself
+           ((ivy-rich-candidate (:width 60)) ; return the candidate itself
             (ivy-rich-switch-buffer-size (:width 7)) ; return the buffer size
             (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right)); return the buffer indicators
             (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))          ; return the major mode info
@@ -189,7 +186,7 @@
             (ivy-rich-counsel-variable-docstring (:face font-lock-doc-face))))  ; return the docstring of the variable
           package-install
           (:columns
-           ((ivy-rich-candidate (:width 30))
+           ((ivy-rich-candidate (:width 60))
             (ivy-rich-package-version (:width 16 :face font-lock-comment-face))
             (ivy-rich-package-archive-summary (:width 7 :face font-lock-builtin-face))
             (ivy-rich-package-install-summary (:face font-lock-doc-face))))
