@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package helm
   :config
@@ -27,7 +27,7 @@
     ("/" (lambda ()
            (interactive)
            (execute-kbd-macro [?\C-s]))
-         "search")
+     "search")
     ("v" helm-execute-persistent-action)
     ("g" helm-beginning-of-buffer "top")
     ("h" helm-previous-source)
@@ -169,3 +169,4 @@ _v_ariable
 ;;         ("f" helm-follow-mode))
 
 (provide 'init-helm)
+;;; init-helm.el ends here

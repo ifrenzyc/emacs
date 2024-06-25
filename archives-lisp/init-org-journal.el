@@ -13,7 +13,7 @@
 ;; 关于为什么使用 =:custom= ，参考 https://github.com/bastibe/org-journal/issues/126
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package org-journal
   :disabled t
@@ -69,3 +69,4 @@
 ;;         org-brain-file-entries-use-title nil))
 
 (provide 'init-org-journal)
+;;; init-org-journal.el ends here

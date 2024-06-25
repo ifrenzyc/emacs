@@ -7,7 +7,7 @@
 ;; icomplete-vertical
 ;; 
 
-;;; Code
+;;; Code:
 
 ;; - https://github.com/oantolin/icomplete-vertical
 (use-package icomplete-vertical
@@ -21,12 +21,14 @@
   :config
   (icomplete-mode)
   (icomplete-vertical-mode)
-  :bind (:map icomplete-minibuffer-map
-              ("<down>" . icomplete-forward-completions)
-              ("C-n" . icomplete-forward-completions)
-              ("<up>" . icomplete-backward-completions)
-              ("C-p" . icomplete-backward-completions)
-              ("C-v" . icomplete-vertical-toggle)))
+  :bind
+  (:map icomplete-minibuffer-map
+        ("<down>" . icomplete-forward-completions)
+        ("C-n" . icomplete-forward-completions)
+        ("<up>" . icomplete-backward-completions)
+        ("C-p" . icomplete-backward-completions)
+        ("C-v" . icomplete-vertical-toggle)))
 
 
 (provide 'init-icomplete)
+;;; init-icomplete.el ends here

@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package xah-fly-keys
   :init
@@ -30,3 +30,4 @@
   (add-hook 'magit-popup-mode-hook 'xah-fly-insert-mode-activate))
 
 (provide 'init-xah-fly-keys)
+;;; init-xah-fly-keys.el ends here

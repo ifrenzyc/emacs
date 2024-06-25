@@ -149,3 +149,4 @@ default lsp-passthrough."
   (corfu-doc-mode))
 
 (provide 'init-corfu)
+;;; init-corfu.el ends here

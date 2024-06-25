@@ -98,8 +98,8 @@
   (require 'ox-beamer)
   (require 'ox-latex)
 
-  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/texlive/2023/bin/universal-darwin/"))
-  (setq exec-path (append exec-path '("/usr/local/texlive/2023/bin/universal-darwin/")))
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/texlive/2024/bin/universal-darwin/"))
+  (setq exec-path (append exec-path '("/usr/local/texlive/2024/bin/universal-darwin/")))
 
   ;; 配置使用 xelate 输出中文 pdf
   ;; org-mode 默认调用的是 pdflatex, 因此需要重新设置编译引擎为 xelatex

@@ -12,7 +12,7 @@
   (pandoc-mode . pandoc-load-default-settings)
   :config
   (when IS-MAC
-    (setq exec-path (append exec-path '("/usr/local/texlive/2023/bin/universal-darwin/")))))
+    (setq exec-path (append exec-path '("/usr/local/texlive/2024/bin/universal-darwin/")))))
 
 (provide 'init-pandoc)
 ;;; init-pandoc.el ends here

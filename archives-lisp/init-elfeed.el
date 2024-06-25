@@ -111,3 +111,4 @@
   :config (elfeed-goodies/setup))
 
 (provide 'init-elfeed)
+;;; init-elfeed.el ends here

@@ -131,16 +131,13 @@ FACE defaults to inheriting from default and highlight."
       ["Symbol Overlay"
        ["Overlays"
         ("." "Add/Remove at point" symbol-overlay-put)
-        ("k" "Remove All" symbol-overlay-remove-all)
-        ]
+        ("k" "Remove All" symbol-overlay-remove-all)]
        ["Move to Symbol"
         ("n" "Next" symbol-overlay-switch-forward)
-        ("p" "Previous" symbol-overlay-switch-backward)
-        ]
+        ("p" "Previous" symbol-overlay-switch-backward)]
        ["Other"
         ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
-        ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)
-        ]
+        ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)]
        ]
       ))
   (defun symbol-overlay-switch-first ()
@@ -261,24 +258,6 @@ If there is only one overlay at point, just return it, no matter region or symbo
     (hilight-jump-prev)
     (hydra-hilight-jump/body))
   )
-
-;; (use-package highlight-thing
-;;   :config
-;;   (add-hook 'iedit-mode-hook (lambda()
-;; 			                   (highlight-thing-mode -1)))
-
-;;   (add-hook 'iedit-mode-end-hook (lambda()
-;; 				                   (highlight-thing-mode 1)))
-;;   :init
-;;   (setq highlight-thing-what-thing 'symbol
-;; 	    highlight-thing-delay-seconds 0.5
-;; 	    highlight-thing-all-visible-buffers-p nil
-;; 	    highlight-thing-limit-to-region-in-large-buffers-p t
-;; 	    highlight-thing-narrow-region-lines 30)
-;;   :hook
-;;   ((org-mode csv-mode) . (lambda()
-;; 		                   (highlight-thing-mode 0)))
-;;   (prog-mode . highlight-thing-mode))
 
 ;; Highlight TODO and similar keywords in comments and strings
 (use-package hl-todo

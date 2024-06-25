@@ -5,7 +5,7 @@
 ;; - fido-mode: https://www.reddit.com/r/emacs/comments/iaqlpk/fidomode_in_emacs_27/
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package ido
   :ensure nil
@@ -52,3 +52,4 @@
   (ido-ubiquitous-mode 1))
 
 (provide 'init-ido)
+;;; init-ido.el ends here

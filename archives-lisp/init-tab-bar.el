@@ -6,7 +6,7 @@
 ;; - https://github.com/manateelazycat/awesome-tab
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package centaur-tabs
   :disabled t
@@ -153,3 +153,4 @@
   (tab-bar-rename-tab tabspaces-default-tab))
 
 (provide 'init-tab-bar)
+;;; init-tab-bar.el ends here

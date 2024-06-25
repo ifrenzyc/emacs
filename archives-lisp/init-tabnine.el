@@ -10,7 +10,7 @@
 ;; M-x company-tabnine-install-binary
 ;; 
 
-;;; Code
+;;; Code:
 (use-package company-tabnine
   :after (company)
   :config
@@ -55,3 +55,4 @@
   )
 
 (provide 'init-tabnine)
+;;; init-tabnine.el ends here

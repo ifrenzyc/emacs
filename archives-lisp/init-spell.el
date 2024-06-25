@@ -5,7 +5,7 @@
 ;; - 其他：https://github.com/redguardtoo/wucuo
 ;; 
 
-;;; Code
+;;; Code:
 
 ;; (use-package ispell
 ;;   :config (setq ispell-program-name "aspell" ; use aspell instead of ispell
@@ -87,4 +87,4 @@
          ("C-M-$" . jinx-languages)))
 
 (provide 'init-spell)
-;; init-spell.el ends here
+;;; init-spell.el ends here

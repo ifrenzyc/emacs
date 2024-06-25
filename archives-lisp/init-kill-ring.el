@@ -41,3 +41,4 @@
                                 (?T string-up-to-char-backward ""))))
 
 (provide 'init-kill-ring)
+;;; init-kill-ring.el ends here

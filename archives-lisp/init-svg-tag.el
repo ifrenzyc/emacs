@@ -14,7 +14,7 @@
 ;; - https://github.com/quantumish/.emacs.d/blob/fa7b4eaeae95a00db2743c20daa92d082e1dc7bd/lisp/tagconfig.el
 ;;
 
-;;; Code
+;;; Code:
 
 (use-package svg-tag-mode
   ;; :straight (:host github :repo "rougier/svg-tag-mode" :branch "main")
@@ -80,3 +80,4 @@
   )
 
 (provide 'init-svg-tag)
+;;; init-svg-tag.el ends here

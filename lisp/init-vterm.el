@@ -22,8 +22,7 @@
         ("M-SPC"   . yc/turn-off-input-method)
         ("H-SPC"   . yc/turn-on-rime-input-method))
   :hook
-  (;; 为 vterm 设置单独字体，https://emacs-china.org/t/mode/15512
-   (vterm-mode . (lambda ()
+  ((vterm-mode . (lambda ()  ;; 为 vterm 设置单独字体，https://emacs-china.org/t/mode/15512
                    (setq-local hs-minor-mode nil)
                    (setq-local origami-mode nil)
                    (setq-local vimish-fold-mode nil)

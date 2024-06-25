@@ -29,3 +29,4 @@
             (rust-mode . ("rls"))))))
 
 (provide 'init-eglot)
+;;; init-eglot.el ends here

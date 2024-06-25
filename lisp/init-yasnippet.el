@@ -12,11 +12,12 @@
   :hook
   (prog-mode . yas-minor-mode)
   (org-mode . yas-minor-mode)
-  :config
+  :custom
   ;; Suppress excessive log messages
-  (setq yas-verbosity 1
-        yas-triggers-in-field t
-        yas-prompt-functions '(yas-dropdown-prompt yas-completing-prompt yas-maybe-ido-prompt yas-no-prompt))
+  (yas-verbosity 1)
+  (yas-triggers-in-field t)
+  (yas-prompt-functions '(yas-dropdown-prompt yas-completing-prompt yas-maybe-ido-prompt yas-no-prompt))
+  :config
   (yas-global-mode t))
 
 (use-package yasnippet-snippets

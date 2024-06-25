@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package dokuwiki-mode
   :config
@@ -16,3 +16,4 @@
 
 
 (provide 'init-dokuwiki)
+;;; init-dokuwiki.el ends here
