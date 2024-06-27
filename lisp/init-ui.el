@@ -30,6 +30,10 @@
   :hook
   (help-mode . page-break-lines-mode))
 
+(use-package nerd-icons
+  :custom
+  (emacs-nerd-icons-font-family "Hack Nerd Font")) ;; The Nerd Font you want to use in GUI
+
 (use-package all-the-icons
   :disabled t
   :demand t
@@ -124,10 +128,6 @@
   ;; see https://github.com/hlissner/doom-emacs/blob/develop/modules/ui/modeline/README.org#the-right-side-of-the-modeline-is-cut-off
   ;; (setq all-the-icons-scale-factor 1.1)
   )
-
-(use-package nerd-icons
-  :custom
-  (emacs-nerd-icons-font-family "Hack Nerd Font")) ;; The Nerd Font you want to use in GUI
 
 (use-package whitespace
   :disabled t

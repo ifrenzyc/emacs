@@ -12,11 +12,12 @@
   :no-require t
   :commands swiper-from-isearch
   :bind
-  (("M-s ."   . isearch-forward-symbol-at-point)
+  (
    ;; "C-s"     . isearch-forward-regexp
    ("C-r"     . isearch-backward-regexp)
    ("C-M-s"   . isearch-forward-other-window)
    ("C-M-r"   . isearch-backward-other-window)
+   ("M-s ."   . isearch-forward-symbol-at-point)
    ("M-s SPC" . xah-search-current-word))
   (:map isearch-mode-map
         ("C-;" . swiper-from-isearch)
@@ -357,12 +358,12 @@ active region use it instead."
 (use-package color-rg
   :ensure-system-package (rg . "brew install ripgrep")
   :load-path "localelpa/color-rg"
+  :bind
+  ("M-s M-s" . color-rg-search-project)
   :commands (color-rg-mode
              color-rg-search-input
              color-rg-search-symbol
-             color-rg-search-project)
-  :bind
-  ("M-s M-s" . color-rg-search-project))
+             color-rg-search-project))
 
 ;; *About:* 多文件查找替换
 ;; - https://github.com/mhayashi1120/Emacs-wgrep

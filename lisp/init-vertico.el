@@ -197,3 +197,4 @@ parses its input."
   (all-the-icons-completion-mode))
 
 (provide 'init-vertico)
+;;; init-vertico.el ends here
