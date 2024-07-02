@@ -10,31 +10,39 @@
 (use-package pixel-scroll
   :ensure nil
   ;; :bind
-  ;; (([remap scroll-up-command]    . +pixel-scroll-up-command)
-  ;; ([remap scroll-down-command]  . +pixel-scroll-down-command)
-  ;; ([remap recenter-top-bottom]  . +pixel-recenter-top-bottom)
+  ;; (([remap scroll-up-command]    . fk/pixel-scroll-up-command)       ; C-v
+  ;; ([remap scroll-down-command]  . fk/pixel-scroll-down-command)      ; M-v
+  ;; ([remap recenter-top-bottom]  . fk/pixel-recenter-top-bottom)      ; C-l
   ;; ("C-M-v"   . sloth/scroll-other-window-up)
   ;; ("C-M-S-v" . sloth/scroll-other-window-down))
   :custom
   (pixel-scroll-precision-interpolation-factor 1.0)
   (pixel-scroll-precision-interpolate-page t)
+  (scroll-conservatively 101)          ; smooth scrolling
   :init
   (pixel-scroll-precision-mode t)
   :config
   ;; scroll less than default
   (defvar fk/default-scroll-lines 15)
+
+  ;; (defun fk/scroll (orig-func &optional arg)
+  ;;   "Scroll up `fk/default-scroll-lines' lines (probably less than default)."
+  ;;   (apply orig-func (list (or arg fk/default-scroll-lines))))
+
+  ;; (advice-add 'scroll-up :around 'fk/scroll)
+  ;; (advice-add 'scroll-down :around 'fk/scroll)
   
-  (defun +pixel-scroll-up-command ()
+  (defun fk/pixel-scroll-up-command ()
     "Similar to `scroll-up-command' but with pixel scrolling."
     (interactive)
     (pixel-scroll-precision-interpolate (- (* fk/default-scroll-lines (line-pixel-height)))))
 
-  (defun +pixel-scroll-down-command ()
+  (defun fk/pixel-scroll-down-command ()
     "Similar to `scroll-down-command' but with pixel scrolling."
     (interactive)
     (pixel-scroll-precision-interpolate (* fk/default-scroll-lines (line-pixel-height))))
 
-  (defun +pixel-recenter-top-bottom ()
+  (defun fk/pixel-recenter-top-bottom ()
     "Similar to `recenter-top-bottom' but with pixel scrolling."
     (interactive)
     (let* ((current-row (cdr (nth 6 (posn-at-point))))

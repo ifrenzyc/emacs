@@ -160,7 +160,8 @@
 ;; @see - https://github.com/VernonGrant/sidekick.el
 (use-package sidekick
   :load-path "localelpa/sidekick"
-  :commands (sidekick-at-point sidekick-focus-toggle sidekick-search-for-literal))
+  ;;:commands (sidekick-at-point sidekick-focus-toggle sidekick-search-for-literal)
+  )
 
 (use-package indent-bars
   :load-path "localelpa/indent-bars"

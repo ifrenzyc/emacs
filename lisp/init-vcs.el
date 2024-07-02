@@ -265,6 +265,8 @@
 ;;   :config
 ;;   (global-blamer-mode 1))
 
+;; (use-package sideline-blame)
+
 ;; Display transient in child frame
 ;; (use-package transient-posframe
 ;;   :diminish

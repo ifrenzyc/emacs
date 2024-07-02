@@ -79,14 +79,19 @@
   :init
   (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht))))))
 
+(use-package sideline-lsp
+  :disabled t
+  :hook (lsp-mode . sideline-mode))
+
 (use-package lsp-ui
   :after lsp-mode
   :bind
-  (("C-c u" . lsp-ui-imenu)
-   :map lsp-ui-mode-map
-   ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)  ; [M-.]
-   ([remap xref-find-references]  . lsp-ui-peek-find-references)   ; [M-?]
-   ("M-RET"  . lsp-ui-sideline-apply-code-actions))
+  (:map lsp-mode-map
+        ("C-c u" . lsp-ui-imenu))
+  (:map lsp-ui-mode-map
+        ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)   ; [M-.]
+        ([remap xref-find-references]  . lsp-ui-peek-find-references)    ; [M-?]
+        ("M-RET"  . lsp-ui-sideline-apply-code-actions))
   :custom-face
   (lsp-ui-sideline-code-action ((t (:inherit warning))))
   :hook

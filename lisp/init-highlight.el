@@ -94,7 +94,6 @@ FACE defaults to inheriting from default and highlight."
    ("M-N"   . symbol-overlay-switch-forward)
    ("M-P"   . symbol-overlay-switch-backward)
    ("M-C"   . symbol-overlay-remove-all)
-   ("s-."   . symbol-overlay-transient)
    ([M-f3]  . symbol-overlay-remove-all))
   :diminish
   :functions (turn-off-symbol-overlay turn-on-symbol-overlay)
@@ -121,6 +120,9 @@ FACE defaults to inheriting from default and highlight."
   (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay)
 
   (use-package transient
+    :bind
+    (:map symbol-overlay-mode-map
+          ("M-." . symbol-overlay-transient))
     :custom
     ((transient-levels-file (concat yc/cache-dir "/transient/levels.el"))
      (transient-values-file (concat yc/cache-dir "/transient/values.el"))

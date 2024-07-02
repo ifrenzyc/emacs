@@ -22,11 +22,11 @@
         ("C-c C-o"   . embark-export)
         ("C-c C-c"   . embark-collect)
         :map vertico-map
-        ("RET"   . vertico-directory-enter)
-        ("DEL"   . vertico-directory-delete-char)
-        ("M-DEL" . vertico-directory-delete-word)
-        ("M-P"   . vertico-repeat-previous)
-        ("M-N"   . vertico-repeat-next)
+        ("RET"        . vertico-directory-enter)
+        ("DEL"        . vertico-directory-delete-char)
+        ("M-DEL"      . vertico-directory-delete-word)
+        ("M-P"        . vertico-repeat-previous)
+        ("M-N"        . vertico-repeat-next)
         ("S-<prior>"  . vertico-repeat-previous)
         ("S-<next>"   . vertico-repeat-next))
   :custom
@@ -159,9 +159,11 @@ parses its input."
 (use-package consult
   :bind
   (([remap imenu]              . consult-imenu)
-   ([remap switch-to-buffer]   . consult-buffer)
-   ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
-   ([remap goto-line]          . consult-goto-line)
+   ([remap switch-to-buffer]   . consult-buffer)                          ; C-x b
+   ([remap switch-to-buffer-other-window] . consult-buffer-other-window)  ; C-x 4 b
+   ([remap switch-to-buffer-other-frame]  . consult-buffer-other-frame)   ; C-x 5 b
+   ([remap goto-line]          . consult-goto-line)                       ; M-g g
+   ([remap yank-pop]           . consult-yank-pop)                        ; M-y
    ([remap bookmark-jump]      . consult-bookmark)
    ([remap recentf-open-files] . consult-recent-file))
   :config
@@ -174,10 +176,15 @@ parses its input."
   :custom
   (consult-fontify-preserve nil)
   (consult-async-min-input 2)
+  (consult-narrow-key ">")
   (consult-async-refresh-delay 0.15)
   (consult-async-input-throttle 0.2)
   (consult-async-input-debounce 0.1)
-  (consult-project-root-function #'projectile-project-root))
+  (completion-in-region-function #'consult-completion-in-region)
+  (consult-project-root-function #'projectile-project-root)
+  ;; Use `consult-xref' for `xref-find-references' and `xref-find-definitions'
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref))
 
 (use-package consult-git-log-grep
   :custom
@@ -185,7 +192,10 @@ parses its input."
 
 (use-package consult-dir)
 (use-package consult-flycheck)
-(use-package consult-lsp)
+(use-package consult-lsp
+  :bind
+  (:map lsp-mode
+        ([remap xref-find-apropos] . consult-lsp-symbos)))
 (use-package consult-org-roam)
 (use-package consult-projectile)
 

@@ -30,6 +30,22 @@
   :hook
   (help-mode . page-break-lines-mode))
 
+(use-package sideline
+  :disabled t
+  :custom
+  (sideline-backends-left-skip-current-line t)   ; don't display on current line (left)
+  (sideline-backends-right-skip-current-line t)  ; don't display on current line (right)
+  (sideline-order-left 'down)                    ; or 'up
+  (sideline-order-right 'up)                     ; or 'down
+  (sideline-format-left "%s   ")                 ; format for left aligment
+  (sideline-format-right "   %s")                ; format for right aligment
+  (sideline-priority 100)                        ; overlays' priority
+  (sideline-delay 0.5)                           ; delay sideline
+  (sideline-display-backend-name t)              ; display the backend name
+  (sideline-backends-right '((sideline-lsp      . up)
+                             ;; (sideline-blame    . down)
+                             (sideline-flycheck . down))))
+
 (use-package nerd-icons
   :custom
   (emacs-nerd-icons-font-family "Hack Nerd Font")) ;; The Nerd Font you want to use in GUI

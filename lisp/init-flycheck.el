@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 (use-package flycheck
   :commands global-flycheck-mode
   :bind
@@ -74,6 +74,12 @@
 
 (use-package flycheck-inline
   :hook (flycheck-mode . flycheck-inline-mode))
+
+(use-package sideline-flycheck
+  :disabled t
+  :hook
+  ((flycheck-mode . sideline-flycheck-setup)
+   (flycheck-mode . sideline-mode)))
 
 (use-package flycheck-posframe
   :hook
