@@ -85,3 +85,6 @@
 [submodule "localelpa/awesome-tab"]
 	path = localelpa/awesome-tab
 	url = git@github.com:manateelazycat/awesome-tab.git
+[submodule "localelpa/outline-yaml.el"]
+	path = localelpa/outline-yaml.el
+	url = git@github.com:jamescherti/outline-yaml.el.git
