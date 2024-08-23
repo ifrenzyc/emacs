@@ -1,1 +1,0 @@
-/Users/yangc/.dotfiles/emacs/bin/reveal.js-3.7.0
