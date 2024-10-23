@@ -76,9 +76,6 @@
 [submodule "localelpa/treemacs-nerd-icons"]
 	path = localelpa/treemacs-nerd-icons
 	url = https://github.com/ifrenzyc/treemacs-nerd-icons.git
-[submodule "localelpa/indent-bars"]
-	path = localelpa/indent-bars
-	url = git@github.com:jdtsmith/indent-bars.git
 [submodule "localelpa/quickroam"]
 	path = localelpa/quickroam
 	url = git@github.com:meedstrom/quickroam.git
