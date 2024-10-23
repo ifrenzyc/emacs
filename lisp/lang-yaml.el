@@ -13,5 +13,11 @@
   :hook
   (yaml-ts-mode . lsp))
 
+(use-package outline-yaml
+  :load-path "localelpa/outline-yaml.el"
+  :hook
+  ((yaml-mode . outline-yaml-minor-mode)
+   (yaml-ts-mode . outline-yaml-minor-mode)))
+
 (provide 'lang-yaml)
 ;;; lang-yaml.el ends here
