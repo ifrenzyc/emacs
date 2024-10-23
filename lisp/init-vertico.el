@@ -165,7 +165,14 @@ parses its input."
    ([remap goto-line]          . consult-goto-line)                       ; M-g g
    ([remap yank-pop]           . consult-yank-pop)                        ; M-y
    ([remap bookmark-jump]      . consult-bookmark)
-   ([remap recentf-open-files] . consult-recent-file))
+   ([remap recentf-open-files] . consult-recent-file)
+   ("M-s f"                    . consult-fd)
+   ("M-s l"                    . consult-line)
+   ("M-s M-r"                  . consult-ripgrep)
+   ("H-v" . (lambda ()
+              (interactive)
+              (call-process-shell-command "open /Applications/Paste.app")
+              )))
   :config
   (with-no-warnings
     (consult-customize consult-ripgrep consult-git-grep consult-grep

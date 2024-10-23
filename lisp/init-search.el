@@ -377,6 +377,11 @@ active region use it instead."
 
 (use-package ripgrep :commands ripgrep-regexp)
 
+(use-package find-file-rg
+  :bind
+  ("C-c f"   . find-file-rg)
+  ("C-c g"   . find-file-rg-at-point))
+
 (use-package deadgrep)
 
 ;; https://github.com/winterTTr/ace-jump-mode

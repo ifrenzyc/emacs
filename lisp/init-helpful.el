@@ -92,8 +92,8 @@
 (use-package info-colors)
 
 (use-package helpful
-  :bind
-  ("C-h" . helpful-hydra/body)
+  ;; :bind
+  ;; ("C-h" . helpful-hydra/body)
   :pretty-hydra
   ((:color teal :quit-key "C-g")
    ("Helpful"

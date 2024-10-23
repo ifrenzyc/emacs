@@ -17,7 +17,7 @@
 
 (use-package company
   :bind
-  ("C-." . company-complete)
+  ;; ("C-." . company-complete)
   (:map company-active-map
         ("<tab>" . company-complete-selection)
         ("C-n" . company-select-next)

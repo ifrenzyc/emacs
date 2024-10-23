@@ -18,7 +18,8 @@
         ([f3]      . next-buffer)
         ([f4]      . org-roam-dailies-capture-today)
         ([f6]      . hydra-toggles/body)
-        ([f8]      . treemacs)
+        ([f8]      . treemacs-select-window)
+        ("M-0"     . treemacs)
         ("M-SPC"   . yc/turn-off-input-method)
         ("H-SPC"   . yc/turn-on-rime-input-method))
   :hook
@@ -102,7 +103,8 @@
         ([f3]    . next-buffer)
         ([f4]    . org-roam-dailies-capture-today)
         ([f6]    . hydra-toggles/body)
-        ([f8]    . treemacs))
+        ([f8]    . treemacs-select-window)
+        ("M-0"   . treemacs))
   :commands (multi-vterm multi-vterm-project)
   :config
   (defalias 'mt 'multi-vterm-project))
