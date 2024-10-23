@@ -20,7 +20,7 @@
   (split-window-vertically)
   (other-window 1)
   (switch-to-next-buffer)
-  (switch-to-buffer nil))
+  (consult-buffer))
 
 (defun yc/split-window-horizontally ()
   "Split the window horizontally and display the previous buffer."
@@ -28,7 +28,7 @@
   (split-window-horizontally)
   (other-window 1)
   (switch-to-next-buffer)
-  (switch-to-buffer nil))
+  (consult-buffer))
 
 (defun hydra-move-splitter-left (arg)
   "Move window splitter left."
