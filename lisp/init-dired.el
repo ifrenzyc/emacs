@@ -109,8 +109,7 @@
 ;;              (let ((fn (dired-get-file-for-visit)))
 ;;                (start-process "default-app" nil "open" fn)))))
 
-(use-package dired-hacks
-  :load-path "localelpa/dired-hacks")
+(use-package dired-hacks-utils)
 
 ;; Show subtree when pressing =i=
 (use-package dired-subtree
