@@ -8,8 +8,8 @@
 ;;; Code:
 (use-package vue-mode
   :mode ("\\.vue\\'" . vue-mode)
-  ;; :custom-face
-  ;; (mmm-default-submode-face :background nil)
+  :custom-face
+  (mmm-default-submode-face ((t (:background nil))))
   :custom
   ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
   ((mmm-submode-decoration-level 3)
