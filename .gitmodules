@@ -52,9 +52,6 @@
 [submodule "localelpa/fixed-pitch-mode"]
 	path = localelpa/fixed-pitch-mode
 	url = git@github.com:cstby/fixed-pitch-mode.git
-[submodule "localelpa/dired-hacks"]
-	path = localelpa/dired-hacks
-	url = git@github.com:Fuco1/dired-hacks.git
 [submodule "localelpa/preview-org-html-mode"]
 	path = localelpa/preview-org-html-mode
 	url = git@github.com:jakebox/preview-org-html-mode.git
