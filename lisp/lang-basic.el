@@ -164,9 +164,10 @@
   )
 
 (use-package indent-bars
-  :load-path "localelpa/indent-bars"
   :init
   (require 'indent-bars-ts)
+  :custom-face
+  (indent-bars-face ((t (:height 1.08))))
   :custom
   (indent-bars-treesit-support t)
   (indent-bars-treesit-ignore-blank-lines-types '("module"))

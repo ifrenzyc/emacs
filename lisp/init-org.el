@@ -272,9 +272,9 @@
 
   (defun yc/copy-idlink-to-clipboard ()
     "Copy an ID link with the headline to killring, if no ID is there then create a new unique
-ID.  This function works only in org-mode or org-agenda buffers. 
+ID.  This function works only in org-mode or org-agenda buffers.
 
-The purpose of this function is to easily construct id:-links to 
+The purpose of this function is to easily construct id:-links to
 org-mode items. If its assigned to a key it saves you marking the
 text and copying to the killring."
     (interactive)
@@ -338,6 +338,7 @@ text and copying to the killring."
 ;; - https://github.com/jethrokuan/.emacs.d/blob/master/config.org#org-download
 ;; - https://coldnew.github.io/hexo-org-example/2018/05/22/use-org-download-to-drag-image-to-emacs/
 (use-package org-download
+  :disabled t
   :ensure-system-package (pngpaste . "brew install pngpaste")
   :after org
   :hook ((dired-mode . org-download-enable)

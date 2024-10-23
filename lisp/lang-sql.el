@@ -11,7 +11,7 @@
   :hook (sql-mode   . lsp))
 
 (use-package sqlformat
-  :ensure-system-package (sqlformat . "pip install sqlparse")
+  :ensure-system-package (sqlformat . "brew install sqlparse")
   :bind
   (:map sql-mode-map
         ("C-c C-f" . sqlformat)))

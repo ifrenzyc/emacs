@@ -8,8 +8,9 @@
 (use-package shell-mode
   :ensure nil
   :hook
-  (sh-mode . lsp)
-  (after-save-hook . executable-make-buffer-file-executable-if-script-p))
+  ((sh-mode . lsp)
+   (bash-ts-mode . lsp)
+   (after-save-hook . executable-make-buffer-file-executable-if-script-p)))
 
 (use-package company-shell
   :after (company shell-mode)

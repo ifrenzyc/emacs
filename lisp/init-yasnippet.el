@@ -21,6 +21,7 @@
   (yas-global-mode t))
 
 (use-package yasnippet-snippets
+  :disabled t
   :after yasnippet)
 
 (provide 'init-yasnippet)

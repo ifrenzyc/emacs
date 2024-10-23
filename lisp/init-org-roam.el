@@ -6,7 +6,8 @@
 ;; 
 
 ;;; Code:
-(use-package emacsql-sqlite-builtin)
+(use-package emacsql
+  :init (require 'emacsql-sqlite-builtin))
 
 ;; org-roam-capture 主要参考： /Users/yangc/src/emacs.d/ody55eus-doom-emacs.d/doom/Emacs.org
 (use-package org-roam
@@ -41,7 +42,7 @@
   (org-roam-completion-system 'ivy)
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
-      :if-new (file+head "${slug}.txt"
+      :if-new (file+head "Knowledge/${slug}.txt"
                          "#+TITLE: ${title}\n#+ROAM_TAGS:\n#+ROAM_KEY:\n")
       :unnarrowed t)
      ("p" "personal" plain "%?" :target
@@ -54,7 +55,7 @@
       :unnarrowed t)
      ("c" "default" plain
       "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.txt"
+      :target (file+head "Knowledge/%<%Y%m%d%H%M%S>-${slug}.txt"
                          "#+title: ${title}\n#+created: %U\n#+last_modified: %U\n\n")
       :unnarrowed t)
      ("r" "ref" plain
