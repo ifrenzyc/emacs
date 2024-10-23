@@ -35,7 +35,10 @@
   (org-time-grid ((t (:height 160))))
   (org-todo ((t (:height 160))))
   (org-done ((t (:height 160))))
+  (org-imminent-deadline ((t (:height 160))))
   (org-agenda-calendar-event ((t (:height 160))))
+  (org-upcoming-distant-deadline ((t (:height 160))))
+  (org-upcoming-deadline ((t (:height 160))))
   (org-agenda-current-time ((t (:height 160))))
   :init
   (setq org-super-agenda-groups
@@ -493,7 +496,6 @@
            "* %? :IDEA:\n%t" :clock-in t :clock-resume t)
           ("b" "Blog idea" entry (file+headline org-default-notes-file "Blog Topics:")
            "* %?\n%T" :prepend t)
-          
           ;;  "* %?\nEntered on %U\n  %i\n  %a")
           ("j" "Journal")
           ("jd" "Diary" entry (file+olp+datetree "diary.txt")

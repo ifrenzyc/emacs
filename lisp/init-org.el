@@ -173,8 +173,7 @@
   :hook
   (org-mode . (lambda ()
                 (text-scale-increase 1)
-                (fixed-pitch-mode t)
-                (setq-local line-spacing 0.5)
+                (setq-local line-spacing 0.7)
                 (setq-local truncate-lines t)
                 (setq-local word-wrap nil)))
   :config
@@ -184,6 +183,8 @@
    ;; 单独给 org-table 设一个等宽字体
    ;; 目前使用是有问题的，英文字符是按照设置的 Sarasa 字体，但是中文不是，导致还是不能正确对齐
    ;; Org table font
+   ;; Sarasa Gothic SC
+   ;; LXGW WenKai Mono GB
    '(org-table ((t (:family "Sarasa Gothic SC" :height 160)))))
   
   (defhydra hydra-org (:color red :columns 3)

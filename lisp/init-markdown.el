@@ -24,12 +24,17 @@
   (:map markdown-mode-map
         ([f12] . markdown-live-preview-mode))
   :hook
-  ((markdown-mode . lsp))
+  ((markdown-mode . lsp)
+   (markdown-mode . (lambda ()
+                      (text-scale-increase 1)
+                      (setq-local line-spacing 0.5)
+                      (setq-local truncate-lines t)
+                      (setq-local word-wrap nil))))
   :commands
   (markdown-mode gfm-mode)
   :ensure-system-package (multimarkdown . "brew install multimarkdown")
   :custom-face
-  (markdown-table-face ((t (:family "Sarasa Mono SC" :size user/font-size))))
+  (markdown-table-face ((t (:family "LXGW Bright Code GB" :size 160))))
   ;; (markdown-header-delimiter-face ((t (:foreground "#616161" :height 0.9))))
   ;; (markdown-header-face-1 ((t (:height 1.6  :foreground "#A3BE8C" :weight extra-bold :inherit markdown-header-face))))
   ;; (markdown-header-face-2 ((t (:height 1.4  :foreground "#EBCB8B" :weight extra-bold :inherit markdown-header-face))))

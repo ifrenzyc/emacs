@@ -15,10 +15,10 @@
 ;; Hack
 ;; LXGW WenKai Mono
 ;; 中文的字体
-(defvar user/cjk-font "LXGW WenKai Mono"
+(defvar user/cjk-font "LXGW WenKai Mono GB"
   "Default font for CJK characters.")
 
-(defvar user/latin-font "LXGW WenKai Mono"
+(defvar user/latin-font "JetBrains Mono"
   "Default font for Latin characters.")
 
 (defvar user/unicode-font "Hack"
@@ -71,6 +71,7 @@
 ;; (setq-default line-spacing 0.2)
 
 (use-package fixed-pitch
+  :disabled t
   :load-path "localelpa/fixed-pitch-mode"
   :custom
   (fixed-pitch-dont-change-cursor t)
