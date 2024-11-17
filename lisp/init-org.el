@@ -185,7 +185,8 @@
    ;; Org table font
    ;; Sarasa Gothic SC
    ;; LXGW WenKai Mono GB
-   '(org-table ((t (:family "Sarasa Gothic SC" :height 160)))))
+   '(org-drawer ((t (:family "Cascadia Code" :height 160))))
+   '(org-table ((t (:family "LXGW Bright Code GB" :height 160)))))
   
   (defhydra hydra-org (:color red :columns 3)
     "Org Mode Movements"
