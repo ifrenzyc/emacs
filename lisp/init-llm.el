@@ -74,11 +74,11 @@
             ellama-provider (cdr (car ellama-providers))))
   
   (setopt ellama-provider (make-llm-ollama
-                           :chat-model "llama3"
-                           :embedding-model "llama3:latest"))
+                           :chat-model "llama3.1"
+                           :embedding-model "llama3.1:latest"))
   (setopt ellama-naming-provider (make-llm-ollama
-                                  :chat-model "qwen:14b"
-                                  :embedding-model "qwen:14b"))
+                                  :chat-model "qwen2.5:7b"
+                                  :embedding-model "qwen2.5:7b"))
   ;; Translation llm provider
   (setopt ellama-translation-provider (make-llm-ollama
                                        :chat-model "mistral"
@@ -109,11 +109,11 @@
   :custom
   (gptel-default-mode 'org-mode)
   :config
-  (setq gptel-model "llama3:latest"
+  (setq gptel-model "llama3.1:latest"
         gptel-backend (gptel-make-ollama "Ollama"
                         :host "localhost:11434"
                         :stream t
-                        :models '("llama3:latest"))))
+                        :models '("llama3.1:latest"))))
 
 (use-package copilot
   :disabled t
