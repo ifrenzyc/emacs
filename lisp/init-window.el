@@ -71,8 +71,8 @@
 (use-package window
   :ensure nil
   :bind
-  (([f2]           . previous-buffer)
-   ([f3]           . next-buffer)
+  (;; ([f2]           . previous-buffer)
+   ;; ([f3]           . next-buffer)
    ("s-<left>"     . hydra-move-splitter-left)
    ("s-<right>"    . hydra-move-splitter-right)
    ("s-<up>"       . hydra-move-splitter-up)

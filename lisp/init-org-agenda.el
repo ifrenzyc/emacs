@@ -73,7 +73,13 @@
   :bind
   (("C-c a"   . org-agenda)
    ("C-c c"   . org-capture)
-   ("C-c C-t" . yc/org-todo-force-notes))
+   ("C-c C-t" . yc/org-todo-force-notes)
+   ([f6]      . (lambda ()
+                  (interactive)
+                  (org-capture nil "m")))
+   ([f7]      . (lambda ()
+                  (interactive)
+                  (org-capture nil "n"))))
   :mode-hydra
   (org-agenda-mode
    (:title "Org Agenda Mode" :color pink :pre (setq which-key-inhibit t) :post (setq which-key-inhibit nil) :hint nil :separator "═")

@@ -25,8 +25,11 @@
   :delight org-mode "Org"
   :bind
   (("H-c"     . org-capture)
+   ("H-d"     . (lambda ()
+                  (interactive)
+                  (org-capture nil "d")))
    ([f5]      . yc/copy-idlink-to-clipboard)
-   ([f7]      . org-redisplay-inline-images)
+   ;; ([f7]      . org-redisplay-inline-images)
    ("M-s M-R" . yc/counsel-rg-in-itsycnotes))
   (:map org-mode-map
         ("C-c C-j"   . counsel-org-goto)
