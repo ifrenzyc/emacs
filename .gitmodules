@@ -82,3 +82,6 @@
 [submodule "localelpa/outline-yaml.el"]
 	path = localelpa/outline-yaml.el
 	url = git@github.com:jamescherti/outline-yaml.el.git
+[submodule "localelpa/LSP-copilot"]
+	path = localelpa/LSP-copilot
+	url = git@github.com:TerminalFi/LSP-copilot.git
