@@ -26,6 +26,8 @@ lisp/*.elc
 recentf
 smex-items
 amx-items
+savehist
+elgrep-data.el
 tramp
 transient/
 tutorial/
