@@ -4,7 +4,7 @@
 ;; 
 ;; 
 
-;;; Code
+;;; Code:
 
 (use-package rust-mode
   :mode ("\\.rs\\'" . rust-mode)
@@ -62,3 +62,4 @@
   (rust-mode . lsp))
 
 (provide 'lang-rust)
+;;; lang-rust.el ends here

@@ -226,6 +226,7 @@
 
 ;; Start server
 (use-package server
+  :disabled t
   :ensure nil
   :hook
   (after-init . server-mode))

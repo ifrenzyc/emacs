@@ -6,6 +6,7 @@
 
 ;;; Code:
 (use-package doom-themes
+  :disabled t
   :demand t
   ;; :init
   ;; Global settings (defaults)
@@ -54,6 +55,12 @@
         modus-themes-org-blocks 'gray-background)
   :config
   (modus-themes-select 'modus-operandi-tinted))
+
+(use-package ef-themes
+  :disabled t
+  :demand t
+  :config
+  (ef-themes-select 'ef-eagle))
 
 ;; (use-package tron-legacy-theme
 ;;   :custom

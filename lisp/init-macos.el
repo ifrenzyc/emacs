@@ -64,7 +64,8 @@
                                          'fullboth 'maximized))
 
 ;; integrate use-package with =:ensure-system-package=
-(use-package use-package-ensure-system-package)
+(use-package use-package-ensure-system-package
+  :disabled t)
 
 ;; delete files by moving to trash in macOS
 ;; https://github.com/lunaryorn/osx-trash.el

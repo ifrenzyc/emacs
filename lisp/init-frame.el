@@ -8,11 +8,13 @@
 (require 'init-funcs)
 
 (use-package nameframe
+  :disabled t
   ;; :bind
   ;; ("M-P" . nameframe-switch-frame)
   )
 
 (use-package nameframe-projectile
+  :disabled t
   :after projectile
   :config
   (nameframe-projectile-mode t))
