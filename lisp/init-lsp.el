@@ -79,6 +79,28 @@
   :init
   (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht))))))
 
+(use-package lsp-copilot
+  :load-path ("localelpa/lsp-copilot")
+  :hook
+  ((tsx-ts-mode
+    js-ts-mode
+    typescript-mode
+    typescript-ts-mode
+    java-mode
+    java-ts-mode
+    rjsx-mode
+    less-css-mode
+    web-mode
+    python-ts-mode
+    rust-mode
+    rustic-mode
+    rust-ts-mode
+    toml-ts-mode
+    conf-toml-mode
+    bash-ts-mode) . lsp-copilot-mode)
+  :config
+  (setq lsp-copilot-user-languages-config  "/Users/yangc/.emacs.d/localelpa/lsp-copilot/languages.toml"))
+
 (use-package sideline-lsp
   :disabled t
   :hook (lsp-mode . sideline-mode))

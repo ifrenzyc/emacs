@@ -12,8 +12,9 @@
 ;; JetBrains Mono
 ;; Roboto Mono
 ;; IBM Plex Mono
+;; IBM Plex Sans SC
 ;; Hack
-;; LXGW WenKai Mono
+;; LXGW WenKai Mono GB
 ;; 中文的字体
 (defvar user/cjk-font "LXGW WenKai Mono GB"
   "Default font for CJK characters.")
