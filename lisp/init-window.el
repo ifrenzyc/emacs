@@ -252,6 +252,8 @@
   :bind
   (("C-x w ." . hydra-rotate-window/body)
    ("C-x M-w" . rotate-window)
+   ("s-_"     . rotate:even-vertical)
+   ("s-|"     . rotate:even-horizontal)
    ("C-x M-r" . rotate-layout))
   :init
   (defhydra hydra-rotate-window ()
@@ -395,6 +397,7 @@
           (list-environment-mode :select t :size 0.3 :align 'below :autoclose t)
           (tabulated-list-mode :size 0.4 :align 'below))))
 
+;;================================================================================
 ;; eyebrowse 是一个类似 i3wm 的平铺窗口管理器，可以设置多个工作空间。
 ;; 目前是使用 =<f5>= 、 =<f6>= 、 =<f7>= 、 =<f8>= 进行工作空间切换。
 ;; *注意：* 这个的使用和 Winner Mode 有点冲突，通过 Winner Mode 进行恢复窗口时，会恢复到其他工作空间的窗口。
@@ -439,6 +442,7 @@
   ;; :straight (:host github :repo "jcs-elpa/transwin")
   :config
   (transwin-toggle-transparent-frame))
+;;================================================================================
 
 (provide 'init-window)
 ;;; init-window.el ends here

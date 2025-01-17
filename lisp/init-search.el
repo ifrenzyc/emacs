@@ -332,16 +332,6 @@ active region use it instead."
 
 (use-package fzf)
 
-;; fuzzy file finder
-(use-package fiplr
-  :disabled t
-  :bind
-  ("C-c p p" . fiplr-find-file)
-  :config
-  (setq fiplr-root-markers '(".git" ".svn"))
-  (setq fiplr-ignored-globs '((directories (".git" ".svn" "node_modules" "elpa" "localelpa"))
-                              (files ("*.jpg" "*.png" "*.zip" "*~")))))
-
 ;; 基于 Silver Searcher 的多文件内容查找
 ;; - https://github.com/Wilfred/ag.el
 (use-package ag
@@ -384,6 +374,17 @@ active region use it instead."
 
 (use-package deadgrep)
 
+;;================================================================================
+;; fuzzy file finder
+(use-package fiplr
+  :disabled t
+  :bind
+  ("C-c p p" . fiplr-find-file)
+  :config
+  (setq fiplr-root-markers '(".git" ".svn"))
+  (setq fiplr-ignored-globs '((directories (".git" ".svn" "node_modules" "elpa" "localelpa"))
+                              (files ("*.jpg" "*.png" "*.zip" "*~")))))
+
 ;; https://github.com/winterTTr/ace-jump-mode
 (use-package ace-jump-mode
   :disabled t
@@ -422,6 +423,7 @@ active region use it instead."
   :config
   (unless (require 'fuz-core nil t)
     (fuz-build-and-load-dymod)))
+;;================================================================================
 
 (provide 'init-search)
 ;;; init-search.el ends here

@@ -15,6 +15,7 @@
   ((olivetti-body-width 89)
    (olivetti-hide-mode-line t)))
 
+;;================================================================================
 ;; add view mode keybindings
 ;; - https://gist.github.com/ivan-krukov/63a586f2121519ca51b201c634402a84
 (use-package view
@@ -57,6 +58,7 @@
   :custom
   ((writeroom-restore-window-config t)
    (writeroom-width 89)))
+;;================================================================================
 
 (provide 'init-reader)
 ;;; init-reader.el ends here

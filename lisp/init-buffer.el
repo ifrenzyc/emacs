@@ -69,6 +69,7 @@
   :hook
   (after-init . unmodified-buffer-mode))
 
+;;================================================================================
 (use-package all-the-icons-ibuffer
   :disabled t
   :hook
@@ -76,6 +77,7 @@
   :init
   ;; Use human readable file size in ibuffer.
   (setq all-the-icons-ibuffer-human-readable-size t))
+;;================================================================================
 
 (provide 'init-buffer)
 ;;; init-buffer.el ends here

@@ -146,6 +146,7 @@ there's a region, all lines that region covers will be duplicated."
      (("s-o" embark-act)))))
 
 ;; 选中文本后，直接输入就可以，省去了删除操作。这在其他文本编辑器里都是标配，建议打开。
+;; delsel --> delete-selection
 (use-package delsel
   :ensure nil
   :hook

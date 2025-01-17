@@ -35,6 +35,7 @@
   :config
   (set-face-attribute 'vundo-default nil :family "Symbola"))
 
+;;================================================================================
 (use-package undo-tree
   :disabled t
   :demand t
@@ -59,6 +60,7 @@
 ;;   (define-key evil-normal-state-map "\C-r" 'undo-fu-only-redo))
 
 ;; (use-package undo-fu-session)
+;;================================================================================
 
 (provide 'init-undo-redo)
 ;;; init-undo-redo.el ends here

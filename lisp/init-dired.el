@@ -156,6 +156,7 @@
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
+;;================================================================================
 ;; (use-package dired-rainbow
 ;;   :init
 ;;   (eval-after-load 'dired '(require 'dired-rainbow))
@@ -219,5 +220,6 @@
 (use-package dired-ranger
   :disabled t
   :after (dired))
+;;================================================================================
 
 (provide 'init-dired)

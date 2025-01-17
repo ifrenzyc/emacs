@@ -5,6 +5,21 @@
 ;; 
 
 ;;; Code:
+
+(use-package modus-themes
+  :demand t
+  :init
+  (setq modus-themes-common-palette-overrides
+        '((fg-heading-2 fg-main)))
+
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs nil
+        modus-themes-org-blocks 'gray-background)
+  :config
+  (modus-themes-select 'modus-operandi-tinted))
+
+;;================================================================================
 (use-package doom-themes
   :disabled t
   :demand t
@@ -42,19 +57,6 @@
   ;; Corrects (and improves) org-mode's native fontification.
   ;; (doom-themes-org-config)
   )
-
-(use-package modus-themes
-  :demand t
-  :init
-  (setq modus-themes-common-palette-overrides
-        '((fg-heading-2 fg-main)))
-
-  ;; Add all your customizations prior to loading the themes
-  (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs nil
-        modus-themes-org-blocks 'gray-background)
-  :config
-  (modus-themes-select 'modus-operandi-tinted))
 
 (use-package ef-themes
   :disabled t
@@ -106,6 +108,7 @@
   (vscode-dark-plus-box-org-todo nil)
   :config
   (load-theme 'vscode-dark-plus t))
+;;================================================================================
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

@@ -90,6 +90,7 @@
     (make-frame)
     (vterm "Untitled-Vterm")))
 
+;;================================================================================
 (use-package vterm-toggle
   :disabled t
   :commands (vterm-toggle vterm-toggle-cd vterm)
@@ -114,6 +115,7 @@
   :commands (multi-vterm multi-vterm-project)
   :config
   (defalias 'mt 'multi-vterm-project))
+;;================================================================================
 
 (provide 'init-vterm)
 ;;; init-vterm.el ends here

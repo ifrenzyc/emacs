@@ -189,10 +189,12 @@
 (use-package go-rename
   :after go-ts-mode)
 
+;;================================================================================
 (use-package go-snippets
   :disabled t
   :after (go-ts-mode)
   :init (go-snippets-initialize))
+;;================================================================================
 
 (provide 'lang-golang)
 ;;; lang-golang.el ends here

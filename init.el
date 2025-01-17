@@ -224,11 +224,13 @@
   (write-region "" nil custom-file))
 (load custom-file)
 
+;;================================================================================
 ;; Start server
 (use-package server
   :disabled t
   :ensure nil
   :hook
   (after-init . server-mode))
+;;================================================================================
 
 ;;; init.el ends here

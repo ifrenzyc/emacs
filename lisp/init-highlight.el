@@ -400,6 +400,7 @@ If there is only one overlay at point, just return it, no matter region or symbo
                           :inherit nil)))
   (aorst/display-fill-column-indicator-setup-faces))
 
+;;================================================================================
 (use-package highlight-symbol
   :disabled t
   :hook
@@ -435,6 +436,7 @@ If there is only one overlay at point, just return it, no matter region or symbo
 ;; (use-package beacon
 ;;   :init
 ;;   (beacon-mode +1))
+;;================================================================================
 
 (provide 'init-highlight)
 ;;; init-highlight.el ends here

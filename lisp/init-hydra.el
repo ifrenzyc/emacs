@@ -240,6 +240,7 @@
                      (symbol-name mode)
                      " commands"))))
 
+;;================================================================================
 ;; (use-package hydra-posframe
 ;;   :straight (:host github :repo "Ladicle/hydra-posframe")
 ;;   :after (hydra posframe)
@@ -263,6 +264,7 @@
 ;;       (list (list 'my/posframe #'my/hydra-posframe-show #'my/hydra-posframe-hide))
 ;;       hydra--work-around-dedicated nil)
 ;; )
+;;================================================================================
 
 (provide 'init-hydra)
 ;;; init-hydra.el ends here

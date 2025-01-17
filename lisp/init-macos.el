@@ -63,10 +63,6 @@
 (set-frame-parameter nil 'fullscreen (if IS-WINDOWS
                                          'fullboth 'maximized))
 
-;; integrate use-package with =:ensure-system-package=
-(use-package use-package-ensure-system-package
-  :disabled t)
-
 ;; delete files by moving to trash in macOS
 ;; https://github.com/lunaryorn/osx-trash.el
 (use-package osx-trash
@@ -74,6 +70,12 @@
   :config
   (setq delete-by-moving-to-trash t)      ; Deleting files go to OS's trash folder
   (osx-trash-setup))
+
+;;================================================================================
+;; integrate use-package with =:ensure-system-package=
+(use-package use-package-ensure-system-package
+  :disabled t)
+;;================================================================================
 
 (provide 'init-macos)
 ;;; init-macos.el ends here

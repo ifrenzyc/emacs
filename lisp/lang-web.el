@@ -157,6 +157,7 @@
   (add-hook 'comint-preoutput-filter-functions 'node-repl-comint-preoutput-filter)
   (add-hook 'comint-output-filter-functions 'node-repl-comint-preoutput-filter))
 
+;;================================================================================
 (use-package tern
   :disabled t
   :bind
@@ -179,6 +180,7 @@
   :config
   (with-eval-after-load 'company
     (add-to-list 'company-backends 'company-tern)))
+;;================================================================================
 
 (provide 'lang-web)
 ;;; lang-web.el ends here

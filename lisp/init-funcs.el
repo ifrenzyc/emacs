@@ -5,6 +5,7 @@
 ;; 
 
 ;;; Code:
+(require 'init-basic)
 (require 'windmove)
 
 (global-set-key (kbd "C-x 2") 'yc/split-window-vertically)

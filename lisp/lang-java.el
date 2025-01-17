@@ -110,6 +110,7 @@
   (log4j-mode . view-mode)
   (log4j-mode . read-only-mode))
 
+;;================================================================================
 ;; decompile class file
 (use-package autodisass-java-bytecode
   :disabled t)
@@ -127,6 +128,7 @@
                     (meghanada-mode t)
                     (flycheck-mode +1)
                     )))
+;;================================================================================
 
 (provide 'lang-java)
 ;;; lang-java.el ends here

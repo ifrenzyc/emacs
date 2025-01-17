@@ -115,6 +115,7 @@
                         :stream t
                         :models '("llama3.1:latest"))))
 
+;;================================================================================
 (use-package copilot
   :disabled t
   ;; zerolfx/copilot.el
@@ -147,6 +148,7 @@
                   ("yaml-ts"       . "yaml")
                   ("julia-ts"      . "julia")))
     (add-to-list 'copilot-major-mode-alist item)))
+;;================================================================================
 
 (provide 'init-llm)
 ;;; init-llm.el ends here

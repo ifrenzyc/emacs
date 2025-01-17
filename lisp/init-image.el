@@ -27,11 +27,13 @@
   :hook
   (image-mode . imagex-sticky-mode))
 
+;;================================================================================
 (use-package iscroll
   :disabled t
   :hook (org-mode . iscroll-mode)
   :config
   (setq iscroll-preserve-screen-position t))
+;;================================================================================
 
 (provide 'init-image)
 ;;; init-image.el ends here

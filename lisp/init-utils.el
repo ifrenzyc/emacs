@@ -15,6 +15,7 @@
   :config
   (logms-mode t))
 
+;;================================================================================
 ;; buffer's Imenu
 ;; - https://github.com/rnkn/side-hustle
 ;; - https://github.com/bmag/imenu-list
@@ -27,6 +28,7 @@
   :disabled t
   :commands (restart-emacs)
   :config (emacs-restore-frames t))
+;;================================================================================
 
 (provide 'init-utils)
 ;;; init-utils.el ends here

@@ -97,6 +97,7 @@
   :init
   (require 'ts-fold-indicators))
 
+;;================================================================================
 (use-package tree-sitter-langs
   :disabled t
   :after tree-sitter
@@ -116,6 +117,7 @@
   (add-to-list 'tree-sitter-major-mode-language-alist '(markdown-mode . markdown))
   (tree-sitter-load 'sql)
   (add-to-list 'tree-sitter-major-mode-language-alist '(sql-mode . sql)))
+;;================================================================================
 
 (provide 'init-tree-sitter)
 ;;; init-tree-sitter.el ends here

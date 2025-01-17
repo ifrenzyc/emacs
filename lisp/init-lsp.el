@@ -101,10 +101,6 @@
   :config
   (setq lsp-copilot-user-languages-config  "/Users/yangc/.emacs.d/localelpa/lsp-copilot/languages.toml"))
 
-(use-package sideline-lsp
-  :disabled t
-  :hook (lsp-mode . sideline-mode))
-
 (use-package lsp-ui
   :after lsp-mode
   :bind
@@ -189,6 +185,11 @@
   (with-eval-after-load 'company
     (push 'company-lsp company-backends)))
 
+;;================================================================================
+(use-package sideline-lsp
+  :disabled t
+  :hook (lsp-mode . sideline-mode))
+
 (use-package lsp-ivy
   :disabled t
   :after lsp-mode
@@ -256,6 +257,7 @@
   (lsp-sonarlint-xml-enabled t)
   (lsp-sonarlint-python-enabled t)
   (lsp-sonarlint-javascript-enabled t))
+;;================================================================================
 
 (provide 'init-lsp)
 ;;; init-lsp.el ends here

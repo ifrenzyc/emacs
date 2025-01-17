@@ -206,12 +206,14 @@ parses its input."
 (use-package consult-org-roam)
 (use-package consult-projectile)
 
+;;================================================================================
 (use-package all-the-icons-completion
   :disabled t
   :after (marginalia all-the-icons)
   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
   :init
   (all-the-icons-completion-mode))
+;;================================================================================
 
 (provide 'init-vertico)
 ;;; init-vertico.el ends here

@@ -474,6 +474,7 @@ text and copying to the killring."
 
 (use-package htmlize)
 
+;;================================================================================
 ;; 当执行 org code block 后，显示图片
 ;; - http://orgmode.org/worg/org-hacks.html#orgheadline126
 ;; (defun yc/ogrep (search &optional context)
@@ -958,6 +959,7 @@ text and copying to the killring."
   :disabled t
   :hook
   (org-mode . org-modern-indent-mode))
+;;================================================================================
 
 (provide 'init-org)
 ;;; init-org.el ends here

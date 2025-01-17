@@ -32,10 +32,5 @@
   :bind
   ("C-c s" . counsel-tramp))
 
-;; OBSOLETED
-;; (use-package docker-tramp
-;;   :after tramp
-;;   :custom (docker-tramp-use-names t))
-
 (provide 'init-tramp)
 ;;; init-tramp.el ends here

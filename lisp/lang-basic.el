@@ -177,6 +177,7 @@
                 dockerfile-mode dockerfile-ts-mode
                 nxml-mode) . indent-bars-mode))
 
+;;================================================================================
 ;; shows a sticky header at the top of the window
 ;; (use-package topsy
 ;;   :hook (prog-mode . topsy-mode))
@@ -271,6 +272,7 @@
             (ignore-errors
               (remove-text-properties next pos '(display nil face nil) str))))))
     (advice-add #'ivy-cleanup-string :after #'my-ivy-cleanup-indentation)))
+;;================================================================================
 
 (provide 'lang-basic)
 ;;; lang-basic.el ends here

@@ -212,6 +212,7 @@ To be used with `markdown-live-preview-window-function'."
   ;; Path to the grip binary
   (setq grip-mode-binary-path (executable-find "grip")))
 
+;;================================================================================
 ;; (use-package separedit
 ;;   :hook (separedit-buffer-creation . aorst/separedit-header-line-setup)
 ;;   :bind (:map prog-mode-map
@@ -226,6 +227,7 @@ To be used with `markdown-live-preview-window-function'."
 ;;      header-line-format
 ;;      (substitute-command-keys
 ;;       "Edit, then exit with `\\[separedit-commit]' or abort with `\\[edit-indirect-abort]'"))))
+;;================================================================================
 
 (provide 'init-markdown)
 ;;; init-markdown.el ends here

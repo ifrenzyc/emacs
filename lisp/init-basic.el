@@ -82,7 +82,8 @@
   ;; removing 1 space at a time.
   (setq backward-delete-char-untabify-method 'hungry)
 
-  (unbind-key "C-z" global-map))
+  (unbind-key "C-z" global-map)
+  (unbind-key "s-_" global-map))
 
 (provide 'init-basic)
 ;;; init-basic.el ends here

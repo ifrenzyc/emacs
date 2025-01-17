@@ -307,6 +307,7 @@
   (require 'company-english-helper)
   (setq company-english-helper-fuzz-search-p t))
 
+;;================================================================================
 (use-package company-fuzzy
   :disabled t
   :hook (company-mode . company-fuzzy-mode)
@@ -314,6 +315,7 @@
   (setq company-fuzzy-sorting-backend 'flx
         company-fuzzy-prefix-on-top nil
         company-fuzzy-trigger-symbols '("." "->" "<" "\"" "'" "@")))
+;;================================================================================
 
 (provide 'init-company)
 ;;; init-company.el ends here

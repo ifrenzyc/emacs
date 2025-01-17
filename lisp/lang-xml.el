@@ -37,6 +37,7 @@
                  nxml-forward-element
                  nil)))
 
+;;================================================================================
 (use-package noxml-fold
   :disabled t
   :hook (nxml-mode . noxml-fold-mode))
@@ -48,6 +49,7 @@
   (:map nxml-mode-map
         ("C-c C-f" . xml-format))
   :ensure-system-package (xmllint . "brew install libxml2"))
+;;================================================================================
 
 (provide 'lang-xml)
 ;;; lang-xml.el ends here

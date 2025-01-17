@@ -30,6 +30,11 @@
   :hook
   (help-mode . page-break-lines-mode))
 
+(use-package nerd-icons
+  :custom
+  (emacs-nerd-icons-font-family "Hack Nerd Font")) ;; The Nerd Font you want to use in GUI
+
+;;================================================================================
 (use-package sideline
   :disabled t
   :custom
@@ -45,10 +50,6 @@
   (sideline-backends-right '((sideline-lsp      . up)
                              ;; (sideline-blame    . down)
                              (sideline-flycheck . down))))
-
-(use-package nerd-icons
-  :custom
-  (emacs-nerd-icons-font-family "Hack Nerd Font")) ;; The Nerd Font you want to use in GUI
 
 (use-package all-the-icons
   :disabled t
@@ -211,6 +212,7 @@
   (after-init . global-so-long-mode)
   :config
   (setq so-long-threshold 400))
+;;================================================================================
 
 (provide 'init-ui)
 ;;; init-ui.el ends here

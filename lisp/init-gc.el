@@ -25,6 +25,7 @@
                                                  gc-cons-percentage 0.1)))
 (run-with-idle-timer 3 t (lambda () (garbage-collect)))
 
+;;================================================================================
 ;; (use-package benchmark-init
 ;;   :init
 ;;   (benchmark-init/activate)
@@ -52,6 +53,7 @@
 ;;   :custom
 ;;   (gcmh-idle-delay 10)
 ;;   (gcmh-high-cons-threshold #x6400000))
+;;================================================================================
 
 (provide 'init-gc)
 ;;; init-gc.el ends here

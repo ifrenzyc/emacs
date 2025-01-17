@@ -25,6 +25,7 @@
   :init
   (repeat-mode t))
 
+;;================================================================================
 ;; https://github.com/tarsius/keycast
 (use-package keycast
   :disabled t
@@ -50,6 +51,7 @@
   :init
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
+;;================================================================================
 
 (provide 'init-which-key)
 ;;; init-which-key.el ends here

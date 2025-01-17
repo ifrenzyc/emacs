@@ -199,6 +199,7 @@
     ("n" git-timemachine-show-next-revision "next revision")
     ("C-g" nil "quit")))
 
+;;================================================================================
 ;; - https://github.com/thisch/gerrit.el
 ;; (use-package gerrit
 ;;   :custom
@@ -308,6 +309,7 @@
 ;; 			             :override-parameters transient-posframe-parameters)))
 ;;           (frame-selected-window posframe))))
 ;;     (advice-add #'transient-posframe--show-buffer :override #'my-transient-posframe--show-buffer)))
+;;================================================================================
 
 (provide 'init-vcs)
 ;;; init-vcs.el ends here
