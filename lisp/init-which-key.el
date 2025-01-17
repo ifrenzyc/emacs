@@ -25,6 +25,18 @@
   :init
   (repeat-mode t))
 
+;; 键盘黏滞键
+;; https://github.com/emacsorphanage/key-chord
+;; 参考 /Users/yangc/src/emacs.d/kaushalmodi-emacs.d/setup-files/setup-key-chord.el 有一些不常用的按键可以作为黏滞键
+;; Sacha 的 key-chord 配置：/Users/yangc/src/emacs.d/sachac-emacs.d/Sacha.org
+(use-package key-chord
+  :init
+  (key-chord-mode 1)
+  :config
+  (key-chord-define-global "zz" 'view-mode)
+  (key-chord-define-global "jk" 'consult-buffer)
+  (key-chord-define-global "jj" 'avy-goto-word-1))
+
 ;;================================================================================
 ;; https://github.com/tarsius/keycast
 (use-package keycast

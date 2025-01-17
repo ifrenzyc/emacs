@@ -15,17 +15,14 @@
   ((olivetti-body-width 89)
    (olivetti-hide-mode-line t)))
 
-;;================================================================================
 ;; add view mode keybindings
 ;; - https://gist.github.com/ivan-krukov/63a586f2121519ca51b201c634402a84
 (use-package view
-  :disabled t
   :ensure nil
   :bind
-  (([f18] . view-mode)  ;; remap R-Shift to F18
-   :map view-mode-map
-   ("n" . next-line)
-   ("p" . previous-line))
+  (:map view-mode-map
+        ("n" . next-line)
+        ("p" . previous-line))
   ;; :config
   ;; make sure the cursor is changed visually
   ;; (set-cursor-color "DarkCyan")
@@ -47,6 +44,7 @@
   (view-mode . (lambda ()
                  (setq cursor-type (if view-mode 'hollow 'box)))))
 
+;;================================================================================
 (use-package writeroom-mode
   :disabled t
   :commands (writeroom-mode)
