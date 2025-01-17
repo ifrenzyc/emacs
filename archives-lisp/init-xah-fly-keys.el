@@ -7,19 +7,17 @@
 ;;; Code:
 
 (use-package xah-fly-keys
-  :init
-  (setq xah-fly-use-control-key nil)
+  :custom
+  (xah-fly-use-control-key nil)
+  :config
   (defun xfk-command-mode-on ()
     (global-hl-line-mode 1)
     (set-cursor-color "deep pink")
-    (setq cursor-type 'box)
-    )
+    (setq cursor-type 'box))
   (defun xfk-insert-mode-on ()
     (global-hl-line-mode 0)
     (set-cursor-color "Dark Turquoise")
-    (setq cursor-type 'hbar)
-    )
-  :config
+    (setq cursor-type 'hbar))
   ;; comment out for default dvorak layout
   (xah-fly-keys-set-layout "qwerty") ; required if you use qwerty
   (message "activating xah-fly-keys")

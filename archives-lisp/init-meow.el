@@ -32,4 +32,6 @@
    '("RET" . eval-buffer)
    '("SPC" . eval-defun)))
 
+(use-package meow-tree-sitter)
+
 (provide 'init-meow)
