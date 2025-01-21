@@ -68,6 +68,7 @@
                   (window-buffer (aw-select "Select window to scroll"))))
     (scroll-other-window-down)))
 
+;; 参考： https://karthinks.com/software/emacs-window-management-almanac/
 (use-package window
   :ensure nil
   :bind
@@ -242,10 +243,9 @@
 ;; https://github.com/syohex/emacs-zoom-window
 (use-package zoom-window
   :commands zoom-window-zoom
-  :bind
-  ("C-x w z" . zoom-window-zoom)
-  :config
-  (setq zoom-window-mode-line-color "DarkGreen"))
+  ;; :config
+  ;; (setq zoom-window-mode-line-color "DarkGreen")
+  )
 
 (use-package rotate
   ;; :commands (rotate-layout rotate-window hydra-rotate-window/body)

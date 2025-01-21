@@ -3,6 +3,8 @@
 ;;; Commentary:
 ;; 
 ;; 
+;; 参考：
+;; - https://protesilaos.com/codelog/2024-02-17-emacs-modern-minibuffer-packages/
 
 ;;; Code:
 
