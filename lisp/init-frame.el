@@ -7,6 +7,7 @@
 ;;; Code:
 (require 'init-funcs)
 
+;;================================================================================
 (use-package nameframe
   :disabled t
   ;; :bind
@@ -18,6 +19,7 @@
   :after projectile
   :config
   (nameframe-projectile-mode t))
+;;================================================================================
 
 (provide 'init-frame)
 ;;; init-frame.el ends here

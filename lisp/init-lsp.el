@@ -98,8 +98,8 @@
     toml-ts-mode
     conf-toml-mode
     bash-ts-mode) . lsp-copilot-mode)
-  :config
-  (setq lsp-copilot-user-languages-config  "/Users/yangc/.emacs.d/localelpa/lsp-copilot/languages.toml"))
+  :custom
+  (lsp-copilot-user-languages-config "/Users/yangc/.emacs.d/localelpa/lsp-copilot/languages.toml"))
 
 (use-package lsp-ui
   :after lsp-mode

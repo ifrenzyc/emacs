@@ -129,19 +129,19 @@ FACE defaults to inheriting from default and highlight."
      (transient-history-file (concat yc/cache-dir "/transient/history.el")))
     :config
     (transient-define-prefix symbol-overlay-transient ()
-      "Symbol Overlay transient"
-      ["Symbol Overlay"
-       ["Overlays"
-        ("." "Add/Remove at point" symbol-overlay-put)
-        ("k" "Remove All" symbol-overlay-remove-all)]
-       ["Move to Symbol"
-        ("n" "Next" symbol-overlay-switch-forward)
-        ("p" "Previous" symbol-overlay-switch-backward)]
-       ["Other"
-        ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
-        ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)]
-       ]
-      ))
+                             "Symbol Overlay transient"
+                             ["Symbol Overlay"
+                              ["Overlays"
+                               ("." "Add/Remove at point" symbol-overlay-put)
+                               ("k" "Remove All" symbol-overlay-remove-all)]
+                              ["Move to Symbol"
+                               ("n" "Next" symbol-overlay-switch-forward)
+                               ("p" "Previous" symbol-overlay-switch-backward)]
+                              ["Other"
+                               ("m" "Hightlight symbol-at-point" symbol-overlay-mode)
+                               ("w" "Copy symbol-at-point" symbol-overlay-save-symbol)]
+                              ]
+                             ))
   (defun symbol-overlay-switch-first ()
     (interactive)
     (let* ((symbol (symbol-overlay-get-symbol))
@@ -160,20 +160,20 @@ FACE defaults to inheriting from default and highlight."
            (count (length after)))
       (symbol-overlay-jump-call 'symbol-overlay-basic-jump (- count 1))))
 
-  (setq symbol-overlay-map (make-sparse-keymap))
-  (setq my/symbol-overlay-keymap (make-sparse-keymap))
-  (define-key my/symbol-overlay-keymap (kbd "h") 'symbol-overlay-put)
-  (define-key my/symbol-overlay-keymap (kbd "n") 'symbol-overlay-jump-next)
-  (define-key my/symbol-overlay-keymap (kbd "p") 'symbol-overlay-jump-prev)
-  (define-key my/symbol-overlay-keymap (kbd "w") 'symbol-overlay-save-symbol)
-  (define-key my/symbol-overlay-keymap (kbd "t") 'symbol-overlay-toggle-in-scope)
-  (define-key my/symbol-overlay-keymap (kbd "e") 'symbol-overlay-echo-mark)
-  (define-key my/symbol-overlay-keymap (kbd "d") 'symbol-overlay-jump-to-definition)
-  (define-key my/symbol-overlay-keymap (kbd "s") 'symbol-overlay-isearch-literally)
-  (define-key my/symbol-overlay-keymap (kbd "q") 'symbol-overlay-query-replace)
-  (define-key my/symbol-overlay-keymap (kbd "r") 'symbol-overlay-rename)
-  (define-key my/symbol-overlay-keymap (kbd "<") 'symbol-overlay-switch-first)
-  (define-key my/symbol-overlay-keymap (kbd ">") 'symbol-overlay-switch-last)
+  ;; (setq symbol-overlay-map (make-sparse-keymap))
+  ;; (setq my/symbol-overlay-keymap (make-sparse-keymap))
+  ;; (define-key my/symbol-overlay-keymap (kbd "h") 'symbol-overlay-put)
+  ;; (define-key my/symbol-overlay-keymap (kbd "n") 'symbol-overlay-jump-next)
+  ;; (define-key my/symbol-overlay-keymap (kbd "p") 'symbol-overlay-jump-prev)
+  ;; (define-key my/symbol-overlay-keymap (kbd "w") 'symbol-overlay-save-symbol)
+  ;; (define-key my/symbol-overlay-keymap (kbd "t") 'symbol-overlay-toggle-in-scope)
+  ;; (define-key my/symbol-overlay-keymap (kbd "e") 'symbol-overlay-echo-mark)
+  ;; (define-key my/symbol-overlay-keymap (kbd "d") 'symbol-overlay-jump-to-definition)
+  ;; (define-key my/symbol-overlay-keymap (kbd "s") 'symbol-overlay-isearch-literally)
+  ;; (define-key my/symbol-overlay-keymap (kbd "q") 'symbol-overlay-query-replace)
+  ;; (define-key my/symbol-overlay-keymap (kbd "r") 'symbol-overlay-rename)
+  ;; (define-key my/symbol-overlay-keymap (kbd "<") 'symbol-overlay-switch-first)
+  ;; (define-key my/symbol-overlay-keymap (kbd ">") 'symbol-overlay-switch-last)
   ;; (global-set-key (kbd "C-c h") my/symbol-overlay-keymap)
 
   ;; 以下内容参考：https://gist.github.com/twlz0ne/2c743846bc73dd83c3f3e6a5cc85383e

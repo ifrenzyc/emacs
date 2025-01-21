@@ -71,6 +71,7 @@
 (add-hook 'before-make-frame-hook #'user/set-font)
 ;; (setq-default line-spacing 0.2)
 
+;;================================================================================
 (use-package fixed-pitch
   :disabled t
   :load-path "localelpa/fixed-pitch-mode"
@@ -89,6 +90,7 @@
 ;; (use-package unicode-fonts
 ;;   :config
 ;;   (unicode-fonts-setup))
+;;================================================================================
 
 (provide 'init-font)
 ;;; init-font.el ends here

@@ -337,49 +337,6 @@ text and copying to the killring."
         '((0 headline)
           (1 paragraph src-block table property-drawer))))
 
-;; moving images from point A to point B.
-;; https://github.com/abo-abo/org-download
-;; - https://github.com/jethrokuan/.emacs.d/blob/master/config.org#org-download
-;; - https://coldnew.github.io/hexo-org-example/2018/05/22/use-org-download-to-drag-image-to-emacs/
-(use-package org-download
-  :disabled t
-  :ensure-system-package (pngpaste . "brew install pngpaste")
-  :after org
-  :hook ((dired-mode . org-download-enable)
-         (org-mode . org-download-enable))
-  :config
-  (org-download-enable)
-  (if (memq window-system '(mac ns))
-      (setq org-download-screenshot-method "screencapture -i %s")
-    (setq org-download-screenshot-method "maim -s %s"))
-  (defun yc/org-download-method (link)
-    "This is a helper function for org-download.
-    It creates a folder in the root directory (~/.org/img/) named after the
-    org filename (sans extension) and puts all images from that file in there.
-    Inspired by https://github.com/daviderestivo/emacs-config/blob/6086a7013020e19c0bc532770e9533b4fc549438/init.el#L701"
-    (let ((filename
-           (file-name-nondirectory
-            (car (url-path-and-query
-                  (url-generic-parse-url link)))))
-          ;; Create folder name with current buffer name, and place in root dir
-          (setq dirname "/Users/yangc/notes/images/")
-          ;; (dirname (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name)) "_imgs/"))
-          ;; (dirname (concat "./images/"
-          ;;                   (replace-regexp-in-string " " "_" (downcase (file-name-base buffer-file-name))))))
-          )
-
-
-      ;; Add timestamp to filename
-      (setq filename-with-timestamp (format "%s%s.%s"
-                                            (file-name-sans-extension filename)
-                                            (format-time-string org-download-timestamp)
-                                            (file-name-extension filename)))
-      ;; Create folder if necessary
-      (unless (file-exists-p dirname)
-        (make-directory dirname))
-      (expand-file-name filename-with-timestamp dirname)))
-  (setq org-download-method 'yc/org-download-method))
-
 ;; lets you insert a link from your clipboard with a title that is fetched from the page’s metadata by curl.
 ;; https://github.com/rexim/org-cliplink
 (use-package org-cliplink
@@ -475,6 +432,49 @@ text and copying to the killring."
 (use-package htmlize)
 
 ;;================================================================================
+;; moving images from point A to point B.
+;; https://github.com/abo-abo/org-download
+;; - https://github.com/jethrokuan/.emacs.d/blob/master/config.org#org-download
+;; - https://coldnew.github.io/hexo-org-example/2018/05/22/use-org-download-to-drag-image-to-emacs/
+(use-package org-download
+  :disabled t
+  :ensure-system-package (pngpaste . "brew install pngpaste")
+  :after org
+  :hook ((dired-mode . org-download-enable)
+         (org-mode . org-download-enable))
+  :config
+  (org-download-enable)
+  (if (memq window-system '(mac ns))
+      (setq org-download-screenshot-method "screencapture -i %s")
+    (setq org-download-screenshot-method "maim -s %s"))
+  (defun yc/org-download-method (link)
+    "This is a helper function for org-download.
+    It creates a folder in the root directory (~/.org/img/) named after the
+    org filename (sans extension) and puts all images from that file in there.
+    Inspired by https://github.com/daviderestivo/emacs-config/blob/6086a7013020e19c0bc532770e9533b4fc549438/init.el#L701"
+    (let ((filename
+           (file-name-nondirectory
+            (car (url-path-and-query
+                  (url-generic-parse-url link)))))
+          ;; Create folder name with current buffer name, and place in root dir
+          (setq dirname "/Users/yangc/notes/images/")
+          ;; (dirname (concat (file-name-nondirectory (file-name-sans-extension buffer-file-name)) "_imgs/"))
+          ;; (dirname (concat "./images/"
+          ;;                   (replace-regexp-in-string " " "_" (downcase (file-name-base buffer-file-name))))))
+          )
+
+
+      ;; Add timestamp to filename
+      (setq filename-with-timestamp (format "%s%s.%s"
+                                            (file-name-sans-extension filename)
+                                            (format-time-string org-download-timestamp)
+                                            (file-name-extension filename)))
+      ;; Create folder if necessary
+      (unless (file-exists-p dirname)
+        (make-directory dirname))
+      (expand-file-name filename-with-timestamp dirname)))
+  (setq org-download-method 'yc/org-download-method))
+
 ;; 当执行 org code block 后，显示图片
 ;; - http://orgmode.org/worg/org-hacks.html#orgheadline126
 ;; (defun yc/ogrep (search &optional context)

@@ -27,10 +27,13 @@
   :init
   (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
 
+;;================================================================================
 (use-package counsel-tramp
+  :disabled t
   :after (tramp counsel)
   :bind
   ("C-c s" . counsel-tramp))
+;;================================================================================
 
 (provide 'init-tramp)
 ;;; init-tramp.el ends here

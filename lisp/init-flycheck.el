@@ -75,12 +75,6 @@
 (use-package flycheck-inline
   :hook (flycheck-mode . flycheck-inline-mode))
 
-(use-package sideline-flycheck
-  :disabled t
-  :hook
-  ((flycheck-mode . sideline-flycheck-setup)
-   (flycheck-mode . sideline-mode)))
-
 (use-package flycheck-posframe
   :hook
   (flycheck-mode . flycheck-posframe-mode)
@@ -91,6 +85,14 @@
   :config
   (setq flycheck-posframe-border-width 1)
   (flycheck-posframe-configure-pretty-defaults))
+
+;;================================================================================
+(use-package sideline-flycheck
+  :disabled t
+  :hook
+  ((flycheck-mode . sideline-flycheck-setup)
+   (flycheck-mode . sideline-mode)))
+;;================================================================================
 
 (provide 'init-flycheck)
 ;;; init-flycheck.el ends here

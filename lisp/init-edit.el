@@ -269,6 +269,7 @@ there's a region, all lines that region covers will be duplicated."
   :bind
   ([remap zap-to-char] . zzz-to-char))
 
+;;================================================================================
 ;; 文本替换，使用 =query-replace= 或者 =M-%= 命令。
 ;; - https://github.com/syohex/emacs-anzu
 ;; anzu 依赖这个 mdi
@@ -599,6 +600,7 @@ there's a region, all lines that region covers will be duplicated."
                                               regexp-search-ring
                                               extended-command-history)
               savehist-autosave-interval 300))
+;;================================================================================
 
 (provide 'init-edit)
 ;;; init-edit.el ends here
