@@ -23,7 +23,7 @@
   :commands (projectile-project-root)
   :custom
   ((projectile-enable-caching t)
-   (projectile-completion-system 'ivy)
+   (projectile-completion-system 'auto)
    (projectile-indexing-method 'native))
   :config
   (which-key-add-key-based-replacements "C-x p"   "Project & Projectile")

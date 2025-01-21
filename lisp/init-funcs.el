@@ -10,6 +10,8 @@
 
 (global-set-key (kbd "C-x 2") 'yc/split-window-vertically)
 (global-set-key (kbd "C-x 3") 'yc/split-window-horizontally)
+(global-set-key (kbd "M-2")   'yc/split-window-vertically)
+(global-set-key (kbd "M-3")   'yc/split-window-horizontally)
 
 (global-set-key (kbd "C-c n n") 'yc/new-buffer-frame)
 (global-set-key (kbd "C-x C-m") 'yc/move-file)

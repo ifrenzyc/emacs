@@ -7,10 +7,11 @@
 
 ;;; Code:
 (require 'init-const)
+(require 'init-font)
 
 (use-package vundo
   :bind
-  (("C-x u" . undo)
+  (([remap undo] . vundo)
    :map vundo-mode-map
    ("C-a" . vundo-stem-root)
    ("C-e" . vundo-stem-end)
@@ -33,7 +34,7 @@
      (last-branch     . ?╰)
      (horizontal-stem . ?─)))
   :config
-  (set-face-attribute 'vundo-default nil :family "Symbola"))
+  (set-face-attribute 'vundo-default nil :family user/unicode-font))
 
 ;;================================================================================
 (use-package undo-tree

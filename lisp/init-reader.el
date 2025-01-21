@@ -22,7 +22,25 @@
   :bind
   (:map view-mode-map
         ("n" . next-line)
-        ("p" . previous-line))
+        ("p" . previous-line)
+        ("j" . next-line)
+        ("k" . previous-line)
+        ("J" . scroll-up-one-line)
+        ("K" . scroll-down-one-line)
+        ("g" . beginning-of-buffer)
+        ("G" . end-of-buffer)
+        ("h" . backward-char)
+        ("l" . forward-char)
+        ("H" . backward-word)
+        ("L" . forward-word)
+        ("<SPC>"   . scroll-up)
+        ("S-<SPC>" . scroll-down)
+        ("s" . color-rg-search-symbol)
+        ("i" . color-rg-search-input)
+        ("," . color-rg-search-symbol-in-current-file)
+        ("." . color-rg-search-input-in-current-file)
+        ("<" . remember-init)
+        (">" . remember-jump))
   ;; :config
   ;; make sure the cursor is changed visually
   ;; (set-cursor-color "DarkCyan")

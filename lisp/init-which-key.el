@@ -35,6 +35,7 @@
   :config
   (key-chord-define-global "zz" 'view-mode)
   (key-chord-define-global "jk" 'consult-buffer)
+  (key-chord-define-global "kj" 'consult-buffer)
   (key-chord-define-global "jj" 'avy-goto-word-1))
 
 ;;================================================================================

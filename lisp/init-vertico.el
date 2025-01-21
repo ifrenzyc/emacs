@@ -12,23 +12,24 @@
   (rfn-eshadow-update-overlay . vertico-directory-tidy)
   (minibuffer-setup . vertico-repeat-save)
   :bind
-  (:map vertico-map
-        ("<tab>"     . vertico-insert)    ; Choose selected candidate
-        ("<escape>"  . minibuffer-keyboard-quit) ; Close minibuffer
-        ;; NOTE 2022-02-05: Cycle through candidate groups
-        ("C-M-n"     . vertico-next-group)
-        ("C-M-p"     . vertico-previous-group)
-        :map minibuffer-local-map
-        ("C-c C-o"   . embark-export)
-        ("C-c C-c"   . embark-collect)
-        :map vertico-map
-        ("RET"        . vertico-directory-enter)
-        ("DEL"        . vertico-directory-delete-char)
-        ("M-DEL"      . vertico-directory-delete-word)
-        ("M-P"        . vertico-repeat-previous)
-        ("M-N"        . vertico-repeat-next)
-        ("S-<prior>"  . vertico-repeat-previous)
-        ("S-<next>"   . vertico-repeat-next))
+  (("M-R"       . vertico-repeat)
+   :map vertico-map
+   ("<tab>"     . vertico-insert)    ; Choose selected candidate
+   ("<escape>"  . minibuffer-keyboard-quit) ; Close minibuffer
+   ;; NOTE 2022-02-05: Cycle through candidate groups
+   ("C-M-n"     . vertico-next-group)
+   ("C-M-p"     . vertico-previous-group)
+   :map minibuffer-local-map
+   ("C-c C-o"   . embark-export)
+   ("C-c C-c"   . embark-collect)
+   :map vertico-map
+   ("RET"        . vertico-directory-enter)
+   ("DEL"        . vertico-directory-delete-char)
+   ("M-DEL"      . vertico-directory-delete-word)
+   ("M-P"        . vertico-repeat-previous)
+   ("M-N"        . vertico-repeat-next)
+   ("S-<prior>"  . vertico-repeat-previous)
+   ("S-<next>"   . vertico-repeat-next))
   :custom
   (vertico-count 13)               ; Number of candidates to display
   (vertico-resize nil)
@@ -52,7 +53,9 @@
      (consult-flycheck)
      (consult-lsp-diagnostics)))
   :config
-  (vertico-mode)
+  (vertico-mode +1)
+  (vertico-multiform-mode)
+  (vertico-indexed-mode)
   ;; Prefix the current candidate with “» ”. From
   ;; https://github.com/minad/vertico/wiki#prefix-current-candidate-with-arrow
   (advice-add #'vertico--format-candidate :around
@@ -160,6 +163,7 @@ parses its input."
   :bind
   (([remap imenu]              . consult-imenu)
    ([remap switch-to-buffer]   . consult-buffer)                          ; C-x b
+   ("H-b"                      . switch-to-buffer)
    ([remap switch-to-buffer-other-window] . consult-buffer-other-window)  ; C-x 4 b
    ([remap switch-to-buffer-other-frame]  . consult-buffer-other-frame)   ; C-x 5 b
    ([remap goto-line]          . consult-goto-line)                       ; M-g g
