@@ -112,7 +112,7 @@
      prot-orderless-strict-initialism-dispatcher
      prot-orderless-flex-dispatcher))
   :init
-  (vertico-mode) ; optional but recommended!
+  ;; (vertico-mode) ; optional but recommended!
   (defun orderless--strict-*-initialism (component &optional anchored)
     "Match a COMPONENT as a strict initialism, optionally ANCHORED.
 The characters in COMPONENT must occur in the candidate in that

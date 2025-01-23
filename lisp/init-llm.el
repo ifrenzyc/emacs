@@ -74,15 +74,15 @@
             ellama-provider (cdr (car ellama-providers))))
   
   (setopt ellama-provider (make-llm-ollama
-                           :chat-model "llama3.1"
-                           :embedding-model "llama3.1:latest"))
+                           :chat-model "deepseek-r1:14b"
+                           :embedding-model "deepseek-r1:14b"))
   (setopt ellama-naming-provider (make-llm-ollama
-                                  :chat-model "qwen2.5:7b"
-                                  :embedding-model "qwen2.5:7b"))
+                                  :chat-model "deepseek-r1:14b"
+                                  :embedding-model "deepseek-r1:14b"))
   ;; Translation llm provider
   (setopt ellama-translation-provider (make-llm-ollama
-                                       :chat-model "mistral"
-                                       :embedding-model "mistral:latest"))
+                                       :chat-model "deepseek-r1:14b"
+                                       :embedding-model "deepseek-r1:14b"))
   ;; Naming new sessions with llm
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   
@@ -109,11 +109,11 @@
   :custom
   (gptel-default-mode 'org-mode)
   :config
-  (setq gptel-model "llama3.1:latest"
+  (setq gptel-model "deepseek-r1:14b"
         gptel-backend (gptel-make-ollama "Ollama"
                         :host "localhost:11434"
                         :stream t
-                        :models '("llama3.1:latest"))))
+                        :models '("deepseek-r1:14b"))))
 
 ;;================================================================================
 (use-package copilot
@@ -126,10 +126,10 @@
   (prog-mode  . copilot-mode)
   :bind
   (:map copilot-completion-map
-        ("<tab>"             . 'copilot-accept-completion)
-        ("TAB"               . 'copilot-accept-completion)
-        ("M-TAB"             . 'copilot-accept-completion-by-word)
-        ("M-<tab>"           . 'copilot-accept-completion-by-word))
+        ("<TAB>"    . copilot-accept-completion)
+        ("<TAB>"    . copilot-accept-completion)
+        ("M-<TAB>"  . copilot-accept-completion-by-word)
+        ("M-<TAB>"  . copilot-accept-completion-by-word))
   :custom
   ;; wait two seconds before suggesting
   (copilot-idle-delay 2)

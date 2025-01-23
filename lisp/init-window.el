@@ -9,64 +9,13 @@
 
 (use-package pixel-scroll
   :ensure nil
-  ;; :bind
-  ;; (([remap scroll-up-command]    . fk/pixel-scroll-up-command)       ; C-v
-  ;; ([remap scroll-down-command]  . fk/pixel-scroll-down-command)      ; M-v
-  ;; ([remap recenter-top-bottom]  . fk/pixel-recenter-top-bottom)      ; C-l
-  ;; ("C-M-v"   . sloth/scroll-other-window-up)
-  ;; ("C-M-S-v" . sloth/scroll-other-window-down))
   :custom
   (pixel-scroll-precision-interpolation-factor 1.0)
   (pixel-scroll-precision-interpolate-page t)
-  (scroll-conservatively 101)          ; smooth scrolling
+  (scroll-conservatively 101)
   :init
-  (pixel-scroll-precision-mode t)
-  :config
-  ;; scroll less than default
-  (defvar fk/default-scroll-lines 15)
-
-  ;; (defun fk/scroll (orig-func &optional arg)
-  ;;   "Scroll up `fk/default-scroll-lines' lines (probably less than default)."
-  ;;   (apply orig-func (list (or arg fk/default-scroll-lines))))
-
-  ;; (advice-add 'scroll-up :around 'fk/scroll)
-  ;; (advice-add 'scroll-down :around 'fk/scroll)
-  
-  (defun fk/pixel-scroll-up-command ()
-    "Similar to `scroll-up-command' but with pixel scrolling."
-    (interactive)
-    (pixel-scroll-precision-interpolate (- (* fk/default-scroll-lines (line-pixel-height)))))
-
-  (defun fk/pixel-scroll-down-command ()
-    "Similar to `scroll-down-command' but with pixel scrolling."
-    (interactive)
-    (pixel-scroll-precision-interpolate (* fk/default-scroll-lines (line-pixel-height))))
-
-  (defun fk/pixel-recenter-top-bottom ()
-    "Similar to `recenter-top-bottom' but with pixel scrolling."
-    (interactive)
-    (let* ((current-row (cdr (nth 6 (posn-at-point))))
-           (target-row (save-window-excursion
-                         (recenter-top-bottom)
-                         (cdr (nth 6 (posn-at-point)))))
-           (distance-in-pixels (* (- target-row current-row) (line-pixel-height))))
-      (pixel-scroll-precision-interpolate distance-in-pixels)))
-
-  (defun sloth/scroll-other-window-up ()
-    "Scroll selected window up."
-    (interactive)
-    (when current-prefix-arg
-      (setq-local other-window-scroll-buffer
-                  (window-buffer (aw-select "Select window to scroll"))))
-    (scroll-other-window))
-
-  (defun sloth/scroll-other-window-down ()
-    "Scroll selected window down."
-    (interactive)
-    (when current-prefix-arg
-      (setq-local other-window-scroll-buffer
-                  (window-buffer (aw-select "Select window to scroll"))))
-    (scroll-other-window-down)))
+  (pixel-scroll-mode t)
+  (pixel-scroll-precision-mode t))
 
 ;; 参考： https://karthinks.com/software/emacs-window-management-almanac/
 (use-package window
@@ -110,11 +59,11 @@
      (("n" balance-windows "balance")
       ("s-<left>" hydra-move-splitter-left "←")
       ("s-<right>" hydra-move-splitter-right "→")
-      ("s-<up>"   hydra-move-splitter-up "↑")
+      ("s-<up>" hydra-move-splitter-up "↑")
       ("s-<down>" hydra-move-splitter-down "↓")
       ("s-S-<left>" hydra-move-splitter-left-4x "4x ←")
       ("s-S-<right>" hydra-move-splitter-right-4x "4x →")
-      ("s-+"  balance-windows)
+      ("s-+" balance-windows)
       ("K" shrink-window "↑")
       ("J" enlarge-window "↓"))
      "Split"
@@ -155,7 +104,7 @@
      ;;                   ("B" ivy-purpose-switch-buffer-with-purpose)
      ;;                   ("!" purpose-toggle-window-purpose-dedicated)
      ;;                   ("#" purpose-toggle-window-buffer-dedicated))
-     ;; "Others" 
+     ;; "Others"
      ;;           (("x" counsel-M-x)
      ;;           ("q" nil))
      "Rotate Layout"
@@ -163,8 +112,8 @@
       ("w"   rotate-window "swap")
       ("1"   delete-other-windows "maximize" :exit t)) ; 暂时不加这个，因为旋转窗口就是因为有多窗口的需要
      "Switch"
-     (("b" ivy-purpose-switch-buffer-without-purpose)
-      ("f" counsel-find-file "find file")
+     (;; ("b" ivy-purpose-switch-buffer-without-purpose)
+      ("f" consult-find "find file")
       ("a" (lambda ()
              (interactive)
              (ace-window 1)
@@ -196,6 +145,7 @@
   (advice-add 'winner-save-old-configurations :before #'gjg/winner-clean-up-modified-list))
 
 (use-package winum
+  :disabled t
   :bind
   ("M-`" . other-frame)
   ;; (:map winum-keymap
@@ -209,13 +159,14 @@
   ;;       ("M-7" . winum-select-window-7)
   ;;       ("M-8" . winum-select-window-8)
   ;;       ("M-9" . winum-select-window-9))
+  :custom
+  (winum-auto-setup-mode-line nil)
+  (winum-auto-assign-0-to-minibuffer nil)
+  (winum-ignored-buffers '(" *which-key*"))
   :init
-  (setq winum-auto-setup-mode-line nil)
   (winum-mode 1)
   :config
-  (which-key-add-key-based-replacements "C-x w"   "winum")
-  (setq winum-auto-assign-0-to-minibuffer nil
-        winum-ignored-buffers '(" *which-key*")))
+  (which-key-add-key-based-replacements "C-x w"   "winum"))
 
 ;; 或许试试这个 Package： https://github.com/dimitri/switch-window
 ;; https://sachachua.com/blog/2015/01/emacs-microhabit-switching-windows-windmove-ace-window-ace-jump/
@@ -230,6 +181,7 @@
    '((?s aw-swap-window "swap window")
      (?2 aw-split-window-vert "split window vertically")
      (?3 aw-split-window-horz "split window horizontally")
+     (?k aw-delete-window "delete window")
      (?x aw-delete-window "delete window")
      (?? aw-show-dispatch-help)))
   :custom-face
@@ -243,9 +195,8 @@
 ;; https://github.com/syohex/emacs-zoom-window
 (use-package zoom-window
   :commands zoom-window-zoom
-  ;; :config
-  ;; (setq zoom-window-mode-line-color "DarkGreen")
-  )
+  :custom
+  (zoom-window-mode-line-color "#8abeb7"))
 
 (use-package rotate
   ;; :commands (rotate-layout rotate-window hydra-rotate-window/body)
@@ -279,6 +230,7 @@
 (defvar-local shackle--current-popup-window nil) ; current popup window
 (put 'shackle--current-popup-window 'permanent-local t)
 (use-package shackle
+  :disabled t
   :bind
   ("C-c z" . shackle-last-popup-buffer)
   :functions org-switch-to-buffer-other-window

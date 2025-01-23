@@ -11,13 +11,13 @@
   :bind
   (:map projectile-command-map
         ("."   . hydra-projectile/body)
-        ("f"   . counsel-projectile-find-file)
+        ("f"   . consult-projectile-find-file)
         ("F"   . projectile-find-file-dwim-other-window)
-        ("b"   . counsel-projectile-switch-to-buffer)
+        ("b"   . consult-projectile-switch-to-buffer)
         ("B"   . projectile-switch-to-buffer-other-window)
         ("a"   . projectile-ag)
         ("C-r" . projectile-run-project)
-        ("p"   . counsel-projectile-switch-project))
+        ("p"   . consult-projectile-switch-project))
   (:map projectile-mode-map
         ("C-x p" . projectile-command-map))
   :commands (projectile-project-root)

@@ -35,9 +35,7 @@
   (set-face-attribute 'anzu-mode-line nil
                       :foreground "yellow" :weight 'bold)
   (setq-default anzu-cons-mode-line-p nil
-                anzu-replace-to-string-separator " => "
-                ;; anzu-replace-to-string-separator (mdi "arrow-right" t)
-                ))
+                anzu-replace-to-string-separator " => "))
 
 ;; Emacs extension to increase selected region by semantic units.
 ;; - https://github.com/magnars/expand-region.el
@@ -49,9 +47,116 @@
   :init
   (pending-delete-mode t))
 
+;; 选中文本后，直接输入就可以，省去了删除操作。这在其他文本编辑器里都是标配，建议打开。
+;; delsel --> delete-selection
+(use-package delsel
+  :ensure nil
+  :hook
+  (after-init . delete-selection-mode))
+
+;; Hungry deletion
+(use-package hungry-delete
+  :hook
+  (after-init . global-hungry-delete-mode)
+  (minibuffer-setup . (lambda ()
+                        (hungry-delete-mode -1)))
+  :config
+  (setq-default hungry-delete-chars-to-skip " \t\f\v"))
+
+(use-package beginend
+  :diminish (beginend-mode beginend-global-mode)
+  :hook
+  (after-init . beginend-global-mode))
+
+;; Move to the beginning/end of line or code
+;; From https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/."
+(use-package mwim
+  :demand t
+  :bind
+  (;; ("C-a" . mwim-beginning-of-code-or-line)
+   ([remap move-beginning-of-line] . mwim-beginning-of-code-or-line)
+   ;; ("C-e" . mwim-end-of-code-or-line))
+   ([remap move-end-of-line] . mwim-end-of-code-or-line)))
+
+;; View Large Files
+;; - https://github.com/m00natic/vlfi
+;; - https://writequit.org/articles/working-with-logs-in-emacs.html
+(use-package vlf
+  :config
+  (require 'vlf-setup))
+
+;; An all-in-one comment command to rule them all
+(use-package comment-dwim-2
+  :bind ([remap comment-dwim] . comment-dwim-2))
+
+;; 针对中文用户，在中英文混合的文档里面，在中英文中间显示空格字符。
+;; - https://github.com/coldnew/pangu-spacing
+;; - http://coldnew.github.io/blog/2013/05-20_5cbb7/
+(use-package pangu-spacing
+  ;; :hook
+  ;; ;; 针对 org-mode 和 markdown-mode，插入真正的空格字符
+  ;; (org-mode . (lambda ()
+  ;;               (pangu-spacing-mode 1)
+  ;;               (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+  ;; (markdown-mode . (lambda ()
+  ;;                    (pangu-spacing-mode 1)
+  ;;                    (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
+  :config
+  (global-pangu-spacing-mode t))
+
+(use-package hippie-expand
+  :ensure nil
+  :bind
+  ;; ("M-/" . hippie-expand)
+  ([remap dabbrev-expand] . hippie-expand)    ; override dabbrev-expand’s keybinding to use hippie-expand instead
+  :init
+  (setq hippie-expand-try-functions-list
+	    '(
+	      ;; Try to expand yasnippet snippets based on prefix
+	      yas-hippie-try-expand
+	      ;; Try to expand word "dynamically", searching the current buffer.
+	      try-expand-dabbrev
+	      ;; Try to expand word "dynamically", searching all other buffers.
+	      try-expand-dabbrev-all-buffers
+	      ;; Try to expand word "dynamically", searching the kill ring.
+	      try-expand-dabbrev-from-kill
+	      ;; Try to complete text as a file name, as many characters as unique.
+	      try-complete-file-name-partially
+	      ;; Try to complete text as a file name.
+	      try-complete-file-name
+	      ;; Try to expand word before point according to all abbrev tables.
+	      try-expand-all-abbrevs
+	      ;; Try to complete the current line to an entire line in the buffer.
+	      try-expand-list
+	      ;; Try to complete the current line to an entire line in the buffer.
+	      try-expand-line
+	      ;; Try to complete as an Emacs Lisp symbol, as many characters as
+	      ;; unique.
+	      try-complete-lisp-symbol-partially
+	      ;; Try to complete word as an Emacs Lisp symbol.
+	      try-complete-lisp-symbol
+	      )))
+
+(use-package fancy-dabbrev
+  :commands (fancy-dabbrev-mode)
+  :custom
+  (fancy-dabbrev-preview-delay 0.1)
+  (fancy-dabbrev-preview-context 'before-non-word)
+  (fancy-dabbrev-expansion-on-preview-only t)
+  (fancy-dabbrev-indent-command 'tab-to-tab-stop)
+  :config
+  (global-fancy-dabbrev-mode t))
+
+;; - Zap To Char Usage :: https://www.emacswiki.org/emacs/ZapToCharUsage
+(use-package zzz-to-char
+  :bind
+  ([remap zap-to-char] . zzz-to-char))
+
+;;================================================================================
 ;; 针对选中的区域自定义一些按键
 ;; - https://github.com/Kungsgeten/selected.el
 (use-package selected
+  :disabled t
   :commands (selected-minor-mode)
   :custom
   (selected-minor-mode-override t)
@@ -91,7 +196,7 @@ there's a region, all lines that region covers will be duplicated."
         (goto-char (+ origin (* (length region) arg) arg)))))
 
   (defun align-code (beg end &optional arg)
-    (interactive "rP")
+    
     (if (null arg)
         (align beg end)
       (let ((end-mark (copy-marker end)))
@@ -145,131 +250,10 @@ there's a region, all lines that region covers will be duplicated."
      "Embark"
      (("s-o" embark-act)))))
 
-;; 选中文本后，直接输入就可以，省去了删除操作。这在其他文本编辑器里都是标配，建议打开。
-;; delsel --> delete-selection
-(use-package delsel
-  :ensure nil
-  :hook
-  (after-init . delete-selection-mode))
-
-;; Hungry deletion
-(use-package hungry-delete
-  :hook
-  (after-init . global-hungry-delete-mode)
-  (minibuffer-setup . (lambda ()
-                        (hungry-delete-mode -1)))
-  :config
-  (setq-default hungry-delete-chars-to-skip " \t\f\v"))
-
 (use-package subword
+  :disabled t
   :ensure nil
   :delight subword-mode)
-
-(use-package beginend
-  :diminish (beginend-mode beginend-global-mode)
-  :hook
-  (after-init . beginend-global-mode))
-
-;; Move to the beginning/end of line or code
-(use-package mwim
-  :demand t
-  :bind (("C-a" . mwim-beginning-of-code-or-line)   ; ([remap move-beginning-of-line] . mwim-beginning-of-code-or-line)
-         ("C-e" . mwim-end-of-code-or-line))        ; ([remap move-end-of-line] . mwim-end-of-code-or-line)
-  ;; :config
-  ;; `C-a' first takes you to the first non-whitespace char as
-  ;; `back-to-indentation' on a line, and if pressed again takes you to
-  ;; the actual beginning of the line.
-  ;; (defun smarter-move-beginning-of-line (arg)
-  ;;   "Move depending on ARG to beginning of visible line or not.
-  ;; From https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/."
-  ;;   (interactive "^p")
-  ;;   (setq arg (or arg 1))
-  ;;   (when (/= arg 1)
-  ;;     (let ((line-move-visual nil))
-  ;;       (forward-line (1- arg))))
-  ;;   (let ((orig-point (point)))
-  ;;     (back-to-indentation)
-  ;;     (when (= orig-point (point))
-  ;;       (move-beginning-of-line 1))))
-  ;; (global-set-key [remap move-beginning-of-line] 'smarter-move-beginning-of-line)
-  )
-
-;; View Large Files
-;; - https://github.com/m00natic/vlfi
-;; - https://writequit.org/articles/working-with-logs-in-emacs.html
-(use-package vlf
-  :config
-  (require 'vlf-setup))
-
-;; An all-in-one comment command to rule them all
-(use-package comment-dwim-2
-  :bind ([remap comment-dwim] . comment-dwim-2))
-
-;; 针对中文用户，在中英文混合的文档里面，在中英文中间显示空格字符。
-;; - https://github.com/coldnew/pangu-spacing
-;; - http://coldnew.github.io/blog/2013/05-20_5cbb7/
-(use-package pangu-spacing
-  ;; :hook
-  ;; ;; 针对 org-mode 和 markdown-mode，插入真正的空格字符
-  ;; (org-mode . (lambda ()
-  ;;               (pangu-spacing-mode 1)
-  ;;               (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
-  ;; (markdown-mode . (lambda ()
-  ;;                    (pangu-spacing-mode 1)
-  ;;                    (set (make-local-variable 'pangu-spacing-real-insert-separtor) t)))
-  :config
-  (global-pangu-spacing-mode t))
-
-(use-package hippie-expand
-  :ensure nil
-  :bind
-  ("M-/" . hippie-expand)
-  ([remap dabbrev-expand] . hippie-expand)    ; override dabbrev-expand’s keybinding to use hippie-expand instead
-  :init
-  (setq hippie-expand-try-functions-list
-	    '(
-	      ;; Try to expand yasnippet snippets based on prefix
-	      yas-hippie-try-expand
-	      ;; Try to expand word "dynamically", searching the current buffer.
-	      try-expand-dabbrev
-	      ;; Try to expand word "dynamically", searching all other buffers.
-	      try-expand-dabbrev-all-buffers
-	      ;; Try to expand word "dynamically", searching the kill ring.
-	      try-expand-dabbrev-from-kill
-	      ;; Try to complete text as a file name, as many characters as unique.
-	      try-complete-file-name-partially
-	      ;; Try to complete text as a file name.
-	      try-complete-file-name
-	      ;; Try to expand word before point according to all abbrev tables.
-	      try-expand-all-abbrevs
-	      ;; Try to complete the current line to an entire line in the buffer.
-	      try-expand-list
-	      ;; Try to complete the current line to an entire line in the buffer.
-	      try-expand-line
-	      ;; Try to complete as an Emacs Lisp symbol, as many characters as
-	      ;; unique.
-	      try-complete-lisp-symbol-partially
-	      ;; Try to complete word as an Emacs Lisp symbol.
-	      try-complete-lisp-symbol
-	      )))
-
-(use-package fancy-dabbrev
-  :commands (fancy-dabbrev-mode)
-  :custom
-  (fancy-dabbrev-preview-delay 0.1)
-  (fancy-dabbrev-preview-context 'before-non-word)
-
-  (fancy-dabbrev-expansion-on-preview-only t)
-  (fancy-dabbrev-indent-command 'tab-to-tab-stop)
-  :config
-  (global-fancy-dabbrev-mode t))
-
-;; - Zap To Char Usage :: https://www.emacswiki.org/emacs/ZapToCharUsage
-(use-package zzz-to-char
-  :bind
-  ([remap zap-to-char] . zzz-to-char))
-
-;;================================================================================
 ;; 文本替换，使用 =query-replace= 或者 =M-%= 命令。
 ;; - https://github.com/syohex/emacs-anzu
 ;; anzu 依赖这个 mdi

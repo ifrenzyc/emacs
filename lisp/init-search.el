@@ -10,19 +10,18 @@
 (use-package isearch
   :ensure nil
   :no-require t
-  :commands swiper-from-isearch
   :bind
   (
    ;; "C-s"     . isearch-forward-regexp
-   ("C-r"     . isearch-backward-regexp)
-   ("C-M-s"   . isearch-forward-other-window)
-   ("C-M-r"   . isearch-backward-other-window)
-   ("M-s ."   . isearch-forward-symbol-at-point)
-   ("M-s SPC" . xah-search-current-word))
+   ("C-r"       . isearch-backward-regexp)
+   ("C-M-s"     . isearch-forward-other-window)
+   ("C-M-r"     . isearch-backward-other-window)
+   ("M-s ."     . isearch-forward-symbol-at-point)
+   ("M-s <SPC>" . xah-search-current-word))
   (:map isearch-mode-map
-        ("C-;" . swiper-from-isearch)
+        ("C-;" . consult-line)
         ("C-'" . avy-isearch)
-        ("C-l" . counsel-git-grep-from-isearch))
+        ("C-l" . consult-git-grep))
   :config
   ;; Isearch in other windows
   (defun isearch-forward-other-window (prefix)
@@ -68,40 +67,6 @@ Version 2015-04-09"
       (isearch-mode t)
       (isearch-yank-string (buffer-substring-no-properties $p1 $p2)))))
 
-(use-package loccur
-  :commands (loccur-isearch loccur-current loccur))
-
-(use-package occur
-  :ensure nil
-  :bind
-  ("M-s o" . occur-dwim)
-  :config
-  ;; - https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#occur
-  (defun occur-dwim ()
-    "Call `occur' with a sane default."
-    (interactive)
-    (push (if (region-active-p)
-		      (buffer-substring-no-properties
-		       (region-beginning)
-		       (region-end))
-	        (let ((sym (thing-at-point 'symbol)))
-		      (when (stringp sym)
-		        (regexp-quote sym))))
-	      regexp-history)
-    (call-interactively 'occur)))
-
-;; To refine your occur buffer, removing or keeping lines that match any regular expression of your choice, press "k" ([K]eep) or "f" ([F]lush). Press "u" to undo the last filter in the stack.
-;; "k" occur-x-filter-out
-;; "f" occur-x-filter
-;; "u" occur-x-undo-filter
-(use-package occur-x
-  :hook
-  (occur-mode . turn-on-occur-x-mode))
-
-(use-package occur-context-resize
-  :hook
-  (occur-mode . occur-context-resize-mode))
-
 ;; 快速在当前 buffer 中跳转光标
 ;; - avy
 ;; - ace-jump-mode
@@ -117,18 +82,19 @@ Version 2015-04-09"
    ("M-g A" . ace-jump-two-chars-mode)
    ("M-g a" . avy-goto-char)
    ("M-g l" . avy-goto-char-2))
-  (:map isearch-mode-map
-        ("M-j" . avy-isearch))
+  ;; (:map isearch-mode-map
+  ;;       ("M-j" . avy-isearch))
   ;; (swiper-map
   ;;   "M-j" 'swiper-avy)
-  :custom ((avy-all-windows nil)
-           (avy-all-windows-alt t)
-           (avy-background t)
-           (avy-style 'pre)
-           (avy-keys '(?q ?e ?r ?y ?u ?o ?p
-                          ?a ?s ?d ?f ?g ?h ?j
-                          ?k ?l ?' ?x ?c ?v ?b
-                          ?n ?, ?/)))
+  :custom
+  ((avy-all-windows nil)
+   (avy-all-windows-alt t)
+   (avy-background t)
+   (avy-style 'pre)
+   (avy-keys '(?q ?e ?r ?y ?u ?o ?p
+                  ?a ?s ?d ?f ?g ?h ?j
+                  ?k ?l ?' ?x ?c ?v ?b
+                  ?n ?, ?/)))
   :hook
   (after-init . avy-setup-default)
   :config
@@ -337,8 +303,6 @@ active region use it instead."
 (use-package ag
   :ensure-system-package (ag . "brew install the_silver_searcher"))
 
-(use-package counsel-ag-popup)
-
 (use-package rg
   :custom
   (rg-group-result t)
@@ -375,6 +339,48 @@ active region use it instead."
 (use-package deadgrep)
 
 ;;================================================================================
+(use-package loccur
+  :disabled t
+  :commands (loccur-isearch loccur-current loccur))
+
+(use-package occur
+  :disabled t
+  :ensure nil
+  :no-require t
+  :bind
+  ("M-s o" . occur-dwim)
+  :config
+  ;; - https://github.com/wandersoncferreira/dotfiles/blob/master/README.org#occur
+  (defun occur-dwim ()
+    "Call `occur' with a sane default."
+    (interactive)
+    (push (if (region-active-p)
+		      (buffer-substring-no-properties
+		       (region-beginning)
+		       (region-end))
+	        (let ((sym (thing-at-point 'symbol)))
+		      (when (stringp sym)
+		        (regexp-quote sym))))
+	      regexp-history)
+    (call-interactively 'occur)))
+
+;; To refine your occur buffer, removing or keeping lines that match any regular expression of your choice, press "k" ([K]eep) or "f" ([F]lush). Press "u" to undo the last filter in the stack.
+;; "k" occur-x-filter-out
+;; "f" occur-x-filter
+;; "u" occur-x-undo-filter
+(use-package occur-x
+  :disabled t
+  :hook
+  (occur-mode . turn-on-occur-x-mode))
+
+(use-package occur-context-resize
+  :disabled t
+  :hook
+  (occur-mode . occur-context-resize-mode))
+
+(use-package counsel-ag-popup
+  :disabled t)
+
 ;; fuzzy file finder
 (use-package fiplr
   :disabled t

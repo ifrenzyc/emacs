@@ -9,7 +9,9 @@
 ;; A Collection of Ridiculously Useful eXtensions for Emacs.
 ;; https://github.com/bbatsov/crux
 (use-package crux
-  :commands (crux-sudo-edit crux-insert-date crux-reopen-as-root-mode crux-rename-file-and-buffer))
+  :commands (crux-sudo-edit crux-insert-date crux-reopen-as-root-mode crux-rename-file-and-buffer)
+  :config
+  (defalias 'cb 'crux-create-scratch-buffer))
 
 (use-package logms
   :config

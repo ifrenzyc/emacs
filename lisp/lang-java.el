@@ -13,7 +13,7 @@
   :hook
   (java-ts-mode . (lambda ()
                     (setq-local c-basic-offset 4)
-                    (subword-mode)
+                    ;; (subword-mode)
                     )))
 
 ;; - https://xpressrazor.wordpress.com/2020/11/04/java-programming-in-emacs/

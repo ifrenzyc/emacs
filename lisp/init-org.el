@@ -32,7 +32,7 @@
    ;; ([f7]      . org-redisplay-inline-images)
    ("M-s M-R" . yc/counsel-rg-in-itsycnotes))
   (:map org-mode-map
-        ("C-c C-j"   . counsel-org-goto)
+        ("C-c C-j"   . consult-org-heading)
         ("<backtab>" . org-shifttab)
         ("<tab>"     . org-cycle))
   :mode-hydra
@@ -296,7 +296,8 @@ text and copying to the killring."
   (defun yc/counsel-rg-in-itsycnotes ()
     "rg in ~/notes"
     (interactive)
-    (counsel-rg ivy-text "~/notes/" nil nil))
+    ;;(counsel-rg ivy-text "~/notes/" nil nil)
+    (consult-ripgrep "~/notes/" nil))
   
   (defun yc/org-insert-clipboard-image ()
     "paste image from clipboard"

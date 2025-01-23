@@ -48,7 +48,7 @@
   ;; - /Users/yangc/src/emacs.d/novoid-dot-emacs/config.org
   ;; - /Users/yangc/src/emacs.d/caiohcs-emacs/settings.el
   :bind
-  (("C-z <tab>" . hydra-fold/body)
+  (("C-z <TAB>" . hydra-fold/body)
    ("C-z D"     . hydra-dates/body)
    ("C-z f"     . hydra-flycheck/body)
    ("C-z j"     . hydra-dumb-jump/body)
@@ -59,7 +59,8 @@
    ("C-z p"     . hydra-projectile/body)
    ("C-z P"     . hydra-system/body)
    ("C-z t"     . hydra-toggles/body)
-   ("C-z w"     . hydra-window/body))
+   ("C-z w"     . hydra-window/body)
+   ("C-x <SPC>" . hydra-rectangle/body))
   :config
   ;; (which-key-add-key-based-replacements "C-c h"   "hydra")
   (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
@@ -90,7 +91,6 @@
            (rectangle-mark-mode 1)))
     ("u" undo nil)
     ("C-g" nil))
-  (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
 
   ;; hydra for macros in emacs
   (pretty-hydra-define hydra-macro

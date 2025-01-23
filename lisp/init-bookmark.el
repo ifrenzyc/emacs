@@ -8,7 +8,7 @@
 (use-package bookmark
   :ensure nil
   :bind
-  ([remap bookmark-jump] . counsel-bookmark)
+  ([remap bookmark-jump] . consult-bookmark)
   :custom
   ;; disable bookmark face after org-capture
   (bookmark-fringe-mark nil))

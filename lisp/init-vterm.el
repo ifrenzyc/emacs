@@ -26,6 +26,8 @@
                        (org-capture nil "n")))
         ([f8]      . treemacs-select-window)
         ("M-0"     . treemacs)
+        ("M-2"     . yc/split-window-vertically)
+        ("M-3"     . yc/split-window-horizontally)
         ("M-SPC"   . yc/turn-off-input-method)
         ("H-SPC"   . yc/turn-on-rime-input-method))
   :hook
