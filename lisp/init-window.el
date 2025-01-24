@@ -178,11 +178,16 @@
    aw-background nil
    aw-scope 'frame
    aw-dispatch-alist
-   '((?s aw-swap-window "swap window")
+   '((?k aw-delete-window "Delete Window")
+     (?x aw-swap-window "Swap Windows")
+     (?c aw-copy-window "Copy Window")
      (?2 aw-split-window-vert "split window vertically")
      (?3 aw-split-window-horz "split window horizontally")
-     (?k aw-delete-window "delete window")
-     (?x aw-delete-window "delete window")
+     (?j aw-switch-buffer-in-window "Select Buffer")
+     (?f aw-flip-window)
+     (?b aw-switch-buffer-other-window "Switch Buffer Other Window")
+     (?C aw-split-window-fair "Split Fair Window")
+     (?o delete-other-windows "Delete Other Windows")
      (?? aw-show-dispatch-help)))
   :custom-face
   (aw-leading-char-face ((t (:inherit font-lock-keyword-face :foreground unspecified :bold t :height 3.0))))
@@ -190,6 +195,13 @@
   (aw-mode-line-face ((t (:inherit mode-line-emphasis :bold t))))
   :config
   (ace-window-display-mode 1))
+
+(use-package windmove
+  :bind
+  (("H-<right>" . windmove-swap-states-right)
+   ("H-<down>"  . windmove-swap-states-down)
+   ("H-<up>"    . windmove-swap-states-up)
+   ("H-<left>"  . windmove-swap-states-left)))
 
 ;; 类似于 tmux 的最大化当前窗口功能，保持和我在 tmux 下的习惯一致。
 ;; https://github.com/syohex/emacs-zoom-window

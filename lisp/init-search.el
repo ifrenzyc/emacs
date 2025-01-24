@@ -19,9 +19,19 @@
    ("M-s ."     . isearch-forward-symbol-at-point)
    ("M-s <SPC>" . xah-search-current-word))
   (:map isearch-mode-map
-        ("C-;" . consult-line)
-        ("C-'" . avy-isearch)
-        ("C-l" . consult-git-grep))
+        ([remap isearch-delete-char]          . isearch-del-char)
+        ([remap isearch-query-replace]        . anzu-isearch-query-replace)
+        ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp)
+        ("M-<"   . isearch-beginning-of-buffer)
+        ("M->"   . isearch-end-of-buffer)
+        ("M-s <" . isearch-beginning-of-buffer)
+        ("M-s >" . isearch-end-of-buffer)
+        ("M-/"   . isearch-complete)
+        ("M-e"   . consult-isearch-history) ; orig. isearch-edit-string
+        ("M-s e" . consult-isearch-history) ; orig. isearch-edit-string
+        ("M-s l" . consult-line)
+        ("C-;"   . avy-isearch)
+        ("C-l"   . consult-git-grep))
   :config
   ;; Isearch in other windows
   (defun isearch-forward-other-window (prefix)
@@ -314,6 +324,8 @@ active region use it instead."
   :load-path "localelpa/color-rg"
   :bind
   ("M-s M-s" . color-rg-search-project)
+  (:map isearch-mode-map
+        ("M-s M-s" . isearch-toggle-color-rg))
   :commands (color-rg-mode
              color-rg-search-input
              color-rg-search-symbol
