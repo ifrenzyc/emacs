@@ -80,6 +80,7 @@
   (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht))))))
 
 (use-package lsp-copilot
+  :disabled t
   :load-path ("localelpa/lsp-copilot")
   :hook
   ((tsx-ts-mode

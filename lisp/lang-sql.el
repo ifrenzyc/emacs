@@ -5,7 +5,7 @@
 ;; 
 
 ;;; Code:
-(use-package sql-mode
+(use-package sql
   :ensure nil
   :mode ("\\.sql\\'" . sql-mode)
   :hook (sql-mode   . lsp))
